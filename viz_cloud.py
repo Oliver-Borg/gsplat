@@ -4,10 +4,36 @@ import gradio as gr
 import plotly.graph_objects as go
 import trimesh
 import cv2
-from typing import Optional, List, Union
+from typing import Optional, Union, Tuple, Dict
+from examples.datasets.colmap import Parser
+from evaluation import umeyama_alignment, calculate_metrics
 
-from evaluation import get_poses, umeyama_alignment, calculate_metrics, get_point_cloud, get_intrinsics
-from viz import create_frustum_traces
+
+def create_frustum_traces(c2w: np.ndarray, color: str, name: str, size: float = 0.1) -> list[go.Scatter3d]:
+    """Creates Plotly 3D traces for a camera frustum."""
+    pts = np.array([[0, 0, 0], [1, 1, 2], [-1, 1, 2], [-1, -1, 2], [1, -1, 2]]) * size
+    # Transform to world coordinates
+    pts_world = (c2w[:3, :3] @ pts.T + c2w[:3, 3:4]).T
+
+    # Define the 8 lines of the frustum
+    lines = [[0, 1], [0, 2], [0, 3], [0, 4], [1, 2], [2, 3], [3, 4], [4, 1]]
+
+    traces = []
+    for line in lines:
+        p0, p1 = pts_world[line[0]], pts_world[line[1]]
+        traces.append(
+            go.Scatter3d(
+                x=[p0[0], p1[0]],
+                y=[p0[1], p1[1]],
+                z=[p0[2], p1[2]],
+                mode="lines",
+                line=dict(color=color, width=3),
+                showlegend=False,
+                hoverinfo="name",
+                name=name,
+            )
+        )
+    return traces
 
 
 def create_point_cloud_trace(
@@ -36,83 +62,78 @@ def create_point_cloud_trace(
     )
 
 
-def project_points(points_3d, c2w, intrinsics):
-    """Projects 3D points into 2D image coordinates."""
+def project_points(points_3d: np.ndarray, c2w: np.ndarray, K: np.ndarray):
+    """
+    Projects 3D points into 2D image coordinates using a 3x3 Intrinsic Matrix.
+    """
     # w2c transform
     w2c = np.linalg.inv(c2w)
     pts_cam = (w2c[:3, :3] @ points_3d.T).T + w2c[:3, 3]
 
-    # Perspective projection
-    fx, fy, cx, cy = intrinsics["fx"], intrinsics["fy"], intrinsics["cx"], intrinsics["cy"]
+    # Perspective projection using Matrix K
+    # K = [[fx, 0, cx], [0, fy, cy], [0, 0, 1]]
+    fx, fy = K[0, 0], K[1, 1]
+    cx, cy = K[0, 2], K[1, 2]
+
+    # Z-normalization
     x = (pts_cam[:, 0] * fx / pts_cam[:, 2]) + cx
     y = (pts_cam[:, 1] * fy / pts_cam[:, 2]) + cy
 
-    # Return coords and depth values (instead of just mask)
     return np.stack([x, y], axis=1), pts_cam[:, 2]
 
 
-# def project_points(points_3d, c2w, intrinsics):
-#     """Projects 3D points into 2D image coordinates with k1 distortion."""
-#     # world to camera transform
-#     w2c = np.linalg.inv(c2w)
-#     pts_cam = (w2c[:3, :3] @ points_3d.T).T + w2c[:3, 3]
-
-#     # Standard perspective projection
-#     z = pts_cam[:, 2]
-#     u = pts_cam[:, 0] / z
-#     v = pts_cam[:, 1] / z
-
-#     # Apply Simple Radial Distortion (k1)
-#     if intrinsics.get("k1", 0) != 0:
-#         r2 = u**2 + v**2
-#         radial = 1 + intrinsics["k1"] * r2
-#         u *= radial
-#         v *= radial
-
-#     # Scale by focal length and offset by principal point
-#     x = (u * intrinsics["fx"]) + intrinsics["cx"]
-#     y = (v * intrinsics["fy"]) + intrinsics["cy"]
-
-#     return np.stack([x, y], axis=1), z > 0
+def load_parser_data(path: str) -> Tuple[Optional[Parser], Optional[Dict], Optional[str]]:
+    """Safe wrapper to initialize Parser and extract poses."""
+    try:
+        # Parser expects data_dir. Normalize=False to keep raw scale for alignment.
+        parser = Parser(data_dir=path, normalize=False)
+        # Create dict {image_name: c2w} for metrics calculation
+        poses = {name: c2w for name, c2w in zip(parser.image_names, parser.camtoworlds)}
+        return parser, poses, None
+    except Exception as e:
+        return None, None, str(e)
 
 
 def run_gradio_eval(pred_path: str, gt_path: str, show_gt_pts: bool, show_pred_pts: bool, pred_color_mode: str):
-    gt_poses = get_poses(gt_path)
-    pred_poses = get_poses(pred_path)
+    # 1. Load data using Parser
+    gt_parser, gt_poses, gt_err = load_parser_data(gt_path)
+    if gt_err:
+        return f"Error loading GT: {gt_err}", None, {}, None, None
 
-    if not gt_poses or not pred_poses:
-        return "Error: Could not load poses from one or both paths.", None, {}
+    pred_parser, pred_poses, pred_err = load_parser_data(pred_path)
+    if pred_err:
+        return f"Error loading Pred: {pred_err}", None, {}, None, None
 
+    # 2. Calculate Metrics
     metrics = calculate_metrics(pred_poses, gt_poses)
     if "error" in metrics:
-        return f"Error: {metrics['error']}", None, metrics
+        return f"Error: {metrics['error']}", None, metrics, None, None
 
     common_names = sorted(list(set(pred_poses.keys()) & set(gt_poses.keys())))
     p_centers = np.array([pred_poses[n][:3, 3] for n in common_names])
     g_centers = np.array([gt_poses[n][:3, 3] for n in common_names])
 
+    # 3. Alignment
     s, R, t = umeyama_alignment(p_centers, g_centers)
 
     fig = go.Figure()
 
+    # 4. GT Points Visualization
     if show_gt_pts:
-        try:
-            gt_pts = get_point_cloud(gt_path)
-            if gt_pts is not None and len(gt_pts) > 0:
-                fig.add_trace(create_point_cloud_trace(gt_pts, "green", "GT Points"))
-        except Exception as e:
-            print(f"Could not load GT points: {e}")
+        if len(gt_parser.points) > 0:
+            fig.add_trace(create_point_cloud_trace(gt_parser.points, "green", "GT Points"))
 
+    # 5. Pred Points Visualization
     if show_pred_pts:
         try:
-            # Determine which file to load based on user selection
+            # Special handling for confidence PLY in prediction folder (retained from original)
             ply_filename = "points_conf.ply" if pred_color_mode == "Confidence" else "points.ply"
             ply_file_path = os.path.join(pred_path, "sparse", ply_filename)
 
             pred_pts = None
-            pred_colors = "red"  # Fallback color
+            pred_colors = "red"
 
-            # Try loading the PLY file directly if it exists
+            # Try loading specific PLY if exists (for confidence visualization)
             if os.path.exists(ply_file_path):
                 pc = trimesh.load(ply_file_path)
                 if isinstance(pc, trimesh.PointCloud):
@@ -120,9 +141,10 @@ def run_gradio_eval(pred_path: str, gt_path: str, show_gt_pts: bool, show_pred_p
                     if hasattr(pc, "colors") and len(pc.colors) > 0:
                         pred_colors = np.array(pc.colors)
 
-            # Fallback to original get_point_cloud if PLY doesn't exist
-            if pred_pts is None:
-                pred_pts = get_point_cloud(pred_path)
+            if pred_pts is None and len(pred_parser.points) > 0:
+                pred_pts = pred_parser.points
+                if len(pred_parser.points_rgb) > 0:
+                    pred_colors = pred_parser.points_rgb
 
             if pred_pts is not None and len(pred_pts) > 0:
                 # Apply the alignment transform to the prediction point cloud
@@ -139,6 +161,7 @@ def run_gradio_eval(pred_path: str, gt_path: str, show_gt_pts: bool, show_pred_p
         except Exception as e:
             print(f"Could not load Pred points: {e}")
 
+    # 6. Frustum Visualization
     for name in common_names:
         # Align Pred
         p_c2w = pred_poses[name].copy()
@@ -178,15 +201,20 @@ def run_gradio_eval(pred_path: str, gt_path: str, show_gt_pts: bool, show_pred_p
         f"- **Mean RTE:** {metrics['mean_rte']:.5f}"
     )
 
-    return summary_text, fig, metrics
+    return summary_text, fig, metrics, gt_parser, pred_parser
 
 
 def run_gradio_eval_with_names(pred_path, gt_path, show_gt_pts, show_pred_pts, pred_color_mode):
-    summary, fig, metrics = run_gradio_eval(pred_path, gt_path, show_gt_pts, show_pred_pts, pred_color_mode)
+    summary, fig, metrics, gt_parser, pred_parser = run_gradio_eval(
+        pred_path, gt_path, show_gt_pts, show_pred_pts, pred_color_mode
+    )
 
-    # Get names for the dropdown
-    gt_poses = get_poses(gt_path)
-    pred_poses = get_poses(pred_path)
+    if metrics is None:
+        return summary, fig, {}, gr.update(), gr.update(), [], None, None
+
+    # Get names from loaded parser
+    gt_poses = {n: c2w for n, c2w in zip(gt_parser.image_names, gt_parser.camtoworlds)}
+    pred_poses = {n: c2w for n, c2w in zip(pred_parser.image_names, pred_parser.camtoworlds)}
     common_names = sorted(list(set(pred_poses.keys()) & set(gt_poses.keys())))
 
     if common_names:
@@ -195,35 +223,21 @@ def run_gradio_eval_with_names(pred_path, gt_path, show_gt_pts, show_pred_pts, p
             fig,
             metrics,
             gr.update(choices=common_names, value=common_names[0]),
-            gr.update(maximum=len(common_names) - 1, value=0, visible=True),  # Enable slider
+            gr.update(maximum=len(common_names) - 1, value=0, visible=True),
             common_names,
+            gt_parser,
+            pred_parser,
         )
     else:
-        return summary, fig, metrics, gr.update(), gr.update(), []
+        return summary, fig, metrics, gr.update(), gr.update(), [], gt_parser, pred_parser
 
 
-def find_image_file(base_path: str, image_name: str) -> Optional[str]:
-    """Helper to find the image file traversing common COLMAP directory structures."""
-    possible_roots = [
-        base_path,
-        os.path.join(base_path, "images"),
-        os.path.join(base_path, "..", "images"),
-        os.path.join(base_path, "..", "..", "images"),
-    ]
-    for root in possible_roots:
-        if os.path.exists(root):
-            cand = os.path.join(root, image_name)
-            if os.path.exists(cand):
-                return cand
-    return None
-
-
-def render_depth_overlay(img_ref, points_3d, pose, intrinsics):
+def render_depth_overlay(img_ref, points_3d, pose, K):
     """Projects 3D points onto image and draws them with depth coloring."""
     h, w = img_ref.shape[:2]
 
     # Project points and get depths
-    pts_2d, depths = project_points(points_3d, pose, intrinsics)
+    pts_2d, depths = project_points(points_3d, pose, K)
 
     # Filter valid points (in front of camera and inside image)
     valid = (depths > 0) & (pts_2d[:, 0] >= 0) & (pts_2d[:, 0] < w) & (pts_2d[:, 1] >= 0) & (pts_2d[:, 1] < h)
@@ -256,16 +270,22 @@ def render_depth_overlay(img_ref, points_3d, pose, intrinsics):
     return img_viz
 
 
-def update_projection_comparison(camera_name, pred_path, gt_path):
-    """Function to update both GT and Pred projection images."""
+def update_projection_comparison(camera_name, gt_parser_state, pred_parser_state):
+    """Update function utilizing the cached Parser objects."""
     if not camera_name:
         return None, None, "Select a camera."
 
-    # 1. Setup Alignment
-    gt_poses = get_poses(gt_path)
-    pred_poses = get_poses(pred_path)
-    common_names = sorted(list(set(pred_poses.keys()) & set(gt_poses.keys())))
+    if not gt_parser_state or not pred_parser_state:
+        return None, None, "Run evaluation first."
 
+    gt_parser = gt_parser_state
+    pred_parser = pred_parser_state
+
+    # 1. Setup Alignment
+    gt_poses = {n: c2w for n, c2w in zip(gt_parser.image_names, gt_parser.camtoworlds)}
+    pred_poses = {n: c2w for n, c2w in zip(pred_parser.image_names, pred_parser.camtoworlds)}
+
+    common_names = sorted(list(set(pred_poses.keys()) & set(gt_poses.keys())))
     if camera_name not in common_names:
         return None, None, f"Camera {camera_name} not found in common set."
 
@@ -273,37 +293,45 @@ def update_projection_comparison(camera_name, pred_path, gt_path):
     g_centers = np.array([gt_poses[n][:3, 3] for n in common_names])
     s, R, t = umeyama_alignment(p_centers, g_centers)
 
-    # 2. Load Image (Try to find it in GT path structure)
-    img_path = find_image_file(gt_path, camera_name)
-    if not img_path:
-        # Fallback to pred path
-        img_path = find_image_file(pred_path, camera_name)
+    # 2. Get Image and Intrinsics from Parser
+    if camera_name in gt_parser.image_names:
+        idx = gt_parser.image_names.index(camera_name)
+        img_path = gt_parser.image_paths[idx]
+        cam_id = gt_parser.camera_ids[idx]
+        gt_K = gt_parser.Ks_dict[cam_id]
 
-    if not img_path or not os.path.exists(img_path):
-        return None, None, f"Image {camera_name} not found on disk."
+        if not os.path.exists(img_path):
+            return None, None, f"Image {img_path} not found."
 
-    img_ref = cv2.imread(img_path)
-    img_ref = cv2.cvtColor(img_ref, cv2.COLOR_BGR2RGB)
+        img_ref = cv2.imread(img_path)
+        img_ref = cv2.cvtColor(img_ref, cv2.COLOR_BGR2RGB)
 
-    # 3. Get Intrinsics (We use GT intrinsics for both to compare against the same image)
-    gt_intrinsics = get_intrinsics(gt_path, camera_id=1)
-    pred_intrinsics = get_intrinsics(pred_path, camera_id=1)
-    # Note: If camera_id varies per image, this needs to be dynamic based on cameras.txt
+        # Undistort if Parser has computed undistortion maps
+        if cam_id in gt_parser.mapx_dict:
+            mapx = gt_parser.mapx_dict[cam_id]
+            mapy = gt_parser.mapy_dict[cam_id]
+            img_ref = cv2.remap(img_ref, mapx, mapy, interpolation=cv2.INTER_LINEAR)
 
-    # 4. Generate GT Projection
-    gt_pts = get_point_cloud(gt_path)
-    if gt_pts is not None:
-        gt_viz = render_depth_overlay(img_ref, gt_pts, gt_poses[camera_name], gt_intrinsics)
     else:
-        gt_viz = img_ref  # Return clean image if no points
+        return None, None, "Camera not found in GT parser."
 
-    # 5. Generate Pred Projection (Aligned)
-    pred_pts = get_point_cloud(pred_path)
-    if pred_pts is not None:
-        # Align Pred Points to GT World
-        pred_pts_aligned = (s * (R @ pred_pts.T)).T + t.T
-        # Project using GT Pose (to see if geometry matches the real image view)
-        pred_viz = render_depth_overlay(img_ref, pred_pts_aligned, gt_poses[camera_name], pred_intrinsics)
+    # For Pred intrinsics, we assume matching camera ID or look up by name
+    if camera_name in pred_parser.image_names:
+        idx_p = pred_parser.image_names.index(camera_name)
+        cam_id_p = pred_parser.camera_ids[idx_p]
+        pred_K = pred_parser.Ks_dict[cam_id_p]
+    else:
+        pred_K = gt_K  # Fallback
+
+    # 3. Generate GT Projection
+    gt_viz = render_depth_overlay(img_ref, gt_parser.points, gt_poses[camera_name], gt_K)
+
+    # 4. Generate Pred Projection (Aligned)
+    # Align Pred Points to GT World
+    pred_points = pred_parser.points
+    if len(pred_points) > 0:
+        pred_pts_aligned = (s * (R @ pred_points.T)).T + t.T
+        pred_viz = render_depth_overlay(img_ref, pred_pts_aligned, gt_poses[camera_name], pred_K)
     else:
         pred_viz = img_ref
 
@@ -321,17 +349,20 @@ with gr.Blocks(title="SfM Evaluation Suite") as demo:
     gr.Markdown("# 3D Reconstruction Evaluator")
     camera_names_state = gr.State([])
 
+    # Store Parser objects to avoid reloading on every dropdown change
+    gt_parser_state = gr.State(None)
+    pred_parser_state = gr.State(None)
+
     with gr.Row():
         with gr.Column(scale=1):
             pred_input = gr.Textbox(
                 label="Prediction Path",
-                placeholder="./vggt_outputs/bonsai_2_n100_s42_c2.0",
-                value="./vggt_outputs/bonsai_2_n100_s42_c2.0",
+                value="../vggt/vggt_outputs/bonsai_2_n100_s42_c1.0",
             )
             gt_input = gr.Textbox(
                 label="Ground Truth Path",
-                placeholder="./data/360_v2/bonsai/sparse/0",
-                value="./data/360_v2/bonsai/sparse/0",
+                value="../vggt/colmap_outputs/bonsai_2_n100_s42_c5.0",
+                # value="./data/360_v2/bonsai/sparse/0",
             )
 
             with gr.Row():
@@ -362,7 +393,16 @@ with gr.Blocks(title="SfM Evaluation Suite") as demo:
     btn.click(
         fn=run_gradio_eval_with_names,
         inputs=[pred_input, gt_input, chk_gt, chk_pred, radio_color],
-        outputs=[output_metrics, plot_output, output_json, camera_dropdown, camera_slider, camera_names_state],
+        outputs=[
+            output_metrics,
+            plot_output,
+            output_json,
+            camera_dropdown,
+            camera_slider,
+            camera_names_state,
+            gt_parser_state,
+            pred_parser_state,
+        ],
     )
 
     camera_slider.change(
@@ -371,7 +411,7 @@ with gr.Blocks(title="SfM Evaluation Suite") as demo:
 
     camera_dropdown.change(
         fn=update_projection_comparison,
-        inputs=[camera_dropdown, pred_input, gt_input],
+        inputs=[camera_dropdown, gt_parser_state, pred_parser_state],
         outputs=[gt_img_display, pred_img_display, img_info],
     )
 
