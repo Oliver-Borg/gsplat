@@ -9,14 +9,59 @@ from examples.datasets.colmap import Parser
 from evaluation import umeyama_alignment, calculate_metrics
 
 
-def create_frustum_traces(c2w: np.ndarray, color: str, name: str, size: float = 0.1) -> List[go.Scatter3d]:
-    """Creates Plotly 3D traces for a camera frustum."""
-    pts = np.array([[0, 0, 0], [1, 1, 2], [-1, 1, 2], [-1, -1, 2], [1, -1, 2]]) * size
-    # Transform to world coordinates
-    pts_world = (c2w[:3, :3] @ pts.T + c2w[:3, 3:4]).T
+def create_frustum_traces(
+    c2w: np.ndarray,
+    intrinsics: np.ndarray,
+    image_size: Tuple[int, int],
+    color: str,
+    name: str,
+    size: float = 1.0,
+) -> List[go.Scatter3d]:
+    """
+    Creates Plotly 3D traces for a camera frustum using actual intrinsics.
 
-    # Define the 8 lines of the frustum
-    lines = [[0, 1], [0, 2], [0, 3], [0, 4], [1, 2], [2, 3], [3, 4], [4, 1]]
+    Args:
+        c2w: (4, 4) Camera-to-World matrix.
+        intrinsics: (3, 3) Pinhole intrinsics matrix [[fx, 0, cx], [0, fy, cy], [0, 0, 1]].
+        image_size: (W, H) tuple of image dimensions.
+    """
+    W, H = image_size
+    fx, fy = intrinsics[0, 0], intrinsics[1, 1]
+    cx, cy = intrinsics[0, 2], intrinsics[1, 2]
+
+    # 1. Define the 4 corners of the image plane + the camera center (0,0,0)
+    # The depth of the frustum base is determined by 'size' (z = size)
+    # x = (u - cx) * z / fx
+    # y = (v - cy) * z / fy
+
+    # Corners in pixel coordinates: Top-Left, Top-Right, Bottom-Right, Bottom-Left
+    corners_pix = np.array([[0, 0], [W, 0], [W, H], [0, H]])
+
+    corners_cam = np.zeros((5, 3))
+    # Point 0 is the camera center
+    corners_cam[0] = [0, 0, 0]
+
+    # Points 1-4 are the image corners projected to depth = size
+    corners_cam[1:, 0] = (corners_pix[:, 0] - cx) * size / fx
+    corners_cam[1:, 1] = (corners_pix[:, 1] - cy) * size / fy
+    corners_cam[1:, 2] = size
+
+    # 2. Transform to world coordinates
+    # Apply rotation (3x3) and translation (3x1)
+    pts_world = (c2w[:3, :3] @ corners_cam.T + c2w[:3, 3:4]).T
+
+    # 3. Define the lines of the frustum
+    # 0 is apex. 1-4 are the base corners.
+    lines = [
+        [0, 1],
+        [0, 2],
+        [0, 3],
+        [0, 4],
+        [1, 2],
+        [2, 3],
+        [3, 4],
+        [4, 1],
+    ]
 
     traces = []
     for line in lines:
@@ -82,27 +127,35 @@ def project_points(points_3d: np.ndarray, c2w: np.ndarray, K: np.ndarray) -> Tup
     return np.stack([x, y], axis=1), pts_cam[:, 2]
 
 
-def load_parser_data(path: str) -> Tuple[Optional[Parser], Optional[Dict], Optional[str]]:
+def load_parser_data(
+    path: str,
+) -> Tuple[Optional[Parser], Optional[Dict], Optional[Dict], Optional[Dict], Optional[str]]:
     """Safe wrapper to initialize Parser and extract poses."""
     try:
         # Parser expects data_dir. Normalize=False to keep raw scale for alignment.
         parser = Parser(data_dir=path, normalize=False)
         # Create dict {image_name: c2w} for metrics calculation
         poses = {name: c2w for name, c2w in zip(parser.image_names, parser.camtoworlds)}
-        return parser, poses, None
+        intrinsics = {
+            name: parser.Ks_dict[parser.camera_ids[parser.image_names.index(name)]] for name in parser.image_names
+        }
+        imsizes = {
+            name: parser.imsize_dict[parser.camera_ids[parser.image_names.index(name)]] for name in parser.image_names
+        }
+        return parser, poses, intrinsics, imsizes, None
     except Exception as e:
-        return None, None, str(e)
+        return None, None, None, None, str(e)
 
 
 def run_gradio_eval(
     pred_path: str, gt_path: str, show_gt_pts: bool, show_pred_pts: bool, pred_color_mode: str
 ) -> Tuple[str, Optional[go.Figure], Dict, Optional[Parser], Optional[Parser]]:
     # 1. Load data using Parser
-    gt_parser, gt_poses, gt_err = load_parser_data(gt_path)
+    gt_parser, gt_poses, gt_intrinsics, gt_imsizes, gt_err = load_parser_data(gt_path)
     if gt_err or gt_parser is None or gt_poses is None:
         return f"Error loading GT: {gt_err}", None, {}, None, None
 
-    pred_parser, pred_poses, pred_err = load_parser_data(pred_path)
+    pred_parser, pred_poses, pred_intrinsics, pred_imsizes, pred_err = load_parser_data(pred_path)
     if pred_err or pred_parser is None or pred_poses is None:
         return f"Error loading Pred: {pred_err}", None, {}, None, None
 
@@ -169,11 +222,15 @@ def run_gradio_eval(
         p_c2w = pred_poses[name].copy()
         p_c2w[:3, 3] = s * R @ p_c2w[:3, 3] + t
         p_c2w[:3, :3] = R @ p_c2w[:3, :3]
+        p_Ks = pred_intrinsics[name]
+        p_imsize = pred_imsizes[name]
 
         g_c2w = gt_poses[name]
+        g_Ks = gt_intrinsics[name]
+        g_imsize = gt_imsizes[name]
 
-        gt_traces = create_frustum_traces(g_c2w, color="green", name=f"GT_{name}")
-        pred_traces = create_frustum_traces(p_c2w, color="red", name=f"Pred_{name}")
+        gt_traces = create_frustum_traces(g_c2w, g_Ks, g_imsize, color="green", name=f"GT_{name}")
+        pred_traces = create_frustum_traces(p_c2w, p_Ks, p_imsize, color="red", name=f"Pred_{name}")
 
         for t_trace in gt_traces + pred_traces:
             t_trace.customdata = [name] * len(t_trace.x)
