@@ -57,7 +57,7 @@ def create_point_cloud_trace(
         y=pts_sub[:, 1],
         z=pts_sub[:, 2],
         mode="markers",
-        marker=dict(size=3.0, color=marker_color, opacity=0.6),
+        marker=dict(size=1.5, color=marker_color, opacity=1.0),
         name=name,
     )
 
@@ -258,7 +258,7 @@ def render_depth_overlay(img_ref: np.ndarray, points_3d: np.ndarray, pose: np.nd
     if len(depths_valid) > 0:
         d_min, d_max = depths_valid.min(), depths_valid.max()
         norm_depth = (depths_valid - d_min) / (d_max - d_min + 1e-8)
-        norm_depth = (norm_depth * 255).astype(np.uint8)
+        norm_depth = ((1.0 - norm_depth) * 255).astype(np.uint8)
 
         cmap = getattr(cv2, "COLORMAP_TURBO", cv2.COLORMAP_JET)
         colors = cv2.applyColorMap(norm_depth[:, None], cmap)  # Shape (N, 1, 3)
@@ -322,7 +322,7 @@ def update_projection_comparison(
     gt_parser_state: Optional[Parser],
     pred_parser_state: Optional[Parser],
     pred_path_str: str,
-) -> Tuple[Optional[np.ndarray], Optional[np.ndarray], Optional[np.ndarray], str]:
+) -> Tuple[Optional[np.ndarray], Optional[np.ndarray], Optional[np.ndarray], Optional[np.ndarray], str]:
     """Update function utilizing the cached Parser objects."""
     if not camera_name:
         return None, None, None, "Select a camera."
@@ -391,8 +391,10 @@ def update_projection_comparison(
     # Construct path: {pred_path}/depths/depth_{camera_name}.npy
     depth_file_path = os.path.join(pred_path_str, "depths", f"depth_{camera_name}.npy")
     depth_viz = render_dense_depth_overlay(img_ref, depth_file_path)
+    depth_conf_file_path = os.path.join(pred_path_str, "depths", f"depth_conf_{camera_name}.npy")
+    depth_conf_viz = render_dense_depth_overlay(img_ref, depth_conf_file_path)
 
-    return gt_viz, pred_viz, depth_viz, f"Visualizing: {camera_name} (Scale: {s:.2f})"
+    return gt_viz, pred_viz, depth_viz, depth_conf_viz, f"Visualizing: {camera_name} (Scale: {s:.2f})"
 
 
 def sync_slider_to_dropdown(idx: Union[int, float], names: List[str]) -> Optional[str]:
@@ -440,14 +442,17 @@ with gr.Blocks(title="SfM Evaluation Suite") as demo:
             img_info = gr.Markdown("")
 
         with gr.Column(scale=2):
-            plot_output = gr.Plot(label="3D Trajectory Comparison")
             with gr.Row():
                 with gr.Column():
                     gt_img_display = gr.Image(label="GT Projection")
                 with gr.Column():
                     pred_img_display = gr.Image(label="Pred Projection")
+            with gr.Row():
                 with gr.Column():
                     depth_img_display = gr.Image(label="Pred Depth Overlay")
+                with gr.Column():
+                    depth_conf_img_display = gr.Image(label="Pred Depth Confidence Overlay")
+            plot_output = gr.Plot(label="3D Trajectory Comparison")
 
     btn.click(
         fn=run_gradio_eval_with_names,
@@ -470,8 +475,8 @@ with gr.Blocks(title="SfM Evaluation Suite") as demo:
 
     camera_dropdown.change(
         fn=update_projection_comparison,
-        inputs=[camera_dropdown, gt_parser_state, pred_parser_state, pred_input],  # Added pred_input
-        outputs=[gt_img_display, pred_img_display, depth_img_display, img_info],  # Added depth_img_display
+        inputs=[camera_dropdown, gt_parser_state, pred_parser_state, pred_input],
+        outputs=[gt_img_display, pred_img_display, depth_img_display, depth_conf_img_display, img_info],
     )
 
 if __name__ == "__main__":
