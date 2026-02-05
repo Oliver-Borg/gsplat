@@ -274,15 +274,61 @@ def render_depth_overlay(img_ref: np.ndarray, points_3d: np.ndarray, pose: np.nd
     return img_viz
 
 
+def render_dense_depth_overlay(img_ref: np.ndarray, depth_path: str) -> np.ndarray:
+    """Loads, resizes, and overlays a dense depth map onto the reference image."""
+    if not os.path.exists(depth_path):
+        out = img_ref.copy()
+        cv2.putText(out, "No Depth File", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+        return out
+
+    try:
+        depth = np.load(depth_path)
+    except Exception as e:
+        print(f"Error loading depth {depth_path}: {e}")
+        return img_ref
+
+    h, w = img_ref.shape[:2]
+
+    # Depth is 518x518 so we need to crop a rectangle with the same aspect ratio as the image
+    depth_h, depth_w = depth.shape
+    img_aspect = w / h
+    depth_aspect = depth_w / depth_h
+    if depth_aspect > img_aspect:
+        # Depth is wider than image, crop width
+        new_w = int(depth_h * img_aspect)
+        start_x = (depth_w - new_w) // 2
+        depth = depth[:, start_x : start_x + new_w]
+    else:
+        # Depth is taller than image, crop height
+        new_h = int(depth_w / img_aspect)
+        start_y = (depth_h - new_h) // 2
+        depth = depth[start_y : start_y + new_h, :]
+
+    depth_resized = cv2.resize(depth, (w, h), interpolation=cv2.INTER_NEAREST)
+
+    d_min, d_max = depth_resized.min(), depth_resized.max()
+    depth_norm = (depth_resized - d_min) / (d_max - d_min + 1e-8)
+    depth_uint8 = (depth_norm * 255).clip(0, 255).astype(np.uint8)
+
+    cmap = getattr(cv2, "COLORMAP_TURBO", cv2.COLORMAP_JET)
+    depth_color = cv2.applyColorMap(depth_uint8, cmap)
+    depth_color = cv2.cvtColor(depth_color, cv2.COLOR_BGR2RGB)
+    overlay = cv2.addWeighted(img_ref, 0.6, depth_color, 0.4, 0)
+    return overlay
+
+
 def update_projection_comparison(
-    camera_name: str, gt_parser_state: Optional[Parser], pred_parser_state: Optional[Parser]
-) -> Tuple[Optional[np.ndarray], Optional[np.ndarray], str]:
+    camera_name: str,
+    gt_parser_state: Optional[Parser],
+    pred_parser_state: Optional[Parser],
+    pred_path_str: str,
+) -> Tuple[Optional[np.ndarray], Optional[np.ndarray], Optional[np.ndarray], str]:
     """Update function utilizing the cached Parser objects."""
     if not camera_name:
-        return None, None, "Select a camera."
+        return None, None, None, "Select a camera."
 
     if not gt_parser_state or not pred_parser_state:
-        return None, None, "Run evaluation first."
+        return None, None, None, "Run evaluation first."
 
     gt_parser = gt_parser_state
     pred_parser = pred_parser_state
@@ -293,7 +339,7 @@ def update_projection_comparison(
 
     common_names = sorted(list(set(pred_poses.keys()) & set(gt_poses.keys())))
     if camera_name not in common_names:
-        return None, None, f"Camera {camera_name} not found in common set."
+        return None, None, None, f"Camera {camera_name} not found in common set."
 
     p_centers = np.array([pred_poses[n][:3, 3] for n in common_names])
     g_centers = np.array([gt_poses[n][:3, 3] for n in common_names])
@@ -307,7 +353,7 @@ def update_projection_comparison(
         gt_K = gt_parser.Ks_dict[cam_id]
 
         if not os.path.exists(img_path):
-            return None, None, f"Image {img_path} not found."
+            return None, None, None, f"Image {img_path} not found."
 
         img_ref = cv2.imread(img_path)
         img_ref = cv2.cvtColor(img_ref, cv2.COLOR_BGR2RGB)
@@ -319,7 +365,7 @@ def update_projection_comparison(
             img_ref = cv2.remap(img_ref, mapx, mapy, interpolation=cv2.INTER_LINEAR)
 
     else:
-        return None, None, "Camera not found in GT parser."
+        return None, None, None, "Camera not found in GT parser."
 
     # For Pred intrinsics, we assume matching camera ID or look up by name
     if camera_name in pred_parser.image_names:
@@ -341,7 +387,12 @@ def update_projection_comparison(
     else:
         pred_viz = img_ref
 
-    return gt_viz, pred_viz, f"Visualizing: {camera_name} (Scale: {s:.2f})"
+    # 5. Generate Dense Depth Overlay
+    # Construct path: {pred_path}/depths/depth_{camera_name}.npy
+    depth_file_path = os.path.join(pred_path_str, "depths", f"depth_{camera_name}.npy")
+    depth_viz = render_dense_depth_overlay(img_ref, depth_file_path)
+
+    return gt_viz, pred_viz, depth_viz, f"Visualizing: {camera_name} (Scale: {s:.2f})"
 
 
 def sync_slider_to_dropdown(idx: Union[int, float], names: List[str]) -> Optional[str]:
@@ -363,7 +414,7 @@ with gr.Blocks(title="SfM Evaluation Suite") as demo:
         with gr.Column(scale=1):
             pred_input = gr.Textbox(
                 label="Prediction Path",
-                value="../vggt/vggt_outputs/bonsai_2_n100_s42_c1.0",
+                value="../vggt/vggt_outputs/bonsai_2_n100_s42_c1.0_random",
             )
             gt_input = gr.Textbox(
                 label="Ground Truth Path",
@@ -395,6 +446,8 @@ with gr.Blocks(title="SfM Evaluation Suite") as demo:
                     gt_img_display = gr.Image(label="GT Projection")
                 with gr.Column():
                     pred_img_display = gr.Image(label="Pred Projection")
+                with gr.Column():
+                    depth_img_display = gr.Image(label="Pred Depth Overlay")
 
     btn.click(
         fn=run_gradio_eval_with_names,
@@ -417,8 +470,8 @@ with gr.Blocks(title="SfM Evaluation Suite") as demo:
 
     camera_dropdown.change(
         fn=update_projection_comparison,
-        inputs=[camera_dropdown, gt_parser_state, pred_parser_state],
-        outputs=[gt_img_display, pred_img_display, img_info],
+        inputs=[camera_dropdown, gt_parser_state, pred_parser_state, pred_input],  # Added pred_input
+        outputs=[gt_img_display, pred_img_display, depth_img_display, img_info],  # Added depth_img_display
     )
 
 if __name__ == "__main__":
