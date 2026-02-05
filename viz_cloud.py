@@ -4,12 +4,12 @@ import gradio as gr
 import plotly.graph_objects as go
 import trimesh
 import cv2
-from typing import Optional, Union, Tuple, Dict
+from typing import Optional, Union, Tuple, Dict, List, Any
 from examples.datasets.colmap import Parser
 from evaluation import umeyama_alignment, calculate_metrics
 
 
-def create_frustum_traces(c2w: np.ndarray, color: str, name: str, size: float = 0.1) -> list[go.Scatter3d]:
+def create_frustum_traces(c2w: np.ndarray, color: str, name: str, size: float = 0.1) -> List[go.Scatter3d]:
     """Creates Plotly 3D traces for a camera frustum."""
     pts = np.array([[0, 0, 0], [1, 1, 2], [-1, 1, 2], [-1, -1, 2], [1, -1, 2]]) * size
     # Transform to world coordinates
@@ -62,7 +62,7 @@ def create_point_cloud_trace(
     )
 
 
-def project_points(points_3d: np.ndarray, c2w: np.ndarray, K: np.ndarray):
+def project_points(points_3d: np.ndarray, c2w: np.ndarray, K: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
     """
     Projects 3D points into 2D image coordinates using a 3x3 Intrinsic Matrix.
     """
@@ -94,14 +94,16 @@ def load_parser_data(path: str) -> Tuple[Optional[Parser], Optional[Dict], Optio
         return None, None, str(e)
 
 
-def run_gradio_eval(pred_path: str, gt_path: str, show_gt_pts: bool, show_pred_pts: bool, pred_color_mode: str):
+def run_gradio_eval(
+    pred_path: str, gt_path: str, show_gt_pts: bool, show_pred_pts: bool, pred_color_mode: str
+) -> Tuple[str, Optional[go.Figure], Dict, Optional[Parser], Optional[Parser]]:
     # 1. Load data using Parser
     gt_parser, gt_poses, gt_err = load_parser_data(gt_path)
-    if gt_err:
+    if gt_err or gt_parser is None or gt_poses is None:
         return f"Error loading GT: {gt_err}", None, {}, None, None
 
     pred_parser, pred_poses, pred_err = load_parser_data(pred_path)
-    if pred_err:
+    if pred_err or pred_parser is None or pred_poses is None:
         return f"Error loading Pred: {pred_err}", None, {}, None, None
 
     # 2. Calculate Metrics
@@ -204,12 +206,14 @@ def run_gradio_eval(pred_path: str, gt_path: str, show_gt_pts: bool, show_pred_p
     return summary_text, fig, metrics, gt_parser, pred_parser
 
 
-def run_gradio_eval_with_names(pred_path, gt_path, show_gt_pts, show_pred_pts, pred_color_mode):
+def run_gradio_eval_with_names(
+    pred_path: str, gt_path: str, show_gt_pts: bool, show_pred_pts: bool, pred_color_mode: str
+) -> Tuple:
     summary, fig, metrics, gt_parser, pred_parser = run_gradio_eval(
         pred_path, gt_path, show_gt_pts, show_pred_pts, pred_color_mode
     )
 
-    if metrics is None:
+    if metrics is None or gt_parser is None or pred_parser is None:
         return summary, fig, {}, gr.update(), gr.update(), [], None, None
 
     # Get names from loaded parser
@@ -232,7 +236,7 @@ def run_gradio_eval_with_names(pred_path, gt_path, show_gt_pts, show_pred_pts, p
         return summary, fig, metrics, gr.update(), gr.update(), [], gt_parser, pred_parser
 
 
-def render_depth_overlay(img_ref, points_3d, pose, K):
+def render_depth_overlay(img_ref: np.ndarray, points_3d: np.ndarray, pose: np.ndarray, K: np.ndarray) -> np.ndarray:
     """Projects 3D points onto image and draws them with depth coloring."""
     h, w = img_ref.shape[:2]
 
@@ -270,7 +274,9 @@ def render_depth_overlay(img_ref, points_3d, pose, K):
     return img_viz
 
 
-def update_projection_comparison(camera_name, gt_parser_state, pred_parser_state):
+def update_projection_comparison(
+    camera_name: str, gt_parser_state: Optional[Parser], pred_parser_state: Optional[Parser]
+) -> Tuple[Optional[np.ndarray], Optional[np.ndarray], str]:
     """Update function utilizing the cached Parser objects."""
     if not camera_name:
         return None, None, "Select a camera."
@@ -338,7 +344,7 @@ def update_projection_comparison(camera_name, gt_parser_state, pred_parser_state
     return gt_viz, pred_viz, f"Visualizing: {camera_name} (Scale: {s:.2f})"
 
 
-def sync_slider_to_dropdown(idx, names):
+def sync_slider_to_dropdown(idx: Union[int, float], names: List[str]) -> Optional[str]:
     """Updates the dropdown selection based on slider index."""
     if names and 0 <= int(idx) < len(names):
         return names[int(idx)]
