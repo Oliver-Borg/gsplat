@@ -357,6 +357,7 @@ class Dataset:
         split: str = "train",
         patch_size: Optional[int] = None,
         load_depths: bool = False,
+        max_train_cameras: Optional[int] = None,
     ):
         self.parser = parser
         self.split = split
@@ -365,6 +366,10 @@ class Dataset:
         indices = np.arange(len(self.parser.image_names))
         if split == "train":
             self.indices = indices[indices % self.parser.test_every != 0]
+            if max_train_cameras is not None:
+                cam_step = max(len(self.indices) // max_train_cameras, 1)
+                self.indices = self.indices[::cam_step]
+                print(f"Limited to {len(self.indices)} cameras")
         else:
             self.indices = indices[indices % self.parser.test_every == 0]
 
