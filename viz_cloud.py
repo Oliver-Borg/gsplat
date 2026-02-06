@@ -4,10 +4,11 @@ import gradio as gr
 import plotly.graph_objects as go
 import trimesh
 import cv2
+import json
 from typing import Optional, Union, Tuple, Dict, List, Any
 from examples.datasets.colmap import Parser
 from evaluation import umeyama_alignment, calculate_metrics
-
+from nerf_synth import SimpleParser, load_json_data
 
 def create_frustum_traces(
     c2w: np.ndarray,
@@ -129,11 +130,17 @@ def project_points(points_3d: np.ndarray, c2w: np.ndarray, K: np.ndarray) -> Tup
 
 def load_parser_data(
     path: str,
-) -> Tuple[Optional[Parser], Optional[Dict], Optional[Dict], Optional[Dict], Optional[str]]:
+) -> Tuple[Optional[Union[Parser, SimpleParser]], Optional[Dict], Optional[Dict], Optional[Dict], Optional[str]]:
     """Safe wrapper to initialize Parser and extract poses."""
     try:
-        # Parser expects data_dir. Normalize=False to keep raw scale for alignment.
-        parser = Parser(data_dir=path, normalize=False)
+        if path.endswith(".json"):
+            parser = load_json_data(path)
+        else:
+            if path.endswith("cameras.bin") or path.endswith("cameras.txt"):
+                path = os.path.dirname(path)
+            # Parser expects data_dir. Normalize=False to keep raw scale for alignment.
+            parser = Parser(data_dir=path, normalize=False)
+
         # Create dict {image_name: c2w} for metrics calculation
         poses = {name: c2w for name, c2w in zip(parser.image_names, parser.camtoworlds)}
         intrinsics = {
@@ -473,11 +480,13 @@ with gr.Blocks(title="SfM Evaluation Suite") as demo:
         with gr.Column(scale=1):
             pred_input = gr.Textbox(
                 label="Prediction Path",
-                value="../vggt/vggt_outputs/bonsai_2_n100_s42_c1.0_random",
+                value="../vggt/vggt_outputs/lego_1_n100_s42_c1.1_random",
+                # value="../vggt/vggt_outputs/bonsai_2_n100_s42_c1.0_random",
             )
             gt_input = gr.Textbox(
                 label="Ground Truth Path",
-                value="../vggt/colmap_outputs/bonsai_2_n100_s42_c5.0",
+                # value="../vggt/colmap_outputs/bonsai_2_n100_s42_c5.0",
+                value="../vggt/data/nerf_synthetic/lego/transforms_train.json",
                 # value="./data/360_v2/bonsai/sparse/0",
             )
 
