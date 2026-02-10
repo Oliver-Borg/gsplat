@@ -1,4 +1,5 @@
 import json
+import cv2
 import numpy as np
 import os
 
@@ -24,39 +25,28 @@ def load_json_data(path: str) -> SimpleParser:
         data = json.load(f)
 
     parser = SimpleParser()
-
+    cam_angle = data.get("camera_angle_x", 0.0)
     frames = data.get("frames", [])
     frames = sorted(frames, key=lambda x: x["file_path"])
 
-    def get_intrinsics(props):
-        w = props.get("w")
-        h = props.get("h")
-        fl_x = props.get("fl_x")
-        fl_y = props.get("fl_y")
-        cx = props.get("cx")
-        cy = props.get("cy")
+    def get_intrinsics(w: int, h: int):
 
-        if w is None or h is None:
-            return None
-
-        if fl_x is None and "camera_angle_x" in props:
-            fl_x = 0.5 * w / np.tan(0.5 * props["camera_angle_x"])
-        if fl_y is None and "camera_angle_y" in props:
-            fl_y = 0.5 * h / np.tan(0.5 * props["camera_angle_y"])
-        if fl_y is None:
-            fl_y = fl_x
-
-        if cx is None:
-            cx = w / 2.0
-        if cy is None:
-            cy = h / 2.0
+        fl_x = 0.5 * w / np.tan(0.5 * cam_angle)
+        fl_y = fl_x
+        cx = w / 2.0
+        cy = h / 2.0
 
         return w, h, fl_x, fl_y, cx, cy
-
-    global_intrinsics = get_intrinsics(data)
+    
+    
 
     for i, frame in enumerate(frames):
         fname = frame["file_path"] + ".png"
+        base_dir = os.path.dirname(path)
+        im_path = os.path.join(base_dir, fname)
+        im = cv2.imread(im_path)
+        frame_intrinsics = get_intrinsics(im.shape[0], im.shape[1])
+        
         name = os.path.basename(fname)
         parser.image_names.append(name)
 
@@ -64,11 +54,9 @@ def load_json_data(path: str) -> SimpleParser:
         c2w[0:3, 1:3] *= -1
         parser.camtoworlds.append(c2w)
 
-        frame_intrinsics = get_intrinsics(frame)
+        
         if frame_intrinsics:
             w_i, h_i, fx_i, fy_i, cx_i, cy_i = frame_intrinsics
-        elif global_intrinsics:
-            w_i, h_i, fx_i, fy_i, cx_i, cy_i = global_intrinsics
         else:
             w_i, h_i = 100, 100
             fx_i, fy_i, cx_i, cy_i = 100, 100, 50, 50
@@ -83,8 +71,6 @@ def load_json_data(path: str) -> SimpleParser:
         parser.camera_ids.append(cam_id)
         parser.Ks_dict[cam_id] = K
         parser.imsize_dict[cam_id] = (int(w_i), int(h_i))
-
-        base_dir = os.path.dirname(path)
-        parser.image_paths.append(os.path.join(base_dir, fname))
+        parser.image_paths.append(im_path)
 
     return parser
