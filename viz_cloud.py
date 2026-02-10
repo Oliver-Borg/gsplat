@@ -11,6 +11,7 @@ from evaluation import umeyama_alignment, calculate_metrics
 from nerf_synth import SimpleParser, load_json_data
 from geometry import unproject_depth_map_to_point_map
 
+
 def create_frustum_traces(
     c2w: np.ndarray,
     intrinsics: np.ndarray,
@@ -366,6 +367,7 @@ def load_and_resize_depth(img_ref: np.ndarray, depth_path: str):
     depth_resized = cv2.resize(depth, (w, h), interpolation=cv2.INTER_NEAREST)
     return depth_resized
 
+
 def render_dense_depth_overlay(img_ref: np.ndarray, depth_path: str) -> np.ndarray:
     """Loads, resizes, and overlays a dense depth map onto the reference image."""
     if not os.path.exists(depth_path):
@@ -374,7 +376,7 @@ def render_dense_depth_overlay(img_ref: np.ndarray, depth_path: str) -> np.ndarr
         return out
 
     depth_resized = load_and_resize_depth(img_ref, depth_path)
-    
+
     nan_mask = np.isnan(depth_resized)
     depth_resized = np.nan_to_num(depth_resized)
 
@@ -390,22 +392,18 @@ def render_dense_depth_overlay(img_ref: np.ndarray, depth_path: str) -> np.ndarr
     return overlay
 
 
-def update_projection_comparison(
+def get_projection_data(
     camera_name: str,
     gt_parser_state: Optional[Parser],
     pred_parser_state: Optional[Parser],
-    pred_path_str: str,
-) -> Tuple[Optional[np.ndarray], Optional[np.ndarray], Optional[np.ndarray], Optional[np.ndarray], str, Optional[go.Figure]]:
-    """Update function utilizing the cached Parser objects."""
-
-    def format_error(error: str):
-        return None, None, None, None, error, None
+):
+    """Get data for projection viz"""
 
     if not camera_name:
-        return format_error("Select a camera.")
+        raise ValueError("Select a camera.")
 
     if not gt_parser_state or not pred_parser_state:
-        return format_error("Run evaluation first.")
+        raise ValueError("Run evaluation first.")
 
     gt_parser = gt_parser_state
     pred_parser = pred_parser_state
@@ -416,8 +414,7 @@ def update_projection_comparison(
 
     common_names = sorted(list(set(pred_poses.keys()) & set(gt_poses.keys())))
     if camera_name not in common_names:
-        return format_error(f"Camera {camera_name} not found in common set.")
-
+        raise ValueError(f"Camera {camera_name} not found in common set.")
 
     p_centers = np.array([pred_poses[n][:3, 3] for n in common_names])
     g_centers = np.array([gt_poses[n][:3, 3] for n in common_names])
@@ -431,7 +428,7 @@ def update_projection_comparison(
         gt_K = gt_parser.Ks_dict[cam_id]
 
         if not os.path.exists(img_path):
-            return format_error(f"Image {img_path} not found.")
+            raise ValueError(f"Image {img_path} not found.")
 
         img_ref = cv2.imread(img_path)
         img_ref = cv2.cvtColor(img_ref, cv2.COLOR_BGR2RGB)
@@ -443,7 +440,7 @@ def update_projection_comparison(
             img_ref = cv2.remap(img_ref, mapx, mapy, interpolation=cv2.INTER_LINEAR)
 
     else:
-        return format_error(f"Camera {camera_name} not found in GT parser.")
+        raise ValueError(f"Camera {camera_name} not found in GT parser.")
 
     # For Pred intrinsics, we assume matching camera ID or look up by name
     if camera_name in pred_parser.image_names:
@@ -465,6 +462,25 @@ def update_projection_comparison(
     if len(gt_points_to_render) == 0 and pred_pts_aligned is not None:
         gt_points_to_render = pred_pts_aligned
 
+    return img_ref, gt_points_to_render, gt_K, pred_K, pred_pts_aligned, gt_poses, pred_poses
+
+
+def update_projection_comparison(
+    camera_name: str,
+    gt_parser_state: Optional[Parser],
+    pred_parser_state: Optional[Parser],
+    pred_path_str: str,
+) -> Tuple[Optional[np.ndarray], Optional[np.ndarray], Optional[np.ndarray], Optional[np.ndarray], str]:
+    """Update function utilizing the cached Parser objects."""
+
+    try:
+        img_ref, gt_points_to_render, gt_K, pred_K, pred_pts_aligned, gt_poses, pred_poses = get_projection_data(
+            camera_name, gt_parser_state, pred_parser_state
+        )
+    except ValueError as e:
+        return None, None, None, None, str(e)
+
+    # 3. Generate GT Projection
 
     gt_viz = render_depth_overlay(img_ref, gt_points_to_render, gt_poses[camera_name], gt_K)
 
@@ -481,9 +497,23 @@ def update_projection_comparison(
     depth_conf_file_path = os.path.join(pred_path_str, "depths", f"depth_conf_{camera_name}.npy")
     depth_conf_viz = render_dense_depth_overlay(img_ref, depth_conf_file_path)
 
+    return gt_viz, pred_viz, depth_viz, depth_conf_viz, f"Visualizing: {camera_name}"
+
+
+def update_depth_projection_figure(
+    camera_name: str,
+    gt_parser_state: Optional[Parser],
+    pred_parser_state: Optional[Parser],
+    pred_path_str: str,
+) -> Optional[go.Figure] | str:
+    try:
+        img_ref, _, _, pred_K, _, _, pred_poses = get_projection_data(camera_name, gt_parser_state, pred_parser_state)
+    except ValueError as e:
+        return str(e)
+    depth_file_path = os.path.join(pred_path_str, "depths", f"depth_{camera_name}.npy")
     depth_map = load_and_resize_depth(img_ref, depth_file_path)
-    extrinsics = gt_poses[camera_name]
-    intrinsics = gt_K
+    extrinsics = pred_poses[camera_name]
+    intrinsics = pred_K
     depth_map = np.expand_dims(depth_map, axis=0)
     extrinsics = np.expand_dims(extrinsics, axis=0)
     intrinsics = np.expand_dims(intrinsics, axis=0)
@@ -498,8 +528,7 @@ def update_projection_comparison(
     pcd_trace = create_point_cloud_trace(cam_pcd, colours, "Camera Points")
     fig.add_trace(pcd_trace)
     fig.update_layout(scene=dict(aspectmode="data"), margin=dict(l=0, r=0, b=0, t=0), template="plotly_dark")
-
-    return gt_viz, pred_viz, depth_viz, depth_conf_viz, f"Visualizing: {camera_name} (Scale: {s:.2f})", fig
+    return fig
 
 
 def sync_slider_to_dropdown(idx: Union[int, float], names: List[str]) -> Optional[str]:
@@ -543,6 +572,7 @@ with gr.Blocks(title="SfM Evaluation Suite") as demo:
 
             camera_slider = gr.Slider(label="Scroll Cameras", minimum=0, maximum=1, step=1, visible=False)
             camera_dropdown = gr.Dropdown(label="Select Camera to Project", choices=[], allow_custom_value=True)
+            project_btn = gr.Button("Project camera points", variant="primary")
 
             output_metrics = gr.Markdown("Results will appear here...")
             output_json = gr.JSON(label="Full Metrics JSON")
@@ -559,7 +589,7 @@ with gr.Blocks(title="SfM Evaluation Suite") as demo:
                     depth_img_display = gr.Image(label="Pred Depth Overlay")
                 with gr.Column():
                     depth_conf_img_display = gr.Image(label="Pred Depth Confidence Overlay")
-            
+
             with gr.Row():
                 with gr.Column():
                     plot_output = gr.Plot(label="3D Trajectory Comparison")
@@ -588,8 +618,21 @@ with gr.Blocks(title="SfM Evaluation Suite") as demo:
     camera_dropdown.change(
         fn=update_projection_comparison,
         inputs=[camera_dropdown, gt_parser_state, pred_parser_state, pred_input],
-        outputs=[gt_img_display, pred_img_display, depth_img_display, depth_conf_img_display, img_info, focused_plot_output],
+        outputs=[
+            gt_img_display,
+            pred_img_display,
+            depth_img_display,
+            depth_conf_img_display,
+            img_info,
+        ],
     )
+
+    project_btn.click(
+        fn=update_depth_projection_figure,
+        inputs=[camera_dropdown, gt_parser_state, pred_parser_state, pred_input],
+        outputs=[focused_plot_output],
+    )
+
 
 if __name__ == "__main__":
     demo.launch(server_name="0.0.0.0", server_port=7860, share=True)
