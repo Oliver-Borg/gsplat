@@ -369,8 +369,10 @@ def render_dense_depth_overlay(img_ref: np.ndarray, depth_path: str) -> np.ndarr
         depth = depth[start_y : start_y + new_h, :]
 
     depth_resized = cv2.resize(depth, (w, h), interpolation=cv2.INTER_NEAREST)
+    nan_mask = np.isnan(depth_resized)
+    depth_resized = np.nan_to_num(depth_resized)
 
-    d_min, d_max = depth_resized.min(), depth_resized.max()
+    d_min, d_max = depth_resized[~nan_mask].min(), depth_resized[~nan_mask].max()
     depth_norm = (depth_resized - d_min) / (d_max - d_min + 1e-8)
     depth_uint8 = (depth_norm * 255).clip(0, 255).astype(np.uint8)
 
@@ -378,6 +380,7 @@ def render_dense_depth_overlay(img_ref: np.ndarray, depth_path: str) -> np.ndarr
     depth_color = cv2.applyColorMap(depth_uint8, cmap)
     depth_color = cv2.cvtColor(depth_color, cv2.COLOR_BGR2RGB)
     overlay = cv2.addWeighted(img_ref, 0.6, depth_color, 0.4, 0)
+    overlay[nan_mask] = img_ref[nan_mask]
     return overlay
 
 
@@ -439,14 +442,23 @@ def update_projection_comparison(
     else:
         pred_K = gt_K  # Fallback
 
-    # 3. Generate GT Projection
-    gt_viz = render_depth_overlay(img_ref, gt_parser.points, gt_poses[camera_name], gt_K)
-
-    # 4. Generate Pred Projection (Aligned)
-    # Align Pred Points to GT World
+    # Pre-calculate Aligned Pred Points
     pred_points = pred_parser.points
+    pred_pts_aligned = None
     if len(pred_points) > 0:
         pred_pts_aligned = (s * (R @ pred_points.T)).T + t.T
+
+    # 3. Generate GT Projection
+    # If GT points are empty (e.g. JSON/NeRF Synthetic), use aligned pred points
+    gt_points_to_render = gt_parser.points
+    if len(gt_points_to_render) == 0 and pred_pts_aligned is not None:
+        gt_points_to_render = pred_pts_aligned
+
+
+    gt_viz = render_depth_overlay(img_ref, gt_points_to_render, gt_poses[camera_name], gt_K)
+
+    # 4. Generate Pred Projection (Aligned)
+    if pred_pts_aligned is not None:
         pred_viz = render_depth_overlay(img_ref, pred_pts_aligned, gt_poses[camera_name], pred_K)
     else:
         pred_viz = img_ref
