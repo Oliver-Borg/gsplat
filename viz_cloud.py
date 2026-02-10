@@ -9,6 +9,7 @@ from typing import Optional, Union, Tuple, Dict, List, Any
 from examples.datasets.colmap import Parser
 from evaluation import umeyama_alignment, calculate_metrics
 from nerf_synth import SimpleParser, load_json_data
+from geometry import unproject_depth_map_to_point_map
 
 def create_frustum_traces(
     c2w: np.ndarray,
@@ -338,13 +339,7 @@ def render_depth_overlay(img_ref: np.ndarray, points_3d: np.ndarray, pose: np.nd
     return img_viz
 
 
-def render_dense_depth_overlay(img_ref: np.ndarray, depth_path: str) -> np.ndarray:
-    """Loads, resizes, and overlays a dense depth map onto the reference image."""
-    if not os.path.exists(depth_path):
-        out = img_ref.copy()
-        cv2.putText(out, "No Depth File", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
-        return out
-
+def load_and_resize_depth(img_ref: np.ndarray, depth_path: str):
     try:
         depth = np.load(depth_path)
     except Exception as e:
@@ -369,6 +364,17 @@ def render_dense_depth_overlay(img_ref: np.ndarray, depth_path: str) -> np.ndarr
         depth = depth[start_y : start_y + new_h, :]
 
     depth_resized = cv2.resize(depth, (w, h), interpolation=cv2.INTER_NEAREST)
+    return depth_resized
+
+def render_dense_depth_overlay(img_ref: np.ndarray, depth_path: str) -> np.ndarray:
+    """Loads, resizes, and overlays a dense depth map onto the reference image."""
+    if not os.path.exists(depth_path):
+        out = img_ref.copy()
+        cv2.putText(out, "No Depth File", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+        return out
+
+    depth_resized = load_and_resize_depth(img_ref, depth_path)
+    
     nan_mask = np.isnan(depth_resized)
     depth_resized = np.nan_to_num(depth_resized)
 
@@ -389,13 +395,17 @@ def update_projection_comparison(
     gt_parser_state: Optional[Parser],
     pred_parser_state: Optional[Parser],
     pred_path_str: str,
-) -> Tuple[Optional[np.ndarray], Optional[np.ndarray], Optional[np.ndarray], Optional[np.ndarray], str]:
+) -> Tuple[Optional[np.ndarray], Optional[np.ndarray], Optional[np.ndarray], Optional[np.ndarray], str, Optional[go.Figure]]:
     """Update function utilizing the cached Parser objects."""
+
+    def format_error(error: str):
+        return None, None, None, None, error, None
+
     if not camera_name:
-        return None, None, None, "Select a camera."
+        return format_error("Select a camera.")
 
     if not gt_parser_state or not pred_parser_state:
-        return None, None, None, "Run evaluation first."
+        return format_error("Run evaluation first.")
 
     gt_parser = gt_parser_state
     pred_parser = pred_parser_state
@@ -406,7 +416,8 @@ def update_projection_comparison(
 
     common_names = sorted(list(set(pred_poses.keys()) & set(gt_poses.keys())))
     if camera_name not in common_names:
-        return None, None, None, f"Camera {camera_name} not found in common set."
+        return format_error(f"Camera {camera_name} not found in common set.")
+
 
     p_centers = np.array([pred_poses[n][:3, 3] for n in common_names])
     g_centers = np.array([gt_poses[n][:3, 3] for n in common_names])
@@ -420,7 +431,7 @@ def update_projection_comparison(
         gt_K = gt_parser.Ks_dict[cam_id]
 
         if not os.path.exists(img_path):
-            return None, None, None, f"Image {img_path} not found."
+            return format_error(f"Image {img_path} not found.")
 
         img_ref = cv2.imread(img_path)
         img_ref = cv2.cvtColor(img_ref, cv2.COLOR_BGR2RGB)
@@ -432,7 +443,7 @@ def update_projection_comparison(
             img_ref = cv2.remap(img_ref, mapx, mapy, interpolation=cv2.INTER_LINEAR)
 
     else:
-        return None, None, None, "Camera not found in GT parser."
+        return format_error(f"Camera {camera_name} not found in GT parser.")
 
     # For Pred intrinsics, we assume matching camera ID or look up by name
     if camera_name in pred_parser.image_names:
@@ -470,7 +481,25 @@ def update_projection_comparison(
     depth_conf_file_path = os.path.join(pred_path_str, "depths", f"depth_conf_{camera_name}.npy")
     depth_conf_viz = render_dense_depth_overlay(img_ref, depth_conf_file_path)
 
-    return gt_viz, pred_viz, depth_viz, depth_conf_viz, f"Visualizing: {camera_name} (Scale: {s:.2f})"
+    depth_map = load_and_resize_depth(img_ref, depth_file_path)
+    extrinsics = gt_poses[camera_name]
+    intrinsics = gt_K
+    depth_map = np.expand_dims(depth_map, axis=0)
+    extrinsics = np.expand_dims(extrinsics, axis=0)
+    intrinsics = np.expand_dims(intrinsics, axis=0)
+
+    cam_pcd = unproject_depth_map_to_point_map(np.expand_dims(depth_map, axis=-1), extrinsics, intrinsics)
+
+    nan_mask = np.isnan(depth_map)
+    cam_pcd = cam_pcd[~nan_mask]
+    colours = img_ref[~(nan_mask[0])]
+
+    fig = go.Figure()
+    pcd_trace = create_point_cloud_trace(cam_pcd, colours, "Camera Points")
+    fig.add_trace(pcd_trace)
+    fig.update_layout(scene=dict(aspectmode="data"), margin=dict(l=0, r=0, b=0, t=0), template="plotly_dark")
+
+    return gt_viz, pred_viz, depth_viz, depth_conf_viz, f"Visualizing: {camera_name} (Scale: {s:.2f})", fig
 
 
 def sync_slider_to_dropdown(idx: Union[int, float], names: List[str]) -> Optional[str]:
@@ -530,7 +559,12 @@ with gr.Blocks(title="SfM Evaluation Suite") as demo:
                     depth_img_display = gr.Image(label="Pred Depth Overlay")
                 with gr.Column():
                     depth_conf_img_display = gr.Image(label="Pred Depth Confidence Overlay")
-            plot_output = gr.Plot(label="3D Trajectory Comparison")
+            
+            with gr.Row():
+                with gr.Column():
+                    plot_output = gr.Plot(label="3D Trajectory Comparison")
+                with gr.Column():
+                    focused_plot_output = gr.Plot(label="Camera Points")
 
     btn.click(
         fn=run_gradio_eval_with_names,
@@ -554,7 +588,7 @@ with gr.Blocks(title="SfM Evaluation Suite") as demo:
     camera_dropdown.change(
         fn=update_projection_comparison,
         inputs=[camera_dropdown, gt_parser_state, pred_parser_state, pred_input],
-        outputs=[gt_img_display, pred_img_display, depth_img_display, depth_conf_img_display, img_info],
+        outputs=[gt_img_display, pred_img_display, depth_img_display, depth_conf_img_display, img_info, focused_plot_output],
     )
 
 if __name__ == "__main__":
