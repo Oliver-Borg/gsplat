@@ -10,6 +10,7 @@ from examples.datasets.colmap import Parser
 from evaluation import umeyama_alignment, calculate_metrics
 from nerf_synth import SimpleParser, load_json_data
 from geometry import unproject_depth_map_to_point_map
+from scipy.spatial import cKDTree  # type: ignore
 
 
 def create_frustum_traces(
@@ -189,41 +190,52 @@ def run_gradio_eval(
 
     # 5. Pred Points Visualization
     if show_pred_pts:
-        try:
-            # Special handling for confidence PLY in prediction folder (retained from original)
-            ply_filename = "points_conf.ply" if pred_color_mode == "Confidence" else "points.ply"
-            ply_file_path = os.path.join(pred_path, "sparse", ply_filename)
+        # try:
+        # Special handling for confidence PLY in prediction folder (retained from original)
+        ply_filename = "points_conf.ply" if pred_color_mode == "Confidence" else "points.ply"
+        ply_file_path = os.path.join(pred_path, "sparse", ply_filename)
 
-            pred_pts = None
-            pred_colors = "red"
+        pred_pts = None
+        pred_colors = "red"
 
-            # Try loading specific PLY if exists (for confidence visualization)
-            if os.path.exists(ply_file_path):
-                pc = trimesh.load(ply_file_path)
-                if isinstance(pc, trimesh.PointCloud):
-                    pred_pts = np.array(pc.vertices)
-                    if hasattr(pc, "colors") and len(pc.colors) > 0:
-                        pred_colors = np.array(pc.colors)
+        # Try loading specific PLY if exists (for confidence visualization)
+        if os.path.exists(ply_file_path):
+            pc = trimesh.load(ply_file_path)
+            if isinstance(pc, trimesh.PointCloud):
+                pred_pts = np.array(pc.vertices)
+                if hasattr(pc, "colors") and len(pc.colors) > 0:
+                    pred_colors = np.array(pc.colors)
+            if pred_color_mode == "Spatial":
+                tree = cKDTree(pred_pts)  # type: ignore
+                distances, indices = tree.query(pred_pts, k=4)
+                avg_distances = np.mean(distances[:, 1:], axis=1)
+                norm_distances = ((avg_distances - np.min(avg_distances)) / (
+                    np.max(avg_distances) - np.min(avg_distances) + 1e-8
+                ) * 255).clip(0, 255).astype(np.uint8)
 
-            if pred_pts is None and len(pred_parser.points) > 0:
-                pred_pts = pred_parser.points
-                if len(pred_parser.points_rgb) > 0:
-                    pred_colors = pred_parser.points_rgb
+                cmap = getattr(cv2, "COLORMAP_TURBO", cv2.COLORMAP_JET)
+                pred_colors = cv2.applyColorMap(norm_distances[:, None], cmap)[:, 0, :]  # Shape (N, 1, 3)
 
-            if pred_pts is not None and len(pred_pts) > 0:
-                # Apply the alignment transform to the prediction point cloud
-                # transform: x' = s * R * x + t
-                pred_pts_aligned = (s * (R @ pred_pts.T)).T + t.T
 
-                # Update name based on mode
-                trace_name = (
-                    f"Pred Points ({pred_color_mode})"
-                    if isinstance(pred_colors, np.ndarray)
-                    else "Pred Points (Aligned)"
-                )
-                fig.add_trace(create_point_cloud_trace(pred_pts_aligned, pred_colors, trace_name))
-        except Exception as e:
-            print(f"Could not load Pred points: {e}")
+        if pred_pts is None and len(pred_parser.points) > 0:
+            pred_pts = pred_parser.points
+            if len(pred_parser.points_rgb) > 0:
+                pred_colors = pred_parser.points_rgb
+
+        if pred_pts is not None and len(pred_pts) > 0:
+            # Apply the alignment transform to the prediction point cloud
+            # transform: x' = s * R * x + t
+            pred_pts_aligned = (s * (R @ pred_pts.T)).T + t.T
+
+            # Update name based on mode
+            trace_name = (
+                f"Pred Points ({pred_color_mode})"
+                if isinstance(pred_colors, np.ndarray)
+                else "Pred Points (Aligned)"
+            )
+            fig.add_trace(create_point_cloud_trace(pred_pts_aligned, pred_colors, trace_name))
+        # except Exception as e:
+        #     print(f"Could not load Pred points: {e}")
 
     # 6. Frustum Visualization
     for name in common_names:
@@ -550,7 +562,8 @@ with gr.Blocks(title="SfM Evaluation Suite") as demo:
         with gr.Column(scale=1):
             pred_input = gr.Textbox(
                 label="Prediction Path",
-                value="../vggt/vggt_outputs/lego_1_n100_s42_c1.1_random",
+                value="../vggt/vggt_outputs/lego_1_n50_s42_c0.0_p1000_voxels",
+                # value="../vggt/vggt_outputs/bonsai_2_n50_s42_c0.0_p1000_voxels",
                 # value="../vggt/vggt_outputs/bonsai_2_n100_s42_c1.0_random",
             )
             gt_input = gr.Textbox(
@@ -565,7 +578,7 @@ with gr.Blocks(title="SfM Evaluation Suite") as demo:
                 chk_pred = gr.Checkbox(label="Show Pred Cloud", value=True)
 
             radio_color = gr.Radio(
-                choices=["RGB", "Confidence"], label="Pred Point Color", value="RGB", interactive=True
+                choices=["RGB", "Confidence", "Spatial"], label="Pred Point Color", value="RGB", interactive=True
             )
 
             btn = gr.Button("Evaluate & Visualize", variant="primary")
