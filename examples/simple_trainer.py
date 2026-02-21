@@ -377,6 +377,7 @@ class Runner:
             world_size=world_size,
         )
         print("Model initialized. Number of GS:", len(self.splats["means"]))
+        self.num_points = len(self.splats["means"])
 
         # Densification Strategy
         self.cfg.strategy.check_sanity(self.splats, self.optimizers)
@@ -974,6 +975,7 @@ class Runner:
                 {
                     "ellipse_time": ellipse_time,
                     "num_GS": len(self.splats["means"]),
+                    "num_points": self.num_points,  # This is the initial number of points
                 }
             )
             if cfg.use_bilateral_grid:
