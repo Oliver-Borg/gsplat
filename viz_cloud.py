@@ -8,7 +8,7 @@ import json
 from typing import Optional, Union, Tuple, Dict, List, Any
 from examples.datasets.colmap import Parser
 from evaluation import umeyama_alignment, calculate_metrics
-from nerf_synth import SimpleParser, load_json_data
+from examples.datasets.nerf_synth import SimpleParser, load_json_data
 from geometry import unproject_depth_map_to_point_map
 from scipy.spatial import cKDTree  # type: ignore
 
