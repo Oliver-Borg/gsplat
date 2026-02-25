@@ -29,11 +29,16 @@ class EvalReport(TypedDict):
     profiling: Dict[str, Any]
 
 
-def umeyama_alignment(q: np.ndarray, p: np.ndarray, with_scale: bool = True) -> Tuple[float, np.ndarray, np.ndarray]:
+def umeyama_alignment(
+    from_points: np.ndarray, to_points: np.ndarray, with_scale: bool = True
+) -> tuple[float, np.ndarray, np.ndarray]:
     """
     Computes optimal similarity transform: p = s * R * q + t.
     https://en.wikipedia.org/wiki/Kabsch_algorithm
     """
+    q = from_points
+    p = to_points
+
     # Translation
     n, m = q.shape
     q_mean = q.mean(axis=0)

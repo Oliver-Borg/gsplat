@@ -28,6 +28,8 @@ from torch.utils.tensorboard import SummaryWriter
 from torchmetrics.image import PeakSignalNoiseRatio, StructuralSimilarityIndexMeasure
 from torchmetrics.image.lpip import LearnedPerceptualImagePatchSimilarity
 from typing_extensions import Literal, assert_never
+from datasets.nerf_synth import SimpleParser
+from evaluation import umeyama_alignment
 from utils import AppearanceOptModule, CameraOptModule, knn, rgb_to_sh, set_random_seed
 
 from gsplat import export_splats
@@ -53,6 +55,10 @@ class Config:
 
     # Path to the Mip-NeRF 360 dataset
     data_dir: str = "data/360_v2/garden"
+    # Path to ground truth training data. Either a json file for NeRF synthetic data or a folder. This is used to align with the training cameras.
+    gt_train_data_dir: str | None = None
+    # Path to ground truth eval data. Either a json file for NeRF synthetic data or a folder. This is actually used for evaluation.
+    gt_eval_data_dir: str | None = None
     # Downsample factor for the dataset
     data_factor: int = 4
     # Directory to save results
@@ -334,27 +340,59 @@ class Runner:
         self.writer = SummaryWriter(log_dir=f"{cfg.result_dir}/tb")
 
         # Load data: Training data should contain initial points and colors.
-        self.parser = Parser(
+        self.train_parser = Parser(
             data_dir=cfg.data_dir,
             factor=cfg.data_factor,
             normalize=cfg.normalize_world_space,
             test_every=cfg.test_every,
         )
+
+        if cfg.gt_train_data_dir is not None:
+            if cfg.gt_train_data_dir.endswith(".json"):
+                self.align_parser = SimpleParser(
+                    cfg.gt_train_data_dir, cfg.test_every, transform=self.train_parser.transform, factor=cfg.data_factor
+                )
+            else:
+                # TODO Technically these images can overlap with the training set when using GT, especially in the nerf360 case
+                self.align_parser = Parser(
+                    data_dir=cfg.gt_train_data_dir,
+                    factor=cfg.data_factor,
+                    normalize=cfg.normalize_world_space,
+                    test_every=cfg.test_every,
+                )
+        else:
+            self.align_parser = self.train_parser
+
+        if cfg.gt_eval_data_dir is not None:
+            if cfg.gt_eval_data_dir.endswith(".json"):
+                self.eval_parser = SimpleParser(
+                    cfg.gt_eval_data_dir, cfg.test_every, transform=self.train_parser.transform, factor=cfg.data_factor
+                )
+            else:
+                self.eval_parser = Parser(
+                    data_dir=cfg.gt_eval_data_dir,
+                    factor=cfg.data_factor,
+                    normalize=cfg.normalize_world_space,
+                    test_every=cfg.test_every,
+                )
+        else:
+            self.eval_parser = self.train_parser
+
+
         self.trainset = Dataset(
-            self.parser,
+            self.train_parser,
             split="train",
             patch_size=cfg.patch_size,
             load_depths=cfg.depth_loss,
             max_train_cameras=cfg.max_train_cameras,
         )
-        self.valset = Dataset(self.parser, split="val")
-        self.scene_scale = self.parser.scene_scale * 1.1 * cfg.global_scale
+        self.scene_scale = self.train_parser.scene_scale * 1.1 * cfg.global_scale
         print("Scene scale:", self.scene_scale)
 
         # Model
         feature_dim = 32 if cfg.app_opt else None
         self.splats, self.optimizers = create_splats_with_optimizers(
-            self.parser,
+            self.train_parser,
             init_type=cfg.init_type,
             init_num_pts=cfg.init_num_pts,
             init_extent=cfg.init_extent,
@@ -916,13 +954,36 @@ class Runner:
         world_rank = self.world_rank
         world_size = self.world_size
 
+        common_names = set(self.train_parser.image_names) & set(self.align_parser.image_names)
+
+        if len(common_names) >= 3 and cfg.gt_train_data_dir is not None:
+            from_points = np.array([c2w[:3, 3] for c2w in self.align_parser.get_camera_positions(common_names)])
+            to_points = np.array([c2w[:3, 3] for c2w in self.train_parser.get_camera_positions(common_names)])
+            s, R, t = umeyama_alignment(from_points, to_points)
+            if s == 0:
+                print("Warning: Scale of 0 calculated. Setting to 1.0")
+                s = 1.0
+            print(f"Aligned poses with {s} {R} {t}")
+            matrix = np.eye(4)
+            matrix[:3, :3] = s * R
+            matrix[:3, 3] = t.reshape(3)
+        else:
+            matrix = None
+
+        used_training_names = [self.train_parser.image_names[i] for i in self.trainset.indices]
+        
+        valset = Dataset(self.align_parser, split="align", exclude_names=used_training_names)
+
         valloader = torch.utils.data.DataLoader(
-            self.valset, batch_size=1, shuffle=False, num_workers=1
+            valset, batch_size=1, shuffle=False, num_workers=1
         )
         ellipse_time = 0
         metrics = defaultdict(list)
         for i, data in enumerate(valloader):
-            camtoworlds = data["camtoworld"].to(device)
+            camtoworlds: torch.tensor = data["camtoworld"].to(device)
+            if matrix is not None:
+                camtoworlds = torch.from_numpy(matrix).to(device).to(camtoworlds.dtype) @ camtoworlds.T  # TODO Fix deprecation warning
+                camtoworlds = camtoworlds.T
             Ks = data["K"].to(device)
             pixels = data["image"].to(device) / 255.0
             masks = data["mask"].to(device) if "mask" in data else None
@@ -976,6 +1037,7 @@ class Runner:
                     "ellipse_time": ellipse_time,
                     "num_GS": len(self.splats["means"]),
                     "num_points": self.num_points,  # This is the initial number of points
+                    "num_eval_images": len(valloader),
                 }
             )
             if cfg.use_bilateral_grid:
@@ -1008,10 +1070,10 @@ class Runner:
         cfg = self.cfg
         device = self.device
 
-        if self.parser.camtoworlds.shape[0] > 10:
-            camtoworlds_all = self.parser.camtoworlds[5:-5]
+        if self.train_parser.camtoworlds.shape[0] > 10:
+            camtoworlds_all = self.train_parser.camtoworlds[5:-5]
         else:
-            camtoworlds_all = self.parser.camtoworlds
+            camtoworlds_all = self.train_parser.camtoworlds
         if cfg.render_traj_path == "interp":
             camtoworlds_all = generate_interpolated_path(
                 camtoworlds_all, 1
@@ -1024,8 +1086,8 @@ class Runner:
         elif cfg.render_traj_path == "spiral":
             camtoworlds_all = generate_spiral_path(
                 camtoworlds_all,
-                bounds=self.parser.bounds * self.scene_scale,
-                spiral_scale_r=self.parser.extconf["spiral_radius_scale"],
+                bounds=self.train_parser.bounds * self.scene_scale,
+                spiral_scale_r=self.train_parser.extconf["spiral_radius_scale"],
             )
         else:
             raise ValueError(
@@ -1043,8 +1105,8 @@ class Runner:
         )  # [N, 4, 4]
 
         camtoworlds_all = torch.from_numpy(camtoworlds_all).float().to(device)
-        K = torch.from_numpy(list(self.parser.Ks_dict.values())[0]).float().to(device)
-        width, height = list(self.parser.imsize_dict.values())[0]
+        K = torch.from_numpy(list(self.train_parser.Ks_dict.values())[0]).float().to(device)
+        width, height = list(self.train_parser.imsize_dict.values())[0]
 
         # save to video
         video_dir = f"{cfg.result_dir}/videos"

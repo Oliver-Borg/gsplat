@@ -4,11 +4,13 @@ import cv2
 import numpy as np
 import os
 
+from .normalize import transform_cameras
+
 
 class SimpleParser:
     """A simple parser for JSON transforms data."""
 
-    def __init__(self, path: str, test_every: int = 8):
+    def __init__(self, path: str, test_every: int = 8, factor: int = 1, transform: np.ndarray = np.eye(4)):
         self.image_names = []
         self.camtoworlds = []
         self.Ks_dict = {}
@@ -22,11 +24,13 @@ class SimpleParser:
 
         self.test_every = test_every
         self.path = path
-        # TODO Implement these properly
         self.params_dict = {}
-        self.roi_undist_dict = {}
+        self.roi_undist_dict = {}  # This should be empty if there is no distortion
         self.mask_dict = {}
         self.depths = {}
+        self.transform = transform
+        self.factor = factor
+
         self._load_json_data()
 
     def _load_json_data(self):
@@ -51,7 +55,7 @@ class SimpleParser:
             base_dir = os.path.dirname(self.path)
             im_path = os.path.join(base_dir, fname)
             im = cv2.imread(im_path)
-            frame_intrinsics = get_intrinsics(im.shape[0], im.shape[1])
+            w_i, h_i, fx_i, fy_i, cx_i, cy_i = get_intrinsics(im.shape[0], im.shape[1])
 
             name = os.path.basename(fname)
             self.image_names.append(name)
@@ -59,12 +63,6 @@ class SimpleParser:
             c2w = np.array(frame["transform_matrix"])
             c2w[0:3, 1:3] *= -1
             self.camtoworlds.append(c2w)
-
-            if frame_intrinsics:
-                w_i, h_i, fx_i, fy_i, cx_i, cy_i = frame_intrinsics
-            else:
-                w_i, h_i = 100, 100
-                fx_i, fy_i, cx_i, cy_i = 100, 100, 50, 50
 
             K = np.eye(3)
             K[0, 0] = fx_i
@@ -77,6 +75,14 @@ class SimpleParser:
             self.Ks_dict[cam_id] = K
             self.imsize_dict[cam_id] = (int(w_i), int(h_i))
             self.image_paths.append(im_path)
+            self.params_dict[cam_id] = np.empty(0, dtype=np.float32)
+            self.mask_dict[cam_id] = None
+        
+        self.camtoworlds = transform_cameras(self.transform, np.array(self.camtoworlds))
+
+    def get_camera_positions(self, names: set[str]):
+        indices = [self.image_names.index(name) for name in names]
+        return np.array([self.camtoworlds[i] for i in indices])
 
 
 def load_json_data(path: str) -> SimpleParser:

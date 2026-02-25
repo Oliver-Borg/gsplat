@@ -11,6 +11,8 @@ from pycolmap import SceneManager
 from tqdm import tqdm
 from typing_extensions import assert_never
 
+from .nerf_synth import SimpleParser
+
 from .normalize import (
     align_principal_axes,
     similarity_from_cameras,
@@ -346,6 +348,10 @@ class Parser:
         scene_center = np.mean(camera_locations, axis=0)
         dists = np.linalg.norm(camera_locations - scene_center, axis=1)
         self.scene_scale = np.max(dists)
+    
+    def get_camera_positions(self, names: set[str]):
+        indices = [self.image_names.index(name) for name in names]
+        return np.array([self.camtoworlds[i] for i in indices])
 
 
 class Dataset:
@@ -353,11 +359,12 @@ class Dataset:
 
     def __init__(
         self,
-        parser: Parser,
+        parser: Parser | SimpleParser,
         split: str = "train",
         patch_size: Optional[int] = None,
         load_depths: bool = False,
         max_train_cameras: Optional[int] = None,
+        exclude_names: Optional[list[str]] = None,
     ):
         self.parser = parser
         self.split = split
@@ -370,8 +377,13 @@ class Dataset:
                 cam_step = max(len(self.indices) // max_train_cameras, 1)
                 self.indices = self.indices[::cam_step]
                 print(f"Limited to {len(self.indices)} cameras")
-        else:
+        elif split == "val":
             self.indices = indices[indices % self.parser.test_every == 0]
+        else:
+            self.indices = indices
+        
+        if exclude_names is not None:
+            self.indices = [i for i in self.indices if self.parser.image_names[i] not in exclude_names]
 
     def __len__(self):
         return len(self.indices)
@@ -409,11 +421,12 @@ class Dataset:
             "camtoworld": torch.from_numpy(camtoworlds).float(),
             "image": torch.from_numpy(image).float(),
             "image_id": item,  # the index of the image in the dataset
+            "image_name": self.parser.image_names[index],
         }
         if mask is not None:
             data["mask"] = torch.from_numpy(mask).bool()
 
-        if self.load_depths:
+        if self.load_depths and isinstance(self.parser, Parser):
             # projected points to image plane to get depths
             worldtocams = np.linalg.inv(camtoworlds)
             image_name = self.parser.image_names[index]
@@ -435,6 +448,8 @@ class Dataset:
             depths = depths[selector]
             data["points"] = torch.from_numpy(points).float()
             data["depths"] = torch.from_numpy(depths).float()
+        elif self.load_depths and isinstance(self.parser, SimpleParser):
+            raise NotImplementedError("Implement this with depth loading for SimpleParser.")
 
         return data
 
