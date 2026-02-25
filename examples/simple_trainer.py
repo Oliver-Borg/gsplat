@@ -155,6 +155,8 @@ class Config:
 
     # Enable camera optimization.
     pose_opt: bool = False
+    # Enable camera optimization for evaluation cameras.
+    eval_pose_opt_steps: int = 0
     # Learning rate for camera optimization
     pose_opt_lr: float = 1e-5
     # Regularization for camera optimization as weight decay
@@ -451,6 +453,25 @@ class Runner:
             if world_size > 1:
                 self.pose_adjust = DDP(self.pose_adjust)
 
+        self.used_training_names = [self.train_parser.image_names[i] for i in self.trainset.indices]
+        self.common_names = set(self.used_training_names) & set(self.align_parser.image_names)
+        transform_matrix = self.get_dataset_alignment_matrix()
+        self.valset = Dataset(self.align_parser, split="align", exclude_names=self.used_training_names, transform_matrix=transform_matrix)
+
+        self.eval_pose_optimizers = []
+        if cfg.eval_pose_opt_steps > 0:
+            self.eval_pose_adjust = CameraOptModule(len(self.valset)).to(self.device)
+            self.eval_pose_adjust.zero_init()
+            self.eval_pose_optimizers = [
+                torch.optim.Adam(
+                    self.eval_pose_adjust.parameters(),
+                    lr=cfg.pose_opt_lr * math.sqrt(cfg.batch_size) * cfg.eval_pose_opt_steps,
+                    weight_decay=cfg.pose_opt_reg / cfg.eval_pose_opt_steps,
+                )
+            ]
+            if world_size > 1:
+                self.eval_pose_adjust = DDP(self.eval_pose_adjust)
+
         if cfg.pose_noise > 0.0:
             self.pose_perturb = CameraOptModule(len(self.trainset)).to(self.device)
             self.pose_perturb.random_init(cfg.pose_noise)
@@ -612,6 +633,14 @@ class Runner:
                     self.pose_optimizers[0], gamma=0.01 ** (1.0 / max_steps)
                 )
             )
+        eval_schedulers = []
+        if cfg.eval_pose_opt_steps > 0:
+            # pose optimization has a learning rate schedule
+            eval_schedulers.append(
+                torch.optim.lr_scheduler.ExponentialLR(
+                    self.eval_pose_optimizers[0], gamma=0.01 ** (1.0 / max_steps * cfg.eval_pose_opt_steps)
+                )
+            )
         if cfg.use_bilateral_grid:
             # bilateral grid has a learning rate schedule. Linear warmup for 1000 steps.
             schedulers.append(
@@ -637,7 +666,18 @@ class Runner:
             persistent_workers=True,
             pin_memory=True,
         )
+
+        evalloader = torch.utils.data.DataLoader(
+            self.valset,
+            batch_size=cfg.batch_size,
+            shuffle=False,
+            num_workers=4,
+            persistent_workers=True,
+            pin_memory=True,
+        )
+
         trainloader_iter = iter(trainloader)
+        evalloader_iter = iter(evalloader)
 
         # Training loop.
         global_tic = time.time()
@@ -648,12 +688,22 @@ class Runner:
                     time.sleep(0.01)
                 self.viewer.lock.acquire()
                 tic = time.time()
+            # TODO Do I really only want this to be on if pose_opt is on?
+            # step % cfg.eval_pose_opt_steps == 1 so we don't overlap with refine_every
+            is_eval_opt_step = cfg.eval_pose_opt_steps > 0 and step % cfg.eval_pose_opt_steps == 1 and cfg.pose_opt
 
-            try:
-                data = next(trainloader_iter)
-            except StopIteration:
-                trainloader_iter = iter(trainloader)
-                data = next(trainloader_iter)
+            if is_eval_opt_step:  # Eval pose optimization as in https://arxiv.org/pdf/2504.04294
+                try:
+                    data = next(evalloader_iter)
+                except StopIteration:
+                    evalloader_iter = iter(evalloader)
+                    data = next(evalloader_iter)
+            else:
+                try:
+                    data = next(trainloader_iter)
+                except StopIteration:
+                    trainloader_iter = iter(trainloader)
+                    data = next(trainloader_iter)
 
             camtoworlds = camtoworlds_gt = data["camtoworld"].to(device)  # [1, 4, 4]
             Ks = data["K"].to(device)  # [1, 3, 3]
@@ -672,7 +722,9 @@ class Runner:
             if cfg.pose_noise:
                 camtoworlds = self.pose_perturb(camtoworlds, image_ids)
 
-            if cfg.pose_opt:
+            if is_eval_opt_step:
+                camtoworlds = self.eval_pose_adjust(camtoworlds, image_ids)
+            elif cfg.pose_opt:
                 camtoworlds = self.pose_adjust(camtoworlds, image_ids)
 
             # sh schedule
@@ -883,45 +935,62 @@ class Runner:
                     visibility_mask = (info["radii"] > 0).all(-1).any(0)
 
             # optimize
-            for optimizer in self.optimizers.values():
-                if cfg.visible_adam:
-                    optimizer.step(visibility_mask)
-                else:
+            if is_eval_opt_step:
+                for optimizer in self.eval_pose_optimizers:
                     optimizer.step()
-                optimizer.zero_grad(set_to_none=True)
-            for optimizer in self.pose_optimizers:
-                optimizer.step()
-                optimizer.zero_grad(set_to_none=True)
-            for optimizer in self.app_optimizers:
-                optimizer.step()
-                optimizer.zero_grad(set_to_none=True)
-            for optimizer in self.bil_grid_optimizers:
-                optimizer.step()
-                optimizer.zero_grad(set_to_none=True)
-            for scheduler in schedulers:
-                scheduler.step()
-
-            # Run post-backward steps after backward and optimizer
-            if isinstance(self.cfg.strategy, DefaultStrategy):
-                self.cfg.strategy.step_post_backward(
-                    params=self.splats,
-                    optimizers=self.optimizers,
-                    state=self.strategy_state,
-                    step=step,
-                    info=info,
-                    packed=cfg.packed,
-                )
-            elif isinstance(self.cfg.strategy, MCMCStrategy):
-                self.cfg.strategy.step_post_backward(
-                    params=self.splats,
-                    optimizers=self.optimizers,
-                    state=self.strategy_state,
-                    step=step,
-                    info=info,
-                    lr=schedulers[0].get_last_lr()[0],
-                )
+                    optimizer.zero_grad(set_to_none=True)
+                
+                # We don't want to optimize based on the validation set for anything apart from pose
+                for optimizer in self.optimizers.values():
+                    optimizer.zero_grad(set_to_none=True)
+                for optimizer in self.pose_optimizers:
+                    optimizer.zero_grad(set_to_none=True)
+                for optimizer in self.app_optimizers:
+                    optimizer.zero_grad(set_to_none=True)
+                for optimizer in self.bil_grid_optimizers:
+                    optimizer.zero_grad(set_to_none=True)
+                for scheduler in eval_schedulers:
+                    scheduler.step()
             else:
-                assert_never(self.cfg.strategy)
+                for optimizer in self.optimizers.values():
+                    if cfg.visible_adam:
+                        optimizer.step(visibility_mask)
+                    else:
+                        optimizer.step()
+                    optimizer.zero_grad(set_to_none=True)
+                for optimizer in self.pose_optimizers:
+                    optimizer.step()
+                    optimizer.zero_grad(set_to_none=True)
+                for optimizer in self.app_optimizers:
+                    optimizer.step()
+                    optimizer.zero_grad(set_to_none=True)
+                for optimizer in self.bil_grid_optimizers:
+                    optimizer.step()
+                    optimizer.zero_grad(set_to_none=True)
+                for scheduler in schedulers:
+                    scheduler.step()
+
+                # Run post-backward steps after backward and optimizer
+                if isinstance(self.cfg.strategy, DefaultStrategy):
+                    self.cfg.strategy.step_post_backward(
+                        params=self.splats,
+                        optimizers=self.optimizers,
+                        state=self.strategy_state,
+                        step=step,
+                        info=info,
+                        packed=cfg.packed,
+                    )
+                elif isinstance(self.cfg.strategy, MCMCStrategy):
+                    self.cfg.strategy.step_post_backward(
+                        params=self.splats,
+                        optimizers=self.optimizers,
+                        state=self.strategy_state,
+                        step=step,
+                        info=info,
+                        lr=schedulers[0].get_last_lr()[0],
+                    )
+                else:
+                    assert_never(self.cfg.strategy)
 
             # eval the full set
             if step in [i - 1 for i in cfg.eval_steps]:
@@ -945,6 +1014,29 @@ class Runner:
                 # Update the scene.
                 self.viewer.update(step, num_train_rays_per_step)
 
+    def get_dataset_alignment_matrix(self):
+        from_points = np.array([c2w[:3, 3] for c2w in self.align_parser.get_camera_positions(self.common_names)])
+        train_c2ws = np.array([c2w for c2w in self.train_parser.get_camera_positions(self.common_names)])
+
+        image_ids = np.array([self.used_training_names.index(name) for name in self.common_names])
+
+        if cfg.pose_opt:
+            with torch.no_grad():
+                train_c2ws = self.pose_adjust(
+                    torch.from_numpy(train_c2ws).to(torch.float32).to(self.device),
+                    torch.from_numpy(image_ids).to(self.device)
+                ).cpu().numpy()
+        to_points = np.array([c2w[:3, 3] for c2w in train_c2ws])
+        s, R, t = umeyama_alignment(from_points, to_points)
+        if s == 0:
+            print("Warning: Scale of 0 calculated. Setting to 1.0")
+            s = 1.0
+        print(f"Aligned poses with {s} {R} {t}")
+        matrix = np.eye(4)
+        matrix[:3, :3] = s * R
+        matrix[:3, 3] = t.reshape(3)
+        return matrix
+
     @torch.no_grad()
     def eval(self, step: int, stage: str = "val"):
         """Entry for evaluation."""
@@ -954,43 +1046,22 @@ class Runner:
         world_rank = self.world_rank
         world_size = self.world_size
 
-        used_training_names = [self.train_parser.image_names[i] for i in self.trainset.indices]
-
-        common_names = set(used_training_names) & set(self.align_parser.image_names)
-
-        if len(common_names) >= 3 and cfg.gt_train_data_dir is not None:
-            from_points = np.array([c2w[:3, 3] for c2w in self.align_parser.get_camera_positions(common_names)])
-            train_c2ws = np.array([c2w for c2w in self.train_parser.get_camera_positions(common_names)])
-
-            image_ids = np.array([used_training_names.index(name) for name in common_names])
-
-            if cfg.pose_opt:
-                with torch.no_grad():
-                    train_c2ws = self.pose_adjust(
-                        torch.from_numpy(train_c2ws).to(torch.float32).to(device),
-                        torch.from_numpy(image_ids).to(device)
-                    ).cpu().numpy()
-            to_points = np.array([c2w[:3, 3] for c2w in train_c2ws])
-            s, R, t = umeyama_alignment(from_points, to_points)
-            if s == 0:
-                print("Warning: Scale of 0 calculated. Setting to 1.0")
-                s = 1.0
-            print(f"Aligned poses with {s} {R} {t}")
-            matrix = np.eye(4)
-            matrix[:3, :3] = s * R
-            matrix[:3, 3] = t.reshape(3)
+        if len(self.common_names) >= 3 and cfg.gt_train_data_dir is not None and cfg.eval_pose_opt_steps == 0:
+            matrix = self.get_dataset_alignment_matrix()
         else:
             matrix = None
-        
-        valset = Dataset(self.align_parser, split="align", exclude_names=used_training_names)
 
         valloader = torch.utils.data.DataLoader(
-            valset, batch_size=1, shuffle=False, num_workers=1
+            self.valset, batch_size=1, shuffle=False, num_workers=1
         )
         ellipse_time = 0
         metrics = defaultdict(list)
         for i, data in enumerate(valloader):
             camtoworlds: torch.tensor = data["camtoworld"].to(device)
+            image_ids = data["image_id"].to(device)
+
+            if cfg.eval_pose_opt_steps > 0:
+                camtoworlds = self.eval_pose_adjust(camtoworlds, image_ids)
             if matrix is not None:
                 camtoworlds = torch.from_numpy(matrix).to(device).to(camtoworlds.dtype) @ camtoworlds.T  # TODO Fix deprecation warning
                 camtoworlds = camtoworlds.T

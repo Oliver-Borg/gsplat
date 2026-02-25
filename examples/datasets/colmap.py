@@ -365,6 +365,7 @@ class Dataset:
         load_depths: bool = False,
         max_train_cameras: Optional[int] = None,
         exclude_names: Optional[list[str]] = None,
+        transform_matrix: Optional[np.ndarray] = None,
     ):
         self.parser = parser
         self.split = split
@@ -385,6 +386,8 @@ class Dataset:
         if exclude_names is not None:
             self.indices = [i for i in self.indices if self.parser.image_names[i] not in exclude_names]
 
+        self.transform_matrix = transform_matrix
+
     def __len__(self):
         return len(self.indices)
 
@@ -395,6 +398,12 @@ class Dataset:
         K = self.parser.Ks_dict[camera_id].copy()  # undistorted K
         params = self.parser.params_dict[camera_id]
         camtoworlds = self.parser.camtoworlds[index]
+
+
+        camtoworlds = np.array(camtoworlds).astype(np.float32)
+        if self.transform_matrix is not None:
+            camtoworlds = self.transform_matrix @ camtoworlds
+
         mask = self.parser.mask_dict[camera_id]
 
         if len(params) > 0:
