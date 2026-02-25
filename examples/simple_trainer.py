@@ -1020,14 +1020,6 @@ class Runner:
             canvas_list = [pixels, colors, distances, (0.6 * pixels + 0.4 * colors)]
 
             if world_rank == 0:
-                # write images
-                canvas = torch.cat(canvas_list, dim=2).squeeze(0).cpu().numpy()
-                canvas = (canvas * 255).astype(np.uint8)
-                imageio.imwrite(
-                    f"{self.render_dir}/{stage}_step{step}_{i:04d}.png",
-                    canvas,
-                )
-
                 pixels_p = pixels.permute(0, 3, 1, 2)  # [1, 3, H, W]
                 colors_p = colors.permute(0, 3, 1, 2)  # [1, 3, H, W]
                 metrics["psnr"].append(self.psnr(colors_p, pixels_p))
@@ -1039,6 +1031,17 @@ class Runner:
                     metrics["cc_psnr"].append(self.psnr(cc_colors_p, pixels_p))
                     metrics["cc_ssim"].append(self.ssim(cc_colors_p, pixels_p))
                     metrics["cc_lpips"].append(self.lpips(cc_colors_p, pixels_p))
+                # write images
+                canvas = torch.cat(canvas_list, dim=2).squeeze(0).cpu().numpy()
+                canvas = (canvas * 255).astype(np.uint8)
+                for p in Path(self.render_dir).glob(f"{stage}_step{step}_{i:04d}*.png"):
+                    if p.is_file():
+                        p.unlink()
+                imageio.imwrite(
+                    f"{self.render_dir}/{stage}_step{step}_{i:04d}_psnr{metrics['psnr'][-1]:.2f}_lpips{metrics['lpips'][-1]:.2f}.png",
+                    canvas,
+                )
+
 
         if world_rank == 0:
             ellipse_time /= len(valloader)
