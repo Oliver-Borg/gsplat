@@ -954,11 +954,23 @@ class Runner:
         world_rank = self.world_rank
         world_size = self.world_size
 
-        common_names = set(self.train_parser.image_names) & set(self.align_parser.image_names)
+        used_training_names = [self.train_parser.image_names[i] for i in self.trainset.indices]
+
+        common_names = set(used_training_names) & set(self.align_parser.image_names)
 
         if len(common_names) >= 3 and cfg.gt_train_data_dir is not None:
             from_points = np.array([c2w[:3, 3] for c2w in self.align_parser.get_camera_positions(common_names)])
-            to_points = np.array([c2w[:3, 3] for c2w in self.train_parser.get_camera_positions(common_names)])
+            train_c2ws = np.array([c2w for c2w in self.train_parser.get_camera_positions(common_names)])
+
+            image_ids = np.array([used_training_names.index(name) for name in common_names])
+
+            if cfg.pose_opt:
+                with torch.no_grad():
+                    train_c2ws = self.pose_adjust(
+                        torch.from_numpy(train_c2ws).to(torch.float32).to(device),
+                        torch.from_numpy(image_ids).to(device)
+                    ).cpu().numpy()
+            to_points = np.array([c2w[:3, 3] for c2w in train_c2ws])
             s, R, t = umeyama_alignment(from_points, to_points)
             if s == 0:
                 print("Warning: Scale of 0 calculated. Setting to 1.0")
@@ -969,8 +981,6 @@ class Runner:
             matrix[:3, 3] = t.reshape(3)
         else:
             matrix = None
-
-        used_training_names = [self.train_parser.image_names[i] for i in self.trainset.indices]
         
         valset = Dataset(self.align_parser, split="align", exclude_names=used_training_names)
 
@@ -1005,7 +1015,9 @@ class Runner:
             ellipse_time += max(time.time() - tic, 1e-10)
 
             colors = torch.clamp(colors, 0.0, 1.0)
-            canvas_list = [pixels, colors]
+            distances = torch.sqrt(torch.sum((pixels - colors) ** 2, dim=-1)).squeeze(0).unsqueeze(-1)
+            distances = apply_float_colormap(distances / distances.max()).unsqueeze(0)
+            canvas_list = [pixels, colors, distances, (0.6 * pixels + 0.4 * colors)]
 
             if world_rank == 0:
                 # write images
