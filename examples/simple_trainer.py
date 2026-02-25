@@ -158,7 +158,7 @@ class Config:
     # Enable camera optimization for evaluation cameras.
     eval_pose_opt_steps: int = 0
     # Learning rate for camera optimization
-    pose_opt_lr: float = 1e-5
+    pose_opt_lr: float = 1e-4
     # Regularization for camera optimization as weight decay
     pose_opt_reg: float = 1e-6
     # Add noise to camera extrinsics. This is only to test the camera pose optimization.
@@ -690,7 +690,7 @@ class Runner:
                 tic = time.time()
             # TODO Do I really only want this to be on if pose_opt is on?
             # step % cfg.eval_pose_opt_steps == 1 so we don't overlap with refine_every
-            is_eval_opt_step = cfg.eval_pose_opt_steps > 0 and step % cfg.eval_pose_opt_steps == 1 and cfg.pose_opt
+            is_eval_opt_step = cfg.eval_pose_opt_steps > 0 and step % cfg.eval_pose_opt_steps == 1
 
             if is_eval_opt_step:  # Eval pose optimization as in https://arxiv.org/pdf/2504.04294
                 try:
