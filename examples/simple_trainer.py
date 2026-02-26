@@ -155,8 +155,10 @@ class Config:
 
     # Enable camera optimization.
     pose_opt: bool = False
+    # Enable eval camera optimization. This does not affect training, but rather allows a more accurate quantitative analysis.
+    eval_opt: bool = False
     # Enable camera optimization for evaluation cameras.
-    eval_pose_opt_steps: int = 0
+    eval_pose_opt_steps: int = 10
     # Learning rate for camera optimization
     pose_opt_lr: float = 1e-4
     # Regularization for camera optimization as weight decay
@@ -459,7 +461,11 @@ class Runner:
         self.valset = Dataset(self.align_parser, split="align", exclude_names=self.used_training_names, transform_matrix=transform_matrix)
 
         self.eval_pose_optimizers = []
-        if cfg.eval_pose_opt_steps > 0:
+
+        if cfg.eval_opt:
+            assert cfg.eval_pose_opt_steps > 0
+
+        if cfg.eval_pose_opt_steps > 0 and cfg.eval_opt:
             self.eval_pose_adjust = CameraOptModule(len(self.valset)).to(self.device)
             self.eval_pose_adjust.zero_init()
             self.eval_pose_optimizers = [
@@ -634,7 +640,7 @@ class Runner:
                 )
             )
         eval_schedulers = []
-        if cfg.eval_pose_opt_steps > 0:
+        if cfg.eval_pose_opt_steps > 0 and cfg.eval_opt:
             # pose optimization has a learning rate schedule
             eval_schedulers.append(
                 torch.optim.lr_scheduler.ExponentialLR(
@@ -690,7 +696,7 @@ class Runner:
                 tic = time.time()
             # TODO Do I really only want this to be on if pose_opt is on?
             # step % cfg.eval_pose_opt_steps == 1 so we don't overlap with refine_every
-            is_eval_opt_step = cfg.eval_pose_opt_steps > 0 and step % cfg.eval_pose_opt_steps == 1
+            is_eval_opt_step = cfg.eval_pose_opt_steps > 0 and step % cfg.eval_pose_opt_steps == 1 and cfg.eval_opt
 
             if is_eval_opt_step:  # Eval pose optimization as in https://arxiv.org/pdf/2504.04294
                 try:
@@ -1060,7 +1066,7 @@ class Runner:
             camtoworlds: torch.tensor = data["camtoworld"].to(device)
             image_ids = data["image_id"].to(device)
 
-            if cfg.eval_pose_opt_steps > 0:
+            if cfg.eval_pose_opt_steps > 0 and cfg.eval_opt:
                 camtoworlds = self.eval_pose_adjust(camtoworlds, image_ids)
             if matrix is not None:
                 camtoworlds = torch.from_numpy(matrix).to(device).to(camtoworlds.dtype) @ camtoworlds.T  # TODO Fix deprecation warning
