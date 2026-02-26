@@ -5,6 +5,8 @@ import os
 import subprocess
 import argparse
 
+from tqdm import tqdm
+
 
 @dataclass
 class Dataset:
@@ -38,9 +40,9 @@ class Config:
     num_points_value: int = 30000
     sampling_mode: Literal["voxels", "random", "confidence", "ba"] = "voxels"
     image_mode: Literal["shuffle", "distributed"] = "shuffle"
-    gt_eval: bool = False
-    pose_opt: bool = False
-    eval_opt: bool = False
+    gt_eval: bool = True
+    pose_opt: bool = True
+    eval_opt: bool = True
     num_cameras: int | None = None
 
     @classmethod
@@ -76,7 +78,8 @@ class Config:
         ]
 
         if self.choice == "colmap":
-            parts.append(self.image_mode)
+            if self.image_mode != "shuffle":
+                parts.append(self.image_mode)
         elif self.choice == "vggt":
             if self.sampling_mode == "ba":
                 parts.append(self.sampling_mode)
@@ -88,7 +91,8 @@ class Config:
                         self.sampling_mode,
                     ]
                 )
-            parts.append(self.image_mode)
+            if self.image_mode != "shuffle":
+                parts.append(self.image_mode)
 
         parts = "_".join(parts)
         return f"{self.choice}_outputs/{parts}"
@@ -108,28 +112,37 @@ class Config:
         parts = "_".join(parts)
         return f"{self.input_name}_{parts}"
 
-    def run(self):
-        result_dir = f"./results/{self.output_name}"
-        stats_dir = f"{result_dir}/stats/val_step6999.json"
-        data_dir = f"../vggt/{self.input_name}"
+    @property
+    def result_dir(self):
+        return f"./results/{self.output_name}"
 
-        if os.path.exists(stats_dir):
-            print(f"{stats_dir} found. Skipping splatting")
+    @property
+    def stats_dir(self):
+        return f"{self.result_dir}/stats/val_step6999.json"
+
+    @property
+    def data_dir(self):
+        return f"../vggt/{self.input_name}"
+
+    def run(self):
+
+        if os.path.exists(self.stats_dir):
+            print(f"{self.stats_dir} found. Skipping splatting")
             return 0
 
-        print(f"{Path(stats_dir)} not found. Running splatting")
-        print(f"Using data from: {Path(data_dir)}")
-        print(f"Result dir: {Path(result_dir)}")
+        print(f"{Path(self.stats_dir)} not found. Running splatting")
+        print(f"Using data from: {Path(self.data_dir)}")
+        print(f"Result dir: {Path(self.result_dir)}")
         command = [
             "python",
             "examples/simple_trainer.py",
             "mcmc",
             "--data_dir",
-            data_dir,
+            self.data_dir,
             "--data_factor",
             f"{self.dataset.factor}",
             "--result-dir",
-            result_dir,
+            self.result_dir,
             "--disable_viewer",
             "--max_train_cameras",
             str(self.num_cams),
@@ -186,25 +199,40 @@ def generate_configs(
 
 
 @dataclass
+class PlotConfig:
+    name: str
+    x_axis: str
+    split_param: str | None = None
+    filter: str | None = None
+
+
+@dataclass
 class Experiment:
     name: str
     description: str
     config_dict: dict
+    plot_args: PlotConfig | None = None
 
     def get_configs(self, dataset_name: str):
         self.config_dict["dataset"] = dataset_name
         config_dicts = generate_configs(self.config_dict)
         configs = [Config.from_dict(config_dict) for config_dict in config_dicts]
-        return configs
+        config_set = set()
+        unique_configs = []
+        for config in configs:
+            if (config.result_dir, config.stats_dir, config.data_dir) not in config_set:
+                unique_configs.append(config)
+            config_set.add((config.result_dir, config.stats_dir, config.data_dir))
+        return unique_configs
 
     def run(self, dataset_name: str):
         configs = self.get_configs(dataset_name)
         failures: list[Config] = []
-        for config in configs:
+        for config in tqdm(configs):
             returncode = config.run()
             if returncode != 0:
                 failures.append(config)
-        
+
         if len(failures) > 0:
             print("Failures:")
             for failure in failures:
@@ -233,10 +261,20 @@ experiments = [
             "gt_eval": [True, False],
         },
     ),
+    Experiment(
+        "num_points",
+        "Test the behaviour of different numbers of points and sampling modes",
+        {
+            "choice": ["vggt", "colmap"],
+            "num_images": [30],
+            "seed": [42, 43, 44],
+            "sampling_mode": ["voxels", "random", "confidence", "ba"],
+            "num_points_value": [1000, 5000, 10000, 20000, 30000, 50000, 75000, 100000, 500000, 1000000],
+        },
+    ),
 ]
 
 # TODO Add automatic plotting
-# TODO Add progress bar
 # TODO Add automatic vggt running
 
 if __name__ == "__main__":
