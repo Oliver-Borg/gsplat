@@ -7,25 +7,37 @@ import argparse
 
 from tqdm import tqdm
 
+from vggt.plot_metrics import plot_graph
+
+GSPLAT_PYTHON = os.path.expanduser("~/.conda/envs/gsplat/bin/python")
+VGGT_PYTHON = os.path.expanduser("~/.conda/envs/vggt/bin/python")
+
 
 @dataclass
 class Dataset:
     name: str
     factor: int
+    directory: str
     gt_train_data_dir: str | None = None
     gt_eval_data_dir: str | None = None
+
+    @property
+    def scene_name(self):
+        return f"{self.name}_{self.factor}"
 
 
 datasets = {
     "lego": Dataset(
         name="lego",
         factor=1,
+        directory="../vggt/data/nerf_synthetic/lego",
         gt_train_data_dir="../vggt/data/nerf_synthetic/lego/transforms_train.json",
         gt_eval_data_dir="../vggt/data/nerf_synthetic/lego/transforms_val.json",
     ),
     "bonsai": Dataset(
         name="bonsai",
         factor=1,
+        directory="../vggt/data/360_v2/bonsai",
     ),
 }
 
@@ -40,9 +52,9 @@ class Config:
     num_points_value: int = 30000
     sampling_mode: Literal["voxels", "random", "confidence", "ba"] = "voxels"
     image_mode: Literal["shuffle", "distributed"] = "shuffle"
-    gt_eval: bool = True
-    pose_opt: bool = True
-    eval_opt: bool = True
+    gt_eval: bool = False
+    pose_opt: bool = False
+    eval_opt: bool = False
     num_cameras: int | None = None
 
     @classmethod
@@ -78,8 +90,7 @@ class Config:
         ]
 
         if self.choice == "colmap":
-            if self.image_mode != "shuffle":
-                parts.append(self.image_mode)
+            parts.append(self.image_mode)
         elif self.choice == "vggt":
             if self.sampling_mode == "ba":
                 parts.append(self.sampling_mode)
@@ -91,8 +102,7 @@ class Config:
                         self.sampling_mode,
                     ]
                 )
-            if self.image_mode != "shuffle":
-                parts.append(self.image_mode)
+            parts.append(self.image_mode)
 
         parts = "_".join(parts)
         return f"{self.choice}_outputs/{parts}"
@@ -124,6 +134,39 @@ class Config:
     def data_dir(self):
         return f"../vggt/{self.input_name}"
 
+    def reconstruct(self):
+        command = [
+            VGGT_PYTHON,
+            "-m",
+            "reconstruct",
+            "--input",
+            self.dataset.directory,
+            "--name",
+            f"{self.dataset.name}_{self.dataset.factor}",
+            "--choice",
+            self.choice,
+            "--num_images",
+            str(self.num_images),
+            "--num_points",
+            str(self.num_points_value),
+            "--seed",
+            str(self.seed),
+            "--conf_thres_value",
+            str(self.conf_thres_value),
+            "--sampling_mode",
+            self.sampling_mode,
+            "--image_mode",
+            self.image_mode,
+        ]
+
+        try:
+            output = subprocess.run(command, check=True, cwd="../vggt")
+            print(output)
+            return output.returncode
+        except subprocess.CalledProcessError as e:
+            print(e)
+            return e.returncode
+
     def run(self):
 
         if os.path.exists(self.stats_dir):
@@ -134,7 +177,7 @@ class Config:
         print(f"Using data from: {Path(self.data_dir)}")
         print(f"Result dir: {Path(self.result_dir)}")
         command = [
-            "python",
+            GSPLAT_PYTHON,
             "examples/simple_trainer.py",
             "mcmc",
             "--data_dir",
@@ -200,7 +243,6 @@ def generate_configs(
 
 @dataclass
 class PlotConfig:
-    name: str
     x_axis: str
     split_param: str | None = None
     filter: str | None = None
@@ -213,22 +255,28 @@ class Experiment:
     config_dict: dict
     plot_args: PlotConfig | None = None
 
-    def get_configs(self, dataset_name: str):
+    def get_configs(self, dataset_name: str) -> list[Config]:
         self.config_dict["dataset"] = dataset_name
         config_dicts = generate_configs(self.config_dict)
         configs = [Config.from_dict(config_dict) for config_dict in config_dicts]
         config_set = set()
-        unique_configs = []
+        unique_configs: list[Config] = []
         for config in configs:
             if (config.result_dir, config.stats_dir, config.data_dir) not in config_set:
                 unique_configs.append(config)
             config_set.add((config.result_dir, config.stats_dir, config.data_dir))
         return unique_configs
 
-    def run(self, dataset_name: str):
+    def run(self, dataset_name: str, do_reconstruct: bool = True):
         configs = self.get_configs(dataset_name)
         failures: list[Config] = []
         for config in tqdm(configs):
+            if do_reconstruct:
+                reconstruction_returncode = config.reconstruct()
+                if reconstruction_returncode != 0:
+                    failures.append(config)
+                    continue
+
             returncode = config.run()
             if returncode != 0:
                 failures.append(config)
@@ -237,6 +285,18 @@ class Experiment:
             print("Failures:")
             for failure in failures:
                 print("", failure.output_name, sep="\t")
+
+    def plot(self, dataset_name: str):
+        if self.plot_args is None:
+            return
+        configs = self.get_configs(dataset_name)
+        plot_graph(
+            name=datasets[dataset_name].scene_name,
+            x_axis=self.plot_args.x_axis,
+            split_param=self.plot_args.split_param,
+            filter=self.plot_args.filter,
+            folders=[config.output_name.split("/")[-1] for config in configs],
+        )
 
 
 experiments = [
@@ -248,18 +308,20 @@ experiments = [
             "num_images": [10, 20, 30, 40, 50, 100],
             "seed": [42, 43, 44],
         },
+        PlotConfig(x_axis="num_images", split_param="choice"),
     ),
     Experiment(
         "pose_opt",
         "Test the behaviour of different combinations of pose optimization",
         {
             "choice": ["vggt", "colmap"],
-            "num_images": [30],
+            "num_images": [10, 20, 30, 40, 50, 100],
             "seed": [42, 43, 44],
             "pose_opt": [True, False],
             "eval_opt": [True, False],
             "gt_eval": [True, False],
         },
+        PlotConfig(x_axis="num_images", split_param="choice"),
     ),
     Experiment(
         "num_points",
@@ -271,18 +333,28 @@ experiments = [
             "sampling_mode": ["voxels", "random", "confidence", "ba"],
             "num_points_value": [1000, 5000, 10000, 20000, 30000, 50000, 75000, 100000, 500000, 1000000],
         },
+        PlotConfig(x_axis="num_points_value", split_param="choice"),
+    ),
+    Experiment(
+        "test",
+        "Small test for functionality",
+        {
+            "choice": ["vggt", "colmap"],
+            "num_images": [30],
+            "seed": [42],
+        },
+        PlotConfig(x_axis="num_images", split_param="choice"),
     ),
 ]
-
-# TODO Add automatic plotting
-# TODO Add automatic vggt running
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run experiments")
     parser.add_argument("--experiment_name", type=str, required=True, help="Name of the experiment to run")
     parser.add_argument("--dataset_name", type=str, required=True, help="Name of the dataset to use")
+    parser.add_argument("--do_reconstruct", action="store_true", help="Whether to run reconstruction")
     args = parser.parse_args()
 
     for experiment in experiments:
-        if args.experiment_name is None or experiment.name == args.experiment_name:
-            experiment.run(args.dataset_name)
+        if experiment.name == args.experiment_name:
+            experiment.run(args.dataset_name, do_reconstruct=args.do_reconstruct)
+            experiment.plot(args.dataset_name)
