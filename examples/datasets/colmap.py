@@ -416,12 +416,35 @@ class Dataset:
             x, y, w, h = self.parser.roi_undist_dict[camera_id]
             image = image[y : y + h, x : x + w]
 
+        depth_conf = None
+        image_name = self.parser.image_names[index]
+        conf_path = os.path.join(
+            os.path.dirname(os.path.dirname(self.parser.image_paths[index])),
+            "depths",
+            f"depth_conf_{image_name}.npy"
+        )
+        
+        if os.path.exists(conf_path):
+            conf_data = np.load(conf_path)
+            depth_conf = torch.from_numpy(conf_data).float()
+            
+            img_h, img_w = image.shape[:2]
+            if depth_conf.shape[-2:] != (img_h, img_w):
+                depth_conf = torch.nn.functional.interpolate(
+                    depth_conf[None, None, ...], 
+                    size=(img_h, img_w), 
+                    mode="bilinear", 
+                    align_corners=False
+                )[0, 0]
+
         if self.patch_size is not None:
             # Random crop.
             h, w = image.shape[:2]
             x = np.random.randint(0, max(w - self.patch_size, 1))
             y = np.random.randint(0, max(h - self.patch_size, 1))
             image = image[y : y + self.patch_size, x : x + self.patch_size]
+            if depth_conf is not None:
+                depth_conf = depth_conf[y : y + self.patch_size, x : x + self.patch_size]
             K[0, 2] -= x
             K[1, 2] -= y
 
@@ -434,6 +457,9 @@ class Dataset:
         }
         if mask is not None:
             data["mask"] = torch.from_numpy(mask).bool()
+        
+        if depth_conf is not None:
+            data["depth_conf"] = depth_conf
 
         if self.load_depths and isinstance(self.parser, Parser):
             # projected points to image plane to get depths

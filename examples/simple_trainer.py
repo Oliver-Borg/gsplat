@@ -182,6 +182,8 @@ class Config:
 
     # Enable depth loss. (experimental)
     depth_loss: bool = False
+    # Enable depth confidence. (experimental)
+    depth_conf: bool = False
     # Weight for depth loss
     depth_lambda: float = 1e-2
 
@@ -458,7 +460,14 @@ class Runner:
         self.used_training_names = [self.train_parser.image_names[i] for i in self.trainset.indices]
         self.common_names = set(self.used_training_names) & set(self.align_parser.image_names)
         transform_matrix = self.get_dataset_alignment_matrix()
-        self.valset = Dataset(self.align_parser, split="align", exclude_names=self.used_training_names, transform_matrix=transform_matrix)
+        self.valset = Dataset(
+            self.align_parser,
+            split="align",
+            exclude_names=self.used_training_names,
+            transform_matrix=transform_matrix,
+            patch_size=cfg.patch_size,
+            load_depths=cfg.depth_loss,
+        )
 
         self.eval_pose_optimizers = []
 
@@ -719,9 +728,14 @@ class Runner:
             )
             image_ids = data["image_id"].to(device)
             masks = data["mask"].to(device) if "mask" in data else None  # [1, H, W]
+            depth_conf = None
             if cfg.depth_loss:
                 points = data["points"].to(device)  # [1, M, 2]
                 depths_gt = data["depths"].to(device)  # [1, M]
+                if "depth_conf" in data and cfg.depth_conf:
+                    depth_conf = data["depth_conf"].to(device)  # [1, H, W]
+                else:
+                    depth_conf = None
 
             height, width = pixels.shape[1:3]
 
@@ -799,11 +813,21 @@ class Runner:
                 depths = F.grid_sample(
                     depths.permute(0, 3, 1, 2), grid, align_corners=True
                 )  # [1, 1, M, 1]
+                if depth_conf is not None and cfg.depth_conf:
+                    # depth_conf [1, H, W]
+                    depth_conf = F.grid_sample(
+                        depth_conf.unsqueeze(0), grid, align_corners=True
+                    )  # [1, 1, M, 1]
+                    depth_conf = depth_conf.squeeze(3).squeeze(1)  # [1, M]
+
                 depths = depths.squeeze(3).squeeze(1)  # [1, M]
-                # calculate loss in disparity space
-                disp = torch.where(depths > 0.0, 1.0 / depths, torch.zeros_like(depths))
-                disp_gt = 1.0 / depths_gt  # [1, M]
-                depthloss = F.l1_loss(disp, disp_gt) * self.scene_scale
+                safe_depths = torch.clamp(depths, min=1e-3)
+                safe_depths_gt = torch.clamp(depths_gt, min=1e-3)
+                
+                disp = torch.where(depths > 1e-3, 1.0 / safe_depths, torch.zeros_like(depths))
+                disp_gt = 1.0 / safe_depths_gt  # [1, M]
+                
+                depthloss = F.l1_loss(disp, disp_gt, weight=depth_conf) * self.scene_scale
                 loss += depthloss * cfg.depth_lambda
             if cfg.use_bilateral_grid:
                 tvloss = 10 * total_variation_loss(self.bil_grids.grids)
