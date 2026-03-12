@@ -18,6 +18,7 @@ class Dataset:
     name: str
     factor: int
     directory: str
+    data_folder_name: str
     gt_train_data_dir: str | None = None
     gt_eval_data_dir: str | None = None
 
@@ -33,12 +34,9 @@ datasets = {
         directory="../vggt/data/nerf_synthetic/lego",
         gt_train_data_dir="../vggt/data/nerf_synthetic/lego/transforms_train.json",
         gt_eval_data_dir="../vggt/data/nerf_synthetic/lego/transforms_val.json",
+        data_folder_name="train",
     ),
-    "bonsai": Dataset(
-        name="bonsai",
-        factor=1,
-        directory="../vggt/data/360_v2/bonsai",
-    ),
+    "bonsai": Dataset(name="bonsai", factor=2, directory="../vggt/data/360_v2/bonsai", data_folder_name="images_2"),
 }
 
 
@@ -49,13 +47,15 @@ class Config:
     dataset: Dataset = datasets["lego"]
     seed: int = 42
     conf_thres_value: float = 0.0
-    num_points_value: int = 30000
+    num_points_value: int = 35000
     sampling_mode: Literal["voxels", "random", "confidence", "ba"] = "voxels"
     image_mode: Literal["shuffle", "distributed"] = "shuffle"
     gt_eval: bool = False
     pose_opt: bool = False
     eval_opt: bool = False
     num_cameras: int | None = None
+    depth_loss: bool = False
+    depth_conf: bool = False
 
     @classmethod
     def from_dict(cls, data: dict) -> "Config":
@@ -72,7 +72,12 @@ class Config:
         instance.pose_opt = data.get("pose_opt", instance.pose_opt)
         instance.eval_opt = data.get("eval_opt", instance.eval_opt)
         instance.num_cameras = data.get("num_cameras", instance.num_cameras)
+        instance.depth_loss = data.get("depth_loss", instance.depth_loss)
+        instance.depth_conf = data.get("depth_conf", instance.depth_conf)
         return instance
+
+    def __post_init__(self):
+        self.depth_conf = self.depth_conf and self.choice == "vggt" and self.depth_loss
 
     @property
     def num_cams(self):
@@ -118,6 +123,10 @@ class Config:
             parts.append("poseopt")
         if self.eval_opt:
             parts.append("evalopt")
+        if self.depth_loss:
+            parts.append("depth")
+        if self.depth_conf and self.choice == "vggt" and self.depth_loss:
+            parts.append("conf")
 
         parts = "_".join(parts)
         return f"{self.input_name}_{parts}"
@@ -135,12 +144,17 @@ class Config:
         return f"../vggt/{self.input_name}"
 
     def reconstruct(self):
+        force = False  # self.sampling_mode == "ba"
+        if os.path.exists(os.path.join(self.data_dir, "stat.json")) and not force:
+            print(Path(self.data_dir), "has already been constructed.\nUse --force to force reconstruction.")
+            return 0
+
         command = [
             VGGT_PYTHON,
             "-m",
             "reconstruct",
             "--input",
-            self.dataset.directory,
+            Path(self.dataset.directory) / Path(self.dataset.data_folder_name),
             "--name",
             f"{self.dataset.name}_{self.dataset.factor}",
             "--choice",
@@ -183,7 +197,7 @@ class Config:
             "--data_dir",
             self.data_dir,
             "--data_factor",
-            f"{self.dataset.factor}",
+            "1",
             "--result-dir",
             self.result_dir,
             "--disable_viewer",
@@ -212,6 +226,12 @@ class Config:
                 )
         if self.eval_opt:
             command.append("--eval_opt")
+
+        if self.depth_loss:
+            command.append("--depth_loss")
+
+        if self.depth_conf:
+            command.append("--depth_conf")
 
         try:
             output = subprocess.run(command, check=True)
@@ -292,6 +312,7 @@ class Experiment:
         configs = self.get_configs(dataset_name)
         plot_graph(
             name=datasets[dataset_name].scene_name,
+            prefix=self.name,
             x_axis=self.plot_args.x_axis,
             split_param=self.plot_args.split_param,
             filter=self.plot_args.filter,
@@ -311,17 +332,29 @@ experiments = [
         PlotConfig(x_axis="num_images", split_param="choice"),
     ),
     Experiment(
+        "num_images_pose_opt",
+        "Test the behaviour of splatting over various number of images",
+        {
+            "choice": ["vggt", "colmap"],
+            "num_images": [10, 20, 30, 40, 50, 100],
+            "seed": [42, 43, 44],
+            "pose_opt": [True],
+            "eval_opt": [True],
+        },
+        PlotConfig(x_axis="num_images", split_param="choice"),
+    ),
+    Experiment(
         "pose_opt",
         "Test the behaviour of different combinations of pose optimization",
         {
             "choice": ["vggt", "colmap"],
-            "num_images": [10, 20, 30, 40, 50, 100],
+            "num_images": [30],
             "seed": [42, 43, 44],
             "pose_opt": [True, False],
             "eval_opt": [True, False],
             "gt_eval": [True, False],
         },
-        PlotConfig(x_axis="num_images", split_param="choice"),
+        PlotConfig(x_axis="num_images", split_param="choice,pose_opt,eval_opt,gt_eval"),
     ),
     Experiment(
         "num_points",
@@ -345,6 +378,21 @@ experiments = [
         },
         PlotConfig(x_axis="num_images", split_param="choice"),
     ),
+    Experiment(
+        "depth",
+        "Test for depth loss and depth conf",
+        {
+            "choice": ["vggt" , "colmap"],
+            "num_images": [30],
+            "seed": [42],
+            "sampling_mode": ["voxels", "ba"],
+            "depth_loss": [True, False],
+            "depth_conf": [True, False],
+            "pose_opt": [True],
+            "eval_opt": [True],
+        },
+        PlotConfig(x_axis="num_images", split_param="choice,depth_loss,depth_conf,sampling_mode"),
+    ),
 ]
 
 if __name__ == "__main__":
@@ -355,6 +403,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     for experiment in experiments:
-        if experiment.name == args.experiment_name:
+        if experiment.name == args.experiment_name or args.experiment_name == "all":
             experiment.run(args.dataset_name, do_reconstruct=args.do_reconstruct)
             experiment.plot(args.dataset_name)
