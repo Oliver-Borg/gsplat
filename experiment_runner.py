@@ -10,6 +10,7 @@ from tqdm import tqdm
 from vggt.plot_metrics import plot_graph
 
 GSPLAT_PYTHON = os.path.expanduser("~/.conda/envs/gsplat/bin/python")
+GSPLAT_TORCHRUN = os.path.expanduser("~/.conda/envs/gsplat/bin/torchrun")
 VGGT_PYTHON = os.path.expanduser("~/.conda/envs/vggt/bin/python")
 
 
@@ -37,6 +38,18 @@ datasets = {
         data_folder_name="train",
     ),
     "bonsai": Dataset(name="bonsai", factor=2, directory="../vggt/data/360_v2/bonsai", data_folder_name="images_2"),
+    "blender_radial": Dataset(
+        name="blender_radial",
+        factor=1,
+        directory="../vggt/data/blender",
+        data_folder_name="dataset_N100_R5.5_H1.0_C-4.0_0.0_2.0_SIMPLE_RADIAL_K-0.02_RMEevee_no_windows",
+    ),
+    "blender_pinhole": Dataset(
+        name="blender_pinhole",
+        factor=1,
+        directory="../vggt/data/blender",
+        data_folder_name="dataset_N100_R5.5_H1.0_C-4.0_0.0_2.0_SIMPLE_PINHOLE",
+    ),
 }
 
 
@@ -53,9 +66,11 @@ class Config:
     gt_eval: bool = False
     pose_opt: bool = False
     eval_opt: bool = False
+    all_opt: bool = False
     num_cameras: int | None = None
     depth_loss: bool = False
     depth_conf: bool = False
+    camera_type: Literal["SIMPLE_RADIAL", "SIMPLE_PINHOLE"] = "SIMPLE_PINHOLE"
 
     @classmethod
     def from_dict(cls, data: dict) -> "Config":
@@ -71,9 +86,12 @@ class Config:
         instance.gt_eval = data.get("gt_eval", instance.gt_eval)
         instance.pose_opt = data.get("pose_opt", instance.pose_opt)
         instance.eval_opt = data.get("eval_opt", instance.eval_opt)
+        instance.pose_opt |= data.get("all_opt", instance.all_opt)
+        instance.eval_opt |= data.get("all_opt", instance.all_opt)
         instance.num_cameras = data.get("num_cameras", instance.num_cameras)
         instance.depth_loss = data.get("depth_loss", instance.depth_loss)
         instance.depth_conf = data.get("depth_conf", instance.depth_conf)
+        instance.camera_type = data.get("camera_type", instance.camera_type)
         return instance
 
     def __post_init__(self):
@@ -98,6 +116,7 @@ class Config:
             parts.append(self.image_mode)
         elif self.choice == "vggt":
             if self.sampling_mode == "ba":
+                parts.append(self.camera_type.lower().replace("simple_", "m"))
                 parts.append(self.sampling_mode)
             else:
                 parts.extend(
@@ -143,9 +162,13 @@ class Config:
     def data_dir(self):
         return f"../vggt/{self.input_name}"
 
+    @property
+    def force(self):
+        return False
+        return self.sampling_mode == "ba" and self.camera_type == "SIMPLE_RADIAL" and self.choice == "vggt"
+
     def reconstruct(self):
-        force = False  # self.sampling_mode == "ba"
-        if os.path.exists(os.path.join(self.data_dir, "stat.json")) and not force:
+        if os.path.exists(os.path.join(self.data_dir, "stat.json")) and not self.force:
             print(Path(self.data_dir), "has already been constructed.\nUse --force to force reconstruction.")
             return 0
 
@@ -171,7 +194,11 @@ class Config:
             self.sampling_mode,
             "--image_mode",
             self.image_mode,
+            "--camera_type",
+            self.camera_type,
         ]
+        if self.force:
+            command.append("--force")
 
         try:
             output = subprocess.run(command, check=True, cwd="../vggt")
@@ -183,11 +210,14 @@ class Config:
 
     def run(self):
 
-        if os.path.exists(self.stats_dir):
+        if os.path.exists(self.stats_dir) and not self.force:
             print(f"{self.stats_dir} found. Skipping splatting")
             return 0
 
-        print(f"{Path(self.stats_dir)} not found. Running splatting")
+        if self.force:
+            print("Forcing splatting")
+        else:
+            print(f"{Path(self.stats_dir)} not found. Running splatting")
         print(f"Using data from: {Path(self.data_dir)}")
         print(f"Result dir: {Path(self.result_dir)}")
         command = [
@@ -382,7 +412,7 @@ experiments = [
         "depth",
         "Test for depth loss and depth conf",
         {
-            "choice": ["vggt" , "colmap"],
+            "choice": ["vggt", "colmap"],
             "num_images": [30],
             "seed": [42],
             "sampling_mode": ["voxels", "ba"],
@@ -392,6 +422,33 @@ experiments = [
             "eval_opt": [True],
         },
         PlotConfig(x_axis="num_images", split_param="choice,depth_loss,depth_conf,sampling_mode"),
+    ),
+    Experiment(
+        "camera_type",
+        "Test for camera mode",
+        {
+            "choice": ["vggt", "colmap"],
+            "num_images": [100],
+            "seed": [42, 43, 44],
+            "sampling_mode": ["ba"],
+            "all_opt": [False],
+            "camera_type": ["SIMPLE_RADIAL", "SIMPLE_PINHOLE"],
+        },
+        PlotConfig(x_axis="num_images", split_param="camera_type"),
+    ),
+    Experiment(
+        "camera_type_ext",
+        "Test for camera mode (extended)",
+        {
+            "choice": ["vggt", "colmap"],
+            "num_images": [100],
+            "seed": [42, 43, 44],
+            "sampling_mode": ["ba", "voxels"],
+            "all_opt": [True, False],
+            "camera_type": ["SIMPLE_RADIAL", "SIMPLE_PINHOLE"],
+            "num_points_value": [35000, 75000],
+        },
+        PlotConfig(x_axis="num_images", split_param="camera_type,pose_opt,eval_opt,sampling_mode"),
     ),
 ]
 
