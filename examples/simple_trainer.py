@@ -7,6 +7,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Union
 
+from line_profiler import profile
 import imageio
 import numpy as np
 import torch
@@ -41,6 +42,8 @@ from gsplat.strategy import DefaultStrategy, MCMCStrategy
 from gsplat_viewer import GsplatViewer, GsplatRenderTabState
 from nerfview import CameraState, RenderTabState, apply_float_colormap
 
+from concurrent.futures import ThreadPoolExecutor
+
 
 @dataclass
 class Config:
@@ -61,6 +64,10 @@ class Config:
     gt_eval_data_dir: str | None = None
     # Downsample factor for the dataset
     data_factor: int = 4
+    # Downsample factor for the eval dataset
+    eval_data_factor: int = 1
+    # Max eval images
+    max_eval_images: int = 30
     # Directory to save results
     result_dir: str = "results/garden"
     # Every N images there is a test image
@@ -372,12 +379,12 @@ class Runner:
         if cfg.gt_eval_data_dir is not None:
             if cfg.gt_eval_data_dir.endswith(".json"):
                 self.eval_parser = SimpleParser(
-                    cfg.gt_eval_data_dir, cfg.test_every, transform=self.train_parser.transform, factor=cfg.data_factor
+                    cfg.gt_eval_data_dir, cfg.test_every, transform=self.train_parser.transform, factor=cfg.eval_data_factor
                 )
             else:
                 self.eval_parser = Parser(
                     data_dir=cfg.gt_eval_data_dir,
-                    factor=cfg.data_factor,
+                    factor=cfg.eval_data_factor,
                     normalize=cfg.normalize_world_space,
                     test_every=cfg.test_every,
                 )
@@ -387,10 +394,10 @@ class Runner:
 
         self.trainset = Dataset(
             self.train_parser,
-            split="train",
+            split="train",  # TODO Technically this will not use as many images as it can when using gt eval
             patch_size=cfg.patch_size,
             load_depths=cfg.depth_loss,
-            max_train_cameras=cfg.max_train_cameras,
+            max_images=cfg.max_train_cameras,
         )
         self.scene_scale = self.train_parser.scene_scale * 1.1 * cfg.global_scale
         print("Scene scale:", self.scene_scale)
@@ -467,6 +474,7 @@ class Runner:
             transform_matrix=transform_matrix,
             patch_size=cfg.patch_size,
             load_depths=cfg.depth_loss,
+            max_images=cfg.max_eval_images,
         )
 
         self.eval_pose_optimizers = []
@@ -1068,6 +1076,7 @@ class Runner:
         return matrix
 
     @torch.no_grad()
+    @profile
     def eval(self, step: int, stage: str = "val"):
         """Entry for evaluation."""
         print("Running evaluation...")
@@ -1076,7 +1085,7 @@ class Runner:
         world_rank = self.world_rank
         world_size = self.world_size
 
-        if len(self.common_names) >= 3 and cfg.gt_train_data_dir is not None and cfg.eval_pose_opt_steps == 0:
+        if len(self.common_names) >= 3 and cfg.gt_train_data_dir is not None and cfg.eval_pose_opt_steps == 0 and not cfg.eval_opt:
             matrix = self.get_dataset_alignment_matrix()
         else:
             matrix = None
@@ -1086,62 +1095,64 @@ class Runner:
         )
         ellipse_time = 0
         metrics = defaultdict(list)
-        for i, data in enumerate(valloader):
-            camtoworlds: torch.tensor = data["camtoworld"].to(device)
-            image_ids = data["image_id"].to(device)
+        with ThreadPoolExecutor(max_workers=8) as executor:
+            for i, data in enumerate(tqdm.tqdm(valloader)):
+                camtoworlds: torch.tensor = data["camtoworld"].to(device)
+                image_ids = data["image_id"].to(device)
 
-            if cfg.eval_pose_opt_steps > 0 and cfg.eval_opt:
-                camtoworlds = self.eval_pose_adjust(camtoworlds, image_ids)
-            if matrix is not None:
-                camtoworlds = torch.from_numpy(matrix).to(device).to(camtoworlds.dtype) @ camtoworlds.T  # TODO Fix deprecation warning
-                camtoworlds = camtoworlds.T
-            Ks = data["K"].to(device)
-            pixels = data["image"].to(device) / 255.0
-            masks = data["mask"].to(device) if "mask" in data else None
-            height, width = pixels.shape[1:3]
+                if cfg.eval_pose_opt_steps > 0 and cfg.eval_opt:
+                    camtoworlds = self.eval_pose_adjust(camtoworlds, image_ids)
+                if matrix is not None:
+                    camtoworlds = torch.from_numpy(matrix).to(device).to(camtoworlds.dtype) @ camtoworlds.T  # TODO Fix deprecation warning
+                    camtoworlds = camtoworlds.T
+                Ks = data["K"].to(device)
+                pixels = data["image"].to(device) / 255.0
+                masks = data["mask"].to(device) if "mask" in data else None
+                height, width = pixels.shape[1:3]
 
-            torch.cuda.synchronize()
-            tic = time.time()
-            colors, _, _ = self.rasterize_splats(
-                camtoworlds=camtoworlds,
-                Ks=Ks,
-                width=width,
-                height=height,
-                sh_degree=cfg.sh_degree,
-                near_plane=cfg.near_plane,
-                far_plane=cfg.far_plane,
-                masks=masks,
-            )  # [1, H, W, 3]
-            torch.cuda.synchronize()
-            ellipse_time += max(time.time() - tic, 1e-10)
+                torch.cuda.synchronize()
+                tic = time.time()
+                colors, _, _ = self.rasterize_splats(
+                    camtoworlds=camtoworlds,
+                    Ks=Ks,
+                    width=width,
+                    height=height,
+                    sh_degree=cfg.sh_degree,
+                    near_plane=cfg.near_plane,
+                    far_plane=cfg.far_plane,
+                    masks=masks,
+                )  # [1, H, W, 3]
+                torch.cuda.synchronize()
+                ellipse_time += max(time.time() - tic, 1e-10)
 
-            colors = torch.clamp(colors, 0.0, 1.0)
-            distances = torch.sqrt(torch.sum((pixels - colors) ** 2, dim=-1)).squeeze(0).unsqueeze(-1)
-            distances = apply_float_colormap(distances / distances.max()).unsqueeze(0)
-            canvas_list = [pixels, colors, distances, (0.6 * pixels + 0.4 * colors)]
+                colors = torch.clamp(colors, 0.0, 1.0)
+                distances = torch.sqrt(torch.sum((pixels - colors) ** 2, dim=-1)).squeeze(0).unsqueeze(-1)
+                distances = apply_float_colormap(distances / distances.max()).unsqueeze(0)
+                canvas_list = [pixels, colors, distances, (0.6 * pixels + 0.4 * colors)]
 
-            if world_rank == 0:
-                pixels_p = pixels.permute(0, 3, 1, 2)  # [1, 3, H, W]
-                colors_p = colors.permute(0, 3, 1, 2)  # [1, 3, H, W]
-                metrics["psnr"].append(self.psnr(colors_p, pixels_p))
-                metrics["ssim"].append(self.ssim(colors_p, pixels_p))
-                metrics["lpips"].append(self.lpips(colors_p, pixels_p))
-                if cfg.use_bilateral_grid:
-                    cc_colors = color_correct(colors, pixels)
-                    cc_colors_p = cc_colors.permute(0, 3, 1, 2)  # [1, 3, H, W]
-                    metrics["cc_psnr"].append(self.psnr(cc_colors_p, pixels_p))
-                    metrics["cc_ssim"].append(self.ssim(cc_colors_p, pixels_p))
-                    metrics["cc_lpips"].append(self.lpips(cc_colors_p, pixels_p))
-                # write images
-                canvas = torch.cat(canvas_list, dim=2).squeeze(0).cpu().numpy()
-                canvas = (canvas * 255).astype(np.uint8)
-                for p in Path(self.render_dir).glob(f"{stage}_step{step}_{i:04d}*.png"):
-                    if p.is_file():
-                        p.unlink()
-                imageio.imwrite(
-                    f"{self.render_dir}/{stage}_step{step}_{i:04d}_psnr{metrics['psnr'][-1]:.2f}_lpips{metrics['lpips'][-1]:.2f}.png",
-                    canvas,
-                )
+                if world_rank == 0:
+                    pixels_p = pixels.permute(0, 3, 1, 2)  # [1, 3, H, W]
+                    colors_p = colors.permute(0, 3, 1, 2)  # [1, 3, H, W]
+                    metrics["psnr"].append(self.psnr(colors_p, pixels_p))
+                    metrics["ssim"].append(self.ssim(colors_p, pixels_p))
+                    metrics["lpips"].append(self.lpips(colors_p, pixels_p))
+                    if cfg.use_bilateral_grid:
+                        cc_colors = color_correct(colors, pixels)
+                        cc_colors_p = cc_colors.permute(0, 3, 1, 2)  # [1, 3, H, W]
+                        metrics["cc_psnr"].append(self.psnr(cc_colors_p, pixels_p))
+                        metrics["cc_ssim"].append(self.ssim(cc_colors_p, pixels_p))
+                        metrics["cc_lpips"].append(self.lpips(cc_colors_p, pixels_p))
+                    # write images
+                    canvas = torch.cat(canvas_list, dim=2).squeeze(0).cpu().numpy()
+                    canvas = (canvas * 255).astype(np.uint8)
+                    for p in Path(self.render_dir).glob(f"{stage}_step{step}_{i:04d}*.png"):
+                        if p.is_file():
+                            p.unlink()
+                    executor.submit(
+                        imageio.imwrite,
+                        f"{self.render_dir}/{stage}_step{step}_{i:04d}_psnr{metrics['psnr'][-1]:.2f}_lpips{metrics['lpips'][-1]:.2f}.png",
+                        canvas
+                    )
 
 
         if world_rank == 0:
@@ -1178,6 +1189,7 @@ class Runner:
             self.writer.flush()
 
     @torch.no_grad()
+    @profile
     def render_traj(self, step: int):
         """Entry for trajectory rendering."""
         if self.cfg.disable_video:
@@ -1404,7 +1416,7 @@ if __name__ == "__main__":
                 init_scale=0.1,
                 opacity_reg=0.01,
                 scale_reg=0.01,
-                strategy=MCMCStrategy(verbose=True),
+                strategy=MCMCStrategy(verbose=True, cap_max=5_000_000),
             ),
         ),
     }
