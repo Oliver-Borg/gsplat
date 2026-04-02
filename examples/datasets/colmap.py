@@ -1,5 +1,6 @@
 import json
 import os
+from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 import cv2
@@ -363,7 +364,7 @@ class Dataset:
         split: str = "train",
         patch_size: Optional[int] = None,
         load_depths: bool = False,
-        max_train_cameras: Optional[int] = None,
+        max_images: Optional[int] = None,
         exclude_names: Optional[list[str]] = None,
         transform_matrix: Optional[np.ndarray] = None,
     ):
@@ -374,10 +375,6 @@ class Dataset:
         indices = np.arange(len(self.parser.image_names))
         if split == "train":
             self.indices = indices[indices % self.parser.test_every != 0]
-            if max_train_cameras is not None:
-                cam_step = max(len(self.indices) // max_train_cameras, 1)
-                self.indices = self.indices[::cam_step]
-                print(f"Limited to {len(self.indices)} cameras")
         elif split == "val":
             self.indices = indices[indices % self.parser.test_every == 0]
         else:
@@ -385,6 +382,11 @@ class Dataset:
         
         if exclude_names is not None:
             self.indices = [i for i in self.indices if self.parser.image_names[i] not in exclude_names]
+
+        if max_images is not None:
+            cam_step = max(len(self.indices) // max_images, 1)
+            self.indices = self.indices[::cam_step]
+            print(f"Limited to {len(self.indices)} cameras")
 
         self.transform_matrix = transform_matrix
 
@@ -454,6 +456,7 @@ class Dataset:
             "image": torch.from_numpy(image).float(),
             "image_id": item,  # the index of the image in the dataset
             "image_name": self.parser.image_names[index],
+            "params": self.parser.params_dict[camera_id],
         }
         if mask is not None:
             data["mask"] = torch.from_numpy(mask).bool()
@@ -496,7 +499,8 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--data_dir", type=str, default="data/360_v2/garden")
-    parser.add_argument("--factor", type=int, default=4)
+    parser.add_argument("--output_dir", type=str, default="results")
+    parser.add_argument("--factor", type=int, default=1)
     args = parser.parse_args()
 
     # Parse COLMAP data.
@@ -506,12 +510,35 @@ if __name__ == "__main__":
     dataset = Dataset(parser, split="train", load_depths=True)
     print(f"Dataset: {len(dataset)} images.")
 
-    writer = imageio.get_writer("results/points.mp4", fps=30)
+    transforms_dict = {}
+
+    output_dir = Path(args.output_dir)
+
+    os.makedirs(output_dir, exist_ok=True)
+
+    writer = imageio.get_writer(output_dir / "points.mp4", fps=30)
     for data in tqdm(dataset, desc="Plotting points"):
         image = data["image"].numpy().astype(np.uint8)
         points = data["points"].numpy()
         depths = data["depths"].numpy()
+        image_name = data["image_name"]
+        K = data["K"].numpy()
+        camtoworld = data["camtoworld"].numpy()
+        params = data["params"]
+        transforms_dict.setdefault(image_name, {})
+        transforms_dict[image_name]["params"] = params.tolist()
+        transforms_dict[image_name]["K"] = K.tolist()
+        transforms_dict[image_name]["camtoworld"] = camtoworld.tolist()
         for x, y in points:
             cv2.circle(image, (int(x), int(y)), 2, (255, 0, 0), -1)
         writer.append_data(image)
     writer.close()
+
+    transforms_dict = {k: transforms_dict[k] for k in sorted(transforms_dict.keys())}
+
+    json_dir = output_dir / "cams.json"
+
+    with open(json_dir, "w") as f:
+        json.dump(transforms_dict, f, indent=2)
+    
+    print(f"Wrote cameras to {json_dir}")
