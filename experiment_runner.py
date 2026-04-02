@@ -5,6 +5,7 @@ import os
 import subprocess
 import argparse
 
+from line_profiler import profile
 from tqdm import tqdm
 
 from vggt.plot_metrics import plot_graph
@@ -37,8 +38,22 @@ datasets = {
         gt_eval_data_dir="../vggt/data/nerf_synthetic/lego/transforms_val.json",
         data_folder_name="train",
     ),
-    "bonsai": Dataset(name="bonsai", factor=2, directory="../vggt/data/360_v2/bonsai", data_folder_name="images_2"),
-    "bonsai_4": Dataset(name="bonsai", factor=4, directory="../vggt/data/360_v2/bonsai", data_folder_name="images_4"),
+    "bonsai": Dataset(
+        name="bonsai",
+        factor=2,
+        directory="../vggt/data/360_v2/bonsai",
+        gt_eval_data_dir="../vggt/data/360_v2/bonsai",
+        gt_train_data_dir="../vggt/data/360_v2/bonsai",
+        data_folder_name="images_2",
+    ),
+    "bonsai_4": Dataset(
+        name="bonsai",
+        factor=4,
+        directory="../vggt/data/360_v2/bonsai",
+        gt_eval_data_dir="../vggt/data/360_v2/bonsai",
+        gt_train_data_dir="../vggt/data/360_v2/bonsai",
+        data_folder_name="images_4",
+    ),
     "blender_radial": Dataset(
         name="blender_radial",
         factor=1,
@@ -97,6 +112,7 @@ class Config:
         instance.depth_conf = data.get("depth_conf", instance.depth_conf)
         instance.camera_type = data.get("camera_type", instance.camera_type)
         instance.num_steps = data.get("num_steps", instance.num_steps)
+        assert not (instance.eval_opt and instance.gt_eval)  # TODO Figure out a good way to have both enabled
         return instance
 
     def __post_init__(self):
@@ -168,6 +184,10 @@ class Config:
         return f"./results/{self.output_name}"
 
     @property
+    def renders_folder(self):
+        return f"{self.result_dir}/renders"
+
+    @property
     def stats_dir(self):
         return f"{self.result_dir}/stats/val_step{self.num_steps - 1}.json"
 
@@ -234,6 +254,7 @@ class Config:
     def is_splatted(self):
         return os.path.exists(self.stats_dir)
 
+    @profile
     def run(self):
         if self.is_splatted and not self.force:
             print(f"{self.stats_dir} found. Skipping splatting")
@@ -253,6 +274,8 @@ class Config:
             self.data_dir,
             "--data_factor",
             str(self.dataset.factor) if self.choice == "gt" else "1",  # We resize the data when copying in VGGT already
+            "--eval_data_factor",
+            str(self.dataset.factor),
             "--result-dir",
             self.result_dir,
             "--disable_viewer",
@@ -339,7 +362,9 @@ class Experiment:
         if self.include_gt:
             for config in configs:
                 gt_config = replace(config, choice="gt")
-                num_images = len(os.listdir(Path(gt_config.dataset.directory) / "images"))  # This will not work for lego yet
+                num_images = len(
+                    os.listdir(Path(gt_config.dataset.directory) / "images")
+                )  # This will not work for lego yet
                 gt_config.num_images = num_images
                 gt_configs.append(gt_config)
 
@@ -412,9 +437,9 @@ experiments = [
         "num_images",
         "Test the behaviour of splatting over various number of images",
         {
-            "choice": ["vggt", "colmap"],
-            "num_images": [10, 20, 30, 40, 50, 100],
             "seed": [42, 43, 44],
+            "num_images": [10, 20, 30, 40, 50, 100],
+            "choice": ["vggt", "colmap"],
         },
         PlotConfig(x_axis="num_images", split_param="choice"),
     ),
@@ -422,11 +447,12 @@ experiments = [
         "num_images_pose_opt",
         "Test the behaviour of splatting over various number of images",
         {
-            "choice": ["vggt", "colmap"],
-            "num_images": [10, 20, 30, 40, 50, 100],
             "seed": [42, 43, 44],
+            "num_images": [10, 20, 30, 40, 50, 100],
             "pose_opt": [True],
-            "eval_opt": [True],
+            "eval_opt": [False],
+            "gt_eval": [True],
+            "choice": ["vggt", "colmap"],
         },
         PlotConfig(x_axis="num_images", split_param="choice"),
     ),
@@ -434,26 +460,40 @@ experiments = [
         "pose_opt",
         "Test the behaviour of different combinations of pose optimization",
         {
-            "choice": ["vggt", "colmap"],
-            "num_images": [30],
             "seed": [42, 43, 44],
+            "num_images": [30],
             "pose_opt": [True, False],
             "eval_opt": [True, False],
             "gt_eval": [True, False],
+            "choice": ["vggt", "colmap"],
         },
         PlotConfig(x_axis="num_images", split_param="choice,pose_opt,eval_opt,gt_eval"),
     ),
     Experiment(
         "num_points",
-        "Test the behaviour of different numbers of points and sampling modes",
+        "Test the behaviour of different numbers of points",
         {
-            "choice": ["vggt", "colmap"],
-            "num_images": [30],
             "seed": [42, 43, 44],
-            "sampling_mode": ["voxels", "random", "confidence", "ba"],
+            "num_images": [30],
+            "sampling_mode": ["voxels"],
             "num_points_value": [1000, 5000, 10000, 20000, 30000, 50000, 75000, 100000, 500000, 1000000],
+            "choice": ["vggt", "colmap"],
+            "gt_eval": True,
         },
-        PlotConfig(x_axis="num_points", split_param="sampling_mode"),
+        PlotConfig(x_axis="num_points", split_param=""),
+    ),
+    Experiment(
+        "sampling_mode",
+        "Test the behaviour of different sampling modes",
+        {
+            "seed": [42, 43, 44],
+            "num_images": [30],
+            "sampling_mode": ["voxels", "random", "confidence", "ba"],
+            "num_points_value": [100000],
+            "choice": ["vggt", "colmap"],
+            "gt_eval": True,
+        },
+        PlotConfig(x_axis="sampling_mode", split_param=""),
     ),
     Experiment(
         "test",
@@ -470,14 +510,14 @@ experiments = [
         "depth",
         "Test for depth loss and depth conf",
         {
-            "choice": ["vggt", "colmap"],
-            "num_images": [30],
             "seed": [42],
+            "num_images": [30],
             "sampling_mode": ["voxels", "ba"],
             "depth_loss": [True, False],
             "depth_conf": [True, False],
             "pose_opt": [True],
             "eval_opt": [True],
+            "choice": ["vggt", "colmap"],
         },
         PlotConfig(x_axis="num_images", split_param="choice,depth_loss,depth_conf,sampling_mode"),
     ),
@@ -485,13 +525,13 @@ experiments = [
         "camera_type",
         "Test for camera mode",
         {
-            "choice": ["vggt", "colmap"],
-            "num_images": [50, 100],
             "seed": [42, 43, 44],
+            "num_images": [50, 100],
             "sampling_mode": ["voxels"],
             "all_opt": [False],
             "camera_type": ["SIMPLE_RADIAL", "SIMPLE_PINHOLE"],
             "num_points": [35000],
+            "choice": ["vggt", "colmap"],
         },
         PlotConfig(x_axis="num_images", split_param="camera_type"),
     ),
@@ -499,13 +539,13 @@ experiments = [
         "camera_type_ext",
         "Test for camera mode (extended)",
         {
-            "choice": ["vggt", "colmap"],
-            "num_images": [100],
             "seed": [42, 43, 44],
+            "num_images": [100],
             "sampling_mode": ["ba", "voxels"],
             "all_opt": [True, False],
             "camera_type": ["SIMPLE_RADIAL", "SIMPLE_PINHOLE"],
             "num_points_value": [35000, 75000],
+            "choice": ["vggt", "colmap"],
         },
         PlotConfig(x_axis="num_images", split_param="camera_type,pose_opt,eval_opt,sampling_mode"),
     ),
@@ -513,12 +553,12 @@ experiments = [
         "dataset_type",
         "Test for dataset types",
         {
-            "choice": ["vggt", "colmap"],
-            "num_images": [50, 100],
             "seed": [42, 43, 44],
+            "num_images": [50, 100],
             "sampling_mode": ["voxels"],
             "all_opt": [False],
             "num_points": [35000, 75000],
+            "choice": ["vggt", "colmap"],
         },
         PlotConfig(x_axis="num_images", split_param="num_points"),
     ),
@@ -526,12 +566,12 @@ experiments = [
         "copy_mode",
         "Test for copy modes",
         {
-            "choice": ["vggt", "colmap"],
             "num_images": [50, 100],
             "seed": [42, 43, 44],
             "sampling_mode": ["voxels"],
             "all_opt": [False],
             "copy_mode": [None, "crop", "square"],
+            "choice": ["vggt", "colmap"],
         },
         PlotConfig(x_axis="num_images", split_param="copy_mode"),
     ),
