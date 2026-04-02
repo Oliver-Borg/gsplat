@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import Literal
 import os
@@ -38,6 +38,7 @@ datasets = {
         data_folder_name="train",
     ),
     "bonsai": Dataset(name="bonsai", factor=2, directory="../vggt/data/360_v2/bonsai", data_folder_name="images_2"),
+    "bonsai_4": Dataset(name="bonsai", factor=4, directory="../vggt/data/360_v2/bonsai", data_folder_name="images_4"),
     "blender_radial": Dataset(
         name="blender_radial",
         factor=1,
@@ -48,14 +49,14 @@ datasets = {
         name="blender_pinhole",
         factor=1,
         directory="../vggt/data/blender",
-        data_folder_name="dataset_N100_R5.5_H1.0_C-4.0_0.0_2.0_SIMPLE_PINHOLE",
+        data_folder_name="dataset_N100_R5.5_H1.0_C-4.0_0.0_2.0_SIMPLE_PINHOLE_K-0.02_RMEevee_no_windows",
     ),
 }
 
 
 @dataclass
 class Config:
-    choice: Literal["vggt", "colmap"] = "vggt"
+    choice: Literal["vggt", "colmap", "gt"] = "vggt"
     num_images: int = 30
     dataset: Dataset = datasets["lego"]
     seed: int = 42
@@ -63,6 +64,7 @@ class Config:
     num_points_value: int = 35000
     sampling_mode: Literal["voxels", "random", "confidence", "ba"] = "voxels"
     image_mode: Literal["shuffle", "distributed"] = "shuffle"
+    copy_mode: Literal[None, "crop", "square", "tiles"] = None
     gt_eval: bool = False
     pose_opt: bool = False
     eval_opt: bool = False
@@ -71,6 +73,7 @@ class Config:
     depth_loss: bool = False
     depth_conf: bool = False
     camera_type: Literal["SIMPLE_RADIAL", "SIMPLE_PINHOLE"] = "SIMPLE_PINHOLE"
+    num_steps: Literal[7000, 30000] = 7000
 
     @classmethod
     def from_dict(cls, data: dict) -> "Config":
@@ -83,6 +86,7 @@ class Config:
         instance.num_points_value = data.get("num_points_value", instance.num_points_value)
         instance.sampling_mode = data.get("sampling_mode", instance.sampling_mode)
         instance.image_mode = data.get("image_mode", instance.image_mode)
+        instance.copy_mode = data.get("copy_mode", instance.copy_mode)
         instance.gt_eval = data.get("gt_eval", instance.gt_eval)
         instance.pose_opt = data.get("pose_opt", instance.pose_opt)
         instance.eval_opt = data.get("eval_opt", instance.eval_opt)
@@ -92,6 +96,7 @@ class Config:
         instance.depth_loss = data.get("depth_loss", instance.depth_loss)
         instance.depth_conf = data.get("depth_conf", instance.depth_conf)
         instance.camera_type = data.get("camera_type", instance.camera_type)
+        instance.num_steps = data.get("num_steps", instance.num_steps)
         return instance
 
     def __post_init__(self):
@@ -114,6 +119,9 @@ class Config:
 
         if self.choice == "colmap":
             parts.append(self.image_mode)
+
+            if self.copy_mode is not None:
+                parts.append(self.copy_mode)
         elif self.choice == "vggt":
             if self.sampling_mode == "ba":
                 parts.append(self.camera_type.lower().replace("simple_", "m"))
@@ -127,6 +135,11 @@ class Config:
                     ]
                 )
             parts.append(self.image_mode)
+
+            if self.copy_mode is not None:
+                parts.append(self.copy_mode)
+        elif self.choice == "gt":
+            pass
 
         parts = "_".join(parts)
         return f"{self.choice}_outputs/{parts}"
@@ -156,10 +169,13 @@ class Config:
 
     @property
     def stats_dir(self):
-        return f"{self.result_dir}/stats/val_step6999.json"
+        return f"{self.result_dir}/stats/val_step{self.num_steps - 1}.json"
 
     @property
     def data_dir(self):
+        if self.choice == "gt":
+            return self.dataset.directory
+
         return f"../vggt/{self.input_name}"
 
     @property
@@ -167,8 +183,12 @@ class Config:
         return False
         return self.sampling_mode == "ba" and self.camera_type == "SIMPLE_RADIAL" and self.choice == "vggt"
 
+    @property
+    def is_reconstructed(self):
+        return os.path.exists(os.path.join(self.data_dir, "stat.json")) or self.choice == "gt"
+
     def reconstruct(self):
-        if os.path.exists(os.path.join(self.data_dir, "stat.json")) and not self.force:
+        if self.is_reconstructed and not self.force:
             print(Path(self.data_dir), "has already been constructed.\nUse --force to force reconstruction.")
             return 0
 
@@ -199,6 +219,8 @@ class Config:
         ]
         if self.force:
             command.append("--force")
+        if self.copy_mode is not None:
+            command.extend(["--copy_mode", self.copy_mode])
 
         try:
             output = subprocess.run(command, check=True, cwd="../vggt")
@@ -208,9 +230,12 @@ class Config:
             print(e)
             return e.returncode
 
-    def run(self):
+    @property
+    def is_splatted(self):
+        return os.path.exists(self.stats_dir)
 
-        if os.path.exists(self.stats_dir) and not self.force:
+    def run(self):
+        if self.is_splatted and not self.force:
             print(f"{self.stats_dir} found. Skipping splatting")
             return 0
 
@@ -227,14 +252,14 @@ class Config:
             "--data_dir",
             self.data_dir,
             "--data_factor",
-            "1",
+            str(self.dataset.factor) if self.choice == "gt" else "1",  # We resize the data when copying in VGGT already
             "--result-dir",
             self.result_dir,
             "--disable_viewer",
             "--max_train_cameras",
             str(self.num_cams),
             "--max_steps",
-            "7000",
+            str(self.num_steps),
         ]
 
         if self.pose_opt:
@@ -304,11 +329,21 @@ class Experiment:
     description: str
     config_dict: dict
     plot_args: PlotConfig | None = None
+    include_gt: bool = False
 
     def get_configs(self, dataset_name: str) -> list[Config]:
         self.config_dict["dataset"] = dataset_name
         config_dicts = generate_configs(self.config_dict)
         configs = [Config.from_dict(config_dict) for config_dict in config_dicts]
+        gt_configs = []
+        if self.include_gt:
+            for config in configs:
+                gt_config = replace(config, choice="gt")
+                num_images = len(os.listdir(Path(gt_config.dataset.directory) / "images"))  # This will not work for lego yet
+                gt_config.num_images = num_images
+                gt_configs.append(gt_config)
+
+        configs += gt_configs
         config_set = set()
         unique_configs: list[Config] = []
         for config in configs:
@@ -336,18 +371,40 @@ class Experiment:
             for failure in failures:
                 print("", failure.output_name, sep="\t")
 
-    def plot(self, dataset_name: str):
+    def get_output_paths(self, dataset_name: str):
+        configs = self.get_configs(dataset_name)
+        return [Path(config.output_name) for config in configs]
+
+    def get_input_paths(self, dataset_name: str):
+        configs = self.get_configs(dataset_name)
+        return [Path(config.input_name) for config in configs]
+
+    def plot(self, dataset_name: str, create_pcp: bool = True):
         if self.plot_args is None:
             return
-        configs = self.get_configs(dataset_name)
+        print(self.progress_stats(dataset_name))
         plot_graph(
             name=datasets[dataset_name].scene_name,
             prefix=self.name,
             x_axis=self.plot_args.x_axis,
             split_param=self.plot_args.split_param,
             filter=self.plot_args.filter,
-            folders=[config.output_name.split("/")[-1] for config in configs],
+            folders=[path.name for path in self.get_output_paths(dataset_name)],
+            create_pcp=create_pcp,
         )
+
+    def progress_stats(self, dataset_name: str) -> str:
+        configs = self.get_configs(dataset_name)
+
+        reconstructed = 0
+        splatted = 0
+        for config in configs:
+            if config.is_reconstructed:
+                reconstructed += 1
+            if config.is_splatted:
+                splatted += 1
+
+        return f"Reconstructed: {reconstructed} / {len(configs)} | Splatted: {splatted} / {len(configs)}"
 
 
 experiments = [
@@ -396,7 +453,7 @@ experiments = [
             "sampling_mode": ["voxels", "random", "confidence", "ba"],
             "num_points_value": [1000, 5000, 10000, 20000, 30000, 50000, 75000, 100000, 500000, 1000000],
         },
-        PlotConfig(x_axis="num_points_value", split_param="choice"),
+        PlotConfig(x_axis="num_points", split_param="sampling_mode"),
     ),
     Experiment(
         "test",
@@ -405,8 +462,9 @@ experiments = [
             "choice": ["vggt", "colmap"],
             "num_images": [30],
             "seed": [42],
+            "num_steps": [30000],
         },
-        PlotConfig(x_axis="num_images", split_param="choice"),
+        PlotConfig(x_axis="val_step", split_param=""),
     ),
     Experiment(
         "depth",
@@ -428,11 +486,12 @@ experiments = [
         "Test for camera mode",
         {
             "choice": ["vggt", "colmap"],
-            "num_images": [100],
+            "num_images": [50, 100],
             "seed": [42, 43, 44],
-            "sampling_mode": ["ba"],
+            "sampling_mode": ["voxels"],
             "all_opt": [False],
             "camera_type": ["SIMPLE_RADIAL", "SIMPLE_PINHOLE"],
+            "num_points": [35000],
         },
         PlotConfig(x_axis="num_images", split_param="camera_type"),
     ),
@@ -450,16 +509,49 @@ experiments = [
         },
         PlotConfig(x_axis="num_images", split_param="camera_type,pose_opt,eval_opt,sampling_mode"),
     ),
+    Experiment(
+        "dataset_type",
+        "Test for dataset types",
+        {
+            "choice": ["vggt", "colmap"],
+            "num_images": [50, 100],
+            "seed": [42, 43, 44],
+            "sampling_mode": ["voxels"],
+            "all_opt": [False],
+            "num_points": [35000, 75000],
+        },
+        PlotConfig(x_axis="num_images", split_param="num_points"),
+    ),
+    Experiment(
+        "copy_mode",
+        "Test for copy modes",
+        {
+            "choice": ["vggt", "colmap"],
+            "num_images": [50, 100],
+            "seed": [42, 43, 44],
+            "sampling_mode": ["voxels"],
+            "all_opt": [False],
+            "copy_mode": [None, "crop", "square"],
+        },
+        PlotConfig(x_axis="num_images", split_param="copy_mode"),
+    ),
 ]
+
+experiment_dict = {exp.name: exp for exp in experiments}
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run experiments")
     parser.add_argument("--experiment_name", type=str, required=True, help="Name of the experiment to run")
     parser.add_argument("--dataset_name", type=str, required=True, help="Name of the dataset to use")
     parser.add_argument("--do_reconstruct", action="store_true", help="Whether to run reconstruction")
+    parser.add_argument("--plot_only", action="store_true", help="Whether to only plot")
+    parser.add_argument("--include_gt", action="store_true", help="Whether to include the ground truth splatted data")
     args = parser.parse_args()
 
     for experiment in experiments:
         if experiment.name == args.experiment_name or args.experiment_name == "all":
-            experiment.run(args.dataset_name, do_reconstruct=args.do_reconstruct)
+            experiment = replace(experiment, include_gt=args.include_gt)
+            if not args.plot_only:
+                experiment.run(args.dataset_name, do_reconstruct=args.do_reconstruct)
             experiment.plot(args.dataset_name)
