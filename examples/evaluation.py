@@ -5,7 +5,7 @@ import json
 import os
 import numpy as np
 import pycolmap
-from scipy.spatial.transform import Rotation as R
+from scipy.spatial.transform import Rotation as Rot
 from typing import Dict, Tuple, List, Optional, Any, TypedDict, Union
 import struct
 
@@ -38,6 +38,9 @@ def umeyama_alignment(
     """
     q = from_points
     p = to_points
+
+    if np.allclose(q, p):
+        return 1.0, np.eye(3), np.zeros(3)
 
     # Translation
     n, m = q.shape
@@ -86,32 +89,36 @@ def get_poses(path: str) -> Dict[str, np.ndarray]:
         ]
         potential_paths.extend(subdirs)
 
-    best_reconst: Optional[pycolmap.Reconstruction] = None
+    best_reconst: Optional[pycolmap.SceneManager] = None
     max_images: int = -1
 
     for p in potential_paths:
         if os.path.exists(os.path.join(p, "images.bin")):
             try:
-                reconst = pycolmap.Reconstruction(p)
-                num_reg = reconst.num_reg_images()
+                reconst = pycolmap.SceneManager(p)
+                reconst.load_cameras()
+                reconst.load_images()
+                reconst.load_points3D()
+                num_reg = len(reconst.images)
                 if num_reg > max_images:
                     max_images = num_reg
                     best_reconst = reconst
-            except Exception:
-                continue
+            # except Exception:
+            #     continue
+            finally:
+                pass
 
     if not best_reconst:
         return {}
 
     poses: Dict[str, np.ndarray] = {}
     for _, image in best_reconst.images.items():
-        rigid_stat = image.cam_from_world
-        rot_mat = rigid_stat.rotation.matrix()
-        tvec = rigid_stat.translation.reshape(3, 1)
+        rot_mat = Rot.from_quat(image.q.q).as_matrix()
+        tvec = image.t
 
         c2w = np.eye(4)
         c2w[:3, :3] = rot_mat.T
-        c2w[:3, 3:4] = -np.dot(rot_mat.T, tvec)
+        c2w[:3, 3] = -np.dot(rot_mat.T, tvec)
         poses[image.name] = c2w
 
     return poses
@@ -137,13 +144,15 @@ def get_point_cloud(path: str) -> Optional[np.ndarray]:
     for p in potential_paths:
         if os.path.exists(os.path.join(p, "points3D.bin")):
             try:
-                reconst = pycolmap.Reconstruction(p)
-                points = []
-                for _, point in reconst.points3D.items():
-                    points.append(point.xyz)
-                return np.array(points)
-            except Exception:
-                continue
+                reconst = pycolmap.SceneManager(p)
+                reconst.load_cameras()
+                reconst.load_images()
+                reconst.load_points3D()
+                return reconst.points3D
+            # except Exception:
+            #     continue
+            finally:
+                pass
 
     return None
 
