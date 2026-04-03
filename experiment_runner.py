@@ -1,4 +1,5 @@
 from dataclasses import dataclass, replace
+import json
 from pathlib import Path
 from typing import Literal
 import os
@@ -8,7 +9,7 @@ import argparse
 from line_profiler import profile
 from tqdm import tqdm
 
-from vggt.plot_metrics import plot_graph
+from vggt.plot_metrics import plot_graph, _parse_gsplat_json
 
 import examples.evaluation
 
@@ -203,7 +204,17 @@ class Config:
 
     @property
     def force(self):
-        return False
+        if self.is_splatted:
+            with open(self.stats_dir, "r") as f:
+                stats = _parse_gsplat_json(json.load(f), self.stats_dir)
+                psnr = stats.get("psnr", 0.0)
+            if psnr is None or psnr < 15:
+                return True
+            if len(list(filter(lambda x : "6999" in x, os.listdir(self.renders_folder)))) < 30:
+                return True
+            return False
+        else:
+            return self.sampling_mode != "ba" and self.choice == "vggt"
         return self.sampling_mode == "ba" and self.camera_type == "SIMPLE_RADIAL" and self.choice == "vggt"
 
     @property
