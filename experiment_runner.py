@@ -482,12 +482,12 @@ experiments = [
         {
             "seed": [42, 43, 44],
             "num_images": [10, 20, 30, 40, 50, 100],
-            "pose_opt": [True],
+            "pose_opt": [True, False],
             "eval_opt": [False],
             "gt_eval": [True],
             "choice": ["vggt", "colmap"],
         },
-        PlotConfig(x_axis="num_images", split_param="choice"),
+        PlotConfig(x_axis="num_images", split_param="choice,pose_opt"),
     ),
     Experiment(
         "pose_opt",
