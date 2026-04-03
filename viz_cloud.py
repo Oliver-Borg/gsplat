@@ -314,7 +314,7 @@ def run_gradio_eval_with_names(
         return summary, fig, metrics, gr.update(), gr.update(), [], gt_parser, pred_parser
 
 
-def render_depth_overlay(img_ref: np.ndarray, points_3d: np.ndarray, pose: np.ndarray, K: np.ndarray) -> np.ndarray:
+def render_depth_overlay(img_ref: np.ndarray, points_3d: np.ndarray, pose: np.ndarray, K: np.ndarray, stride: int = 5) -> np.ndarray:
     """Projects 3D points onto image and draws them with depth coloring."""
     h, w = img_ref.shape[:2]
 
@@ -345,7 +345,6 @@ def render_depth_overlay(img_ref: np.ndarray, points_3d: np.ndarray, pose: np.nd
 
     img_viz = img_ref.copy()
 
-    stride = 5
     for pt, color in zip(pts_valid[::stride], colors[::stride]):
         cv2.circle(img_viz, (int(pt[0]), int(pt[1])), 2, color[0].tolist(), -1)
 
@@ -468,6 +467,11 @@ def get_projection_data(
     if len(pred_points) > 0:
         pred_pts_aligned = (s * (R @ pred_points.T)).T + t.T
 
+    for k, p_c2w in pred_poses.items():
+        p_c2w[:3, 3] = s * R @ p_c2w[:3, 3] + t
+        p_c2w[:3, :3] = R @ p_c2w[:3, :3]
+        pred_poses[k] = p_c2w
+
     # 3. Generate GT Projection
     # If GT points are empty (e.g. JSON/NeRF Synthetic), use aligned pred points
     gt_points_to_render = gt_parser.points
@@ -494,11 +498,11 @@ def update_projection_comparison(
 
     # 3. Generate GT Projection
 
-    gt_viz = render_depth_overlay(img_ref, gt_points_to_render, gt_poses[camera_name], gt_K)
+    gt_viz = render_depth_overlay(img_ref, gt_points_to_render, gt_poses[camera_name], gt_K, stride=1)
 
     # 4. Generate Pred Projection (Aligned)
     if pred_pts_aligned is not None:
-        pred_viz = render_depth_overlay(img_ref, pred_pts_aligned, gt_poses[camera_name], pred_K)
+        pred_viz = render_depth_overlay(img_ref, pred_pts_aligned, pred_poses[camera_name], pred_K, stride=1)
     else:
         pred_viz = img_ref
 
@@ -562,14 +566,16 @@ with gr.Blocks(title="SfM Evaluation Suite") as demo:
         with gr.Column(scale=1):
             pred_input = gr.Textbox(
                 label="Prediction Path",
-                value="../vggt/vggt_outputs/lego_1_n50_s42_c0.0_p1000_voxels",
+                value="../vggt/vggt_outputs/bonsai_2_n30_s42_c0.0_p50000_voxels_shuffle",
+                # value="../vggt/data/360_v2/bonsai",
                 # value="../vggt/vggt_outputs/bonsai_2_n50_s42_c0.0_p1000_voxels",
                 # value="../vggt/vggt_outputs/bonsai_2_n100_s42_c1.0_random",
             )
             gt_input = gr.Textbox(
                 label="Ground Truth Path",
                 # value="../vggt/colmap_outputs/bonsai_2_n100_s42_c5.0",
-                value="../vggt/data/nerf_synthetic/lego/transforms_train.json",
+                value="../vggt/data/360_v2/bonsai",
+                # value="../vggt/vggt_outputs/bonsai_2_n30_s42_c0.0_p50000_voxels_shuffle",
                 # value="./data/360_v2/bonsai/sparse/0",
             )
 
