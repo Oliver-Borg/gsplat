@@ -442,7 +442,12 @@ class Experiment:
             split_param=self.plot_args.split_param,
             filter=self.plot_args.filter,
             # TODO This may cause incorrect data to be added to the plot but should be safe because of th i{n} part
-            folders=[path.name for path in self.get_output_paths(dataset_name) + self.get_input_paths(dataset_name)],
+            folders=list(
+                zip(
+                    [path.name for path in self.get_input_paths(dataset_name)],
+                    [path.name for path in self.get_output_paths(dataset_name)],
+                )
+            ),
             create_pcp=create_pcp,
         )
 
