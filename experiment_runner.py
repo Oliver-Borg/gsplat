@@ -10,6 +10,8 @@ from tqdm import tqdm
 
 from vggt.plot_metrics import plot_graph
 
+import examples.evaluation
+
 GSPLAT_PYTHON = os.path.expanduser("~/.conda/envs/gsplat/bin/python")
 GSPLAT_TORCHRUN = os.path.expanduser("~/.conda/envs/gsplat/bin/torchrun")
 VGGT_PYTHON = os.path.expanduser("~/.conda/envs/vggt/bin/python")
@@ -112,7 +114,8 @@ class Config:
         instance.depth_conf = data.get("depth_conf", instance.depth_conf)
         instance.camera_type = data.get("camera_type", instance.camera_type)
         instance.num_steps = data.get("num_steps", instance.num_steps)
-        assert not (instance.eval_opt and instance.gt_eval)  # TODO Figure out a good way to have both enabled
+        if instance.eval_opt and instance.gt_eval:  # TODO Figure out a good way to have both enabled
+            instance.eval_opt = False
         return instance
 
     def __post_init__(self):
@@ -251,6 +254,20 @@ class Config:
             return e.returncode
 
     @property
+    def is_evaluated(self):
+        return False  # TODO
+
+    def eval(self):
+        if self.is_evaluated:
+            return 0
+        try:
+            examples.evaluation.main(self.data_dir, self.dataset.directory)
+            return 0
+        except Exception as e:
+            print(f"Error during evaluation: {e}")
+            return 1
+
+    @property
     def is_splatted(self):
         return os.path.exists(self.stats_dir)
 
@@ -379,21 +396,31 @@ class Experiment:
 
     def run(self, dataset_name: str, do_reconstruct: bool = True):
         configs = self.get_configs(dataset_name)
-        failures: list[Config] = []
+        splat_failures: list[Config] = []
+        eval_failures: list[Config] = []
         for config in tqdm(configs):
             if do_reconstruct:
                 reconstruction_returncode = config.reconstruct()
                 if reconstruction_returncode != 0:
-                    failures.append(config)
+                    splat_failures.append(config)
                     continue
+
+            eval_returncode = config.eval()
+            if eval_returncode != 0:
+                eval_failures.append(config)
 
             returncode = config.run()
             if returncode != 0:
-                failures.append(config)
+                splat_failures.append(config)
 
-        if len(failures) > 0:
-            print("Failures:")
-            for failure in failures:
+        if len(splat_failures) > 0:
+            print("Splat Failures:")
+            for failure in splat_failures:
+                print("", failure.output_name, sep="\t")
+
+        if len(eval_failures) > 0:
+            print("Eval Failures:")
+            for failure in eval_failures:
                 print("", failure.output_name, sep="\t")
 
     def get_output_paths(self, dataset_name: str):
@@ -414,7 +441,8 @@ class Experiment:
             x_axis=self.plot_args.x_axis,
             split_param=self.plot_args.split_param,
             filter=self.plot_args.filter,
-            folders=[path.name for path in self.get_output_paths(dataset_name)],
+            # TODO This may cause incorrect data to be added to the plot but should be safe because of th i{n} part
+            folders=[path.name for path in self.get_output_paths(dataset_name) + self.get_input_paths(dataset_name)],
             create_pcp=create_pcp,
         )
 
@@ -493,7 +521,7 @@ experiments = [
             "choice": ["vggt", "colmap"],
             "gt_eval": True,
         },
-        PlotConfig(x_axis="sampling_mode", split_param=""),
+        PlotConfig(x_axis="num_points", split_param="sampling_mode"),
     ),
     Experiment(
         "test",
