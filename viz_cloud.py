@@ -314,9 +314,11 @@ def run_gradio_eval_with_names(
         return summary, fig, metrics, gr.update(), gr.update(), [], gt_parser, pred_parser
 
 
-def render_depth_overlay(img_ref: np.ndarray, points_3d: np.ndarray, pose: np.ndarray, K: np.ndarray, stride: int = 5) -> np.ndarray:
+def render_depth_overlay(img_ref: np.ndarray, points_3d: np.ndarray, pose: np.ndarray, K: np.ndarray, im_size: np.ndarray, stride: int = 5) -> np.ndarray:
     """Projects 3D points onto image and draws them with depth coloring."""
-    h, w = img_ref.shape[:2]
+    w, h = tuple(im_size)
+
+    img_ref = cv2.resize(img_ref, (w, h), interpolation=cv2.INTER_CUBIC)
 
     # Project points and get depths
     pts_2d, depths = project_points(points_3d, pose, K)
@@ -420,8 +422,8 @@ def get_projection_data(
     pred_parser = pred_parser_state
 
     # 1. Setup Alignment
-    gt_poses = {n: c2w for n, c2w in zip(gt_parser.image_names, gt_parser.camtoworlds)}
-    pred_poses = {n: c2w for n, c2w in zip(pred_parser.image_names, pred_parser.camtoworlds)}
+    gt_poses = {n: c2w.copy() for n, c2w in zip(gt_parser.image_names, gt_parser.camtoworlds)}
+    pred_poses = {n: c2w.copy() for n, c2w in zip(pred_parser.image_names, pred_parser.camtoworlds)}
 
     common_names = sorted(list(set(pred_poses.keys()) & set(gt_poses.keys())))
     if camera_name not in common_names:
@@ -437,6 +439,7 @@ def get_projection_data(
         img_path = gt_parser.image_paths[idx]
         cam_id = gt_parser.camera_ids[idx]
         gt_K = gt_parser.Ks_dict[cam_id]
+        gt_imsize = gt_parser.imsize_dict[cam_id]
 
         if not os.path.exists(img_path):
             raise ValueError(f"Image {img_path} not found.")
@@ -458,8 +461,10 @@ def get_projection_data(
         idx_p = pred_parser.image_names.index(camera_name)
         cam_id_p = pred_parser.camera_ids[idx_p]
         pred_K = pred_parser.Ks_dict[cam_id_p]
+        pred_imsize = pred_parser.imsize_dict[cam_id_p]
     else:
         pred_K = gt_K  # Fallback
+        pred_imsize = gt_imsize
 
     # Pre-calculate Aligned Pred Points
     pred_points = pred_parser.points
@@ -472,13 +477,22 @@ def get_projection_data(
         p_c2w[:3, :3] = R @ p_c2w[:3, :3]
         pred_poses[k] = p_c2w
 
+    print(f"\n--- DEBUG INFO FOR CAMERA: {camera_name} ---")
+    print(f"Ground Truth Intrinsics (K):\n{gt_K}")
+    print(f"Predicted Intrinsics (K):\n{pred_K}")
+    print(f"Ground Truth Extrinsics (c2w):\n{gt_poses[camera_name]}")
+    print(f"Predicted Extrinsics Aligned (c2w):\n{pred_poses[camera_name]}")
+    print(f"Ground Truth Image Size:\n{gt_imsize}")
+    print(f"Predicted Image Size:\n{pred_imsize}")
+    print("------------------------------------------\n")
+
     # 3. Generate GT Projection
     # If GT points are empty (e.g. JSON/NeRF Synthetic), use aligned pred points
     gt_points_to_render = gt_parser.points
     if len(gt_points_to_render) == 0 and pred_pts_aligned is not None:
         gt_points_to_render = pred_pts_aligned
 
-    return img_ref, gt_points_to_render, gt_K, pred_K, pred_pts_aligned, gt_poses, pred_poses
+    return img_ref, gt_points_to_render, gt_K, pred_K, pred_pts_aligned, gt_poses, pred_poses, gt_imsize, pred_imsize
 
 
 def update_projection_comparison(
@@ -490,7 +504,7 @@ def update_projection_comparison(
     """Update function utilizing the cached Parser objects."""
 
     try:
-        img_ref, gt_points_to_render, gt_K, pred_K, pred_pts_aligned, gt_poses, pred_poses = get_projection_data(
+        img_ref, gt_points_to_render, gt_K, pred_K, pred_pts_aligned, gt_poses, pred_poses, gt_imsize, pred_imsize = get_projection_data(
             camera_name, gt_parser_state, pred_parser_state
         )
     except ValueError as e:
@@ -498,11 +512,12 @@ def update_projection_comparison(
 
     # 3. Generate GT Projection
 
-    gt_viz = render_depth_overlay(img_ref, gt_points_to_render, gt_poses[camera_name], gt_K, stride=1)
+    gt_viz = render_depth_overlay(img_ref, gt_points_to_render, gt_poses[camera_name], gt_K, gt_imsize, stride=2)
+    print()
 
     # 4. Generate Pred Projection (Aligned)
     if pred_pts_aligned is not None:
-        pred_viz = render_depth_overlay(img_ref, pred_pts_aligned, pred_poses[camera_name], pred_K, stride=1)
+        pred_viz = render_depth_overlay(img_ref, pred_pts_aligned, pred_poses[camera_name], pred_K, pred_imsize, stride=2)
     else:
         pred_viz = img_ref
 
@@ -523,7 +538,7 @@ def update_depth_projection_figure(
     pred_path_str: str,
 ) -> Optional[go.Figure] | str:
     try:
-        img_ref, _, _, pred_K, _, _, pred_poses = get_projection_data(camera_name, gt_parser_state, pred_parser_state)
+        img_ref, _, _, pred_K, _, _, pred_poses, _, _ = get_projection_data(camera_name, gt_parser_state, pred_parser_state)
     except ValueError as e:
         return str(e)
     depth_file_path = os.path.join(pred_path_str, "depths", f"depth_{camera_name}.npy")
@@ -566,7 +581,7 @@ with gr.Blocks(title="SfM Evaluation Suite") as demo:
         with gr.Column(scale=1):
             pred_input = gr.Textbox(
                 label="Prediction Path",
-                value="../vggt/vggt_outputs/bonsai_2_n30_s42_c0.0_p50000_voxels_shuffle",
+                value="../vggt/vggt_outputs/bonsai_2_n30_s42_c0.0_p100000_voxels_shuffle",
                 # value="../vggt/data/360_v2/bonsai",
                 # value="../vggt/vggt_outputs/bonsai_2_n50_s42_c0.0_p1000_voxels",
                 # value="../vggt/vggt_outputs/bonsai_2_n100_s42_c1.0_random",
