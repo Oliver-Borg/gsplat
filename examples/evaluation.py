@@ -9,6 +9,13 @@ from scipy.spatial.transform import Rotation as Rot
 from typing import Dict, Tuple, List, Optional, Any, TypedDict, Union
 import struct
 
+try:
+    from .datasets.colmap import Parser
+    from .datasets.nerf_synth import SimpleParser, load_json_data
+except ImportError: # TODO Figure out a better way to do this
+    from datasets.colmap import Parser
+    from datasets.nerf_synth import SimpleParser, load_json_data
+
 
 class EvalMetrics(TypedDict, total=False):
     mean_rre_deg: float
@@ -19,6 +26,8 @@ class EvalMetrics(TypedDict, total=False):
     num_aligned: int
     alignment_scale: float
     error: str
+    all_rre: list[float]
+    all_rte: list[float]
 
 
 class EvalReport(TypedDict):
@@ -72,165 +81,30 @@ def umeyama_alignment(
     return float(scale), rotation, translation
 
 
-def get_poses(path: str) -> Dict[str, np.ndarray]:
-    """
-    Reads all available COLMAP models in a path and returns the best one.
-    Checks for subfolders like 0, 1, 2 if they exist.
-    """
-    potential_paths: List[str] = [path]
-    sparse_path = os.path.join(path, "sparse")
+def load_parser_data(
+    path: str,
+) -> Tuple[Optional[Union[Parser, SimpleParser]], Optional[Dict], Optional[Dict], Optional[Dict], Optional[str]]:
+    """Safe wrapper to initialize Parser and extract poses."""
+    try:
+        if path.endswith(".json"):
+            parser = load_json_data(path)
+        else:
+            if path.endswith("cameras.bin") or path.endswith("cameras.txt"):
+                path = os.path.dirname(path)
+            # Parser expects data_dir. Normalize=False to keep raw scale for alignment.
+            parser = Parser(data_dir=path, normalize=False)
 
-    if os.path.isdir(sparse_path):
-        potential_paths.append(sparse_path)
-        subdirs = [
-            os.path.join(sparse_path, d)
-            for d in os.listdir(sparse_path)
-            if d.isdigit() and os.path.isdir(os.path.join(sparse_path, d))
-        ]
-        potential_paths.extend(subdirs)
-
-    best_reconst: Optional[pycolmap.SceneManager] = None
-    max_images: int = -1
-
-    for p in potential_paths:
-        if os.path.exists(os.path.join(p, "images.bin")):
-            try:
-                reconst = pycolmap.SceneManager(p)
-                reconst.load_cameras()
-                reconst.load_images()
-                reconst.load_points3D()
-                num_reg = len(reconst.images)
-                if num_reg > max_images:
-                    max_images = num_reg
-                    best_reconst = reconst
-            # except Exception:
-            #     continue
-            finally:
-                pass
-
-    if not best_reconst:
-        return {}
-
-    poses: Dict[str, np.ndarray] = {}
-    for _, image in best_reconst.images.items():
-        rot_mat = Rot.from_quat(image.q.q).as_matrix()
-        tvec = image.t
-
-        c2w = np.eye(4)
-        c2w[:3, :3] = rot_mat.T
-        c2w[:3, 3] = -np.dot(rot_mat.T, tvec)
-        poses[image.name] = c2w
-
-    return poses
-
-
-def get_point_cloud(path: str) -> Optional[np.ndarray]:
-    """
-    Reads the point cloud from a COLMAP model in a path.
-    Checks for subfolders like 0, 1, 2 if they exist.
-    """
-    potential_paths: List[str] = [path]
-    sparse_path = os.path.join(path, "sparse")
-
-    if os.path.isdir(sparse_path):
-        potential_paths.append(sparse_path)
-        subdirs = [
-            os.path.join(sparse_path, d)
-            for d in os.listdir(sparse_path)
-            if d.isdigit() and os.path.isdir(os.path.join(sparse_path, d))
-        ]
-        potential_paths.extend(subdirs)
-
-    for p in potential_paths:
-        if os.path.exists(os.path.join(p, "points3D.bin")):
-            try:
-                reconst = pycolmap.SceneManager(p)
-                reconst.load_cameras()
-                reconst.load_images()
-                reconst.load_points3D()
-                return reconst.points3D
-            # except Exception:
-            #     continue
-            finally:
-                pass
-
-    return None
-
-
-def get_intrinsics(path: str, camera_id: int = 1) -> dict:
-    """
-    Parses COLMAP cameras.txt or cameras.bin.
-    Fixes the header size to 32 bytes for binary format.
-    """
-    sparse_path = os.path.join(path, "sparse")
-
-    if os.path.exists(os.path.join(sparse_path, "0")):
-        sparse_path = os.path.join(sparse_path, "0")
-
-    cameras_txt = os.path.join(sparse_path, "cameras.txt")
-    cameras_bin = os.path.join(sparse_path, "cameras.bin")
-
-    if os.path.exists(cameras_bin):
-        with open(cameras_bin, "rb") as f:
-            num_cameras = struct.unpack("<Q", f.read(8))[0]
-            for _ in range(num_cameras):
-                # Header: id(i=4), model(i=4), width(Q=8), height(Q=8) = 24 bytes
-                header_data = f.read(24)
-                if len(header_data) < 24:
-                    break
-
-                cam_id, model_id, width, height = struct.unpack("<iiQQ", header_data)
-
-                # COLMAP Model IDs: 0:SIMPLE_PINHOLE(3), 1:PINHOLE(4), 2:SIMPLE_RADIAL(4), 3:RADIAL(5), 4:OPENCV(8)
-                num_params_map = {0: 3, 1: 4, 2: 4, 3: 5, 4: 8, 5: 8}
-                num_params = num_params_map.get(model_id, 0)
-
-                params_data = f.read(8 * num_params)
-                if len(params_data) < 8 * num_params:
-                    break
-                params = struct.unpack("<" + "d" * num_params, params_data)
-
-                if cam_id == camera_id:
-                    return format_colmap_params(model_id, params)
-
-    elif os.path.exists(cameras_txt):
-        with open(cameras_txt, "r") as f:
-            for line in f:
-                if line.startswith("#") or not line.strip():
-                    continue
-                elems = line.split()
-                if int(elems[0]) == camera_id:
-                    model_name = elems[1]
-                    params = [float(x) for x in elems[4:]]
-                    return format_colmap_params(model_name, params)
-
-    return None
-
-
-def format_colmap_params(model: Union[int, str], params: list) -> dict:
-    """Maps flat COLMAP params to a structured dictionary."""
-    # SIMPLE_PINHOLE: f, cx, cy
-    if model in [0, "SIMPLE_PINHOLE"]:
-        return {"fx": params[0], "fy": params[0], "cx": params[1], "cy": params[2], "k1": 0}
-    # PINHOLE: fx, fy, cx, cy
-    elif model in [1, "PINHOLE"]:
-        return {"fx": params[0], "fy": params[1], "cx": params[2], "cy": params[3], "k1": 0}
-    # SIMPLE_RADIAL: f, cx, cy, k1
-    elif model in [2, "SIMPLE_RADIAL"]:
-        return {"fx": params[0], "fy": params[0], "cx": params[1], "cy": params[2], "k1": params[3]}
-    # OPENCV: fx, fy, cx, cy, k1, k2, p1, p2
-    elif model in [4, "OPENCV"]:
-        return {
-            "fx": params[0],
-            "fy": params[1],
-            "cx": params[2],
-            "cy": params[3],
-            "k1": params[4],
-            "k2": params[5],
-            "p1": params[6],
-            "p2": params[7],
+        # Create dict {image_name: c2w} for metrics calculation
+        poses = {name: c2w for name, c2w in zip(parser.image_names, parser.camtoworlds)}
+        intrinsics = {
+            name: parser.Ks_dict[parser.camera_ids[parser.image_names.index(name)]] for name in parser.image_names
         }
-    return {"fx": 0, "fy": 0, "cx": 0, "cy": 0, "k1": 0}
+        imsizes = {
+            name: parser.imsize_dict[parser.camera_ids[parser.image_names.index(name)]] for name in parser.image_names
+        }
+        return parser, poses, intrinsics, imsizes, None
+    except Exception as e:
+        return None, None, None, None, str(e)
 
 
 def calculate_metrics(pred_poses: Dict[str, np.ndarray], gt_poses: Dict[str, np.ndarray]) -> EvalMetrics:
@@ -248,8 +122,8 @@ def calculate_metrics(pred_poses: Dict[str, np.ndarray], gt_poses: Dict[str, np.
 
     for name in common_names:
         p_c2w = pred_poses[name].copy()
-        p_c2w[:3, 3] = s * np.dot(R_align, p_c2w[:3, 3]) + t_align
-        p_c2w[:3, :3] = np.dot(R_align, p_c2w[:3, :3])
+        p_c2w[:3, 3] = s * R_align @ p_c2w[:3, 3] + t_align
+        p_c2w[:3, :3] = R_align @ p_c2w[:3, :3]
 
         g_c2w = gt_poses[name]
 
@@ -272,6 +146,8 @@ def calculate_metrics(pred_poses: Dict[str, np.ndarray], gt_poses: Dict[str, np.
         "auc_30": round(float(np.mean(np.array(rre_list) < 30)), 3),
         "num_aligned": len(common_names),
         "alignment_scale": round(s, 6),
+        "all_rre": rre_list,
+        "all_rte": rte_list,
     }
 
 
@@ -281,8 +157,10 @@ def main(pred: str, gt: str, force: bool = False) -> None:
         print(f"Evaluation for {pred} already exists at {out_file}. Skipping.")
         return
 
-    gt_poses = get_poses(gt)
-    pred_poses = get_poses(pred)
+    gt_poses = load_parser_data(gt)[1]
+    pred_poses = load_parser_data(pred)[1]
+
+    assert gt_poses is not None and pred_poses is not None
 
     if not gt_poses or not pred_poses:
         print(f"Error: Missing or empty reconstruction in pred ({len(pred_poses)}) or gt ({len(gt_poses)})")

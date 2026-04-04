@@ -7,8 +7,7 @@ import cv2
 import json
 from typing import Optional, Union, Tuple, Dict, List, Any
 from examples.datasets.colmap import Parser
-from examples.evaluation import umeyama_alignment, calculate_metrics
-from examples.datasets.nerf_synth import SimpleParser, load_json_data
+from examples.evaluation import umeyama_alignment, calculate_metrics, load_parser_data
 from geometry import unproject_depth_map_to_point_map
 from scipy.spatial import cKDTree  # type: ignore
 
@@ -130,31 +129,6 @@ def project_points(points_3d: np.ndarray, c2w: np.ndarray, K: np.ndarray) -> Tup
 
     return np.stack([x, y], axis=1), pts_cam[:, 2]
 
-
-def load_parser_data(
-    path: str,
-) -> Tuple[Optional[Union[Parser, SimpleParser]], Optional[Dict], Optional[Dict], Optional[Dict], Optional[str]]:
-    """Safe wrapper to initialize Parser and extract poses."""
-    try:
-        if path.endswith(".json"):
-            parser = load_json_data(path)
-        else:
-            if path.endswith("cameras.bin") or path.endswith("cameras.txt"):
-                path = os.path.dirname(path)
-            # Parser expects data_dir. Normalize=False to keep raw scale for alignment.
-            parser = Parser(data_dir=path, normalize=False)
-
-        # Create dict {image_name: c2w} for metrics calculation
-        poses = {name: c2w for name, c2w in zip(parser.image_names, parser.camtoworlds)}
-        intrinsics = {
-            name: parser.Ks_dict[parser.camera_ids[parser.image_names.index(name)]] for name in parser.image_names
-        }
-        imsizes = {
-            name: parser.imsize_dict[parser.camera_ids[parser.image_names.index(name)]] for name in parser.image_names
-        }
-        return parser, poses, intrinsics, imsizes, None
-    except Exception as e:
-        return None, None, None, None, str(e)
 
 
 def run_gradio_eval(
