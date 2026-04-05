@@ -1,4 +1,5 @@
 from dataclasses import dataclass, replace
+import datetime
 import json
 from pathlib import Path
 from typing import Literal
@@ -83,7 +84,7 @@ class Config:
     sampling_mode: Literal["voxels", "random", "confidence", "ba"] = "voxels"
     image_mode: Literal["shuffle", "distributed"] = "shuffle"
     copy_mode: Literal[None, "crop", "square", "tiles"] = None
-    gt_eval: bool = False
+    gt_eval: bool = True
     pose_opt: bool = False
     eval_opt: bool = False
     all_opt: bool = False
@@ -203,26 +204,32 @@ class Config:
         return f"../vggt/{self.input_name}"
 
     @property
-    def force(self):
-        if self.is_splatted:
+    def force_splat(self):
+        if self.force_reconstruct: return True
+        if self.gt_eval and self.is_splatted:
+            if len(list(filter(lambda x : "6999" in x, os.listdir(self.renders_folder)))) < 30:
+                return True
+        return False
+        return self.sampling_mode == "ba" and self.camera_type == "SIMPLE_RADIAL" and self.choice == "vggt"
+
+    @property
+    def force_reconstruct(self):
+        if self.is_splatted and self.choice == "vggt":
             with open(self.stats_dir, "r") as f:
                 stats = _parse_gsplat_json(json.load(f), self.stats_dir)
                 psnr = stats.get("psnr", 0.0)
-            if psnr is None or psnr < 15:
-                return True
-            if len(list(filter(lambda x : "6999" in x, os.listdir(self.renders_folder)))) < 30:
+            if psnr is None or (psnr < 15 and self.num_images > 20):
                 return True
             return False
         else:
             return self.sampling_mode != "ba" and self.choice == "vggt"
-        return self.sampling_mode == "ba" and self.camera_type == "SIMPLE_RADIAL" and self.choice == "vggt"
 
     @property
     def is_reconstructed(self):
         return os.path.exists(os.path.join(self.data_dir, "stat.json")) or self.choice == "gt"
 
     def reconstruct(self):
-        if self.is_reconstructed and not self.force:
+        if self.is_reconstructed and not self.force_reconstruct:
             print(Path(self.data_dir), "has already been constructed.\nUse --force to force reconstruction.")
             return 0
 
@@ -251,7 +258,7 @@ class Config:
             "--camera_type",
             self.camera_type,
         ]
-        if self.force:
+        if self.force_reconstruct:
             command.append("--force")
         if self.copy_mode is not None:
             command.extend(["--copy_mode", self.copy_mode])
@@ -265,14 +272,29 @@ class Config:
             return e.returncode
 
     @property
+    def eval_path(self):
+        return os.path.join(self.data_dir, "eval_results.json")
+
+    @property
     def is_evaluated(self):
-        return False  # TODO
+        return os.path.exists(self.eval_path)
+
+    @property
+    def force_eval(self):
+        if not self.is_evaluated:
+            return True
+
+        threshold_date = datetime.datetime(2026, 4, 4, 11, 20)  # This is when I fixed the eval script
+        threshold_timestamp = threshold_date.timestamp()
+        file_timestamp = Path(self.eval_path).stat().st_mtime
+        return file_timestamp < threshold_timestamp
+
 
     def eval(self):
         if self.is_evaluated:
             return 0
         try:
-            examples.evaluation.main(self.data_dir, self.dataset.directory)
+            examples.evaluation.main(self.data_dir, self.dataset.directory, force=self.force_eval)
             return 0
         except Exception as e:
             print(f"Error during evaluation: {e}")
@@ -284,11 +306,11 @@ class Config:
 
     @profile
     def run(self):
-        if self.is_splatted and not self.force:
+        if self.is_splatted and not self.force_splat:
             print(f"{self.stats_dir} found. Skipping splatting")
             return 0
 
-        if self.force:
+        if self.force_splat:
             print("Forcing splatting")
         else:
             print(f"{Path(self.stats_dir)} not found. Running splatting")
@@ -391,8 +413,8 @@ class Experiment:
             for config in configs:
                 gt_config = replace(config, choice="gt")
                 num_images = len(
-                    os.listdir(Path(gt_config.dataset.directory) / "images")
-                )  # This will not work for lego yet
+                    os.listdir(Path(gt_config.dataset.directory) / gt_config.dataset.data_folder_name)
+                )  # This will not work for lego yet in splatting
                 gt_config.num_images = num_images
                 gt_configs.append(gt_config)
 
@@ -483,22 +505,11 @@ experiments = [
         {
             "seed": [42, 43, 44],
             "num_images": [10, 20, 30, 40, 50, 100],
-            "choice": ["vggt", "colmap"],
-        },
-        PlotConfig(x_axis="num_images", split_param="choice"),
-    ),
-    Experiment(
-        "num_images_pose_opt",
-        "Test the behaviour of splatting over various number of images",
-        {
-            "seed": [42, 43, 44],
-            "num_images": [10, 20, 30, 40, 50, 100],
-            "pose_opt": [True, False],
-            "eval_opt": [False],
+            "sampling_mode": ["voxels", "ba"],
             "gt_eval": [True],
             "choice": ["vggt", "colmap"],
         },
-        PlotConfig(x_axis="num_images", split_param="choice,pose_opt"),
+        PlotConfig(x_axis="num_images", split_param="gt_eval,sampling_mode"),
     ),
     Experiment(
         "pose_opt",
@@ -519,12 +530,12 @@ experiments = [
         {
             "seed": [42, 43, 44],
             "num_images": [30],
-            "sampling_mode": ["voxels"],
+            "sampling_mode": ["voxels", "random"],
             "num_points_value": [1000, 5000, 10000, 20000, 30000, 50000, 75000, 100000, 500000, 1000000],
             "choice": ["vggt", "colmap"],
             "gt_eval": True,
         },
-        PlotConfig(x_axis="num_points", split_param=""),
+        PlotConfig(x_axis="num_points", split_param="sampling_mode"),
     ),
     Experiment(
         "sampling_mode",
@@ -565,59 +576,72 @@ experiments = [
         },
         PlotConfig(x_axis="num_images", split_param="choice,depth_loss,depth_conf,sampling_mode"),
     ),
+    # Experiment(
+    #     "camera_type",
+    #     "Test for camera mode",
+    #     {
+    #         "seed": [42, 43, 44],
+    #         "num_images": [50, 100],
+    #         "sampling_mode": ["voxels"],
+    #         "all_opt": [False],
+    #         "camera_type": ["SIMPLE_RADIAL", "SIMPLE_PINHOLE"],
+    #         "num_points": [35000],
+    #         "choice": ["vggt", "colmap"],
+    #     },
+    #     PlotConfig(x_axis="num_images", split_param="camera_type"),
+    # ),
+    # Experiment(
+    #     "camera_type_ext",
+    #     "Test for camera mode (extended)",
+    #     {
+    #         "seed": [42, 43, 44],
+    #         "num_images": [100],
+    #         "sampling_mode": ["ba", "voxels"],
+    #         "all_opt": [True, False],
+    #         "camera_type": ["SIMPLE_RADIAL", "SIMPLE_PINHOLE"],
+    #         "num_points_value": [35000, 75000],
+    #         "choice": ["vggt", "colmap"],
+    #     },
+    #     PlotConfig(x_axis="num_images", split_param="camera_type,pose_opt,eval_opt,sampling_mode"),
+    # ),
+    # Experiment(
+    #     "dataset_type",
+    #     "Test for dataset types",
+    #     {
+    #         "seed": [42, 43, 44],
+    #         "num_images": [50, 100],
+    #         "sampling_mode": ["voxels"],
+    #         "all_opt": [False],
+    #         "num_points": [35000, 75000],
+    #         "choice": ["vggt", "colmap"],
+    #     },
+    #     PlotConfig(x_axis="num_images", split_param="num_points"),
+    # ),
+    # Experiment(
+    #     "copy_mode",
+    #     "Test for copy modes",
+    #     {
+    #         "num_images": [50, 100],
+    #         "seed": [42, 43, 44],
+    #         "sampling_mode": ["voxels"],
+    #         "all_opt": [False],
+    #         "copy_mode": [None, "crop", "square"],
+    #         "choice": ["vggt", "colmap"],
+    #     },
+    #     PlotConfig(x_axis="num_images", split_param="copy_mode"),
+    # ),
     Experiment(
-        "camera_type",
-        "Test for camera mode",
+        "num_images_pose_opt",
+        "Test the behaviour of splatting over various number of images",
         {
             "seed": [42, 43, 44],
-            "num_images": [50, 100],
-            "sampling_mode": ["voxels"],
-            "all_opt": [False],
-            "camera_type": ["SIMPLE_RADIAL", "SIMPLE_PINHOLE"],
-            "num_points": [35000],
+            "num_images": [10, 20, 30, 40, 50, 100],
+            "pose_opt": [True, False],
+            "eval_opt": [False],
+            "gt_eval": [True],
             "choice": ["vggt", "colmap"],
         },
-        PlotConfig(x_axis="num_images", split_param="camera_type"),
-    ),
-    Experiment(
-        "camera_type_ext",
-        "Test for camera mode (extended)",
-        {
-            "seed": [42, 43, 44],
-            "num_images": [100],
-            "sampling_mode": ["ba", "voxels"],
-            "all_opt": [True, False],
-            "camera_type": ["SIMPLE_RADIAL", "SIMPLE_PINHOLE"],
-            "num_points_value": [35000, 75000],
-            "choice": ["vggt", "colmap"],
-        },
-        PlotConfig(x_axis="num_images", split_param="camera_type,pose_opt,eval_opt,sampling_mode"),
-    ),
-    Experiment(
-        "dataset_type",
-        "Test for dataset types",
-        {
-            "seed": [42, 43, 44],
-            "num_images": [50, 100],
-            "sampling_mode": ["voxels"],
-            "all_opt": [False],
-            "num_points": [35000, 75000],
-            "choice": ["vggt", "colmap"],
-        },
-        PlotConfig(x_axis="num_images", split_param="num_points"),
-    ),
-    Experiment(
-        "copy_mode",
-        "Test for copy modes",
-        {
-            "num_images": [50, 100],
-            "seed": [42, 43, 44],
-            "sampling_mode": ["voxels"],
-            "all_opt": [False],
-            "copy_mode": [None, "crop", "square"],
-            "choice": ["vggt", "colmap"],
-        },
-        PlotConfig(x_axis="num_images", split_param="copy_mode"),
+        PlotConfig(x_axis="num_images", split_param="choice,pose_opt"),
     ),
 ]
 
