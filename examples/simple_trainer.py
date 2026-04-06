@@ -30,6 +30,7 @@ from torchmetrics.image import PeakSignalNoiseRatio, StructuralSimilarityIndexMe
 from torchmetrics.image.lpip import LearnedPerceptualImagePatchSimilarity
 from typing_extensions import Literal, assert_never
 from datasets.nerf_synth import SimpleParser
+from copy_cameras import copy_cameras
 from evaluation import umeyama_alignment
 from utils import AppearanceOptModule, CameraOptModule, knn, rgb_to_sh, set_random_seed
 
@@ -62,6 +63,12 @@ class Config:
     gt_train_data_dir: str | None = None
     # Path to ground truth eval data. Either a json file for NeRF synthetic data or a folder. This is actually used for evaluation.
     gt_eval_data_dir: str | None = None
+    # Use ground truth camera extrinsics. Only possible if gt_train_data_dir is given.
+    use_gt_extrinsics: bool = False
+    # Use ground truth camera intrinsics. Only possible if gt_train_data_dir is given.
+    use_gt_intrinsics: bool = False
+    # Use ground truth points. Only possible if gt_train_data_dir is given.
+    use_gt_points: bool = False
     # Downsample factor for the dataset
     data_factor: int = 4
     # Downsample factor for the eval dataset
@@ -360,6 +367,9 @@ class Runner:
             test_every=cfg.test_every,
         )
 
+        if cfg.use_gt_extrinsics or cfg.use_gt_intrinsics or cfg.use_gt_points:
+            assert cfg.gt_train_data_dir, "GT data must be given to use extrinsics or intrinsics."
+
         if cfg.gt_train_data_dir is not None:
             if cfg.gt_train_data_dir.endswith(".json"):
                 self.align_parser = SimpleParser(
@@ -373,6 +383,8 @@ class Runner:
                     normalize=cfg.normalize_world_space,
                     test_every=cfg.test_every,
                 )
+            if cfg.use_gt_extrinsics or cfg.use_gt_intrinsics or cfg.use_gt_points:
+                copy_cameras(self.align_parser, self.train_parser, cfg.use_gt_extrinsics, cfg.use_gt_intrinsics, cfg.use_gt_points)
         else:
             self.align_parser = self.train_parser
 

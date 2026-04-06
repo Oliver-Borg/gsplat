@@ -85,6 +85,9 @@ class Config:
     image_mode: Literal["shuffle", "distributed"] = "shuffle"
     copy_mode: Literal[None, "crop", "square", "tiles"] = None
     gt_eval: bool = True
+    use_gt_extrinsics: bool = False
+    use_gt_intrinsics: bool = False
+    use_gt_points: bool = False
     pose_opt: bool = False
     eval_opt: bool = False
     all_opt: bool = False
@@ -107,6 +110,9 @@ class Config:
         instance.image_mode = data.get("image_mode", instance.image_mode)
         instance.copy_mode = data.get("copy_mode", instance.copy_mode)
         instance.gt_eval = data.get("gt_eval", instance.gt_eval)
+        instance.use_gt_extrinsics = data.get("use_gt_extrinsics", instance.use_gt_extrinsics)
+        instance.use_gt_intrinsics = data.get("use_gt_intrinsics", instance.use_gt_intrinsics)
+        instance.use_gt_points = data.get("use_gt_points", instance.use_gt_points)
         instance.pose_opt = data.get("pose_opt", instance.pose_opt)
         instance.eval_opt = data.get("eval_opt", instance.eval_opt)
         instance.pose_opt |= data.get("all_opt", instance.all_opt)
@@ -118,6 +124,9 @@ class Config:
         instance.num_steps = data.get("num_steps", instance.num_steps)
         if instance.eval_opt and instance.gt_eval:  # TODO Figure out a good way to have both enabled
             instance.eval_opt = False
+
+        if instance.use_gt_extrinsics or instance.use_gt_intrinsics or instance.use_gt_points:
+            instance.gt_eval = True
         return instance
 
     def __post_init__(self):
@@ -172,6 +181,12 @@ class Config:
         ]
         if self.gt_eval:
             parts.append("gteval")
+        if self.use_gt_extrinsics:
+            parts.append("gtext")
+        if self.use_gt_intrinsics:
+            parts.append("gtint")
+        if self.use_gt_points:
+            parts.append("gtpcd")
         if self.pose_opt:
             parts.append("poseopt")
         if self.eval_opt:
@@ -205,6 +220,7 @@ class Config:
 
     @property
     def force_splat(self):
+        # if self.use_gt_extrinsics: return True
         if self.force_reconstruct: return True
         if self.gt_eval and self.is_splatted:
             if len(list(filter(lambda x : "6999" in x, os.listdir(self.renders_folder)))) < 30:
@@ -352,6 +368,12 @@ class Config:
                         self.dataset.gt_eval_data_dir,
                     ]
                 )
+        if self.use_gt_extrinsics:
+            command.append("--use_gt_extrinsics")
+        if self.use_gt_intrinsics:
+            command.append("--use_gt_intrinsics")
+        if self.use_gt_points:
+            command.append("--use_gt_points")
         if self.eval_opt:
             command.append("--eval_opt")
 
@@ -522,7 +544,7 @@ experiments = [
             "gt_eval": [True, False],
             "choice": ["vggt", "colmap"],
         },
-        PlotConfig(x_axis="num_images", split_param="choice,pose_opt,eval_opt,gt_eval"),
+        PlotConfig(x_axis="", split_param="choice,pose_opt,eval_opt,gt_eval"),
     ),
     Experiment(
         "num_points",
@@ -531,7 +553,7 @@ experiments = [
             "seed": [42, 43, 44],
             "num_images": [30],
             "sampling_mode": ["voxels", "random"],
-            "num_points_value": [1000, 5000, 10000, 20000, 30000, 50000, 75000, 100000, 500000, 1000000],
+            "num_points_value": [1000, 5000, 10000, 20000, 30000, 50000, 75000, 100000, 500000, 1000000, 2500000],
             "choice": ["vggt", "colmap"],
             "gt_eval": True,
         },
@@ -559,13 +581,13 @@ experiments = [
             "seed": [42],
             "num_steps": [30000],
         },
-        PlotConfig(x_axis="val_step", split_param=""),
+        PlotConfig(x_axis="", split_param="val_step"),
     ),
     Experiment(
         "depth",
         "Test for depth loss and depth conf",
         {
-            "seed": [42],
+            "seed": [42, 43, 44],
             "num_images": [30],
             "sampling_mode": ["voxels", "ba"],
             "depth_loss": [True, False],
@@ -574,62 +596,62 @@ experiments = [
             "eval_opt": [True],
             "choice": ["vggt", "colmap"],
         },
-        PlotConfig(x_axis="num_images", split_param="choice,depth_loss,depth_conf,sampling_mode"),
+        PlotConfig(x_axis="", split_param="choice,depth_loss,depth_conf,sampling_mode"),
     ),
-    # Experiment(
-    #     "camera_type",
-    #     "Test for camera mode",
-    #     {
-    #         "seed": [42, 43, 44],
-    #         "num_images": [50, 100],
-    #         "sampling_mode": ["voxels"],
-    #         "all_opt": [False],
-    #         "camera_type": ["SIMPLE_RADIAL", "SIMPLE_PINHOLE"],
-    #         "num_points": [35000],
-    #         "choice": ["vggt", "colmap"],
-    #     },
-    #     PlotConfig(x_axis="num_images", split_param="camera_type"),
-    # ),
-    # Experiment(
-    #     "camera_type_ext",
-    #     "Test for camera mode (extended)",
-    #     {
-    #         "seed": [42, 43, 44],
-    #         "num_images": [100],
-    #         "sampling_mode": ["ba", "voxels"],
-    #         "all_opt": [True, False],
-    #         "camera_type": ["SIMPLE_RADIAL", "SIMPLE_PINHOLE"],
-    #         "num_points_value": [35000, 75000],
-    #         "choice": ["vggt", "colmap"],
-    #     },
-    #     PlotConfig(x_axis="num_images", split_param="camera_type,pose_opt,eval_opt,sampling_mode"),
-    # ),
-    # Experiment(
-    #     "dataset_type",
-    #     "Test for dataset types",
-    #     {
-    #         "seed": [42, 43, 44],
-    #         "num_images": [50, 100],
-    #         "sampling_mode": ["voxels"],
-    #         "all_opt": [False],
-    #         "num_points": [35000, 75000],
-    #         "choice": ["vggt", "colmap"],
-    #     },
-    #     PlotConfig(x_axis="num_images", split_param="num_points"),
-    # ),
-    # Experiment(
-    #     "copy_mode",
-    #     "Test for copy modes",
-    #     {
-    #         "num_images": [50, 100],
-    #         "seed": [42, 43, 44],
-    #         "sampling_mode": ["voxels"],
-    #         "all_opt": [False],
-    #         "copy_mode": [None, "crop", "square"],
-    #         "choice": ["vggt", "colmap"],
-    #     },
-    #     PlotConfig(x_axis="num_images", split_param="copy_mode"),
-    # ),
+    Experiment(
+        "camera_type",
+        "Test for camera mode",
+        {
+            "seed": [42, 43, 44],
+            "num_images": [50, 100],
+            "sampling_mode": ["voxels"],
+            "all_opt": [False],
+            "camera_type": ["SIMPLE_RADIAL", "SIMPLE_PINHOLE"],
+            "num_points": [35000],
+            "choice": ["vggt", "colmap"],
+        },
+        PlotConfig(x_axis="num_images", split_param="camera_type"),
+    ),
+    Experiment(
+        "camera_type_ext",
+        "Test for camera mode (extended)",
+        {
+            "seed": [42, 43, 44],
+            "num_images": [100],
+            "sampling_mode": ["ba", "voxels"],
+            "all_opt": [True, False],
+            "camera_type": ["SIMPLE_RADIAL", "SIMPLE_PINHOLE"],
+            "num_points_value": [35000, 75000],
+            "choice": ["vggt", "colmap"],
+        },
+        PlotConfig(x_axis="", split_param="camera_type,pose_opt,eval_opt,sampling_mode,num_images"),
+    ),
+    Experiment(
+        "dataset_type",
+        "Test for dataset types",
+        {
+            "seed": [42, 43, 44],
+            "num_images": [50, 100],
+            "sampling_mode": ["voxels"],
+            "all_opt": [False],
+            "num_points": [35000, 75000],
+            "choice": ["vggt", "colmap"],
+        },
+        PlotConfig(x_axis="num_images", split_param="num_points"),
+    ),
+    Experiment(
+        "copy_mode",
+        "Test for copy modes",
+        {
+            "num_images": [50, 100],
+            "seed": [42, 43, 44],
+            "sampling_mode": ["voxels"],
+            "all_opt": [False],
+            "copy_mode": [None, "crop", "square"],
+            "choice": ["vggt", "colmap"],
+        },
+        PlotConfig(x_axis="num_images", split_param="copy_mode"),
+    ),
     Experiment(
         "num_images_pose_opt",
         "Test the behaviour of splatting over various number of images",
@@ -642,6 +664,20 @@ experiments = [
             "choice": ["vggt", "colmap"],
         },
         PlotConfig(x_axis="num_images", split_param="choice,pose_opt"),
+    ),
+    Experiment(
+        "gt_cams",
+        "Test the behaviour of ground truth cameras",
+        {
+            "seed": [42],  # , 43, 44
+            "num_images": [30],
+            "gt_eval": True,
+            "use_gt_extrinsics": [True, False],
+            "use_gt_intrinsics": [True, False],
+            "use_gt_points": [True, False],
+            "choice": ["vggt", "colmap"],
+        },
+        PlotConfig(x_axis="", split_param="use_gt_extrinsics,use_gt_intrinsics,use_gt_points"),
     ),
 ]
 
