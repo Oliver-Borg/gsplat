@@ -1,5 +1,6 @@
 from html import parser
 import json
+from typing import Iterable
 import cv2
 import numpy as np
 import os
@@ -77,12 +78,16 @@ class SimpleParser:
             self.image_paths.append(im_path)
             self.params_dict[cam_id] = np.empty(0, dtype=np.float32)
             self.mask_dict[cam_id] = None
-        
+
         self.camtoworlds = transform_cameras(self.transform, np.array(self.camtoworlds))
 
     def get_camera_positions(self, names: set[str]):
         indices = [self.image_names.index(name) for name in names]
         return np.array([self.camtoworlds[i] for i in indices])
+
+    def get_camera_names(self, indices: Iterable[int]) -> set[str]:
+        names = {self.image_names[i] for i in indices}
+        return names
 
 
 def load_json_data(path: str) -> SimpleParser:

@@ -1,7 +1,7 @@
 import json
 import os
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Iterable, List, Optional
 
 import cv2
 import imageio.v2 as imageio
@@ -353,6 +353,10 @@ class Parser:
     def get_camera_positions(self, names: set[str]):
         indices = [self.image_names.index(name) for name in names]
         return np.array([self.camtoworlds[i] for i in indices])
+
+    def get_camera_names(self, indices: Iterable[int]) -> set[str]:
+        names = {self.image_names[i] for i in indices}
+        return names
 
 
 class Dataset:

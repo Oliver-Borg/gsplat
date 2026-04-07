@@ -101,7 +101,7 @@ class Config:
     # Number of training steps
     max_steps: int = 30_000
     # Steps to evaluate the model
-    eval_steps: List[int] = field(default_factory=lambda: [1, 7_000, 30_000])
+    eval_steps: List[int] = field(default_factory=lambda: [1, 7_000, 15_000, 30_000])
     # Steps to save the model
     save_steps: List[int] = field(default_factory=lambda: [7_000, 30_000])
     # Whether to save ply file (storage size can be large)
@@ -199,7 +199,7 @@ class Config:
     # Enable depth confidence. (experimental)
     depth_conf: bool = False
     # Weight for depth loss
-    depth_lambda: float = 1e-2
+    depth_lambda: float = 1e-2  # TODO Experiment with this
 
     # Dump information to tensorboard every this steps
     tb_every: int = 100
@@ -388,7 +388,10 @@ class Runner:
         else:
             self.align_parser = self.train_parser
 
+        train_split = "train"
+
         if cfg.gt_eval_data_dir is not None:
+            train_split = "train_full"
             if cfg.gt_eval_data_dir.endswith(".json"):
                 self.eval_parser = SimpleParser(
                     cfg.gt_eval_data_dir, cfg.test_every, transform=self.train_parser.transform, factor=cfg.eval_data_factor
@@ -406,7 +409,7 @@ class Runner:
 
         self.trainset = Dataset(
             self.train_parser,
-            split="train",  # TODO Technically this will not use as many images as it can when using gt eval
+            split=train_split,
             patch_size=cfg.patch_size,
             load_depths=cfg.depth_loss,
             max_images=cfg.max_train_cameras,
@@ -480,14 +483,15 @@ class Runner:
         self.common_names = set(self.used_training_names) & set(self.align_parser.image_names)
         transform_matrix = self.get_dataset_alignment_matrix()
         self.valset = Dataset(
-            self.align_parser,
-            split="align",
+            self.eval_parser,
+            split="val",
             exclude_names=self.used_training_names,
             transform_matrix=transform_matrix,
             patch_size=cfg.patch_size,
             load_depths=cfg.depth_loss,
-            max_images=cfg.max_eval_images,
         )
+
+        assert len(self.eval_parser.get_camera_names(self.valset.indices) & set(self.used_training_names)) == 0
 
         self.eval_pose_optimizers = []
 
@@ -1428,7 +1432,7 @@ if __name__ == "__main__":
                 init_scale=0.1,
                 opacity_reg=0.01,
                 scale_reg=0.01,
-                strategy=MCMCStrategy(verbose=True, cap_max=5_000_000),
+                strategy=MCMCStrategy(verbose=True, cap_max=1_000_000),
             ),
         ),
     }
