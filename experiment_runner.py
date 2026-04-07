@@ -34,13 +34,13 @@ class Dataset:
 
 
 datasets = {
-    "lego": Dataset(
-        name="lego",
-        factor=1,
-        directory="../vggt/data/nerf_synthetic/lego",
-        gt_train_data_dir="../vggt/data/nerf_synthetic/lego/transforms_train.json",
-        gt_eval_data_dir="../vggt/data/nerf_synthetic/lego/transforms_val.json",
-        data_folder_name="train",
+    "bicycle": Dataset(
+        name="bicycle",
+        factor=4,
+        directory="../vggt/data/360_v2/bicycle",
+        gt_eval_data_dir="../vggt/data/360_v2/bicycle",
+        gt_train_data_dir="../vggt/data/360_v2/bicycle",
+        data_folder_name="images_4",
     ),
     "bonsai": Dataset(
         name="bonsai",
@@ -49,6 +49,14 @@ datasets = {
         gt_eval_data_dir="../vggt/data/360_v2/bonsai",
         gt_train_data_dir="../vggt/data/360_v2/bonsai",
         data_folder_name="images_2",
+    ),
+    "lego": Dataset(
+        name="lego",
+        factor=1,
+        directory="../vggt/data/nerf_synthetic/lego",
+        gt_train_data_dir="../vggt/data/nerf_synthetic/lego/transforms_train.json",
+        gt_eval_data_dir="../vggt/data/nerf_synthetic/lego/transforms_val.json",
+        data_folder_name="train",
     ),
     "bonsai_4": Dataset(
         name="bonsai",
@@ -82,7 +90,7 @@ class Config:
     conf_thres_value: float = 0.0
     num_points_value: int = 35000
     sampling_mode: Literal["voxels", "random", "confidence", "ba"] = "voxels"
-    image_mode: Literal["shuffle", "distributed"] = "shuffle"
+    image_mode: Literal["shuffle", "distributed"] = "distributed"
     copy_mode: Literal[None, "crop", "square", "tiles"] = None
     gt_eval: bool = True
     use_gt_extrinsics: bool = False
@@ -221,6 +229,8 @@ class Config:
     @property
     def force_splat(self):
         # if self.use_gt_extrinsics: return True
+        if self.choice == "colmap" and self.depth_loss:
+            return True
         if self.force_reconstruct: return True
         if self.gt_eval and self.is_splatted:
             if len(list(filter(lambda x : "6999" in x, os.listdir(self.renders_folder)))) < 30:
@@ -449,7 +459,7 @@ class Experiment:
             config_set.add((config.result_dir, config.stats_dir, config.data_dir))
         return unique_configs
 
-    def run(self, dataset_name: str, do_reconstruct: bool = True):
+    def run(self, dataset_name: str, do_reconstruct: bool = True, do_splatting: bool = True):
         configs = self.get_configs(dataset_name)
         splat_failures: list[Config] = []
         eval_failures: list[Config] = []
@@ -464,9 +474,10 @@ class Experiment:
             if eval_returncode != 0:
                 eval_failures.append(config)
 
-            returncode = config.run()
-            if returncode != 0:
-                splat_failures.append(config)
+            if do_splatting:
+                returncode = config.run()
+                if returncode != 0:
+                    splat_failures.append(config)
 
         if len(splat_failures) > 0:
             print("Splat Failures:")
@@ -527,8 +538,9 @@ experiments = [
         {
             "seed": [42, 43, 44],
             "num_images": [10, 20, 30, 40, 50, 100],
-            "sampling_mode": ["voxels", "ba"],
+            "sampling_mode": ["voxels"],
             "gt_eval": [True],
+            "image_mode": "distributed",
             "choice": ["vggt", "colmap"],
         },
         PlotConfig(x_axis="num_images", split_param="gt_eval,sampling_mode"),
@@ -570,30 +582,42 @@ experiments = [
             "choice": ["vggt", "colmap"],
             "gt_eval": True,
         },
-        PlotConfig(x_axis="num_points", split_param="sampling_mode"),
+        PlotConfig(x_axis="", split_param="sampling_mode,num_points"),
     ),
     Experiment(
         "test",
         "Small test for functionality",
         {
-            "choice": ["vggt", "colmap"],
             "num_images": [30],
-            "seed": [42],
+            "seed": [42, 43, 44],
             "num_steps": [30000],
+            "choice": ["vggt", "colmap"],
         },
         PlotConfig(x_axis="", split_param="val_step"),
+    ),
+    Experiment(
+        "val_step",
+        "Test the impact val_step has on metrics",
+        {
+            "num_images": [30],
+            "seed": [42, 43, 44],
+            "num_steps": [30000],
+            "choice": ["vggt", "colmap"],
+        },
+        PlotConfig(x_axis="val_step", split_param=""),
     ),
     Experiment(
         "depth",
         "Test for depth loss and depth conf",
         {
             "seed": [42, 43, 44],
-            "num_images": [30],
+            "num_images": [50],
             "sampling_mode": ["voxels", "ba"],
             "depth_loss": [True, False],
             "depth_conf": [True, False],
             "pose_opt": [True],
             "eval_opt": [True],
+            "num_points": [1000000],
             "choice": ["vggt", "colmap"],
         },
         PlotConfig(x_axis="", split_param="choice,depth_loss,depth_conf,sampling_mode"),
@@ -669,7 +693,7 @@ experiments = [
         "gt_cams",
         "Test the behaviour of ground truth cameras",
         {
-            "seed": [42],  # , 43, 44
+            "seed": [42, 43, 44],
             "num_images": [30],
             "gt_eval": True,
             "use_gt_extrinsics": [True, False],
@@ -688,6 +712,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run experiments")
     parser.add_argument("--experiment_name", type=str, required=True, help="Name of the experiment to run")
     parser.add_argument("--dataset_name", type=str, required=True, help="Name of the dataset to use")
+    parser.add_argument("--skip_splatting", action="store_true", help="Whether to skip splatting")
     parser.add_argument("--do_reconstruct", action="store_true", help="Whether to run reconstruction")
     parser.add_argument("--plot_only", action="store_true", help="Whether to only plot")
     parser.add_argument("--include_gt", action="store_true", help="Whether to include the ground truth splatted data")
@@ -697,5 +722,5 @@ if __name__ == "__main__":
         if experiment.name == args.experiment_name or args.experiment_name == "all":
             experiment = replace(experiment, include_gt=args.include_gt)
             if not args.plot_only:
-                experiment.run(args.dataset_name, do_reconstruct=args.do_reconstruct)
+                experiment.run(args.dataset_name, do_reconstruct=args.do_reconstruct, do_splatting=not args.skip_splatting)
             experiment.plot(args.dataset_name)
