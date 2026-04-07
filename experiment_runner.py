@@ -88,7 +88,8 @@ class Config:
     dataset: Dataset = datasets["lego"]
     seed: int = 42
     conf_thres_value: float = 0.0
-    num_points_value: int = 35000
+    num_points_per_image: float = 1100
+    num_points_value: int | None = None
     sampling_mode: Literal["voxels", "random", "confidence", "ba"] = "voxels"
     image_mode: Literal["shuffle", "distributed"] = "distributed"
     copy_mode: Literal[None, "crop", "square", "tiles"] = None
@@ -113,6 +114,7 @@ class Config:
         instance.dataset = datasets[data.get("dataset", "lego")]
         instance.seed = data.get("seed", instance.seed)
         instance.conf_thres_value = data.get("conf_thres_value", instance.conf_thres_value)
+        instance.num_points_per_image = data.get("num_points_per_image", instance.num_points_per_image)
         instance.num_points_value = data.get("num_points_value", instance.num_points_value)
         instance.sampling_mode = data.get("sampling_mode", instance.sampling_mode)
         instance.image_mode = data.get("image_mode", instance.image_mode)
@@ -139,6 +141,12 @@ class Config:
 
     def __post_init__(self):
         self.depth_conf = self.depth_conf and self.choice == "vggt" and self.depth_loss
+
+    @property
+    def num_points(self):
+        if self.num_points_value is not None:
+            return self.num_points_value
+        return int(self.num_points_per_image * self.num_images)
 
     @property
     def num_cams(self):
@@ -168,7 +176,7 @@ class Config:
                 parts.extend(
                     [
                         f"c{self.conf_thres_value}",
-                        f"p{self.num_points_value}",
+                        f"p{self.num_points}",
                         self.sampling_mode,
                     ]
                 )
@@ -231,9 +239,10 @@ class Config:
         # if self.use_gt_extrinsics: return True
         if self.choice == "colmap" and self.depth_loss:
             return True
-        if self.force_reconstruct: return True
+        if self.force_reconstruct:
+            return True
         if self.gt_eval and self.is_splatted:
-            if len(list(filter(lambda x : "6999" in x, os.listdir(self.renders_folder)))) < 30:
+            if len(list(filter(lambda x: "6999" in x, os.listdir(self.renders_folder)))) < 30:
                 return True
         return False
         return self.sampling_mode == "ba" and self.camera_type == "SIMPLE_RADIAL" and self.choice == "vggt"
@@ -254,6 +263,29 @@ class Config:
     def is_reconstructed(self):
         return os.path.exists(os.path.join(self.data_dir, "stat.json")) or self.choice == "gt"
 
+    @property
+    def reconstruct_args(self):
+        args = {
+            "input": (Path(self.dataset.directory) / Path(self.dataset.data_folder_name)).absolute().as_posix(),
+            "name": f"{self.dataset.name}_{self.dataset.factor}",
+            "choice": self.choice,
+            "num_images": self.num_images,
+            "num_points": self.num_points,
+            "seed": self.seed,
+            "conf_thres_value": self.conf_thres_value,
+            "sampling_mode": self.sampling_mode,
+            "image_mode": self.image_mode,
+            "camera_type": self.camera_type,
+        }
+
+        if self.force_reconstruct:
+            args["force"] = True
+
+        if self.copy_mode is not None:
+            args["copy_mode"] = self.copy_mode
+
+        return args
+
     def reconstruct(self):
         if self.is_reconstructed and not self.force_reconstruct:
             print(Path(self.data_dir), "has already been constructed.\nUse --force to force reconstruction.")
@@ -263,31 +295,13 @@ class Config:
             VGGT_PYTHON,
             "-m",
             "reconstruct",
-            "--input",
-            Path(self.dataset.directory) / Path(self.dataset.data_folder_name),
-            "--name",
-            f"{self.dataset.name}_{self.dataset.factor}",
-            "--choice",
-            self.choice,
-            "--num_images",
-            str(self.num_images),
-            "--num_points",
-            str(self.num_points_value),
-            "--seed",
-            str(self.seed),
-            "--conf_thres_value",
-            str(self.conf_thres_value),
-            "--sampling_mode",
-            self.sampling_mode,
-            "--image_mode",
-            self.image_mode,
-            "--camera_type",
-            self.camera_type,
+            "single",
         ]
-        if self.force_reconstruct:
-            command.append("--force")
-        if self.copy_mode is not None:
-            command.extend(["--copy_mode", self.copy_mode])
+        for key, value in self.reconstruct_args.items():
+            if key == "force" and value is True:
+                command.extend([f"--{key}"])
+            elif value is not None:
+                command.extend([f"--{key}", str(value)])
 
         try:
             output = subprocess.run(command, check=True, cwd="../vggt")
@@ -314,7 +328,6 @@ class Config:
         threshold_timestamp = threshold_date.timestamp()
         file_timestamp = Path(self.eval_path).stat().st_mtime
         return file_timestamp < threshold_timestamp
-
 
     def eval(self):
         if self.is_evaluated:
@@ -459,12 +472,41 @@ class Experiment:
             config_set.add((config.result_dir, config.stats_dir, config.data_dir))
         return unique_configs
 
-    def run(self, dataset_name: str, do_reconstruct: bool = True, do_splatting: bool = True):
+    def bulk_reconstruct(self, configs: list[Config]):
+        reconstruct_args = []
+        for config in configs:
+            reconstruct_args.append(config.reconstruct_args)
+
+        temp_dir = Path("../vggt/configs/")
+        temp_dir.mkdir(exist_ok=True)
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        config_path = temp_dir / f"reconstruct_args_{self.name}_{timestamp}.json"
+        with open(config_path, "w") as f:
+            json.dump(reconstruct_args, f, indent=4)
+
+        command = [
+            VGGT_PYTHON,
+            "-m",
+            "reconstruct",
+            "batch",
+            "--config_path",
+            config_path.absolute().as_posix(),
+        ]
+
+        output = subprocess.run(command, check=True, cwd="../vggt")
+
+    def run(
+        self, dataset_name: str, do_reconstruct: bool = True, do_splatting: bool = True, bulk_reconstruct: bool = True
+    ):
         configs = self.get_configs(dataset_name)
         splat_failures: list[Config] = []
         eval_failures: list[Config] = []
+
+        if do_reconstruct and bulk_reconstruct:
+            self.bulk_reconstruct(configs)
+
         for config in tqdm(configs):
-            if do_reconstruct:
+            if do_reconstruct and not bulk_reconstruct:
                 reconstruction_returncode = config.reconstruct()
                 if reconstruction_returncode != 0:
                     splat_failures.append(config)
@@ -537,13 +579,13 @@ experiments = [
         "Test the behaviour of splatting over various number of images",
         {
             "seed": [42, 43, 44],
-            "num_images": [10, 20, 30, 40, 50, 100],
+            "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
             "sampling_mode": ["voxels"],
             "gt_eval": [True],
-            "image_mode": "distributed",
+            "image_mode": ["distributed", "shuffle", "mfps"],
             "choice": ["vggt", "colmap"],
         },
-        PlotConfig(x_axis="num_images", split_param="gt_eval,sampling_mode"),
+        PlotConfig(x_axis="num_images", split_param="gt_eval,sampling_mode,image_mode"),
     ),
     Experiment(
         "pose_opt",
@@ -563,9 +605,10 @@ experiments = [
         "Test the behaviour of different numbers of points",
         {
             "seed": [42, 43, 44],
-            "num_images": [30],
-            "sampling_mode": ["voxels", "random"],
-            "num_points_value": [1000, 5000, 10000, 20000, 30000, 50000, 75000, 100000, 500000, 1000000, 2500000],
+            "num_images": [100],
+            "sampling_mode": ["voxels"],
+            # "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 5000, 10000, 25000],
+            "num_points_per_image": [10],
             "choice": ["vggt", "colmap"],
             "gt_eval": True,
         },
@@ -578,7 +621,7 @@ experiments = [
             "seed": [42, 43, 44],
             "num_images": [30],
             "sampling_mode": ["voxels", "random", "confidence", "ba"],
-            "num_points_value": [100000],
+            "num_points_per_image": [100000],
             "choice": ["vggt", "colmap"],
             "gt_eval": True,
         },
@@ -591,6 +634,7 @@ experiments = [
             "num_images": [30],
             "seed": [42, 43, 44],
             "num_steps": [30000],
+            "image_mode": "mfps",
             "choice": ["vggt", "colmap"],
         },
         PlotConfig(x_axis="", split_param="val_step"),
@@ -631,7 +675,6 @@ experiments = [
             "sampling_mode": ["voxels"],
             "all_opt": [False],
             "camera_type": ["SIMPLE_RADIAL", "SIMPLE_PINHOLE"],
-            "num_points": [35000],
             "choice": ["vggt", "colmap"],
         },
         PlotConfig(x_axis="num_images", split_param="camera_type"),
@@ -645,7 +688,7 @@ experiments = [
             "sampling_mode": ["ba", "voxels"],
             "all_opt": [True, False],
             "camera_type": ["SIMPLE_RADIAL", "SIMPLE_PINHOLE"],
-            "num_points_value": [35000, 75000],
+            "num_points_per_image": [1100, 2200],
             "choice": ["vggt", "colmap"],
         },
         PlotConfig(x_axis="", split_param="camera_type,pose_opt,eval_opt,sampling_mode,num_images"),
@@ -658,7 +701,7 @@ experiments = [
             "num_images": [50, 100],
             "sampling_mode": ["voxels"],
             "all_opt": [False],
-            "num_points": [35000, 75000],
+            "num_points_per_image": [1100, 2200],
             "choice": ["vggt", "colmap"],
         },
         PlotConfig(x_axis="num_images", split_param="num_points"),
@@ -722,5 +765,7 @@ if __name__ == "__main__":
         if experiment.name == args.experiment_name or args.experiment_name == "all":
             experiment = replace(experiment, include_gt=args.include_gt)
             if not args.plot_only:
-                experiment.run(args.dataset_name, do_reconstruct=args.do_reconstruct, do_splatting=not args.skip_splatting)
+                experiment.run(
+                    args.dataset_name, do_reconstruct=args.do_reconstruct, do_splatting=not args.skip_splatting
+                )
             experiment.plot(args.dataset_name)
