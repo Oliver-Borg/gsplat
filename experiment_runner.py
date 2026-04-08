@@ -91,7 +91,7 @@ class Config:
     num_points_per_image: float = 1100
     num_points_value: int | None = None
     sampling_mode: Literal["voxels", "random", "confidence", "ba"] = "voxels"
-    image_mode: Literal["shuffle", "distributed"] = "distributed"
+    image_mode: Literal["shuffle", "distributed", "mfps"] = "distributed"
     copy_mode: Literal[None, "crop", "square", "tiles"] = None
     gt_eval: bool = True
     use_gt_extrinsics: bool = False
@@ -105,6 +105,7 @@ class Config:
     depth_conf: bool = False
     camera_type: Literal["SIMPLE_RADIAL", "SIMPLE_PINHOLE"] = "SIMPLE_PINHOLE"
     num_steps: Literal[7000, 30000] = 7000
+    colmap_mode: Literal["default", "relaxed"] = "default"
 
     @classmethod
     def from_dict(cls, data: dict) -> "Config":
@@ -132,6 +133,7 @@ class Config:
         instance.depth_conf = data.get("depth_conf", instance.depth_conf)
         instance.camera_type = data.get("camera_type", instance.camera_type)
         instance.num_steps = data.get("num_steps", instance.num_steps)
+        instance.colmap_mode = data.get("colmap_mode", instance.colmap_mode)
         if instance.eval_opt and instance.gt_eval:  # TODO Figure out a good way to have both enabled
             instance.eval_opt = False
 
@@ -164,6 +166,7 @@ class Config:
         ]
 
         if self.choice == "colmap":
+            parts.append(self.colmap_mode)
             parts.append(self.image_mode)
 
             if self.copy_mode is not None:
@@ -276,6 +279,7 @@ class Config:
             "sampling_mode": self.sampling_mode,
             "image_mode": self.image_mode,
             "camera_type": self.camera_type,
+            "colmap_mode": self.colmap_mode,
         }
 
         if self.force_reconstruct:
@@ -607,8 +611,7 @@ experiments = [
             "seed": [42, 43, 44],
             "num_images": [100],
             "sampling_mode": ["voxels"],
-            # "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 5000, 10000, 25000],
-            "num_points_per_image": [10],
+            "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 5000, 10000, 25000],
             "choice": ["vggt", "colmap"],
             "gt_eval": True,
         },
@@ -631,13 +634,15 @@ experiments = [
         "test",
         "Small test for functionality",
         {
-            "num_images": [30],
-            "seed": [42, 43, 44],
-            "num_steps": [30000],
-            "image_mode": "mfps",
-            "choice": ["vggt", "colmap"],
+            "seed": [42],  # , 43, 44
+            "num_images": [10, 20, 30, 40, 50],
+            "sampling_mode": ["voxels"],
+            "gt_eval": [True],
+            "colmap_mode": ["default", "relaxed"],
+            "image_mode": ["mfps"],
+            "choice": ["colmap"],
         },
-        PlotConfig(x_axis="", split_param="val_step"),
+        PlotConfig(x_axis="num_images", split_param="colmap_mode"),
     ),
     Experiment(
         "val_step",
