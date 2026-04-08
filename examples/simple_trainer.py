@@ -103,13 +103,13 @@ class Config:
     # Steps to evaluate the model
     eval_steps: List[int] = field(default_factory=lambda: [1, 7_000, 15_000, 30_000])
     # Steps to save the model
-    save_steps: List[int] = field(default_factory=lambda: [7_000, 30_000])
+    save_steps: List[int] = field(default_factory=lambda: [])
     # Whether to save ply file (storage size can be large)
     save_ply: bool = False
     # Steps to save the model as ply
     ply_steps: List[int] = field(default_factory=lambda: [7_000, 30_000])
     # Whether to disable video generation during training and evaluation
-    disable_video: bool = False
+    disable_video: bool = True
 
     # Initialization strategy
     init_type: str = "sfm"
@@ -1164,9 +1164,12 @@ class Runner:
                     for p in Path(self.render_dir).glob(f"{stage}_step{step}_{i:04d}*.png"):
                         if p.is_file():
                             p.unlink()
+                    for p in Path(self.render_dir).glob(f"{stage}_step{step}_{i:04d}*.jpg"):
+                        if p.is_file():
+                            p.unlink()
                     executor.submit(
                         imageio.imwrite,
-                        f"{self.render_dir}/{stage}_step{step}_{i:04d}_psnr{metrics['psnr'][-1]:.2f}_lpips{metrics['lpips'][-1]:.2f}.png",
+                        f"{self.render_dir}/{stage}_step{step}_{i:04d}_psnr{metrics['psnr'][-1]:.2f}_lpips{metrics['lpips'][-1]:.2f}.jpg",
                         canvas
                     )
 
