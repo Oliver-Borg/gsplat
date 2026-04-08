@@ -134,15 +134,28 @@ class Config:
         instance.camera_type = data.get("camera_type", instance.camera_type)
         instance.num_steps = data.get("num_steps", instance.num_steps)
         instance.colmap_mode = data.get("colmap_mode", instance.colmap_mode)
-        if instance.eval_opt and instance.gt_eval:  # TODO Figure out a good way to have both enabled
-            instance.eval_opt = False
-
-        if instance.use_gt_extrinsics or instance.use_gt_intrinsics or instance.use_gt_points:
-            instance.gt_eval = True
-        return instance
+        return replace(instance)
 
     def __post_init__(self):
+
+        if self.choice == "gt":
+            self.gt_eval = False
+            self.pose_opt = False
+            self.eval_opt = False
+            self.use_gt_extrinsics = False
+            self.use_gt_intrinsics = False
+            self.use_gt_points = False
+            self.depth_conf = False
+            self.num_images = len(os.listdir(Path(self.dataset.directory) / Path(self.dataset.data_folder_name)))
+            self.num_cameras = self.num_images
+
         self.depth_conf = self.depth_conf and self.choice == "vggt" and self.depth_loss
+
+        if self.use_gt_extrinsics or self.use_gt_intrinsics or self.use_gt_points:
+            self.gt_eval = True
+
+        if self.eval_opt and self.gt_eval:  # TODO Figure out a good way to have both enabled
+            self.eval_opt = False
 
     @property
     def num_points(self):
@@ -252,6 +265,9 @@ class Config:
 
     @property
     def force_reconstruct(self):
+        if self.choice == "gt":
+            return False
+
         if self.is_splatted and self.choice == "vggt":
             with open(self.stats_dir, "r") as f:
                 stats = _parse_gsplat_json(json.load(f), self.stats_dir)
@@ -264,7 +280,7 @@ class Config:
 
     @property
     def is_reconstructed(self):
-        return os.path.exists(os.path.join(self.data_dir, "stat.json")) or self.choice == "gt"
+        return self.choice == "gt" or os.path.exists(os.path.join(self.data_dir, "stat.json"))
 
     @property
     def reconstruct_args(self):
@@ -461,10 +477,6 @@ class Experiment:
         if self.include_gt:
             for config in configs:
                 gt_config = replace(config, choice="gt")
-                num_images = len(
-                    os.listdir(Path(gt_config.dataset.directory) / gt_config.dataset.data_folder_name)
-                )  # This will not work for lego yet in splatting
-                gt_config.num_images = num_images
                 gt_configs.append(gt_config)
 
         configs += gt_configs
@@ -500,7 +512,13 @@ class Experiment:
         output = subprocess.run(command, check=True, cwd="../vggt")
 
     def run(
-        self, dataset_name: str, do_reconstruct: bool = True, do_splatting: bool = True, bulk_reconstruct: bool = True
+        self,
+        dataset_name: str,
+        do_reconstruct: bool = True,
+        do_splatting: bool = True,
+        bulk_reconstruct: bool = True,
+        force_all: bool = False,
+        force_none: bool = False,
     ):
         configs = self.get_configs(dataset_name)
         splat_failures: list[Config] = []
@@ -635,7 +653,7 @@ experiments = [
         "Small test for functionality",
         {
             "seed": [42],  # , 43, 44
-            "num_images": [10, 20, 30, 40, 50],
+            "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
             "sampling_mode": ["voxels"],
             "gt_eval": [True],
             "colmap_mode": ["default", "relaxed"],
@@ -643,6 +661,14 @@ experiments = [
             "choice": ["colmap"],
         },
         PlotConfig(x_axis="num_images", split_param="colmap_mode"),
+    ),
+    Experiment(
+        "gt",
+        "Small test for gt evaluation",
+        {
+            "choice": ["gt", "vggt"],
+        },
+        PlotConfig(x_axis="num_images", split_param=""),
     ),
     Experiment(
         "val_step",
@@ -764,6 +790,8 @@ if __name__ == "__main__":
     parser.add_argument("--do_reconstruct", action="store_true", help="Whether to run reconstruction")
     parser.add_argument("--plot_only", action="store_true", help="Whether to only plot")
     parser.add_argument("--include_gt", action="store_true", help="Whether to include the ground truth splatted data")
+    parser.add_argument("--force_all", action="store_true", help="Whether to force all experiments to rerun")  # TODO add these properly
+    parser.add_argument("--force_none", action="store_true", help="Ignore force calculation")
     args = parser.parse_args()
 
     for experiment in experiments:
