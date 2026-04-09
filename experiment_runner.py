@@ -240,7 +240,7 @@ class Config:
         return f"{self.result_dir}/renders"
 
     @property
-    def stats_dir(self):
+    def splatting_val_path(self):
         return f"{self.result_dir}/stats/val_step{self.num_steps - 1}.json"
 
     @property
@@ -269,8 +269,8 @@ class Config:
             return False
 
         if self.is_splatted and self.choice == "vggt":
-            with open(self.stats_dir, "r") as f:
-                stats = _parse_gsplat_json(json.load(f), self.stats_dir)
+            with open(self.splatting_val_path, "r") as f:
+                stats = _parse_gsplat_json(json.load(f), self.splatting_val_path)
                 psnr = stats.get("psnr", 0.0)
             if psnr is None or (psnr < 15 and self.num_images > 20):
                 return True
@@ -279,8 +279,12 @@ class Config:
             return self.sampling_mode != "ba" and self.choice == "vggt"
 
     @property
+    def reconstruction_stat_path(self):
+        return os.path.join(self.data_dir, "stat.json")
+
+    @property
     def is_reconstructed(self):
-        return self.choice == "gt" or os.path.exists(os.path.join(self.data_dir, "stat.json"))
+        return self.choice == "gt" or os.path.exists(self.reconstruction_stat_path)
 
     @property
     def reconstruct_args(self):
@@ -347,10 +351,17 @@ class Config:
         threshold_date = datetime.datetime(2026, 4, 4, 11, 20)  # This is when I fixed the eval script
         threshold_timestamp = threshold_date.timestamp()
         file_timestamp = Path(self.eval_path).stat().st_mtime
-        return file_timestamp < threshold_timestamp
+
+        if file_timestamp < threshold_timestamp:
+            return True
+
+
+        if self.is_reconstructed and not self.choice == "gt" and file_timestamp < Path(self.reconstruction_stat_path).stat().st_mtime:
+            return True
+        return False
 
     def eval(self):
-        if self.is_evaluated:
+        if self.is_evaluated and not self.force_eval:
             return 0
         try:
             examples.evaluation.main(self.data_dir, self.dataset.directory, force=self.force_eval)
@@ -361,18 +372,18 @@ class Config:
 
     @property
     def is_splatted(self):
-        return os.path.exists(self.stats_dir)
+        return os.path.exists(self.splatting_val_path)
 
     @profile
     def run(self):
         if self.is_splatted and not self.force_splat:
-            print(f"{self.stats_dir} found. Skipping splatting")
+            print(f"{self.splatting_val_path} found. Skipping splatting")
             return 0
 
         if self.force_splat:
             print("Forcing splatting")
         else:
-            print(f"{Path(self.stats_dir)} not found. Running splatting")
+            print(f"{Path(self.splatting_val_path)} not found. Running splatting")
         print(f"Using data from: {Path(self.data_dir)}")
         print(f"Result dir: {Path(self.result_dir)}")
         command = [
@@ -483,9 +494,9 @@ class Experiment:
         config_set = set()
         unique_configs: list[Config] = []
         for config in configs:
-            if (config.result_dir, config.stats_dir, config.data_dir) not in config_set:
+            if (config.result_dir, config.splatting_val_path, config.data_dir) not in config_set:
                 unique_configs.append(config)
-            config_set.add((config.result_dir, config.stats_dir, config.data_dir))
+            config_set.add((config.result_dir, config.splatting_val_path, config.data_dir))
         return unique_configs
 
     def bulk_reconstruct(self, configs: list[Config]):
@@ -605,9 +616,9 @@ experiments = [
             "sampling_mode": ["voxels"],
             "gt_eval": [True],
             "image_mode": ["distributed", "shuffle", "mfps"],
-            "choice": ["vggt", "colmap"],
+            "choice": ["vggt", "colmap", "gt"],
         },
-        PlotConfig(x_axis="num_images", split_param="gt_eval,sampling_mode,image_mode"),
+        PlotConfig(x_axis="num_images", split_param="sampling_mode,image_mode"),
     ),
     Experiment(
         "pose_opt",
@@ -628,12 +639,12 @@ experiments = [
         {
             "seed": [42, 43, 44],
             "num_images": [100],
-            "sampling_mode": ["voxels"],
+            "sampling_mode": ["voxels", "ba"],
             "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 5000, 10000, 25000],
-            "choice": ["vggt", "colmap"],
+            "choice": ["vggt", "colmap", "gt"],
             "gt_eval": True,
         },
-        PlotConfig(x_axis="num_points", split_param="sampling_mode"),
+        PlotConfig(x_axis="num_points", split_param="sampling_mode,val_step"),
     ),
     Experiment(
         "sampling_mode",
@@ -790,7 +801,9 @@ if __name__ == "__main__":
     parser.add_argument("--do_reconstruct", action="store_true", help="Whether to run reconstruction")
     parser.add_argument("--plot_only", action="store_true", help="Whether to only plot")
     parser.add_argument("--include_gt", action="store_true", help="Whether to include the ground truth splatted data")
-    parser.add_argument("--force_all", action="store_true", help="Whether to force all experiments to rerun")  # TODO add these properly
+    parser.add_argument(
+        "--force_all", action="store_true", help="Whether to force all experiments to rerun"
+    )  # TODO add these properly
     parser.add_argument("--force_none", action="store_true", help="Ignore force calculation")
     args = parser.parse_args()
 
