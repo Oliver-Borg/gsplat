@@ -1,4 +1,4 @@
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 import datetime
 import json
 from pathlib import Path
@@ -93,7 +93,7 @@ class Config:
     num_points_per_image: float = 1100
     num_points_value: int | None = None
     sampling_mode: Literal["voxels", "random", "confidence", "ba"] = "voxels"
-    image_mode: Literal["shuffle", "distributed", "mfps"] = "distributed"
+    image_mode: Literal["shuffle", "distributed", "mfps", "farthestpose"] = "farthestpose"
     copy_mode: Literal[None, "crop", "square", "tiles"] = None
     gt_eval: bool = True
     use_gt_extrinsics: bool = False
@@ -488,6 +488,7 @@ class Experiment:
     config_dict: dict
     plot_args: PlotConfig | None = None
     include_gt: bool = False
+    val_steps: list[int] = field(default_factory=lambda: [7000])
 
     def get_configs(self, dataset_name: str) -> list[Config]:
         self.config_dict["dataset"] = dataset_name
@@ -661,9 +662,8 @@ experiments = [
             "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
             "sampling_mode": ["voxels"],
             "gt_eval": [True],
-            "image_mode": ["distributed", "shuffle", "mfps"],
+            "image_mode": ["distributed", "shuffle", "mfps", "farthestpose"],
             "choice": ["vggt", "colmap", "gt"],
-            "num_steps": [30000],
         },
         PlotConfig(x_axis="num_images", split_param="sampling_mode,image_mode"),
     ),
@@ -698,14 +698,16 @@ experiments = [
         "num_points",
         "Test the behaviour of different numbers of points",
         {
-            "seed": [42, 43, 44],
+            "seed": [42],  # , 43, 44
             "num_images": [100],
             "sampling_mode": ["voxels", "ba"],
             "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 5000, 10000, 25000],
             "choice": ["vggt", "colmap", "gt"],
+            "pose_opt": [True, False],
             "gt_eval": True,
         },
-        PlotConfig(x_axis="num_points", split_param="sampling_mode,val_step"),
+        PlotConfig(x_axis="num_points", split_param="sampling_mode,val_step,pose_opt"),
+        val_steps=[7000, 15000, 30000],
     ),
     Experiment(
         "sampling_mode",
@@ -729,10 +731,23 @@ experiments = [
             "sampling_mode": ["voxels"],
             "gt_eval": [True],
             "colmap_mode": ["default", "relaxed"],
-            "image_mode": ["mfps"],
+            "image_mode": ["farthestpose"],
             "choice": ["colmap"],
         },
-        PlotConfig(x_axis="num_images", split_param="colmap_mode"),
+        PlotConfig(x_axis="num_images", split_param="colmap_mode,image_mode"),
+    ),
+    Experiment(
+        "colmap_mode",
+        "Test of colmap_mode",
+        {
+            "seed": [42, 43, 44],
+            "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+            "gt_eval": [True],
+            "colmap_mode": ["default", "relaxed"],
+            "image_mode": ["farthestpose"],
+            "choice": ["colmap"],
+        },
+        PlotConfig(x_axis="num_images", split_param="colmap_mode,image_mode"),
     ),
     Experiment(
         "gt",
@@ -752,6 +767,7 @@ experiments = [
             "choice": ["vggt", "colmap"],
         },
         PlotConfig(x_axis="val_step", split_param=""),
+        val_steps=[7000, 15000, 30000],
     ),
     Experiment(
         "depth",
