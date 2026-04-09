@@ -17,7 +17,7 @@ def get_step_renders(renders_folder: str, target_step: int) -> dict[str, Path]:
     if not p.exists() or target_step is None:
         return {}
 
-    step_files = list(p.glob(f"val_step{target_step}_*.png"))
+    step_files = list(p.glob(f"val_step{target_step}_*.jpg"))
 
     renders = {}
     for f in step_files:
@@ -110,7 +110,7 @@ def update_steps(vggt_sig: str, colmap_sig: str, seed_val: int, groups: dict):
         if config:
             p = Path(config.renders_folder)
             if p.exists():
-                for f in p.glob("val_step*.png"):
+                for f in p.glob("val_step*.jpg"):
                     match = re.search(r"val_step(\d+)_", f.name)
                     if match:
                         steps.add(int(match.group(1)))
@@ -170,7 +170,7 @@ def on_config_change(vggt_sig: str, colmap_sig: str, seed_val: int, step_val: in
             renders = group_renders.get(choice, {})
             if idx_str in renders:
                 img_path = renders[idx_str]
-                match = re.search(r"psnr([0-9.]+)_lpips([0-9.]+)\.png", img_path.name)
+                match = re.search(r"psnr([0-9.]+)_lpips([0-9.]+)\.jpg", img_path.name)
                 metrics = (
                     f"PSNR: {match.group(1)} | LPIPS: {match.group(2)}" if match else "Metrics missing from filename"
                 )
@@ -282,4 +282,4 @@ with gr.Blocks(title="3DGS Experiment Results Viewer", fill_width=True) as app:
     )
 
 if __name__ == "__main__":
-    app.launch(server_name="0.0.0.0", server_port=7861)
+    app.launch(server_name="0.0.0.0", server_port=7861, share=True)
