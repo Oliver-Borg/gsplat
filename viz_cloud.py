@@ -5,11 +5,18 @@ import plotly.graph_objects as go
 import trimesh
 import cv2
 import json
+import re
+from pathlib import Path
+from collections import defaultdict
+import dataclasses
 from typing import Optional, Union, Tuple, Dict, List, Any
+
 from examples.datasets.colmap import Parser
 from examples.evaluation import umeyama_alignment, calculate_metrics, load_parser_data
 from geometry import unproject_depth_map_to_point_map
 from scipy.spatial import cKDTree  # type: ignore
+
+from experiment_runner import experiments, datasets, experiment_dict, Config
 
 
 def create_frustum_traces(
@@ -130,7 +137,6 @@ def project_points(points_3d: np.ndarray, c2w: np.ndarray, K: np.ndarray) -> Tup
     return np.stack([x, y], axis=1), pts_cam[:, 2]
 
 
-
 def run_gradio_eval(
     pred_path: str, gt_path: str, show_gt_pts: bool, show_pred_pts: bool, pred_color_mode: str
 ) -> Tuple[str, Optional[go.Figure], Dict, Optional[Parser], Optional[Parser]]:
@@ -183,13 +189,18 @@ def run_gradio_eval(
                 tree = cKDTree(pred_pts)  # type: ignore
                 distances, indices = tree.query(pred_pts, k=4)
                 avg_distances = np.mean(distances[:, 1:], axis=1)
-                norm_distances = ((avg_distances - np.min(avg_distances)) / (
-                    np.max(avg_distances) - np.min(avg_distances) + 1e-8
-                ) * 255).clip(0, 255).astype(np.uint8)
+                norm_distances = (
+                    (
+                        (avg_distances - np.min(avg_distances))
+                        / (np.max(avg_distances) - np.min(avg_distances) + 1e-8)
+                        * 255
+                    )
+                    .clip(0, 255)
+                    .astype(np.uint8)
+                )
 
                 cmap = getattr(cv2, "COLORMAP_TURBO", cv2.COLORMAP_JET)
                 pred_colors = cv2.applyColorMap(norm_distances[:, None], cmap)[:, 0, :]  # Shape (N, 1, 3)
-
 
         if pred_pts is None and len(pred_parser.points) > 0:
             pred_pts = pred_parser.points
@@ -203,9 +214,7 @@ def run_gradio_eval(
 
             # Update name based on mode
             trace_name = (
-                f"Pred Points ({pred_color_mode})"
-                if isinstance(pred_colors, np.ndarray)
-                else "Pred Points (Aligned)"
+                f"Pred Points ({pred_color_mode})" if isinstance(pred_colors, np.ndarray) else "Pred Points (Aligned)"
             )
             fig.add_trace(create_point_cloud_trace(pred_pts_aligned, pred_colors, trace_name))
         # except Exception as e:
@@ -288,7 +297,9 @@ def run_gradio_eval_with_names(
         return summary, fig, metrics, gr.update(), gr.update(), [], gt_parser, pred_parser
 
 
-def render_depth_overlay(img_ref: np.ndarray, points_3d: np.ndarray, pose: np.ndarray, K: np.ndarray, im_size: np.ndarray, stride: int = 5) -> np.ndarray:
+def render_depth_overlay(
+    img_ref: np.ndarray, points_3d: np.ndarray, pose: np.ndarray, K: np.ndarray, im_size: np.ndarray, stride: int = 5
+) -> np.ndarray:
     """Projects 3D points onto image and draws them with depth coloring."""
     w, h = tuple(im_size)
 
@@ -478,8 +489,8 @@ def update_projection_comparison(
     """Update function utilizing the cached Parser objects."""
 
     try:
-        img_ref, gt_points_to_render, gt_K, pred_K, pred_pts_aligned, gt_poses, pred_poses, gt_imsize, pred_imsize = get_projection_data(
-            camera_name, gt_parser_state, pred_parser_state
+        img_ref, gt_points_to_render, gt_K, pred_K, pred_pts_aligned, gt_poses, pred_poses, gt_imsize, pred_imsize = (
+            get_projection_data(camera_name, gt_parser_state, pred_parser_state)
         )
     except ValueError as e:
         return None, None, None, None, str(e)
@@ -491,7 +502,9 @@ def update_projection_comparison(
 
     # 4. Generate Pred Projection (Aligned)
     if pred_pts_aligned is not None:
-        pred_viz = render_depth_overlay(img_ref, pred_pts_aligned, pred_poses[camera_name], pred_K, pred_imsize, stride=2)
+        pred_viz = render_depth_overlay(
+            img_ref, pred_pts_aligned, pred_poses[camera_name], pred_K, pred_imsize, stride=2
+        )
     else:
         pred_viz = img_ref
 
@@ -512,7 +525,9 @@ def update_depth_projection_figure(
     pred_path_str: str,
 ) -> Optional[go.Figure] | str:
     try:
-        img_ref, _, _, pred_K, _, _, pred_poses, _, _ = get_projection_data(camera_name, gt_parser_state, pred_parser_state)
+        img_ref, _, _, pred_K, _, _, pred_poses, _, _ = get_projection_data(
+            camera_name, gt_parser_state, pred_parser_state
+        )
     except ValueError as e:
         return str(e)
     depth_file_path = os.path.join(pred_path_str, "depths", f"depth_{camera_name}.npy")
@@ -543,6 +558,88 @@ def sync_slider_to_dropdown(idx: Union[int, float], names: List[str]) -> Optiona
     return None
 
 
+def update_configs(exp_name: str, ds_name: str):
+    """
+    Called when the Experiment or Dataset dropdown changes.
+    Groups runs by their varying parameters (excluding choice and seed).
+    """
+    if not exp_name or not ds_name:
+        return (
+            gr.update(choices=[], value=None),
+            gr.update(choices=[], value=None),
+            gr.update(choices=[], value=None),
+            {},
+        )
+
+    exp = experiment_dict[exp_name]
+
+    # Identify which parameters vary, pulling 'choice' and 'seed' out of the signature
+    varying_keys = [k for k, v in exp.config_dict.items() if isinstance(v, list) and k not in ["choice", "seed"]]
+
+    exp_gt = dataclasses.replace(exp, include_gt=True)
+    configs = exp_gt.get_configs(ds_name)
+
+    # Dictionary format: choice -> signature -> seed -> config
+    groups = defaultdict(lambda: defaultdict(dict))
+    seeds = set()
+
+    for config in configs:
+        if not config.is_reconstructed:
+            continue
+
+        sig_parts = [f"{k}={getattr(config, k)}" for k in sorted(varying_keys) if hasattr(config, k)]
+        sig = " | ".join(sig_parts) if sig_parts else "Default"
+
+        # Group by the unique signature, storing the seed map
+        groups[config.choice][sig][config.seed] = config
+        seeds.add(config.seed)
+
+    vggt_choices = list(groups["vggt"].keys())
+    vggt_val = vggt_choices[0] if vggt_choices else None
+
+    colmap_choices = list(groups["colmap"].keys())
+    colmap_val = colmap_choices[0] if colmap_choices else None
+
+    # Use a sorted list of valid seeds for the dropdown
+    seed_choices = sorted(list(seeds))
+    seed_val = seed_choices[0] if seed_choices else None
+
+    # Convert defaultdict to standard dict for Gradio state serialization
+    state_groups = {
+        "vggt": {k: dict(v) for k, v in groups["vggt"].items()},
+        "colmap": {k: dict(v) for k, v in groups["colmap"].items()},
+        "gt": {k: dict(v) for k, v in groups["gt"].items()},
+    }
+
+    return (
+        gr.update(choices=vggt_choices, value=vggt_val),
+        gr.update(choices=colmap_choices, value=colmap_val),
+        gr.update(choices=seed_choices, value=seed_val),
+        state_groups,
+    )
+
+
+def update_paths(vggt_sig: str, colmap_sig: str, seed_val: int, pred_choice: str, groups: dict):
+    """
+    Triggered when config UI changes. Updates the GT and Prediction paths for the evaluator.
+    """
+    if not groups or seed_val is None:
+        return gr.update(), gr.update()
+
+    if pred_choice == "VGGT":
+        pred_config = groups.get("vggt", {}).get(vggt_sig, {}).get(seed_val)
+    else:
+        pred_config = groups.get("colmap", {}).get(colmap_sig, {}).get(seed_val)
+
+    gt_sigs = list(groups.get("gt", {}).keys())
+    gt_config = groups.get("gt", {}).get(gt_sigs[0], {}).get(seed_val) if gt_sigs else None
+
+    pred_path = pred_config.data_dir if pred_config else ""
+    gt_path = gt_config.data_dir if gt_config else ""
+
+    return gr.update(value=pred_path), gr.update(value=gt_path)
+
+
 with gr.Blocks(title="SfM Evaluation Suite") as demo:
     gr.Markdown("# 3D Reconstruction Evaluator")
     camera_names_state = gr.State([])
@@ -550,9 +647,22 @@ with gr.Blocks(title="SfM Evaluation Suite") as demo:
     # Store Parser objects to avoid reloading on every dropdown change
     gt_parser_state = gr.State(None)
     pred_parser_state = gr.State(None)
+    config_groups_state = gr.State({})
 
     with gr.Row():
         with gr.Column(scale=1):
+            with gr.Group():
+                gr.Markdown("### Configuration Selector")
+                with gr.Row():
+                    exp_dropdown = gr.Dropdown(choices=list(experiment_dict.keys()), label="1. Select Experiment")
+                    ds_dropdown = gr.Dropdown(choices=list(datasets.keys()), label="2. Select Dataset")
+                    seed_dropdown = gr.Dropdown(choices=[], label="3. Select Seed")
+
+                with gr.Row():
+                    vggt_dropdown = gr.Dropdown(choices=[], label="4. Select VGGT Config")
+                    colmap_dropdown = gr.Dropdown(choices=[], label="5. Select COLMAP Config")
+                    pred_choice = gr.Radio(choices=["VGGT", "COLMAP"], value="VGGT", label="6. Prediction to Evaluate")
+
             pred_input = gr.Textbox(
                 label="Prediction Path",
                 value="../vggt/vggt_outputs/bonsai_2_n30_s42_c0.0_p100000_voxels_shuffle",
@@ -604,6 +714,26 @@ with gr.Blocks(title="SfM Evaluation Suite") as demo:
                 with gr.Column():
                     focused_plot_output = gr.Plot(label="Camera Points")
 
+    exp_dropdown.change(
+        fn=update_configs,
+        inputs=[exp_dropdown, ds_dropdown],
+        outputs=[vggt_dropdown, colmap_dropdown, seed_dropdown, config_groups_state],
+    )
+
+    ds_dropdown.change(
+        fn=update_configs,
+        inputs=[exp_dropdown, ds_dropdown],
+        outputs=[vggt_dropdown, colmap_dropdown, seed_dropdown, config_groups_state],
+    )
+
+    for ui_element in [vggt_dropdown, colmap_dropdown, seed_dropdown, pred_choice]:
+        ui_element.change(
+            fn=update_paths,
+            inputs=[vggt_dropdown, colmap_dropdown, seed_dropdown, pred_choice, config_groups_state],
+            outputs=[pred_input, gt_input],
+        )
+
+    # Existing Event Wiring
     btn.click(
         fn=run_gradio_eval_with_names,
         inputs=[pred_input, gt_input, chk_gt, chk_pred, radio_color],
