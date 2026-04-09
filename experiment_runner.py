@@ -6,6 +6,8 @@ from typing import Literal
 import os
 import subprocess
 import argparse
+import concurrent.futures
+from queue import Queue
 
 from line_profiler import profile
 from tqdm import tqdm
@@ -355,8 +357,11 @@ class Config:
         if file_timestamp < threshold_timestamp:
             return True
 
-
-        if self.is_reconstructed and not self.choice == "gt" and file_timestamp < Path(self.reconstruction_stat_path).stat().st_mtime:
+        if (
+            self.is_reconstructed
+            and not self.choice == "gt"
+            and file_timestamp < Path(self.reconstruction_stat_path).stat().st_mtime
+        ):
             return True
         return False
 
@@ -375,7 +380,7 @@ class Config:
         return os.path.exists(self.splatting_val_path)
 
     @profile
-    def run(self):
+    def run(self, gpu: str | None = None):
         if self.is_splatted and not self.force_splat:
             print(f"{self.splatting_val_path} found. Skipping splatting")
             return 0
@@ -437,8 +442,12 @@ class Config:
         if self.depth_conf:
             command.append("--depth_conf")
 
+        env = os.environ.copy()
+        if gpu is not None:
+            env["CUDA_VISIBLE_DEVICES"] = gpu
+
         try:
-            output = subprocess.run(command, check=True)
+            output = subprocess.run(command, check=True, env=env)
             print(output)
             return output.returncode
         except subprocess.CalledProcessError as e:
@@ -530,6 +539,7 @@ class Experiment:
         bulk_reconstruct: bool = True,
         force_all: bool = False,
         force_none: bool = False,
+        cuda_devices: list[str] | None = None,
     ):
         configs = self.get_configs(dataset_name)
         splat_failures: list[Config] = []
@@ -538,21 +548,57 @@ class Experiment:
         if do_reconstruct and bulk_reconstruct:
             self.bulk_reconstruct(configs)
 
-        for config in tqdm(configs):
-            if do_reconstruct and not bulk_reconstruct:
-                reconstruction_returncode = config.reconstruct()
-                if reconstruction_returncode != 0:
-                    splat_failures.append(config)
-                    continue
+        if cuda_devices:
+            gpu_queue = Queue()
+            for gpu in cuda_devices:
+                gpu_queue.put(gpu)
 
-            eval_returncode = config.eval()
-            if eval_returncode != 0:
-                eval_failures.append(config)
+            def process_config(config: Config):
+                gpu = gpu_queue.get()
+                splat_fail = False
+                eval_fail = False
+                try:
+                    if do_reconstruct and not bulk_reconstruct:
+                        reconstruction_returncode = config.reconstruct()
+                        if reconstruction_returncode != 0:
+                            return config, True, False
 
-            if do_splatting:
-                returncode = config.run()
-                if returncode != 0:
-                    splat_failures.append(config)
+                    eval_returncode = config.eval()
+                    if eval_returncode != 0:
+                        eval_fail = True
+
+                    if do_splatting:
+                        returncode = config.run(gpu=gpu)
+                        if returncode != 0:
+                            splat_fail = True
+                    return config, splat_fail, eval_fail
+                finally:
+                    gpu_queue.put(gpu)
+
+            with concurrent.futures.ThreadPoolExecutor(max_workers=len(cuda_devices)) as executor:
+                futures = [executor.submit(process_config, config) for config in configs]
+                for future in tqdm(concurrent.futures.as_completed(futures), total=len(configs)):
+                    config, splat_fail, eval_fail = future.result()
+                    if splat_fail:
+                        splat_failures.append(config)
+                    if eval_fail:
+                        eval_failures.append(config)
+        else:
+            for config in tqdm(configs):
+                if do_reconstruct and not bulk_reconstruct:
+                    reconstruction_returncode = config.reconstruct()
+                    if reconstruction_returncode != 0:
+                        splat_failures.append(config)
+                        continue
+
+                eval_returncode = config.eval()
+                if eval_returncode != 0:
+                    eval_failures.append(config)
+
+                if do_splatting:
+                    returncode = config.run()
+                    if returncode != 0:
+                        splat_failures.append(config)
 
         if len(splat_failures) > 0:
             print("Splat Failures:")
@@ -617,8 +663,23 @@ experiments = [
             "gt_eval": [True],
             "image_mode": ["distributed", "shuffle", "mfps"],
             "choice": ["vggt", "colmap", "gt"],
+            "num_steps": [30000],
         },
         PlotConfig(x_axis="num_images", split_param="sampling_mode,image_mode"),
+    ),
+    Experiment(
+        "num_images_30000",
+        "Test the behaviour of splatting over various number of images",
+        {
+            "seed": [42, 43, 44],
+            "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+            "sampling_mode": ["voxels"],
+            "gt_eval": [True],
+            "image_mode": ["mfps"],
+            "choice": ["vggt", "colmap", "gt"],
+            "num_steps": [30000],
+        },
+        PlotConfig(x_axis="num_images", split_param="sampling_mode,val_step"),
     ),
     Experiment(
         "pose_opt",
@@ -805,13 +866,24 @@ if __name__ == "__main__":
         "--force_all", action="store_true", help="Whether to force all experiments to rerun"
     )  # TODO add these properly
     parser.add_argument("--force_none", action="store_true", help="Ignore force calculation")
+    parser.add_argument(
+        "--cuda_visible_devices",
+        type=str,
+        default=None,
+        help="Comma separated list of GPU IDs to use for parallel splatting (e.g., '0,1,2,3')",
+    )
     args = parser.parse_args()
+
+    cuda_devices = args.cuda_visible_devices.split(",") if args.cuda_visible_devices else None
 
     for experiment in experiments:
         if experiment.name == args.experiment_name or args.experiment_name == "all":
             experiment = replace(experiment, include_gt=args.include_gt)
             if not args.plot_only:
                 experiment.run(
-                    args.dataset_name, do_reconstruct=args.do_reconstruct, do_splatting=not args.skip_splatting
+                    args.dataset_name,
+                    do_reconstruct=args.do_reconstruct,
+                    do_splatting=not args.skip_splatting,
+                    cuda_devices=cuda_devices,
                 )
             experiment.plot(args.dataset_name)
