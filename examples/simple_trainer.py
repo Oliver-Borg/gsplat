@@ -379,7 +379,7 @@ class Runner:
                 # TODO Technically these images can overlap with the training set when using GT, especially in the nerf360 case
                 self.align_parser = Parser(
                     data_dir=cfg.gt_train_data_dir,
-                    factor=cfg.data_factor,
+                    factor=cfg.eval_data_factor,
                     normalize=cfg.normalize_world_space,
                     test_every=cfg.test_every,
                 )

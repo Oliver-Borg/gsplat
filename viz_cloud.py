@@ -15,6 +15,7 @@ from examples.datasets.colmap import Parser
 from examples.evaluation import umeyama_alignment, calculate_metrics, load_parser_data
 from geometry import unproject_depth_map_to_point_map
 from scipy.spatial import cKDTree  # type: ignore
+from vggt.cam_alignment import get_alignment_rotation
 
 from experiment_runner import experiments, datasets, experiment_dict, Config
 
@@ -144,6 +145,12 @@ def run_gradio_eval(
     gt_parser, gt_poses, gt_intrinsics, gt_imsizes, gt_err = load_parser_data(gt_path)
     if gt_err or gt_parser is None or gt_poses is None:
         return f"Error loading GT: {gt_err}", None, {}, None, None
+
+    R_gt_align = get_alignment_rotation(gt_parser.camtoworlds)
+    if len(gt_parser.points) > 0:
+        gt_parser.points = (R_gt_align @ gt_parser.points.T).T
+    for name in gt_poses:
+        gt_poses[name][:3, :] = R_gt_align @ gt_poses[name][:3, :]
 
     pred_parser, pred_poses, pred_intrinsics, pred_imsizes, pred_err = load_parser_data(pred_path)
     if pred_err or pred_parser is None or pred_poses is None:
