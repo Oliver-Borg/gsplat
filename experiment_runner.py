@@ -246,6 +246,10 @@ class Config:
         return f"{self.result_dir}/stats/val_step{self.num_steps - 1}.json"
 
     @property
+    def splatting_time(self):
+        return Path(self.splatting_val_path).stat().st_mtime
+
+    @property
     def data_dir(self):
         if self.choice == "gt":
             return self.dataset.directory
@@ -254,6 +258,9 @@ class Config:
 
     @property
     def force_splat(self):
+        if not self.choice == "gt" and self.is_splatted and self.is_reconstructed and self.splatting_time < self.reconstruction_time:
+            return True
+
         if self.choice == "colmap" and self.depth_loss:
             return True
         if self.force_reconstruct:
@@ -282,6 +289,10 @@ class Config:
     @property
     def reconstruction_stat_path(self):
         return os.path.join(self.data_dir, "stat.json")
+    
+    @property
+    def reconstruction_time(self):
+        return Path(self.reconstruction_stat_path).stat().st_mtime
 
     @property
     def is_reconstructed(self):
@@ -301,6 +312,7 @@ class Config:
             "image_mode": self.image_mode,
             "camera_type": self.camera_type,
             "colmap_mode": self.colmap_mode,
+            "require_depth_conf": (self.depth_conf or self.depth_loss) and self.choice == "vggt",
         }
 
         if self.force_reconstruct:
@@ -339,6 +351,10 @@ class Config:
     @property
     def eval_path(self):
         return os.path.join(self.data_dir, "eval_results.json")
+    
+    @property
+    def eval_time(self):
+        return Path(self.eval_path).stat().st_mtime
 
     @property
     def is_evaluated(self):
@@ -351,7 +367,7 @@ class Config:
 
         threshold_date = datetime.datetime(2026, 4, 4, 11, 20)  # This is when I fixed the eval script
         threshold_timestamp = threshold_date.timestamp()
-        file_timestamp = Path(self.eval_path).stat().st_mtime
+        file_timestamp = self.eval_time
 
         if file_timestamp < threshold_timestamp:
             return True
@@ -359,7 +375,7 @@ class Config:
         if (
             self.is_reconstructed
             and not self.choice == "gt"
-            and file_timestamp < Path(self.reconstruction_stat_path).stat().st_mtime
+            and file_timestamp < self.reconstruction_time
         ):
             return True
         return False
