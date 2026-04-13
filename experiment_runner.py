@@ -106,7 +106,7 @@ class Config:
     depth_loss: bool = False
     depth_conf: bool = False
     camera_type: Literal["SIMPLE_RADIAL", "SIMPLE_PINHOLE"] = "SIMPLE_PINHOLE"
-    num_steps: Literal[7000, 30000] = 7000
+    num_steps: Literal[7000, 15000, 30000] = 15000
     colmap_mode: Literal["default", "relaxed"] = "default"
 
     @classmethod
@@ -254,7 +254,6 @@ class Config:
 
     @property
     def force_splat(self):
-        # if self.use_gt_extrinsics: return True
         if self.choice == "colmap" and self.depth_loss:
             return True
         if self.force_reconstruct:
@@ -488,7 +487,7 @@ class Experiment:
     config_dict: dict
     plot_args: PlotConfig | None = None
     include_gt: bool = False
-    val_steps: list[int] = field(default_factory=lambda: [7000])
+    val_steps: list[int] = field(default_factory=lambda: [15000])
 
     def get_configs(self, dataset_name: str) -> list[Config]:
         self.config_dict["dataset"] = dataset_name
@@ -542,6 +541,7 @@ class Experiment:
         force_none: bool = False,
         cuda_devices: list[str] | None = None,
     ):
+        print(self.progress_stats(dataset_name))
         configs = self.get_configs(dataset_name)
         splat_failures: list[Config] = []
         eval_failures: list[Config] = []
@@ -637,6 +637,8 @@ class Experiment:
                 )
             ),
             create_pcp=create_pcp,
+            val_steps=self.val_steps,
+            title=self.description,
         )
 
     def progress_stats(self, dataset_name: str) -> str:
@@ -656,67 +658,83 @@ class Experiment:
 experiments = [
     Experiment(
         "num_images",
-        "Test the behaviour of splatting over various number of images",
+        "COLMAP versus VGGT over various number of images",
         {
             "seed": [42, 43, 44],
             "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
             "sampling_mode": ["voxels"],
             "gt_eval": [True],
-            "image_mode": ["distributed", "shuffle", "mfps", "farthestpose"],
-            "choice": ["vggt", "colmap", "gt"],
+            "image_mode": ["farthestpose"],
+            "choice": ["vggt", "colmap"],
         },
-        PlotConfig(x_axis="num_images", split_param="sampling_mode,image_mode"),
+        PlotConfig(x_axis="num_images", split_param="sampling_mode"),
+    ),
+    Experiment(
+        "num_images_pose_opt",
+        "COLMAP versus VGGT over various number of images with pose optimization",
+        {
+            "seed": [42],  # , 43, 44
+            "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+            "sampling_mode": ["voxels"],
+            "pose_opt": [True, False],
+            "gt_eval": [True],
+            "image_mode": ["farthestpose"],
+            "choice": ["vggt", "colmap"],
+        },
+        PlotConfig(x_axis="num_images", split_param="sampling_mode,pose_opt"),
     ),
     Experiment(
         "num_images_30000",
-        "Test the behaviour of splatting over various number of images",
+        "COLMAP versus VGGT over various number of images for different step counts",
         {
             "seed": [42, 43, 44],
             "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
             "sampling_mode": ["voxels"],
             "gt_eval": [True],
-            "image_mode": ["mfps"],
-            "choice": ["vggt", "colmap", "gt"],
+            "image_mode": ["farthestpose"],
+            "choice": ["vggt", "colmap"],
             "num_steps": [30000],
         },
         PlotConfig(x_axis="num_images", split_param="sampling_mode,val_step"),
-    ),
-    Experiment(
-        "pose_opt",
-        "Test the behaviour of different combinations of pose optimization",
-        {
-            "seed": [42, 43, 44],
-            "num_images": [30],
-            "pose_opt": [True, False],
-            "eval_opt": [True, False],
-            "gt_eval": [True, False],
-            "choice": ["vggt", "colmap"],
-        },
-        PlotConfig(x_axis="", split_param="choice,pose_opt,eval_opt,gt_eval"),
-    ),
-    Experiment(
-        "num_points",
-        "Test the behaviour of different numbers of points",
-        {
-            "seed": [42],  # , 43, 44
-            "num_images": [100],
-            "sampling_mode": ["voxels", "ba"],
-            "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 5000, 10000, 25000],
-            "choice": ["vggt", "colmap", "gt"],
-            "pose_opt": [True, False],
-            "gt_eval": True,
-        },
-        PlotConfig(x_axis="num_points", split_param="sampling_mode,val_step,pose_opt"),
         val_steps=[7000, 15000, 30000],
     ),
     Experiment(
-        "sampling_mode",
-        "Test the behaviour of different sampling modes",
+        "pose_opt",
+        "COLMAP versus VGGT with pose optimization",
         {
             "seed": [42, 43, 44],
-            "num_images": [30],
+            "num_images": [100],
+            "pose_opt": [True, False],
+            "gt_eval": [True],
+            "choice": ["vggt", "colmap"],
+            "num_steps": [15000],
+        },
+        PlotConfig(x_axis="", split_param="choice,pose_opt,eval_opt,gt_eval"),
+        val_steps=[15000],
+    ),
+    Experiment(
+        "num_points",
+        "COLMAP versus VGGT initialized with different numbers of points",
+        {
+            "seed": [42],  #
+            "num_images": [100],
+            "sampling_mode": ["voxels", "ba"],
+            "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 2500, 5000, 10000, 25000, 50000],
+            "image_mode": ["farthestpose"],
+            "choice": ["vggt", "colmap"],
+            "pose_opt": [True, False],
+            "gt_eval": True,
+        },
+        PlotConfig(x_axis="num_points", split_param="sampling_mode,pose_opt"),
+    ),
+    Experiment(
+        "sampling_mode",
+        "A comparison of different VGGT point cloud sampling modes",
+        {
+            "seed": [42, 43, 44],
+            "num_images": [100],
             "sampling_mode": ["voxels", "random", "confidence", "ba"],
-            "num_points_per_image": [100000],
+            "num_points_per_image": [1100, 2200, 5000],
             "choice": ["vggt", "colmap"],
             "gt_eval": True,
         },
@@ -738,7 +756,7 @@ experiments = [
     ),
     Experiment(
         "colmap_mode",
-        "Test of colmap_mode",
+        "Default versus Relaxed COLMAP arguments over various number of images",
         {
             "seed": [42, 43, 44],
             "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
@@ -746,8 +764,10 @@ experiments = [
             "colmap_mode": ["default", "relaxed"],
             "image_mode": ["farthestpose"],
             "choice": ["colmap"],
+            "num_steps": [15000],
         },
-        PlotConfig(x_axis="num_images", split_param="colmap_mode,image_mode"),
+        PlotConfig(x_axis="num_images", split_param="colmap_mode"),
+        val_steps=[15000],
     ),
     Experiment(
         "gt",
@@ -758,40 +778,26 @@ experiments = [
         PlotConfig(x_axis="num_images", split_param=""),
     ),
     Experiment(
-        "val_step",
-        "Test the impact val_step has on metrics",
-        {
-            "num_images": [30],
-            "seed": [42, 43, 44],
-            "num_steps": [30000],
-            "choice": ["vggt", "colmap"],
-        },
-        PlotConfig(x_axis="val_step", split_param=""),
-        val_steps=[7000, 15000, 30000],
-    ),
-    Experiment(
         "depth",
-        "Test for depth loss and depth conf",
+        "COLMAP versus VGGT with depth loss",
         {
             "seed": [42, 43, 44],
-            "num_images": [50],
+            "num_images": [100],
             "sampling_mode": ["voxels", "ba"],
             "depth_loss": [True, False],
             "depth_conf": [True, False],
             "pose_opt": [True],
-            "eval_opt": [True],
-            "num_points": [1000000],
             "choice": ["vggt", "colmap"],
         },
         PlotConfig(x_axis="", split_param="choice,depth_loss,depth_conf,sampling_mode"),
     ),
     Experiment(
         "camera_type",
-        "Test for camera mode",
+        "A comparison of different camera types with bundle adjustment",
         {
-            "seed": [42, 43, 44],
-            "num_images": [50, 100],
-            "sampling_mode": ["voxels"],
+            "seed": [42],
+            "num_images": [80],
+            "sampling_mode": ["ba"],
             "all_opt": [False],
             "camera_type": ["SIMPLE_RADIAL", "SIMPLE_PINHOLE"],
             "choice": ["vggt", "colmap"],
@@ -827,43 +833,33 @@ experiments = [
     ),
     Experiment(
         "copy_mode",
-        "Test for copy modes",
+        "A comparison of different image cropping modes",
         {
-            "num_images": [50, 100],
+            "num_images": [100],
             "seed": [42, 43, 44],
             "sampling_mode": ["voxels"],
             "all_opt": [False],
             "copy_mode": [None, "crop", "square"],
             "choice": ["vggt", "colmap"],
         },
-        PlotConfig(x_axis="num_images", split_param="copy_mode"),
-    ),
-    Experiment(
-        "num_images_pose_opt",
-        "Test the behaviour of splatting over various number of images",
-        {
-            "seed": [42, 43, 44],
-            "num_images": [10, 20, 30, 40, 50, 100],
-            "pose_opt": [True, False],
-            "eval_opt": [False],
-            "gt_eval": [True],
-            "choice": ["vggt", "colmap"],
-        },
-        PlotConfig(x_axis="num_images", split_param="choice,pose_opt"),
+        PlotConfig(x_axis="", split_param="copy_mode"),
     ),
     Experiment(
         "gt_cams",
-        "Test the behaviour of ground truth cameras",
+        "The effect of using ground truth extrinsics, intrinsics and points on VGGT and COLMAP results",
         {
             "seed": [42, 43, 44],
-            "num_images": [30],
+            "num_images": [100],
             "gt_eval": True,
             "use_gt_extrinsics": [True, False],
             "use_gt_intrinsics": [True, False],
             "use_gt_points": [True, False],
-            "choice": ["vggt", "colmap"],
+            # "pose_opt": [True, False],
+            "choice": ["vggt", "colmap", "gt"],
+            "num_steps": [15000],
         },
         PlotConfig(x_axis="", split_param="use_gt_extrinsics,use_gt_intrinsics,use_gt_points"),
+        val_steps=[15000],
     ),
 ]
 
