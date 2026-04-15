@@ -92,7 +92,7 @@ class Config:
     conf_thres_value: float = 0.0
     num_points_per_image: float = 1100
     num_points_value: int | None = None
-    sampling_mode: Literal["voxels", "random", "confidence", "ba"] = "voxels"
+    sampling_mode: Literal["voxels", "random", "confidence", "ba", "vox3"] = "voxels"
     image_mode: Literal["shuffle", "distributed", "mfps", "farthestpose"] = "farthestpose"
     copy_mode: Literal[None, "crop", "square", "tiles"] = None
     gt_eval: bool = True
@@ -104,10 +104,12 @@ class Config:
     all_opt: bool = False
     num_cameras: int | None = None
     depth_loss: bool = False
+    depth_lambda: float = 0.0
     depth_conf: bool = False
     camera_type: Literal["SIMPLE_RADIAL", "SIMPLE_PINHOLE"] = "SIMPLE_PINHOLE"
     num_steps: Literal[7000, 15000, 30000] = 15000
     colmap_mode: Literal["default", "relaxed"] = "default"
+    nomcmc: bool = False
 
     @classmethod
     def from_dict(cls, data: dict) -> "Config":
@@ -132,10 +134,12 @@ class Config:
         instance.eval_opt |= data.get("all_opt", instance.all_opt)
         instance.num_cameras = data.get("num_cameras", instance.num_cameras)
         instance.depth_loss = data.get("depth_loss", instance.depth_loss)
+        instance.depth_lambda = data.get("depth_lambda", instance.depth_lambda)
         instance.depth_conf = data.get("depth_conf", instance.depth_conf)
         instance.camera_type = data.get("camera_type", instance.camera_type)
         instance.num_steps = data.get("num_steps", instance.num_steps)
         instance.colmap_mode = data.get("colmap_mode", instance.colmap_mode)
+        instance.nomcmc = data.get("nomcmc", instance.nomcmc)
         return replace(instance)
 
     def __post_init__(self):
@@ -151,7 +155,13 @@ class Config:
             self.num_images = len(os.listdir(Path(self.dataset.directory) / Path(self.dataset.data_folder_name)))
             self.num_cameras = self.num_images
 
-        self.depth_conf = self.depth_conf and self.choice == "vggt" and self.depth_loss
+        self.depth_conf = self.depth_conf and self.choice == "vggt"
+
+        if self.depth_conf and self.choice == "vggt":
+            self.depth_loss = True
+
+        if self.depth_loss and self.depth_lambda <= 0.0:
+            self.depth_lambda = 0.01
 
         if self.use_gt_extrinsics or self.use_gt_intrinsics or self.use_gt_points:
             self.gt_eval = True
@@ -227,8 +237,11 @@ class Config:
             parts.append("evalopt")
         if self.depth_loss:
             parts.append("depth")
+            parts.append(f"dl{self.depth_lambda}")
         if self.depth_conf and self.choice == "vggt" and self.depth_loss:
             parts.append("conf")
+        if self.nomcmc:
+            parts.append("nomcmc")
 
         parts = "_".join(parts)
         return f"{self.input_name}_{parts}"
@@ -258,6 +271,10 @@ class Config:
 
     @property
     def force_splat(self):
+
+        # if self.depth_loss or self.depth_conf:
+        #     return True
+
         if not self.choice == "gt" and self.is_splatted and self.is_reconstructed and self.splatting_time < self.reconstruction_time:
             return True
 
@@ -409,7 +426,7 @@ class Config:
         command = [
             GSPLAT_PYTHON,
             "examples/simple_trainer.py",
-            "mcmc",
+            "default" if self.nomcmc else "mcmc",
             "--data_dir",
             self.data_dir,
             "--data_factor",
@@ -453,6 +470,8 @@ class Config:
 
         if self.depth_loss:
             command.append("--depth_loss")
+            command.append("--depth_lambda")
+            command.append(str(self.depth_lambda))
 
         if self.depth_conf:
             command.append("--depth_conf")
@@ -747,14 +766,16 @@ experiments = [
         "sampling_mode",
         "A comparison of different VGGT point cloud sampling modes",
         {
-            "seed": [42, 43, 44],
+            "seed": [42],  # , 43, 44
             "num_images": [100],
-            "sampling_mode": ["voxels", "random", "confidence", "ba"],
-            "num_points_per_image": [1100, 2200, 5000],
+            "sampling_mode": ["voxels", "random", "confidence", "ba", "vox3"],
+            # "num_points_per_image": [1100, 2200, 5000],
+            # "num_points_per_image": [5000],
+            "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 2500, 5000, 10000, 25000, 50000],
             "choice": ["vggt", "colmap"],
             "gt_eval": True,
         },
-        PlotConfig(x_axis="", split_param="sampling_mode,num_points"),
+        PlotConfig(x_axis="num_points", split_param="sampling_mode"),
     ),
     Experiment(
         "test",
@@ -763,12 +784,50 @@ experiments = [
             "seed": [42],  # , 43, 44
             "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
             "sampling_mode": ["voxels"],
-            "gt_eval": [True],
-            "colmap_mode": ["default", "relaxed"],
-            "image_mode": ["farthestpose"],
-            "choice": ["colmap"],
+            "choice": ["vggt"],
+            "nomcmc": [True, False],
         },
-        PlotConfig(x_axis="num_images", split_param="colmap_mode,image_mode"),
+        PlotConfig(x_axis="num_images", split_param="splatting_strategy"),
+    ),
+    Experiment(
+        "splatting_strategy",
+        "Splatting strategies with different number of images",
+        {
+            "seed": [42],  # , 43, 44
+            "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+            "sampling_mode": ["voxels"],
+            "choice": ["vggt"],
+            "nomcmc": [True, False],
+        },
+        PlotConfig(x_axis="num_images", split_param="splatting_strategy"),
+    ),
+    Experiment(
+        "splatting_strategy_points",
+        "Splatting strategies with different number of points",
+        {
+            "seed": [42],  # , 43, 44
+            "num_images": [100],
+            "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 2500, 5000, 10000, 25000, 50000],
+            "sampling_mode": ["voxels"],
+            "choice": ["vggt"],
+            "nomcmc": [True, False],
+        },
+        PlotConfig(x_axis="num_points", split_param="splatting_strategy"),
+    ),
+    Experiment(
+        "splatting_strategy_pose_opt",
+        "Splatting strategies with pose optimization",
+        {
+            "seed": [42],  # , 43, 44
+            "num_images": [100],
+            "num_points_per_image": [5000],
+            "sampling_mode": ["voxels"],
+            "choice": ["vggt"],
+            "nomcmc": [True, False],
+            "pose_opt": [True, False],
+        },
+        PlotConfig(x_axis="", split_param="splatting_strategy,pose_opt,val_step"),
+        val_steps=[7000, 15000],
     ),
     Experiment(
         "colmap_mode",
@@ -797,15 +856,33 @@ experiments = [
         "depth",
         "COLMAP versus VGGT with depth loss",
         {
-            "seed": [42, 43, 44],
-            "num_images": [100],
-            "sampling_mode": ["voxels", "ba"],
+            "seed": [42],  # , 43, 44
+            "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+            "sampling_mode": ["voxels", "random"],
             "depth_loss": [True, False],
             "depth_conf": [True, False],
             "pose_opt": [True],
             "choice": ["vggt", "colmap"],
+            # "num_points_per_image": [10000, 1100],
+            "num_points_per_image": [10000],
+            "depth_lambda": [0.01, 0.1, 1, 10],
         },
-        PlotConfig(x_axis="", split_param="choice,depth_loss,depth_conf,sampling_mode"),
+        PlotConfig(x_axis="num_images", split_param="choice,depth_loss,depth_lambda,depth_conf,sampling_mode"),
+    ),
+    Experiment(
+        "depth_lambda",
+        "COLMAP versus VGGT with depth loss",
+        {
+            "seed": [42],  # , 43, 44
+            "num_images": [50],
+            "sampling_mode": ["voxels", "random"],
+            "depth_loss": [True],
+            "depth_conf": [True, False],
+            "pose_opt": [True],
+            "choice": ["vggt", "colmap"],
+            "depth_lambda": [0.01, 0.1, 1, 10],
+        },
+        PlotConfig(x_axis="num_images", split_param="choice,depth_loss,depth_lambda,depth_conf,sampling_mode"),
     ),
     Experiment(
         "camera_type",
