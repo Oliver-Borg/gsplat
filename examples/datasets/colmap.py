@@ -397,6 +397,16 @@ class Parser:
         names = {self.image_names[i] for i in indices}
         return names
 
+def get_bbox_2d(arr):
+    mask = ~np.isnan(arr)
+    if not np.any(mask):
+        return None
+    rows = np.any(mask, axis=1)
+    cols = np.any(mask, axis=0)
+    rmin, rmax = np.where(rows)[0][[0, -1]]
+    cmin, cmax = np.where(cols)[0][[0, -1]]
+    
+    return rmin, rmax, cmin, cmax
 
 class Dataset:
     """A simple dataset class."""
@@ -466,20 +476,42 @@ class Dataset:
         conf_path = os.path.join(
             os.path.dirname(os.path.dirname(self.parser.image_paths[index])),
             "depths",
-            f"depth_conf_{image_name}.npy"
+            f"raw_conf_{image_name}.npy"
+        )
+
+        depth = None
+        depth_path = os.path.join(
+            os.path.dirname(os.path.dirname(self.parser.image_paths[index])),
+            "depths",
+            f"depth_{image_name}.npy"
         )
         
-        if os.path.exists(conf_path):
+        if os.path.exists(conf_path) and os.path.exists(depth_path):
+            
+            depth_data = np.load(depth_path)
+            rmin, rmax, cmin, cmax = get_bbox_2d(depth_data)
+            depth_data = depth_data[rmin:rmax+1, cmin:cmax+1]
+            depth = torch.from_numpy(depth_data).float()
+            
+            img_h, img_w = image.shape[:2]
+            if depth.shape[-2:] != (img_h, img_w):
+                depth = torch.nn.functional.interpolate(
+                    depth[None, None, ...],
+                    size=(img_h, img_w),
+                    mode="nearest",
+                )[0, 0]  # TODO Maybe undistort?
+
+
             conf_data = np.load(conf_path)
+            conf_data = conf_data[rmin:rmax+1, cmin:cmax+1]
             depth_conf = torch.from_numpy(conf_data).float()
             
             img_h, img_w = image.shape[:2]
             if depth_conf.shape[-2:] != (img_h, img_w):
                 depth_conf = torch.nn.functional.interpolate(
-                    depth_conf[None, None, ...], 
-                    size=(img_h, img_w), 
-                    mode="bilinear", 
-                    align_corners=False
+                    depth_conf[None, None, ...],
+                    size=(img_h, img_w),
+                    mode="nearest",
                 )[0, 0]
 
         if self.patch_size is not None:
@@ -490,6 +522,8 @@ class Dataset:
             image = image[y : y + self.patch_size, x : x + self.patch_size]
             if depth_conf is not None:
                 depth_conf = depth_conf[y : y + self.patch_size, x : x + self.patch_size]
+            if depth is not None:
+                depth = depth[y : y + self.patch_size, x : x + self.patch_size]
             K[0, 2] -= x
             K[1, 2] -= y
 
@@ -506,6 +540,9 @@ class Dataset:
         
         if depth_conf is not None:
             data["depth_conf"] = depth_conf
+
+        if depth is not None:
+            data["depth"] = depth
 
         if self.load_depths and isinstance(self.parser, Parser):
             # projected points to image plane to get depths

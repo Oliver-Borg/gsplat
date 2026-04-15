@@ -753,6 +753,7 @@ class Runner:
             image_ids = data["image_id"].to(device)
             masks = data["mask"].to(device) if "mask" in data else None  # [1, H, W]
             depth_conf = None
+            depth_map_gt = None
             if cfg.depth_loss:
                 points = data["points"].to(device)  # [1, M, 2]
                 depths_gt = data["depths"].to(device)  # [1, M]
@@ -760,6 +761,11 @@ class Runner:
                     depth_conf = data["depth_conf"].to(device)  # [1, H, W]
                 else:
                     depth_conf = None
+
+                if "depth" in data:
+                    depth_map_gt = data["depth"].to(device)  # [1, H, W]
+                else:
+                    depth_map_gt = None
 
             height, width = pixels.shape[1:3]
 
@@ -834,24 +840,46 @@ class Runner:
                     dim=-1,
                 )  # normalize to [-1, 1]
                 grid = points.unsqueeze(2)  # [1, M, 1, 2]
-                depths = F.grid_sample(
+                sampled_depths = F.grid_sample(
                     depths.permute(0, 3, 1, 2), grid, align_corners=True
                 )  # [1, 1, M, 1]
-                if depth_conf is not None and cfg.depth_conf:
-                    # depth_conf [1, H, W]
-                    depth_conf = F.grid_sample(
-                        depth_conf.unsqueeze(0), grid, align_corners=True
-                    )  # [1, 1, M, 1]
-                    depth_conf = depth_conf.squeeze(3).squeeze(1)  # [1, M]
 
-                depths = depths.squeeze(3).squeeze(1)  # [1, M]
-                safe_depths = torch.clamp(depths, min=1e-3)
+                sampled_depths = sampled_depths.squeeze(3).squeeze(1)  # [1, M]
+                safe_depths = torch.clamp(sampled_depths, min=1e-3)
                 safe_depths_gt = torch.clamp(depths_gt, min=1e-3)
                 
-                disp = torch.where(depths > 1e-3, 1.0 / safe_depths, torch.zeros_like(depths))
+                disp = torch.where(sampled_depths > 1e-3, 1.0 / safe_depths, torch.zeros_like(sampled_depths))
                 disp_gt = 1.0 / safe_depths_gt  # [1, M]
-                
-                depthloss = F.l1_loss(disp, disp_gt, weight=depth_conf) * self.scene_scale
+
+                if depth_conf is not None and cfg.depth_conf:
+                    # depth_conf [1, H, W]
+                    sampled_depth_conf = F.grid_sample(
+                        depth_conf.unsqueeze(0), grid, align_corners=True
+                    )  # [1, 1, M, 1]
+                    sampled_depth_conf = torch.sigmoid(sampled_depth_conf.squeeze(3).squeeze(1)) * 2.0 - 1.0 # [1, M]
+                else:
+                    sampled_depth_conf = 1.0
+
+                if depth_map_gt is not None:
+                    sampled_depth_map_gt = F.grid_sample(
+                        depth_map_gt.unsqueeze(0), grid, align_corners=True
+                    )  # [1, 1, M, 1]
+                    sampled_depth_map_gt = sampled_depth_map_gt.squeeze(3).squeeze(1)  # [1, M]
+                    sampled_depth_map_gt= torch.clamp(sampled_depth_map_gt, min=1e-3)
+                    scaling_factor = safe_depths_gt / sampled_depth_map_gt
+                    depth_map_gt *= scaling_factor.mean()
+                else:
+                    sampled_depth_map_gt = None
+
+                if depth_conf is None:
+                    depth_conf = 1.0
+
+                if depth_map_gt is not None:
+                    full_l1_diff = F.l1_loss(depth_map_gt, depths.squeeze(3), reduction='none')
+                    depthloss = (full_l1_diff * depth_conf).mean() * self.scene_scale
+                else:
+                    l1_diff = F.l1_loss(disp, disp_gt, reduction='none')
+                    depthloss = (l1_diff * sampled_depth_conf).mean() * self.scene_scale
                 loss += depthloss * cfg.depth_lambda
             if cfg.use_bilateral_grid:
                 tvloss = 10 * total_variation_loss(self.bil_grids.grids)
