@@ -83,12 +83,12 @@ class SimpleParser:
 
         self.camtoworlds = transform_cameras(self.transform, np.array(self.camtoworlds))
 
-    def get_camera_positions(self, names: set[str]):
+    def get_camera_positions(self, names: list[str]):
         indices = [self.image_names.index(name) for name in names]
         return np.array([self.camtoworlds[i] for i in indices])
 
-    def get_camera_names(self, indices: Iterable[int]) -> set[str]:
-        names = {self.image_names[i] for i in indices}
+    def get_camera_names(self, indices: Iterable[int]) -> list[str]:
+        names = [self.image_names[i] for i in indices]
         return names
 
 

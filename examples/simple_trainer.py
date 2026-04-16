@@ -31,7 +31,7 @@ from torchmetrics.image.lpip import LearnedPerceptualImagePatchSimilarity
 from typing_extensions import Literal, assert_never
 from datasets.nerf_synth import SimpleParser
 from copy_cameras import copy_cameras
-from evaluation import umeyama_alignment
+from evaluation import EvalMetrics, calculate_metrics, umeyama_alignment
 from utils import AppearanceOptModule, CameraOptModule, knn, rgb_to_sh, set_random_seed
 
 from gsplat import export_splats
@@ -491,7 +491,7 @@ class Runner:
                 self.pose_adjust = DDP(self.pose_adjust)
 
         self.used_training_names = [self.train_parser.image_names[i] for i in self.trainset.indices]
-        self.common_names = set(self.used_training_names) & set(self.align_parser.image_names)
+        self.common_names = list(sorted(set(self.used_training_names) & set(self.align_parser.image_names)))
         transform_matrix = self.get_dataset_alignment_matrix()
         self.valset = Dataset(
             self.eval_parser,
@@ -502,7 +502,7 @@ class Runner:
             load_depths=cfg.depth_loss,
         )
 
-        assert len(self.eval_parser.get_camera_names(self.valset.indices) & set(self.used_training_names)) == 0
+        assert len(set(self.eval_parser.get_camera_names(self.valset.indices)) & set(self.used_training_names)) == 0
 
         self.eval_pose_optimizers = []
 
@@ -1107,8 +1107,9 @@ class Runner:
                 # Update the scene.
                 self.viewer.update(step, num_train_rays_per_step)
 
-    def get_dataset_alignment_matrix(self):
-        from_points = np.array([c2w[:3, 3] for c2w in self.align_parser.get_camera_positions(self.common_names)])
+    def get_dataset_alignment_matrix(self, return_metrics=False) -> np.ndarray | Tuple[np.ndarray, EvalMetrics]:
+        align_c2ws = self.align_parser.get_camera_positions(self.common_names)
+        from_points = np.array([c2w[:3, 3] for c2w in align_c2ws])
         train_c2ws = np.array([c2w for c2w in self.train_parser.get_camera_positions(self.common_names)])
 
         image_ids = np.array([self.used_training_names.index(name) for name in self.common_names])
@@ -1121,6 +1122,12 @@ class Runner:
                 ).cpu().numpy()
         to_points = np.array([c2w[:3, 3] for c2w in train_c2ws])
         s, R, t = umeyama_alignment(from_points, to_points)
+
+        align_poses = {name: c2w for name, c2w in zip(self.common_names, align_c2ws)}
+        train_poses = {name: c2w for name, c2w in zip(self.used_training_names, train_c2ws)}
+
+        metrics = calculate_metrics(align_poses, train_poses)
+
         if s == 0:
             print("Warning: Scale of 0 calculated. Setting to 1.0")
             s = 1.0
@@ -1128,7 +1135,10 @@ class Runner:
         matrix = np.eye(4)
         matrix[:3, :3] = s * R
         matrix[:3, 3] = t.reshape(3)
-        return matrix
+        if return_metrics:
+            return matrix, metrics
+        else:
+            return matrix
 
     @torch.no_grad()
     @profile
@@ -1140,10 +1150,10 @@ class Runner:
         world_rank = self.world_rank
         world_size = self.world_size
 
-        if len(self.common_names) >= 3 and cfg.gt_train_data_dir is not None and cfg.eval_pose_opt_steps == 0 and not cfg.eval_opt:
-            matrix = self.get_dataset_alignment_matrix()
+        if len(self.common_names) >= 3 and cfg.gt_train_data_dir is not None and not cfg.eval_opt:
+            matrix, align_metrics = self.get_dataset_alignment_matrix(return_metrics=True)
         else:
-            matrix = None
+            matrix, align_metrics = None, {}
 
         valloader = torch.utils.data.DataLoader(
             self.valset, batch_size=1, shuffle=False, num_workers=1
@@ -1191,6 +1201,9 @@ class Runner:
                     metrics["psnr"].append(self.psnr(colors_p, pixels_p))
                     metrics["ssim"].append(self.ssim(colors_p, pixels_p))
                     metrics["lpips"].append(self.lpips(colors_p, pixels_p))
+                    if "mean_rre_deg" in align_metrics and "mean_rte" in align_metrics:
+                        metrics["eval_rre"].append(torch.tensor(align_metrics.get("mean_rre_deg", 0.0)))
+                        metrics["eval_rte"].append(torch.tensor(align_metrics.get("mean_rte", 0.0)))
                     if cfg.use_bilateral_grid:
                         cc_colors = color_correct(colors, pixels)
                         cc_colors_p = cc_colors.permute(0, 3, 1, 2)  # [1, 3, H, W]
