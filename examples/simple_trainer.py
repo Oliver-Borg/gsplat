@@ -123,6 +123,8 @@ class Config:
     sh_degree_interval: int = 1000
     # Initial opacity of GS
     init_opa: float = 0.1
+    # Use pcd error to interpolate initial opacity
+    error_opa: bool = False
     # Initial scale of GS
     init_scale: float = 1.0
     # Weight for SSIM loss
@@ -242,6 +244,7 @@ def create_splats_with_optimizers(
     init_num_pts: int = 100_000,
     init_extent: float = 3.0,
     init_opacity: float = 0.1,
+    error_opa: bool = False,
     init_scale: float = 1.0,
     means_lr: float = 1.6e-4,
     scales_lr: float = 5e-3,
@@ -280,7 +283,14 @@ def create_splats_with_optimizers(
 
     N = points.shape[0]
     quats = torch.rand((N, 4))  # [N, 4]
-    opacities = torch.logit(torch.full((N,), init_opacity))  # [N,]
+    if error_opa:
+        assert init_type == "sfm"
+        points_err = torch.from_numpy(parser.points_err).float()
+        points_conf = 1 / (points_err + 1e-5)
+        points_conf = points_conf / (points_conf.max() or 1.0)
+        opacities = torch.tensor(points_conf * init_opacity)  # [N,]
+    else:
+        opacities = torch.logit(torch.full((N,), init_opacity))  # [N,]
 
     params = [
         # name, value, lr
@@ -425,6 +435,7 @@ class Runner:
             init_num_pts=cfg.init_num_pts,
             init_extent=cfg.init_extent,
             init_opacity=cfg.init_opa,
+            error_opa=cfg.error_opa,
             init_scale=cfg.init_scale,
             means_lr=cfg.means_lr,
             scales_lr=cfg.scales_lr,

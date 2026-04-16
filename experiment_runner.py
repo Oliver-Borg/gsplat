@@ -106,6 +106,7 @@ class Config:
     depth_loss: bool = False
     depth_lambda: float = 0.0
     depth_conf: bool = False
+    error_opa: bool = False
     camera_type: Literal["SIMPLE_RADIAL", "SIMPLE_PINHOLE"] = "SIMPLE_PINHOLE"
     num_steps: Literal[7000, 15000, 30000] = 15000
     colmap_mode: Literal["default", "relaxed"] = "default"
@@ -127,6 +128,8 @@ class Config:
         instance.gt_eval = data.get("gt_eval", instance.gt_eval)
         instance.use_gt_extrinsics = data.get("use_gt_extrinsics", instance.use_gt_extrinsics)
         instance.use_gt_intrinsics = data.get("use_gt_intrinsics", instance.use_gt_intrinsics)
+        instance.use_gt_extrinsics |= data.get("use_gt_cams", False)
+        instance.use_gt_intrinsics |= data.get("use_gt_cams", False)
         instance.use_gt_points = data.get("use_gt_points", instance.use_gt_points)
         instance.pose_opt = data.get("pose_opt", instance.pose_opt)
         instance.eval_opt = data.get("eval_opt", instance.eval_opt)
@@ -136,6 +139,7 @@ class Config:
         instance.depth_loss = data.get("depth_loss", instance.depth_loss)
         instance.depth_lambda = data.get("depth_lambda", instance.depth_lambda)
         instance.depth_conf = data.get("depth_conf", instance.depth_conf)
+        instance.error_opa = data.get("error_opa", instance.error_opa)
         instance.camera_type = data.get("camera_type", instance.camera_type)
         instance.num_steps = data.get("num_steps", instance.num_steps)
         instance.colmap_mode = data.get("colmap_mode", instance.colmap_mode)
@@ -208,6 +212,9 @@ class Config:
                         self.sampling_mode,
                     ]
                 )
+            
+            if self.error_opa:
+                parts.append("errconf")
             parts.append(self.image_mode)
 
             if self.copy_mode is not None:
@@ -238,6 +245,8 @@ class Config:
         if self.depth_loss:
             parts.append("depth")
             parts.append(f"dl{self.depth_lambda}")
+        if self.error_opa:
+            parts.append("erroropa")
         if self.depth_conf and self.choice == "vggt" and self.depth_loss:
             parts.append("conf")
         if self.nomcmc:
@@ -292,6 +301,12 @@ class Config:
     def force_reconstruct(self):
         if self.choice == "gt":
             return False
+        
+        # if self.error_opa:
+        #     return True
+
+        # if self.sampling_mode == "confidence" or self.sampling_mode == "random":
+        #     return True
 
         if self.is_splatted and self.choice == "vggt":
             with open(self.splatting_val_path, "r") as f:
@@ -329,7 +344,8 @@ class Config:
             "image_mode": self.image_mode,
             "camera_type": self.camera_type,
             "colmap_mode": self.colmap_mode,
-            "require_depth_conf": (self.depth_conf or self.depth_loss) and self.choice == "vggt",
+            "require_depth_conf": (self.depth_conf or self.depth_loss or self.error_opa) and self.choice == "vggt",
+            "save_conf_as_errors": self.error_opa,
         }
 
         if self.force_reconstruct:
@@ -475,6 +491,9 @@ class Config:
 
         if self.depth_conf:
             command.append("--depth_conf")
+
+        if self.error_opa:
+            command.append("--error_opa")
 
         env = os.environ.copy()
         if gpu is not None:
@@ -773,21 +792,35 @@ experiments = [
             # "num_points_per_image": [5000],
             "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 2500, 5000, 10000, 25000, 50000],
             "choice": ["vggt", "colmap"],
+            "use_gt_cams": [True, False],
             "gt_eval": True,
         },
-        PlotConfig(x_axis="num_points", split_param="sampling_mode"),
+        PlotConfig(x_axis="num_points", split_param="sampling_mode,use_gt_extrinsics,use_gt_intrinsics"),
     ),
     Experiment(
         "test",
         "Small test for functionality",
         {
             "seed": [42],  # , 43, 44
-            "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+            "num_images": [100],
+            "sampling_mode": ["random", "confidence"],
+            "num_points_per_image": [1000],
+            "choice": ["vggt"],
+        },
+        PlotConfig(x_axis="", split_param="sampling_mode"),
+    ),
+    Experiment(
+        "error_opa",
+        "Opacity initialization using error-based confidence",
+        {
+            "seed": [42],  # , 43, 44
+            "num_images": [100],
             "sampling_mode": ["voxels"],
             "choice": ["vggt"],
+            "error_opa": [True, False],
             "nomcmc": [True, False],
         },
-        PlotConfig(x_axis="num_images", split_param="splatting_strategy"),
+        PlotConfig(x_axis="", split_param="error_opa,splatting_strategy"),
     ),
     Experiment(
         "splatting_strategy",
