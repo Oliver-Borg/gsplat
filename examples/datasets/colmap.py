@@ -286,6 +286,9 @@ class Parser:
         points = points - t_align[None, :]
         camtoworlds[:, :3, 3] = camtoworlds[:, :3, 3] - t_align[None, :]
 
+        self.R_align = R_align
+        self.t_align = t_align
+
 
         self.image_names = image_names  # List[str], (num_images,)
         self.image_paths = image_paths  # List[str], (num_images,)

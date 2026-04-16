@@ -31,6 +31,8 @@ class SimpleParser:
         self.depths = {}
         self.transform = transform
         self.factor = factor
+        self.R_align = np.eye(3)
+        self.t_align = np.zeros(3)
 
         self._load_json_data()
 

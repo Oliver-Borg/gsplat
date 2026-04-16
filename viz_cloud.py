@@ -190,6 +190,10 @@ def run_gradio_eval(
             pc = trimesh.load(ply_file_path)
             if isinstance(pc, trimesh.PointCloud):
                 pred_pts = np.array(pc.vertices)
+                
+                pred_pts = (pred_parser.R_align @ pred_pts.T).T
+                pred_pts = pred_pts - pred_parser.t_align[None, :]
+
                 if hasattr(pc, "colors") and len(pc.colors) > 0:
                     pred_colors = np.array(pc.colors)
             if pred_color_mode == "Spatial":
