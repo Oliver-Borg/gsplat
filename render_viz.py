@@ -116,7 +116,7 @@ def update_steps(vggt_sig: str, colmap_sig: str, seed_val: int, groups: dict):
                         steps.add(int(match.group(1)))
 
     step_choices = sorted(list(steps))
-    step_val = (6999 if 6999 in step_choices else max(step_choices)) if step_choices else None
+    step_val = (14999 if 14999 in step_choices else max(step_choices)) if step_choices else None
     return gr.update(choices=step_choices, value=step_val)
 
 
