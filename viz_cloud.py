@@ -244,8 +244,12 @@ def run_gradio_eval(
         g_Ks = gt_intrinsics[name]
         g_imsize = gt_imsizes[name]
 
-        gt_traces = create_frustum_traces(g_c2w, g_Ks, g_imsize, color="green", name=f"GT_{name}")
-        pred_traces = create_frustum_traces(p_c2w, p_Ks, p_imsize, color="red", name=f"Pred_{name}")
+        # Calculate maximum distance between the furthest two GT poses to get a scene scale for frustum size
+        max_dist = np.linalg.norm(g_centers - g_centers[:, None], axis=-1).max()
+        size = max_dist * 0.1
+
+        gt_traces = create_frustum_traces(g_c2w, g_Ks, g_imsize, color="green", name=f"GT_{name}", size=size)
+        pred_traces = create_frustum_traces(p_c2w, p_Ks, p_imsize, color="red", name=f"Pred_{name}", size=size)
 
         for t_trace in gt_traces + pred_traces:
             t_trace.customdata = [name] * len(t_trace.x)
