@@ -251,6 +251,7 @@ class Config:
             parts.append("conf")
         if self.nomcmc:
             parts.append("nomcmc")
+        parts.append(f"steps{self.num_steps}")
 
         parts = "_".join(parts)
         return f"{self.input_name}_{parts}"
@@ -284,15 +285,20 @@ class Config:
         # if self.depth_loss or self.depth_conf:
         #     return True
 
+        if not self.is_splatted:
+            return True
+
+        if self.pose_opt and self.gt_eval:
+            # Runs before this would not align before each evaluation
+            return self.splatting_time < datetime.datetime(2026, 4, 16, 14, 0).timestamp()
+
         if not self.choice == "gt" and self.is_splatted and self.is_reconstructed and self.splatting_time < self.reconstruction_time:
             return True
 
         if self.choice == "colmap" and self.depth_loss:
             return True
-        if self.force_reconstruct:
-            return True
         if self.gt_eval and self.is_splatted:
-            if len(list(filter(lambda x: "6999" in x, os.listdir(self.renders_folder)))) < 30:
+            if len(list(filter(lambda x: "6999" in x, os.listdir(self.renders_folder)))) < self.num_cams:
                 return True
         return False
         return self.sampling_mode == "ba" and self.camera_type == "SIMPLE_RADIAL" and self.choice == "vggt"
@@ -305,7 +311,7 @@ class Config:
         # if self.error_opa:
         #     return True
 
-        # if self.sampling_mode == "confidence" or self.sampling_mode == "random":
+        # if self.sampling_mode == "confidence":
         #     return True
 
         if self.is_splatted and self.choice == "vggt":
@@ -356,8 +362,9 @@ class Config:
 
         return args
 
-    def reconstruct(self):
-        if self.is_reconstructed and not self.force_reconstruct:
+    def reconstruct(self, force: bool = False):
+        force |= self.force_reconstruct
+        if self.is_reconstructed and not force:
             print(Path(self.data_dir), "has already been constructed.\nUse --force to force reconstruction.")
             return 0
 
@@ -428,8 +435,9 @@ class Config:
         return os.path.exists(self.splatting_val_path)
 
     @profile
-    def run(self, gpu: str | None = None):
-        if self.is_splatted and not self.force_splat:
+    def run(self, gpu: str | None = None, force_splat: bool = False):
+        force_splat = self.force_splat or force_splat
+        if self.is_splatted and not force_splat:
             print(f"{self.splatting_val_path} found. Skipping splatting")
             return 0
 
@@ -532,6 +540,7 @@ class PlotConfig:
     x_axis: str
     split_param: str | None = None
     filter: str | None = None
+    metric_keys: list[str] = field(default_factory=lambda: ["rre", "rte", "psnr", "lpips", "ssim", "num_GS"])
 
 
 @dataclass
@@ -614,7 +623,7 @@ class Experiment:
                 eval_fail = False
                 try:
                     if do_reconstruct and not bulk_reconstruct:
-                        reconstruction_returncode = config.reconstruct()
+                        reconstruction_returncode = config.reconstruct(force_all)
                         if reconstruction_returncode != 0:
                             return config, True, False
 
@@ -623,7 +632,7 @@ class Experiment:
                         eval_fail = True
 
                     if do_splatting:
-                        returncode = config.run(gpu=gpu)
+                        returncode = config.run(gpu=gpu, force_splat=force_all)
                         if returncode != 0:
                             splat_fail = True
                     return config, splat_fail, eval_fail
@@ -641,7 +650,7 @@ class Experiment:
         else:
             for config in tqdm(configs):
                 if do_reconstruct and not bulk_reconstruct:
-                    reconstruction_returncode = config.reconstruct()
+                    reconstruction_returncode = config.reconstruct(force=force_all)
                     if reconstruction_returncode != 0:
                         splat_failures.append(config)
                         continue
@@ -651,7 +660,7 @@ class Experiment:
                     eval_failures.append(config)
 
                 if do_splatting:
-                    returncode = config.run()
+                    returncode = config.run(force_splat=force_all)
                     if returncode != 0:
                         splat_failures.append(config)
 
@@ -693,6 +702,7 @@ class Experiment:
             create_pcp=create_pcp,
             val_steps=self.val_steps,
             title=self.description,
+            metric_keys=self.plot_args.metric_keys,
         )
 
     def progress_stats(self, dataset_name: str) -> str:
@@ -782,20 +792,47 @@ experiments = [
         PlotConfig(x_axis="num_points", split_param="sampling_mode,pose_opt"),
     ),
     Experiment(
+        "num_points_pose_opt",
+        "COLMAP versus VGGT initialized with different numbers of points",
+        {
+            "seed": [42],  #
+            "num_images": [100],
+            "sampling_mode": ["voxels"],
+            "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 2500, 5000, 10000, 25000, 50000][::2],
+            "image_mode": ["farthestpose"],
+            "choice": ["vggt", "colmap"],
+            "pose_opt": [True, False],
+            "gt_eval": True,
+        },
+        PlotConfig(x_axis="num_points", split_param="sampling_mode,pose_opt"),
+    ),
+    Experiment(
         "sampling_mode",
         "A comparison of different VGGT point cloud sampling modes",
         {
             "seed": [42],  # , 43, 44
             "num_images": [100],
-            "sampling_mode": ["voxels", "random", "confidence", "ba", "vox3"],
-            # "num_points_per_image": [1100, 2200, 5000],
-            # "num_points_per_image": [5000],
-            "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 2500, 5000, 10000, 25000, 50000],
+            "sampling_mode": ["voxels", "random", "confidence", "ba"],
+            "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 2500, 5000, 10000, 25000, 50000][::2],
             "choice": ["vggt", "colmap"],
-            "use_gt_cams": [True, False],
+            "use_gt_cams": False,
             "gt_eval": True,
         },
-        PlotConfig(x_axis="num_points", split_param="sampling_mode,use_gt_extrinsics,use_gt_intrinsics"),
+        PlotConfig(x_axis="num_points", split_param="sampling_mode,use_gt_extrinsics,use_gt_intrinsics", metric_keys=["psnr", "lpips", "ssim"]),
+    ),
+    Experiment(
+        "sampling_mode_gt_cams",
+        "A comparison of different VGGT point cloud sampling modes with GT cameras",
+        {
+            "seed": [42],  # , 43, 44
+            "num_images": [100],
+            "sampling_mode": ["voxels", "random", "confidence", "ba"],
+            "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 2500, 5000, 10000, 25000, 50000][::2],
+            "choice": ["vggt", "colmap"],
+            "use_gt_cams": [True],
+            "gt_eval": True,
+        },
+        PlotConfig(x_axis="num_points", split_param="sampling_mode,use_gt_extrinsics,use_gt_intrinsics", metric_keys=["psnr", "lpips", "ssim"]),
     ),
     Experiment(
         "test",
@@ -803,11 +840,31 @@ experiments = [
         {
             "seed": [42],  # , 43, 44
             "num_images": [100],
-            "sampling_mode": ["random", "confidence"],
+            "sampling_mode": ["random", "confidence", "voxels", "ba"],
             "num_points_per_image": [1000],
-            "choice": ["vggt"],
+            "pose_opt": [True, False],
+            "gt_eval": True,
+            "choice": ["vggt", "colmap"],
+            "num_steps": [7000],
         },
-        PlotConfig(x_axis="", split_param="sampling_mode"),
+        PlotConfig(x_axis="val_step", split_param="sampling_mode, pose_opt", metric_keys=["eval_rre", "eval_rte"]),
+        val_steps=[1, 7000],
+    ),
+    Experiment(
+        "pose_opt_validation",
+        "Pose optimization validation for different sampling modes",
+        {
+            "seed": [42],  # , 43, 44
+            "num_images": [100],
+            "sampling_mode": ["random"],  # , "confidence", "voxels", "ba"
+            "num_points_per_image": [1000],
+            "pose_opt": [True, False],
+            "gt_eval": True,
+            "choice": ["vggt"], # , "colmap"
+            "num_steps": [7000, 15000, 30000],
+        },
+        PlotConfig(x_axis="val_step", split_param="sampling_mode,num_steps, pose_opt", metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "num_GS"]),
+        val_steps=[1, 3_000, 7_000, 10_000, 15_000, 20_000, 25_000, 30_000],
     ),
     Experiment(
         "error_opa",
@@ -1010,9 +1067,18 @@ if __name__ == "__main__":
         default=None,
         help="Comma separated list of GPU IDs to use for parallel splatting (e.g., '0,1,2,3')",
     )
+    parser.add_argument(
+        "--procs_per_gpu",
+        type=int,
+        default=1,
+        help="Number of parallel processes to run per GPU when using --cuda_visible_devices",
+    )
     args = parser.parse_args()
 
     cuda_devices = args.cuda_visible_devices.split(",") if args.cuda_visible_devices else None
+
+    if args.cuda_visible_devices and args.procs_per_gpu > 1 and cuda_devices is not None:
+        cuda_devices = [gpu_id for gpu_id in cuda_devices for _ in range(args.procs_per_gpu)]
 
     for experiment in experiments:
         if experiment.name == args.experiment_name or args.experiment_name == "all":
