@@ -1152,6 +1152,7 @@ class Runner:
 
         if len(self.common_names) >= 3 and cfg.gt_train_data_dir is not None and not cfg.eval_opt:
             matrix, align_metrics = self.get_dataset_alignment_matrix(return_metrics=True)
+            self.valset.transform_matrix = matrix
         else:
             matrix, align_metrics = None, {}
 
@@ -1167,9 +1168,6 @@ class Runner:
 
                 if cfg.eval_pose_opt_steps > 0 and cfg.eval_opt:
                     camtoworlds = self.eval_pose_adjust(camtoworlds, image_ids)
-                if matrix is not None:
-                    camtoworlds = torch.from_numpy(matrix).to(device).to(camtoworlds.dtype) @ camtoworlds.T  # TODO Fix deprecation warning
-                    camtoworlds = camtoworlds.T
                 Ks = data["K"].to(device)
                 pixels = data["image"].to(device) / 255.0
                 masks = data["mask"].to(device) if "mask" in data else None
