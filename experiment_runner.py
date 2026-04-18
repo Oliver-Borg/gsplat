@@ -34,6 +34,12 @@ class Dataset:
     def scene_name(self):
         return f"{self.name}_{self.factor}"
 
+    @property
+    def eval_names(self):
+        data_dir = Path(self.directory) / Path(self.data_folder_name)
+        images = sorted(os.listdir(data_dir))
+        return images[::8]
+
 
 datasets = {
     "bicycle": Dataset(
@@ -298,7 +304,7 @@ class Config:
         if self.choice == "colmap" and self.depth_loss:
             return True
         if self.gt_eval and self.is_splatted:
-            if len(list(filter(lambda x: "6999" in x, os.listdir(self.renders_folder)))) < self.num_cams:
+            if len(list(filter(lambda x: "6999" in x, os.listdir(self.renders_folder)))) < len(self.dataset.eval_names):
                 return True
         return False
         return self.sampling_mode == "ba" and self.camera_type == "SIMPLE_RADIAL" and self.choice == "vggt"
@@ -321,8 +327,8 @@ class Config:
             if psnr is None or (psnr < 15 and self.num_images > 20):
                 return True
             return False
-        else:
-            return self.sampling_mode != "ba" and self.choice == "vggt"
+        
+        return False
 
     @property
     def reconstruction_stat_path(self):
@@ -705,18 +711,53 @@ class Experiment:
             metric_keys=self.plot_args.metric_keys,
         )
 
-    def progress_stats(self, dataset_name: str) -> str:
+    def progress_stats(self, dataset_name: str, print_progress_bars: bool = False) -> str:
         configs = self.get_configs(dataset_name)
 
         reconstructed = 0
+        evaluated = 0
         splatted = 0
+
+        force_reconstruct = 0
+        force_eval = 0
+        force_splat = 0
+
         for config in configs:
             if config.is_reconstructed:
                 reconstructed += 1
+                if config.force_reconstruct:
+                    force_reconstruct += 1
+            if config.is_evaluated:
+                evaluated += 1
+                if config.force_eval:
+                    force_eval += 1
             if config.is_splatted:
                 splatted += 1
+                if config.force_splat:
+                    force_splat += 1
 
-        return f"Reconstructed: {reconstructed} / {len(configs)} | Splatted: {splatted} / {len(configs)}"
+        if print_progress_bars:
+            with tqdm(total=len(configs), desc="Reconstructed", unit="config") as pbar_recon:
+                for config in configs:
+                    if config.is_reconstructed and not config.force_reconstruct:
+                        pbar_recon.update(1)
+            with tqdm(total=len(configs), desc="Evaluated", unit="config") as pbar_eval:
+                for config in configs:
+                    if config.is_evaluated and not config.force_eval:
+                        pbar_eval.update(1)
+            with tqdm(total=len(configs), desc="Splatted", unit="config") as pbar_splat:
+                for config in configs:
+                    if config.is_splatted and not config.force_splat:
+                        pbar_splat.update(1)
+
+        return (
+            f"Reconstructed: {reconstructed} / {len(configs)} | Evaluated: {evaluated} / {len(configs)} | Splatted: {splatted} / {len(configs)}"
+            f"\nForce Reconstruct: {force_reconstruct} | Force Eval: {force_eval} | Force Splat: {force_splat}"
+            f"\nFinal Reconstruct: {reconstructed - force_reconstruct} / {len(configs)} "
+            f"| Final Evaluated: {evaluated - force_eval} / {len(configs)} | Final Splatted: {splatted - force_splat} / {len(configs)}"
+        )
+
+
 
 
 experiments = [
@@ -724,9 +765,9 @@ experiments = [
         "num_images",
         "COLMAP versus VGGT over various number of images",
         {
-            "seed": [42, 43, 44],
+            "seed": [42],  # , 43, 44
             "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
-            "sampling_mode": ["voxels"],
+            "sampling_mode": ["random", "voxels"],
             "gt_eval": [True],
             "image_mode": ["farthestpose"],
             "choice": ["vggt", "colmap"],
@@ -748,10 +789,25 @@ experiments = [
         PlotConfig(x_axis="num_images", split_param="sampling_mode,pose_opt"),
     ),
     Experiment(
+        "num_images_fixed_points",
+        "COLMAP versus VGGT over various number of images",
+        {
+            "seed": [42],  # , 43, 44
+            "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+            "sampling_mode": ["voxels"],  # , "random"
+            "gt_eval": [True],
+            # "pose_opt": [True, False],
+            "image_mode": ["farthestpose"],
+            "choice": ["vggt", "colmap"],
+            "num_points_value": 100000,
+        },
+        PlotConfig(x_axis="num_images", split_param="sampling_mode,pose_opt"),
+    ),
+    Experiment(
         "num_images_30000",
         "COLMAP versus VGGT over various number of images for different step counts",
         {
-            "seed": [42, 43, 44],
+            "seed": [42],  # , 43, 44
             "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
             "sampling_mode": ["voxels"],
             "gt_eval": [True],
@@ -813,7 +869,7 @@ experiments = [
             "seed": [42],  # , 43, 44
             "num_images": [100],
             "sampling_mode": ["voxels", "random", "confidence", "ba"],
-            "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 2500, 5000, 10000, 25000, 50000][::2],
+            "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 2500, 5000, 10000, 25000, 50000],
             "choice": ["vggt", "colmap"],
             "use_gt_cams": False,
             "gt_eval": True,
@@ -827,7 +883,7 @@ experiments = [
             "seed": [42],  # , 43, 44
             "num_images": [100],
             "sampling_mode": ["voxels", "random", "confidence", "ba"],
-            "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 2500, 5000, 10000, 25000, 50000][::2],
+            "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 2500, 5000, 10000, 25000, 50000],
             "choice": ["vggt", "colmap"],
             "use_gt_cams": [True],
             "gt_eval": True,
@@ -847,7 +903,7 @@ experiments = [
             "choice": ["vggt", "colmap"],
             "num_steps": [7000],
         },
-        PlotConfig(x_axis="val_step", split_param="sampling_mode, pose_opt", metric_keys=["eval_rre", "eval_rte"]),
+        PlotConfig(x_axis="val_step", split_param="sampling_mode,pose_opt", metric_keys=["eval_rre", "eval_rte"]),
         val_steps=[1, 7000],
     ),
     Experiment(
@@ -860,10 +916,10 @@ experiments = [
             "num_points_per_image": [1000],
             "pose_opt": [True, False],
             "gt_eval": True,
-            "choice": ["vggt"], # , "colmap"
+            "choice": ["vggt", "colmap"],
             "num_steps": [7000, 15000, 30000],
         },
-        PlotConfig(x_axis="val_step", split_param="sampling_mode,num_steps, pose_opt", metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "num_GS"]),
+        PlotConfig(x_axis="val_step", split_param="num_steps,pose_opt", metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "num_GS"]),
         val_steps=[1, 3_000, 7_000, 10_000, 15_000, 20_000, 25_000, 30_000],
     ),
     Experiment(
@@ -923,7 +979,7 @@ experiments = [
         "colmap_mode",
         "Default versus Relaxed COLMAP arguments over various number of images",
         {
-            "seed": [42, 43, 44],
+            "seed": [42],  # , 43, 44
             "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
             "gt_eval": [True],
             "colmap_mode": ["default", "relaxed"],
@@ -942,23 +998,23 @@ experiments = [
         },
         PlotConfig(x_axis="num_images", split_param=""),
     ),
-    Experiment(
-        "depth",
-        "COLMAP versus VGGT with depth loss",
-        {
-            "seed": [42],  # , 43, 44
-            "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
-            "sampling_mode": ["voxels", "random"],
-            "depth_loss": [True, False],
-            "depth_conf": [True, False],
-            "pose_opt": [True],
-            "choice": ["vggt", "colmap"],
-            # "num_points_per_image": [10000, 1100],
-            "num_points_per_image": [10000],
-            "depth_lambda": [0.01, 0.1, 1, 10],
-        },
-        PlotConfig(x_axis="num_images", split_param="choice,depth_loss,depth_lambda,depth_conf,sampling_mode"),
-    ),
+    # Experiment(
+    #     "depth",
+    #     "COLMAP versus VGGT with depth loss",
+    #     {
+    #         "seed": [42],  # , 43, 44
+    #         "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+    #         "sampling_mode": ["voxels"],
+    #         "depth_loss": [True, False],
+    #         "depth_conf": [True, False],
+    #         "pose_opt": [True],
+    #         "choice": ["vggt", "colmap"],
+    #         # "num_points_per_image": [10000, 1100],
+    #         "num_points_per_image": [10000],
+    #         # "depth_lambda": [0.01, 0.1, 1, 10],
+    #     },
+    #     PlotConfig(x_axis="num_images", split_param="choice,depth_loss,depth_lambda,depth_conf,sampling_mode"),
+    # ),
     Experiment(
         "depth_lambda",
         "COLMAP versus VGGT with depth loss",
@@ -1073,6 +1129,10 @@ if __name__ == "__main__":
         default=1,
         help="Number of parallel processes to run per GPU when using --cuda_visible_devices",
     )
+    parser.add_argument(
+        "--check_only", action="store_true", help="Only check the status of the experiments without running anything"
+    )
+
     args = parser.parse_args()
 
     cuda_devices = args.cuda_visible_devices.split(",") if args.cuda_visible_devices else None
@@ -1083,6 +1143,13 @@ if __name__ == "__main__":
     for experiment in experiments:
         if experiment.name == args.experiment_name or args.experiment_name == "all":
             experiment = replace(experiment, include_gt=args.include_gt)
+
+            if args.check_only:
+                print(f"Experiment: {experiment.name}")
+                print(experiment.progress_stats(args.dataset_name, print_progress_bars=True))
+                print()
+                continue
+
             if not args.plot_only:
                 experiment.run(
                     args.dataset_name,
