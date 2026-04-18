@@ -709,6 +709,9 @@ class Experiment:
             val_steps=self.val_steps,
             title=self.description,
             metric_keys=self.plot_args.metric_keys,
+            dataset_name=datasets[dataset_name].name,
+            experiment_name=self.name,
+            config_dict=self.config_dict,
         )
 
     def progress_stats(self, dataset_name: str, print_progress_bars: bool = False) -> str:
@@ -765,9 +768,9 @@ experiments = [
         "num_images",
         "COLMAP versus VGGT over various number of images",
         {
-            "seed": [42],  # , 43, 44
+            "seed": [42, 43, 44],
             "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
-            "sampling_mode": ["random", "voxels"],
+            "sampling_mode": ["voxels"],
             "gt_eval": [True],
             "image_mode": ["farthestpose"],
             "choice": ["vggt", "colmap"],
@@ -778,7 +781,7 @@ experiments = [
         "num_images_pose_opt",
         "COLMAP versus VGGT over various number of images with pose optimization",
         {
-            "seed": [42],  # , 43, 44
+            "seed": [42, 43, 44],
             "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
             "sampling_mode": ["voxels"],
             "pose_opt": [True, False],

@@ -1,0 +1,40 @@
+{
+    "seed": [
+        42
+    ],
+    "num_images": [
+        100
+    ],
+    "sampling_mode": [
+        "voxels",
+        "ba"
+    ],
+    "num_points_per_image": [
+        10,
+        50,
+        100,
+        200,
+        300,
+        500,
+        750,
+        1000,
+        2500,
+        5000,
+        10000,
+        25000,
+        50000
+    ],
+    "image_mode": [
+        "farthestpose"
+    ],
+    "choice": [
+        "vggt",
+        "colmap"
+    ],
+    "pose_opt": [
+        true,
+        false
+    ],
+    "gt_eval": true,
+    "dataset": "bicycle"
+}

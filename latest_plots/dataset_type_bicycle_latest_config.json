@@ -1,0 +1,26 @@
+{
+    "seed": [
+        42,
+        43,
+        44
+    ],
+    "num_images": [
+        50,
+        100
+    ],
+    "sampling_mode": [
+        "voxels"
+    ],
+    "all_opt": [
+        false
+    ],
+    "num_points_per_image": [
+        1100,
+        2200
+    ],
+    "choice": [
+        "vggt",
+        "colmap"
+    ],
+    "dataset": "bicycle"
+}

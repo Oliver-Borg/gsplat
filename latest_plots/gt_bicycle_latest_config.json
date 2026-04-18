@@ -1,0 +1,7 @@
+{
+    "choice": [
+        "gt",
+        "vggt"
+    ],
+    "dataset": "bicycle"
+}
