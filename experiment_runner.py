@@ -965,7 +965,7 @@ experiments = [
     ),
     Experiment(
         "splatting_strategy_pose_opt",
-        "Splatting strategies with pose optimization",
+        "Splatting strategies with pose optimization for VGGT with 100 images",
         {
             "seed": [42],  # , 43, 44
             "num_images": [100],
@@ -975,8 +975,8 @@ experiments = [
             "nomcmc": [True, False],
             "pose_opt": [True, False],
         },
-        PlotConfig(x_axis="", split_param="splatting_strategy,pose_opt,val_step"),
-        val_steps=[7000, 15000],
+        PlotConfig(x_axis="", split_param="splatting_strategy,pose_opt"),
+        val_steps=[15000],
     ),
     Experiment(
         "colmap_mode",
@@ -997,9 +997,9 @@ experiments = [
         "gt",
         "Small test for gt evaluation",
         {
-            "choice": ["gt", "vggt"],
+            "choice": ["gt", "vggt", "colmap"],
         },
-        PlotConfig(x_axis="num_images", split_param=""),
+        PlotConfig(x_axis="", split_param="num_images"),
     ),
     # Experiment(
     #     "depth",
@@ -1031,7 +1031,7 @@ experiments = [
             "choice": ["vggt", "colmap"],
             "depth_lambda": [0.01, 0.1, 1, 10],
         },
-        PlotConfig(x_axis="num_images", split_param="choice,depth_loss,depth_lambda,depth_conf,sampling_mode"),
+        PlotConfig(x_axis="depth_lambda", split_param="choice,depth_loss,depth_conf,sampling_mode"),
     ),
     Experiment(
         "camera_type",
@@ -1044,7 +1044,7 @@ experiments = [
             "camera_type": ["SIMPLE_RADIAL", "SIMPLE_PINHOLE"],
             "choice": ["vggt", "colmap"],
         },
-        PlotConfig(x_axis="num_images", split_param="camera_type"),
+        PlotConfig(x_axis="", split_param="camera_type"),
     ),
     Experiment(
         "camera_type_ext",
