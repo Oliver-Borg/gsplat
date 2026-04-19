@@ -552,6 +552,7 @@ class PlotConfig:
 @dataclass
 class Experiment:
     name: str
+    group: int
     description: str
     config_dict: dict
     plot_args: PlotConfig | None = None
@@ -710,7 +711,7 @@ class Experiment:
             title=self.description,
             metric_keys=self.plot_args.metric_keys,
             dataset_name=datasets[dataset_name].name,
-            experiment_name=self.name,
+            experiment_name=f"{self.group:02d}_{self.name}",
             config_dict=self.config_dict,
         )
 
@@ -766,6 +767,7 @@ class Experiment:
 experiments = [
     Experiment(
         "num_images",
+        1,
         "COLMAP versus VGGT over various number of images",
         {
             "seed": [42, 43, 44],
@@ -779,6 +781,7 @@ experiments = [
     ),
     Experiment(
         "num_images_pose_opt",
+        1,
         "COLMAP versus VGGT over various number of images with pose optimization",
         {
             "seed": [42, 43, 44],
@@ -793,6 +796,7 @@ experiments = [
     ),
     Experiment(
         "num_images_fixed_points",
+        1,
         "COLMAP versus VGGT over various number of images",
         {
             "seed": [42],  # , 43, 44
@@ -808,6 +812,7 @@ experiments = [
     ),
     Experiment(
         "num_images_30000",
+        1,
         "COLMAP versus VGGT over various number of images for different step counts",
         {
             "seed": [42],  # , 43, 44
@@ -823,6 +828,7 @@ experiments = [
     ),
     Experiment(
         "pose_opt",
+        4,
         "COLMAP versus VGGT with pose optimization",
         {
             "seed": [42, 43, 44],
@@ -837,6 +843,7 @@ experiments = [
     ),
     Experiment(
         "num_points",
+        3,
         "COLMAP versus VGGT initialized with different numbers of points",
         {
             "seed": [42],  #
@@ -852,6 +859,7 @@ experiments = [
     ),
     Experiment(
         "num_points_pose_opt",
+        2,
         "COLMAP versus VGGT initialized with different numbers of points",
         {
             "seed": [42],  #
@@ -867,6 +875,7 @@ experiments = [
     ),
     Experiment(
         "sampling_mode",
+        3,
         "A comparison of different VGGT point cloud sampling modes",
         {
             "seed": [42],  # , 43, 44
@@ -881,6 +890,7 @@ experiments = [
     ),
     Experiment(
         "sampling_mode_gt_cams",
+        3,
         "A comparison of different VGGT point cloud sampling modes with GT cameras",
         {
             "seed": [42],  # , 43, 44
@@ -895,6 +905,7 @@ experiments = [
     ),
     Experiment(
         "test",
+        99,
         "Small test for functionality",
         {
             "seed": [42],  # , 43, 44
@@ -911,6 +922,7 @@ experiments = [
     ),
     Experiment(
         "pose_opt_validation",
+        4,
         "Pose optimization validation for different sampling modes",
         {
             "seed": [42],  # , 43, 44
@@ -927,6 +939,7 @@ experiments = [
     ),
     Experiment(
         "error_opa",
+        5,
         "Opacity initialization using error-based confidence",
         {
             "seed": [42],  # , 43, 44
@@ -940,6 +953,7 @@ experiments = [
     ),
     Experiment(
         "splatting_strategy",
+        9,
         "Splatting strategies with different number of images",
         {
             "seed": [42],  # , 43, 44
@@ -952,6 +966,7 @@ experiments = [
     ),
     Experiment(
         "splatting_strategy_points",
+        9,
         "Splatting strategies with different number of points",
         {
             "seed": [42],  # , 43, 44
@@ -965,6 +980,7 @@ experiments = [
     ),
     Experiment(
         "splatting_strategy_pose_opt",
+        9,
         "Splatting strategies with pose optimization for VGGT with 100 images",
         {
             "seed": [42],  # , 43, 44
@@ -980,6 +996,7 @@ experiments = [
     ),
     Experiment(
         "colmap_mode",
+        8,
         "Default versus Relaxed COLMAP arguments over various number of images",
         {
             "seed": [42],  # , 43, 44
@@ -995,6 +1012,7 @@ experiments = [
     ),
     Experiment(
         "gt",
+        6,
         "Small test for gt evaluation",
         {
             "choice": ["gt", "vggt", "colmap"],
@@ -1020,6 +1038,7 @@ experiments = [
     # ),
     Experiment(
         "depth_lambda",
+        5,
         "COLMAP versus VGGT with depth loss",
         {
             "seed": [42],  # , 43, 44
@@ -1035,6 +1054,7 @@ experiments = [
     ),
     Experiment(
         "camera_type",
+        10,
         "A comparison of different camera types with bundle adjustment",
         {
             "seed": [42],
@@ -1048,6 +1068,7 @@ experiments = [
     ),
     Experiment(
         "camera_type_ext",
+        10,
         "Test for camera mode (extended)",
         {
             "seed": [42, 43, 44],
@@ -1062,6 +1083,7 @@ experiments = [
     ),
     Experiment(
         "dataset_type",
+        99,
         "Test for dataset types",
         {
             "seed": [42, 43, 44],
@@ -1075,6 +1097,7 @@ experiments = [
     ),
     Experiment(
         "copy_mode",
+        99,
         "A comparison of different image cropping modes",
         {
             "num_images": [100],
@@ -1088,6 +1111,7 @@ experiments = [
     ),
     Experiment(
         "gt_cams",
+        6,
         "The effect of using ground truth extrinsics, intrinsics and points on VGGT and COLMAP results",
         {
             "seed": [42, 43, 44],
