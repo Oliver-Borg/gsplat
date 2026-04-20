@@ -859,7 +859,7 @@ experiments = [
             "pose_opt": [False],
             "gt_eval": True,
         },
-        PlotConfig(x_axis="num_points", split_param=""),
+        PlotConfig(x_axis="num_points", split_param="", metric_keys=["psnr", "lpips", "ssim"]),
     ),
     Experiment(
         "num_points_pose_opt",
@@ -875,7 +875,7 @@ experiments = [
             "pose_opt": [True, False],
             "gt_eval": True,
         },
-        PlotConfig(x_axis="num_points", split_param="pose_opt"),
+        PlotConfig(x_axis="num_points", split_param="pose_opt", metric_keys=["psnr", "lpips", "ssim"]),
     ),
     Experiment(
         "sampling_mode",
@@ -912,7 +912,7 @@ experiments = [
         99,
         "Small test for functionality",
         {
-            "seed": [42],  # , 43, 44
+            "seed": [42, 43, 44],  # 
             "num_images": [100],
             "sampling_mode": ["random", "confidence", "voxels", "ba"],
             "num_points_per_image": [1000],
