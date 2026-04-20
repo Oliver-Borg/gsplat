@@ -1,0 +1,22 @@
+\begin{table}
+\caption{COLMAP versus VGGT with pose optimization (Bicycle)}
+\label{tab:04_pose_opt_bicycle}
+\begin{tabular}{llrrrrr}
+\toprule
+Choice & Pose Opt & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ \\
+\midrule
+COLMAP &  & 0.105 & 0.018 & 21.084 & 0.364 & 0.493 \\
+COLMAP &  & 0.099 & 0.017 & 21.233 & 0.373 & 0.494 \\
+COLMAP &  & 0.102 & 0.017 & 20.921 & 0.367 & 0.483 \\
+COLMAP & Pose Opt & 0.105 & 0.018 & 21.373 & 0.353 & 0.517 \\
+COLMAP & Pose Opt & 0.099 & 0.017 & 21.692 & 0.359 & 0.534 \\
+COLMAP & Pose Opt & 0.102 & 0.017 & 21.257 & 0.354 & 0.510 \\
+VGGT &  & 0.857 & 0.067 & 17.312 & 0.485 & 0.271 \\
+VGGT &  & 0.860 & 0.068 & 17.294 & 0.486 & 0.272 \\
+VGGT &  & 0.857 & 0.067 & 17.288 & 0.480 & 0.270 \\
+VGGT & Pose Opt & 0.857 & 0.067 & 17.489 & 0.374 & 0.268 \\
+VGGT & Pose Opt & 0.860 & 0.068 & 17.410 & 0.374 & 0.264 \\
+VGGT & Pose Opt & 0.857 & 0.067 & 17.386 & 0.378 & 0.265 \\
+\bottomrule
+\end{tabular}
+\end{table}

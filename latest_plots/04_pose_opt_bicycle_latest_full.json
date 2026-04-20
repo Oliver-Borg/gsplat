@@ -37,7 +37,7 @@
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bicycle_4_n100_s42_default_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
         "rre":0.1049,
         "rte":0.017545,
-        "plot_series":"colmap |  |  | GT Eval"
+        "plot_series":"colmap | "
     },
     {
         "method":"colmap",
@@ -77,7 +77,7 @@
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bicycle_4_n100_s42_default_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
         "rre":0.1049,
         "rte":0.017545,
-        "plot_series":"colmap | Pose Opt |  | GT Eval"
+        "plot_series":"colmap | Pose Opt"
     },
     {
         "method":"colmap",
@@ -117,7 +117,7 @@
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bicycle_4_n100_s43_default_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
         "rre":0.0989,
         "rte":0.017192,
-        "plot_series":"colmap |  |  | GT Eval"
+        "plot_series":"colmap | "
     },
     {
         "method":"colmap",
@@ -157,7 +157,7 @@
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bicycle_4_n100_s43_default_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
         "rre":0.0989,
         "rte":0.017192,
-        "plot_series":"colmap | Pose Opt |  | GT Eval"
+        "plot_series":"colmap | Pose Opt"
     },
     {
         "method":"colmap",
@@ -197,7 +197,7 @@
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bicycle_4_n100_s44_default_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
         "rre":0.1024,
         "rte":0.017495,
-        "plot_series":"colmap |  |  | GT Eval"
+        "plot_series":"colmap | "
     },
     {
         "method":"colmap",
@@ -237,7 +237,7 @@
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bicycle_4_n100_s44_default_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
         "rre":0.1024,
         "rte":0.017495,
-        "plot_series":"colmap | Pose Opt |  | GT Eval"
+        "plot_series":"colmap | Pose Opt"
     },
     {
         "method":"vggt",
@@ -277,7 +277,7 @@
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s42_c0.0_p110000_voxels_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
         "rre":0.857,
         "rte":0.067143,
-        "plot_series":"vggt |  |  | GT Eval"
+        "plot_series":"vggt | "
     },
     {
         "method":"vggt",
@@ -317,7 +317,7 @@
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s42_c0.0_p110000_voxels_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
         "rre":0.857,
         "rte":0.067143,
-        "plot_series":"vggt | Pose Opt |  | GT Eval"
+        "plot_series":"vggt | Pose Opt"
     },
     {
         "method":"vggt",
@@ -357,7 +357,7 @@
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s43_c0.0_p110000_voxels_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
         "rre":0.8604,
         "rte":0.06754,
-        "plot_series":"vggt |  |  | GT Eval"
+        "plot_series":"vggt | "
     },
     {
         "method":"vggt",
@@ -397,7 +397,7 @@
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s43_c0.0_p110000_voxels_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
         "rre":0.8604,
         "rte":0.06754,
-        "plot_series":"vggt | Pose Opt |  | GT Eval"
+        "plot_series":"vggt | Pose Opt"
     },
     {
         "method":"vggt",
@@ -437,7 +437,7 @@
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s44_c0.0_p110000_voxels_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
         "rre":0.857,
         "rte":0.067143,
-        "plot_series":"vggt |  |  | GT Eval"
+        "plot_series":"vggt | "
     },
     {
         "method":"vggt",
@@ -477,6 +477,6 @@
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s44_c0.0_p110000_voxels_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
         "rre":0.857,
         "rte":0.067143,
-        "plot_series":"vggt | Pose Opt |  | GT Eval"
+        "plot_series":"vggt | Pose Opt"
     }
 ]

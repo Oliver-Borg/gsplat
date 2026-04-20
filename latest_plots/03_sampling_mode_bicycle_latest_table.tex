@@ -1,0 +1,51 @@
+\begin{table}
+\caption{A comparison of different VGGT point cloud sampling modes (Bicycle)}
+\label{tab:03_sampling_mode_bicycle}
+\begin{tabular}{lrlrrr}
+\toprule
+Choice & Num Points & Sampling Mode & PSNR ↑ & LPIPS ↓ & SSIM ↑ \\
+\midrule
+VGGT & 1000 & confidence & 17.766 & 0.684 & 0.322 \\
+VGGT & 1000 & random & 17.752 & 0.691 & 0.322 \\
+VGGT & 1000 & voxels & 17.851 & 0.712 & 0.326 \\
+VGGT & 5000 & confidence & 17.459 & 0.564 & 0.299 \\
+VGGT & 5000 & random & 17.474 & 0.569 & 0.299 \\
+VGGT & 5000 & voxels & 17.513 & 0.592 & 0.303 \\
+VGGT & 10000 & confidence & 17.389 & 0.536 & 0.291 \\
+VGGT & 10000 & random & 17.421 & 0.532 & 0.291 \\
+VGGT & 10000 & voxels & 17.402 & 0.553 & 0.293 \\
+COLMAP & 16627 & NaN & 21.084 & 0.364 & 0.493 \\
+VGGT & 20000 & confidence & 17.345 & 0.510 & 0.283 \\
+VGGT & 20000 & random & 17.328 & 0.499 & 0.282 \\
+VGGT & 20000 & voxels & 17.338 & 0.529 & 0.287 \\
+VGGT & 23344 & ba & 17.089 & 0.529 & 0.282 \\
+VGGT & 30000 & confidence & 17.297 & 0.504 & 0.280 \\
+VGGT & 30000 & random & 17.265 & 0.479 & 0.275 \\
+VGGT & 30000 & voxels & 17.329 & 0.515 & 0.283 \\
+VGGT & 50000 & confidence & 17.268 & 0.497 & 0.274 \\
+VGGT & 50000 & random & 17.241 & 0.461 & 0.269 \\
+VGGT & 50000 & voxels & 17.270 & 0.501 & 0.278 \\
+VGGT & 75000 & confidence & 17.268 & 0.496 & 0.270 \\
+VGGT & 75000 & random & 17.179 & 0.449 & 0.262 \\
+VGGT & 75000 & voxels & 17.276 & 0.489 & 0.273 \\
+VGGT & 100000 & confidence & 17.245 & 0.492 & 0.266 \\
+VGGT & 100000 & random & 17.190 & 0.440 & 0.258 \\
+VGGT & 100000 & voxels & 17.260 & 0.482 & 0.271 \\
+VGGT & 250000 & confidence & 17.183 & 0.497 & 0.259 \\
+VGGT & 250000 & random & 17.148 & 0.425 & 0.247 \\
+VGGT & 250000 & voxels & 17.258 & 0.477 & 0.264 \\
+VGGT & 500000 & confidence & 17.149 & 0.501 & 0.257 \\
+VGGT & 500000 & random & 17.129 & 0.421 & 0.240 \\
+VGGT & 500000 & voxels & 17.167 & 0.459 & 0.252 \\
+VGGT & 1000000 & confidence & 17.096 & 0.512 & 0.259 \\
+VGGT & 1000000 & random & 17.079 & 0.423 & 0.234 \\
+VGGT & 1000000 & voxels & 17.245 & 0.466 & 0.245 \\
+VGGT & 2500000 & confidence & 17.052 & 0.491 & 0.243 \\
+VGGT & 2500000 & random & 16.938 & 0.421 & 0.211 \\
+VGGT & 2500000 & voxels & 17.057 & 0.428 & 0.223 \\
+VGGT & 5000000 & confidence & 16.960 & 0.465 & 0.224 \\
+VGGT & 5000000 & random & 16.855 & 0.424 & 0.198 \\
+VGGT & 5000000 & voxels & 17.057 & 0.427 & 0.223 \\
+\bottomrule
+\end{tabular}
+\end{table}

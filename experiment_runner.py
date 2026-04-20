@@ -709,12 +709,14 @@ class Experiment:
             ),
             create_pcp=create_pcp,
             val_steps=self.val_steps,
-            title=self.description if include_title else None,
+            title=self.description,
             metric_keys=self.plot_args.metric_keys,
             dataset_name=datasets[dataset_name].name,
             experiment_name=f"{self.group:02d}_{self.name}",
             config_dict=self.config_dict,
             single_legend=self.plot_args.single_legend,
+            create_table=True,
+            print_title=include_title,
         )
 
     def progress_stats(self, dataset_name: str, print_progress_bars: bool = False) -> str:
@@ -840,7 +842,7 @@ experiments = [
             "choice": ["vggt", "colmap"],
             "num_steps": [15000],
         },
-        PlotConfig(x_axis="", split_param="choice,pose_opt,eval_opt,gt_eval"),
+        PlotConfig(x_axis="", split_param="choice,pose_opt", metric_keys=["rre", "rte", "psnr", "lpips", "ssim"]),
         val_steps=[15000],
     ),
     Experiment(
