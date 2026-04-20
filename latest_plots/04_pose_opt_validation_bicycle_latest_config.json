@@ -12,13 +12,11 @@
         1000
     ],
     "pose_opt": [
-        true,
-        false
+        true
     ],
     "gt_eval": true,
     "choice": [
-        "vggt",
-        "colmap"
+        "vggt"
     ],
     "num_steps": [
         7000,

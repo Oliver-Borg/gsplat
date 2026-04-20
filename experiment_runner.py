@@ -547,6 +547,7 @@ class PlotConfig:
     split_param: str | None = None
     filter: str | None = None
     metric_keys: list[str] = field(default_factory=lambda: ["rre", "rte", "psnr", "lpips", "ssim", "num_GS"])
+    single_legend: bool = True
 
 
 @dataclass
@@ -689,7 +690,7 @@ class Experiment:
         configs = self.get_configs(dataset_name)
         return [Path(config.input_name) for config in configs]
 
-    def plot(self, dataset_name: str, create_pcp: bool = True):
+    def plot(self, dataset_name: str, create_pcp: bool = False, include_title: bool = False):
         if self.plot_args is None:
             return
         print(self.progress_stats(dataset_name))
@@ -708,11 +709,12 @@ class Experiment:
             ),
             create_pcp=create_pcp,
             val_steps=self.val_steps,
-            title=self.description,
+            title=self.description if include_title else None,
             metric_keys=self.plot_args.metric_keys,
             dataset_name=datasets[dataset_name].name,
             experiment_name=f"{self.group:02d}_{self.name}",
             config_dict=self.config_dict,
+            single_legend=self.plot_args.single_legend,
         )
 
     def progress_stats(self, dataset_name: str, print_progress_bars: bool = False) -> str:
@@ -777,7 +779,7 @@ experiments = [
             "image_mode": ["farthestpose"],
             "choice": ["vggt", "colmap"],
         },
-        PlotConfig(x_axis="num_images", split_param="sampling_mode"),
+        PlotConfig(x_axis="num_images", split_param="", single_legend=True),
     ),
     Experiment(
         "num_images_pose_opt",
@@ -792,7 +794,7 @@ experiments = [
             "image_mode": ["farthestpose"],
             "choice": ["vggt", "colmap"],
         },
-        PlotConfig(x_axis="num_images", split_param="sampling_mode,pose_opt"),
+        PlotConfig(x_axis="num_images", split_param="pose_opt"),
     ),
     Experiment(
         "num_images_fixed_points",
@@ -808,12 +810,12 @@ experiments = [
             "choice": ["vggt", "colmap"],
             "num_points_value": 100000,
         },
-        PlotConfig(x_axis="num_images", split_param="sampling_mode,pose_opt"),
+        PlotConfig(x_axis="num_images", split_param=""),
     ),
     Experiment(
         "num_images_30000",
         1,
-        "COLMAP versus VGGT over various number of images for different step counts",
+        "COLMAP versus VGGT over various number of images for different validation steps",
         {
             "seed": [42],  # , 43, 44
             "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
@@ -823,7 +825,7 @@ experiments = [
             "choice": ["vggt", "colmap"],
             "num_steps": [30000],
         },
-        PlotConfig(x_axis="num_images", split_param="sampling_mode,val_step"),
+        PlotConfig(x_axis="num_images", split_param="val_step", metric_keys=["psnr", "lpips", "ssim"]),
         val_steps=[7000, 15000, 30000],
     ),
     Experiment(
@@ -843,19 +845,19 @@ experiments = [
     ),
     Experiment(
         "num_points",
-        3,
+        2,
         "COLMAP versus VGGT initialized with different numbers of points",
         {
             "seed": [42],  #
             "num_images": [100],
-            "sampling_mode": ["voxels", "ba"],
+            "sampling_mode": ["voxels"],
             "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 2500, 5000, 10000, 25000, 50000],
             "image_mode": ["farthestpose"],
             "choice": ["vggt", "colmap"],
-            "pose_opt": [True, False],
+            "pose_opt": [False],
             "gt_eval": True,
         },
-        PlotConfig(x_axis="num_points", split_param="sampling_mode,pose_opt"),
+        PlotConfig(x_axis="num_points", split_param=""),
     ),
     Experiment(
         "num_points_pose_opt",
@@ -871,7 +873,7 @@ experiments = [
             "pose_opt": [True, False],
             "gt_eval": True,
         },
-        PlotConfig(x_axis="num_points", split_param="sampling_mode,pose_opt"),
+        PlotConfig(x_axis="num_points", split_param="pose_opt"),
     ),
     Experiment(
         "sampling_mode",
@@ -886,7 +888,7 @@ experiments = [
             "use_gt_cams": False,
             "gt_eval": True,
         },
-        PlotConfig(x_axis="num_points", split_param="sampling_mode,use_gt_extrinsics,use_gt_intrinsics", metric_keys=["psnr", "lpips", "ssim"]),
+        PlotConfig(x_axis="num_points", split_param="sampling_mode", metric_keys=["psnr", "lpips", "ssim"]),
     ),
     Experiment(
         "sampling_mode_gt_cams",
@@ -901,7 +903,7 @@ experiments = [
             "use_gt_cams": [True],
             "gt_eval": True,
         },
-        PlotConfig(x_axis="num_points", split_param="sampling_mode,use_gt_extrinsics,use_gt_intrinsics", metric_keys=["psnr", "lpips", "ssim"]),
+        PlotConfig(x_axis="num_points", split_param="sampling_mode", metric_keys=["psnr", "lpips", "ssim"]),
     ),
     Experiment(
         "test",
@@ -923,18 +925,34 @@ experiments = [
     Experiment(
         "pose_opt_validation",
         4,
-        "Pose optimization validation for different sampling modes",
+        "Pose optimization validation",
         {
             "seed": [42],  # , 43, 44
             "num_images": [100],
             "sampling_mode": ["random"],  # , "confidence", "voxels", "ba"
             "num_points_per_image": [1000],
-            "pose_opt": [True, False],
+            "pose_opt": [True],
             "gt_eval": True,
-            "choice": ["vggt", "colmap"],
+            "choice": ["vggt"],
             "num_steps": [7000, 15000, 30000],
         },
-        PlotConfig(x_axis="val_step", split_param="num_steps,pose_opt", metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "num_GS"]),
+        PlotConfig(x_axis="val_step", split_param="num_steps", metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "num_GS"]),
+        val_steps=[1, 3_000, 7_000, 10_000, 15_000, 20_000, 25_000, 30_000],
+    ),
+    Experiment(
+        "training_step_validation",
+        99,
+        "Training step validation",
+        {
+            "seed": [42],  # , 43, 44
+            "num_images": [100],
+            "sampling_mode": ["random"],  # , "confidence", "voxels", "ba"
+            "num_points_per_image": [1000],
+            "gt_eval": True,
+            "choice": ["vggt"],
+            "num_steps": [7000, 15000, 30000],
+        },
+        PlotConfig(x_axis="val_step", split_param="num_steps", metric_keys=["psnr", "lpips", "ssim"]),
         val_steps=[1, 3_000, 7_000, 10_000, 15_000, 20_000, 25_000, 30_000],
     ),
     Experiment(
