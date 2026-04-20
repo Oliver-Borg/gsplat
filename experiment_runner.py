@@ -218,7 +218,7 @@ class Config:
                         self.sampling_mode,
                     ]
                 )
-            
+
             if self.error_opa:
                 parts.append("errconf")
             parts.append(self.image_mode)
@@ -298,7 +298,12 @@ class Config:
             # Runs before this would not align before each evaluation
             return self.splatting_time < datetime.datetime(2026, 4, 16, 14, 0).timestamp()
 
-        if not self.choice == "gt" and self.is_splatted and self.is_reconstructed and self.splatting_time < self.reconstruction_time:
+        if (
+            not self.choice == "gt"
+            and self.is_splatted
+            and self.is_reconstructed
+            and self.splatting_time < self.reconstruction_time
+        ):
             return True
 
         if self.choice == "colmap" and self.depth_loss:
@@ -313,7 +318,7 @@ class Config:
     def force_reconstruct(self):
         if self.choice == "gt":
             return False
-        
+
         # if self.error_opa:
         #     return True
 
@@ -327,13 +332,13 @@ class Config:
             if psnr is None or (psnr < 15 and self.num_images > 20):
                 return True
             return False
-        
+
         return False
 
     @property
     def reconstruction_stat_path(self):
         return os.path.join(self.data_dir, "stat.json")
-    
+
     @property
     def reconstruction_time(self):
         return Path(self.reconstruction_stat_path).stat().st_mtime
@@ -397,7 +402,7 @@ class Config:
     @property
     def eval_path(self):
         return os.path.join(self.data_dir, "eval_results.json")
-    
+
     @property
     def eval_time(self):
         return Path(self.eval_path).stat().st_mtime
@@ -418,11 +423,7 @@ class Config:
         if file_timestamp < threshold_timestamp:
             return True
 
-        if (
-            self.is_reconstructed
-            and not self.choice == "gt"
-            and file_timestamp < self.reconstruction_time
-        ):
+        if self.is_reconstructed and not self.choice == "gt" and file_timestamp < self.reconstruction_time:
             return True
         return False
 
@@ -559,10 +560,17 @@ class Experiment:
     plot_args: PlotConfig | None = None
     include_gt: bool = False
     val_steps: list[int] = field(default_factory=lambda: [15000])
+    render_filter_override: dict = field(default_factory=lambda: {})
 
-    def get_configs(self, dataset_name: str) -> list[Config]:
+    @property
+    def render_config_dict(self):
+        render_config_dict = self.config_dict.copy()
+        render_config_dict.update(self.render_filter_override)
+        return render_config_dict
+
+    def get_configs(self, dataset_name: str, renders: bool = False) -> list[Config]:
         self.config_dict["dataset"] = dataset_name
-        config_dicts = generate_configs(self.config_dict)
+        config_dicts = generate_configs(self.render_config_dict if renders else self.config_dict)
         configs = [Config.from_dict(config_dict) for config_dict in config_dicts]
         gt_configs = []
         if self.include_gt:
@@ -578,6 +586,9 @@ class Experiment:
                 unique_configs.append(config)
             config_set.add((config.result_dir, config.splatting_val_path, config.data_dir))
         return unique_configs
+
+    def get_render_configs(self, dataset_name: str) -> list[Config]:
+        return self.get_configs(dataset_name, renders=True)
 
     def bulk_reconstruct(self, configs: list[Config]):
         reconstruct_args = []
@@ -689,6 +700,10 @@ class Experiment:
     def get_input_paths(self, dataset_name: str):
         configs = self.get_configs(dataset_name)
         return [Path(config.input_name) for config in configs]
+    
+    def get_render_output_paths(self, dataset_name: str):
+        configs = self.get_render_configs(dataset_name)
+        return [Path(config.output_name) for config in configs]
 
     def plot(self, dataset_name: str, create_pcp: bool = False, include_title: bool = False):
         if self.plot_args is None:
@@ -707,6 +722,9 @@ class Experiment:
                     [path.name for path in self.get_output_paths(dataset_name)],
                 )
             ),
+            render_folders=list(
+                path.name for path in self.get_render_output_paths(dataset_name)
+            ) if self.render_filter_override is not None else None,
             create_pcp=create_pcp,
             val_steps=self.val_steps,
             title=self.description,
@@ -764,8 +782,6 @@ class Experiment:
             f"\nFinal Reconstruct: {reconstructed - force_reconstruct} / {len(configs)} "
             f"| Final Evaluated: {evaluated - force_eval} / {len(configs)} | Final Splatted: {splatted - force_splat} / {len(configs)}"
         )
-
-
 
 
 experiments = [
@@ -860,6 +876,9 @@ experiments = [
             "gt_eval": True,
         },
         PlotConfig(x_axis="num_points", split_param="", metric_keys=["psnr", "lpips", "ssim"]),
+        render_filter_override={
+            "num_points_per_image": [10, 1000, 10000],
+        }
     ),
     Experiment(
         "num_points_pose_opt",
@@ -869,13 +888,17 @@ experiments = [
             "seed": [42],  #
             "num_images": [100],
             "sampling_mode": ["voxels"],
-            "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 2500, 5000, 10000, 25000, 50000][::2],
+            "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 2500, 5000, 10000, 25000, 50000],
             "image_mode": ["farthestpose"],
             "choice": ["vggt", "colmap"],
             "pose_opt": [True, False],
             "gt_eval": True,
         },
         PlotConfig(x_axis="num_points", split_param="pose_opt", metric_keys=["psnr", "lpips", "ssim"]),
+        render_filter_override={
+            "num_points_per_image": [10, 1000, 10000],
+            "pose_opt": [True],
+        }
     ),
     Experiment(
         "sampling_mode",
@@ -912,7 +935,7 @@ experiments = [
         99,
         "Small test for functionality",
         {
-            "seed": [42, 43, 44],  # 
+            "seed": [42, 43, 44],  #
             "num_images": [100],
             "sampling_mode": ["random", "confidence", "voxels", "ba"],
             "num_points_per_image": [1000],
@@ -938,7 +961,11 @@ experiments = [
             "choice": ["vggt"],
             "num_steps": [7000, 15000, 30000],
         },
-        PlotConfig(x_axis="val_step", split_param="num_steps", metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "num_GS"]),
+        PlotConfig(
+            x_axis="val_step",
+            split_param="num_steps",
+            metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "num_GS"],
+        ),
         val_steps=[1, 3_000, 7_000, 10_000, 15_000, 20_000, 25_000, 30_000],
     ),
     Experiment(

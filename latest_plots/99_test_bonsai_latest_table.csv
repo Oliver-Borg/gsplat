@@ -1,0 +1,6 @@
+Choice,Val Step,Sampling Mode,Pose Opt
+VGGT,,ba,
+VGGT,,confidence,
+VGGT,,random,
+VGGT,,voxels,
+VGGT,,,
