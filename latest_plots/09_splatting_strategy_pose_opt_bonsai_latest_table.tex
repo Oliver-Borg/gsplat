@@ -1,0 +1,14 @@
+\begin{table}
+\caption{Splatting strategies with pose optimization for VGGT with 100 images (Bonsai)}
+\label{tab:09_splatting_strategy_pose_opt_bonsai}
+\begin{tabular}{lllrrrrrr}
+\toprule
+Choice & Splatting Strategy & Pose Opt & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Final Gaussian Count ↓ \\
+\midrule
+VGGT & Default &  & 0.790 & 0.107 & 17.456 & 0.447 & 0.569 & 1762894 \\
+VGGT & Default & Pose Opt & 0.790 & 0.107 & 17.316 & 0.406 & 0.557 & 1671405 \\
+VGGT & MCMC &  & 0.790 & 0.107 & 17.455 & 0.429 & 0.565 & 1000000 \\
+VGGT & MCMC & Pose Opt & 0.790 & 0.107 & 17.310 & 0.402 & 0.556 & 1000000 \\
+\bottomrule
+\end{tabular}
+\end{table}

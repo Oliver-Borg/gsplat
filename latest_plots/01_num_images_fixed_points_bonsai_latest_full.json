@@ -37,7 +37,7 @@
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bonsai_2_n10_s42_default_farthestpose_i10_gteval_steps15000\/stats\/val_step14999.json",
         "rre":14.2489,
         "rte":0.037351,
-        "plot_series":"colmap | ",
+        "plot_series":"colmap",
         "num_images_jitter":10.0
     },
     {
@@ -78,7 +78,7 @@
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bonsai_2_n20_s42_default_farthestpose_i20_gteval_steps15000\/stats\/val_step14999.json",
         "rre":1.218,
         "rte":0.030791,
-        "plot_series":"colmap | ",
+        "plot_series":"colmap",
         "num_images_jitter":20.0
     },
     {
@@ -119,7 +119,7 @@
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bonsai_2_n30_s42_default_farthestpose_i30_gteval_steps15000\/stats\/val_step14999.json",
         "rre":12.2005,
         "rte":0.72579,
-        "plot_series":"colmap | ",
+        "plot_series":"colmap",
         "num_images_jitter":30.0
     },
     {
@@ -160,7 +160,7 @@
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bonsai_2_n40_s42_default_farthestpose_i40_gteval_steps15000\/stats\/val_step14999.json",
         "rre":4.181,
         "rte":0.493855,
-        "plot_series":"colmap | ",
+        "plot_series":"colmap",
         "num_images_jitter":40.0
     },
     {
@@ -201,7 +201,7 @@
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bonsai_2_n50_s42_default_farthestpose_i50_gteval_steps15000\/stats\/val_step14999.json",
         "rre":0.5257,
         "rte":0.081737,
-        "plot_series":"colmap | ",
+        "plot_series":"colmap",
         "num_images_jitter":50.0
     },
     {
@@ -242,7 +242,7 @@
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bonsai_2_n60_s42_default_farthestpose_i60_gteval_steps15000\/stats\/val_step14999.json",
         "rre":0.4776,
         "rte":0.067621,
-        "plot_series":"colmap | ",
+        "plot_series":"colmap",
         "num_images_jitter":60.0
     },
     {
@@ -283,7 +283,7 @@
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bonsai_2_n70_s42_default_farthestpose_i70_gteval_steps15000\/stats\/val_step14999.json",
         "rre":0.5947,
         "rte":0.077723,
-        "plot_series":"colmap | ",
+        "plot_series":"colmap",
         "num_images_jitter":70.0
     },
     {
@@ -324,7 +324,7 @@
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bonsai_2_n80_s42_default_farthestpose_i80_gteval_steps15000\/stats\/val_step14999.json",
         "rre":0.6256,
         "rte":0.087851,
-        "plot_series":"colmap | ",
+        "plot_series":"colmap",
         "num_images_jitter":80.0
     },
     {
@@ -365,7 +365,7 @@
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bonsai_2_n90_s42_default_farthestpose_i90_gteval_steps15000\/stats\/val_step14999.json",
         "rre":0.3825,
         "rte":0.050888,
-        "plot_series":"colmap | ",
+        "plot_series":"colmap",
         "num_images_jitter":90.0
     },
     {
@@ -406,7 +406,7 @@
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bonsai_2_n100_s42_default_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
         "rre":0.5629,
         "rte":0.063833,
-        "plot_series":"colmap | ",
+        "plot_series":"colmap",
         "num_images_jitter":100.0
     },
     {
@@ -447,7 +447,7 @@
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bonsai_2_n100_s42_c0.0_p100000_voxels_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
         "rre":0.7897,
         "rte":0.107121,
-        "plot_series":"vggt | ",
+        "plot_series":"vggt",
         "num_images_jitter":100.0
     }
 ]

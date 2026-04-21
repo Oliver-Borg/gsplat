@@ -1,0 +1,23 @@
+{
+    "seed": [
+        42
+    ],
+    "num_images": [
+        80
+    ],
+    "sampling_mode": [
+        "ba"
+    ],
+    "all_opt": [
+        false
+    ],
+    "camera_type": [
+        "SIMPLE_RADIAL",
+        "SIMPLE_PINHOLE"
+    ],
+    "choice": [
+        "vggt",
+        "colmap"
+    ],
+    "dataset": "bonsai"
+}

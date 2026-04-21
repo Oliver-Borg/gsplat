@@ -1,0 +1,28 @@
+{
+    "seed": [
+        42
+    ],
+    "num_images": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+    ],
+    "sampling_mode": [
+        "voxels"
+    ],
+    "choice": [
+        "vggt"
+    ],
+    "nomcmc": [
+        true,
+        false
+    ],
+    "dataset": "bonsai"
+}

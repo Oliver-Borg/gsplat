@@ -1,0 +1,26 @@
+{
+    "num_images": [
+        100
+    ],
+    "seed": [
+        42,
+        43,
+        44
+    ],
+    "sampling_mode": [
+        "voxels"
+    ],
+    "all_opt": [
+        false
+    ],
+    "copy_mode": [
+        null,
+        "crop",
+        "square"
+    ],
+    "choice": [
+        "vggt",
+        "colmap"
+    ],
+    "dataset": "bonsai"
+}

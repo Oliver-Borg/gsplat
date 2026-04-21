@@ -1,0 +1,33 @@
+{
+    "seed": [
+        42
+    ],
+    "num_images": [
+        100
+    ],
+    "sampling_mode": [
+        "voxels"
+    ],
+    "num_points_per_image": [
+        10,
+        100,
+        300,
+        750,
+        2500,
+        10000,
+        50000
+    ],
+    "image_mode": [
+        "farthestpose"
+    ],
+    "choice": [
+        "vggt",
+        "colmap"
+    ],
+    "pose_opt": [
+        true,
+        false
+    ],
+    "gt_eval": true,
+    "dataset": "bonsai"
+}

@@ -1,0 +1,8 @@
+{
+    "choice": [
+        "gt",
+        "vggt",
+        "colmap"
+    ],
+    "dataset": "bonsai"
+}

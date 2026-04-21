@@ -1,0 +1,24 @@
+{
+    "seed": [
+        42
+    ],
+    "num_images": [
+        100
+    ],
+    "sampling_mode": [
+        "random"
+    ],
+    "num_points_per_image": [
+        1000
+    ],
+    "gt_eval": true,
+    "choice": [
+        "vggt"
+    ],
+    "num_steps": [
+        7000,
+        15000,
+        30000
+    ],
+    "dataset": "bonsai"
+}
