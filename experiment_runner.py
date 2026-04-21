@@ -724,7 +724,7 @@ class Experiment:
             ),
             render_folders=list(
                 path.name for path in self.get_render_output_paths(dataset_name)
-            ) if self.render_filter_override is not None else None,
+            ) if self.render_filter_override != {} else None,
             create_pcp=create_pcp,
             val_steps=self.val_steps,
             title=self.description,
@@ -869,7 +869,7 @@ experiments = [
             "seed": [42],  #
             "num_images": [100],
             "sampling_mode": ["voxels"],
-            "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 2500, 5000, 10000, 25000, 50000],
+            "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 2500, 5000, 10000],
             "image_mode": ["farthestpose"],
             "choice": ["vggt", "colmap"],
             "pose_opt": [False],
@@ -888,7 +888,7 @@ experiments = [
             "seed": [42],  #
             "num_images": [100],
             "sampling_mode": ["voxels"],
-            "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 2500, 5000, 10000, 25000, 50000],
+            "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 2500, 5000, 10000],
             "image_mode": ["farthestpose"],
             "choice": ["vggt", "colmap"],
             "pose_opt": [True, False],
@@ -905,17 +905,18 @@ experiments = [
         3,
         "A comparison of different VGGT point cloud sampling modes",
         {
-            "seed": [42],  # , 43, 44
+            "seed": [42, 43, 44],
             "num_images": [100],
             "sampling_mode": ["voxels", "random", "confidence", "ba"],
-            "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 2500, 5000, 10000, 25000, 50000],
+            "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 2500, 5000, 10000],
             "choice": ["vggt", "colmap"],
             "use_gt_cams": False,
             "gt_eval": True,
         },
-        PlotConfig(x_axis="num_points", split_param="sampling_mode", metric_keys=["psnr", "lpips", "ssim"]),
+        PlotConfig(x_axis="num_points", split_param="sampling_mode", metric_keys=["psnr", "lpips", "ssim", "quality"]),
         render_filter_override={
-            "num_points_per_image": [2500],
+            "seed": [42],
+            "num_points_per_image": [1000],
         }
     ),
     Experiment(
@@ -923,16 +924,17 @@ experiments = [
         3,
         "A comparison of different VGGT point cloud sampling modes with GT cameras",
         {
-            "seed": [42],  # , 43, 44
+            "seed": [42, 43, 44],
             "num_images": [100],
             "sampling_mode": ["voxels", "random", "confidence", "ba"],
-            "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 2500, 5000, 10000, 25000, 50000],
+            "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 2500, 5000, 10000],
             "choice": ["vggt", "colmap"],
             "use_gt_cams": [True],
             "gt_eval": True,
         },
-        PlotConfig(x_axis="num_points", split_param="sampling_mode", metric_keys=["psnr", "lpips", "ssim"]),
+        PlotConfig(x_axis="num_points", split_param="sampling_mode", metric_keys=["psnr", "lpips", "ssim", "quality"]),
         render_filter_override={
+            "seed": [42],
             "num_points_per_image": [2500],
         }
     ),
@@ -970,7 +972,7 @@ experiments = [
         PlotConfig(
             x_axis="val_step",
             split_param="num_steps",
-            metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "num_GS"],
+            metric_keys=["eval_rre", "eval_rte", "quality"],
         ),
         val_steps=[1, 3_000, 7_000, 10_000, 15_000, 20_000, 25_000, 30_000],
     ),
@@ -1024,7 +1026,7 @@ experiments = [
         {
             "seed": [42],  # , 43, 44
             "num_images": [100],
-            "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 2500, 5000, 10000, 25000, 50000],
+            "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 2500, 5000, 10000],
             "sampling_mode": ["voxels"],
             "choice": ["vggt"],
             "nomcmc": [True, False],
