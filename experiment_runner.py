@@ -877,13 +877,13 @@ experiments = [
         },
         PlotConfig(x_axis="num_points", split_param="", metric_keys=["psnr", "lpips", "ssim"]),
         render_filter_override={
-            "num_points_per_image": [10, 1000, 10000],
+            "num_points_per_image": [10, 100, 1000, 10000],
         }
     ),
     Experiment(
         "num_points_pose_opt",
         2,
-        "COLMAP versus VGGT initialized with different numbers of points",
+        "COLMAP versus VGGT initialized with different numbers of points and with pose optimization",
         {
             "seed": [42],  #
             "num_images": [100],
@@ -896,7 +896,7 @@ experiments = [
         },
         PlotConfig(x_axis="num_points", split_param="pose_opt", metric_keys=["psnr", "lpips", "ssim"]),
         render_filter_override={
-            "num_points_per_image": [10, 1000, 10000],
+            "num_points_per_image": [10, 100, 1000, 10000],
             "pose_opt": [True],
         }
     ),
@@ -914,6 +914,9 @@ experiments = [
             "gt_eval": True,
         },
         PlotConfig(x_axis="num_points", split_param="sampling_mode", metric_keys=["psnr", "lpips", "ssim"]),
+        render_filter_override={
+            "num_points_per_image": [2500],
+        }
     ),
     Experiment(
         "sampling_mode_gt_cams",
@@ -929,6 +932,9 @@ experiments = [
             "gt_eval": True,
         },
         PlotConfig(x_axis="num_points", split_param="sampling_mode", metric_keys=["psnr", "lpips", "ssim"]),
+        render_filter_override={
+            "num_points_per_image": [2500],
+        }
     ),
     Experiment(
         "test",
@@ -1181,7 +1187,7 @@ experiment_dict = {exp.name: exp for exp in experiments}
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run experiments")
-    parser.add_argument("--experiment_name", type=str, required=True, help="Name of the experiment to run")
+    parser.add_argument("--experiment_names", type=str, required=True, help="Name of the experiment to run", nargs="+")
     parser.add_argument("--dataset_name", type=str, required=True, help="Name of the dataset to use")
     parser.add_argument("--skip_splatting", action="store_true", help="Whether to skip splatting")
     parser.add_argument("--do_reconstruct", action="store_true", help="Whether to run reconstruction")
@@ -1214,21 +1220,22 @@ if __name__ == "__main__":
     if args.cuda_visible_devices and args.procs_per_gpu > 1 and cuda_devices is not None:
         cuda_devices = [gpu_id for gpu_id in cuda_devices for _ in range(args.procs_per_gpu)]
 
-    for experiment in experiments:
-        if experiment.name == args.experiment_name or args.experiment_name == "all":
-            experiment = replace(experiment, include_gt=args.include_gt)
+    for arg_experiment in args.experiment_names:
+        for experiment in experiments:
+            if experiment.name == arg_experiment or arg_experiment == "all":
+                experiment = replace(experiment, include_gt=args.include_gt)
 
-            if args.check_only:
-                print(f"Experiment: {experiment.name}")
-                print(experiment.progress_stats(args.dataset_name, print_progress_bars=True))
-                print()
-                continue
+                if args.check_only:
+                    print(f"Experiment: {experiment.name}")
+                    print(experiment.progress_stats(args.dataset_name, print_progress_bars=True))
+                    print()
+                    continue
 
-            if not args.plot_only:
-                experiment.run(
-                    args.dataset_name,
-                    do_reconstruct=args.do_reconstruct,
-                    do_splatting=not args.skip_splatting,
-                    cuda_devices=cuda_devices,
-                )
-            experiment.plot(args.dataset_name)
+                if not args.plot_only:
+                    experiment.run(
+                        args.dataset_name,
+                        do_reconstruct=args.do_reconstruct,
+                        do_splatting=not args.skip_splatting,
+                        cuda_devices=cuda_devices,
+                    )
+                experiment.plot(args.dataset_name)
