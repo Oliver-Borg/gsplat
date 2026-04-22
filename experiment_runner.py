@@ -91,7 +91,7 @@ datasets = {
 
 @dataclass
 class Config:
-    choice: Literal["vggt", "colmap", "gt"] = "vggt"
+    choice: Literal["vggt", "colmap", "gt", "combined"] = "vggt"
     num_images: int = 30
     dataset: Dataset = datasets["lego"]
     seed: int = 42
@@ -117,6 +117,11 @@ class Config:
     num_steps: Literal[7000, 15000, 30000] = 15000
     colmap_mode: Literal["default", "relaxed"] = "default"
     nomcmc: bool = False
+    camera_src: Literal["vggt", "colmap", "gt"] = "vggt"
+    pcd_src: Literal["vggt", "colmap", "gt", "combined"] = "vggt"
+
+    construction_data: dict = field(default_factory=dict)
+
 
     @classmethod
     def from_dict(cls, data: dict) -> "Config":
@@ -150,6 +155,10 @@ class Config:
         instance.num_steps = data.get("num_steps", instance.num_steps)
         instance.colmap_mode = data.get("colmap_mode", instance.colmap_mode)
         instance.nomcmc = data.get("nomcmc", instance.nomcmc)
+        instance.camera_src = data.get("camera_src", instance.camera_src)
+        instance.pcd_src = data.get("pcd_src", instance.pcd_src)
+
+        instance.construction_data = data
         return replace(instance)
 
     def __post_init__(self):
@@ -164,6 +173,9 @@ class Config:
             self.depth_conf = False
             self.num_images = len(os.listdir(Path(self.dataset.directory) / Path(self.dataset.data_folder_name)))
             self.num_cameras = self.num_images
+
+        if self.choice == "combined" and self.camera_src == self.pcd_src:
+            self.camera_src = "vggt" if self.pcd_src == "colmap" else "colmap"
 
         self.depth_conf = self.depth_conf and self.choice == "vggt"
 
@@ -225,6 +237,34 @@ class Config:
 
             if self.copy_mode is not None:
                 parts.append(self.copy_mode)
+        elif self.choice == "combined":
+            parts.append("combined")
+            parts.append(f"{self.camera_src}cams")
+            parts.append(f"{self.pcd_src}pcd")
+
+
+            parts.append(self.colmap_mode)
+
+            if self.sampling_mode == "ba":
+                parts.append(self.camera_type.lower().replace("simple_", "m"))
+                parts.append(self.sampling_mode)
+            else:
+                parts.extend(
+                    [
+                        f"c{self.conf_thres_value}",
+                        f"p{self.num_points}",
+                        self.sampling_mode,
+                    ]
+                )
+
+            if self.error_opa:
+                parts.append("errconf")
+
+            parts.append(self.image_mode)
+
+            if self.copy_mode is not None:
+                parts.append(self.copy_mode)
+
         elif self.choice == "gt":
             pass
 
@@ -373,11 +413,57 @@ class Config:
 
         return args
 
+    def replace_choice(self, choice: Literal["vggt", "colmap", "gt"]) -> "Config":
+        return Config.from_dict({**self.construction_data, "choice": choice})
+
     def reconstruct(self, force: bool = False):
         force |= self.force_reconstruct
         if self.is_reconstructed and not force:
             print(Path(self.data_dir), "has already been constructed.\nUse --force to force reconstruction.")
             return 0
+        
+        if self.choice == "combined":
+            configs = {
+                "vggt": self.replace_choice("vggt"),
+                "colmap": self.replace_choice("colmap"),
+                "gt": self.replace_choice("gt"),
+            }
+
+            configs[self.camera_src].reconstruct(force)
+            pcd_choices = ["vggt", "colmap"] if self.pcd_src == "both" else [self.pcd_src]
+            for pcd_src in pcd_choices:
+                configs[pcd_src].reconstruct(force)
+
+            cam_config = configs[self.camera_src]
+            if self.pcd_src == "both":
+                if self.camera_src == "vggt":
+                    pcd_config = configs["colmap"]
+                elif self.camera_src == "colmap" or self.camera_src == "gt":
+                    pcd_config = configs["vggt"]
+                else:
+                    raise ValueError(f"Unrecognised camera src {self.camera_src}")
+            else:
+                pcd_config = configs[self.pcd_src]
+
+            command = [
+                VGGT_PYTHON,
+                "-m",
+                "combine_clouds",
+            ]
+
+            command.extend(["--camera_source", cam_config.data_dir])
+            command.extend(["--point_source", pcd_config.data_dir])
+            if self.pcd_src == "both":
+                command.extend(["--use_both_pcds"])
+            command.extend(["--output_dir", self.data_dir])
+
+            try:
+                output = subprocess.run(command, check=True, cwd="../vggt")
+                print(output)
+                return output.returncode
+            except subprocess.CalledProcessError as e:
+                print(e)
+                return e.returncode
 
         command = [
             VGGT_PYTHON,
@@ -593,7 +679,11 @@ class Experiment:
     def bulk_reconstruct(self, configs: list[Config]):
         reconstruct_args = []
         for config in configs:
-            reconstruct_args.append(config.reconstruct_args)
+            if config.choice == "combined":
+                for choice in ("vggt", "colmap"):
+                    reconstruct_args.append(config.replace_choice(choice).reconstruct_args)
+            else:
+                reconstruct_args.append(config.reconstruct_args)
 
         temp_dir = Path("../vggt/configs/")
         temp_dir.mkdir(exist_ok=True)
@@ -612,6 +702,10 @@ class Experiment:
         ]
 
         output = subprocess.run(command, check=True, cwd="../vggt")
+
+        for config in configs:
+            if config.choice == "combined":
+                config.reconstruct()
 
     def run(
         self,
@@ -856,10 +950,10 @@ experiments = [
             "pose_opt": [True, False],
             "gt_eval": [True],
             "choice": ["vggt", "colmap"],
-            "num_steps": [15000],
+            "num_steps": [30000],
         },
-        PlotConfig(x_axis="", split_param="choice,pose_opt", metric_keys=["rre", "rte", "psnr", "lpips", "ssim"]),
-        val_steps=[15000],
+        PlotConfig(x_axis="", split_param="choice,pose_opt", metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim"]),
+        val_steps=[30000],
     ),
     Experiment(
         "num_points",
@@ -954,6 +1048,29 @@ experiments = [
         },
         PlotConfig(x_axis="val_step", split_param="sampling_mode,pose_opt", metric_keys=["eval_rre", "eval_rte"]),
         val_steps=[1, 7000],
+    ),
+    Experiment(
+        "combined",
+        3,
+        "Combining cameras and point clouds",
+        {
+            "seed": [42],  #
+            "num_images": [100],
+            "sampling_mode": ["random"],  # , "confidence", "voxels", "ba"
+            "num_points_per_image": [1000],
+            "pose_opt": [False],  # True, 
+            "gt_eval": True,
+            "choice": ["combined", "vggt", "colmap"],
+            "pcd_src": ["vggt", "colmap", "both"],
+            "camera_src": ["vggt", "colmap"],
+            "num_steps": [15000],
+        },
+        PlotConfig(x_axis="", split_param="sampling_mode,cam_src,pcd_src", metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "quality"]),
+        val_steps=[15000],
+        render_filter_override={
+            "seed": [42],
+            "sampling_mode": ["random"],
+        },
     ),
     Experiment(
         "pose_opt_validation",
