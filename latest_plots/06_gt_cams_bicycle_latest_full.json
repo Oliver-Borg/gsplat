@@ -35,6 +35,7 @@
         "quality":0.3607255448,
         "real_num_points":16627,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bicycle_4_n100_s42_default_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s42_default_farthestpose_i100_gteval_steps15000",
         "rre":0.1049,
         "rte":0.017545,
         "plot_series":"colmap |  |  | "
@@ -75,6 +76,7 @@
         "quality":0.3225052657,
         "real_num_points":16627,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bicycle_4_n100_s42_default_farthestpose_i100_gteval_gtint_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s42_default_farthestpose_i100_gteval_gtint_steps15000",
         "rre":0.1049,
         "rte":0.017545,
         "plot_series":"colmap |  | GT Intrinsics | "
@@ -115,6 +117,7 @@
         "quality":0.3778633674,
         "real_num_points":16627,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bicycle_4_n100_s42_default_farthestpose_i100_gteval_gtext_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s42_default_farthestpose_i100_gteval_gtext_steps15000",
         "rre":0.1049,
         "rte":0.017545,
         "plot_series":"colmap | GT Extrinsics |  | "
@@ -155,6 +158,7 @@
         "quality":0.4698558614,
         "real_num_points":16627,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bicycle_4_n100_s42_default_farthestpose_i100_gteval_gtext_gtint_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s42_default_farthestpose_i100_gteval_gtext_gtint_steps15000",
         "rre":0.1049,
         "rte":0.017545,
         "plot_series":"colmap | GT Extrinsics | GT Intrinsics | "
@@ -195,6 +199,7 @@
         "quality":0.4242810188,
         "real_num_points":54275,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bicycle_4_n100_s42_default_farthestpose_i100_gteval_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s42_default_farthestpose_i100_gteval_gtpcd_steps15000",
         "rre":0.1049,
         "rte":0.017545,
         "plot_series":"colmap |  |  | GT Points"
@@ -235,6 +240,7 @@
         "quality":0.3661716321,
         "real_num_points":54275,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bicycle_4_n100_s42_default_farthestpose_i100_gteval_gtint_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s42_default_farthestpose_i100_gteval_gtint_gtpcd_steps15000",
         "rre":0.1049,
         "rte":0.017545,
         "plot_series":"colmap |  | GT Intrinsics | GT Points"
@@ -275,6 +281,7 @@
         "quality":0.4351431867,
         "real_num_points":54275,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bicycle_4_n100_s42_default_farthestpose_i100_gteval_gtext_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s42_default_farthestpose_i100_gteval_gtext_gtpcd_steps15000",
         "rre":0.1049,
         "rte":0.017545,
         "plot_series":"colmap | GT Extrinsics |  | GT Points"
@@ -315,6 +322,7 @@
         "quality":0.5693961602,
         "real_num_points":54275,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bicycle_4_n100_s42_default_farthestpose_i100_gteval_gtext_gtint_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s42_default_farthestpose_i100_gteval_gtext_gtint_gtpcd_steps15000",
         "rre":0.1049,
         "rte":0.017545,
         "plot_series":"colmap | GT Extrinsics | GT Intrinsics | GT Points"
@@ -355,6 +363,7 @@
         "quality":0.3583163396,
         "real_num_points":16447,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bicycle_4_n100_s43_default_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s43_default_farthestpose_i100_gteval_steps15000",
         "rre":0.0989,
         "rte":0.017192,
         "plot_series":"colmap |  |  | "
@@ -395,6 +404,7 @@
         "quality":0.3263796402,
         "real_num_points":16447,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bicycle_4_n100_s43_default_farthestpose_i100_gteval_gtint_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s43_default_farthestpose_i100_gteval_gtint_steps15000",
         "rre":0.0989,
         "rte":0.017192,
         "plot_series":"colmap |  | GT Intrinsics | "
@@ -435,6 +445,7 @@
         "quality":0.3714888259,
         "real_num_points":16447,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bicycle_4_n100_s43_default_farthestpose_i100_gteval_gtext_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s43_default_farthestpose_i100_gteval_gtext_steps15000",
         "rre":0.0989,
         "rte":0.017192,
         "plot_series":"colmap | GT Extrinsics |  | "
@@ -475,6 +486,7 @@
         "quality":0.4619789689,
         "real_num_points":16447,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bicycle_4_n100_s43_default_farthestpose_i100_gteval_gtext_gtint_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s43_default_farthestpose_i100_gteval_gtext_gtint_steps15000",
         "rre":0.0989,
         "rte":0.017192,
         "plot_series":"colmap | GT Extrinsics | GT Intrinsics | "
@@ -515,6 +527,7 @@
         "quality":0.4276100892,
         "real_num_points":54275,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bicycle_4_n100_s43_default_farthestpose_i100_gteval_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s43_default_farthestpose_i100_gteval_gtpcd_steps15000",
         "rre":0.0989,
         "rte":0.017192,
         "plot_series":"colmap |  |  | GT Points"
@@ -555,6 +568,7 @@
         "quality":0.3769288646,
         "real_num_points":54275,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bicycle_4_n100_s43_default_farthestpose_i100_gteval_gtint_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s43_default_farthestpose_i100_gteval_gtint_gtpcd_steps15000",
         "rre":0.0989,
         "rte":0.017192,
         "plot_series":"colmap |  | GT Intrinsics | GT Points"
@@ -595,6 +609,7 @@
         "quality":0.4361473533,
         "real_num_points":54275,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bicycle_4_n100_s43_default_farthestpose_i100_gteval_gtext_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s43_default_farthestpose_i100_gteval_gtext_gtpcd_steps15000",
         "rre":0.0989,
         "rte":0.017192,
         "plot_series":"colmap | GT Extrinsics |  | GT Points"
@@ -635,6 +650,7 @@
         "quality":0.5668991782,
         "real_num_points":54275,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bicycle_4_n100_s43_default_farthestpose_i100_gteval_gtext_gtint_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s43_default_farthestpose_i100_gteval_gtext_gtint_gtpcd_steps15000",
         "rre":0.0989,
         "rte":0.017192,
         "plot_series":"colmap | GT Extrinsics | GT Intrinsics | GT Points"
@@ -675,6 +691,7 @@
         "quality":0.3495333976,
         "real_num_points":16589,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bicycle_4_n100_s44_default_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s44_default_farthestpose_i100_gteval_steps15000",
         "rre":0.1024,
         "rte":0.017495,
         "plot_series":"colmap |  |  | "
@@ -715,6 +732,7 @@
         "quality":0.3205254553,
         "real_num_points":16589,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bicycle_4_n100_s44_default_farthestpose_i100_gteval_gtint_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s44_default_farthestpose_i100_gteval_gtint_steps15000",
         "rre":0.1024,
         "rte":0.017495,
         "plot_series":"colmap |  | GT Intrinsics | "
@@ -755,6 +773,7 @@
         "quality":0.3900795926,
         "real_num_points":16589,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bicycle_4_n100_s44_default_farthestpose_i100_gteval_gtext_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s44_default_farthestpose_i100_gteval_gtext_steps15000",
         "rre":0.1024,
         "rte":0.017495,
         "plot_series":"colmap | GT Extrinsics |  | "
@@ -795,6 +814,7 @@
         "quality":0.4703735688,
         "real_num_points":16589,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bicycle_4_n100_s44_default_farthestpose_i100_gteval_gtext_gtint_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s44_default_farthestpose_i100_gteval_gtext_gtint_steps15000",
         "rre":0.1024,
         "rte":0.017495,
         "plot_series":"colmap | GT Extrinsics | GT Intrinsics | "
@@ -835,6 +855,7 @@
         "quality":0.4125015855,
         "real_num_points":54275,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bicycle_4_n100_s44_default_farthestpose_i100_gteval_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s44_default_farthestpose_i100_gteval_gtpcd_steps15000",
         "rre":0.1024,
         "rte":0.017495,
         "plot_series":"colmap |  |  | GT Points"
@@ -875,6 +896,7 @@
         "quality":0.3689958623,
         "real_num_points":54275,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bicycle_4_n100_s44_default_farthestpose_i100_gteval_gtint_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s44_default_farthestpose_i100_gteval_gtint_gtpcd_steps15000",
         "rre":0.1024,
         "rte":0.017495,
         "plot_series":"colmap |  | GT Intrinsics | GT Points"
@@ -915,6 +937,7 @@
         "quality":0.4537473126,
         "real_num_points":54275,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bicycle_4_n100_s44_default_farthestpose_i100_gteval_gtext_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s44_default_farthestpose_i100_gteval_gtext_gtpcd_steps15000",
         "rre":0.1024,
         "rte":0.017495,
         "plot_series":"colmap | GT Extrinsics |  | GT Points"
@@ -955,6 +978,7 @@
         "quality":0.5686956954,
         "real_num_points":54275,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bicycle_4_n100_s44_default_farthestpose_i100_gteval_gtext_gtint_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s44_default_farthestpose_i100_gteval_gtext_gtint_gtpcd_steps15000",
         "rre":0.1024,
         "rte":0.017495,
         "plot_series":"colmap | GT Extrinsics | GT Intrinsics | GT Points"
@@ -995,6 +1019,7 @@
         "quality":0.6672387725,
         "real_num_points":54275,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/gt_outputs\/bicycle_4_n194_s42_i194_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n194_s42_i194_steps15000",
         "rre":null,
         "rte":null,
         "plot_series":"gt |  |  | "
@@ -1035,6 +1060,7 @@
         "quality":0.6678849848,
         "real_num_points":54275,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/gt_outputs\/bicycle_4_n194_s43_i194_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n194_s43_i194_steps15000",
         "rre":null,
         "rte":null,
         "plot_series":"gt |  |  | "
@@ -1075,6 +1101,7 @@
         "quality":0.6676171205,
         "real_num_points":54275,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/gt_outputs\/bicycle_4_n194_s44_i194_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n194_s44_i194_steps15000",
         "rre":null,
         "rte":null,
         "plot_series":"gt |  |  | "
@@ -1115,6 +1142,7 @@
         "quality":0.0865572025,
         "real_num_points":107546,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s42_c0.0_p110000_voxels_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s42_c0.0_p110000_voxels_farthestpose_i100_gteval_steps15000",
         "rre":0.857,
         "rte":0.067143,
         "plot_series":"vggt |  |  | "
@@ -1155,6 +1183,7 @@
         "quality":0.1062005383,
         "real_num_points":54275,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s42_c0.0_p110000_voxels_farthestpose_i100_gteval_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s42_c0.0_p110000_voxels_farthestpose_i100_gteval_gtpcd_steps15000",
         "rre":0.857,
         "rte":0.067143,
         "plot_series":"vggt |  |  | GT Points"
@@ -1195,6 +1224,7 @@
         "quality":0.0840489388,
         "real_num_points":107546,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s42_c0.0_p110000_voxels_farthestpose_i100_gteval_gtint_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s42_c0.0_p110000_voxels_farthestpose_i100_gteval_gtint_steps15000",
         "rre":0.857,
         "rte":0.067143,
         "plot_series":"vggt |  | GT Intrinsics | "
@@ -1235,6 +1265,7 @@
         "quality":0.1057867591,
         "real_num_points":54275,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s42_c0.0_p110000_voxels_farthestpose_i100_gteval_gtint_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s42_c0.0_p110000_voxels_farthestpose_i100_gteval_gtint_gtpcd_steps15000",
         "rre":0.857,
         "rte":0.067143,
         "plot_series":"vggt |  | GT Intrinsics | GT Points"
@@ -1275,6 +1306,7 @@
         "quality":0.3186956353,
         "real_num_points":107546,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s42_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s42_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_steps15000",
         "rre":0.857,
         "rte":0.067143,
         "plot_series":"vggt | GT Extrinsics |  | "
@@ -1315,6 +1347,7 @@
         "quality":0.3608682686,
         "real_num_points":54275,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s42_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s42_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_gtpcd_steps15000",
         "rre":0.857,
         "rte":0.067143,
         "plot_series":"vggt | GT Extrinsics |  | GT Points"
@@ -1355,6 +1388,7 @@
         "quality":0.4837130448,
         "real_num_points":107546,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s42_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_gtint_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s42_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_gtint_steps15000",
         "rre":0.857,
         "rte":0.067143,
         "plot_series":"vggt | GT Extrinsics | GT Intrinsics | "
@@ -1395,6 +1429,7 @@
         "quality":0.5691930877,
         "real_num_points":54275,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s42_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_gtint_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s42_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_gtint_gtpcd_steps15000",
         "rre":0.857,
         "rte":0.067143,
         "plot_series":"vggt | GT Extrinsics | GT Intrinsics | GT Points"
@@ -1435,6 +1470,7 @@
         "quality":0.0853353636,
         "real_num_points":112120,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s43_c0.0_p110000_voxels_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s43_c0.0_p110000_voxels_farthestpose_i100_gteval_steps15000",
         "rre":0.8604,
         "rte":0.06754,
         "plot_series":"vggt |  |  | "
@@ -1475,6 +1511,7 @@
         "quality":0.1045816737,
         "real_num_points":54275,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s43_c0.0_p110000_voxels_farthestpose_i100_gteval_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s43_c0.0_p110000_voxels_farthestpose_i100_gteval_gtpcd_steps15000",
         "rre":0.8604,
         "rte":0.06754,
         "plot_series":"vggt |  |  | GT Points"
@@ -1515,6 +1552,7 @@
         "quality":0.0858695505,
         "real_num_points":112120,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s43_c0.0_p110000_voxels_farthestpose_i100_gteval_gtint_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s43_c0.0_p110000_voxels_farthestpose_i100_gteval_gtint_steps15000",
         "rre":0.8604,
         "rte":0.06754,
         "plot_series":"vggt |  | GT Intrinsics | "
@@ -1555,6 +1593,7 @@
         "quality":0.1050828594,
         "real_num_points":54275,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s43_c0.0_p110000_voxels_farthestpose_i100_gteval_gtint_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s43_c0.0_p110000_voxels_farthestpose_i100_gteval_gtint_gtpcd_steps15000",
         "rre":0.8604,
         "rte":0.06754,
         "plot_series":"vggt |  | GT Intrinsics | GT Points"
@@ -1595,6 +1634,7 @@
         "quality":0.319807775,
         "real_num_points":112120,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s43_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s43_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_steps15000",
         "rre":0.8604,
         "rte":0.06754,
         "plot_series":"vggt | GT Extrinsics |  | "
@@ -1635,6 +1675,7 @@
         "quality":0.3625425995,
         "real_num_points":54275,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s43_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s43_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_gtpcd_steps15000",
         "rre":0.8604,
         "rte":0.06754,
         "plot_series":"vggt | GT Extrinsics |  | GT Points"
@@ -1675,6 +1716,7 @@
         "quality":0.4870496448,
         "real_num_points":112120,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s43_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_gtint_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s43_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_gtint_steps15000",
         "rre":0.8604,
         "rte":0.06754,
         "plot_series":"vggt | GT Extrinsics | GT Intrinsics | "
@@ -1715,6 +1757,7 @@
         "quality":0.565314998,
         "real_num_points":54275,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s43_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_gtint_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s43_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_gtint_gtpcd_steps15000",
         "rre":0.8604,
         "rte":0.06754,
         "plot_series":"vggt | GT Extrinsics | GT Intrinsics | GT Points"
@@ -1755,6 +1798,7 @@
         "quality":0.0881039568,
         "real_num_points":107578,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s44_c0.0_p110000_voxels_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s44_c0.0_p110000_voxels_farthestpose_i100_gteval_steps15000",
         "rre":0.857,
         "rte":0.067143,
         "plot_series":"vggt |  |  | "
@@ -1795,6 +1839,7 @@
         "quality":0.105108641,
         "real_num_points":54275,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s44_c0.0_p110000_voxels_farthestpose_i100_gteval_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s44_c0.0_p110000_voxels_farthestpose_i100_gteval_gtpcd_steps15000",
         "rre":0.857,
         "rte":0.067143,
         "plot_series":"vggt |  |  | GT Points"
@@ -1835,6 +1880,7 @@
         "quality":0.0879557609,
         "real_num_points":107578,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s44_c0.0_p110000_voxels_farthestpose_i100_gteval_gtint_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s44_c0.0_p110000_voxels_farthestpose_i100_gteval_gtint_steps15000",
         "rre":0.857,
         "rte":0.067143,
         "plot_series":"vggt |  | GT Intrinsics | "
@@ -1875,6 +1921,7 @@
         "quality":0.1058145749,
         "real_num_points":54275,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s44_c0.0_p110000_voxels_farthestpose_i100_gteval_gtint_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s44_c0.0_p110000_voxels_farthestpose_i100_gteval_gtint_gtpcd_steps15000",
         "rre":0.857,
         "rte":0.067143,
         "plot_series":"vggt |  | GT Intrinsics | GT Points"
@@ -1915,6 +1962,7 @@
         "quality":0.3231660024,
         "real_num_points":107578,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s44_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s44_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_steps15000",
         "rre":0.857,
         "rte":0.067143,
         "plot_series":"vggt | GT Extrinsics |  | "
@@ -1955,6 +2003,7 @@
         "quality":0.3622393389,
         "real_num_points":54275,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s44_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s44_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_gtpcd_steps15000",
         "rre":0.857,
         "rte":0.067143,
         "plot_series":"vggt | GT Extrinsics |  | GT Points"
@@ -1995,6 +2044,7 @@
         "quality":0.4889207693,
         "real_num_points":107578,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s44_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_gtint_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s44_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_gtint_steps15000",
         "rre":0.857,
         "rte":0.067143,
         "plot_series":"vggt | GT Extrinsics | GT Intrinsics | "
@@ -2035,6 +2085,7 @@
         "quality":0.5694601595,
         "real_num_points":54275,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s44_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_gtint_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s44_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_gtint_gtpcd_steps15000",
         "rre":0.857,
         "rte":0.067143,
         "plot_series":"vggt | GT Extrinsics | GT Intrinsics | GT Points"

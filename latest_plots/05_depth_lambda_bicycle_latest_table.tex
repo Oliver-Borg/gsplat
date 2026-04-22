@@ -1,25 +1,22 @@
-\begin{table}
+\begin{table}[H]
 \caption{COLMAP versus VGGT with depth loss (Bicycle)}
 \label{tab:05_depth_lambda_bicycle}
 \begin{tabular}{lrlllrrrrrr}
 \toprule
 Choice & Depth Lambda & Depth Loss & Depth Conf & Sampling Mode & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Final Gaussian Count ↓ \\
 \midrule
-COLMAP & 0.000 & Depth Loss & No Depth Confidence & NaN & 0.383 & 0.024 & 15.995 & 0.615 & 0.271 & 1000000 \\
-VGGT & 0.000 & Depth Loss & Depth Confidence & random & 0.920 & 0.086 & 17.413 & 0.453 & 0.268 & 1000000 \\
-VGGT & 0.000 & Depth Loss & Depth Confidence & voxels & 0.920 & 0.086 & 16.920 & 0.584 & 0.267 & 1000000 \\
-VGGT & 0.000 & Depth Loss & No Depth Confidence & random & 0.920 & 0.086 & 17.462 & 0.395 & 0.260 & 1000000 \\
-VGGT & 0.000 & Depth Loss & No Depth Confidence & voxels & 0.920 & 0.086 & 16.846 & 0.574 & 0.264 & 1000000 \\
-COLMAP & 0.010 & Depth Loss & No Depth Confidence & NaN & 0.383 & 0.024 & 16.171 & 0.593 & 0.275 & 1000000 \\
-VGGT & 0.010 & Depth Loss & Depth Confidence & random & 0.920 & 0.086 & 16.968 & 0.394 & 0.239 & 1000000 \\
-VGGT & 0.010 & Depth Loss & Depth Confidence & voxels & 0.920 & 0.086 & 17.159 & 0.440 & 0.251 & 1000000 \\
-VGGT & 0.010 & Depth Loss & No Depth Confidence & random & 0.920 & 0.086 & 16.987 & 0.394 & 0.239 & 1000000 \\
-VGGT & 0.010 & Depth Loss & No Depth Confidence & voxels & 0.920 & 0.086 & 17.172 & 0.438 & 0.251 & 1000000 \\
-COLMAP & 0.100 & Depth Loss & No Depth Confidence & NaN & 0.383 & 0.024 & 16.391 & 0.598 & 0.283 & 1000000 \\
-VGGT & 0.100 & Depth Loss & Depth Confidence & random & 0.920 & 0.086 & 17.138 & 0.393 & 0.247 & 1000000 \\
-VGGT & 0.100 & Depth Loss & Depth Confidence & voxels & 0.920 & 0.086 & 17.166 & 0.447 & 0.256 & 1000000 \\
-VGGT & 0.100 & Depth Loss & No Depth Confidence & random & 0.920 & 0.086 & 17.124 & 0.396 & 0.247 & 1000000 \\
-VGGT & 0.100 & Depth Loss & No Depth Confidence & voxels & 0.920 & 0.086 & 17.171 & 0.446 & 0.255 & 1000000 \\
+VGGT & 0.000 & Depth Loss & Depth Confidence & random & 0.920 & 0.086 & 17.413 & 0.453 & 0.268 & 1000000.000 \\
+VGGT & 0.000 & Depth Loss & Depth Confidence & voxels & 0.920 & 0.086 & 16.920 & 0.584 & 0.267 & 1000000.000 \\
+VGGT & 0.000 & Depth Loss & No Depth Confidence & random & 0.920 & 0.086 & 17.462 & 0.395 & 0.260 & 1000000.000 \\
+VGGT & 0.000 & Depth Loss & No Depth Confidence & voxels & 0.920 & 0.086 & 16.846 & 0.574 & 0.264 & 1000000.000 \\
+VGGT & 0.010 & Depth Loss & Depth Confidence & random & 0.920 & 0.086 & 16.968 & 0.394 & 0.239 & 1000000.000 \\
+VGGT & 0.010 & Depth Loss & Depth Confidence & voxels & 0.920 & 0.086 & 17.159 & 0.440 & 0.251 & 1000000.000 \\
+VGGT & 0.010 & Depth Loss & No Depth Confidence & random & 0.920 & 0.086 & 16.987 & 0.394 & 0.239 & 1000000.000 \\
+VGGT & 0.010 & Depth Loss & No Depth Confidence & voxels & 0.920 & 0.086 & 17.172 & 0.438 & 0.251 & 1000000.000 \\
+VGGT & 0.100 & Depth Loss & Depth Confidence & random & 0.920 & 0.086 & 17.138 & 0.393 & 0.247 & 1000000.000 \\
+VGGT & 0.100 & Depth Loss & Depth Confidence & voxels & 0.920 & 0.086 & 17.166 & 0.447 & 0.256 & 1000000.000 \\
+VGGT & 0.100 & Depth Loss & No Depth Confidence & random & 0.920 & 0.086 & 17.124 & 0.396 & 0.247 & 1000000.000 \\
+VGGT & 0.100 & Depth Loss & No Depth Confidence & voxels & 0.920 & 0.086 & 17.171 & 0.446 & 0.255 & 1000000.000 \\
 \bottomrule
 \end{tabular}
 \end{table}

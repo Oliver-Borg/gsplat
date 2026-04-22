@@ -35,6 +35,7 @@
         "quality":0.3859792275,
         "real_num_points":80705,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bonsai_2_n100_s42_default_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s42_default_farthestpose_i100_gteval_steps15000",
         "rre":0.5629,
         "rte":0.063833,
         "plot_series":"colmap |  |  |  |  | 100"
@@ -75,6 +76,7 @@
         "quality":0.4369739854,
         "real_num_points":80705,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bonsai_2_n100_s42_default_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s42_default_farthestpose_i100_gteval_poseopt_steps15000",
         "rre":0.5629,
         "rte":0.063833,
         "plot_series":"colmap |  | Pose Opt |  |  | 100"
@@ -115,6 +117,7 @@
         "quality":0.4117033406,
         "real_num_points":80830,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bonsai_2_n100_s43_default_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s43_default_farthestpose_i100_gteval_steps15000",
         "rre":0.4864,
         "rte":0.053874,
         "plot_series":"colmap |  |  |  |  | 100"
@@ -155,6 +158,7 @@
         "quality":0.4559785297,
         "real_num_points":80830,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bonsai_2_n100_s43_default_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s43_default_farthestpose_i100_gteval_poseopt_steps15000",
         "rre":0.4864,
         "rte":0.053874,
         "plot_series":"colmap |  | Pose Opt |  |  | 100"
@@ -195,6 +199,7 @@
         "quality":0.4026650216,
         "real_num_points":79141,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bonsai_2_n100_s44_default_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s44_default_farthestpose_i100_gteval_steps15000",
         "rre":0.4887,
         "rte":0.052377,
         "plot_series":"colmap |  |  |  |  | 100"
@@ -235,6 +240,7 @@
         "quality":0.4416721572,
         "real_num_points":79141,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bonsai_2_n100_s44_default_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s44_default_farthestpose_i100_gteval_poseopt_steps15000",
         "rre":0.4887,
         "rte":0.052377,
         "plot_series":"colmap |  | Pose Opt |  |  | 100"
@@ -275,6 +281,7 @@
         "quality":0.2969105112,
         "real_num_points":110277,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bonsai_2_n100_s42_c0.0_p110000_voxels_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s42_c0.0_p110000_voxels_farthestpose_i100_gteval_steps15000",
         "rre":0.7897,
         "rte":0.107121,
         "plot_series":"vggt |  |  |  | voxels | 100"
@@ -315,6 +322,7 @@
         "quality":0.307372471,
         "real_num_points":110277,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bonsai_2_n100_s42_c0.0_p110000_voxels_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s42_c0.0_p110000_voxels_farthestpose_i100_gteval_poseopt_steps15000",
         "rre":0.7897,
         "rte":0.107121,
         "plot_series":"vggt |  | Pose Opt |  | voxels | 100"
@@ -355,6 +363,7 @@
         "quality":0.391219618,
         "real_num_points":31171,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bonsai_2_n100_s42_mpinhole_ba_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s42_mpinhole_ba_farthestpose_i100_gteval_steps15000",
         "rre":0.6282,
         "rte":0.034836,
         "plot_series":"vggt | pinhole |  |  | ba | 100"
@@ -395,6 +404,7 @@
         "quality":0.4391567053,
         "real_num_points":31171,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bonsai_2_n100_s42_mpinhole_ba_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s42_mpinhole_ba_farthestpose_i100_gteval_poseopt_steps15000",
         "rre":0.6282,
         "rte":0.034836,
         "plot_series":"vggt | pinhole | Pose Opt |  | ba | 100"
@@ -435,6 +445,7 @@
         "quality":0.2979704524,
         "real_num_points":110278,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bonsai_2_n100_s43_c0.0_p110000_voxels_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s43_c0.0_p110000_voxels_farthestpose_i100_gteval_steps15000",
         "rre":0.7897,
         "rte":0.107121,
         "plot_series":"vggt |  |  |  | voxels | 100"
@@ -475,6 +486,7 @@
         "quality":0.3064538079,
         "real_num_points":110278,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bonsai_2_n100_s43_c0.0_p110000_voxels_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s43_c0.0_p110000_voxels_farthestpose_i100_gteval_poseopt_steps15000",
         "rre":0.7897,
         "rte":0.107121,
         "plot_series":"vggt |  | Pose Opt |  | voxels | 100"
@@ -515,6 +527,7 @@
         "quality":0.3929632464,
         "real_num_points":31171,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bonsai_2_n100_s43_mpinhole_ba_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s43_mpinhole_ba_farthestpose_i100_gteval_steps15000",
         "rre":0.6282,
         "rte":0.034835,
         "plot_series":"vggt | pinhole |  |  | ba | 100"
@@ -555,6 +568,7 @@
         "quality":0.4419229931,
         "real_num_points":31171,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bonsai_2_n100_s43_mpinhole_ba_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s43_mpinhole_ba_farthestpose_i100_gteval_poseopt_steps15000",
         "rre":0.6282,
         "rte":0.034835,
         "plot_series":"vggt | pinhole | Pose Opt |  | ba | 100"
@@ -595,6 +609,7 @@
         "quality":0.2971501731,
         "real_num_points":110278,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bonsai_2_n100_s44_c0.0_p110000_voxels_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s44_c0.0_p110000_voxels_farthestpose_i100_gteval_steps15000",
         "rre":0.7897,
         "rte":0.107121,
         "plot_series":"vggt |  |  |  | voxels | 100"
@@ -635,6 +650,7 @@
         "quality":0.3066470133,
         "real_num_points":110278,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bonsai_2_n100_s44_c0.0_p110000_voxels_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s44_c0.0_p110000_voxels_farthestpose_i100_gteval_poseopt_steps15000",
         "rre":0.7897,
         "rte":0.107121,
         "plot_series":"vggt |  | Pose Opt |  | voxels | 100"
@@ -675,6 +691,7 @@
         "quality":0.3917032613,
         "real_num_points":31171,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bonsai_2_n100_s44_mpinhole_ba_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s44_mpinhole_ba_farthestpose_i100_gteval_steps15000",
         "rre":0.6282,
         "rte":0.034835,
         "plot_series":"vggt | pinhole |  |  | ba | 100"
@@ -715,6 +732,7 @@
         "quality":0.4473911683,
         "real_num_points":31171,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bonsai_2_n100_s44_mpinhole_ba_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s44_mpinhole_ba_farthestpose_i100_gteval_poseopt_steps15000",
         "rre":0.6282,
         "rte":0.034835,
         "plot_series":"vggt | pinhole | Pose Opt |  | ba | 100"

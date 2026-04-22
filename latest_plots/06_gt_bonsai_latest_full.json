@@ -35,6 +35,7 @@
         "quality":-0.141177554,
         "real_num_points":6185,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bonsai_2_n30_s42_default_farthestpose_i30_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n30_s42_default_farthestpose_i30_gteval_steps15000",
         "rre":12.2005,
         "rte":0.72579,
         "plot_series":"colmap | 30"
@@ -75,6 +76,7 @@
         "quality":0.9752217716,
         "real_num_points":206613,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/gt_outputs\/bonsai_2_n292_s42_i292_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n292_s42_i292_steps15000",
         "rre":null,
         "rte":null,
         "plot_series":"gt | 292"
@@ -115,6 +117,7 @@
         "quality":0.2033890315,
         "real_num_points":33474,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bonsai_2_n30_s42_c0.0_p33000_voxels_farthestpose_i30_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n30_s42_c0.0_p33000_voxels_farthestpose_i30_gteval_steps15000",
         "rre":0.9727,
         "rte":0.110438,
         "plot_series":"vggt | 30"

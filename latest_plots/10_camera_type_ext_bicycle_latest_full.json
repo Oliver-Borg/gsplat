@@ -35,6 +35,7 @@
         "quality":0.3607255448,
         "real_num_points":16627,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bicycle_4_n100_s42_default_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s42_default_farthestpose_i100_gteval_steps15000",
         "rre":0.1049,
         "rte":0.017545,
         "plot_series":"colmap |  |  |  |  | 100"
@@ -75,6 +76,7 @@
         "quality":0.3865765365,
         "real_num_points":16627,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bicycle_4_n100_s42_default_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s42_default_farthestpose_i100_gteval_poseopt_steps15000",
         "rre":0.1049,
         "rte":0.017545,
         "plot_series":"colmap |  | Pose Opt |  |  | 100"
@@ -115,6 +117,7 @@
         "quality":0.3583163396,
         "real_num_points":16447,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bicycle_4_n100_s43_default_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s43_default_farthestpose_i100_gteval_steps15000",
         "rre":0.0989,
         "rte":0.017192,
         "plot_series":"colmap |  |  |  |  | 100"
@@ -155,6 +158,7 @@
         "quality":0.3992744446,
         "real_num_points":16447,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bicycle_4_n100_s43_default_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s43_default_farthestpose_i100_gteval_poseopt_steps15000",
         "rre":0.0989,
         "rte":0.017192,
         "plot_series":"colmap |  | Pose Opt |  |  | 100"
@@ -195,6 +199,7 @@
         "quality":0.3495333976,
         "real_num_points":16589,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bicycle_4_n100_s44_default_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s44_default_farthestpose_i100_gteval_steps15000",
         "rre":0.1024,
         "rte":0.017495,
         "plot_series":"colmap |  |  |  |  | 100"
@@ -235,6 +240,7 @@
         "quality":0.3799288102,
         "real_num_points":16589,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bicycle_4_n100_s44_default_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s44_default_farthestpose_i100_gteval_poseopt_steps15000",
         "rre":0.1024,
         "rte":0.017495,
         "plot_series":"colmap |  | Pose Opt |  |  | 100"
@@ -275,6 +281,7 @@
         "quality":0.0865572025,
         "real_num_points":107546,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s42_c0.0_p110000_voxels_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s42_c0.0_p110000_voxels_farthestpose_i100_gteval_steps15000",
         "rre":0.857,
         "rte":0.067143,
         "plot_series":"vggt |  |  |  | voxels | 100"
@@ -315,6 +322,7 @@
         "quality":0.156068244,
         "real_num_points":107546,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s42_c0.0_p110000_voxels_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s42_c0.0_p110000_voxels_farthestpose_i100_gteval_poseopt_steps15000",
         "rre":0.857,
         "rte":0.067143,
         "plot_series":"vggt |  | Pose Opt |  | voxels | 100"
@@ -355,6 +363,7 @@
         "quality":0.0881261785,
         "real_num_points":226549,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s42_c0.0_p220000_voxels_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s42_c0.0_p220000_voxels_farthestpose_i100_gteval_steps15000",
         "rre":0.857,
         "rte":0.067143,
         "plot_series":"vggt |  |  |  | voxels | 100"
@@ -395,6 +404,7 @@
         "quality":0.1516378682,
         "real_num_points":226549,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s42_c0.0_p220000_voxels_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s42_c0.0_p220000_voxels_farthestpose_i100_gteval_poseopt_steps15000",
         "rre":0.857,
         "rte":0.067143,
         "plot_series":"vggt |  | Pose Opt |  | voxels | 100"
@@ -435,6 +445,7 @@
         "quality":0.0567024206,
         "real_num_points":23303,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s42_mradial_ba_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s42_mradial_ba_farthestpose_i100_gteval_steps15000",
         "rre":0.7542,
         "rte":0.046893,
         "plot_series":"vggt | radial |  |  | ba | 100"
@@ -475,6 +486,7 @@
         "quality":0.0786040602,
         "real_num_points":23303,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s42_mradial_ba_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s42_mradial_ba_farthestpose_i100_gteval_poseopt_steps15000",
         "rre":0.7542,
         "rte":0.046893,
         "plot_series":"vggt | radial | Pose Opt |  | ba | 100"
@@ -515,6 +527,7 @@
         "quality":0.0613625211,
         "real_num_points":23344,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s42_mpinhole_ba_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s42_mpinhole_ba_farthestpose_i100_gteval_steps15000",
         "rre":0.8191,
         "rte":0.044839,
         "plot_series":"vggt | pinhole |  |  | ba | 100"
@@ -555,6 +568,7 @@
         "quality":0.0797433707,
         "real_num_points":23344,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s42_mpinhole_ba_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s42_mpinhole_ba_farthestpose_i100_gteval_poseopt_steps15000",
         "rre":0.8191,
         "rte":0.044839,
         "plot_series":"vggt | pinhole | Pose Opt |  | ba | 100"
@@ -595,6 +609,7 @@
         "quality":0.0853353636,
         "real_num_points":112120,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s43_c0.0_p110000_voxels_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s43_c0.0_p110000_voxels_farthestpose_i100_gteval_steps15000",
         "rre":0.8604,
         "rte":0.06754,
         "plot_series":"vggt |  |  |  | voxels | 100"
@@ -635,6 +650,7 @@
         "quality":0.1522275658,
         "real_num_points":112120,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s43_c0.0_p110000_voxels_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s43_c0.0_p110000_voxels_farthestpose_i100_gteval_poseopt_steps15000",
         "rre":0.8604,
         "rte":0.06754,
         "plot_series":"vggt |  | Pose Opt |  | voxels | 100"
@@ -675,6 +691,7 @@
         "quality":0.0865607162,
         "real_num_points":209816,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s43_c0.0_p220000_voxels_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s43_c0.0_p220000_voxels_farthestpose_i100_gteval_steps15000",
         "rre":0.8604,
         "rte":0.06754,
         "plot_series":"vggt |  |  |  | voxels | 100"
@@ -715,6 +732,7 @@
         "quality":0.1500047032,
         "real_num_points":209816,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s43_c0.0_p220000_voxels_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s43_c0.0_p220000_voxels_farthestpose_i100_gteval_poseopt_steps15000",
         "rre":0.8604,
         "rte":0.06754,
         "plot_series":"vggt |  | Pose Opt |  | voxels | 100"
@@ -755,6 +773,7 @@
         "quality":0.0596780281,
         "real_num_points":23157,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s43_mradial_ba_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s43_mradial_ba_farthestpose_i100_gteval_steps15000",
         "rre":0.7408,
         "rte":0.047769,
         "plot_series":"vggt | radial |  |  | ba | 100"
@@ -795,6 +814,7 @@
         "quality":0.0836162588,
         "real_num_points":23157,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s43_mradial_ba_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s43_mradial_ba_farthestpose_i100_gteval_poseopt_steps15000",
         "rre":0.7408,
         "rte":0.047769,
         "plot_series":"vggt | radial | Pose Opt |  | ba | 100"
@@ -835,6 +855,7 @@
         "quality":0.0621455881,
         "real_num_points":23254,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s43_mpinhole_ba_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s43_mpinhole_ba_farthestpose_i100_gteval_steps15000",
         "rre":0.8069,
         "rte":0.045314,
         "plot_series":"vggt | pinhole |  |  | ba | 100"
@@ -875,6 +896,7 @@
         "quality":0.085128555,
         "real_num_points":23254,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s43_mpinhole_ba_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s43_mpinhole_ba_farthestpose_i100_gteval_poseopt_steps15000",
         "rre":0.8069,
         "rte":0.045314,
         "plot_series":"vggt | pinhole | Pose Opt |  | ba | 100"
@@ -915,6 +937,7 @@
         "quality":0.0881039568,
         "real_num_points":107578,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s44_c0.0_p110000_voxels_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s44_c0.0_p110000_voxels_farthestpose_i100_gteval_steps15000",
         "rre":0.857,
         "rte":0.067143,
         "plot_series":"vggt |  |  |  | voxels | 100"
@@ -955,6 +978,7 @@
         "quality":0.1501572922,
         "real_num_points":107578,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s44_c0.0_p110000_voxels_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s44_c0.0_p110000_voxels_farthestpose_i100_gteval_poseopt_steps15000",
         "rre":0.857,
         "rte":0.067143,
         "plot_series":"vggt |  | Pose Opt |  | voxels | 100"
@@ -995,6 +1019,7 @@
         "quality":0.0880739463,
         "real_num_points":226549,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s44_c0.0_p220000_voxels_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s44_c0.0_p220000_voxels_farthestpose_i100_gteval_steps15000",
         "rre":0.857,
         "rte":0.067143,
         "plot_series":"vggt |  |  |  | voxels | 100"
@@ -1035,6 +1060,7 @@
         "quality":0.1508774695,
         "real_num_points":226549,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s44_c0.0_p220000_voxels_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s44_c0.0_p220000_voxels_farthestpose_i100_gteval_poseopt_steps15000",
         "rre":0.857,
         "rte":0.067143,
         "plot_series":"vggt |  | Pose Opt |  | voxels | 100"
@@ -1075,6 +1101,7 @@
         "quality":0.0578485008,
         "real_num_points":23303,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s44_mradial_ba_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s44_mradial_ba_farthestpose_i100_gteval_steps15000",
         "rre":0.7542,
         "rte":0.046893,
         "plot_series":"vggt | radial |  |  | ba | 100"
@@ -1115,6 +1142,7 @@
         "quality":0.0772807872,
         "real_num_points":23303,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s44_mradial_ba_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s44_mradial_ba_farthestpose_i100_gteval_poseopt_steps15000",
         "rre":0.7542,
         "rte":0.046893,
         "plot_series":"vggt | radial | Pose Opt |  | ba | 100"
@@ -1155,6 +1183,7 @@
         "quality":0.0603867827,
         "real_num_points":23344,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s44_mpinhole_ba_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s44_mpinhole_ba_farthestpose_i100_gteval_steps15000",
         "rre":0.8191,
         "rte":0.044839,
         "plot_series":"vggt | pinhole |  |  | ba | 100"
@@ -1195,6 +1224,7 @@
         "quality":0.077845565,
         "real_num_points":23344,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s44_mpinhole_ba_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s44_mpinhole_ba_farthestpose_i100_gteval_poseopt_steps15000",
         "rre":0.8191,
         "rte":0.044839,
         "plot_series":"vggt | pinhole | Pose Opt |  | ba | 100"

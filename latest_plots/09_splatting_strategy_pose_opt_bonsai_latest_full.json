@@ -35,6 +35,7 @@
         "quality":0.286177022,
         "real_num_points":489858,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bonsai_2_n100_s42_c0.0_p500000_voxels_farthestpose_i100_gteval_nomcmc_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s42_c0.0_p500000_voxels_farthestpose_i100_gteval_nomcmc_steps15000",
         "rre":0.7897,
         "rte":0.107121,
         "plot_series":"vggt | Default | "
@@ -75,6 +76,7 @@
         "quality":0.2949794517,
         "real_num_points":489858,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bonsai_2_n100_s42_c0.0_p500000_voxels_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s42_c0.0_p500000_voxels_farthestpose_i100_gteval_steps15000",
         "rre":0.7897,
         "rte":0.107121,
         "plot_series":"vggt | MCMC | "
@@ -115,6 +117,7 @@
         "quality":0.3022901874,
         "real_num_points":489858,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bonsai_2_n100_s42_c0.0_p500000_voxels_farthestpose_i100_gteval_poseopt_nomcmc_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s42_c0.0_p500000_voxels_farthestpose_i100_gteval_poseopt_nomcmc_steps15000",
         "rre":0.7897,
         "rte":0.107121,
         "plot_series":"vggt | Default | Pose Opt"
@@ -155,6 +158,7 @@
         "quality":0.3038241849,
         "real_num_points":489858,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bonsai_2_n100_s42_c0.0_p500000_voxels_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s42_c0.0_p500000_voxels_farthestpose_i100_gteval_poseopt_steps15000",
         "rre":0.7897,
         "rte":0.107121,
         "plot_series":"vggt | MCMC | Pose Opt"

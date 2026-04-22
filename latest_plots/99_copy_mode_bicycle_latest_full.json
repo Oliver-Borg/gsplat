@@ -35,6 +35,7 @@
         "quality":-0.3509750084,
         "real_num_points":1327,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bicycle_4_n100_s42_default_farthestpose_crop_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s42_default_farthestpose_crop_i100_gteval_steps15000",
         "rre":18.0293,
         "rte":0.41808,
         "plot_series":"colmap | crop"
@@ -75,6 +76,7 @@
         "quality":0.3307497681,
         "real_num_points":14620,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bicycle_4_n100_s42_default_farthestpose_square_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s42_default_farthestpose_square_i100_gteval_steps15000",
         "rre":0.1219,
         "rte":0.020345,
         "plot_series":"colmap | square"
@@ -115,6 +117,7 @@
         "quality":0.3607255448,
         "real_num_points":16627,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bicycle_4_n100_s42_default_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s42_default_farthestpose_i100_gteval_steps15000",
         "rre":0.1049,
         "rte":0.017545,
         "plot_series":"colmap | "
@@ -155,6 +158,7 @@
         "quality":-0.5323441151,
         "real_num_points":433,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bicycle_4_n100_s43_default_farthestpose_crop_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s43_default_farthestpose_crop_i100_gteval_steps15000",
         "rre":140.6732,
         "rte":0.869998,
         "plot_series":"colmap | crop"
@@ -195,6 +199,7 @@
         "quality":0.3274505766,
         "real_num_points":14529,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bicycle_4_n100_s43_default_farthestpose_square_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s43_default_farthestpose_square_i100_gteval_steps15000",
         "rre":0.1083,
         "rte":0.020192,
         "plot_series":"colmap | square"
@@ -235,6 +240,7 @@
         "quality":0.3583163396,
         "real_num_points":16447,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bicycle_4_n100_s43_default_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s43_default_farthestpose_i100_gteval_steps15000",
         "rre":0.0989,
         "rte":0.017192,
         "plot_series":"colmap | "
@@ -275,6 +281,7 @@
         "quality":-0.305805275,
         "real_num_points":1324,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bicycle_4_n100_s44_default_farthestpose_crop_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s44_default_farthestpose_crop_i100_gteval_steps15000",
         "rre":4.2635,
         "rte":0.135939,
         "plot_series":"colmap | crop"
@@ -315,6 +322,7 @@
         "quality":0.3429580457,
         "real_num_points":14612,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bicycle_4_n100_s44_default_farthestpose_square_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s44_default_farthestpose_square_i100_gteval_steps15000",
         "rre":0.1261,
         "rte":0.020802,
         "plot_series":"colmap | square"
@@ -355,6 +363,7 @@
         "quality":0.3495333976,
         "real_num_points":16589,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bicycle_4_n100_s44_default_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s44_default_farthestpose_i100_gteval_steps15000",
         "rre":0.1024,
         "rte":0.017495,
         "plot_series":"colmap | "
@@ -395,6 +404,7 @@
         "quality":-0.1030062436,
         "real_num_points":107838,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s42_c0.0_p110000_voxels_farthestpose_crop_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s42_c0.0_p110000_voxels_farthestpose_crop_i100_gteval_steps15000",
         "rre":4.6176,
         "rte":0.37664,
         "plot_series":"vggt | crop"
@@ -435,6 +445,7 @@
         "quality":0.0840034417,
         "real_num_points":109406,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s42_c0.0_p110000_voxels_farthestpose_square_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s42_c0.0_p110000_voxels_farthestpose_square_i100_gteval_steps15000",
         "rre":1.0023,
         "rte":0.090311,
         "plot_series":"vggt | square"
@@ -475,6 +486,7 @@
         "quality":0.0865572025,
         "real_num_points":107546,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s42_c0.0_p110000_voxels_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s42_c0.0_p110000_voxels_farthestpose_i100_gteval_steps15000",
         "rre":0.857,
         "rte":0.067143,
         "plot_series":"vggt | "
@@ -515,6 +527,7 @@
         "quality":-0.0942547252,
         "real_num_points":110577,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s43_c0.0_p110000_voxels_farthestpose_crop_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s43_c0.0_p110000_voxels_farthestpose_crop_i100_gteval_steps15000",
         "rre":4.1851,
         "rte":0.358973,
         "plot_series":"vggt | crop"
@@ -555,6 +568,7 @@
         "quality":0.0835883008,
         "real_num_points":109422,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s43_c0.0_p110000_voxels_farthestpose_square_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s43_c0.0_p110000_voxels_farthestpose_square_i100_gteval_steps15000",
         "rre":0.9772,
         "rte":0.088992,
         "plot_series":"vggt | square"
@@ -595,6 +609,7 @@
         "quality":0.0853353636,
         "real_num_points":112120,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s43_c0.0_p110000_voxels_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s43_c0.0_p110000_voxels_farthestpose_i100_gteval_steps15000",
         "rre":0.8604,
         "rte":0.06754,
         "plot_series":"vggt | "
@@ -635,6 +650,7 @@
         "quality":-0.1011311061,
         "real_num_points":107838,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s44_c0.0_p110000_voxels_farthestpose_crop_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s44_c0.0_p110000_voxels_farthestpose_crop_i100_gteval_steps15000",
         "rre":4.6176,
         "rte":0.37664,
         "plot_series":"vggt | crop"
@@ -675,6 +691,7 @@
         "quality":0.0838961427,
         "real_num_points":109406,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s44_c0.0_p110000_voxels_farthestpose_square_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s44_c0.0_p110000_voxels_farthestpose_square_i100_gteval_steps15000",
         "rre":1.0023,
         "rte":0.090311,
         "plot_series":"vggt | square"
@@ -715,6 +732,7 @@
         "quality":0.0881039568,
         "real_num_points":107578,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s44_c0.0_p110000_voxels_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bicycle_4_n100_s44_c0.0_p110000_voxels_farthestpose_i100_gteval_steps15000",
         "rre":0.857,
         "rte":0.067143,
         "plot_series":"vggt | "

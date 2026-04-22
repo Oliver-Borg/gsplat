@@ -35,6 +35,7 @@
         "quality":0.3859792275,
         "real_num_points":80705,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bonsai_2_n100_s42_default_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s42_default_farthestpose_i100_gteval_steps15000",
         "rre":0.5629,
         "rte":0.063833,
         "plot_series":"colmap |  |  | "
@@ -75,6 +76,7 @@
         "quality":0.3784124586,
         "real_num_points":80705,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bonsai_2_n100_s42_default_farthestpose_i100_gteval_gtint_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s42_default_farthestpose_i100_gteval_gtint_steps15000",
         "rre":0.5629,
         "rte":0.063833,
         "plot_series":"colmap |  | GT Intrinsics | "
@@ -115,6 +117,7 @@
         "quality":0.6016149278,
         "real_num_points":80705,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bonsai_2_n100_s42_default_farthestpose_i100_gteval_gtext_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s42_default_farthestpose_i100_gteval_gtext_steps15000",
         "rre":0.5629,
         "rte":0.063833,
         "plot_series":"colmap | GT Extrinsics |  | "
@@ -155,6 +158,7 @@
         "quality":0.8526917693,
         "real_num_points":80705,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bonsai_2_n100_s42_default_farthestpose_i100_gteval_gtext_gtint_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s42_default_farthestpose_i100_gteval_gtext_gtint_steps15000",
         "rre":0.5629,
         "rte":0.063833,
         "plot_series":"colmap | GT Extrinsics | GT Intrinsics | "
@@ -195,6 +199,7 @@
         "quality":0.3879491148,
         "real_num_points":206613,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bonsai_2_n100_s42_default_farthestpose_i100_gteval_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s42_default_farthestpose_i100_gteval_gtpcd_steps15000",
         "rre":0.5629,
         "rte":0.063833,
         "plot_series":"colmap |  |  | GT Points"
@@ -235,6 +240,7 @@
         "quality":0.3848249881,
         "real_num_points":206613,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bonsai_2_n100_s42_default_farthestpose_i100_gteval_gtint_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s42_default_farthestpose_i100_gteval_gtint_gtpcd_steps15000",
         "rre":0.5629,
         "rte":0.063833,
         "plot_series":"colmap |  | GT Intrinsics | GT Points"
@@ -275,6 +281,7 @@
         "quality":0.6014646288,
         "real_num_points":206613,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bonsai_2_n100_s42_default_farthestpose_i100_gteval_gtext_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s42_default_farthestpose_i100_gteval_gtext_gtpcd_steps15000",
         "rre":0.5629,
         "rte":0.063833,
         "plot_series":"colmap | GT Extrinsics |  | GT Points"
@@ -315,6 +322,7 @@
         "quality":0.8917533539,
         "real_num_points":206613,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bonsai_2_n100_s42_default_farthestpose_i100_gteval_gtext_gtint_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s42_default_farthestpose_i100_gteval_gtext_gtint_gtpcd_steps15000",
         "rre":0.5629,
         "rte":0.063833,
         "plot_series":"colmap | GT Extrinsics | GT Intrinsics | GT Points"
@@ -355,6 +363,7 @@
         "quality":0.4117033406,
         "real_num_points":80830,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bonsai_2_n100_s43_default_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s43_default_farthestpose_i100_gteval_steps15000",
         "rre":0.4864,
         "rte":0.053874,
         "plot_series":"colmap |  |  | "
@@ -395,6 +404,7 @@
         "quality":0.4042653772,
         "real_num_points":80830,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bonsai_2_n100_s43_default_farthestpose_i100_gteval_gtint_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s43_default_farthestpose_i100_gteval_gtint_steps15000",
         "rre":0.4864,
         "rte":0.053874,
         "plot_series":"colmap |  | GT Intrinsics | "
@@ -435,6 +445,7 @@
         "quality":0.6026032124,
         "real_num_points":80830,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bonsai_2_n100_s43_default_farthestpose_i100_gteval_gtext_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s43_default_farthestpose_i100_gteval_gtext_steps15000",
         "rre":0.4864,
         "rte":0.053874,
         "plot_series":"colmap | GT Extrinsics |  | "
@@ -475,6 +486,7 @@
         "quality":0.8537650419,
         "real_num_points":80830,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bonsai_2_n100_s43_default_farthestpose_i100_gteval_gtext_gtint_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s43_default_farthestpose_i100_gteval_gtext_gtint_steps15000",
         "rre":0.4864,
         "rte":0.053874,
         "plot_series":"colmap | GT Extrinsics | GT Intrinsics | "
@@ -515,6 +527,7 @@
         "quality":0.4134750007,
         "real_num_points":206613,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bonsai_2_n100_s43_default_farthestpose_i100_gteval_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s43_default_farthestpose_i100_gteval_gtpcd_steps15000",
         "rre":0.4864,
         "rte":0.053874,
         "plot_series":"colmap |  |  | GT Points"
@@ -555,6 +568,7 @@
         "quality":0.405578039,
         "real_num_points":206613,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bonsai_2_n100_s43_default_farthestpose_i100_gteval_gtint_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s43_default_farthestpose_i100_gteval_gtint_gtpcd_steps15000",
         "rre":0.4864,
         "rte":0.053874,
         "plot_series":"colmap |  | GT Intrinsics | GT Points"
@@ -595,6 +609,7 @@
         "quality":0.6059213198,
         "real_num_points":206613,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bonsai_2_n100_s43_default_farthestpose_i100_gteval_gtext_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s43_default_farthestpose_i100_gteval_gtext_gtpcd_steps15000",
         "rre":0.4864,
         "rte":0.053874,
         "plot_series":"colmap | GT Extrinsics |  | GT Points"
@@ -635,6 +650,7 @@
         "quality":0.8867265176,
         "real_num_points":206613,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bonsai_2_n100_s43_default_farthestpose_i100_gteval_gtext_gtint_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s43_default_farthestpose_i100_gteval_gtext_gtint_gtpcd_steps15000",
         "rre":0.4864,
         "rte":0.053874,
         "plot_series":"colmap | GT Extrinsics | GT Intrinsics | GT Points"
@@ -675,6 +691,7 @@
         "quality":0.4026650216,
         "real_num_points":79141,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bonsai_2_n100_s44_default_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s44_default_farthestpose_i100_gteval_steps15000",
         "rre":0.4887,
         "rte":0.052377,
         "plot_series":"colmap |  |  | "
@@ -715,6 +732,7 @@
         "quality":0.3982449117,
         "real_num_points":79141,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bonsai_2_n100_s44_default_farthestpose_i100_gteval_gtint_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s44_default_farthestpose_i100_gteval_gtint_steps15000",
         "rre":0.4887,
         "rte":0.052377,
         "plot_series":"colmap |  | GT Intrinsics | "
@@ -755,6 +773,7 @@
         "quality":0.6129388455,
         "real_num_points":79141,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bonsai_2_n100_s44_default_farthestpose_i100_gteval_gtext_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s44_default_farthestpose_i100_gteval_gtext_steps15000",
         "rre":0.4887,
         "rte":0.052377,
         "plot_series":"colmap | GT Extrinsics |  | "
@@ -795,6 +814,7 @@
         "quality":0.8535638821,
         "real_num_points":79141,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bonsai_2_n100_s44_default_farthestpose_i100_gteval_gtext_gtint_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s44_default_farthestpose_i100_gteval_gtext_gtint_steps15000",
         "rre":0.4887,
         "rte":0.052377,
         "plot_series":"colmap | GT Extrinsics | GT Intrinsics | "
@@ -835,6 +855,7 @@
         "quality":0.4080000285,
         "real_num_points":206613,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bonsai_2_n100_s44_default_farthestpose_i100_gteval_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s44_default_farthestpose_i100_gteval_gtpcd_steps15000",
         "rre":0.4887,
         "rte":0.052377,
         "plot_series":"colmap |  |  | GT Points"
@@ -875,6 +896,7 @@
         "quality":0.4051303447,
         "real_num_points":206613,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bonsai_2_n100_s44_default_farthestpose_i100_gteval_gtint_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s44_default_farthestpose_i100_gteval_gtint_gtpcd_steps15000",
         "rre":0.4887,
         "rte":0.052377,
         "plot_series":"colmap |  | GT Intrinsics | GT Points"
@@ -915,6 +937,7 @@
         "quality":0.6224229838,
         "real_num_points":206613,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bonsai_2_n100_s44_default_farthestpose_i100_gteval_gtext_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s44_default_farthestpose_i100_gteval_gtext_gtpcd_steps15000",
         "rre":0.4887,
         "rte":0.052377,
         "plot_series":"colmap | GT Extrinsics |  | GT Points"
@@ -955,6 +978,7 @@
         "quality":0.8889237715,
         "real_num_points":206613,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/bonsai_2_n100_s44_default_farthestpose_i100_gteval_gtext_gtint_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s44_default_farthestpose_i100_gteval_gtext_gtint_gtpcd_steps15000",
         "rre":0.4887,
         "rte":0.052377,
         "plot_series":"colmap | GT Extrinsics | GT Intrinsics | GT Points"
@@ -995,6 +1019,7 @@
         "quality":0.9752217716,
         "real_num_points":206613,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/gt_outputs\/bonsai_2_n292_s42_i292_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n292_s42_i292_steps15000",
         "rre":null,
         "rte":null,
         "plot_series":"gt |  |  | "
@@ -1035,6 +1060,7 @@
         "quality":0.9752878238,
         "real_num_points":206613,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/gt_outputs\/bonsai_2_n292_s43_i292_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n292_s43_i292_steps15000",
         "rre":null,
         "rte":null,
         "plot_series":"gt |  |  | "
@@ -1075,6 +1101,7 @@
         "quality":0.9751070632,
         "real_num_points":206613,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/gt_outputs\/bonsai_2_n292_s44_i292_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n292_s44_i292_steps15000",
         "rre":null,
         "rte":null,
         "plot_series":"gt |  |  | "
@@ -1115,6 +1142,7 @@
         "quality":0.2969105112,
         "real_num_points":110277,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bonsai_2_n100_s42_c0.0_p110000_voxels_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s42_c0.0_p110000_voxels_farthestpose_i100_gteval_steps15000",
         "rre":0.7897,
         "rte":0.107121,
         "plot_series":"vggt |  |  | "
@@ -1155,6 +1183,7 @@
         "quality":0.3057921296,
         "real_num_points":206613,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bonsai_2_n100_s42_c0.0_p110000_voxels_farthestpose_i100_gteval_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s42_c0.0_p110000_voxels_farthestpose_i100_gteval_gtpcd_steps15000",
         "rre":0.7897,
         "rte":0.107121,
         "plot_series":"vggt |  |  | GT Points"
@@ -1195,6 +1224,7 @@
         "quality":0.3584292967,
         "real_num_points":110277,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bonsai_2_n100_s42_c0.0_p110000_voxels_farthestpose_i100_gteval_gtint_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s42_c0.0_p110000_voxels_farthestpose_i100_gteval_gtint_steps15000",
         "rre":0.7897,
         "rte":0.107121,
         "plot_series":"vggt |  | GT Intrinsics | "
@@ -1235,6 +1265,7 @@
         "quality":0.3778774681,
         "real_num_points":206613,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bonsai_2_n100_s42_c0.0_p110000_voxels_farthestpose_i100_gteval_gtint_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s42_c0.0_p110000_voxels_farthestpose_i100_gteval_gtint_gtpcd_steps15000",
         "rre":0.7897,
         "rte":0.107121,
         "plot_series":"vggt |  | GT Intrinsics | GT Points"
@@ -1275,6 +1306,7 @@
         "quality":0.3647499486,
         "real_num_points":110277,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bonsai_2_n100_s42_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s42_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_steps15000",
         "rre":0.7897,
         "rte":0.107121,
         "plot_series":"vggt | GT Extrinsics |  | "
@@ -1315,6 +1347,7 @@
         "quality":0.376240868,
         "real_num_points":206613,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bonsai_2_n100_s42_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s42_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_gtpcd_steps15000",
         "rre":0.7897,
         "rte":0.107121,
         "plot_series":"vggt | GT Extrinsics |  | GT Points"
@@ -1355,6 +1388,7 @@
         "quality":0.7433650117,
         "real_num_points":110277,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bonsai_2_n100_s42_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_gtint_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s42_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_gtint_steps15000",
         "rre":0.7897,
         "rte":0.107121,
         "plot_series":"vggt | GT Extrinsics | GT Intrinsics | "
@@ -1395,6 +1429,7 @@
         "quality":0.8885018462,
         "real_num_points":206613,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bonsai_2_n100_s42_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_gtint_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s42_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_gtint_gtpcd_steps15000",
         "rre":0.7897,
         "rte":0.107121,
         "plot_series":"vggt | GT Extrinsics | GT Intrinsics | GT Points"
@@ -1435,6 +1470,7 @@
         "quality":0.2979704524,
         "real_num_points":110278,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bonsai_2_n100_s43_c0.0_p110000_voxels_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s43_c0.0_p110000_voxels_farthestpose_i100_gteval_steps15000",
         "rre":0.7897,
         "rte":0.107121,
         "plot_series":"vggt |  |  | "
@@ -1475,6 +1511,7 @@
         "quality":0.3054545499,
         "real_num_points":206613,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bonsai_2_n100_s43_c0.0_p110000_voxels_farthestpose_i100_gteval_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s43_c0.0_p110000_voxels_farthestpose_i100_gteval_gtpcd_steps15000",
         "rre":0.7897,
         "rte":0.107121,
         "plot_series":"vggt |  |  | GT Points"
@@ -1515,6 +1552,7 @@
         "quality":0.3570602539,
         "real_num_points":110278,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bonsai_2_n100_s43_c0.0_p110000_voxels_farthestpose_i100_gteval_gtint_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s43_c0.0_p110000_voxels_farthestpose_i100_gteval_gtint_steps15000",
         "rre":0.7897,
         "rte":0.107121,
         "plot_series":"vggt |  | GT Intrinsics | "
@@ -1555,6 +1593,7 @@
         "quality":0.3785162059,
         "real_num_points":206613,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bonsai_2_n100_s43_c0.0_p110000_voxels_farthestpose_i100_gteval_gtint_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s43_c0.0_p110000_voxels_farthestpose_i100_gteval_gtint_gtpcd_steps15000",
         "rre":0.7897,
         "rte":0.107121,
         "plot_series":"vggt |  | GT Intrinsics | GT Points"
@@ -1595,6 +1634,7 @@
         "quality":0.3629958301,
         "real_num_points":110278,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bonsai_2_n100_s43_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s43_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_steps15000",
         "rre":0.7897,
         "rte":0.107121,
         "plot_series":"vggt | GT Extrinsics |  | "
@@ -1635,6 +1675,7 @@
         "quality":0.3780307154,
         "real_num_points":206613,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bonsai_2_n100_s43_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s43_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_gtpcd_steps15000",
         "rre":0.7897,
         "rte":0.107121,
         "plot_series":"vggt | GT Extrinsics |  | GT Points"
@@ -1675,6 +1716,7 @@
         "quality":0.7408085589,
         "real_num_points":110278,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bonsai_2_n100_s43_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_gtint_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s43_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_gtint_steps15000",
         "rre":0.7897,
         "rte":0.107121,
         "plot_series":"vggt | GT Extrinsics | GT Intrinsics | "
@@ -1715,6 +1757,7 @@
         "quality":0.8909095282,
         "real_num_points":206613,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bonsai_2_n100_s43_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_gtint_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s43_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_gtint_gtpcd_steps15000",
         "rre":0.7897,
         "rte":0.107121,
         "plot_series":"vggt | GT Extrinsics | GT Intrinsics | GT Points"
@@ -1755,6 +1798,7 @@
         "quality":0.2971501731,
         "real_num_points":110278,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bonsai_2_n100_s44_c0.0_p110000_voxels_farthestpose_i100_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s44_c0.0_p110000_voxels_farthestpose_i100_gteval_steps15000",
         "rre":0.7897,
         "rte":0.107121,
         "plot_series":"vggt |  |  | "
@@ -1795,6 +1839,7 @@
         "quality":0.3028925646,
         "real_num_points":206613,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bonsai_2_n100_s44_c0.0_p110000_voxels_farthestpose_i100_gteval_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s44_c0.0_p110000_voxels_farthestpose_i100_gteval_gtpcd_steps15000",
         "rre":0.7897,
         "rte":0.107121,
         "plot_series":"vggt |  |  | GT Points"
@@ -1835,6 +1880,7 @@
         "quality":0.3585533255,
         "real_num_points":110278,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bonsai_2_n100_s44_c0.0_p110000_voxels_farthestpose_i100_gteval_gtint_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s44_c0.0_p110000_voxels_farthestpose_i100_gteval_gtint_steps15000",
         "rre":0.7897,
         "rte":0.107121,
         "plot_series":"vggt |  | GT Intrinsics | "
@@ -1875,6 +1921,7 @@
         "quality":0.3753898829,
         "real_num_points":206613,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bonsai_2_n100_s44_c0.0_p110000_voxels_farthestpose_i100_gteval_gtint_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s44_c0.0_p110000_voxels_farthestpose_i100_gteval_gtint_gtpcd_steps15000",
         "rre":0.7897,
         "rte":0.107121,
         "plot_series":"vggt |  | GT Intrinsics | GT Points"
@@ -1915,6 +1962,7 @@
         "quality":0.3639479471,
         "real_num_points":110278,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bonsai_2_n100_s44_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s44_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_steps15000",
         "rre":0.7897,
         "rte":0.107121,
         "plot_series":"vggt | GT Extrinsics |  | "
@@ -1955,6 +2003,7 @@
         "quality":0.3775762114,
         "real_num_points":206613,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bonsai_2_n100_s44_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s44_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_gtpcd_steps15000",
         "rre":0.7897,
         "rte":0.107121,
         "plot_series":"vggt | GT Extrinsics |  | GT Points"
@@ -1995,6 +2044,7 @@
         "quality":0.7371939781,
         "real_num_points":110278,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bonsai_2_n100_s44_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_gtint_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s44_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_gtint_steps15000",
         "rre":0.7897,
         "rte":0.107121,
         "plot_series":"vggt | GT Extrinsics | GT Intrinsics | "
@@ -2035,6 +2085,7 @@
         "quality":0.8801806819,
         "real_num_points":206613,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bonsai_2_n100_s44_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_gtint_gtpcd_steps15000\/stats\/val_step14999.json",
+        "folder":"bonsai_2_n100_s44_c0.0_p110000_voxels_farthestpose_i100_gteval_gtext_gtint_gtpcd_steps15000",
         "rre":0.7897,
         "rte":0.107121,
         "plot_series":"vggt | GT Extrinsics | GT Intrinsics | GT Points"

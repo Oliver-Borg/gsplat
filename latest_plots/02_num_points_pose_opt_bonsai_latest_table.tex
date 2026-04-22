@@ -1,5 +1,5 @@
-\begin{table}
-\caption{COLMAP versus VGGT initialized with different numbers of points (Bonsai)}
+\begin{table}[H]
+\caption{COLMAP versus VGGT initialized with different numbers of points and with pose optimization (Bonsai)}
 \label{tab:02_num_points_pose_opt_bonsai}
 \begin{tabular}{lrlrrr}
 \toprule
@@ -7,20 +7,28 @@ Choice & Num Points & Pose Opt & PSNR ↑ & LPIPS ↓ & SSIM ↑ \\
 \midrule
 VGGT & 1000 &  & 17.825 & 0.540 & 0.607 \\
 VGGT & 1000 & Pose Opt & 17.557 & 0.486 & 0.591 \\
+VGGT & 5000 &  & 17.707 & 0.486 & 0.593 \\
+VGGT & 5000 & Pose Opt & 17.455 & 0.433 & 0.576 \\
 VGGT & 10000 &  & 17.678 & 0.473 & 0.590 \\
 VGGT & 10000 & Pose Opt & 17.496 & 0.423 & 0.572 \\
+VGGT & 20000 &  & 17.633 & 0.461 & 0.585 \\
+VGGT & 20000 & Pose Opt & 17.477 & 0.413 & 0.569 \\
 VGGT & 30000 &  & 17.578 & 0.451 & 0.581 \\
 VGGT & 30000 & Pose Opt & 17.434 & 0.408 & 0.566 \\
+VGGT & 50000 &  & 17.577 & 0.447 & 0.578 \\
+VGGT & 50000 & Pose Opt & 17.416 & 0.407 & 0.563 \\
 VGGT & 75000 &  & 17.565 & 0.442 & 0.577 \\
 VGGT & 75000 & Pose Opt & 17.402 & 0.404 & 0.562 \\
 COLMAP & 80705 &  & 18.469 & 0.325 & 0.579 \\
 COLMAP & 80705 & Pose Opt & 19.148 & 0.282 & 0.598 \\
+VGGT & 100000 &  & 17.509 & 0.439 & 0.574 \\
+VGGT & 100000 & Pose Opt & 17.370 & 0.404 & 0.560 \\
 VGGT & 250000 &  & 17.507 & 0.431 & 0.569 \\
 VGGT & 250000 & Pose Opt & 17.374 & 0.402 & 0.559 \\
+VGGT & 500000 &  & 17.455 & 0.429 & 0.565 \\
+VGGT & 500000 & Pose Opt & 17.310 & 0.402 & 0.556 \\
 VGGT & 1000000 &  & 17.442 & 0.426 & 0.562 \\
 VGGT & 1000000 & Pose Opt & 17.342 & 0.400 & 0.555 \\
-VGGT & 5000000 &  & 17.451 & 0.417 & 0.553 \\
-VGGT & 5000000 & Pose Opt & 17.354 & 0.394 & 0.550 \\
 \bottomrule
 \end{tabular}
 \end{table}
