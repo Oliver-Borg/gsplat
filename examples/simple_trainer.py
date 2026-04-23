@@ -940,7 +940,7 @@ class Runner:
                 self.writer.flush()
 
             # save checkpoint before updating the model
-            if step in [i - 1 for i in cfg.save_steps] or step == max_steps - 1:
+            if step in [i - 1 for i in cfg.save_steps] or (step == max_steps - 1 and len(cfg.save_steps) > 0):
                 mem = torch.cuda.max_memory_allocated() / 1024**3
                 stats = {
                     "mem": mem,
