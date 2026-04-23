@@ -139,12 +139,12 @@ def project_points(points_3d: np.ndarray, c2w: np.ndarray, K: np.ndarray) -> Tup
 
 
 def run_gradio_eval(
-    pred_path: str, gt_path: str, show_gt_pts: bool, show_pred_pts: bool, pred_color_mode: str
-) -> Tuple[str, Optional[go.Figure], Dict, Optional[Parser], Optional[Parser]]:
+    pred_path: str, gt_path: str, show_comparison: bool, pred_color_mode: str
+) -> Tuple[str, Optional[go.Figure], Optional[go.Figure], Dict, Optional[Parser], Optional[Parser]]:
     # 1. Load data using Parser
     gt_parser, gt_poses, gt_intrinsics, gt_imsizes, gt_err = load_parser_data(gt_path)
     if gt_err or gt_parser is None or gt_poses is None:
-        return f"Error loading GT: {gt_err}", None, {}, None, None
+        return f"Error loading GT: {gt_err}", None, None, {}, None, None
 
     R_gt_align = get_alignment_rotation(gt_parser.camtoworlds)
     if len(gt_parser.points) > 0:
@@ -154,12 +154,12 @@ def run_gradio_eval(
 
     pred_parser, pred_poses, pred_intrinsics, pred_imsizes, pred_err = load_parser_data(pred_path)
     if pred_err or pred_parser is None or pred_poses is None:
-        return f"Error loading Pred: {pred_err}", None, {}, None, None
+        return f"Error loading Pred: {pred_err}", None, None, {}, None, None
 
     # 2. Calculate Metrics
     metrics = calculate_metrics(pred_poses, gt_poses)
     if "error" in metrics:
-        return f"Error: {metrics['error']}", None, metrics, None, None
+        return f"Error: {metrics['error']}", None, None, metrics, None, None
 
     common_names = sorted(list(set(pred_poses.keys()) & set(gt_poses.keys())))
     p_centers = np.array([pred_poses[n][:3, 3] for n in common_names])
@@ -168,68 +168,87 @@ def run_gradio_eval(
     # 3. Alignment
     s, R, t = umeyama_alignment(p_centers, g_centers)
 
-    fig = go.Figure()
+    fig_gt = go.Figure()
+    fig_pred = go.Figure()
 
     # 4. GT Points Visualization
-    if show_gt_pts:
-        if len(gt_parser.points) > 0:
-            fig.add_trace(create_point_cloud_trace(gt_parser.points, "green", "GT Points"))
+    gt_trace_colored = None
+    gt_trace_green = None
+    if len(gt_parser.points) > 0:
+        gt_colors = gt_parser.points_rgb if hasattr(gt_parser, "points_rgb") and len(gt_parser.points_rgb) > 0 else "blue"
+        gt_trace_colored = create_point_cloud_trace(gt_parser.points, gt_colors, "GT Points")
+        gt_trace_green = create_point_cloud_trace(gt_parser.points, "green", "GT Points (Reference)")
+        fig_gt.add_trace(gt_trace_colored)
 
     # 5. Pred Points Visualization
-    if show_pred_pts:
-        # try:
-        # Special handling for confidence PLY in prediction folder (retained from original)
-        ply_filename = "points_conf.ply" if pred_color_mode == "Confidence" else "points.ply"
-        ply_file_path = os.path.join(pred_path, "sparse", ply_filename)
+    pred_trace_colored = None
+    pred_trace_green = None
+    # try:
+    # Special handling for confidence PLY in prediction folder (retained from original)
+    ply_filename = "points_conf.ply" if pred_color_mode == "Confidence" else "points.ply"
+    ply_file_path = os.path.join(pred_path, "sparse", ply_filename)
 
-        pred_pts = None
-        pred_colors = "red"
+    pred_pts = None
+    pred_colors = "red"
 
-        # Try loading specific PLY if exists (for confidence visualization)
-        if os.path.exists(ply_file_path):
-            pc = trimesh.load(ply_file_path)
-            if isinstance(pc, trimesh.PointCloud):
-                pred_pts = np.array(pc.vertices)
+    # Try loading specific PLY if exists (for confidence visualization)
+    if os.path.exists(ply_file_path):
+        pc = trimesh.load(ply_file_path)
+        if isinstance(pc, trimesh.PointCloud):
+            pred_pts = np.array(pc.vertices)
+            
+            pred_pts = (pred_parser.R_align @ pred_pts.T).T
+            pred_pts = pred_pts - pred_parser.t_align[None, :]
+
+            if hasattr(pc, "colors") and len(pc.colors) > 0:
+                pred_colors = np.array(pc.colors)
                 
-                pred_pts = (pred_parser.R_align @ pred_pts.T).T
-                pred_pts = pred_pts - pred_parser.t_align[None, :]
-
-                if hasattr(pc, "colors") and len(pc.colors) > 0:
-                    pred_colors = np.array(pc.colors)
-            if pred_color_mode == "Spatial":
-                tree = cKDTree(pred_pts)  # type: ignore
-                distances, indices = tree.query(pred_pts, k=4)
-                avg_distances = np.mean(distances[:, 1:], axis=1)
-                norm_distances = (
-                    (
-                        (avg_distances - np.min(avg_distances))
-                        / (np.max(avg_distances) - np.min(avg_distances) + 1e-8)
-                        * 255
-                    )
-                    .clip(0, 255)
-                    .astype(np.uint8)
-                )
-
-                cmap = getattr(cv2, "COLORMAP_TURBO", cv2.COLORMAP_JET)
-                pred_colors = cv2.applyColorMap(norm_distances[:, None], cmap)[:, 0, :]  # Shape (N, 1, 3)
-
+    if pred_color_mode == "Spatial":
         if pred_pts is None and len(pred_parser.points) > 0:
             pred_pts = pred_parser.points
-            if len(pred_parser.points_rgb) > 0:
-                pred_colors = pred_parser.points_rgb
-
         if pred_pts is not None and len(pred_pts) > 0:
-            # Apply the alignment transform to the prediction point cloud
-            # transform: x' = s * R * x + t
-            pred_pts_aligned = (s * (R @ pred_pts.T)).T + t.T
-
-            # Update name based on mode
-            trace_name = (
-                f"Pred Points ({pred_color_mode})" if isinstance(pred_colors, np.ndarray) else "Pred Points (Aligned)"
+            tree = cKDTree(pred_pts)  # type: ignore
+            distances, indices = tree.query(pred_pts, k=4)
+            avg_distances = np.mean(distances[:, 1:], axis=1)
+            norm_distances = (
+                (
+                    (avg_distances - np.min(avg_distances))
+                    / (np.max(avg_distances) - np.min(avg_distances) + 1e-8)
+                    * 255
+                )
+                .clip(0, 255)
+                .astype(np.uint8)
             )
-            fig.add_trace(create_point_cloud_trace(pred_pts_aligned, pred_colors, trace_name))
-        # except Exception as e:
-        #     print(f"Could not load Pred points: {e}")
+
+            cmap = getattr(cv2, "COLORMAP_TURBO", cv2.COLORMAP_JET)
+            pred_colors = cv2.applyColorMap(norm_distances[:, None], cmap)[:, 0, :]  # Shape (N, 1, 3)
+
+    if pred_pts is None and len(pred_parser.points) > 0:
+        pred_pts = pred_parser.points
+        if len(pred_parser.points_rgb) > 0:
+            pred_colors = pred_parser.points_rgb
+
+    if pred_pts is not None and len(pred_pts) > 0:
+        # Apply the alignment transform to the prediction point cloud
+        # transform: x' = s * R * x + t
+        pred_pts_aligned = (s * (R @ pred_pts.T)).T + t.T
+
+        # Update name based on mode
+        trace_name = (
+            f"Pred Points ({pred_color_mode})" if isinstance(pred_colors, np.ndarray) else "Pred Points (Aligned)"
+        )
+        pred_trace_colored = create_point_cloud_trace(pred_pts_aligned, pred_colors, trace_name)
+        pred_trace_green = create_point_cloud_trace(pred_pts_aligned, "green", "Pred Points (Reference)")
+        fig_pred.add_trace(pred_trace_colored)
+    # except Exception as e:
+    #     print(f"Could not load Pred points: {e}")
+
+    # 5.5. Apply Comparison Traces
+    if show_comparison:
+        if pred_trace_green is not None:
+            fig_gt.add_trace(pred_trace_green)
+        if gt_trace_green is not None:
+            fig_pred.add_trace(gt_trace_green)
 
     # 6. Frustum Visualization
     for name in common_names:
@@ -251,16 +270,23 @@ def run_gradio_eval(
         gt_traces = create_frustum_traces(g_c2w, g_Ks, g_imsize, color="green", name=f"GT_{name}", size=size)
         pred_traces = create_frustum_traces(p_c2w, p_Ks, p_imsize, color="red", name=f"Pred_{name}", size=size)
 
-        for t_trace in gt_traces + pred_traces:
+        for t_trace in gt_traces:
             t_trace.customdata = [name] * len(t_trace.x)
             t_trace.hoverinfo = "name"
+            
+        for p_trace in pred_traces:
+            p_trace.customdata = [name] * len(p_trace.x)
+            p_trace.hoverinfo = "name"
 
-        fig.add_traces(gt_traces)
-        fig.add_traces(pred_traces)
+        fig_gt.add_traces(gt_traces)
+        fig_pred.add_traces(pred_traces)
 
-        # Add Error Vector (RTE)
-        fig.add_trace(
-            go.Scatter3d(
+        if show_comparison:
+            fig_gt.add_traces(pred_traces)
+            fig_pred.add_traces(gt_traces)
+
+            # Add Error Vector (RTE)
+            err_trace = go.Scatter3d(
                 x=[g_c2w[0, 3], p_c2w[0, 3]],
                 y=[g_c2w[1, 3], p_c2w[1, 3]],
                 z=[g_c2w[2, 3], p_c2w[2, 3]],
@@ -268,9 +294,11 @@ def run_gradio_eval(
                 line=dict(color="yellow", width=2),
                 showlegend=False,
             )
-        )
+            fig_gt.add_trace(err_trace)
+            fig_pred.add_trace(err_trace)
 
-    fig.update_layout(scene=dict(aspectmode="data"), margin=dict(l=0, r=0, b=0, t=0), template="plotly_dark")
+    fig_gt.update_layout(scene=dict(aspectmode="data"), margin=dict(l=0, r=0, b=0, t=0), template="plotly_dark")
+    fig_pred.update_layout(scene=dict(aspectmode="data"), margin=dict(l=0, r=0, b=0, t=0), template="plotly_dark")
 
     summary_text = (
         f"### Alignment Success\n"
@@ -279,18 +307,18 @@ def run_gradio_eval(
         f"- **Mean RTE:** {metrics['mean_rte']:.5f}"
     )
 
-    return summary_text, fig, metrics, gt_parser, pred_parser
+    return summary_text, fig_gt, fig_pred, metrics, gt_parser, pred_parser
 
 
 def run_gradio_eval_with_names(
-    pred_path: str, gt_path: str, show_gt_pts: bool, show_pred_pts: bool, pred_color_mode: str
+    pred_path: str, gt_path: str, show_comparison: bool, pred_color_mode: str
 ) -> Tuple:
-    summary, fig, metrics, gt_parser, pred_parser = run_gradio_eval(
-        pred_path, gt_path, show_gt_pts, show_pred_pts, pred_color_mode
+    summary, fig_gt, fig_pred, metrics, gt_parser, pred_parser = run_gradio_eval(
+        pred_path, gt_path, show_comparison, pred_color_mode
     )
 
     if metrics is None or gt_parser is None or pred_parser is None:
-        return summary, fig, {}, gr.update(), gr.update(), [], None, None
+        return summary, fig_gt, fig_pred, {}, gr.update(), gr.update(), [], None, None
 
     # Get names from loaded parser
     gt_poses = {n: c2w for n, c2w in zip(gt_parser.image_names, gt_parser.camtoworlds)}
@@ -300,7 +328,8 @@ def run_gradio_eval_with_names(
     if common_names:
         return (
             summary,
-            fig,
+            fig_gt,
+            fig_pred,
             metrics,
             gr.update(choices=common_names, value=common_names[0]),
             gr.update(maximum=len(common_names) - 1, value=0, visible=True),
@@ -309,7 +338,7 @@ def run_gradio_eval_with_names(
             pred_parser,
         )
     else:
-        return summary, fig, metrics, gr.update(), gr.update(), [], gt_parser, pred_parser
+        return summary, fig_gt, fig_pred, metrics, gr.update(), gr.update(), [], gt_parser, pred_parser
 
 
 def render_depth_overlay(
@@ -707,8 +736,7 @@ with gr.Blocks(title="SfM Evaluation Suite") as demo:
             )
 
             with gr.Row():
-                chk_gt = gr.Checkbox(label="Show GT Cloud", value=True)
-                chk_pred = gr.Checkbox(label="Show Pred Cloud", value=True)
+                chk_compare = gr.Checkbox(label="Show Comparison", value=False)
 
             radio_color = gr.Radio(
                 choices=["RGB", "Confidence", "Spatial"], label="Pred Point Color", value="RGB", interactive=True
@@ -738,7 +766,10 @@ with gr.Blocks(title="SfM Evaluation Suite") as demo:
 
             with gr.Row():
                 with gr.Column():
-                    plot_output = gr.Plot(label="3D Trajectory Comparison")
+                    plot_gt_output = gr.Plot(label="GT 3D Trajectory")
+                with gr.Column():
+                    plot_pred_output = gr.Plot(label="Pred 3D Trajectory")
+            with gr.Row():
                 with gr.Column():
                     focused_plot_output = gr.Plot(label="Camera Points")
 
@@ -764,10 +795,11 @@ with gr.Blocks(title="SfM Evaluation Suite") as demo:
     # Existing Event Wiring
     btn.click(
         fn=run_gradio_eval_with_names,
-        inputs=[pred_input, gt_input, chk_gt, chk_pred, radio_color],
+        inputs=[pred_input, gt_input, chk_compare, radio_color],
         outputs=[
             output_metrics,
-            plot_output,
+            plot_gt_output,
+            plot_pred_output,
             output_json,
             camera_dropdown,
             camera_slider,
