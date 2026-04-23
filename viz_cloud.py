@@ -615,6 +615,9 @@ def update_configs(exp_name: str, ds_name: str):
     colmap_choices = list(groups["colmap"].keys())
     colmap_val = colmap_choices[0] if colmap_choices else None
 
+    combined_choices = list(groups["combined"].keys())
+    combined_val = combined_choices[0] if combined_choices else None
+
     # Use a sorted list of valid seeds for the dropdown
     seed_choices = sorted(list(seeds))
     seed_val = seed_choices[0] if seed_choices else None
@@ -623,18 +626,20 @@ def update_configs(exp_name: str, ds_name: str):
     state_groups = {
         "vggt": {k: dict(v) for k, v in groups["vggt"].items()},
         "colmap": {k: dict(v) for k, v in groups["colmap"].items()},
+        "combined": {k: dict(v) for k, v in groups["combined"].items()},
         "gt": {k: dict(v) for k, v in groups["gt"].items()},
     }
 
     return (
         gr.update(choices=vggt_choices, value=vggt_val),
         gr.update(choices=colmap_choices, value=colmap_val),
+        gr.update(choices=combined_choices, value=combined_val),
         gr.update(choices=seed_choices, value=seed_val),
         state_groups,
     )
 
 
-def update_paths(vggt_sig: str, colmap_sig: str, seed_val: int, pred_choice: str, groups: dict):
+def update_paths(vggt_sig: str, colmap_sig: str, combined_sig: str, seed_val: int, pred_choice: str, groups: dict):
     """
     Triggered when config UI changes. Updates the GT and Prediction paths for the evaluator.
     """
@@ -643,8 +648,14 @@ def update_paths(vggt_sig: str, colmap_sig: str, seed_val: int, pred_choice: str
 
     if pred_choice == "VGGT":
         pred_config = groups.get("vggt", {}).get(vggt_sig, {}).get(seed_val)
-    else:
+    elif pred_choice == "COLMAP":
         pred_config = groups.get("colmap", {}).get(colmap_sig, {}).get(seed_val)
+    else:
+        pred_config = groups.get("combined", {}).get(combined_sig, {}).get(seed_val)
+
+    if not pred_config:
+        return gr.update(), gr.update()
+
 
     gt_sigs = list(groups.get("gt", {}).keys())
     gt_config = groups.get("gt", {}).get(gt_sigs[0], {}).get(seed_val) if gt_sigs else None
@@ -676,7 +687,9 @@ with gr.Blocks(title="SfM Evaluation Suite") as demo:
                 with gr.Row():
                     vggt_dropdown = gr.Dropdown(choices=[], label="4. Select VGGT Config")
                     colmap_dropdown = gr.Dropdown(choices=[], label="5. Select COLMAP Config")
-                    pred_choice = gr.Radio(choices=["VGGT", "COLMAP"], value="VGGT", label="6. Prediction to Evaluate")
+                    combined_dropdown = gr.Dropdown(choices=[], label="6. Select Combined Config")
+                with gr.Row():
+                    pred_choice = gr.Radio(choices=["VGGT", "COLMAP", "Combined"], value="VGGT", label="7. Prediction to Evaluate")
 
             pred_input = gr.Textbox(
                 label="Prediction Path",
@@ -732,19 +745,19 @@ with gr.Blocks(title="SfM Evaluation Suite") as demo:
     exp_dropdown.change(
         fn=update_configs,
         inputs=[exp_dropdown, ds_dropdown],
-        outputs=[vggt_dropdown, colmap_dropdown, seed_dropdown, config_groups_state],
+        outputs=[vggt_dropdown, colmap_dropdown, combined_dropdown, seed_dropdown, config_groups_state],
     )
 
     ds_dropdown.change(
         fn=update_configs,
         inputs=[exp_dropdown, ds_dropdown],
-        outputs=[vggt_dropdown, colmap_dropdown, seed_dropdown, config_groups_state],
+        outputs=[vggt_dropdown, colmap_dropdown, combined_dropdown, seed_dropdown, config_groups_state],
     )
 
-    for ui_element in [vggt_dropdown, colmap_dropdown, seed_dropdown, pred_choice]:
+    for ui_element in [vggt_dropdown, colmap_dropdown, combined_dropdown, seed_dropdown, pred_choice]:
         ui_element.change(
             fn=update_paths,
-            inputs=[vggt_dropdown, colmap_dropdown, seed_dropdown, pred_choice, config_groups_state],
+            inputs=[vggt_dropdown, colmap_dropdown, combined_dropdown, seed_dropdown, pred_choice, config_groups_state],
             outputs=[pred_input, gt_input],
         )
 

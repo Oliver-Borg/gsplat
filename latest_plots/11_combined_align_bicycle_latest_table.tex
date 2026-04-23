@@ -1,0 +1,26 @@
+\begin{table}[H]
+\caption{Combining cameras and point clouds (Bicycle)}
+\label{tab:11_combined_align_bicycle}
+\begin{tabular}{lrllrrrrrr}
+\toprule
+Choice & Num Images & Sampling Mode & Align Mode & Validation Step RRE ↓ & Validation Step RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP & 30 & ba & Global Alignment & 52.688 & 1.144 & 12.830 & 0.730 & 0.187 & -0.197 \\
+COLMAP & 30 & random & Local Alignment & 52.688 & 1.144 & 12.506 & 0.701 & 0.168 & -0.196 \\
+COLMAP & 40 & ba & Global Alignment & 20.915 & 1.157 & 13.256 & 0.722 & 0.185 & -0.185 \\
+COLMAP & 40 & random & Local Alignment & 20.915 & 1.157 & 12.732 & 0.716 & 0.183 & -0.193 \\
+COLMAP & 50 & ba & Global Alignment & 31.914 & 0.650 & 13.062 & 0.716 & 0.173 & -0.193 \\
+COLMAP & 50 & random & Local Alignment & 31.914 & 0.650 & 12.292 & 0.725 & 0.168 & -0.215 \\
+COLMAP & 60 & ba & Global Alignment & 12.728 & 0.732 & 13.602 & 0.682 & 0.194 & -0.150 \\
+COLMAP & 60 & random & Local Alignment & 12.728 & 0.732 & 12.259 & 0.694 & 0.174 & -0.193 \\
+COLMAP & 70 & ba & Global Alignment & 32.011 & 0.679 & 12.996 & 0.728 & 0.172 & -0.202 \\
+COLMAP & 70 & random & Local Alignment & 32.011 & 0.679 & 12.715 & 0.704 & 0.161 & -0.199 \\
+COLMAP & 80 & ba & Global Alignment & 37.030 & 0.742 & 13.340 & 0.729 & 0.191 & -0.185 \\
+COLMAP & 80 & random & Local Alignment & 37.030 & 0.742 & 12.298 & 0.713 & 0.174 & -0.204 \\
+COLMAP & 90 & ba & Global Alignment & 0.133 & 0.004 & 20.130 & 0.281 & 0.421 & 0.352 \\
+COLMAP & 90 & random & Local Alignment & 0.133 & 0.004 & 19.552 & 0.373 & 0.389 & 0.266 \\
+COLMAP & 100 & ba & Global Alignment & 0.105 & 0.004 & 20.982 & 0.260 & 0.497 & 0.425 \\
+COLMAP & 100 & random & Local Alignment & 0.105 & 0.004 & 20.699 & 0.336 & 0.467 & 0.356 \\
+\bottomrule
+\end{tabular}
+\end{table}

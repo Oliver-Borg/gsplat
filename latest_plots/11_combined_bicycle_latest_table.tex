@@ -1,0 +1,42 @@
+\begin{table}[H]
+\caption{Combining cameras and point clouds (Bicycle)}
+\label{tab:11_combined_bicycle}
+\begin{tabular}{lrlllrrrrrr}
+\toprule
+Choice & Num Images & Sampling Mode & Camera Src & Pcd Src & Validation Step RRE ↓ & Validation Step RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP & 30 & ba & colmapcams & bothpcd & 52.688 & 1.144 & 12.830 & 0.730 & 0.187 & -0.197 \\
+COLMAP & 30 & ba & colmapcams & vggtpcd & 52.688 & 1.144 & 12.731 & 0.725 & 0.182 & -0.199 \\
+VGGT & 30 & ba & vggtcams & bothpcd & 1.494 & 0.016 & 12.334 & 0.655 & 0.135 & -0.191 \\
+VGGT & 30 & ba & vggtcams & colmappcd & 1.494 & 0.016 & 11.349 & 0.772 & 0.192 & -0.248 \\
+COLMAP & 40 & ba & colmapcams & bothpcd & 20.915 & 1.157 & 13.256 & 0.722 & 0.185 & -0.185 \\
+COLMAP & 40 & ba & colmapcams & vggtpcd & 20.915 & 1.157 & 13.365 & 0.722 & 0.192 & -0.180 \\
+VGGT & 40 & ba & vggtcams & bothpcd & 0.789 & 0.015 & 13.131 & 0.586 & 0.136 & -0.133 \\
+VGGT & 40 & ba & vggtcams & colmappcd & 0.789 & 0.015 & 13.766 & 0.670 & 0.222 & -0.122 \\
+COLMAP & 50 & ba & colmapcams & bothpcd & 31.914 & 0.650 & 13.062 & 0.716 & 0.173 & -0.193 \\
+COLMAP & 50 & ba & colmapcams & vggtpcd & 31.914 & 0.650 & 13.023 & 0.718 & 0.170 & -0.196 \\
+VGGT & 50 & ba & vggtcams & bothpcd & 0.689 & 0.014 & 14.558 & 0.521 & 0.171 & -0.046 \\
+VGGT & 50 & ba & vggtcams & colmappcd & 0.689 & 0.014 & 15.264 & 0.624 & 0.250 & -0.050 \\
+COLMAP & 60 & ba & colmapcams & bothpcd & 12.728 & 0.732 & 13.602 & 0.682 & 0.194 & -0.150 \\
+COLMAP & 60 & ba & colmapcams & vggtpcd & 12.728 & 0.732 & 13.539 & 0.682 & 0.193 & -0.151 \\
+VGGT & 60 & ba & vggtcams & bothpcd & 0.557 & 0.013 & 14.815 & 0.501 & 0.178 & -0.025 \\
+VGGT & 60 & ba & vggtcams & colmappcd & 0.557 & 0.013 & 15.440 & 0.599 & 0.246 & -0.033 \\
+COLMAP & 70 & ba & colmapcams & bothpcd & 32.011 & 0.679 & 12.996 & 0.728 & 0.172 & -0.202 \\
+COLMAP & 70 & ba & colmapcams & vggtpcd & 32.011 & 0.679 & 13.038 & 0.728 & 0.173 & -0.201 \\
+VGGT & 70 & ba & vggtcams & bothpcd & 0.620 & 0.013 & 14.781 & 0.504 & 0.177 & -0.027 \\
+VGGT & 70 & ba & vggtcams & colmappcd & 0.620 & 0.013 & 15.364 & 0.581 & 0.242 & -0.026 \\
+COLMAP & 80 & ba & colmapcams & bothpcd & 37.030 & 0.742 & 13.340 & 0.729 & 0.191 & -0.185 \\
+COLMAP & 80 & ba & colmapcams & vggtpcd & 37.030 & 0.742 & 13.489 & 0.733 & 0.198 & -0.180 \\
+VGGT & 80 & ba & vggtcams & bothpcd & 0.570 & 0.012 & 15.350 & 0.479 & 0.197 & 0.010 \\
+VGGT & 80 & ba & vggtcams & colmappcd & 0.570 & 0.012 & 15.849 & 0.560 & 0.255 & 0.003 \\
+COLMAP & 90 & ba & colmapcams & bothpcd & 0.133 & 0.004 & 20.130 & 0.281 & 0.421 & 0.352 \\
+COLMAP & 90 & ba & colmapcams & vggtpcd & 0.133 & 0.004 & 19.945 & 0.293 & 0.412 & 0.336 \\
+VGGT & 90 & ba & vggtcams & bothpcd & 0.891 & 0.016 & 17.105 & 0.439 & 0.250 & 0.099 \\
+VGGT & 90 & ba & vggtcams & colmappcd & 0.891 & 0.016 & 17.253 & 0.529 & 0.284 & 0.066 \\
+COLMAP & 100 & ba & colmapcams & bothpcd & 0.105 & 0.004 & 20.982 & 0.260 & 0.497 & 0.425 \\
+COLMAP & 100 & ba & colmapcams & vggtpcd & 0.105 & 0.004 & 20.757 & 0.275 & 0.486 & 0.405 \\
+VGGT & 100 & ba & vggtcams & bothpcd & 0.857 & 0.015 & 17.224 & 0.433 & 0.257 & 0.108 \\
+VGGT & 100 & ba & vggtcams & colmappcd & 0.857 & 0.015 & 17.384 & 0.517 & 0.287 & 0.077 \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,10 +1,12 @@
 \begin{table}[H]
 \caption{A comparison of different image cropping modes (Bonsai)}
 \label{tab:99_copy_mode_bonsai}
-\begin{tabular}{lrrrrrrr}
+\begin{tabular}{llrrrrrr}
 \toprule
 Choice & Copy Mode & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Final Gaussian Count ↓ \\
 \midrule
+COLMAP & crop & 0.832 & 0.028 & 10.590 & 0.718 & 0.258 & 1000000.000 \\
+COLMAP & square & 0.136 & 0.012 & 20.138 & 0.271 & 0.638 & 1000000.000 \\
 \bottomrule
 \end{tabular}
 \end{table}

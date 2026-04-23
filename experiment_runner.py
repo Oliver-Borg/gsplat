@@ -118,7 +118,8 @@ class Config:
     colmap_mode: Literal["default", "relaxed"] = "default"
     nomcmc: bool = False
     camera_src: Literal["vggt", "colmap", "gt"] = "vggt"
-    pcd_src: Literal["vggt", "colmap", "gt", "combined"] = "vggt"
+    pcd_src: Literal["vggt", "colmap", "gt", "both"] = "vggt"
+    align_mode: Literal["local", "global"] = "local"
 
     construction_data: dict = field(default_factory=dict)
 
@@ -157,6 +158,7 @@ class Config:
         instance.nomcmc = data.get("nomcmc", instance.nomcmc)
         instance.camera_src = data.get("camera_src", instance.camera_src)
         instance.pcd_src = data.get("pcd_src", instance.pcd_src)
+        instance.align_mode = data.get("align_mode", instance.align_mode)
 
         instance.construction_data = data
         return replace(instance)
@@ -181,9 +183,14 @@ class Config:
 
         if self.depth_conf and self.choice == "vggt":
             self.depth_loss = True
+        else:
+            self.depth_conf = False
 
-        if self.depth_loss and self.depth_lambda <= 0.0:
-            self.depth_lambda = 0.01
+        if self.depth_lambda < 0.0:
+            self.depth_lambda = 0.0
+
+        if self.depth_lambda > 0.0:
+            self.depth_loss = True
 
         if self.use_gt_extrinsics or self.use_gt_intrinsics or self.use_gt_points:
             self.gt_eval = True
@@ -241,14 +248,17 @@ class Config:
             parts.append("combined")
             parts.append(f"{self.camera_src}cams")
             parts.append(f"{self.pcd_src}pcd")
-
+            if self.align_mode == "local":
+                parts.append("amlocal")
+            else:
+                parts.append("amglobal")
 
             parts.append(self.colmap_mode)
 
-            if self.sampling_mode == "ba":
+            if self.sampling_mode == "ba" and self.camera_src == "vggt":
                 parts.append(self.camera_type.lower().replace("simple_", "m"))
                 parts.append(self.sampling_mode)
-            else:
+            elif self.pcd_src == "vggt" or self.pcd_src == "both":
                 parts.extend(
                     [
                         f"c{self.conf_thres_value}",
@@ -401,10 +411,12 @@ class Config:
             "image_mode": self.image_mode,
             "camera_type": self.camera_type,
             "colmap_mode": self.colmap_mode,
-            "require_depth_conf": (self.depth_conf or self.depth_loss or self.error_opa) and self.choice == "vggt",
-            "save_conf_as_errors": self.error_opa,
         }
 
+        if (self.depth_conf or self.depth_loss or self.error_opa) and self.choice == "vggt":
+            args["require_depth_conf"] = True
+        if self.error_opa:
+            args["save_conf_as_errors"] = True
         if self.force_reconstruct:
             args["force"] = True
 
@@ -417,7 +429,7 @@ class Config:
         return Config.from_dict({**self.construction_data, "choice": choice})
 
     def reconstruct(self, force: bool = False):
-        force |= self.force_reconstruct
+        force |= self.force_reconstruct or self.choice == "combined"
         if self.is_reconstructed and not force:
             print(Path(self.data_dir), "has already been constructed.\nUse --force to force reconstruction.")
             return 0
@@ -456,6 +468,8 @@ class Config:
             if self.pcd_src == "both":
                 command.extend(["--use_both_pcds"])
             command.extend(["--output_dir", self.data_dir])
+            if self.align_mode == "local":
+                command.append("--align_each_point_set")
 
             try:
                 output = subprocess.run(command, check=True, cwd="../vggt")
@@ -472,7 +486,7 @@ class Config:
             "single",
         ]
         for key, value in self.reconstruct_args.items():
-            if key == "force" and value is True:
+            if (key == "force" or key == "require_depth_conf" or key == "save_conf_as_errors") and value is True:
                 command.extend([f"--{key}"])
             elif value is not None:
                 command.extend([f"--{key}", str(value)])
@@ -892,6 +906,10 @@ experiments = [
             "choice": ["vggt", "colmap"],
         },
         PlotConfig(x_axis="num_images", split_param="", single_legend=True),
+        render_filter_override={
+            "num_images": [20, 30, 40, 100],
+            "seed": [42],
+        }
     ),
     Experiment(
         "num_images_pose_opt",
@@ -907,6 +925,11 @@ experiments = [
             "choice": ["vggt", "colmap"],
         },
         PlotConfig(x_axis="num_images", split_param="pose_opt"),
+        render_filter_override={
+            "num_images": [20, 30, 40, 100],
+            "seed": [42],
+            "pose_opt": [True],
+        },
     ),
     Experiment(
         "num_images_fixed_points",
@@ -1051,25 +1074,78 @@ experiments = [
     ),
     Experiment(
         "combined",
-        3,
+        11,
         "Combining cameras and point clouds",
         {
             "seed": [42],  #
-            "num_images": [100],
+            "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
             "sampling_mode": ["random"],  # , "confidence", "voxels", "ba"
             "num_points_per_image": [1000],
             "pose_opt": [False],  # True, 
             "gt_eval": True,
             "choice": ["combined", "vggt", "colmap"],
             "pcd_src": ["vggt", "colmap", "both"],
+            "align_mode": ["global"],
             "camera_src": ["vggt", "colmap"],
             "num_steps": [15000],
         },
-        PlotConfig(x_axis="", split_param="sampling_mode,cam_src,pcd_src", metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "quality"]),
+        PlotConfig(x_axis="num_images", split_param="sampling_mode,camera_src,pcd_src", metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "quality"]),
         val_steps=[15000],
         render_filter_override={
             "seed": [42],
             "sampling_mode": ["random"],
+            "num_images": [100],
+        },
+    ),
+    Experiment(
+        "combined_align",
+        11,
+        "Combining cameras and point clouds",
+        {
+            "seed": [42],  #
+            "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+            "sampling_mode": ["random"],  # , "confidence", "voxels", "ba"
+            "num_points_per_image": [1000],
+            "pose_opt": [False],  # True, 
+            "gt_eval": True,
+            "choice": ["combined", "vggt", "colmap"],
+            "pcd_src": ["both"],
+            "align_mode": ["local", "global"],
+            "camera_src": ["colmap"],
+            "num_steps": [15000],
+        },
+        PlotConfig(x_axis="num_images", split_param="sampling_mode,align_mode", metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "quality"]),
+        val_steps=[15000],
+        render_filter_override={
+            "seed": [42],
+            "sampling_mode": ["random"],
+            "num_images": [100],
+        },
+    ),
+    Experiment(
+        "combined_align_relaxed",
+        11,
+        "Combining cameras and point clouds",
+        {
+            "seed": [42],  #
+            "num_images": [20, 30],
+            "sampling_mode": ["random"],  # , "confidence", "voxels", "ba"
+            "num_points_per_image": [1000],
+            "pose_opt": [False],  # True, 
+            "colmap_mode": ["relaxed"],
+            "gt_eval": True,
+            "choice": ["combined", "vggt", "colmap"],
+            "pcd_src": ["both"],
+            "align_mode": ["local", "global"],
+            "camera_src": ["colmap"],
+            "num_steps": [15000],
+        },
+        PlotConfig(x_axis="num_images", split_param="sampling_mode,align_mode", metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "quality"]),
+        val_steps=[15000],
+        render_filter_override={
+            "seed": [42],
+            "sampling_mode": ["random"],
+            "num_images": [100],
         },
     ),
     Experiment(
@@ -1214,15 +1290,15 @@ experiments = [
         "COLMAP versus VGGT with depth loss",
         {
             "seed": [42],  # , 43, 44
-            "num_images": [50],
-            "sampling_mode": ["voxels", "random"],
+            "num_images": [100],
+            "sampling_mode": ["random"],
             "depth_loss": [True],
             "depth_conf": [True, False],
             "pose_opt": [True],
             "choice": ["vggt", "colmap"],
-            "depth_lambda": [0.01, 0.1, 1, 10],
+            "depth_lambda": [0.0, 0.01, 0.1, 1, 10],
         },
-        PlotConfig(x_axis="depth_lambda", split_param="choice,depth_loss,depth_conf,sampling_mode"),
+        PlotConfig(x_axis="depth_lambda", split_param="depth_conf,sampling_mode", metric_keys=["psnr", "lpips", "ssim"]),
     ),
     Experiment(
         "camera_type",
