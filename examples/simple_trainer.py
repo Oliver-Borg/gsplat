@@ -5,7 +5,7 @@ import time
 from collections import defaultdict
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 from line_profiler import profile
 import imageio
@@ -1175,7 +1175,7 @@ class Runner:
 
                 torch.cuda.synchronize()
                 tic = time.time()
-                colors, _, _ = self.rasterize_splats(
+                renders, _, _ = self.rasterize_splats(
                     camtoworlds=camtoworlds,
                     Ks=Ks,
                     width=width,
@@ -1183,15 +1183,21 @@ class Runner:
                     sh_degree=cfg.sh_degree,
                     near_plane=cfg.near_plane,
                     far_plane=cfg.far_plane,
+                    render_mode="RGB+ED",
                     masks=masks,
-                )  # [1, H, W, 3]
+                )
+                if renders.shape[-1] == 4:
+                    colors, depths = renders[..., 0:3], renders[..., 3:4]
+                else:
+                    colors, depths = renders, None
+                assert depths is not None
                 torch.cuda.synchronize()
                 ellipse_time += max(time.time() - tic, 1e-10)
 
                 colors = torch.clamp(colors, 0.0, 1.0)
                 distances = torch.sqrt(torch.sum((pixels - colors) ** 2, dim=-1)).squeeze(0).unsqueeze(-1)
                 distances = apply_float_colormap(distances / distances.max()).unsqueeze(0)
-                canvas_list = [pixels, colors, distances, (0.6 * pixels + 0.4 * colors)]
+                canvas_list = [pixels, colors, distances, (0.6 * pixels + 0.4 * colors), torch.stack([depths.squeeze(-1) / depths.max()] * 3, dim=-1)]
 
                 if world_rank == 0:
                     pixels_p = pixels.permute(0, 3, 1, 2)  # [1, 3, H, W]
@@ -1199,6 +1205,7 @@ class Runner:
                     metrics["psnr"].append(self.psnr(colors_p, pixels_p))
                     metrics["ssim"].append(self.ssim(colors_p, pixels_p))
                     metrics["lpips"].append(self.lpips(colors_p, pixels_p))
+                    metrics["depth_factor"].append(depths.max())
                     if "mean_rre_deg" in align_metrics and "mean_rte" in align_metrics:
                         metrics["eval_rre"].append(torch.tensor(align_metrics.get("mean_rre_deg", 0.0)))
                         metrics["eval_rte"].append(torch.tensor(align_metrics.get("mean_rte", 0.0)))
@@ -1219,7 +1226,10 @@ class Runner:
                             p.unlink()
                     executor.submit(
                         imageio.imwrite,
-                        f"{self.render_dir}/{stage}_step{step}_{i:04d}_psnr{metrics['psnr'][-1]:.2f}_lpips{metrics['lpips'][-1]:.2f}.jpg",
+                        f"{self.render_dir}/{stage}_step{step}_{i:04d}"
+                        f"_psnr{metrics['psnr'][-1]:.3f}"
+                        f"_lpips{metrics['lpips'][-1]:.3f}"
+                        f"_ssim{metrics['ssim'][-1]:.3f}.jpg",
                         canvas
                     )
 
@@ -1227,7 +1237,8 @@ class Runner:
         if world_rank == 0:
             ellipse_time /= len(valloader)
 
-            stats = {k: torch.stack(v).mean().item() for k, v in metrics.items()}
+            stats: dict[str, Any] = {k: torch.stack(v).mean().item() for k, v in metrics.items()}
+            stats["raw_metrics"] = {k: [x.item() for x in v] for k, v in metrics.items()}
             stats.update(
                 {
                     "ellipse_time": ellipse_time,
@@ -1254,6 +1265,8 @@ class Runner:
                 json.dump(stats, f)
             # save stats to tensorboard
             for k, v in stats.items():
+                if isinstance(v, dict):
+                    continue
                 self.writer.add_scalar(f"{stage}/{k}", v, step)
             self.writer.flush()
 
