@@ -654,6 +654,7 @@ class PlotConfig:
     metric_keys: list[str] = field(default_factory=lambda: ["rre", "rte", "psnr", "lpips", "ssim", "num_GS"])
     single_legend: bool = True
     split_choice: bool = False
+    max_render_cols: int = 3
 
 
 @dataclass
@@ -851,6 +852,7 @@ class Experiment:
             create_table=True,
             print_title=include_title,
             split_choice=self.plot_args.split_choice,
+            max_render_cols=self.plot_args.max_render_cols,
         )
 
     def progress_stats(self, dataset_name: str, print_progress_bars: bool = False) -> str:
@@ -1404,7 +1406,12 @@ experiments = [
             split_param="use_gt_extrinsics,use_gt_intrinsics,use_gt_points",
             metric_keys=["quality"],
             split_choice=True,
+            max_render_cols=4,
         ),
+        render_filter_override={
+            "seed": [42],
+            "num_images": [100],
+        },
         val_steps=[15000],
     ),
 ]
