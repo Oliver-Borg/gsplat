@@ -1,27 +1,26 @@
 \begin{table}[H]
 \caption{The effect of using ground truth extrinsics, intrinsics and points on VGGT and COLMAP results (Bicycle)}
 \label{tab:06_gt_cams_bicycle}
-\begin{tabular}{llllrrrrrr}
+\begin{tabular}{llllr}
 \toprule
-Choice & Use Gt Extrinsics & Use Gt Intrinsics & Use Gt Points & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Final Gaussian Count ↓ \\
+Choice & Use Gt Extrinsics & Use Gt Intrinsics & Use Gt Points & Composite Quality ↑ \\
 \midrule
-COLMAP &  &  &  & 0.102 & 0.017 & 21.079 & 0.368 & 0.490 & 1000000.000 \\
-GT &  &  &  & NaN & NaN & 25.142 & 0.230 & 0.748 & 1000000.000 \\
-VGGT &  &  &  & 0.858 & 0.067 & 17.298 & 0.484 & 0.271 & 1000000.000 \\
-COLMAP &  &  & GT Points & 0.102 & 0.017 & 21.073 & 0.275 & 0.504 & 1000000.000 \\
-VGGT &  &  & GT Points & 0.858 & 0.067 & 17.293 & 0.449 & 0.266 & 1000000.000 \\
-COLMAP &  & GT Intrinsics &  & 0.102 & 0.017 & 20.805 & 0.388 & 0.464 & 1000000.000 \\
-VGGT &  & GT Intrinsics &  & 0.858 & 0.067 & 17.286 & 0.485 & 0.271 & 1000000.000 \\
-COLMAP &  & GT Intrinsics & GT Points & 0.102 & 0.017 & 20.659 & 0.303 & 0.460 & 1000000.000 \\
-VGGT &  & GT Intrinsics & GT Points & 0.858 & 0.067 & 17.292 & 0.449 & 0.267 & 1000000.000 \\
-COLMAP & GT Extrinsics &  &  & 0.102 & 0.017 & 22.168 & 0.394 & 0.523 & 1000000.000 \\
-VGGT & GT Extrinsics &  &  & 0.858 & 0.067 & 20.905 & 0.381 & 0.448 & 1000000.000 \\
-COLMAP & GT Extrinsics &  & GT Points & 0.102 & 0.017 & 22.171 & 0.310 & 0.540 & 1000000.000 \\
-VGGT & GT Extrinsics &  & GT Points & 0.858 & 0.067 & 21.185 & 0.342 & 0.469 & 1000000.000 \\
-COLMAP & GT Extrinsics & GT Intrinsics &  & 0.102 & 0.017 & 22.917 & 0.353 & 0.606 & 1000000.000 \\
-VGGT & GT Extrinsics & GT Intrinsics &  & 0.858 & 0.067 & 22.496 & 0.305 & 0.601 & 1000000.000 \\
-COLMAP & GT Extrinsics & GT Intrinsics & GT Points & 0.102 & 0.017 & 23.240 & 0.251 & 0.661 & 1000000.000 \\
-VGGT & GT Extrinsics & GT Intrinsics & GT Points & 0.858 & 0.067 & 23.244 & 0.251 & 0.661 & 1000000.000 \\
+COLMAP &  &  &  & 0.361 \\
+VGGT &  &  &  & 0.087 \\
+COLMAP &  &  & GT Points & 0.424 \\
+VGGT &  &  & GT Points & 0.106 \\
+COLMAP &  & GT Intrinsics &  & 0.323 \\
+VGGT &  & GT Intrinsics &  & 0.084 \\
+COLMAP &  & GT Intrinsics & GT Points & 0.366 \\
+VGGT &  & GT Intrinsics & GT Points & 0.106 \\
+COLMAP & GT Extrinsics &  &  & 0.378 \\
+VGGT & GT Extrinsics &  &  & 0.319 \\
+COLMAP & GT Extrinsics &  & GT Points & 0.435 \\
+VGGT & GT Extrinsics &  & GT Points & 0.361 \\
+COLMAP & GT Extrinsics & GT Intrinsics &  & 0.470 \\
+VGGT & GT Extrinsics & GT Intrinsics &  & 0.484 \\
+COLMAP & GT Extrinsics & GT Intrinsics & GT Points & 0.569 \\
+VGGT & GT Extrinsics & GT Intrinsics & GT Points & 0.569 \\
 \bottomrule
 \end{tabular}
 \end{table}

@@ -123,7 +123,6 @@ class Config:
 
     construction_data: dict = field(default_factory=dict)
 
-
     @classmethod
     def from_dict(cls, data: dict) -> "Config":
         instance = cls()
@@ -344,9 +343,9 @@ class Config:
         if not self.is_splatted:
             return True
 
-        if self.pose_opt and self.gt_eval:
+        if self.pose_opt and self.gt_eval and self.splatting_time < datetime.datetime(2026, 4, 16, 14, 0).timestamp():
             # Runs before this would not align before each evaluation
-            return self.splatting_time < datetime.datetime(2026, 4, 16, 14, 0).timestamp()
+            return True
 
         if (
             not self.choice == "gt"
@@ -356,8 +355,9 @@ class Config:
         ):
             return True
 
-        if self.choice == "colmap" and self.depth_loss:
+        if self.depth_loss and self.splatting_time < datetime.datetime(2026, 4, 23, 16, 00, 0).timestamp():
             return True
+
         if self.gt_eval and self.is_splatted:
             if len(list(filter(lambda x: "6999" in x, os.listdir(self.renders_folder)))) < len(self.dataset.eval_names):
                 return True
@@ -374,6 +374,10 @@ class Config:
 
         # if self.sampling_mode == "confidence":
         #     return True
+
+        if self.choice == "combined" and self.align_mode == "local" and self.is_reconstructed:
+            if self.reconstruction_time < datetime.datetime(2026, 4, 23, 15, 50, 0).timestamp():
+                return True
 
         if self.is_splatted and self.choice == "vggt":
             with open(self.splatting_val_path, "r") as f:
@@ -429,11 +433,11 @@ class Config:
         return Config.from_dict({**self.construction_data, "choice": choice})
 
     def reconstruct(self, force: bool = False):
-        force |= self.force_reconstruct or self.choice == "combined"
+        force |= self.force_reconstruct
         if self.is_reconstructed and not force:
             print(Path(self.data_dir), "has already been constructed.\nUse --force to force reconstruction.")
             return 0
-        
+
         if self.choice == "combined":
             configs = {
                 "vggt": self.replace_choice("vggt"),
@@ -649,6 +653,7 @@ class PlotConfig:
     filter: str | None = None
     metric_keys: list[str] = field(default_factory=lambda: ["rre", "rte", "psnr", "lpips", "ssim", "num_GS"])
     single_legend: bool = True
+    split_choice: bool = False
 
 
 @dataclass
@@ -808,7 +813,7 @@ class Experiment:
     def get_input_paths(self, dataset_name: str):
         configs = self.get_configs(dataset_name)
         return [Path(config.input_name) for config in configs]
-    
+
     def get_render_output_paths(self, dataset_name: str):
         configs = self.get_render_configs(dataset_name)
         return [Path(config.output_name) for config in configs]
@@ -830,9 +835,11 @@ class Experiment:
                     [path.name for path in self.get_output_paths(dataset_name)],
                 )
             ),
-            render_folders=list(
-                path.name for path in self.get_render_output_paths(dataset_name)
-            ) if self.render_filter_override != {} else None,
+            render_folders=(
+                list(path.name for path in self.get_render_output_paths(dataset_name))
+                if self.render_filter_override != {}
+                else None
+            ),
             create_pcp=create_pcp,
             val_steps=self.val_steps,
             title=self.description,
@@ -843,6 +850,7 @@ class Experiment:
             single_legend=self.plot_args.single_legend,
             create_table=True,
             print_title=include_title,
+            split_choice=self.plot_args.split_choice,
         )
 
     def progress_stats(self, dataset_name: str, print_progress_bars: bool = False) -> str:
@@ -909,7 +917,7 @@ experiments = [
         render_filter_override={
             "num_images": [20, 30, 40, 100],
             "seed": [42],
-        }
+        },
     ),
     Experiment(
         "num_images_pose_opt",
@@ -975,7 +983,9 @@ experiments = [
             "choice": ["vggt", "colmap"],
             "num_steps": [30000],
         },
-        PlotConfig(x_axis="", split_param="choice,pose_opt", metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim"]),
+        PlotConfig(
+            x_axis="", split_param="choice,pose_opt", metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim"]
+        ),
         val_steps=[30000],
     ),
     Experiment(
@@ -995,7 +1005,7 @@ experiments = [
         PlotConfig(x_axis="num_points", split_param="", metric_keys=["psnr", "lpips", "ssim"]),
         render_filter_override={
             "num_points_per_image": [10, 100, 1000, 10000],
-        }
+        },
     ),
     Experiment(
         "num_points_pose_opt",
@@ -1015,7 +1025,7 @@ experiments = [
         render_filter_override={
             "num_points_per_image": [10, 100, 1000, 10000],
             "pose_opt": [True],
-        }
+        },
     ),
     Experiment(
         "sampling_mode",
@@ -1034,7 +1044,7 @@ experiments = [
         render_filter_override={
             "seed": [42],
             "num_points_per_image": [1000],
-        }
+        },
     ),
     Experiment(
         "sampling_mode_gt_cams",
@@ -1053,7 +1063,7 @@ experiments = [
         render_filter_override={
             "seed": [42],
             "num_points_per_image": [2500],
-        }
+        },
     ),
     Experiment(
         "test",
@@ -1081,7 +1091,7 @@ experiments = [
             "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
             "sampling_mode": ["random"],  # , "confidence", "voxels", "ba"
             "num_points_per_image": [1000],
-            "pose_opt": [False],  # True, 
+            "pose_opt": [False],  # True,
             "gt_eval": True,
             "choice": ["combined", "vggt", "colmap"],
             "pcd_src": ["vggt", "colmap", "both"],
@@ -1089,7 +1099,11 @@ experiments = [
             "camera_src": ["vggt", "colmap"],
             "num_steps": [15000],
         },
-        PlotConfig(x_axis="num_images", split_param="sampling_mode,camera_src,pcd_src", metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "quality"]),
+        PlotConfig(
+            x_axis="num_images",
+            split_param="sampling_mode,camera_src,pcd_src",
+            metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "quality"],
+        ),
         val_steps=[15000],
         render_filter_override={
             "seed": [42],
@@ -1106,7 +1120,7 @@ experiments = [
             "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
             "sampling_mode": ["random"],  # , "confidence", "voxels", "ba"
             "num_points_per_image": [1000],
-            "pose_opt": [False],  # True, 
+            "pose_opt": [False],  # True,
             "gt_eval": True,
             "choice": ["combined", "vggt", "colmap"],
             "pcd_src": ["both"],
@@ -1114,7 +1128,11 @@ experiments = [
             "camera_src": ["colmap"],
             "num_steps": [15000],
         },
-        PlotConfig(x_axis="num_images", split_param="sampling_mode,align_mode", metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "quality"]),
+        PlotConfig(
+            x_axis="num_images",
+            split_param="sampling_mode,align_mode",
+            metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "quality"],
+        ),
         val_steps=[15000],
         render_filter_override={
             "seed": [42],
@@ -1131,7 +1149,7 @@ experiments = [
             "num_images": [20, 30],
             "sampling_mode": ["random"],  # , "confidence", "voxels", "ba"
             "num_points_per_image": [1000],
-            "pose_opt": [False],  # True, 
+            "pose_opt": [False],  # True,
             "colmap_mode": ["relaxed"],
             "gt_eval": True,
             "choice": ["combined", "vggt", "colmap"],
@@ -1140,7 +1158,11 @@ experiments = [
             "camera_src": ["colmap"],
             "num_steps": [15000],
         },
-        PlotConfig(x_axis="num_images", split_param="sampling_mode,align_mode", metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "quality"]),
+        PlotConfig(
+            x_axis="num_images",
+            split_param="sampling_mode,align_mode",
+            metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "quality"],
+        ),
         val_steps=[15000],
         render_filter_override={
             "seed": [42],
@@ -1290,15 +1312,20 @@ experiments = [
         "COLMAP versus VGGT with depth loss",
         {
             "seed": [42],  # , 43, 44
-            "num_images": [100],
+            "num_images": [20, 30, 40, 100],
             "sampling_mode": ["random"],
             "depth_loss": [True],
-            "depth_conf": [True, False],
             "pose_opt": [True],
             "choice": ["vggt", "colmap"],
             "depth_lambda": [0.0, 0.01, 0.1, 1, 10],
+            "depth_conf": [True, False],
         },
-        PlotConfig(x_axis="depth_lambda", split_param="depth_conf,sampling_mode", metric_keys=["psnr", "lpips", "ssim"]),
+        PlotConfig(x_axis="depth_lambda", split_param="depth_conf,num_images", metric_keys=["psnr", "lpips", "ssim"]),
+        render_filter_override={
+            "seed": [42],
+            "num_images": [30],
+            "depth_lambda": [0.0, 0.01, 1],
+        },
     ),
     Experiment(
         "camera_type",
@@ -1362,17 +1389,22 @@ experiments = [
         6,
         "The effect of using ground truth extrinsics, intrinsics and points on VGGT and COLMAP results",
         {
-            "seed": [42, 43, 44],
+            "seed": [42],  # , 43, 44
             "num_images": [100],
             "gt_eval": True,
             "use_gt_extrinsics": [True, False],
             "use_gt_intrinsics": [True, False],
             "use_gt_points": [True, False],
             # "pose_opt": [True, False],
-            "choice": ["vggt", "colmap", "gt"],
+            "choice": ["vggt", "colmap"],
             "num_steps": [15000],
         },
-        PlotConfig(x_axis="", split_param="use_gt_extrinsics,use_gt_intrinsics,use_gt_points"),
+        PlotConfig(
+            x_axis="",
+            split_param="use_gt_extrinsics,use_gt_intrinsics,use_gt_points",
+            metric_keys=["quality"],
+            split_choice=True,
+        ),
         val_steps=[15000],
     ),
 ]

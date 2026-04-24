@@ -3,18 +3,16 @@
         42
     ],
     "num_images": [
-        50
+        20,
+        30,
+        40,
+        100
     ],
     "sampling_mode": [
-        "voxels",
         "random"
     ],
     "depth_loss": [
         true
-    ],
-    "depth_conf": [
-        true,
-        false
     ],
     "pose_opt": [
         true
@@ -29,6 +27,10 @@
         0.1,
         1,
         10
+    ],
+    "depth_conf": [
+        true,
+        false
     ],
     "dataset": "bicycle"
 }
