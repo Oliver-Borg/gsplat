@@ -1,5 +1,0 @@
-Choice,Num Images,Sampling Mode,Align Mode,Validation Step RRE ↓,Validation Step RTE ↓,PSNR ↑,LPIPS ↓,SSIM ↑,Composite Quality ↑
-VGGT,20,ba,Global Alignment,,,,,,
-VGGT,20,random,Local Alignment,,,,,,
-VGGT,30,ba,Global Alignment,,,,,,
-VGGT,30,random,Local Alignment,,,,,,

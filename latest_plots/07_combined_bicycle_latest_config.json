@@ -1,0 +1,48 @@
+{
+    "seed": [
+        42
+    ],
+    "num_images": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+    ],
+    "sampling_mode": [
+        "random"
+    ],
+    "num_points_per_image": [
+        1000
+    ],
+    "pose_opt": [
+        false
+    ],
+    "gt_eval": true,
+    "choice": [
+        "combined",
+        "vggt",
+        "colmap"
+    ],
+    "pcd_src": [
+        "vggt",
+        "colmap",
+        "both"
+    ],
+    "align_mode": [
+        "global"
+    ],
+    "camera_src": [
+        "vggt",
+        "colmap"
+    ],
+    "num_steps": [
+        15000
+    ],
+    "dataset": "bicycle"
+}

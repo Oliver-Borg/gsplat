@@ -101,6 +101,7 @@ class Config:
     sampling_mode: Literal["voxels", "random", "confidence", "ba", "vox3"] = "voxels"
     image_mode: Literal["shuffle", "distributed", "mfps", "farthestpose"] = "farthestpose"
     copy_mode: Literal[None, "crop", "square", "tiles"] = None
+    shared_camera: bool = True
     gt_eval: bool = True
     use_gt_extrinsics: bool = False
     use_gt_intrinsics: bool = False
@@ -120,6 +121,7 @@ class Config:
     camera_src: Literal["vggt", "colmap", "gt"] = "vggt"
     pcd_src: Literal["vggt", "colmap", "gt", "both"] = "vggt"
     align_mode: Literal["local", "global"] = "local"
+    keep_backup_cams: bool = False
 
     construction_data: dict = field(default_factory=dict)
 
@@ -136,6 +138,7 @@ class Config:
         instance.sampling_mode = data.get("sampling_mode", instance.sampling_mode)
         instance.image_mode = data.get("image_mode", instance.image_mode)
         instance.copy_mode = data.get("copy_mode", instance.copy_mode)
+        instance.shared_camera = data.get("shared_camera", instance.shared_camera)
         instance.gt_eval = data.get("gt_eval", instance.gt_eval)
         instance.use_gt_extrinsics = data.get("use_gt_extrinsics", instance.use_gt_extrinsics)
         instance.use_gt_intrinsics = data.get("use_gt_intrinsics", instance.use_gt_intrinsics)
@@ -158,6 +161,7 @@ class Config:
         instance.camera_src = data.get("camera_src", instance.camera_src)
         instance.pcd_src = data.get("pcd_src", instance.pcd_src)
         instance.align_mode = data.get("align_mode", instance.align_mode)
+        instance.keep_backup_cams = data.get("keep_backup_cams", instance.keep_backup_cams)
 
         instance.construction_data = data
         return replace(instance)
@@ -179,6 +183,9 @@ class Config:
             self.camera_src = "vggt" if self.pcd_src == "colmap" else "colmap"
 
         self.depth_conf = self.depth_conf and self.choice == "vggt"
+
+        if self.choice == "vggt" and self.sampling_mode != "ba":
+            self.shared_camera = False
 
         if self.depth_conf and self.choice == "vggt":
             self.depth_loss = True
@@ -221,6 +228,8 @@ class Config:
         if self.choice == "colmap":
             parts.append(self.colmap_mode)
             parts.append(self.image_mode)
+            if self.shared_camera:
+                parts.append("sharedcam")
 
             if self.copy_mode is not None:
                 parts.append(self.copy_mode)
@@ -240,6 +249,8 @@ class Config:
             if self.error_opa:
                 parts.append("errconf")
             parts.append(self.image_mode)
+            if self.shared_camera:
+                parts.append("sharedcam")
 
             if self.copy_mode is not None:
                 parts.append(self.copy_mode)
@@ -251,6 +262,8 @@ class Config:
                 parts.append("amlocal")
             else:
                 parts.append("amglobal")
+            if self.keep_backup_cams:
+                parts.append("fallbackcams")
 
             parts.append(self.colmap_mode)
 
@@ -366,6 +379,9 @@ class Config:
 
     @property
     def force_reconstruct(self):
+        if not self.is_reconstructed:
+            return True
+
         if self.choice == "gt":
             return False
 
@@ -375,8 +391,8 @@ class Config:
         # if self.sampling_mode == "confidence":
         #     return True
 
-        if self.choice == "combined" and self.align_mode == "local" and self.is_reconstructed:
-            if self.reconstruction_time < datetime.datetime(2026, 4, 23, 15, 50, 0).timestamp():
+        if self.choice == "combined":
+            if self.reconstruction_time < datetime.datetime(2026, 4, 24, 18, 00, 0).timestamp():
                 return True
 
         if self.is_splatted and self.choice == "vggt":
@@ -424,6 +440,9 @@ class Config:
         if self.force_reconstruct:
             args["force"] = True
 
+        if self.shared_camera:
+            args["shared_camera"] = True
+
         if self.copy_mode is not None:
             args["copy_mode"] = self.copy_mode
 
@@ -433,7 +452,8 @@ class Config:
         return Config.from_dict({**self.construction_data, "choice": choice})
 
     def reconstruct(self, force: bool = False):
-        force |= self.force_reconstruct
+        orig_force = force
+        force |= self.force_reconstruct  # or self.choice == "combined"
         if self.is_reconstructed and not force:
             print(Path(self.data_dir), "has already been constructed.\nUse --force to force reconstruction.")
             return 0
@@ -445,10 +465,10 @@ class Config:
                 "gt": self.replace_choice("gt"),
             }
 
-            configs[self.camera_src].reconstruct(force)
+            configs[self.camera_src].reconstruct(orig_force)
             pcd_choices = ["vggt", "colmap"] if self.pcd_src == "both" else [self.pcd_src]
             for pcd_src in pcd_choices:
-                configs[pcd_src].reconstruct(force)
+                configs[pcd_src].reconstruct(orig_force)
 
             cam_config = configs[self.camera_src]
             if self.pcd_src == "both":
@@ -474,6 +494,8 @@ class Config:
             command.extend(["--output_dir", self.data_dir])
             if self.align_mode == "local":
                 command.append("--align_each_point_set")
+            if self.keep_backup_cams:
+                command.append("--keep_backup_cams")
 
             try:
                 output = subprocess.run(command, check=True, cwd="../vggt")
@@ -490,7 +512,7 @@ class Config:
             "single",
         ]
         for key, value in self.reconstruct_args.items():
-            if (key == "force" or key == "require_depth_conf" or key == "save_conf_as_errors") and value is True:
+            if key in ("force", "require_depth_conf", "save_conf_as_errors", "shared_camera") and value is True:
                 command.extend([f"--{key}"])
             elif value is not None:
                 command.extend([f"--{key}", str(value)])
@@ -531,11 +553,11 @@ class Config:
             return True
         return False
 
-    def eval(self):
-        if self.is_evaluated and not self.force_eval:
+    def eval(self, force: bool = False):
+        if self.is_evaluated and not self.force_eval and not force:
             return 0
         try:
-            examples.evaluation.main(self.data_dir, self.dataset.directory, force=self.force_eval)
+            examples.evaluation.main(self.data_dir, self.dataset.directory, force=self.force_eval or force)
             return 0
         except Exception as e:
             print(f"Error during evaluation: {e}")
@@ -1086,7 +1108,7 @@ experiments = [
     ),
     Experiment(
         "combined",
-        11,
+        7,
         "Combining cameras and point clouds",
         {
             "seed": [42],  #
@@ -1103,8 +1125,37 @@ experiments = [
         },
         PlotConfig(
             x_axis="num_images",
-            split_param="sampling_mode,camera_src,pcd_src",
-            metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "quality"],
+            split_param="camera_src,pcd_src",
+            metric_keys=["rre", "rte", "psnr", "lpips", "ssim", "quality"],
+        ),
+        val_steps=[15000],
+        render_filter_override={
+            "seed": [42],
+            "sampling_mode": ["random"],
+            "num_images": [100],
+        },
+    ),
+    Experiment(
+        "combined_single",
+        7,
+        "Combining cameras and point clouds",
+        {
+            "seed": [42],  #
+            "num_images": [100],
+            "sampling_mode": ["random"],  # , "confidence", "voxels", "ba"
+            "num_points_per_image": [1000],
+            "pose_opt": [False],  # True,
+            "gt_eval": True,
+            "choice": ["combined", "vggt", "colmap"],
+            "pcd_src": ["vggt", "colmap", "both"],
+            "align_mode": ["global"],
+            "camera_src": ["vggt", "colmap"],
+            "num_steps": [15000],
+        },
+        PlotConfig(
+            x_axis="",
+            split_param="camera_src,pcd_src",
+            metric_keys=["rre", "rte", "psnr", "lpips", "ssim", "quality"],
         ),
         val_steps=[15000],
         render_filter_override={
@@ -1115,11 +1166,12 @@ experiments = [
     ),
     Experiment(
         "combined_align",
-        11,
+        7,
         "Combining cameras and point clouds",
         {
             "seed": [42],  #
-            "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+            "num_images": [30, 40, 50, 60, 70, 80, 90, 100],
+            # "num_images": [80, 90, 100],
             "sampling_mode": ["random"],  # , "confidence", "voxels", "ba"
             "num_points_per_image": [1000],
             "pose_opt": [False],  # True,
@@ -1127,13 +1179,14 @@ experiments = [
             "choice": ["combined", "vggt", "colmap"],
             "pcd_src": ["both"],
             "align_mode": ["local", "global"],
+            "keep_backup_cams": [True, False],
             "camera_src": ["colmap"],
             "num_steps": [15000],
         },
         PlotConfig(
             x_axis="num_images",
             split_param="sampling_mode,align_mode",
-            metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "quality"],
+            metric_keys=["rre", "rte", "psnr", "lpips", "ssim", "quality"],
         ),
         val_steps=[15000],
         render_filter_override={
@@ -1144,7 +1197,7 @@ experiments = [
     ),
     Experiment(
         "combined_align_relaxed",
-        11,
+        7,
         "Combining cameras and point clouds",
         {
             "seed": [42],  #
@@ -1163,7 +1216,7 @@ experiments = [
         PlotConfig(
             x_axis="num_images",
             split_param="sampling_mode,align_mode",
-            metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "quality"],
+            metric_keys=["rre", "rte", "psnr", "lpips", "ssim", "quality"],
         ),
         val_steps=[15000],
         render_filter_override={
@@ -1385,6 +1438,19 @@ experiments = [
             "choice": ["vggt", "colmap"],
         },
         PlotConfig(x_axis="", split_param="copy_mode"),
+    ),
+    Experiment(
+        "shared_camera",
+        99,
+        "Shared camera test",
+        {
+            "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+            "seed": [42],
+            "sampling_mode": ["ba"],
+            "choice": ["vggt", "colmap"],
+            "shared_camera": [True, False],
+        },
+        PlotConfig(x_axis="num_images", split_param="shared_camera"),
     ),
     Experiment(
         "gt_cams",

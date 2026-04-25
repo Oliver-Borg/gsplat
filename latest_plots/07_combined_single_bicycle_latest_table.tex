@@ -1,0 +1,14 @@
+\begin{table}[H]
+\caption{Combining cameras and point clouds (Bicycle)}
+\label{tab:07_combined_single_bicycle}
+\begin{tabular}{lllrrrrrr}
+\toprule
+Choice & Camera Src & Pcd Src & Validation Step RRE ↓ & Validation Step RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP & colmapcams & bothpcd & 0.105 & 0.004 & 20.991 & 0.260 & 0.498 & 0.426 \\
+COLMAP & colmapcams & vggtpcd & 0.105 & 0.004 & 20.752 & 0.275 & 0.485 & 0.405 \\
+VGGT & vggtcams & bothpcd & 0.857 & 0.015 & 17.242 & 0.431 & 0.257 & 0.110 \\
+VGGT & vggtcams & colmappcd & 0.857 & 0.015 & 17.401 & 0.520 & 0.288 & 0.076 \\
+\bottomrule
+\end{tabular}
+\end{table}
