@@ -1,14 +1,12 @@
 \begin{table}[H]
 \caption{Combining cameras and point clouds (Bicycle)}
 \label{tab:07_combined_single_bicycle}
-\begin{tabular}{lllrrrrrr}
+\begin{tabular}{lllllrrrr}
 \toprule
-Choice & Camera Src & Pcd Src & Validation Step RRE ↓ & Validation Step RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+Choice & Camera Src & Pcd Src & Align Mode & Keep Backup Cams & RRE ↓ ↓ & RTE ↓ ↓ & Aligned Cameras ↑ ↑ & Composite Quality ↑ ↑ \\
 \midrule
-COLMAP & colmapcams & bothpcd & 0.105 & 0.004 & 20.991 & 0.260 & 0.498 & 0.426 \\
-COLMAP & colmapcams & vggtpcd & 0.105 & 0.004 & 20.752 & 0.275 & 0.485 & 0.405 \\
-VGGT & vggtcams & bothpcd & 0.857 & 0.015 & 17.242 & 0.431 & 0.257 & 0.110 \\
-VGGT & vggtcams & colmappcd & 0.857 & 0.015 & 17.401 & 0.520 & 0.288 & 0.076 \\
+COLMAP & colmapcams & bothpcd & Global Alignment & Fallback Cams & 0.107 & 0.018 & 100.000 & 0.414 \\
+COLMAP & colmapcams & bothpcd & Local Alignment & Fallback Cams & 0.107 & 0.018 & 100.000 & 0.408 \\
 \bottomrule
 \end{tabular}
 \end{table}

@@ -1,0 +1,22 @@
+\begin{table}[H]
+\caption{Combining cameras and point clouds with different point coints (Bicycle)}
+\label{tab:07_combined_num_points_bicycle}
+\begin{tabular}{lrlrrrr}
+\toprule
+Choice & Num Points & Sampling Mode & RRE ↓ ↓ & RTE ↓ ↓ & Aligned Cameras ↑ ↑ & Composite Quality ↑ ↑ \\
+\midrule
+COLMAP & 1000 & random & 0.107 & 0.018 & 100.000 & 0.359 \\
+VGGT & 1000 & random & 0.857 & 0.067 & 100.000 & -0.003 \\
+COLMAP & 5000 & random & 0.107 & 0.018 & 100.000 & 0.370 \\
+VGGT & 5000 & random & 0.857 & 0.067 & 100.000 & 0.054 \\
+COLMAP & 10000 & random & 0.107 & 0.018 & 100.000 & 0.382 \\
+VGGT & 10000 & random & 0.857 & 0.067 & 100.000 & 0.071 \\
+COLMAP & 50000 & random & 0.107 & 0.018 & 100.000 & 0.408 \\
+VGGT & 50000 & random & 0.857 & 0.067 & 100.000 & 0.098 \\
+COLMAP & 100000 & random & 0.107 & 0.018 & 100.000 & 0.414 \\
+VGGT & 100000 & random & 0.857 & 0.067 & 100.000 & 0.103 \\
+COLMAP & 250000 & random & 0.107 & 0.018 & 100.000 & 0.412 \\
+VGGT & 250000 & random & 0.857 & 0.067 & 100.000 & 0.106 \\
+\bottomrule
+\end{tabular}
+\end{table}

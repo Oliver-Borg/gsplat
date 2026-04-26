@@ -1,14 +1,14 @@
 \begin{table}[H]
 \caption{A comparison of different image cropping modes (Bicycle)}
 \label{tab:99_copy_mode_bicycle}
-\begin{tabular}{llrrrrrr}
+\begin{tabular}{llrrrr}
 \toprule
-Choice & Copy Mode & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Final Gaussian Count ↓ \\
+Choice & Copy Mode & RRE ↓ ↓ & RTE ↓ ↓ & Aligned Cameras ↑ ↑ & Composite Quality ↑ ↑ \\
 \midrule
-COLMAP & crop & 54.322 & 0.475 & 10.075 & 0.862 & 0.073 & 825228.000 \\
-VGGT & crop & 4.473 & 0.371 & 13.977 & 0.617 & 0.201 & 1000000.000 \\
-COLMAP & square & 0.119 & 0.020 & 21.548 & 0.422 & 0.494 & 1000000.000 \\
-VGGT & square & 0.994 & 0.090 & 17.388 & 0.484 & 0.264 & 1000000.000 \\
+COLMAP & crop & 54.322 & 0.475 & 12.333 & -0.396 \\
+VGGT & crop & 4.473 & 0.371 & 100.000 & -0.099 \\
+COLMAP & square & 0.119 & 0.020 & 99.667 & 0.334 \\
+VGGT & square & 0.994 & 0.090 & 100.000 & 0.084 \\
 \bottomrule
 \end{tabular}
 \end{table}

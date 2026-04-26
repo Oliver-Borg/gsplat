@@ -1,19 +1,20 @@
 \begin{table}[H]
 \caption{Shared camera test (Bicycle)}
 \label{tab:99_shared_camera_bicycle}
-\begin{tabular}{lrlrrrrrr}
+\begin{tabular}{lrllrrrrrr}
 \toprule
-Choice & Num Images & Shared Camera & RRE ↓ ↓ & RTE ↓ ↓ & PSNR ↑ ↑ & LPIPS ↓ ↓ & SSIM ↑ ↑ & Final Gaussian Count ↓ \\
+Choice & Num Images & Shared Camera & Sampling Mode & RRE ↓ ↓ & RTE ↓ ↓ & PSNR ↑ ↑ & LPIPS ↓ ↓ & SSIM ↑ ↑ & Final Gaussian Count ↓ \\
 \midrule
-COLMAP & 20 & Shared Cam & NaN & NaN & 9.434 & 0.961 & 0.020 & 37114.000 \\
-COLMAP & 30 & Shared Cam & 0.602 & 0.010 & 13.327 & 0.757 & 0.231 & 812527.000 \\
-COLMAP & 40 & Shared Cam & 0.295 & 0.018 & 14.192 & 0.667 & 0.239 & 1000000.000 \\
-COLMAP & 50 & Shared Cam & 0.180 & 0.009 & 16.783 & 0.583 & 0.305 & 1000000.000 \\
-COLMAP & 60 & Shared Cam & 0.123 & 0.010 & 17.285 & 0.546 & 0.330 & 1000000.000 \\
-COLMAP & 70 & Shared Cam & 0.105 & 0.009 & 18.025 & 0.508 & 0.356 & 1000000.000 \\
-COLMAP & 80 & Shared Cam & 0.140 & 0.005 & 17.954 & 0.478 & 0.343 & 1000000.000 \\
-COLMAP & 90 & Shared Cam & 0.121 & 0.008 & 20.749 & 0.398 & 0.438 & 1000000.000 \\
-COLMAP & 100 & Shared Cam & 0.104 & 0.008 & 21.391 & 0.369 & 0.478 & 1000000.000 \\
+VGGT & 10 & Shared Cam & ba & 9.657 & 1.198 & 12.327 & 0.713 & 0.175 & 1000000.000 \\
+VGGT & 20 & Shared Cam & ba & 2.883 & 0.222 & 14.908 & 0.652 & 0.244 & 1000000.000 \\
+VGGT & 30 & Shared Cam & ba & 1.052 & 0.103 & 16.199 & 0.603 & 0.266 & 1000000.000 \\
+VGGT & 40 & Shared Cam & ba & 0.991 & 0.090 & 16.528 & 0.596 & 0.272 & 1000000.000 \\
+VGGT & 50 & Shared Cam & ba & 0.761 & 0.067 & 17.372 & 0.529 & 0.284 & 1000000.000 \\
+VGGT & 60 & Shared Cam & ba & 0.719 & 0.044 & 17.004 & 0.521 & 0.276 & 1000000.000 \\
+VGGT & 70 & Shared Cam & ba & 0.766 & 0.047 & 17.032 & 0.513 & 0.276 & 1000000.000 \\
+VGGT & 80 & Shared Cam & ba & 0.734 & 0.043 & 17.120 & 0.507 & 0.279 & 1000000.000 \\
+VGGT & 90 & Shared Cam & ba & 0.789 & 0.043 & 17.225 & 0.526 & 0.286 & 1000000.000 \\
+VGGT & 100 & Shared Cam & ba & 0.814 & 0.045 & 17.045 & 0.530 & 0.282 & 1000000.000 \\
 \bottomrule
 \end{tabular}
 \end{table}

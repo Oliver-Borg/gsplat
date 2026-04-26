@@ -3,8 +3,10 @@
         42
     ],
     "num_images": [
-        20,
-        30
+        25,
+        50,
+        75,
+        100
     ],
     "sampling_mode": [
         "random"
@@ -16,7 +18,8 @@
         false
     ],
     "colmap_mode": [
-        "relaxed"
+        "relaxed",
+        "default"
     ],
     "gt_eval": true,
     "choice": [
@@ -25,11 +28,9 @@
         "colmap"
     ],
     "pcd_src": [
-        "both"
-    ],
-    "align_mode": [
-        "local",
-        "global"
+        "both",
+        "colmap",
+        "vggt"
     ],
     "camera_src": [
         "colmap"

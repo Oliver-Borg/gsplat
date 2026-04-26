@@ -15,9 +15,11 @@
         42
     ],
     "sampling_mode": [
-        "ba"
+        "ba",
+        "voxels"
     ],
     "choice": [
+        "vggt",
         "colmap"
     ],
     "shared_camera": [

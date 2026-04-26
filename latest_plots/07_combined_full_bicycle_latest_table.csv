@@ -1,0 +1,17 @@
+Choice,Num Images,Camera Src,Pcd Src,Align Mode,Keep Backup Cams,RRE ↓ ↓,RTE ↓ ↓,Aligned Cameras ↑ ↑,Composite Quality ↑ ↑
+COLMAP,30,colmapcams,bothpcd,Global Alignment,Fallback Cams,1.1253,0.086719,30.0,0.01888611465402053
+COLMAP,30,colmapcams,bothpcd,Local Alignment,Fallback Cams,1.1253,0.086719,30.0,0.01452297773974683
+COLMAP,40,colmapcams,bothpcd,Global Alignment,Fallback Cams,0.8223,0.081137,40.0,0.061365758272794446
+COLMAP,40,colmapcams,bothpcd,Local Alignment,Fallback Cams,0.8223,0.081137,40.0,0.059435259296647794
+COLMAP,50,colmapcams,bothpcd,Global Alignment,Fallback Cams,0.7647,0.07365,50.0,0.11505892107903459
+COLMAP,50,colmapcams,bothpcd,Local Alignment,Fallback Cams,0.7647,0.07365,50.0,0.10959781269658456
+COLMAP,60,colmapcams,bothpcd,Global Alignment,Fallback Cams,0.6419,0.058389,60.0,0.13143815314173313
+COLMAP,60,colmapcams,bothpcd,Local Alignment,Fallback Cams,0.6419,0.058389,60.0,0.12678140192701107
+COLMAP,70,colmapcams,bothpcd,Global Alignment,Fallback Cams,0.6421,0.073629,70.0,0.1449645148460706
+COLMAP,70,colmapcams,bothpcd,Local Alignment,Fallback Cams,0.6421,0.073629,70.0,0.13927911883286642
+COLMAP,80,colmapcams,bothpcd,Global Alignment,Fallback Cams,0.6207,0.062369,80.0,0.17001474685991175
+COLMAP,80,colmapcams,bothpcd,Local Alignment,Fallback Cams,0.6207,0.062369,80.0,0.16596718753135536
+COLMAP,90,colmapcams,bothpcd,Global Alignment,Fallback Cams,0.1284,0.017995,90.0,0.3719202711878076
+COLMAP,90,colmapcams,bothpcd,Local Alignment,Fallback Cams,0.1284,0.017995,90.0,0.3694475496101875
+COLMAP,100,colmapcams,bothpcd,Global Alignment,Fallback Cams,0.1067,0.017644,100.0,0.4140253851288243
+COLMAP,100,colmapcams,bothpcd,Local Alignment,Fallback Cams,0.1067,0.017644,100.0,0.40839084992554364

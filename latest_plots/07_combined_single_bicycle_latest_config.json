@@ -17,19 +17,21 @@
     "gt_eval": true,
     "choice": [
         "combined",
-        "vggt",
-        "colmap"
+        "colmap",
+        "vggt"
     ],
     "pcd_src": [
-        "vggt",
-        "colmap",
         "both"
     ],
     "align_mode": [
+        "local",
         "global"
     ],
+    "keep_backup_cams": [
+        true,
+        false
+    ],
     "camera_src": [
-        "vggt",
         "colmap"
     ],
     "num_steps": [

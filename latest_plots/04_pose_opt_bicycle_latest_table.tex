@@ -1,14 +1,14 @@
 \begin{table}[H]
 \caption{COLMAP versus VGGT with pose optimization (Bicycle)}
 \label{tab:04_pose_opt_bicycle}
-\begin{tabular}{llrrrrr}
+\begin{tabular}{llrrrrrr}
 \toprule
-Choice & Pose Opt & Validation Step RRE ↓ & Validation Step RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ \\
+Choice & Pose Opt & Validation Step RRE ↓ ↓ & Validation Step RTE ↓ ↓ & PSNR ↑ ↑ & LPIPS ↓ ↓ & SSIM ↑ ↑ & Composite Quality ↑ ↑ \\
 \midrule
-COLMAP &  & 0.105 & 0.004 & 21.007 & 0.283 & 0.494 \\
-COLMAP & Pose Opt & 0.099 & 0.004 & 21.548 & 0.267 & 0.542 \\
-VGGT &  & 0.858 & 0.015 & 17.051 & 0.434 & 0.249 \\
-VGGT & Pose Opt & 0.677 & 0.014 & 17.384 & 0.319 & 0.250 \\
+COLMAP &  & 0.108 & 0.005 & 20.717 & 0.287 & 0.474 & 0.390 \\
+COLMAP & Pose Opt & 0.099 & 0.004 & 21.500 & 0.267 & 0.538 & 0.454 \\
+VGGT &  & 0.858 & 0.015 & 17.051 & 0.434 & 0.249 & 0.100 \\
+VGGT & Pose Opt & 0.677 & 0.014 & 17.384 & 0.319 & 0.250 & 0.178 \\
 \bottomrule
 \end{tabular}
 \end{table}

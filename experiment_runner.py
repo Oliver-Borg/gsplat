@@ -120,7 +120,7 @@ class Config:
     nomcmc: bool = False
     camera_src: Literal["vggt", "colmap", "gt"] = "vggt"
     pcd_src: Literal["vggt", "colmap", "gt", "both"] = "vggt"
-    align_mode: Literal["local", "global"] = "local"
+    align_mode: Literal["local", "global"] = "global"
     keep_backup_cams: bool = False
 
     construction_data: dict = field(default_factory=dict)
@@ -392,7 +392,7 @@ class Config:
         #     return True
 
         if self.choice == "combined":
-            if self.reconstruction_time < datetime.datetime(2026, 4, 24, 18, 00, 0).timestamp():
+            if self.reconstruction_time < datetime.datetime(2026, 4, 25, 11, 30, 0).timestamp():
                 return True
 
         if self.is_splatted and self.choice == "vggt":
@@ -453,7 +453,7 @@ class Config:
 
     def reconstruct(self, force: bool = False):
         orig_force = force
-        force |= self.force_reconstruct  # or self.choice == "combined"
+        force |= self.force_reconstruct
         if self.is_reconstructed and not force:
             print(Path(self.data_dir), "has already been constructed.\nUse --force to force reconstruction.")
             return 0
@@ -877,6 +877,10 @@ class Experiment:
             max_render_cols=self.plot_args.max_render_cols,
         )
 
+        # print("Plotted metrics from these files")
+        # for config in self.get_configs(dataset_name):
+        #     print(Path(config.eval_path))
+
     def progress_stats(self, dataset_name: str, print_progress_bars: bool = False) -> str:
         configs = self.get_configs(dataset_name)
 
@@ -1008,7 +1012,9 @@ experiments = [
             "num_steps": [30000],
         },
         PlotConfig(
-            x_axis="", split_param="choice,pose_opt", metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim"]
+            x_axis="",
+            split_param="choice,pose_opt",
+            metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "quality"],
         ),
         val_steps=[30000],
     ),
@@ -1112,7 +1118,7 @@ experiments = [
         "Combining cameras and point clouds",
         {
             "seed": [42],  #
-            "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+            "num_images": [25, 50, 75, 100],
             "sampling_mode": ["random"],  # , "confidence", "voxels", "ba"
             "num_points_per_image": [1000],
             "pose_opt": [False],  # True,
@@ -1126,7 +1132,7 @@ experiments = [
         PlotConfig(
             x_axis="num_images",
             split_param="camera_src,pcd_src",
-            metric_keys=["rre", "rte", "psnr", "lpips", "ssim", "quality"],
+            metric_keys=["rre", "rte", "num_aligned", "quality"],
         ),
         val_steps=[15000],
         render_filter_override={
@@ -1146,16 +1152,47 @@ experiments = [
             "num_points_per_image": [1000],
             "pose_opt": [False],  # True,
             "gt_eval": True,
-            "choice": ["combined", "vggt", "colmap"],
-            "pcd_src": ["vggt", "colmap", "both"],
-            "align_mode": ["global"],
-            "camera_src": ["vggt", "colmap"],
+            "choice": ["combined", "colmap", "vggt"],
+            "pcd_src": ["both"],
+            "align_mode": ["local", "global"],
+            "keep_backup_cams": [True, False],
+            "camera_src": ["colmap"],
             "num_steps": [15000],
         },
         PlotConfig(
             x_axis="",
-            split_param="camera_src,pcd_src",
-            metric_keys=["rre", "rte", "psnr", "lpips", "ssim", "quality"],
+            split_param="camera_src,pcd_src,align_mode,keep_backup_cams",
+            metric_keys=["rre", "rte", "num_aligned", "quality"],
+        ),
+        val_steps=[15000],
+        render_filter_override={
+            "seed": [42],
+            "sampling_mode": ["random"],
+            "num_images": [100],
+        },
+    ),
+    Experiment(
+        "combined_full",
+        7,
+        "Combining cameras and point clouds",
+        {
+            "seed": [42],  #
+            "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+            "sampling_mode": ["random"],  # , "confidence", "voxels", "ba"
+            "num_points_per_image": [1000],
+            "pose_opt": [False],  # True,
+            "gt_eval": True,
+            "choice": ["combined", "colmap", "vggt"],
+            "pcd_src": ["both"],
+            "align_mode": ["local", "global"],
+            "keep_backup_cams": [True, False],
+            "camera_src": ["colmap"],
+            "num_steps": [15000],
+        },
+        PlotConfig(
+            x_axis="num_images",
+            split_param="camera_src,pcd_src,align_mode,keep_backup_cams",
+            metric_keys=["rre", "rte", "num_aligned", "quality"],
         ),
         val_steps=[15000],
         render_filter_override={
@@ -1170,8 +1207,7 @@ experiments = [
         "Combining cameras and point clouds",
         {
             "seed": [42],  #
-            "num_images": [30, 40, 50, 60, 70, 80, 90, 100],
-            # "num_images": [80, 90, 100],
+            "num_images": [25, 50, 75, 100],
             "sampling_mode": ["random"],  # , "confidence", "voxels", "ba"
             "num_points_per_image": [1000],
             "pose_opt": [False],  # True,
@@ -1185,8 +1221,8 @@ experiments = [
         },
         PlotConfig(
             x_axis="num_images",
-            split_param="sampling_mode,align_mode",
-            metric_keys=["rre", "rte", "psnr", "lpips", "ssim", "quality"],
+            split_param="sampling_mode,align_mode,keep_backup_cams",
+            metric_keys=["rre", "rte", "num_aligned", "quality"],
         ),
         val_steps=[15000],
         render_filter_override={
@@ -1201,22 +1237,47 @@ experiments = [
         "Combining cameras and point clouds",
         {
             "seed": [42],  #
-            "num_images": [20, 30],
+            "num_images": [25, 50, 75, 100],
             "sampling_mode": ["random"],  # , "confidence", "voxels", "ba"
             "num_points_per_image": [1000],
             "pose_opt": [False],  # True,
-            "colmap_mode": ["relaxed"],
+            "colmap_mode": ["relaxed", "default"],
             "gt_eval": True,
             "choice": ["combined", "vggt", "colmap"],
-            "pcd_src": ["both"],
-            "align_mode": ["local", "global"],
+            "pcd_src": ["both", "colmap", "vggt"],
             "camera_src": ["colmap"],
             "num_steps": [15000],
         },
         PlotConfig(
             x_axis="num_images",
-            split_param="sampling_mode,align_mode",
-            metric_keys=["rre", "rte", "psnr", "lpips", "ssim", "quality"],
+            split_param="colmap_mode,pcd_src",
+            metric_keys=["rre", "rte", "num_aligned", "quality"],
+        ),
+        val_steps=[15000],
+        render_filter_override={
+            "seed": [42],
+            "sampling_mode": ["random"],
+            "num_images": [100],
+        },
+    ),
+    Experiment(
+        "combined_num_points",
+        7,
+        "Combining cameras and point clouds with different point coints",
+        {
+            "seed": [42],  #
+            "num_images": [100],
+            "sampling_mode": ["random"],
+            "num_points_per_image": [10, 50, 100, 500, 1000, 2500],
+            "choice": ["combined", "vggt", "colmap"],
+            "pcd_src": ["both"],
+            "camera_src": ["colmap"],
+            "num_steps": [15000],
+        },
+        PlotConfig(
+            x_axis="num_points",
+            split_param="sampling_mode",
+            metric_keys=["rre", "rte", "num_aligned", "quality"],
         ),
         val_steps=[15000],
         render_filter_override={
@@ -1437,7 +1498,7 @@ experiments = [
             "copy_mode": [None, "crop", "square"],
             "choice": ["vggt", "colmap"],
         },
-        PlotConfig(x_axis="", split_param="copy_mode"),
+        PlotConfig(x_axis="", split_param="copy_mode", metric_keys=["rre", "rte", "num_aligned", "quality"]),
     ),
     Experiment(
         "shared_camera",
@@ -1446,11 +1507,11 @@ experiments = [
         {
             "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
             "seed": [42],
-            "sampling_mode": ["ba"],
+            "sampling_mode": ["ba", "voxels"],
             "choice": ["vggt", "colmap"],
             "shared_camera": [True, False],
         },
-        PlotConfig(x_axis="num_images", split_param="shared_camera"),
+        PlotConfig(x_axis="num_images", split_param="shared_camera,sampling_mode"),
     ),
     Experiment(
         "gt_cams",
@@ -1537,5 +1598,6 @@ if __name__ == "__main__":
                         do_reconstruct=args.do_reconstruct,
                         do_splatting=not args.skip_splatting,
                         cuda_devices=cuda_devices,
+                        force_all=args.force_all,
                     )
                 experiment.plot(args.dataset_name)
