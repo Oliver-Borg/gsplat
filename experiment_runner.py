@@ -1296,11 +1296,13 @@ experiments = [
             x_axis="num_points",
             split_param="sampling_mode",
             metric_keys=["rre", "rte", "num_aligned", "quality"],
+            max_render_cols=4,
         ),
         val_steps=[15000],
         render_filter_override={
             "seed": [42],
             "sampling_mode": ["random"],
+            "choice": ["combined", "colmap"],
             "num_images": [100],
         },
     ),
