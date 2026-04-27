@@ -677,6 +677,8 @@ class PlotConfig:
     single_legend: bool = True
     split_choice: bool = False
     max_render_cols: int = 3
+    show_depth: bool = False
+    show_gt: bool = True
 
 
 @dataclass
@@ -743,7 +745,7 @@ class Experiment:
             config_path.absolute().as_posix(),
         ]
 
-        output = subprocess.run(command, check=True, cwd="../vggt")
+        subprocess.run(command, check=True, cwd="../vggt")
 
         for config in configs:
             if config.choice == "combined":
@@ -875,6 +877,8 @@ class Experiment:
             print_title=include_title,
             split_choice=self.plot_args.split_choice,
             max_render_cols=self.plot_args.max_render_cols,
+            show_depth=self.plot_args.show_depth,
+            show_gt=self.plot_args.show_gt,
         )
 
         # print("Plotted metrics from these files")
@@ -921,10 +925,13 @@ class Experiment:
                         pbar_splat.update(1)
 
         return (
-            f"Reconstructed: {reconstructed} / {len(configs)} | Evaluated: {evaluated} / {len(configs)} | Splatted: {splatted} / {len(configs)}"
+            f"Reconstructed: {reconstructed} / {len(configs)} "
+            f"| Evaluated: {evaluated} / {len(configs)} "
+            f"| Splatted: {splatted} / {len(configs)}"
             f"\nForce Reconstruct: {force_reconstruct} | Force Eval: {force_eval} | Force Splat: {force_splat}"
             f"\nFinal Reconstruct: {reconstructed - force_reconstruct} / {len(configs)} "
-            f"| Final Evaluated: {evaluated - force_eval} / {len(configs)} | Final Splatted: {splatted - force_splat} / {len(configs)}"
+            f"| Final Evaluated: {evaluated - force_eval} / {len(configs)} "
+            f"| Final Splatted: {splatted - force_splat} / {len(configs)}"
         )
 
 
@@ -941,7 +948,13 @@ experiments = [
             "image_mode": ["farthestpose"],
             "choice": ["vggt", "colmap"],
         },
-        PlotConfig(x_axis="num_images", split_param="", single_legend=True),
+        PlotConfig(
+            x_axis="num_images",
+            split_param="",
+            single_legend=True,
+            max_render_cols=4,
+            show_gt=False,
+        ),
         render_filter_override={
             "num_images": [20, 30, 40, 100],
             "seed": [42],
@@ -960,7 +973,12 @@ experiments = [
             "image_mode": ["farthestpose"],
             "choice": ["vggt", "colmap"],
         },
-        PlotConfig(x_axis="num_images", split_param="pose_opt"),
+        PlotConfig(
+            x_axis="num_images",
+            split_param="pose_opt",
+            max_render_cols=4,
+            show_gt=False,
+        ),
         render_filter_override={
             "num_images": [20, 30, 40, 100],
             "seed": [42],
@@ -1428,7 +1446,7 @@ experiments = [
         "COLMAP versus VGGT with depth loss",
         {
             "seed": [42],  # , 43, 44
-            "num_images": [20, 30, 40, 100],
+            "num_images": [100],
             "sampling_mode": ["random"],
             "depth_loss": [True],
             "pose_opt": [True],
@@ -1436,11 +1454,45 @@ experiments = [
             "depth_lambda": [0.0, 0.01, 0.1, 1, 10],
             "depth_conf": [True, False],
         },
-        PlotConfig(x_axis="depth_lambda", split_param="depth_conf,num_images", metric_keys=["psnr", "lpips", "ssim"]),
+        PlotConfig(
+            x_axis="depth_lambda",
+            split_param="depth_conf",
+            metric_keys=["psnr", "lpips", "ssim"],
+            show_depth=True,
+            show_gt=False,
+        ),
         render_filter_override={
             "seed": [42],
-            "num_images": [30],
+            "num_images": [100],
             "depth_lambda": [0.0, 0.01, 1],
+        },
+    ),
+    Experiment(
+        "depth_lambda_num_images",
+        5,
+        "COLMAP versus VGGT with depth loss",
+        {
+            "seed": [42],  # , 43, 44
+            "num_images": [20, 30, 40, 100],
+            "sampling_mode": ["voxels"],  # "random"
+            "depth_loss": [True],
+            "pose_opt": [True],
+            "choice": ["vggt"],  # , "colmap"
+            "depth_lambda": [0.0, 0.01, 0.1, 1.0],
+            "depth_conf": [True],  # , False
+        },
+        PlotConfig(
+            x_axis="num_images",
+            split_param="depth_lambda",
+            metric_keys=["psnr", "lpips", "ssim"],
+            max_render_cols=4,
+            show_depth=True,
+            show_gt=False,
+        ),
+        render_filter_override={
+            "seed": [42],
+            "num_images": [20, 30, 40, 100],
+            "depth_lambda": [0.0, 0.01, 0.1, 1.0],
         },
     ),
     Experiment(
