@@ -122,6 +122,8 @@ class Config:
     pcd_src: Literal["vggt", "colmap", "gt", "both"] = "vggt"
     align_mode: Literal["local", "global"] = "global"
     keep_backup_cams: bool = False
+    random_init: bool = False
+    match_colmap_points: bool = False
 
     construction_data: dict = field(default_factory=dict)
 
@@ -162,6 +164,8 @@ class Config:
         instance.pcd_src = data.get("pcd_src", instance.pcd_src)
         instance.align_mode = data.get("align_mode", instance.align_mode)
         instance.keep_backup_cams = data.get("keep_backup_cams", instance.keep_backup_cams)
+        instance.random_init = data.get("random_init", instance.random_init)
+        instance.match_colmap_points = data.get("match_colmap_points", instance.match_colmap_points)
 
         instance.construction_data = data
         return replace(instance)
@@ -203,6 +207,19 @@ class Config:
 
         if self.eval_opt and self.gt_eval:  # TODO Figure out a good way to have both enabled
             self.eval_opt = False
+
+        if self.match_colmap_points:
+            if self.choice != "colmap":
+                colmap_config = self.replace_choice("colmap")
+                colmap_config.eval()
+                colmap_points = colmap_config.eval_metrics.get("real_num_points", 0)
+            else:
+                self.eval()
+                colmap_points = self.eval_metrics.get("real_num_points", 0)
+            if not colmap_points:
+                self.match_colmap_points = False
+            else:
+                self.num_points_value = colmap_points
 
     @property
     def num_points(self):
@@ -319,6 +336,8 @@ class Config:
             parts.append("conf")
         if self.nomcmc:
             parts.append("nomcmc")
+        if self.random_init:
+            parts.append(f"randinit{self.num_points}")
         parts.append(f"steps{self.num_steps}")
 
         parts = "_".join(parts)
@@ -530,6 +549,13 @@ class Config:
         return os.path.join(self.data_dir, "eval_results.json")
 
     @property
+    def eval_metrics(self):
+        if not os.path.exists(self.eval_path):
+            return {}
+        with open(self.eval_path, "r") as f:
+            return json.load(f).get("metrics", {})
+
+    @property
     def eval_time(self):
         return Path(self.eval_path).stat().st_mtime
 
@@ -551,6 +577,10 @@ class Config:
 
         if self.is_reconstructed and not self.choice == "gt" and file_timestamp < self.reconstruction_time:
             return True
+
+        if not self.eval_metrics.get("real_num_points", 0):
+            return True
+
         return False
 
     def eval(self, force: bool = False):
@@ -635,6 +665,12 @@ class Config:
 
         if self.error_opa:
             command.append("--error_opa")
+
+        if self.random_init:
+            command.append("--init_type")
+            command.append("random")
+            command.append("--init_num_pts")
+            command.append(str(self.num_points))
 
         env = os.environ.copy()
         if gpu is not None:
@@ -1139,7 +1175,7 @@ experiments = [
             "num_images": [25, 50, 75, 100],
             "sampling_mode": ["random"],  # , "confidence", "voxels", "ba"
             "num_points_per_image": [1000],
-            "pose_opt": [False],  # True,
+            "pose_opt": [True],
             "gt_eval": True,
             "choice": ["combined", "vggt", "colmap"],
             "pcd_src": ["vggt", "colmap", "both"],
@@ -1168,7 +1204,7 @@ experiments = [
             "num_images": [100],
             "sampling_mode": ["random"],  # , "confidence", "voxels", "ba"
             "num_points_per_image": [1000],
-            "pose_opt": [False],  # True,
+            "pose_opt": [True],
             "gt_eval": True,
             "choice": ["combined", "colmap", "vggt"],
             "pcd_src": ["both"],
@@ -1198,7 +1234,7 @@ experiments = [
             "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
             "sampling_mode": ["random"],  # , "confidence", "voxels", "ba"
             "num_points_per_image": [1000],
-            "pose_opt": [False],  # True,
+            "pose_opt": [True],
             "gt_eval": True,
             "choice": ["combined", "colmap", "vggt"],
             "pcd_src": ["both"],
@@ -1228,7 +1264,7 @@ experiments = [
             "num_images": [25, 50, 75, 100],
             "sampling_mode": ["random"],  # , "confidence", "voxels", "ba"
             "num_points_per_image": [1000],
-            "pose_opt": [False],  # True,
+            "pose_opt": [True],
             "gt_eval": True,
             "choice": ["combined", "vggt", "colmap"],
             "pcd_src": ["both"],
@@ -1258,7 +1294,7 @@ experiments = [
             "num_images": [25, 50, 75, 100],
             "sampling_mode": ["random"],  # , "confidence", "voxels", "ba"
             "num_points_per_image": [1000],
-            "pose_opt": [False],  # True,
+            "pose_opt": [True],
             "colmap_mode": ["relaxed", "default"],
             "gt_eval": True,
             "choice": ["combined", "vggt", "colmap"],
@@ -1286,6 +1322,7 @@ experiments = [
             "seed": [42],  #
             "num_images": [100],
             "sampling_mode": ["random"],
+            "pose_opt": [True],
             "num_points_per_image": [10, 50, 100, 500, 1000, 2500],
             "choice": ["combined", "vggt", "colmap"],
             "pcd_src": ["both"],
@@ -1407,13 +1444,14 @@ experiments = [
         {
             "seed": [42],  # , 43, 44
             "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+            "pose_opt": [True, False],
             "gt_eval": [True],
             "colmap_mode": ["default", "relaxed"],
             "image_mode": ["farthestpose"],
             "choice": ["colmap"],
             "num_steps": [15000],
         },
-        PlotConfig(x_axis="num_images", split_param="colmap_mode"),
+        PlotConfig(x_axis="num_images", split_param="colmap_mode,pose_opt"),
         val_steps=[15000],
     ),
     Experiment(
@@ -1594,6 +1632,26 @@ experiments = [
             "num_images": [100],
         },
         val_steps=[15000],
+    ),
+    Experiment(
+        "isolated_cams",
+        6,
+        "Test isolated cameras with random point clouds.",
+        {
+            "seed": [42],
+            "num_images": [100],
+            "sampling_mode": ["random", "ba"],
+            "match_colmap_points": [True],
+            "random_init": [True],
+            "pose_opt": [True, False],
+            "gt_eval": True,
+            "choice": ["colmap", "vggt"],
+        },
+        PlotConfig(
+            x_axis="",
+            split_param="num_points,random_init,pose_opt,sampling_mode",
+            metric_keys=["quality", "num_GS"],
+        ),
     ),
 ]
 

@@ -12,7 +12,7 @@ import struct
 try:
     from .datasets.colmap import Parser
     from .datasets.nerf_synth import SimpleParser, load_json_data
-except ImportError: # TODO Figure out a better way to do this
+except ImportError:  # TODO Figure out a better way to do this
     from datasets.colmap import Parser
     from datasets.nerf_synth import SimpleParser, load_json_data
 
@@ -24,6 +24,7 @@ class EvalMetrics(TypedDict, total=False):
     auc_20: float
     auc_30: float
     num_aligned: int
+    real_num_points: int | None
     alignment_scale: float
     error: str
     all_rre: list[float]
@@ -107,7 +108,9 @@ def load_parser_data(
         return None, None, None, None, str(e)
 
 
-def calculate_metrics(pred_poses: Dict[str, np.ndarray], gt_poses: Dict[str, np.ndarray]) -> EvalMetrics:
+def calculate_metrics(
+    pred_poses: Dict[str, np.ndarray], gt_poses: Dict[str, np.ndarray], pred_parser: Parser | SimpleParser | None = None
+) -> EvalMetrics:
     common_names = sorted(list(set(pred_poses.keys()) & set(gt_poses.keys())))
     if len(common_names) < 3:
         return {"error": f"Only {len(common_names)} images matched. Need >= 3 for Umeyama."}
@@ -145,6 +148,7 @@ def calculate_metrics(pred_poses: Dict[str, np.ndarray], gt_poses: Dict[str, np.
         "auc_20": round(float(np.mean(np.array(rre_list) < 20)), 3),
         "auc_30": round(float(np.mean(np.array(rre_list) < 30)), 3),
         "num_aligned": len(common_names),
+        "real_num_points": None if pred_parser is None else pred_parser.points.shape[0],
         "alignment_scale": round(s, 6),
         "all_rre": rre_list,
         "all_rte": rte_list,
@@ -157,8 +161,8 @@ def main(pred: str, gt: str, force: bool = False) -> None:
         print(f"Evaluation for {pred} already exists at {out_file}. Skipping.")
         return
 
-    gt_poses = load_parser_data(gt)[1]
-    pred_poses = load_parser_data(pred)[1]
+    gt_parser, gt_poses, _, _, _ = load_parser_data(gt)
+    pred_parser, pred_poses, _, _, _ = load_parser_data(pred)
 
     assert gt_poses is not None and pred_poses is not None
 
@@ -166,7 +170,7 @@ def main(pred: str, gt: str, force: bool = False) -> None:
         print(f"Error: Missing or empty reconstruction in pred ({len(pred_poses)}) or gt ({len(gt_poses)})")
         return
 
-    metrics = calculate_metrics(pred_poses, gt_poses)
+    metrics = calculate_metrics(pred_poses, gt_poses, pred_parser)
 
     stat_json_path = os.path.join(pred, "stat.json")
     profiling = {}
