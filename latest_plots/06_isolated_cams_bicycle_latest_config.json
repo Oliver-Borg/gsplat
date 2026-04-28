@@ -1,0 +1,28 @@
+{
+    "seed": [
+        42
+    ],
+    "num_images": [
+        100
+    ],
+    "sampling_mode": [
+        "random",
+        "ba"
+    ],
+    "match_colmap_points": [
+        true
+    ],
+    "random_init": [
+        true
+    ],
+    "pose_opt": [
+        true,
+        false
+    ],
+    "gt_eval": true,
+    "choice": [
+        "colmap",
+        "vggt"
+    ],
+    "dataset": "bicycle"
+}

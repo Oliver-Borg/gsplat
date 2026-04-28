@@ -1,0 +1,22 @@
+\begin{table}[H]
+\caption{Test isolated cameras with random point clouds. (Bicycle)}
+\label{tab:06_isolated_cams_num_points_bicycle}
+\begin{tabular}{lrrlllrr}
+\toprule
+Choice & Num Images & Num Points & Random Init & Pose Opt & Sampling Mode & Composite Quality ↑ ↑ & Final Gaussian Count ↓ \\
+\midrule
+VGGT & 25 & 667 & Random Init &  & random & -0.114 & 739712.000 \\
+VGGT & 25 & 667 & Random Init & Pose Opt & random & -0.144 & 739712.000 \\
+VGGT & 50 & 3101 & Random Init &  & ba & -0.010 & 1000000.000 \\
+VGGT & 50 & 3101 & Random Init &  & random & 0.004 & 1000000.000 \\
+VGGT & 50 & 3101 & Random Init & Pose Opt & ba & -0.054 & 1000000.000 \\
+VGGT & 50 & 3101 & Random Init & Pose Opt & random & -0.058 & 1000000.000 \\
+VGGT & 75 & 6098 & Random Init &  & random & 0.025 & 1000000.000 \\
+VGGT & 75 & 6098 & Random Init & Pose Opt & random & 0.002 & 1000000.000 \\
+VGGT & 100 & 16592 & Random Init &  & ba & 0.024 & 1000000.000 \\
+VGGT & 100 & 16592 & Random Init &  & random & 0.041 & 1000000.000 \\
+VGGT & 100 & 16592 & Random Init & Pose Opt & ba & 0.017 & 1000000.000 \\
+VGGT & 100 & 16592 & Random Init & Pose Opt & random & 0.030 & 1000000.000 \\
+\bottomrule
+\end{tabular}
+\end{table}

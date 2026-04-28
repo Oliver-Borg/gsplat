@@ -1,0 +1,5 @@
+Choice,Num Points,Random Init,Pose Opt,Sampling Mode,Composite Quality ↑ ↑,Final Gaussian Count ↓
+VGGT,16592,Random Init,,ba,0.024161111309282113,1000000.0
+VGGT,16592,Random Init,,random,0.041376244719730296,1000000.0
+VGGT,16592,Random Init,Pose Opt,ba,0.017404421805715886,1000000.0
+VGGT,16592,Random Init,Pose Opt,random,0.030444445743275834,1000000.0

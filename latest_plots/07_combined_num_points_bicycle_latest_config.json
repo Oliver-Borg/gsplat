@@ -8,6 +8,9 @@
     "sampling_mode": [
         "random"
     ],
+    "pose_opt": [
+        true
+    ],
     "num_points_per_image": [
         10,
         50,

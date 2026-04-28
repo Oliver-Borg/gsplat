@@ -15,7 +15,7 @@
         1000
     ],
     "pose_opt": [
-        false
+        true
     ],
     "gt_eval": true,
     "choice": [

@@ -1,3 +1,3 @@
 Choice,Camera Src,Pcd Src,Align Mode,Keep Backup Cams,RRE ↓ ↓,RTE ↓ ↓,Aligned Cameras ↑ ↑,Composite Quality ↑ ↑
-COLMAP,colmapcams,bothpcd,Global Alignment,Fallback Cams,0.1067,0.017644,100.0,0.4140253851288243
-COLMAP,colmapcams,bothpcd,Local Alignment,Fallback Cams,0.1067,0.017644,100.0,0.40839084992554364
+COLMAP,colmapcams,bothpcd,Global Alignment,Fallback Cams,0.1067,0.017644,100.0,0.462885915129273
+COLMAP,colmapcams,bothpcd,Local Alignment,Fallback Cams,0.1067,0.017644,100.0,0.4606331235561532

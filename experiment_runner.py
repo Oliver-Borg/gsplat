@@ -1653,6 +1653,26 @@ experiments = [
             metric_keys=["quality", "num_GS"],
         ),
     ),
+    Experiment(
+        "isolated_cams_num_points",
+        6,
+        "Test isolated cameras with random point clouds.",
+        {
+            "seed": [42],
+            "num_images": [25, 50, 75, 100],
+            "sampling_mode": ["random", "ba"],
+            "match_colmap_points": [True],
+            "random_init": [True],
+            "pose_opt": [True, False],
+            "gt_eval": True,
+            "choice": ["colmap", "vggt"],
+        },
+        PlotConfig(
+            x_axis="num_images",
+            split_param="num_points,random_init,pose_opt,sampling_mode",
+            metric_keys=["quality", "num_GS"],
+        ),
+    ),
 ]
 
 experiment_dict = {exp.name: exp for exp in experiments}

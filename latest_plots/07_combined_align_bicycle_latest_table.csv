@@ -1,9 +1,9 @@
 Choice,Num Images,Sampling Mode,Align Mode,Keep Backup Cams,RRE ↓ ↓,RTE ↓ ↓,Aligned Cameras ↑ ↑,Composite Quality ↑ ↑
-COLMAP,25,random,Global Alignment,Fallback Cams,1.419,0.089213,25.0,-0.008119553192007262
-COLMAP,25,random,Local Alignment,Fallback Cams,1.419,0.089213,25.0,-0.009395817993057443
-COLMAP,50,random,Global Alignment,Fallback Cams,0.7647,0.07365,50.0,0.11505892107903459
-COLMAP,50,random,Local Alignment,Fallback Cams,0.7647,0.07365,50.0,0.10959781269658456
-COLMAP,75,random,Global Alignment,Fallback Cams,0.6276,0.069716,75.0,0.17590191350345724
-COLMAP,75,random,Local Alignment,Fallback Cams,0.6276,0.069716,75.0,0.17090617107678888
-COLMAP,100,random,Global Alignment,Fallback Cams,0.1067,0.017644,100.0,0.4140253851288243
-COLMAP,100,random,Local Alignment,Fallback Cams,0.1067,0.017644,100.0,0.40839084992554364
+COLMAP,25,random,Global Alignment,Fallback Cams,1.419,0.089213,25.0,0.004962204531309651
+COLMAP,25,random,Local Alignment,Fallback Cams,1.419,0.089213,25.0,0.0006142144779480718
+COLMAP,50,random,Global Alignment,Fallback Cams,0.7647,0.07365,50.0,0.1488841168674422
+COLMAP,50,random,Local Alignment,Fallback Cams,0.7647,0.07365,50.0,0.14418223262065571
+COLMAP,75,random,Global Alignment,Fallback Cams,0.6276,0.069716,75.0,0.21082675921754304
+COLMAP,75,random,Local Alignment,Fallback Cams,0.6276,0.069716,75.0,0.2108432491388005
+COLMAP,100,random,Global Alignment,Fallback Cams,0.1067,0.017644,100.0,0.462885915129273
+COLMAP,100,random,Local Alignment,Fallback Cams,0.1067,0.017644,100.0,0.4606331235561532
