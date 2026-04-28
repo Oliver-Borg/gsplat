@@ -13,6 +13,8 @@ from line_profiler import profile
 from tqdm import tqdm
 
 from vggt.plot_metrics import plot_graph, _parse_gsplat_json
+from vggt.reconstruct_args import ReconstructArgs, IMAGE_MODE, CAMERA_TYPE, COLMAP_MODE, SAMPLING_MODE
+
 
 import examples.evaluation
 
@@ -98,10 +100,10 @@ class Config:
     conf_thres_value: float = 0.0
     num_points_per_image: float = 1100
     num_points_value: int | None = None
-    sampling_mode: Literal["voxels", "random", "confidence", "ba", "vox3"] = "voxels"
+    sampling_mode: SAMPLING_MODE = "voxels"
     use_ba: bool = False
     max_ba_iterations: int = 50
-    image_mode: Literal["shuffle", "distributed", "mfps", "farthestpose"] = "farthestpose"
+    image_mode: IMAGE_MODE = "farthestpose"
     copy_mode: Literal[None, "crop", "square", "tiles"] = None
     shared_camera: bool = True
     gt_eval: bool = True
@@ -116,9 +118,9 @@ class Config:
     depth_lambda: float = 0.0
     depth_conf: bool = False
     error_opa: bool = False
-    camera_type: Literal["SIMPLE_RADIAL", "SIMPLE_PINHOLE"] = "SIMPLE_PINHOLE"
+    camera_type: CAMERA_TYPE = "SIMPLE_PINHOLE"
     num_steps: Literal[7000, 15000, 30000] = 15000
-    colmap_mode: Literal["default", "relaxed"] = "default"
+    colmap_mode: COLMAP_MODE = "default"
     nomcmc: bool = False
     camera_src: Literal["vggt", "colmap", "gt"] = "vggt"
     pcd_src: Literal["vggt", "colmap", "gt", "both"] = "vggt"
@@ -260,17 +262,16 @@ class Config:
             if self.copy_mode is not None:
                 parts.append(self.copy_mode)
         elif self.choice == "vggt":
-            if self.sampling_mode == "ba":
+            if self.sampling_mode == "ba" or self.use_ba:
                 parts.append(self.camera_type.lower().replace("simple_", "m"))
-                parts.append(self.sampling_mode)
-            else:
+            if self.sampling_mode != "ba":
                 parts.extend(
                     [
                         f"c{self.conf_thres_value}",
                         f"p{self.num_points}",
-                        self.sampling_mode,
                     ]
                 )
+            parts.append(self.sampling_mode)
 
             if self.error_opa:
                 parts.append("errconf")
@@ -322,6 +323,12 @@ class Config:
             pass
 
         parts = "_".join(parts)
+
+        # TODO Actually remove current logic for constructing names
+        if self.choice == "colmap" or self.choice == "vggt":
+            recon_args = ReconstructArgs(**self._reconstruct_args)
+            assert recon_args.full_name == parts, f"{recon_args.full_name} != {parts}"
+
         return f"{self.choice}_outputs/{parts}"
 
     @property
@@ -454,7 +461,7 @@ class Config:
         return self.choice == "gt" or os.path.exists(self.reconstruction_stat_path)
 
     @property
-    def reconstruct_args(self):
+    def _reconstruct_args(self):
         args = {
             "input": (Path(self.dataset.directory) / Path(self.dataset.data_folder_name)).absolute().as_posix(),
             "name": f"{self.dataset.name}_{self.dataset.factor}",
@@ -474,8 +481,6 @@ class Config:
             args["require_depth_conf"] = True
         if self.error_opa:
             args["save_conf_as_errors"] = True
-        if self.force_reconstruct:
-            args["force"] = True
 
         if self.shared_camera:
             args["shared_camera"] = True
@@ -485,6 +490,15 @@ class Config:
 
         if self.use_ba:
             args["use_ba"] = True
+
+        return args
+
+    @property
+    def reconstruct_args(self):
+        args = self._reconstruct_args
+
+        if self.force_reconstruct:
+            args["force"] = True
 
         return args
 
