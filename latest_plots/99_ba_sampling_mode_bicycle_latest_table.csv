@@ -1,0 +1,2 @@
+Choice,Num Images,Sampling Mode,Use Ba,Max Ba Iterations,Shared Camera,RRE ↓ ↓,RTE ↓ ↓,Aligned Cameras ↑ ↑,Composite Quality ↑ ↑
+VGGT,50,random,Use BA,3000.0,Shared Cam,0.88635,0.058913499999999994,50.0,

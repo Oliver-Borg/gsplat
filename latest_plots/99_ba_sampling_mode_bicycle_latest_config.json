@@ -1,0 +1,30 @@
+{
+    "seed": [
+        42,
+        43
+    ],
+    "num_images": [
+        25,
+        50,
+        75,
+        100
+    ],
+    "sampling_mode": [
+        "random"
+    ],
+    "use_ba": [
+        true,
+        false
+    ],
+    "pose_opt": [
+        true
+    ],
+    "gt_eval": true,
+    "choice": [
+        "vggt"
+    ],
+    "max_ba_iterations": [
+        3000
+    ],
+    "dataset": "bicycle"
+}

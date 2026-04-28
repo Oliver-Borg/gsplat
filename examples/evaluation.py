@@ -20,6 +20,8 @@ except ImportError:  # TODO Figure out a better way to do this
 class EvalMetrics(TypedDict, total=False):
     mean_rre_deg: float
     mean_rte: float
+    auc_1: float
+    auc_5: float
     auc_10: float
     auc_20: float
     auc_30: float
@@ -144,6 +146,8 @@ def calculate_metrics(
     return {
         "mean_rre_deg": round(float(np.mean(rre_list)), 4),
         "mean_rte": round(float(np.mean(rte_list)), 6),
+        "auc_1": round(float(np.mean(np.array(rre_list) < 1)), 3),
+        "auc_5": round(float(np.mean(np.array(rre_list) < 5)), 3),
         "auc_10": round(float(np.mean(np.array(rre_list) < 10)), 3),
         "auc_20": round(float(np.mean(np.array(rre_list) < 20)), 3),
         "auc_30": round(float(np.mean(np.array(rre_list) < 30)), 3),

@@ -99,6 +99,8 @@ class Config:
     num_points_per_image: float = 1100
     num_points_value: int | None = None
     sampling_mode: Literal["voxels", "random", "confidence", "ba", "vox3"] = "voxels"
+    use_ba: bool = False
+    max_ba_iterations: int = 50
     image_mode: Literal["shuffle", "distributed", "mfps", "farthestpose"] = "farthestpose"
     copy_mode: Literal[None, "crop", "square", "tiles"] = None
     shared_camera: bool = True
@@ -131,41 +133,43 @@ class Config:
     def from_dict(cls, data: dict) -> "Config":
         instance = cls()
         instance.choice = data["choice"]
-        instance.num_images = data.get("num_images", instance.num_images)
+        instance.num_images = data.get("num_images", cls.num_images)
         instance.dataset = datasets[data.get("dataset", "lego")]
-        instance.seed = data.get("seed", instance.seed)
-        instance.conf_thres_value = data.get("conf_thres_value", instance.conf_thres_value)
-        instance.num_points_per_image = data.get("num_points_per_image", instance.num_points_per_image)
-        instance.num_points_value = data.get("num_points_value", instance.num_points_value)
-        instance.sampling_mode = data.get("sampling_mode", instance.sampling_mode)
-        instance.image_mode = data.get("image_mode", instance.image_mode)
-        instance.copy_mode = data.get("copy_mode", instance.copy_mode)
-        instance.shared_camera = data.get("shared_camera", instance.shared_camera)
-        instance.gt_eval = data.get("gt_eval", instance.gt_eval)
-        instance.use_gt_extrinsics = data.get("use_gt_extrinsics", instance.use_gt_extrinsics)
-        instance.use_gt_intrinsics = data.get("use_gt_intrinsics", instance.use_gt_intrinsics)
+        instance.seed = data.get("seed", cls.seed)
+        instance.conf_thres_value = data.get("conf_thres_value", cls.conf_thres_value)
+        instance.num_points_per_image = data.get("num_points_per_image", cls.num_points_per_image)
+        instance.num_points_value = data.get("num_points_value", cls.num_points_value)
+        instance.sampling_mode = data.get("sampling_mode", cls.sampling_mode)
+        instance.use_ba = data.get("use_ba", cls.use_ba)
+        instance.max_ba_iterations = data.get("max_ba_iterations", cls.max_ba_iterations)
+        instance.image_mode = data.get("image_mode", cls.image_mode)
+        instance.copy_mode = data.get("copy_mode", cls.copy_mode)
+        instance.shared_camera = data.get("shared_camera", cls.shared_camera)
+        instance.gt_eval = data.get("gt_eval", cls.gt_eval)
+        instance.use_gt_extrinsics = data.get("use_gt_extrinsics", cls.use_gt_extrinsics)
+        instance.use_gt_intrinsics = data.get("use_gt_intrinsics", cls.use_gt_intrinsics)
         instance.use_gt_extrinsics |= data.get("use_gt_cams", False)
         instance.use_gt_intrinsics |= data.get("use_gt_cams", False)
-        instance.use_gt_points = data.get("use_gt_points", instance.use_gt_points)
-        instance.pose_opt = data.get("pose_opt", instance.pose_opt)
-        instance.eval_opt = data.get("eval_opt", instance.eval_opt)
-        instance.pose_opt |= data.get("all_opt", instance.all_opt)
-        instance.eval_opt |= data.get("all_opt", instance.all_opt)
-        instance.num_cameras = data.get("num_cameras", instance.num_cameras)
-        instance.depth_loss = data.get("depth_loss", instance.depth_loss)
-        instance.depth_lambda = data.get("depth_lambda", instance.depth_lambda)
-        instance.depth_conf = data.get("depth_conf", instance.depth_conf)
-        instance.error_opa = data.get("error_opa", instance.error_opa)
-        instance.camera_type = data.get("camera_type", instance.camera_type)
-        instance.num_steps = data.get("num_steps", instance.num_steps)
-        instance.colmap_mode = data.get("colmap_mode", instance.colmap_mode)
-        instance.nomcmc = data.get("nomcmc", instance.nomcmc)
-        instance.camera_src = data.get("camera_src", instance.camera_src)
-        instance.pcd_src = data.get("pcd_src", instance.pcd_src)
-        instance.align_mode = data.get("align_mode", instance.align_mode)
-        instance.keep_backup_cams = data.get("keep_backup_cams", instance.keep_backup_cams)
-        instance.random_init = data.get("random_init", instance.random_init)
-        instance.match_colmap_points = data.get("match_colmap_points", instance.match_colmap_points)
+        instance.use_gt_points = data.get("use_gt_points", cls.use_gt_points)
+        instance.pose_opt = data.get("pose_opt", cls.pose_opt)
+        instance.eval_opt = data.get("eval_opt", cls.eval_opt)
+        instance.pose_opt |= data.get("all_opt", cls.all_opt)
+        instance.eval_opt |= data.get("all_opt", cls.all_opt)
+        instance.num_cameras = data.get("num_cameras", cls.num_cameras)
+        instance.depth_loss = data.get("depth_loss", cls.depth_loss)
+        instance.depth_lambda = data.get("depth_lambda", cls.depth_lambda)
+        instance.depth_conf = data.get("depth_conf", cls.depth_conf)
+        instance.error_opa = data.get("error_opa", cls.error_opa)
+        instance.camera_type = data.get("camera_type", cls.camera_type)
+        instance.num_steps = data.get("num_steps", cls.num_steps)
+        instance.colmap_mode = data.get("colmap_mode", cls.colmap_mode)
+        instance.nomcmc = data.get("nomcmc", cls.nomcmc)
+        instance.camera_src = data.get("camera_src", cls.camera_src)
+        instance.pcd_src = data.get("pcd_src", cls.pcd_src)
+        instance.align_mode = data.get("align_mode", cls.align_mode)
+        instance.keep_backup_cams = data.get("keep_backup_cams", cls.keep_backup_cams)
+        instance.random_init = data.get("random_init", cls.random_init)
+        instance.match_colmap_points = data.get("match_colmap_points", cls.match_colmap_points)
 
         instance.construction_data = data
         return replace(instance)
@@ -183,12 +187,17 @@ class Config:
             self.num_images = len(os.listdir(Path(self.dataset.directory) / Path(self.dataset.data_folder_name)))
             self.num_cameras = self.num_images
 
+        self.use_ba = self.sampling_mode == "ba" or self.use_ba or self.choice == "colmap"
+
+        if not (self.use_ba and self.choice == "vggt"):
+            self.max_ba_iterations = 0
+
         if self.choice == "combined" and self.camera_src == self.pcd_src:
             self.camera_src = "vggt" if self.pcd_src == "colmap" else "colmap"
 
         self.depth_conf = self.depth_conf and self.choice == "vggt"
 
-        if self.choice == "vggt" and self.sampling_mode != "ba":
+        if self.choice == "vggt" and not self.use_ba:
             self.shared_camera = False
 
         if self.depth_conf and self.choice == "vggt":
@@ -247,7 +256,7 @@ class Config:
             parts.append(self.image_mode)
             if self.shared_camera:
                 parts.append("sharedcam")
-
+            # We always use ba here so we don't bother adding it to the name
             if self.copy_mode is not None:
                 parts.append(self.copy_mode)
         elif self.choice == "vggt":
@@ -266,6 +275,11 @@ class Config:
             if self.error_opa:
                 parts.append("errconf")
             parts.append(self.image_mode)
+
+            if self.use_ba:
+                parts.append("useba")
+                parts.append(f"maxba{self.max_ba_iterations}")
+
             if self.shared_camera:
                 parts.append("sharedcam")
 
@@ -404,6 +418,9 @@ class Config:
         if self.choice == "gt":
             return False
 
+        # if self.use_ba:
+        #     return True
+
         # if self.error_opa:
         #     return True
 
@@ -450,6 +467,7 @@ class Config:
             "image_mode": self.image_mode,
             "camera_type": self.camera_type,
             "colmap_mode": self.colmap_mode,
+            "max_ba_iterations": self.max_ba_iterations,
         }
 
         if (self.depth_conf or self.depth_loss or self.error_opa) and self.choice == "vggt":
@@ -464,6 +482,9 @@ class Config:
 
         if self.copy_mode is not None:
             args["copy_mode"] = self.copy_mode
+
+        if self.use_ba:
+            args["use_ba"] = True
 
         return args
 
@@ -531,7 +552,10 @@ class Config:
             "single",
         ]
         for key, value in self.reconstruct_args.items():
-            if key in ("force", "require_depth_conf", "save_conf_as_errors", "shared_camera") and value is True:
+            if (
+                key in ("force", "require_depth_conf", "save_conf_as_errors", "shared_camera", "use_ba")
+                and value is True
+            ):
                 command.extend([f"--{key}"])
             elif value is not None:
                 command.extend([f"--{key}", str(value)])
@@ -715,6 +739,7 @@ class PlotConfig:
     max_render_cols: int = 3
     show_depth: bool = False
     show_gt: bool = True
+    apply_jitter: bool = False
 
 
 @dataclass
@@ -915,6 +940,7 @@ class Experiment:
             max_render_cols=self.plot_args.max_render_cols,
             show_depth=self.plot_args.show_depth,
             show_gt=self.plot_args.show_gt,
+            apply_jitter=self.plot_args.apply_jitter,
         )
 
         # print("Plotted metrics from these files")
@@ -1672,6 +1698,32 @@ experiments = [
             split_param="num_points,random_init,pose_opt,sampling_mode",
             metric_keys=["quality", "num_GS"],
         ),
+    ),
+    Experiment(
+        "ba_sampling_mode",
+        99,
+        "Test for combining BA with sampling mode.",
+        {
+            "seed": [42, 43],
+            "num_images": [25, 50, 75, 100],
+            "sampling_mode": ["random"],
+            "use_ba": [True, False],
+            "pose_opt": [True],
+            "gt_eval": True,
+            "choice": ["vggt"],
+            "max_ba_iterations": [3000],
+            "camera_type": ["SIMPLE_RADIAL", "SIMPLE_PINHOLE"],
+        },
+        PlotConfig(
+            x_axis="num_images",
+            split_param="sampling_mode,use_ba,max_ba_iterations,shared_camera,camera_type",
+            metric_keys=["rre", "rte", "num_aligned", "quality"],
+            apply_jitter=True,
+        ),
+        render_filter_override={
+            "seed": [42],
+            "num_images": [100],
+        },
     ),
 ]
 
