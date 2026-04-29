@@ -1,0 +1,16 @@
+\begin{table}[H]
+\caption{COLMAP versus VGGT with depth loss (Bicycle)}
+\label{tab:05_depth_loss_mode_bicycle}
+\begin{tabular}{llrrrr}
+\toprule
+Choice & Depth Loss Mode & Composite Quality ↑ ↑ & Validation Step RRE ↓ ↓ & Validation Step RTE ↓ ↓ & Initial Points ↑ \\
+\midrule
+COLMAP &  & 0.443 & 0.098 & 0.002 & 16687.000 \\
+VGGT &  & 0.165 & 0.724 & 0.014 & 110000.000 \\
+VGGT & closer & 0.174 & 0.662 & 0.013 & 110000.000 \\
+VGGT & full & 0.176 & 0.606 & 0.013 & 110000.000 \\
+COLMAP & points & 0.387 & 0.087 & 0.002 & 16687.000 \\
+VGGT & points & 0.137 & 0.771 & 0.014 & 110000.000 \\
+\bottomrule
+\end{tabular}
+\end{table}

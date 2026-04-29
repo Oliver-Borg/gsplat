@@ -197,9 +197,9 @@ class Config:
     bilateral_grid_shape: Tuple[int, int, int] = (16, 16, 8)
 
     # Enable depth loss. (experimental)
-    depth_loss: bool = False
+    depth_loss_mode: Literal["disabled", "points", "full", "closer"] = "disabled"
     # Enable depth confidence. (experimental)
-    depth_conf: bool = False
+    depth_conf_mode: Literal["disabled", "standard", "sigmoid"] = "disabled"
     # Weight for depth loss
     depth_lambda: float = 1e-2  # TODO Experiment with this
 
@@ -421,7 +421,7 @@ class Runner:
             self.train_parser,
             split=train_split,
             patch_size=cfg.patch_size,
-            load_depths=cfg.depth_loss,
+            load_depths=cfg.depth_loss_mode != "disabled",
             max_images=cfg.max_train_cameras,
         )
         self.scene_scale = self.train_parser.scene_scale * 1.1 * cfg.global_scale
@@ -499,7 +499,7 @@ class Runner:
             exclude_names=self.used_training_names,
             transform_matrix=transform_matrix,
             patch_size=cfg.patch_size,
-            load_depths=cfg.depth_loss,
+            load_depths=cfg.depth_loss_mode != "disabled",
         )
 
         assert len(set(self.eval_parser.get_camera_names(self.valset.indices)) & set(self.used_training_names)) == 0
@@ -765,15 +765,15 @@ class Runner:
             masks = data["mask"].to(device) if "mask" in data else None  # [1, H, W]
             depth_conf = None
             depth_map_gt = None
-            if cfg.depth_loss:
+            if cfg.depth_loss_mode != "disabled":
                 points = data["points"].to(device)  # [1, M, 2]
                 depths_gt = data["depths"].to(device)  # [1, M]
-                if "depth_conf" in data and cfg.depth_conf:
+                if "depth_conf" in data and cfg.depth_conf_mode != "disabled":
                     depth_conf = data["depth_conf"].to(device)  # [1, H, W]
                 else:
                     depth_conf = None
 
-                if "depth" in data:
+                if "depth" in data and cfg.depth_loss_mode in ("full", "closer"):
                     depth_map_gt = data["depth"].to(device)  # [1, H, W]
                 else:
                     depth_map_gt = None
@@ -801,7 +801,7 @@ class Runner:
                 near_plane=cfg.near_plane,
                 far_plane=cfg.far_plane,
                 image_ids=image_ids,
-                render_mode="RGB+ED" if cfg.depth_loss else "RGB",
+                render_mode="RGB+ED" if cfg.depth_loss_mode != "disabled" else "RGB",
                 masks=masks,
             )
             if renders.shape[-1] == 4:
@@ -841,7 +841,7 @@ class Runner:
                 colors.permute(0, 3, 1, 2), pixels.permute(0, 3, 1, 2), padding="valid"
             )
             loss = l1loss * (1.0 - cfg.ssim_lambda) + ssimloss * cfg.ssim_lambda
-            if cfg.depth_loss:
+            if cfg.depth_loss_mode != "disabled":
                 # query depths from depth map
                 points = torch.stack(
                     [
@@ -858,16 +858,21 @@ class Runner:
                 sampled_depths = sampled_depths.squeeze(3).squeeze(1)  # [1, M]
                 safe_depths = torch.clamp(sampled_depths, min=1e-3)
                 safe_depths_gt = torch.clamp(depths_gt, min=1e-3)
-                
+
                 disp = torch.where(sampled_depths > 1e-3, 1.0 / safe_depths, torch.zeros_like(sampled_depths))
                 disp_gt = 1.0 / safe_depths_gt  # [1, M]
 
-                if depth_conf is not None and cfg.depth_conf:
+                if depth_conf is not None and cfg.depth_conf_mode != "disabled":
                     # depth_conf [1, H, W]
                     sampled_depth_conf = F.grid_sample(
                         depth_conf.unsqueeze(0), grid, align_corners=True
                     )  # [1, 1, M, 1]
-                    sampled_depth_conf = torch.sigmoid(sampled_depth_conf.squeeze(3).squeeze(1)) * 2.0 - 1.0 # [1, M]
+                    if cfg.depth_conf_mode == "sigmoid":
+                        sampled_depth_conf = torch.sigmoid(
+                            sampled_depth_conf.squeeze(3).squeeze(1)
+                        ) * 2.0 - 1.0  # [1, M]
+                    else:
+                        sampled_depth_conf = sampled_depth_conf.squeeze(3).squeeze(1)  # [1, M]
                 else:
                     sampled_depth_conf = 1.0
 
@@ -876,17 +881,27 @@ class Runner:
                         depth_map_gt.unsqueeze(0), grid, align_corners=True
                     )  # [1, 1, M, 1]
                     sampled_depth_map_gt = sampled_depth_map_gt.squeeze(3).squeeze(1)  # [1, M]
-                    sampled_depth_map_gt= torch.clamp(sampled_depth_map_gt, min=1e-3)
-                    scaling_factor = safe_depths_gt / sampled_depth_map_gt
-                    depth_map_gt *= scaling_factor.mean()
+                    sampled_depth_map_gt = torch.clamp(sampled_depth_map_gt, min=1e-3)
+                    scaling_factors = safe_depths_gt / sampled_depth_map_gt
+                    scaling_factors = torch.sort(scaling_factors.flatten()).values
+                    # IQM for better stability
+                    q1 = len(scaling_factors) // 4
+                    q3 = 3 * len(scaling_factors) // 4
+                    depth_map_gt *= scaling_factors[q1: q3 + 1].mean()
                 else:
                     sampled_depth_map_gt = None
 
                 if depth_conf is None:
                     depth_conf = 1.0
+                elif cfg.depth_conf_mode == "sigmoid":  # TODO Experiment with this
+                    depth_conf = torch.sigmoid(depth_conf) * 2.0 - 1.0  # [1, H, W]
 
                 if depth_map_gt is not None:
                     full_l1_diff = F.l1_loss(depth_map_gt, depths.squeeze(3), reduction='none')
+                    if cfg.depth_loss_mode == "closer":
+                        valid_mask = (depths.squeeze(3) <= depth_map_gt).to(depths.dtype)
+                        full_l1_diff *= valid_mask
+
                     depthloss = (full_l1_diff * depth_conf).mean() * self.scene_scale
                 else:
                     l1_diff = F.l1_loss(disp, disp_gt, reduction='none')
@@ -905,7 +920,7 @@ class Runner:
             loss.backward()
 
             desc = f"loss={loss.item():.3f}| " f"sh degree={sh_degree_to_use}| "
-            if cfg.depth_loss:
+            if cfg.depth_loss_mode != "disabled":
                 desc += f"depth loss={depthloss.item():.6f}| "
             if cfg.pose_opt and cfg.pose_noise:
                 # monitor the pose error if we inject noise
@@ -929,7 +944,7 @@ class Runner:
                 self.writer.add_scalar("train/ssimloss", ssimloss.item(), step)
                 self.writer.add_scalar("train/num_GS", len(self.splats["means"]), step)
                 self.writer.add_scalar("train/mem", mem, step)
-                if cfg.depth_loss:
+                if cfg.depth_loss_mode != "disabled":
                     self.writer.add_scalar("train/depthloss", depthloss.item(), step)
                 if cfg.use_bilateral_grid:
                     self.writer.add_scalar("train/tvloss", tvloss.item(), step)
@@ -1032,7 +1047,7 @@ class Runner:
                 for optimizer in self.eval_pose_optimizers:
                     optimizer.step()
                     optimizer.zero_grad(set_to_none=True)
-                
+
                 # We don't want to optimize based on the validation set for anything apart from pose
                 for optimizer in self.optimizers.values():
                     optimizer.zero_grad(set_to_none=True)

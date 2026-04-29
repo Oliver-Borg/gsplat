@@ -117,9 +117,9 @@ class Config:
     eval_opt: bool = False
     all_opt: bool = False
     num_cameras: int | None = None
-    depth_loss: bool = False
+    depth_loss_mode: Literal["disabled", "points", "full", "closer"] = "disabled"
     depth_lambda: float = 0.0
-    depth_conf: bool = False
+    depth_conf_mode: Literal["disabled", "standard", "sigmoid"] = "disabled"
     error_opa: bool = False
     camera_type: CAMERA_TYPE = "SIMPLE_PINHOLE"
     num_steps: Literal[7000, 15000, 30000] = 15000
@@ -161,9 +161,9 @@ class Config:
         instance.pose_opt |= data.get("all_opt", cls.all_opt)
         instance.eval_opt |= data.get("all_opt", cls.all_opt)
         instance.num_cameras = data.get("num_cameras", cls.num_cameras)
-        instance.depth_loss = data.get("depth_loss", cls.depth_loss)
+        instance.depth_loss_mode = data.get("depth_loss_mode", cls.depth_loss_mode)
         instance.depth_lambda = data.get("depth_lambda", cls.depth_lambda)
-        instance.depth_conf = data.get("depth_conf", cls.depth_conf)
+        instance.depth_conf_mode = data.get("depth_conf_mode", cls.depth_conf_mode)
         instance.error_opa = data.get("error_opa", cls.error_opa)
         instance.camera_type = data.get("camera_type", instance.dataset.camera_type)
         instance.num_steps = data.get("num_steps", cls.num_steps)
@@ -188,7 +188,7 @@ class Config:
             self.use_gt_extrinsics = False
             self.use_gt_intrinsics = False
             self.use_gt_points = False
-            self.depth_conf = False
+            self.depth_conf_mode = "disabled"
             self.num_images = len(os.listdir(Path(self.dataset.directory) / Path(self.dataset.data_folder_name)))
             self.num_cameras = self.num_images
 
@@ -200,21 +200,20 @@ class Config:
         if self.choice == "combined" and self.camera_src == self.pcd_src:
             self.camera_src = "vggt" if self.pcd_src == "colmap" else "colmap"
 
-        self.depth_conf = self.depth_conf and self.choice == "vggt"
+        if self.choice != "vggt" and self.choice != "combined":
+            self.depth_conf_mode = "disabled"
 
         if self.choice == "vggt" and not self.use_ba:
             self.shared_camera = False
 
-        if self.depth_conf and self.choice == "vggt":
-            self.depth_loss = True
-        else:
-            self.depth_conf = False
-
         if self.depth_lambda < 0.0:
             self.depth_lambda = 0.0
 
-        if self.depth_lambda > 0.0:
-            self.depth_loss = True
+        if self.depth_loss_mode == "disabled":
+            self.depth_lambda = 0.0
+
+        if self.depth_loss_mode != "disabled" and self.choice == "colmap":
+            self.depth_loss_mode = "points"
 
         if self.use_gt_extrinsics or self.use_gt_intrinsics or self.use_gt_points:
             self.gt_eval = True
@@ -351,13 +350,13 @@ class Config:
             parts.append("poseopt")
         if self.eval_opt:
             parts.append("evalopt")
-        if self.depth_loss:
-            parts.append("depth")
+        if self.depth_loss_mode != "disabled":
+            parts.append(f"depth{self.depth_loss_mode}")
             parts.append(f"dl{self.depth_lambda}")
         if self.error_opa:
             parts.append("erroropa")
-        if self.depth_conf and self.choice == "vggt" and self.depth_loss:
-            parts.append("conf")
+        if self.depth_conf_mode and self.choice == "vggt" and self.depth_loss_mode != "disabled":
+            parts.append(f"conf{self.depth_conf_mode}")
         if self.nomcmc:
             parts.append("nomcmc")
         if self.random_init:
@@ -392,10 +391,6 @@ class Config:
 
     @property
     def force_splat(self):
-
-        # if self.depth_loss or self.depth_conf:
-        #     return True
-
         if not self.is_splatted:
             return True
 
@@ -409,9 +404,6 @@ class Config:
             and self.is_reconstructed
             and self.splatting_time < self.reconstruction_time
         ):
-            return True
-
-        if self.depth_loss and self.splatting_time < datetime.datetime(2026, 4, 23, 16, 00, 0).timestamp():
             return True
 
         if self.gt_eval and self.is_splatted:
@@ -447,7 +439,6 @@ class Config:
                 psnr = stats.get("psnr", 0.0)
             if psnr is None or (psnr < 15 and self.num_images > 20):
                 return True
-            return False
 
         return False
 
@@ -480,7 +471,9 @@ class Config:
             "max_ba_iterations": self.max_ba_iterations,
         }
 
-        if (self.depth_conf or self.depth_loss or self.error_opa) and self.choice == "vggt":
+        if (
+            self.depth_conf_mode != "disabled" or self.depth_loss_mode != "disabled" or self.error_opa
+        ) and self.choice == "vggt":
             args["require_depth_conf"] = True
         if self.error_opa:
             args["save_conf_as_errors"] = True
@@ -696,13 +689,15 @@ class Config:
         if self.eval_opt:
             command.append("--eval_opt")
 
-        if self.depth_loss:
-            command.append("--depth_loss")
+        if self.depth_loss_mode != "disabled":
+            command.append("--depth_loss_mode")
+            command.append(str(self.depth_loss_mode))
             command.append("--depth_lambda")
             command.append(str(self.depth_lambda))
 
-        if self.depth_conf:
-            command.append("--depth_conf")
+        if self.depth_conf_mode != "disabled":
+            command.append("--depth_conf_mode")
+            command.append(str(self.depth_conf_mode))
 
         if self.error_opa:
             command.append("--error_opa")
@@ -757,6 +752,7 @@ class PlotConfig:
     show_depth: bool = False
     show_gt: bool = True
     apply_jitter: bool = False
+    render_nums: list[int] = field(default_factory=lambda: [0])
 
 
 @dataclass
@@ -958,6 +954,7 @@ class Experiment:
             show_depth=self.plot_args.show_depth,
             show_gt=self.plot_args.show_gt,
             apply_jitter=self.plot_args.apply_jitter,
+            render_nums=self.plot_args.render_nums,
         )
 
         # print("Plotted metrics from these files")
@@ -1512,20 +1509,23 @@ experiments = [
     ),
     # Experiment(
     #     "depth",
+    #     5,
     #     "COLMAP versus VGGT with depth loss",
     #     {
     #         "seed": [42],  # , 43, 44
     #         "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
     #         "sampling_mode": ["voxels"],
-    #         "depth_loss": [True, False],
-    #         "depth_conf": [True, False],
+    #         "depth_loss_mode": ["points"],
+    #         "depth_conf_mode": ["disabled"],
     #         "pose_opt": [True],
     #         "choice": ["vggt", "colmap"],
     #         # "num_points_per_image": [10000, 1100],
     #         "num_points_per_image": [10000],
     #         # "depth_lambda": [0.01, 0.1, 1, 10],
     #     },
-    #     PlotConfig(x_axis="num_images", split_param="choice,depth_loss,depth_lambda,depth_conf,sampling_mode"),
+    #     PlotConfig(
+    #         x_axis="num_images", split_param="choice,depth_loss_mode,depth_lambda,depth_conf_mode,sampling_mode"
+    #     ),
     # ),
     Experiment(
         "depth_lambda",
@@ -1535,15 +1535,15 @@ experiments = [
             "seed": [42],  # , 43, 44
             "num_images": [100],
             "sampling_mode": ["random"],
-            "depth_loss": [True],
+            "depth_loss_mode": ["points"],
             "pose_opt": [True],
             "choice": ["vggt", "colmap"],
             "depth_lambda": [0.0, 0.01, 0.1, 1, 10],
-            "depth_conf": [True, False],
+            "depth_conf_mode": ["disabled", "standard", "sigmoid"],
         },
         PlotConfig(
             x_axis="depth_lambda",
-            split_param="depth_conf",
+            split_param="depth_conf_mode",
             metric_keys=["psnr", "lpips", "ssim"],
             show_depth=True,
             show_gt=False,
@@ -1555,6 +1555,64 @@ experiments = [
         },
     ),
     Experiment(
+        "depth_loss_mode",
+        5,
+        "COLMAP versus VGGT with depth loss",
+        {
+            "seed": [42],  # , 43, 44
+            "num_images": [100],
+            "sampling_mode": ["random"],
+            "depth_loss_mode": ["disabled", "full", "points", "closer"],
+            "pose_opt": [True],
+            "choice": ["vggt", "colmap"],
+            "depth_lambda": [1.0],
+            "depth_conf_mode": ["disabled"],
+        },
+        PlotConfig(
+            x_axis="",
+            split_param="depth_loss_mode",
+            metric_keys=["quality", "eval_rre", "eval_rte", "real_num_points"],
+            show_depth=True,
+            show_gt=False,
+            max_render_cols=5,
+            render_nums=[0, 2, 3, 4, 5],
+        ),
+        render_filter_override={
+            "seed": [42],
+            "num_images": [100],
+            "depth_lambda": [1.0],
+        },
+    ),
+    Experiment(
+        "depth_conf_mode",
+        5,
+        "COLMAP versus VGGT with depth loss",
+        {
+            "seed": [42],  # , 43, 44
+            "num_images": [100],
+            "sampling_mode": ["random"],
+            "depth_loss_mode": ["closer"],
+            "pose_opt": [True],
+            "choice": ["vggt", "colmap"],
+            "depth_lambda": [1.0],
+            "depth_conf_mode": ["disabled", "standard", "sigmoid",],
+        },
+        PlotConfig(
+            x_axis="",
+            split_param="depth_conf_mode",
+            metric_keys=["quality", "eval_rre", "eval_rte", "real_num_points"],
+            show_depth=True,
+            show_gt=False,
+            max_render_cols=5,
+            render_nums=[0, 2, 3, 4, 5],
+        ),
+        render_filter_override={
+            "seed": [42],
+            "num_images": [100],
+            "depth_lambda": [1.0],
+        },
+    ),
+    Experiment(
         "depth_lambda_num_images",
         5,
         "COLMAP versus VGGT with depth loss",
@@ -1562,11 +1620,11 @@ experiments = [
             "seed": [42],  # , 43, 44
             "num_images": [20, 30, 40, 100],
             "sampling_mode": ["voxels"],  # "random"
-            "depth_loss": [True],
+            "depth_loss_mode": [True],
             "pose_opt": [True],
             "choice": ["vggt"],  # , "colmap"
             "depth_lambda": [0.0, 0.01, 0.1, 1.0],
-            "depth_conf": [True],  # , False
+            "depth_conf_mode": ["standard"],  # , False
         },
         PlotConfig(
             x_axis="num_images",
