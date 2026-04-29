@@ -29,7 +29,8 @@
         "farthestpose"
     ],
     "choice": [
-        "colmap"
+        "colmap",
+        "vggt"
     ],
     "num_steps": [
         15000

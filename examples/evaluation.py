@@ -165,8 +165,14 @@ def main(pred: str, gt: str, force: bool = False) -> None:
         print(f"Evaluation for {pred} already exists at {out_file}. Skipping.")
         return
 
-    gt_parser, gt_poses, _, _, _ = load_parser_data(gt)
-    pred_parser, pred_poses, _, _, _ = load_parser_data(pred)
+    gt_parser, gt_poses, _, _, gt_err = load_parser_data(gt)
+    pred_parser, pred_poses, _, _, pred_err = load_parser_data(pred)
+
+    if gt_err:
+        raise ValueError(gt_err)
+
+    if pred_err:
+        raise ValueError(pred_err)
 
     assert gt_poses is not None and pred_poses is not None
 

@@ -24,7 +24,12 @@
         "vggt"
     ],
     "max_ba_iterations": [
+        50,
         3000
+    ],
+    "camera_type": [
+        "SIMPLE_RADIAL",
+        "SIMPLE_PINHOLE"
     ],
     "dataset": "bicycle"
 }

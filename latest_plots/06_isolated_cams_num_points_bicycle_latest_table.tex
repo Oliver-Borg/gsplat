@@ -1,22 +1,26 @@
 \begin{table}[H]
 \caption{Test isolated cameras with random point clouds. (Bicycle)}
 \label{tab:06_isolated_cams_num_points_bicycle}
-\begin{tabular}{lrrlllrr}
+\begin{tabular}{lrlllrrrrr}
 \toprule
-Choice & Num Images & Num Points & Random Init & Pose Opt & Sampling Mode & Composite Quality ↑ ↑ & Final Gaussian Count ↓ \\
+Choice & Num Images & Random Init & Pose Opt & Sampling Mode & Composite Quality ↑ ↑ & Validation Step RRE ↓ ↓ & Validation Step RTE ↓ ↓ & Aligned Cameras ↑ ↑ & Initial Points ↑ \\
 \midrule
-VGGT & 25 & 667 & Random Init &  & random & -0.114 & 739712.000 \\
-VGGT & 25 & 667 & Random Init & Pose Opt & random & -0.144 & 739712.000 \\
-VGGT & 50 & 3101 & Random Init &  & ba & -0.010 & 1000000.000 \\
-VGGT & 50 & 3101 & Random Init &  & random & 0.004 & 1000000.000 \\
-VGGT & 50 & 3101 & Random Init & Pose Opt & ba & -0.054 & 1000000.000 \\
-VGGT & 50 & 3101 & Random Init & Pose Opt & random & -0.058 & 1000000.000 \\
-VGGT & 75 & 6098 & Random Init &  & random & 0.025 & 1000000.000 \\
-VGGT & 75 & 6098 & Random Init & Pose Opt & random & 0.002 & 1000000.000 \\
-VGGT & 100 & 16592 & Random Init &  & ba & 0.024 & 1000000.000 \\
-VGGT & 100 & 16592 & Random Init &  & random & 0.041 & 1000000.000 \\
-VGGT & 100 & 16592 & Random Init & Pose Opt & ba & 0.017 & 1000000.000 \\
-VGGT & 100 & 16592 & Random Init & Pose Opt & random & 0.030 & 1000000.000 \\
+VGGT & 25 & Random Init &  & ba & -0.115 & 1.764 & 0.035 & 25.000 & 663.000 \\
+VGGT & 25 & Random Init &  & random & -0.127 & 1.078 & 0.020 & 25.000 & 663.000 \\
+VGGT & 25 & Random Init & Pose Opt & ba & -0.136 & 1.899 & 0.045 & 25.000 & 663.000 \\
+VGGT & 25 & Random Init & Pose Opt & random & -0.127 & 1.704 & 0.030 & 25.000 & 663.000 \\
+VGGT & 50 & Random Init &  & ba & -0.026 & 0.840 & 0.016 & 50.000 & 3071.000 \\
+VGGT & 50 & Random Init &  & random & -0.016 & 0.920 & 0.019 & 50.000 & 3071.000 \\
+VGGT & 50 & Random Init & Pose Opt & ba & -0.049 & 1.115 & 0.015 & 50.000 & 3071.000 \\
+VGGT & 50 & Random Init & Pose Opt & random & -0.050 & 1.083 & 0.023 & 50.000 & 3071.000 \\
+VGGT & 75 & Random Init &  & ba & 0.015 & 0.776 & 0.011 & 75.000 & 6068.000 \\
+VGGT & 75 & Random Init &  & random & 0.030 & 0.892 & 0.017 & 75.000 & 6068.000 \\
+VGGT & 75 & Random Init & Pose Opt & ba & 0.002 & 0.846 & 0.012 & 75.000 & 6068.000 \\
+VGGT & 75 & Random Init & Pose Opt & random & -0.000 & 0.906 & 0.020 & 75.000 & 6068.000 \\
+VGGT & 100 & Random Init &  & ba & 0.032 & 0.792 & 0.011 & 100.000 & 16687.000 \\
+VGGT & 100 & Random Init &  & random & 0.040 & 0.857 & 0.015 & 100.000 & 16687.000 \\
+VGGT & 100 & Random Init & Pose Opt & ba & 0.027 & 0.733 & 0.009 & 100.000 & 16687.000 \\
+VGGT & 100 & Random Init & Pose Opt & random & 0.049 & 0.782 & 0.016 & 100.000 & 16687.000 \\
 \bottomrule
 \end{tabular}
 \end{table}

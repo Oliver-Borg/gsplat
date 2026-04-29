@@ -31,6 +31,7 @@ class Dataset:
     data_folder_name: str
     gt_train_data_dir: str | None = None
     gt_eval_data_dir: str | None = None
+    camera_type: CAMERA_TYPE = "SIMPLE_RADIAL"
 
     @property
     def scene_name(self):
@@ -67,6 +68,7 @@ datasets = {
         gt_train_data_dir="../vggt/data/nerf_synthetic/lego/transforms_train.json",
         gt_eval_data_dir="../vggt/data/nerf_synthetic/lego/transforms_val.json",
         data_folder_name="train",
+        camera_type="SIMPLE_PINHOLE",
     ),
     "bonsai_4": Dataset(
         name="bonsai",
@@ -87,6 +89,7 @@ datasets = {
         factor=1,
         directory="../vggt/data/blender",
         data_folder_name="dataset_N100_R5.5_H1.0_C-4.0_0.0_2.0_SIMPLE_PINHOLE_K-0.02_RMEevee_no_windows",
+        camera_type="SIMPLE_PINHOLE",
     ),
 }
 
@@ -162,7 +165,7 @@ class Config:
         instance.depth_lambda = data.get("depth_lambda", cls.depth_lambda)
         instance.depth_conf = data.get("depth_conf", cls.depth_conf)
         instance.error_opa = data.get("error_opa", cls.error_opa)
-        instance.camera_type = data.get("camera_type", cls.camera_type)
+        instance.camera_type = data.get("camera_type", instance.dataset.camera_type)
         instance.num_steps = data.get("num_steps", cls.num_steps)
         instance.colmap_mode = data.get("colmap_mode", cls.colmap_mode)
         instance.nomcmc = data.get("nomcmc", cls.nomcmc)
@@ -628,7 +631,7 @@ class Config:
             examples.evaluation.main(self.data_dir, self.dataset.directory, force=self.force_eval or force)
             return 0
         except Exception as e:
-            print(f"Error during evaluation: {e}")
+            print(f"Error during evaluation of {self.data_dir}: {e}")
             return 1
 
     @property
@@ -1488,10 +1491,14 @@ experiments = [
             "gt_eval": [True],
             "colmap_mode": ["default", "relaxed"],
             "image_mode": ["farthestpose"],
-            "choice": ["colmap"],
+            "choice": ["colmap", "vggt"],
             "num_steps": [15000],
         },
-        PlotConfig(x_axis="num_images", split_param="colmap_mode,pose_opt"),
+        PlotConfig(
+            x_axis="num_images",
+            split_param="colmap_mode,pose_opt",
+            metric_keys=["eval_rre", "eval_rte", "rre", "rte", "num_aligned", "quality"],
+        ),
         val_steps=[15000],
     ),
     Experiment(
@@ -1709,8 +1716,8 @@ experiments = [
         },
         PlotConfig(
             x_axis="num_images",
-            split_param="num_points,random_init,pose_opt,sampling_mode",
-            metric_keys=["quality", "num_GS"],
+            split_param="random_init,pose_opt,sampling_mode",
+            metric_keys=["quality", "eval_rre", "eval_rte", "num_aligned", "real_num_points"],
         ),
     ),
     Experiment(
@@ -1725,14 +1732,14 @@ experiments = [
             "pose_opt": [True],
             "gt_eval": True,
             "choice": ["vggt"],
-            "max_ba_iterations": [3000],
+            "max_ba_iterations": [50, 3000],
             "camera_type": ["SIMPLE_RADIAL", "SIMPLE_PINHOLE"],
         },
         PlotConfig(
             x_axis="num_images",
             split_param="sampling_mode,use_ba,max_ba_iterations,shared_camera,camera_type",
             metric_keys=["rre", "rte", "num_aligned", "quality"],
-            apply_jitter=True,
+            apply_jitter=False,
         ),
         render_filter_override={
             "seed": [42],
