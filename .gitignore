@@ -128,3 +128,7 @@ results
 
 stubs/
 plots/
+*.ipynb
+.gradio/
+*.sh
+experiment_log.txt
