@@ -11,8 +11,8 @@
     "sampling_mode": [
         "voxels"
     ],
-    "depth_loss": [
-        true
+    "depth_loss_mode": [
+        "full"
     ],
     "pose_opt": [
         true
@@ -26,8 +26,8 @@
         0.1,
         1.0
     ],
-    "depth_conf": [
-        true
+    "depth_conf_mode": [
+        "standard"
     ],
     "dataset": "bicycle"
 }

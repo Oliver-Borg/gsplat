@@ -1,14 +1,14 @@
 \begin{table}[H]
 \caption{Test isolated cameras with random point clouds. (Bicycle)}
 \label{tab:06_isolated_cams_bicycle}
-\begin{tabular}{lrlllrr}
+\begin{tabular}{llllrrrrr}
 \toprule
-Choice & Num Points & Random Init & Pose Opt & Sampling Mode & Composite Quality ↑ ↑ & Final Gaussian Count ↓ \\
+Choice & Random Init & Pose Opt & Sampling Mode & Validation Step RRE ↓ ↓ & Validation Step RTE ↓ ↓ & Aligned Cameras ↑ ↑ & Initial Points ↑ & Composite Quality ↑ ↑ \\
 \midrule
-VGGT & 16592 & Random Init &  & ba & 0.024 & 1000000.000 \\
-VGGT & 16592 & Random Init &  & random & 0.041 & 1000000.000 \\
-VGGT & 16592 & Random Init & Pose Opt & ba & 0.017 & 1000000.000 \\
-VGGT & 16592 & Random Init & Pose Opt & random & 0.030 & 1000000.000 \\
+VGGT & Random Init &  & ba & 0.792 & 0.011 & 100.000 & 16687.000 & 0.032 \\
+VGGT & Random Init &  & random & 0.857 & 0.015 & 100.000 & 16687.000 & 0.040 \\
+VGGT & Random Init & Pose Opt & ba & 0.733 & 0.009 & 100.000 & 16687.000 & 0.027 \\
+VGGT & Random Init & Pose Opt & random & 0.782 & 0.016 & 100.000 & 16687.000 & 0.049 \\
 \bottomrule
 \end{tabular}
 \end{table}

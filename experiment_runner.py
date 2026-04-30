@@ -1041,7 +1041,7 @@ experiments = [
         1,
         "COLMAP versus VGGT over various number of images with pose optimization",
         {
-            "seed": [42, 43, 44],
+            "seed": [42, 43],
             "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
             "sampling_mode": ["voxels"],
             "pose_opt": [True, False],
@@ -1266,6 +1266,33 @@ experiments = [
         },
     ),
     Experiment(
+        "combined_test",
+        7,
+        "Test that COLMAP cams have the same metrics as combined with COLMAP cams.",
+        {
+            "seed": [42],  #
+            "num_images": [100],
+            "sampling_mode": ["random"],  # , "confidence", "voxels", "ba"
+            "num_points_per_image": [1000],
+            "gt_eval": True,
+            "choice": ["combined", "colmap"],
+            "pcd_src": ["both"],
+            "align_mode": ["global"],
+            "keep_backup_cams": [False],
+            "camera_src": ["colmap"],
+        },
+        PlotConfig(
+            x_axis="",
+            split_param="camera_src,pcd_src,keep_backup_cams",
+            metric_keys=["rre", "rte", "num_aligned", "quality"],
+        ),
+        render_filter_override={
+            "seed": [42],
+            "sampling_mode": ["random"],
+            "num_images": [100],
+        },
+    ),
+    Experiment(
         "combined_full",
         7,
         "Combining cameras and point clouds",
@@ -1311,14 +1338,12 @@ experiments = [
             "align_mode": ["local", "global"],
             "keep_backup_cams": [True, False],
             "camera_src": ["colmap"],
-            "num_steps": [15000],
         },
         PlotConfig(
             x_axis="num_images",
             split_param="sampling_mode,align_mode,keep_backup_cams",
             metric_keys=["rre", "rte", "num_aligned", "quality"],
         ),
-        val_steps=[15000],
         render_filter_override={
             "seed": [42],
             "sampling_mode": ["random"],
@@ -1620,7 +1645,7 @@ experiments = [
             "seed": [42],  # , 43, 44
             "num_images": [20, 30, 40, 100],
             "sampling_mode": ["voxels"],  # "random"
-            "depth_loss_mode": [True],
+            "depth_loss_mode": ["full"],
             "pose_opt": [True],
             "choice": ["vggt"],  # , "colmap"
             "depth_lambda": [0.0, 0.01, 0.1, 1.0],
@@ -1629,7 +1654,7 @@ experiments = [
         PlotConfig(
             x_axis="num_images",
             split_param="depth_lambda",
-            metric_keys=["psnr", "lpips", "ssim"],
+            metric_keys=["psnr", "lpips", "ssim", "quality"],
             max_render_cols=4,
             show_depth=True,
             show_gt=False,
@@ -1646,9 +1671,9 @@ experiments = [
         "A comparison of different camera types with bundle adjustment",
         {
             "seed": [42],
-            "num_images": [80],
+            "num_images": [100],
             "sampling_mode": ["ba"],
-            "all_opt": [False],
+            "pose_opt": [False],
             "camera_type": ["SIMPLE_RADIAL", "SIMPLE_PINHOLE"],
             "choice": ["vggt", "colmap"],
         },
@@ -1662,12 +1687,12 @@ experiments = [
             "seed": [42, 43, 44],
             "num_images": [100],
             "sampling_mode": ["ba", "voxels"],
-            "all_opt": [True, False],
+            "pose_opt": [True, False],
             "camera_type": ["SIMPLE_RADIAL", "SIMPLE_PINHOLE"],
-            "num_points_per_image": [1100, 2200],
+            "num_points_per_image": [1100],
             "choice": ["vggt", "colmap"],
         },
-        PlotConfig(x_axis="", split_param="camera_type,pose_opt,eval_opt,sampling_mode,num_images"),
+        PlotConfig(x_axis="", split_param="camera_type,pose_opt,sampling_mode"),
     ),
     Experiment(
         "dataset_type",
@@ -1754,8 +1779,8 @@ experiments = [
         },
         PlotConfig(
             x_axis="",
-            split_param="num_points,random_init,pose_opt,sampling_mode",
-            metric_keys=["quality", "num_GS"],
+            split_param="random_init,pose_opt,sampling_mode",
+            metric_keys=["eval_rre", "eval_rte", "num_aligned", "real_num_points", "quality"],
         ),
     ),
     Experiment(
@@ -1775,7 +1800,7 @@ experiments = [
         PlotConfig(
             x_axis="num_images",
             split_param="random_init,pose_opt,sampling_mode",
-            metric_keys=["quality", "eval_rre", "eval_rte", "num_aligned", "real_num_points"],
+            metric_keys=["eval_rre", "eval_rte", "num_aligned", "real_num_points", "quality"],
         ),
     ),
     Experiment(
@@ -1847,6 +1872,7 @@ if __name__ == "__main__":
     for arg_experiment in args.experiment_names:
         for experiment in experiments:
             if experiment.name == arg_experiment or arg_experiment == "all":
+                # try:
                 experiment = replace(experiment, include_gt=args.include_gt)
 
                 if args.check_only:
@@ -1864,3 +1890,5 @@ if __name__ == "__main__":
                         force_all=args.force_all,
                     )
                 experiment.plot(args.dataset_name)
+                # except Exception as e:
+                #     print(e)

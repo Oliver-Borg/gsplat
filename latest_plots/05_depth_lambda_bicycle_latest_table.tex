@@ -3,23 +3,28 @@
 \label{tab:05_depth_lambda_bicycle}
 \begin{tabular}{lrlrrr}
 \toprule
-Choice & Depth Lambda & Depth Conf & PSNR ↑ ↑ & LPIPS ↓ ↓ & SSIM ↑ ↑ \\
+Choice & Depth Lambda & Depth Conf Mode & PSNR ↑ ↑ & LPIPS ↓ ↓ & SSIM ↑ ↑ \\
 \midrule
-COLMAP & 0.000 &  & 21.475 & 0.352 & 0.521 \\
-VGGT & 0.000 &  & 17.329 & 0.348 & 0.263 \\
-VGGT & 0.000 & Depth Confidence & 17.283 & 0.349 & 0.262 \\
-COLMAP & 0.010 &  & 21.548 & 0.358 & 0.521 \\
-VGGT & 0.010 &  & 17.352 & 0.347 & 0.263 \\
-VGGT & 0.010 & Depth Confidence & 17.356 & 0.347 & 0.263 \\
-COLMAP & 0.100 &  & 21.530 & 0.372 & 0.516 \\
-VGGT & 0.100 &  & 17.479 & 0.349 & 0.267 \\
-VGGT & 0.100 & Depth Confidence & 17.475 & 0.350 & 0.267 \\
-COLMAP & 1.000 &  & 21.359 & 0.396 & 0.502 \\
-VGGT & 1.000 &  & 17.786 & 0.360 & 0.279 \\
-VGGT & 1.000 & Depth Confidence & 17.821 & 0.360 & 0.280 \\
-COLMAP & 10.000 &  & 20.904 & 0.434 & 0.478 \\
-VGGT & 10.000 &  & 17.813 & 0.404 & 0.287 \\
-VGGT & 10.000 & Depth Confidence & 17.815 & 0.406 & 0.288 \\
+COLMAP & 0.000 &  & 22.422 & 0.349 & 0.575 \\
+VGGT & 0.000 &  & 17.291 & 0.349 & 0.262 \\
+VGGT & 0.000 & sigmoid & 17.314 & 0.348 & 0.262 \\
+VGGT & 0.000 & standard & 17.301 & 0.349 & 0.263 \\
+COLMAP & 0.010 &  & 22.545 & 0.351 & 0.567 \\
+VGGT & 0.010 &  & 17.347 & 0.348 & 0.262 \\
+VGGT & 0.010 & sigmoid & 17.328 & 0.347 & 0.263 \\
+VGGT & 0.010 & standard & 17.312 & 0.348 & 0.263 \\
+COLMAP & 0.100 &  & 22.447 & 0.367 & 0.554 \\
+VGGT & 0.100 &  & 17.326 & 0.351 & 0.262 \\
+VGGT & 0.100 & sigmoid & 17.337 & 0.348 & 0.262 \\
+VGGT & 0.100 & standard & 17.313 & 0.353 & 0.262 \\
+COLMAP & 1.000 &  & 22.157 & 0.391 & 0.535 \\
+VGGT & 1.000 &  & 17.226 & 0.392 & 0.263 \\
+VGGT & 1.000 & sigmoid & 17.258 & 0.375 & 0.263 \\
+VGGT & 1.000 & standard & 17.236 & 0.399 & 0.264 \\
+COLMAP & 10.000 &  & 21.365 & 0.435 & 0.487 \\
+VGGT & 10.000 &  & 17.251 & 0.454 & 0.263 \\
+VGGT & 10.000 & sigmoid & 17.221 & 0.438 & 0.262 \\
+VGGT & 10.000 & standard & 17.243 & 0.458 & 0.263 \\
 \bottomrule
 \end{tabular}
 \end{table}

@@ -8,8 +8,8 @@
     "sampling_mode": [
         "random"
     ],
-    "depth_loss": [
-        true
+    "depth_loss_mode": [
+        "points"
     ],
     "pose_opt": [
         true
@@ -25,9 +25,10 @@
         1,
         10
     ],
-    "depth_conf": [
-        true,
-        false
+    "depth_conf_mode": [
+        "disabled",
+        "standard",
+        "sigmoid"
     ],
     "dataset": "bicycle"
 }
