@@ -318,6 +318,13 @@ class Config:
 
             parts.append(self.image_mode)
 
+            if self.use_ba:
+                parts.append("useba")
+                parts.append(f"maxba{self.max_ba_iterations}")
+
+            if self.shared_camera:
+                parts.append("sharedcam")
+
             if self.copy_mode is not None:
                 parts.append(self.copy_mode)
 
@@ -1836,7 +1843,7 @@ experiment_dict = {exp.name: exp for exp in experiments}
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run experiments")
-    parser.add_argument("--experiment_names", type=str, required=True, help="Name of the experiment to run", nargs="+")
+    parser.add_argument("--experiment_names", type=str, required=True, help="Names of the experiments to run", nargs="+")
     parser.add_argument("--dataset_name", type=str, required=True, help="Name of the dataset to use")
     parser.add_argument("--skip_splatting", action="store_true", help="Whether to skip splatting")
     parser.add_argument("--do_reconstruct", action="store_true", help="Whether to run reconstruction")

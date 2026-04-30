@@ -37,8 +37,5 @@
     "camera_src": [
         "colmap"
     ],
-    "num_steps": [
-        15000
-    ],
     "dataset": "bicycle"
 }
