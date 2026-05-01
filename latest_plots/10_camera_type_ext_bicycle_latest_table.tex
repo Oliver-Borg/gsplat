@@ -1,14 +1,14 @@
 \begin{table}[H]
 \caption{Test for camera mode (extended) (Bicycle)}
 \label{tab:10_camera_type_ext_bicycle}
-\begin{tabular}{lllllrrrrrrr}
+\begin{tabular}{llllrrrrrr}
 \toprule
-Choice & Camera Type & Pose Opt & Eval Opt & Sampling Mode & Num Images & RRE ↓ ↓ & RTE ↓ ↓ & PSNR ↑ ↑ & LPIPS ↓ ↓ & SSIM ↑ ↑ & Final Gaussian Count ↓ \\
+Choice & Camera Type & Pose Opt & Sampling Mode & RRE ↓ ↓ & RTE ↓ ↓ & PSNR ↑ ↑ & LPIPS ↓ ↓ & SSIM ↑ ↑ & Final Gaussian Count ↓ \\
 \midrule
-VGGT & pinhole &  &  & ba & 100 & 0.860 & 0.046 & 17.097 & 0.536 & 0.285 & 1000000.000 \\
-VGGT & pinhole & Pose Opt &  & ba & 100 & 0.860 & 0.046 & 16.849 & 0.491 & 0.275 & 1000000.000 \\
-VGGT & radial &  &  & ba & 100 & 0.776 & 0.048 & 17.267 & 0.548 & 0.289 & 1000000.000 \\
-VGGT & radial & Pose Opt &  & ba & 100 & 0.776 & 0.048 & 17.163 & 0.493 & 0.280 & 1000000.000 \\
+VGGT & pinhole &  & ba & 0.860 & 0.046 & 17.085 & 0.535 & 0.284 & 1000000.000 \\
+VGGT & pinhole & Pose Opt & ba & 0.860 & 0.046 & 16.845 & 0.487 & 0.274 & 1000000.000 \\
+VGGT & radial &  & ba & 0.776 & 0.048 & 17.270 & 0.548 & 0.289 & 1000000.000 \\
+VGGT & radial & Pose Opt & ba & 0.776 & 0.048 & 17.130 & 0.495 & 0.280 & 1000000.000 \\
 \bottomrule
 \end{tabular}
 \end{table}
