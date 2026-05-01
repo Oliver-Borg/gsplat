@@ -1,0 +1,25 @@
+{
+    "num_images": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+    ],
+    "seed": [
+        42
+    ],
+    "choice": [
+        "colmap"
+    ],
+    "shared_camera": [
+        true,
+        false
+    ],
+    "dataset": "bicycle"
+}

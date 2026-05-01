@@ -1,0 +1,35 @@
+{
+    "seed": [
+        42
+    ],
+    "num_images": [
+        100
+    ],
+    "sampling_mode": [
+        "random"
+    ],
+    "match_colmap_points": [
+        true,
+        false
+    ],
+    "random_init": [
+        true,
+        false
+    ],
+    "pose_opt": [
+        false
+    ],
+    "gt_eval": true,
+    "choice": [
+        "combined"
+    ],
+    "pcd_src": [
+        "colmap",
+        "vggt"
+    ],
+    "camera_src": [
+        "vggt"
+    ],
+    "use_ba": true,
+    "dataset": "bicycle"
+}

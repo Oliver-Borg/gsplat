@@ -1,0 +1,11 @@
+Choice,Num Images,Shared Camera,Sampling Mode,RRE ↓ ↓,RTE ↓ ↓,Aligned Cameras ↑ ↑,Composite Quality ↑ ↑
+VGGT,10,Shared Cam,ba,7.2232,1.3413,10.0,-0.20015195931917346
+VGGT,20,Shared Cam,ba,2.1172,0.160081,20.0,-0.05998114125150755
+VGGT,30,Shared Cam,ba,1.1104,0.093747,30.0,
+VGGT,40,Shared Cam,ba,1.092,0.094928,40.0,
+VGGT,50,Shared Cam,ba,0.8398,0.073226,50.0,
+VGGT,60,Shared Cam,ba,0.7716,0.047466,60.0,
+VGGT,70,Shared Cam,ba,0.793,0.050649,70.0,0.08115084419938323
+VGGT,80,Shared Cam,ba,0.7082,0.044108,80.0,
+VGGT,90,Shared Cam,ba,0.7593,0.045281,90.0,
+VGGT,100,Shared Cam,ba,0.7917,0.048267,100.0,0.07595182840044896

@@ -128,6 +128,7 @@ class Config:
     camera_src: Literal["vggt", "colmap", "gt"] = "vggt"
     pcd_src: Literal["vggt", "colmap", "gt", "both"] = "vggt"
     align_mode: Literal["local", "global"] = "global"
+    align_glue: bool = False
     keep_backup_cams: bool = False
     random_init: bool = False
     match_colmap_points: bool = False
@@ -172,6 +173,7 @@ class Config:
         instance.camera_src = data.get("camera_src", cls.camera_src)
         instance.pcd_src = data.get("pcd_src", cls.pcd_src)
         instance.align_mode = data.get("align_mode", cls.align_mode)
+        instance.align_glue = data.get("align_glue", cls.align_glue)
         instance.keep_backup_cams = data.get("keep_backup_cams", cls.keep_backup_cams)
         instance.random_init = data.get("random_init", cls.random_init)
         instance.match_colmap_points = data.get("match_colmap_points", cls.match_colmap_points)
@@ -180,6 +182,11 @@ class Config:
         return replace(instance)
 
     def __post_init__(self):
+        if self.choice == "combined" and self.camera_src == self.pcd_src:
+            self.choice = self.camera_src
+
+        if self.choice == "combined" and self.camera_src != self.pcd_src and self.random_init:
+            self.choice = self.camera_src
 
         if self.choice == "gt":
             self.gt_eval = False
@@ -196,9 +203,6 @@ class Config:
 
         if not (self.use_ba and self.choice == "vggt"):
             self.max_ba_iterations = 0
-
-        if self.choice == "combined" and self.camera_src == self.pcd_src:
-            self.camera_src = "vggt" if self.pcd_src == "colmap" else "colmap"
 
         if self.choice != "vggt" and self.choice != "combined":
             self.depth_conf_mode = "disabled"
@@ -233,6 +237,9 @@ class Config:
                 self.match_colmap_points = False
             else:
                 self.num_points_value = colmap_points
+
+        if self.align_glue and self.camera_src != "colmap":
+            self.align_glue = False
 
     @property
     def num_points(self):
@@ -298,6 +305,9 @@ class Config:
                 parts.append("amglobal")
             if self.keep_backup_cams:
                 parts.append("fallbackcams")
+
+            if self.align_glue:
+                parts.append("glued")
 
             parts.append(self.colmap_mode)
 
@@ -553,6 +563,8 @@ class Config:
                 command.append("--align_each_point_set")
             if self.keep_backup_cams:
                 command.append("--keep_backup_cams")
+            if self.align_glue:
+                command.append("--glue_parts")
 
             try:
                 output = subprocess.run(command, check=True, cwd="../vggt")
@@ -1589,7 +1601,7 @@ experiments = [
     Experiment(
         "depth_loss_mode",
         5,
-        "COLMAP versus VGGT with depth loss",
+        "COLMAP versus VGGT with depth loss for different depth loss modes.",
         {
             "seed": [42],  # , 43, 44
             "num_images": [100],
@@ -1618,7 +1630,7 @@ experiments = [
     Experiment(
         "depth_conf_mode",
         5,
-        "COLMAP versus VGGT with depth loss",
+        "COLMAP versus VGGT with depth loss for different depth confidence modes.",
         {
             "seed": [42],  # , 43, 44
             "num_images": [100],
@@ -1627,7 +1639,11 @@ experiments = [
             "pose_opt": [True],
             "choice": ["vggt", "colmap"],
             "depth_lambda": [1.0],
-            "depth_conf_mode": ["disabled", "standard", "sigmoid",],
+            "depth_conf_mode": [
+                "disabled",
+                "standard",
+                "sigmoid",
+            ],
         },
         PlotConfig(
             x_axis="",
@@ -1730,17 +1746,50 @@ experiments = [
         PlotConfig(x_axis="", split_param="copy_mode", metric_keys=["rre", "rte", "num_aligned", "quality"]),
     ),
     Experiment(
-        "shared_camera",
-        99,
-        "Shared camera test",
+        "shared_camera_colmap",
+        6,
+        "A test for shared cameras with COLMAP",
+        {
+            "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+            "seed": [42],
+            "choice": ["colmap"],
+            "shared_camera": [True, False],
+        },
+        PlotConfig(
+            x_axis="num_images",
+            split_param="shared_camera",
+            metric_keys=["rre", "rte", "num_aligned", "quality"],
+            max_render_cols=5,
+            render_nums=[0, 2, 3, 4, 5],
+        ),
+        render_filter_override={
+            "seed": [42],
+            "num_images": [70],
+        },
+    ),
+    Experiment(
+        "shared_camera_vggt",
+        6,
+        "A test for shared cameras with VGGT",
         {
             "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
             "seed": [42],
             "sampling_mode": ["ba", "voxels"],
-            "choice": ["vggt", "colmap"],
+            "pose_opt": [True],
+            "choice": ["vggt"],
             "shared_camera": [True, False],
         },
-        PlotConfig(x_axis="num_images", split_param="shared_camera,sampling_mode"),
+        PlotConfig(
+            x_axis="num_images",
+            split_param="shared_camera,sampling_mode",
+            metric_keys=["rre", "rte", "num_aligned", "quality"],
+            max_render_cols=5,
+            render_nums=[0, 2, 3, 4, 5],
+        ),
+        render_filter_override={
+            "seed": [42],
+            "num_images": [70],
+        },
     ),
     Experiment(
         "gt_cams",
@@ -1788,7 +1837,13 @@ experiments = [
             x_axis="",
             split_param="random_init,pose_opt,sampling_mode",
             metric_keys=["eval_rre", "eval_rte", "num_aligned", "real_num_points", "quality"],
+            max_render_cols=4,
+            render_nums=[0, 2],
         ),
+        render_filter_override={
+            "seed": [42],
+            "num_images": [100],
+        },
     ),
     Experiment(
         "isolated_cams_num_points",
@@ -1809,6 +1864,85 @@ experiments = [
             split_param="random_init,pose_opt,sampling_mode",
             metric_keys=["eval_rre", "eval_rte", "num_aligned", "real_num_points", "quality"],
         ),
+    ),
+    Experiment(
+        "isolated_cams_point_clouds",
+        6,
+        "Test COLMAP cameras with different point cloud sources.",
+        {
+            "seed": [42],
+            "num_images": [100],
+            "sampling_mode": ["random"],
+            "match_colmap_points": [True, False],
+            "random_init": [True, False],
+            "pose_opt": [False],
+            "gt_eval": True,
+            "choice": ["combined"],
+            "pcd_src": ["colmap", "vggt"],
+            "camera_src": ["colmap"]
+        },
+        PlotConfig(
+            x_axis="",
+            split_param="random_init,pcd_src,real_num_points",
+            metric_keys=["eval_rre", "eval_rte", "num_aligned", "real_num_points", "quality"],
+        ),
+        render_filter_override={
+            "seed": [42],
+            "num_images": [100],
+        },
+    ),
+    Experiment(
+        "isolated_cams_vggt",
+        6,
+        "Test COLMAP cameras with different point cloud sources.",
+        {
+            "seed": [42],
+            "num_images": [100],
+            "sampling_mode": ["random"],
+            "match_colmap_points": [True, False],
+            "random_init": [True, False],
+            "pose_opt": [False],
+            "gt_eval": True,
+            "choice": ["combined"],
+            "pcd_src": ["colmap", "vggt"],
+            "camera_src": ["vggt"]
+        },
+        PlotConfig(
+            x_axis="",
+            split_param="random_init,pcd_src,real_num_points",
+            metric_keys=["eval_rre", "eval_rte", "num_aligned", "real_num_points", "quality"],
+        ),
+        render_filter_override={
+            "seed": [42],
+            "num_images": [100],
+        },
+    ),
+    Experiment(
+        "isolated_cams_vggt_ba",
+        6,
+        "Test COLMAP cameras with different point cloud sources.",
+        {
+            "seed": [42],
+            "num_images": [100],
+            "sampling_mode": ["random"],
+            "match_colmap_points": [True, False],
+            "random_init": [True, False],
+            "pose_opt": [False],
+            "gt_eval": True,
+            "choice": ["combined"],
+            "pcd_src": ["colmap", "vggt"],
+            "camera_src": ["vggt"],
+            "use_ba": True,
+        },
+        PlotConfig(
+            x_axis="",
+            split_param="random_init,pcd_src,real_num_points,use_ba",
+            metric_keys=["eval_rre", "eval_rte", "num_aligned", "real_num_points", "quality"],
+        ),
+        render_filter_override={
+            "seed": [42],
+            "num_images": [100],
+        },
     ),
     Experiment(
         "ba_sampling_mode",
@@ -1836,6 +1970,33 @@ experiments = [
             "num_images": [100],
         },
     ),
+    Experiment(
+        "align_glue",
+        99,
+        "Test for combining COLMAP cameras using glue",
+        {
+            "seed": [42],
+            "num_images": [20, 30, 40, 50, 60, 70, 80, 100],
+            # "num_images": [40, 60, 80],
+            # "num_images": [40],
+            "choice": ["combined", "colmap", "vggt"],
+            # TODO Enable COLMAP pcd by always passing both pcds and deciding based on other parameters
+            "pcd_src": ["both"],
+            "camera_src": ["colmap"],
+            "align_glue": [True, False],
+        },
+        PlotConfig(
+            x_axis="num_images",
+            split_param="align_glue",
+            metric_keys=["rre", "rte", "num_aligned", "quality"],
+            max_render_cols=4,
+            render_nums=[0, 2],
+        ),
+        render_filter_override={
+            "seed": [42],
+            "num_images": [70],
+        },
+    ),
 ]
 
 experiment_dict = {exp.name: exp for exp in experiments}
@@ -1843,7 +2004,9 @@ experiment_dict = {exp.name: exp for exp in experiments}
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run experiments")
-    parser.add_argument("--experiment_names", type=str, required=True, help="Names of the experiments to run", nargs="+")
+    parser.add_argument(
+        "--experiment_names", type=str, required=True, help="Names of the experiments to run", nargs="+"
+    )
     parser.add_argument("--dataset_name", type=str, required=True, help="Name of the dataset to use")
     parser.add_argument("--skip_splatting", action="store_true", help="Whether to skip splatting")
     parser.add_argument("--do_reconstruct", action="store_true", help="Whether to run reconstruction")
