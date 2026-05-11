@@ -1,18 +1,18 @@
 \begin{table}[H]
 \caption{Test for combining COLMAP cameras using glue (Bicycle)}
 \label{tab:99_align_glue_bicycle}
-\begin{tabular}{lrlrrrr}
+\begin{tabular}{lrlrrrrrr}
 \toprule
-Choice & Num Images & Align Glue & RRE ↓ ↓ & RTE ↓ ↓ & Aligned Cameras ↑ ↑ & Composite Quality ↑ ↑ \\
+Choice & Num Images & Align Glue & RRE ↓ ↓ & RTE ↓ ↓ & Aligned Cameras ↑ ↑ & PSNR ↑ ↑ & SSIM ↑ ↑ & LPIPS ↓ ↓ \\
 \midrule
-COLMAP & 20 & Align Glued & NaN & NaN & NaN & -0.516 \\
-COLMAP & 30 & Align Glued & 0.592 & 0.010 & 8.000 & -0.181 \\
-COLMAP & 40 & Align Glued & 0.998 & 0.056 & 29.000 & -0.080 \\
-COLMAP & 50 & Align Glued & 1.258 & 0.053 & 47.000 & 0.060 \\
-COLMAP & 60 & Align Glued & 4.241 & 0.040 & 57.000 & 0.077 \\
-COLMAP & 70 & Align Glued & 0.968 & 0.045 & 68.000 & 0.087 \\
-COLMAP & 80 & Align Glued & 0.877 & 0.040 & 79.000 & 0.118 \\
-COLMAP & 100 & Align Glued & 0.107 & 0.008 & 100.000 & 0.392 \\
+COLMAP & 20 & Align Glued & NaN & NaN & NaN & 9.334 & 0.007 & 0.972 \\
+COLMAP & 30 & Align Glued & 0.592 & 0.010 & 8.000 & 12.868 & 0.162 & 0.669 \\
+COLMAP & 40 & Align Glued & 0.998 & 0.056 & 29.000 & 14.193 & 0.184 & 0.580 \\
+COLMAP & 50 & Align Glued & 1.258 & 0.053 & 47.000 & 16.696 & 0.251 & 0.487 \\
+COLMAP & 60 & Align Glued & 4.241 & 0.040 & 57.000 & 16.815 & 0.246 & 0.468 \\
+COLMAP & 70 & Align Glued & 0.968 & 0.045 & 68.000 & 17.126 & 0.251 & 0.462 \\
+COLMAP & 80 & Align Glued & 0.877 & 0.040 & 79.000 & 17.502 & 0.260 & 0.428 \\
+COLMAP & 100 & Align Glued & 0.107 & 0.008 & 100.000 & 21.134 & 0.478 & 0.300 \\
 \bottomrule
 \end{tabular}
 \end{table}

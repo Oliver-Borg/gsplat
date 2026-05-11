@@ -1,0 +1,18 @@
+\begin{table}[H]
+\caption{Test for combining COLMAP cameras using glue with pose optimization (Bicycle)}
+\label{tab:99_align_glue_pose_opt_bicycle}
+\begin{tabular}{lrlrrrrrr}
+\toprule
+Choice & Num Images & Align Glue & RRE ↓ ↓ & RTE ↓ ↓ & Aligned Cameras ↑ ↑ & PSNR ↑ ↑ & SSIM ↑ ↑ & LPIPS ↓ ↓ \\
+\midrule
+COLMAP & 20 & Align Glued & NaN & NaN & NaN & 9.376 & 0.009 & 0.973 \\
+COLMAP & 30 & Align Glued & 0.592 & 0.010 & 8.000 & 12.659 & 0.162 & 0.677 \\
+COLMAP & 40 & Align Glued & 0.998 & 0.056 & 29.000 & 14.504 & 0.191 & 0.576 \\
+COLMAP & 50 & Align Glued & 1.258 & 0.053 & 47.000 & 16.925 & 0.258 & 0.471 \\
+COLMAP & 60 & Align Glued & 4.241 & 0.040 & 57.000 & 17.153 & 0.260 & 0.447 \\
+COLMAP & 70 & Align Glued & 0.968 & 0.045 & 68.000 & 17.291 & 0.257 & 0.448 \\
+COLMAP & 80 & Align Glued & 0.877 & 0.040 & 79.000 & 17.833 & 0.275 & 0.410 \\
+COLMAP & 100 & Align Glued & 0.107 & 0.008 & 100.000 & 22.545 & 0.592 & 0.275 \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,0 +1,24 @@
+{
+    "seed": [
+        42
+    ],
+    "num_images": [
+        30
+    ],
+    "choice": [
+        "vggt"
+    ],
+    "pose_opt": [
+        true,
+        false
+    ],
+    "pose_opt_module": [
+        "default",
+        "mcmc",
+        "3rgs"
+    ],
+    "num_steps": [
+        7000
+    ],
+    "dataset": "lego"
+}

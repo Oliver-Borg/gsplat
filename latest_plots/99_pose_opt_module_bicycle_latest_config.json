@@ -1,0 +1,22 @@
+{
+    "seed": [
+        42
+    ],
+    "num_images": [
+        100
+    ],
+    "choice": [
+        "vggt"
+    ],
+    "pose_opt": [
+        true,
+        false
+    ],
+    "pose_opt_module": [
+        "default",
+        "mcmc",
+        "3rgs",
+        "sgld"
+    ],
+    "dataset": "bicycle"
+}

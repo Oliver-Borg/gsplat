@@ -1,0 +1,12 @@
+\begin{table}[H]
+\caption{Test for combining relaxed COLMAP cameras using glue (Bicycle)}
+\label{tab:99_align_glue_relaxed_bicycle}
+\begin{tabular}{lllrrrrrr}
+\toprule
+Choice & Align Glue & Colmap Mode & RRE ↓ ↓ & RTE ↓ ↓ & Aligned Cameras ↑ ↑ & PSNR ↑ ↑ & SSIM ↑ ↑ & LPIPS ↓ ↓ \\
+\midrule
+COLMAP & Align Glued & default & 0.968 & 0.045 & 68.000 & 17.126 & 0.251 & 0.462 \\
+COLMAP & Align Glued & relaxed & 11.668 & 2.542 & 70.000 & 14.033 & 0.201 & 0.567 \\
+\bottomrule
+\end{tabular}
+\end{table}

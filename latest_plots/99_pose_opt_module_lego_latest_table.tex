@@ -1,0 +1,22 @@
+\begin{table}[H]
+\caption{Splatting strategies with pose optimization for VGGT with 100 images (Lego)}
+\label{tab:99_pose_opt_module_lego}
+\begin{tabular}{lrllrrr}
+\toprule
+Choice & Val Step & Pose Opt Module & Pose Opt & Validation Step RRE ↓ ↓ & Validation Step RTE ↓ ↓ & Composite Quality ↑ ↑ \\
+\midrule
+VGGT & 1 &  &  & 2.235 & 0.033 & 0.222 \\
+VGGT & 1 &  & Pose Opt & 2.234 & 0.033 & 0.221 \\
+VGGT & 1 & 3rgs & Pose Opt & 2.232 & 0.033 & 0.221 \\
+VGGT & 1 & mcmc & Pose Opt & 2.235 & 0.033 & 0.222 \\
+VGGT & 3000 &  &  & 2.235 & 0.033 & 0.341 \\
+VGGT & 3000 &  & Pose Opt & 2.136 & 0.031 & 0.345 \\
+VGGT & 3000 & 3rgs & Pose Opt & 2.163 & 0.032 & 0.344 \\
+VGGT & 3000 & mcmc & Pose Opt & 2.235 & 0.033 & 0.323 \\
+VGGT & 7000 &  &  & 2.235 & 0.033 & 0.335 \\
+VGGT & 7000 &  & Pose Opt & 2.108 & 0.030 & 0.343 \\
+VGGT & 7000 & 3rgs & Pose Opt & 2.161 & 0.032 & 0.341 \\
+VGGT & 7000 & mcmc & Pose Opt & 2.235 & 0.033 & 0.329 \\
+\bottomrule
+\end{tabular}
+\end{table}
