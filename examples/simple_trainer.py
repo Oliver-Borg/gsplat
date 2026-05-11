@@ -32,7 +32,7 @@ from typing_extensions import Literal, assert_never
 from datasets.nerf_synth import SimpleParser
 from copy_cameras import copy_cameras
 from evaluation import EvalMetrics, calculate_metrics, umeyama_alignment
-from utils import AppearanceOptModule, CameraOptModule, knn, rgb_to_sh, set_random_seed
+from utils import AnnealedSGLD, AppearanceOptModule, knn, rgb_to_sh, set_random_seed
 
 from gsplat import export_splats
 from gsplat.compression import PngCompression
@@ -171,6 +171,8 @@ class Config:
 
     # Enable camera optimization.
     pose_opt: bool = False
+    # Pose opt module
+    pose_opt_module: Literal["default", "3rgs", "mcmc", "sgld"] = "default"
     # Enable eval camera optimization. This does not affect training, but rather allows a more accurate quantitative analysis.
     eval_opt: bool = False
     # Enable camera optimization for evaluation cameras.
@@ -476,11 +478,31 @@ class Runner:
             else:
                 raise ValueError(f"Unknown compression strategy: {cfg.compression}")
 
+        if cfg.pose_opt_module == "default":
+            from utils import CameraOptModule as PoseOptModule
+        elif cfg.pose_opt_module == "3rgs":
+            from utils import CameraOptModuleMLP as PoseOptModule
+        elif cfg.pose_opt_module == "mcmc":
+            from utils import MCMCCameraOptModule as PoseOptModule
+        elif cfg.pose_opt_module == "sgld":
+            from utils import CameraOptModule as PoseOptModule
+        else:
+            raise ValueError(f"Unknown pose opt module: {cfg.pose_opt_module}")
+
         self.pose_optimizers = []
         if cfg.pose_opt:
-            self.pose_adjust = CameraOptModule(len(self.trainset)).to(self.device)
+            self.pose_adjust = PoseOptModule(len(self.trainset)).to(self.device)
             self.pose_adjust.zero_init()
             self.pose_optimizers = [
+                AnnealedSGLD(
+                    self.pose_adjust.parameters(),
+                    lr=cfg.pose_opt_lr * math.sqrt(cfg.batch_size),
+                    weight_decay=cfg.pose_opt_reg,
+                    total_steps=cfg.max_steps,
+                    noise_scale=1e-2,
+                    warmup_steps=cfg.max_steps // 10,
+                )
+            ] if cfg.pose_opt_module == "sgld" else [
                 torch.optim.Adam(
                     self.pose_adjust.parameters(),
                     lr=cfg.pose_opt_lr * math.sqrt(cfg.batch_size),
@@ -510,7 +532,7 @@ class Runner:
             assert cfg.eval_pose_opt_steps > 0
 
         if cfg.eval_pose_opt_steps > 0 and cfg.eval_opt:
-            self.eval_pose_adjust = CameraOptModule(len(self.valset)).to(self.device)
+            self.eval_pose_adjust = PoseOptModule(len(self.valset)).to(self.device)
             self.eval_pose_adjust.zero_init()
             self.eval_pose_optimizers = [
                 torch.optim.Adam(
@@ -523,7 +545,7 @@ class Runner:
                 self.eval_pose_adjust = DDP(self.eval_pose_adjust)
 
         if cfg.pose_noise > 0.0:
-            self.pose_perturb = CameraOptModule(len(self.trainset)).to(self.device)
+            self.pose_perturb = PoseOptModule(len(self.trainset)).to(self.device)
             self.pose_perturb.random_init(cfg.pose_noise)
             if world_size > 1:
                 self.pose_perturb = DDP(self.pose_perturb)
@@ -783,10 +805,19 @@ class Runner:
             if cfg.pose_noise:
                 camtoworlds = self.pose_perturb(camtoworlds, image_ids)
 
+            kwargs = {}
+
+            noise_pose_opt = False
+
+            if cfg.pose_opt_module == "mcmc" and cfg.pose_opt:
+                noise_pose_opt = step % 2 == 0
+                kwargs["step"] = step
+                kwargs["explore_std"] = schedulers[1].get_last_lr()[0] if noise_pose_opt else 0.0
+
             if is_eval_opt_step:
                 camtoworlds = self.eval_pose_adjust(camtoworlds, image_ids)
             elif cfg.pose_opt:
-                camtoworlds = self.pose_adjust(camtoworlds, image_ids)
+                camtoworlds = self.pose_adjust(camtoworlds, image_ids, **kwargs)
 
             # sh schedule
             sh_degree_to_use = min(step // cfg.sh_degree_interval, cfg.sh_degree)
@@ -1042,6 +1073,10 @@ class Runner:
                 else:
                     visibility_mask = (info["radii"] > 0).all(-1).any(0)
 
+            for optimizer in self.pose_optimizers:
+                if isinstance(optimizer, AnnealedSGLD):
+                    optimizer.update_step(step)
+
             # optimize
             if is_eval_opt_step:
                 for optimizer in self.eval_pose_optimizers:
@@ -1059,6 +1094,22 @@ class Runner:
                     optimizer.zero_grad(set_to_none=True)
                 for scheduler in eval_schedulers:
                     scheduler.step()
+            elif noise_pose_opt:
+                for optimizer in self.pose_optimizers:
+                    optimizer.step()
+                    optimizer.zero_grad(set_to_none=True)
+
+                for optimizer in self.optimizers.values():
+                    optimizer.zero_grad(set_to_none=True)
+                for optimizer in self.app_optimizers:
+                    optimizer.zero_grad(set_to_none=True)
+                for optimizer in self.bil_grid_optimizers:
+                    optimizer.zero_grad(set_to_none=True)
+                for scheduler in eval_schedulers:
+                    scheduler.step()
+                for scheduler in schedulers:
+                    scheduler.step()
+
             else:
                 for optimizer in self.optimizers.values():
                     if cfg.visible_adam:

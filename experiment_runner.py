@@ -132,6 +132,7 @@ class Config:
     keep_backup_cams: bool = False
     random_init: bool = False
     match_colmap_points: bool = False
+    pose_opt_module: Literal["default", "3rgs", "mcmc", "sgld"] = "default"
 
     construction_data: dict = field(default_factory=dict)
 
@@ -177,6 +178,7 @@ class Config:
         instance.keep_backup_cams = data.get("keep_backup_cams", cls.keep_backup_cams)
         instance.random_init = data.get("random_init", cls.random_init)
         instance.match_colmap_points = data.get("match_colmap_points", cls.match_colmap_points)
+        instance.pose_opt_module = data.get("pose_opt_module", cls.pose_opt_module)
 
         instance.construction_data = data
         return replace(instance)
@@ -240,6 +242,9 @@ class Config:
 
         if self.align_glue and self.camera_src != "colmap":
             self.align_glue = False
+
+        if not self.pose_opt:
+            self.pose_opt_module = "default"
 
     @property
     def num_points(self):
@@ -378,6 +383,8 @@ class Config:
             parts.append("nomcmc")
         if self.random_init:
             parts.append(f"randinit{self.num_points}")
+        if self.pose_opt and self.pose_opt_module != "default":
+            parts.append(f"pomod{self.pose_opt_module}")
         parts.append(f"steps{self.num_steps}")
 
         parts = "_".join(parts)
@@ -396,6 +403,12 @@ class Config:
         return f"{self.result_dir}/stats/val_step{self.num_steps - 1}.json"
 
     @property
+    def splatting_metrics(self):
+        if not os.path.exists(self.splatting_val_path):
+            return {}
+        return _parse_gsplat_json(json.load(open(self.splatting_val_path)), self.splatting_val_path)
+
+    @property
     def splatting_time(self):
         return Path(self.splatting_val_path).stat().st_mtime
 
@@ -409,6 +422,12 @@ class Config:
     @property
     def force_splat(self):
         if not self.is_splatted:
+            return True
+
+        if self.pose_opt_module == "sgld":
+            return True
+
+        if self.splatting_metrics.get("raw_metrics") is None:
             return True
 
         if self.pose_opt and self.gt_eval and self.splatting_time < datetime.datetime(2026, 4, 16, 14, 0).timestamp():
@@ -450,12 +469,12 @@ class Config:
             if self.reconstruction_time < datetime.datetime(2026, 4, 25, 11, 30, 0).timestamp():
                 return True
 
-        if self.is_splatted and self.choice == "vggt":
-            with open(self.splatting_val_path, "r") as f:
-                stats = _parse_gsplat_json(json.load(f), self.splatting_val_path)
-                psnr = stats.get("psnr", 0.0)
-            if psnr is None or (psnr < 15 and self.num_images > 20):
-                return True
+        # if self.is_splatted and self.choice == "vggt":
+        #     with open(self.splatting_val_path, "r") as f:
+        #         stats = _parse_gsplat_json(json.load(f), self.splatting_val_path)
+        #         psnr = stats.get("psnr", 0.0)
+        #     if psnr is None or (psnr < 15 and self.num_images > 20):
+        #         return True
 
         return False
 
@@ -464,12 +483,18 @@ class Config:
         return os.path.join(self.data_dir, "stat.json")
 
     @property
+    def reconstruction_aligned_cameras_path(self):
+        return os.path.join(self.data_dir, "aligned_cameras.json")
+
+    @property
     def reconstruction_time(self):
         return Path(self.reconstruction_stat_path).stat().st_mtime
 
     @property
     def is_reconstructed(self):
-        return self.choice == "gt" or os.path.exists(self.reconstruction_stat_path)
+        return self.choice == "gt" or (
+            os.path.exists(self.reconstruction_stat_path) and os.path.exists(self.reconstruction_aligned_cameras_path)
+        )
 
     @property
     def _reconstruct_args(self):
@@ -651,7 +676,7 @@ class Config:
         return os.path.exists(self.splatting_val_path)
 
     @profile
-    def run(self, gpu: str | None = None, force_splat: bool = False):
+    def run(self, gpu: str | None = None, force_splat: bool = False, enable_viewer: bool = False):
         force_splat = self.force_splat or force_splat
         if self.is_splatted and not force_splat:
             print(f"{self.splatting_val_path} found. Skipping splatting")
@@ -675,15 +700,21 @@ class Config:
             str(self.dataset.factor),
             "--result-dir",
             self.result_dir,
-            "--disable_viewer",
             "--max_train_cameras",
             str(self.num_cams),
             "--max_steps",
             str(self.num_steps),
         ]
 
+        if not enable_viewer:
+            command.append("--disable_viewer")
+
         if self.pose_opt:
             command.append("--pose_opt")
+            if self.pose_opt_module != "default":
+                command.append("--pose_opt_module")
+                command.append(self.pose_opt_module)
+
         if self.gt_eval:
             if self.dataset.gt_train_data_dir is not None:
                 command.extend(
@@ -772,6 +803,8 @@ class PlotConfig:
     show_gt: bool = True
     apply_jitter: bool = False
     render_nums: list[int] = field(default_factory=lambda: [0])
+    shared_colors: bool = False
+    raw_metrics: bool = False
 
 
 @dataclass
@@ -853,6 +886,7 @@ class Experiment:
         force_all: bool = False,
         force_none: bool = False,
         cuda_devices: list[str] | None = None,
+        enable_viewer: bool = False,
     ):
         print(self.progress_stats(dataset_name))
         configs = self.get_configs(dataset_name)
@@ -910,7 +944,7 @@ class Experiment:
                     eval_failures.append(config)
 
                 if do_splatting:
-                    returncode = config.run(force_splat=force_all)
+                    returncode = config.run(force_splat=force_all, enable_viewer=enable_viewer)
                     if returncode != 0:
                         splat_failures.append(config)
 
@@ -974,6 +1008,8 @@ class Experiment:
             show_gt=self.plot_args.show_gt,
             apply_jitter=self.plot_args.apply_jitter,
             render_nums=self.plot_args.render_nums,
+            shared_colors=self.plot_args.shared_colors,
+            plot_raw=self.plot_args.raw_metrics,
         )
 
         # print("Plotted metrics from these files")
@@ -1506,6 +1542,30 @@ experiments = [
         PlotConfig(x_axis="num_points", split_param="splatting_strategy"),
     ),
     Experiment(
+        "pose_opt_module",
+        99,
+        "Splatting strategies with pose optimization for VGGT with 100 images",
+        {
+            "seed": [42],  # , 43, 44
+            "num_images": [100],
+            "choice": ["vggt"],
+            "pose_opt": [True, False],
+            # "pose_opt": [True],
+            "pose_opt_module": ["default", "mcmc", "3rgs", "sgld"],
+            # "pose_opt_module": ["sgld"],
+            # "num_steps": [7000],
+        },
+        PlotConfig(
+            x_axis="val_step", split_param="pose_opt_module,pose_opt", metric_keys=["eval_rre", "eval_rte", "quality"]
+        ),
+        val_steps=[1, 3_000, 7_000, 10_000, 15_000, 20_000, 25_000, 30_000],
+        render_filter_override={
+            "seed": [42],
+            "num_images": [30],
+            # "val_step": [7000],
+        },
+    ),
+    Experiment(
         "splatting_strategy_pose_opt",
         9,
         "Splatting strategies with pose optimization for VGGT with 100 images",
@@ -1879,7 +1939,7 @@ experiments = [
             "gt_eval": True,
             "choice": ["combined"],
             "pcd_src": ["colmap", "vggt"],
-            "camera_src": ["colmap"]
+            "camera_src": ["colmap"],
         },
         PlotConfig(
             x_axis="",
@@ -1905,7 +1965,7 @@ experiments = [
             "gt_eval": True,
             "choice": ["combined"],
             "pcd_src": ["colmap", "vggt"],
-            "camera_src": ["vggt"]
+            "camera_src": ["vggt"],
         },
         PlotConfig(
             x_axis="",
@@ -1988,7 +2048,90 @@ experiments = [
         PlotConfig(
             x_axis="num_images",
             split_param="align_glue",
-            metric_keys=["rre", "rte", "num_aligned", "quality"],
+            metric_keys=["rre", "rte", "num_aligned", "psnr", "ssim", "lpips"],
+            max_render_cols=4,
+            render_nums=[0, 2],
+        ),
+        render_filter_override={
+            "seed": [42],
+            "num_images": [70],
+        },
+    ),
+    Experiment(
+        "align_glue_pose_opt",
+        99,
+        "Test for combining COLMAP cameras using glue with pose optimization",
+        {
+            "seed": [42],
+            "num_images": [20, 30, 40, 50, 60, 70, 80, 100],
+            "pose_opt": [True],
+            "choice": ["combined", "colmap", "vggt"],
+            # TODO Enable COLMAP pcd by always passing both pcds and deciding based on other parameters
+            "pcd_src": ["both"],
+            "camera_src": ["colmap"],
+            "align_glue": [True, False],
+        },
+        PlotConfig(
+            x_axis="num_images",
+            split_param="align_glue",
+            metric_keys=["rre", "rte", "num_aligned", "psnr", "ssim", "lpips"],
+            max_render_cols=4,
+            render_nums=[0, 2],
+        ),
+        render_filter_override={
+            "seed": [42],
+            "num_images": [70],
+        },
+    ),
+    Experiment(
+        "align_glue_relaxed",
+        99,
+        "Test for combining relaxed COLMAP cameras using glue",
+        {
+            "seed": [42],
+            "num_images": [70],
+            # "num_images": [40, 60, 80],
+            # "num_images": [40],
+            "choice": ["combined", "colmap", "vggt"],
+            # TODO Enable COLMAP pcd by always passing both pcds and deciding based on other parameters
+            "colmap_mode": ["default", "relaxed"],
+            "pcd_src": ["both"],
+            "camera_src": ["colmap"],
+            "align_glue": [True, False],
+        },
+        PlotConfig(
+            x_axis="",
+            split_param="align_glue,colmap_mode",
+            metric_keys=["rre", "rte", "num_aligned", "psnr", "ssim", "lpips"],
+            max_render_cols=4,
+            render_nums=[0, 2],
+        ),
+        render_filter_override={
+            "seed": [42],
+            "num_images": [70],
+        },
+    ),
+    Experiment(
+        "align_glue_relaxed_pose_opt",
+        99,
+        "Test for combining relaxed COLMAP cameras using glue with pose optimization",
+        {
+            "seed": [42],
+            "num_images": [70],
+            # "num_images": [40, 60, 80],
+            # "num_images": [40],
+            "choice": ["combined", "colmap", "vggt"],
+            # TODO Enable COLMAP pcd by always passing both pcds and deciding based on other parameters
+            "colmap_mode": ["default", "relaxed"],
+            "pose_opt": [True],
+            "pcd_src": ["both"],
+            "camera_src": ["colmap"],
+            "align_glue": [True, False],
+        },
+        PlotConfig(
+            x_axis="",
+            split_param="align_glue,colmap_mode",
+            metric_keys=["rre", "rte", "num_aligned", "psnr", "ssim", "lpips"],
             max_render_cols=4,
             render_nums=[0, 2],
         ),
@@ -2031,6 +2174,9 @@ if __name__ == "__main__":
     parser.add_argument(
         "--check_only", action="store_true", help="Only check the status of the experiments without running anything"
     )
+    parser.add_argument(
+        "--enable_viewer", action="store_true", help="Enable the splatting viewer"
+    )
 
     args = parser.parse_args()
 
@@ -2058,6 +2204,7 @@ if __name__ == "__main__":
                         do_splatting=not args.skip_splatting,
                         cuda_devices=cuda_devices,
                         force_all=args.force_all,
+                        enable_viewer=args.enable_viewer,
                     )
                 experiment.plot(args.dataset_name)
                 # except Exception as e:

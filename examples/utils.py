@@ -7,6 +7,80 @@ from torch import Tensor
 import torch.nn.functional as F
 import matplotlib.pyplot as plt
 from matplotlib import colormaps
+import math
+from torch.optim import Adam
+
+
+class AnnealedSGLD(Adam):
+    """
+    Adam optimizer with Annealed Stochastic Gradient Langevin Dynamics (SGLD).
+    Behaves exactly like PyTorch's native Adam when temperature/noise is 0.
+    """
+
+    def __init__(
+        self,
+        params,
+        lr=1e-3,
+        betas=(0.9, 0.999),
+        eps=1e-8,
+        weight_decay=0,
+        initial_temperature=1.0,
+        total_steps=30000,
+        noise_scale=1e-3,
+        warmup_steps=1000,
+    ):
+        # Initialize the underlying Adam optimizer
+        super().__init__(params, lr=lr, betas=betas, eps=eps, weight_decay=weight_decay)
+
+        # Inject our custom SGLD parameters into the optimizer groups
+        for group in self.param_groups:
+            group["initial_temperature"] = initial_temperature
+            group["total_steps"] = total_steps
+            group["noise_scale"] = noise_scale
+            group["warmup_steps"] = warmup_steps
+
+        self.step_number = 0
+
+    @torch.no_grad()
+    def update_step(self, new_step: int):
+        self.step_number = new_step
+
+    @torch.no_grad()
+    def step(self, closure=None):
+        # 1. Perform the highly-optimized native Adam step
+        loss = super().step(closure)
+
+        # 2. Inject Annealed Langevin Noise
+        for group in self.param_groups:
+            lr = group["lr"]
+            initial_temp = group["initial_temperature"]
+            noise_scale = group["noise_scale"]
+            warmup_steps = group["warmup_steps"]
+            total_steps = group["total_steps"]
+
+            # Compute Annealed Temperature
+            if self.step_number < warmup_steps:
+                current_temp = 0.0
+            else:
+                half_max = total_steps * 0.5
+                if self.step_number >= half_max:
+                    current_temp = 0.0
+                else:
+                    progress = (self.step_number - warmup_steps) / (half_max - warmup_steps)
+                    current_temp = max(0.0, initial_temp * (1.0 - progress))
+
+            # Add exploration noise
+            if current_temp > 0:
+                for p in group["params"]:
+                    if p.grad is None:
+                        continue
+
+                    # Variance = sqrt(2 * lr * current_temp) * noise_scale
+                    sigma = math.sqrt(2 * lr * current_temp) * noise_scale
+                    noise = torch.randn_like(p) * sigma
+                    p.add_(noise)
+
+        return loss
 
 
 class CameraOptModule(torch.nn.Module):
@@ -39,13 +113,66 @@ class CameraOptModule(torch.nn.Module):
         batch_dims = camtoworlds.shape[:-2]
         pose_deltas = self.embeds(embed_ids)  # (..., 9)
         dx, drot = pose_deltas[..., :3], pose_deltas[..., 3:]
-        rot = rotation_6d_to_matrix(
-            drot + self.identity.expand(*batch_dims, -1)
-        )  # (..., 3, 3)
+        rot = rotation_6d_to_matrix(drot + self.identity.expand(*batch_dims, -1))  # (..., 3, 3)
         transform = torch.eye(4, device=pose_deltas.device).repeat((*batch_dims, 1, 1))
         transform[..., :3, :3] = rot
         transform[..., :3, 3] = dx
         return torch.matmul(camtoworlds, transform)
+
+
+class MCMCCameraOptModule(torch.nn.Module):
+    """Camera pose optimization module."""
+
+    def __init__(self, n: int, noise_lr: float = 5e2, refine_start_iter: int = 500, refine_stop_iter: int = 25_000):
+        super().__init__()
+        # Explicit parameters per camera for translation and rotation residuals (MCMC strategy)
+        self.trans_residual = torch.nn.Parameter(torch.zeros(n, 3))
+        self.rot_residual = torch.nn.Parameter(torch.zeros(n, 6))
+        self.noise_lr = noise_lr
+        self.refine_start_iter = refine_start_iter
+        self.refine_stop_iter = refine_stop_iter
+        # Identity rotation in 6D representation
+        self.register_buffer("identity", torch.tensor([1.0, 0.0, 0.0, 0.0, 1.0, 0.0]))
+
+    def zero_init(self):
+        torch.nn.init.zeros_(self.trans_residual)
+        torch.nn.init.zeros_(self.rot_residual)
+
+    def random_init(self, std: float):
+        torch.nn.init.normal_(self.trans_residual, std=std)
+        torch.nn.init.normal_(self.rot_residual, std=std)
+
+    def forward(
+        self, camtoworlds: Tensor, embed_ids: Tensor, step: int | None = None, explore_std: float = 0.0
+    ) -> Tensor:
+        """Adjust camera pose based on deltas.
+
+        Args:
+            camtoworlds: (..., 4, 4)
+            embed_ids: (...,)
+            explore_std: Standard deviation for exploring the rotation and translation space.
+
+        Returns:
+            updated camtoworlds: (..., 4, 4)
+        """
+        assert camtoworlds.shape[:-2] == embed_ids.shape
+        batch_dims = camtoworlds.shape[:-2]
+
+        dx = self.trans_residual[embed_ids]
+        drot = self.rot_residual[embed_ids]
+
+        # MCMC strategy: Explore the rotation and translation space
+        if self.training and explore_std > 0.0 and step and step % 2 == 0:
+            dx = dx + torch.randn_like(dx) * explore_std * self.noise_lr * 1e-2
+            drot = drot + torch.randn_like(drot) * explore_std * self.noise_lr
+
+        rot = rotation_6d_to_matrix(drot + self.identity.expand(*batch_dims, -1))  # (..., 3, 3)
+        transform = torch.eye(4, device=dx.device).repeat((*batch_dims, 1, 1))
+        if step is None or (step >= self.refine_start_iter and step < self.refine_stop_iter):
+            transform[..., :3, :3] = rot
+            transform[..., :3, 3] = dx
+        return torch.matmul(camtoworlds, transform)
+
 
 class CameraOptModuleMLP(torch.nn.Module):
     """
@@ -54,16 +181,21 @@ class CameraOptModuleMLP(torch.nn.Module):
     TODO Evaluate this properly
     """
 
-    def __init__(self, n: int, mlp_width: int = 64, mlp_depth: int = 2, 
-                 trainset=None,):
+    def __init__(
+        self,
+        n: int,
+        mlp_width: int = 64,
+        mlp_depth: int = 2,
+        trainset=None,
+    ):
         super().__init__()
         # Identity rotation in 6D representation
         self.register_buffer("identity", torch.tensor([1.0, 0.0, 0.0, 0.0, 1.0, 0.0]))
-        
+
         # Initial embeddings for each camera
         self.embeds = torch.nn.Embedding(n, mlp_width)
         self.num_cams = n
-        
+
         # MLP layers
         activation = torch.nn.ReLU(inplace=True)
         layers = []
@@ -78,12 +210,12 @@ class CameraOptModuleMLP(torch.nn.Module):
 
         self.cam_scale = 1.0
         if trainset is not None:
-            if hasattr(trainset, 'cam_scale'):
+            if hasattr(trainset, "cam_scale"):
                 self.cam_scale = trainset.cam_scale
-        
+
     def zero_init(self):
         torch.nn.init.zeros_(self.embeds.weight)
-        #torch.nn.init.normal_(self.embeds.weight)
+        # torch.nn.init.normal_(self.embeds.weight)
         # Also initialize the last layer of MLP with small weights
         torch.nn.init.zeros_(self.mlp[-1].weight)
         torch.nn.init.zeros_(self.mlp[-1].bias)
@@ -106,22 +238,20 @@ class CameraOptModuleMLP(torch.nn.Module):
         """
         assert camtoworlds.shape[:-2] == embed_ids.shape
         batch_shape = camtoworlds.shape[:-2]
-        
+
         # Get embeddings and process through MLP with noise
         embeddings = self.embeds(embed_ids)  # (..., mlp_width)
         pose_deltas = self.mlp(embeddings)  # (..., 9)
-        
+
         # Split into position and rotation deltas
         dx, drot = pose_deltas[..., :3], pose_deltas[..., 3:]
-        rot = rotation_6d_to_matrix(
-            drot + self.identity.expand(*batch_shape, -1)
-        )  # (..., 3, 3)
-        
+        rot = rotation_6d_to_matrix(drot + self.identity.expand(*batch_shape, -1))  # (..., 3, 3)
+
         # Create transformation matrix
         transform = torch.eye(4, device=pose_deltas.device).repeat((*batch_shape, 1, 1))
         transform[..., :3, :3] = rot
         transform[..., :3, 3] = dx * self.cam_scale
-            
+
         return torch.matmul(camtoworlds, transform)
 
 
@@ -142,9 +272,7 @@ class AppearanceOptModule(torch.nn.Module):
         self.sh_degree = sh_degree
         self.embeds = torch.nn.Embedding(n, embed_dim)
         layers = []
-        layers.append(
-            torch.nn.Linear(embed_dim + feature_dim + (sh_degree + 1) ** 2, mlp_width)
-        )
+        layers.append(torch.nn.Linear(embed_dim + feature_dim + (sh_degree + 1) ** 2, mlp_width))
         layers.append(torch.nn.ReLU(inplace=True))
         for _ in range(mlp_depth - 1):
             layers.append(torch.nn.Linear(mlp_width, mlp_width))
@@ -152,9 +280,7 @@ class AppearanceOptModule(torch.nn.Module):
         layers.append(torch.nn.Linear(mlp_width, 3))
         self.color_head = torch.nn.Sequential(*layers)
 
-    def forward(
-        self, features: Tensor, embed_ids: Tensor, dirs: Tensor, sh_degree: int
-    ) -> Tensor:
+    def forward(self, features: Tensor, embed_ids: Tensor, dirs: Tensor, sh_degree: int) -> Tensor:
         """Adjust appearance based on embeddings.
 
         Args:
