@@ -1,0 +1,3 @@
+choice,camera_src,pcd_src,keep_backup_cams,rre,rte,num_aligned
+VGGT,colmapcams,bothpcd,,12.7941,0.784629,87
+VGGT,,,,12.7941,0.784629,87

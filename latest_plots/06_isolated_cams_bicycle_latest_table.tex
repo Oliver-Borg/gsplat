@@ -3,12 +3,14 @@
 \label{tab:06_isolated_cams_bicycle}
 \begin{tabular}{llllrrrrr}
 \toprule
-Choice & Random Init & Pose Opt & Sampling Mode & Validation Step RRE ↓ ↓ & Validation Step RTE ↓ ↓ & Aligned Cameras ↑ ↑ & Initial Points ↑ & Composite Quality ↑ ↑ \\
+Choice & Random Init & Pose Opt & Sampling Mode & Val RRE ↓ & Val RTE ↓ & Aligned Cameras ↑ & Initial Points & Composite Quality ↑ \\
 \midrule
-VGGT & Random Init &  & ba & 0.792 & 0.011 & 100.000 & 16687.000 & 0.030 \\
-VGGT & Random Init &  & random & 0.857 & 0.015 & 100.000 & 16687.000 & 0.040 \\
-VGGT & Random Init & Pose Opt & ba & 0.764 & 0.009 & 100.000 & 16687.000 & 0.033 \\
-VGGT & Random Init & Pose Opt & random & 0.782 & 0.016 & 100.000 & 16687.000 & 0.049 \\
+COLMAP & Random Init &  &  & \textbf{0.107} & \textbf{0.002} & \textbf{100} & 16687 & \textbf{0.235} \\
+COLMAP & Random Init & Pose Opt &  & \underline{0.389} & \underline{0.006} & \textbf{100} & 16687 & \underline{0.148} \\
+VGGT & Random Init &  & ba & 0.792 & 0.011 & \textbf{100} & 16687 & 0.030 \\
+VGGT & Random Init &  & random & 0.857 & 0.015 & \textbf{100} & 16687 & 0.040 \\
+VGGT & Random Init & Pose Opt & ba & 0.764 & 0.009 & \textbf{100} & 16687 & 0.033 \\
+VGGT & Random Init & Pose Opt & random & 0.782 & 0.016 & \textbf{100} & 16687 & 0.049 \\
 \bottomrule
 \end{tabular}
 \end{table}

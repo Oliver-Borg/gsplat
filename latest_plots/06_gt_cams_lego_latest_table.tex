@@ -1,0 +1,18 @@
+\begin{table}[H]
+\caption{The effect of using ground truth extrinsics, intrinsics and points on VGGT and COLMAP results (Lego)}
+\label{tab:06_gt_cams_lego}
+\begin{tabular}{llllr}
+\toprule
+Choice & Use Gt Extrinsics & Use Gt Intrinsics & Use Gt Points & Composite Quality ↑ \\
+\midrule
+COLMAP &  &  &  & 0.095 \\
+COLMAP &  & GT Intrinsics &  & 0.099 \\
+COLMAP & GT Extrinsics &  &  & 0.914 \\
+COLMAP & GT Extrinsics & GT Intrinsics &  & \underline{1.074} \\
+VGGT &  &  &  & 0.669 \\
+VGGT &  & GT Intrinsics &  & 0.674 \\
+VGGT & GT Extrinsics &  &  & 0.914 \\
+VGGT & GT Extrinsics & GT Intrinsics &  & \textbf{1.080} \\
+\bottomrule
+\end{tabular}
+\end{table}

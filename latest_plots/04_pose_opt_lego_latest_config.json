@@ -1,0 +1,25 @@
+{
+    "seed": [
+        42,
+        43,
+        44
+    ],
+    "num_images": [
+        100
+    ],
+    "pose_opt": [
+        true,
+        false
+    ],
+    "gt_eval": [
+        true
+    ],
+    "choice": [
+        "vggt",
+        "colmap"
+    ],
+    "num_steps": [
+        30000
+    ],
+    "dataset": "lego"
+}

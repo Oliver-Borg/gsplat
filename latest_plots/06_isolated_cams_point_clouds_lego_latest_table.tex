@@ -1,0 +1,15 @@
+\begin{table}[H]
+\caption{COLMAP cameras with different point cloud sources. (Lego)}
+\label{tab:06_isolated_cams_point_clouds_lego}
+\begin{tabular}{lllrrrrrr}
+\toprule
+Choice & Random Init & Pcd Src & Real Num Points & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & SSIM ↑ & LPIPS ↓ \\
+\midrule
+COLMAP & Random Init &  & 10350 & \textbf{12.794} & \textbf{0.240} & 10.482 & \underline{0.531} & 0.525 \\
+COLMAP & Random Init &  & 95700 & \textbf{12.794} & \textbf{0.240} & 10.498 & \underline{0.531} & 0.524 \\
+COLMAP &  & vggtpcd & 10350 & \textbf{12.794} & \textbf{0.240} & \underline{10.699} & \textbf{0.532} & \textbf{0.519} \\
+COLMAP &  & vggtpcd & 95700 & \textbf{12.794} & \textbf{0.240} & 10.632 & \textbf{0.532} & \underline{0.520} \\
+COLMAP &  &  & 10350 & \textbf{12.794} & \textbf{0.240} & \textbf{10.700} & \textbf{0.532} & \textbf{0.519} \\
+\bottomrule
+\end{tabular}
+\end{table}

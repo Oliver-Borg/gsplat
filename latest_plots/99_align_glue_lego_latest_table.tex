@@ -1,0 +1,33 @@
+\begin{table}[H]
+\caption{Test for combining COLMAP cameras using glue (Lego)}
+\label{tab:99_align_glue_lego}
+\begin{tabular}{lrlrrrrrr}
+\toprule
+Choice & Num Images & Align Glue & RRE ↓ & RTE ↓ & Aligned Cameras ↑ & PSNR ↑ & SSIM ↑ & LPIPS ↓ \\
+\midrule
+COLMAP & 20 &  & 114.883 & \textbf{0.023} & 3.000 & 11.361 & 0.673 & 0.509 \\
+COLMAP & 30 &  & 75.873 & 2.953 & 18.000 & 11.432 & 0.574 & 0.511 \\
+COLMAP & 40 &  & 154.914 & 3.717 & 35.000 & 11.359 & 0.673 & 0.509 \\
+COLMAP & 50 &  & 170.769 & 3.637 & 43.000 & 11.361 & 0.673 & 0.509 \\
+COLMAP & 60 &  & 90.799 & 3.439 & 56.000 & 11.293 & 0.660 & 0.514 \\
+COLMAP & 70 &  & 76.429 & 3.072 & 70.000 & 10.898 & 0.646 & 0.514 \\
+COLMAP & 80 &  & 13.712 & 0.865 & \underline{80.000} & 10.611 & 0.526 & 0.527 \\
+VGGT & 20 & Align Glued & 114.883 & \textbf{0.023} & 3.000 &  &  &  \\
+VGGT & 20 &  & 58.591 & \underline{0.082} & 11.500 & 14.237 & 0.611 & 0.408 \\
+VGGT & 30 & Align Glued & 75.873 & 2.953 & 18.000 &  &  &  \\
+VGGT & 30 &  & 39.054 & 1.544 & 24.000 & 14.073 & 0.615 & 0.329 \\
+VGGT & 40 & Align Glued & 154.914 & 3.717 & 35.000 &  &  &  \\
+VGGT & 40 &  & 78.118 & 1.893 & 37.500 & 14.658 & 0.645 & 0.283 \\
+VGGT & 50 & Align Glued & 170.769 & 3.637 & 43.000 &  &  &  \\
+VGGT & 50 &  & 85.820 & 1.839 & 46.500 & 15.393 & 0.672 & 0.235 \\
+VGGT & 60 & Align Glued & 90.799 & 3.439 & 56.000 &  &  &  \\
+VGGT & 60 &  & 45.713 & 1.734 & 58.000 & 16.665 & 0.705 & 0.184 \\
+VGGT & 70 & Align Glued & 76.429 & 3.072 & 70.000 &  &  &  \\
+VGGT & 70 &  & 38.428 & 1.547 & 70.000 & \underline{18.675} & \underline{0.744} & \underline{0.125} \\
+VGGT & 80 & Align Glued & 13.712 & 0.865 & \underline{80.000} &  &  &  \\
+VGGT & 80 &  & \textbf{7.030} & 0.442 & \underline{80.000} & \textbf{19.998} & \textbf{0.760} & \textbf{0.106} \\
+VGGT & 87 & Align Glued & 12.794 & 0.785 & \textbf{87.000} &  &  &  \\
+VGGT & 87 &  & \underline{8.640} & 0.529 & \textbf{87.000} &  &  &  \\
+\bottomrule
+\end{tabular}
+\end{table}

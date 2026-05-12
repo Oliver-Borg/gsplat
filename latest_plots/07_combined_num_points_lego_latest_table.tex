@@ -1,0 +1,17 @@
+\begin{table}[H]
+\caption{Combining cameras and point clouds with different point coints (Lego)}
+\label{tab:07_combined_num_points_lego}
+\begin{tabular}{lrlrrrr}
+\toprule
+Choice & Num Points & Sampling Mode & RRE ↓ & RTE ↓ & Aligned Cameras ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP & 10350 &  & \underline{12.794} & \underline{0.785} & \textbf{87} & 0.095 \\
+VGGT & 870 & random & \textbf{6.562} & \textbf{0.402} & \textbf{87} & 0.693 \\
+VGGT & 4350 & random & \textbf{6.562} & \textbf{0.402} & \textbf{87} & 0.698 \\
+VGGT & 8700 & random & \textbf{6.562} & \textbf{0.402} & \textbf{87} & 0.698 \\
+VGGT & 43500 & random & \textbf{6.562} & \textbf{0.402} & \textbf{87} & \underline{0.699} \\
+VGGT & 87000 & random & \textbf{6.562} & \textbf{0.402} & \textbf{87} & \underline{0.699} \\
+VGGT & 217500 & random & \textbf{6.562} & \textbf{0.402} & \textbf{87} & \textbf{0.700} \\
+\bottomrule
+\end{tabular}
+\end{table}

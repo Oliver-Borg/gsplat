@@ -3,7 +3,7 @@
         42
     ],
     "num_images": [
-        30
+        100
     ],
     "choice": [
         "vggt"
@@ -15,10 +15,8 @@
     "pose_opt_module": [
         "default",
         "mcmc",
-        "3rgs"
-    ],
-    "num_steps": [
-        7000
+        "3rgs",
+        "sgld"
     ],
     "dataset": "lego"
 }

@@ -1,0 +1,14 @@
+\begin{table}[H]
+\caption{Splatting strategies with pose optimization for VGGT with 100 images (Lego)}
+\label{tab:09_splatting_strategy_pose_opt_lego}
+\begin{tabular}{lllrrrrrr}
+\toprule
+Choice & Splatting Strategy & Pose Opt & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Final Gaussian Count \\
+\midrule
+VGGT & Default &  & \textbf{0.331} & \textbf{0.019} & 20.386 & \underline{0.101} & 0.768 & 468021 \\
+VGGT & Default & Pose Opt & \textbf{0.331} & \textbf{0.019} & \underline{20.670} & \textbf{0.070} & \underline{0.778} & 482055 \\
+VGGT & MCMC &  & \textbf{0.331} & \textbf{0.019} & 20.445 & \underline{0.101} & 0.768 & 1000000 \\
+VGGT & MCMC & Pose Opt & \textbf{0.331} & \textbf{0.019} & \textbf{20.721} & \textbf{0.070} & \textbf{0.779} & 1000000 \\
+\bottomrule
+\end{tabular}
+\end{table}

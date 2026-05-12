@@ -1,0 +1,23 @@
+{
+    "seed": [
+        42
+    ],
+    "num_images": [
+        100
+    ],
+    "sampling_mode": [
+        "voxels"
+    ],
+    "choice": [
+        "vggt"
+    ],
+    "error_opa": [
+        true,
+        false
+    ],
+    "nomcmc": [
+        true,
+        false
+    ],
+    "dataset": "lego"
+}

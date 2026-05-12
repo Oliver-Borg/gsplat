@@ -1,0 +1,33 @@
+\begin{table}[H]
+\caption{Isolated cameras with random point clouds. (Lego)}
+\label{tab:06_isolated_cams_num_points_lego}
+\begin{tabular}{lrlllrrrrrr}
+\toprule
+Choice & Num Images & Random Init & Pose Opt & Sampling Mode & Val RRE ↓ & Val RTE ↓ & Initial Points & PSNR ↑ & SSIM ↑ & LPIPS ↓ \\
+\midrule
+COLMAP & 50 & Random Init &  &  & 170.769 & 0.935 & 3914 & 11.361 & 0.673 & 0.509 \\
+COLMAP & 50 & Random Init & Pose Opt &  & 166.918 & 0.941 & 3914 & 11.361 & 0.673 & 0.509 \\
+COLMAP & 75 & Random Init &  &  & 96.569 & 0.862 & 8126 & 10.968 & 0.589 & 0.538 \\
+COLMAP & 75 & Random Init & Pose Opt &  & 95.921 & 0.859 & 8126 & 10.955 & 0.633 & 0.521 \\
+COLMAP & 87 & Random Init &  &  & 12.794 & 0.240 & 10350 & 10.482 & 0.531 & 0.525 \\
+COLMAP & 87 & Random Init & Pose Opt &  & 12.833 & 0.242 & 10350 & 10.608 & 0.532 & 0.522 \\
+VGGT & 25 & Random Init &  & ba & 0.718 & 0.009 & 345 & 11.371 & 0.649 & 0.514 \\
+VGGT & 25 & Random Init &  & random & 2.139 & 0.030 & 345 & 11.344 & 0.646 & 0.517 \\
+VGGT & 25 & Random Init & Pose Opt & ba & 3.272 & 0.043 & 345 & 11.290 & 0.643 & 0.520 \\
+VGGT & 25 & Random Init & Pose Opt & random & 3.498 & 0.052 & 345 & 11.007 & 0.586 & 0.566 \\
+VGGT & 25 &  &  &  &  &  &  &  &  &  \\
+VGGT & 50 & Random Init &  & ba & 0.479 & 0.005 & 3914 & 11.387 & 0.622 & 0.515 \\
+VGGT & 50 & Random Init &  & random & 0.871 & 0.010 & 3914 & 11.368 & 0.629 & 0.520 \\
+VGGT & 50 & Random Init & Pose Opt & ba & 2.457 & 0.031 & 3914 & 11.362 & 0.673 & 0.509 \\
+VGGT & 50 & Random Init & Pose Opt & random & 2.320 & 0.028 & 3914 & 11.374 & 0.657 & 0.509 \\
+VGGT & 75 & Random Init &  & ba & 0.289 & \underline{0.004} & 8126 & 21.459 & 0.787 & 0.096 \\
+VGGT & 75 & Random Init &  & random & 0.368 & 0.005 & 8126 & 19.664 & 0.756 & 0.118 \\
+VGGT & 75 & Random Init & Pose Opt & ba & 0.275 & \textbf{0.003} & 8126 & \underline{22.352} & 0.814 & \underline{0.070} \\
+VGGT & 75 & Random Init & Pose Opt & random & 0.385 & 0.005 & 8126 & 19.208 & 0.757 & 0.101 \\
+VGGT & 87 & Random Init &  & ba & 0.268 & \underline{0.004} & 10350 & 22.300 & \underline{0.822} & 0.089 \\
+VGGT & 87 & Random Init &  & random & 0.330 & 0.005 & 10350 & 20.434 & 0.770 & 0.112 \\
+VGGT & 87 & Random Init & Pose Opt & ba & \textbf{0.203} & \textbf{0.003} & 10350 & \textbf{23.151} & \textbf{0.844} & \textbf{0.058} \\
+VGGT & 87 & Random Init & Pose Opt & random & \underline{0.265} & 0.006 & 10350 & 20.806 & 0.785 & 0.080 \\
+\bottomrule
+\end{tabular}
+\end{table}

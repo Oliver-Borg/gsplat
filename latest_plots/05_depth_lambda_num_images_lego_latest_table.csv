@@ -1,0 +1,5 @@
+choice,num_images,depth_lambda
+VGGT,20,0
+VGGT,30,0
+VGGT,40,0
+VGGT,87,0

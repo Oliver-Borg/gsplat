@@ -21,15 +21,9 @@
         "vggt"
     ],
     "pcd_src": [
-        "both"
-    ],
-    "align_mode": [
-        "local",
-        "global"
-    ],
-    "keep_backup_cams": [
-        true,
-        false
+        "both",
+        "vggt",
+        "colmap"
     ],
     "camera_src": [
         "colmap"

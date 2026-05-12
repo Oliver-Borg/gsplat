@@ -1,0 +1,29 @@
+{
+    "seed": [
+        42
+    ],
+    "num_images": [
+        100
+    ],
+    "gt_eval": true,
+    "use_gt_extrinsics": [
+        true,
+        false
+    ],
+    "use_gt_intrinsics": [
+        true,
+        false
+    ],
+    "use_gt_points": [
+        true,
+        false
+    ],
+    "choice": [
+        "vggt",
+        "colmap"
+    ],
+    "num_steps": [
+        15000
+    ],
+    "dataset": "lego"
+}

@@ -1,10 +1,15 @@
 \begin{table}[H]
-\caption{Test COLMAP cameras with different point cloud sources. (Bicycle)}
+\caption{VGGT cameras with different point cloud sources. (Bicycle)}
 \label{tab:06_isolated_cams_vggt_bicycle}
-\begin{tabular}{lllrrrrr}
+\begin{tabular}{lllrrrrrr}
 \toprule
-Choice & Random Init & Pcd Src & Initial Points ↑ & Validation Step RRE ↓ ↓ & Validation Step RTE ↓ ↓ & Aligned Cameras ↑ ↑ & Composite Quality ↑ ↑ \\
+Choice & Random Init & Pcd Src & Real Num Points & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & SSIM ↑ & LPIPS ↓ \\
 \midrule
+VGGT & Random Init &  & 16687 & \textbf{0.857} & \textbf{0.015} & \underline{17.402} & \textbf{0.298} & 0.588 \\
+VGGT & Random Init &  & 110000 & \textbf{0.857} & \textbf{0.015} & 17.057 & 0.283 & 0.564 \\
+VGGT &  & colmappcd & 16687 & \textbf{0.857} & \textbf{0.015} & \textbf{17.457} & \underline{0.288} & 0.527 \\
+VGGT &  &  & 16687 & \textbf{0.857} & \textbf{0.015} & 17.339 & 0.282 & \underline{0.506} \\
+VGGT &  &  & 110000 & \textbf{0.857} & \textbf{0.015} & 17.188 & 0.257 & \textbf{0.439} \\
 \bottomrule
 \end{tabular}
 \end{table}

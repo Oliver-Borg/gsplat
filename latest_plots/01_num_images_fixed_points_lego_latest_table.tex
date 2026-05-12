@@ -1,0 +1,26 @@
+\begin{table}[H]
+\caption{COLMAP versus VGGT over various number of images (Lego)}
+\label{tab:01_num_images_fixed_points_lego}
+\begin{tabular}{lrrrrrrr}
+\toprule
+Choice & Num Images & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Final Gaussian Count \\
+\midrule
+COLMAP & 20 & 114.883 & 0.023 & 11.361 & 0.509 & 0.673 & 90482 \\
+COLMAP & 30 & 75.873 & 2.953 & 11.432 & 0.511 & 0.574 & 1000000 \\
+COLMAP & 40 & 154.914 & 3.717 & 11.359 & 0.509 & 0.673 & 1000000 \\
+COLMAP & 50 & 170.769 & 3.637 & 11.361 & 0.509 & 0.673 & 1000000 \\
+COLMAP & 60 & 90.799 & 3.439 & 11.293 & 0.514 & 0.660 & 1000000 \\
+COLMAP & 70 & 76.429 & 3.072 & 10.898 & 0.514 & 0.646 & 1000000 \\
+COLMAP & 80 & 13.712 & 0.865 & 10.611 & 0.527 & 0.526 & 1000000 \\
+VGGT & 10 & 2.592 & 0.160 & 13.739 & 0.363 & 0.592 & 943923 \\
+VGGT & 20 & 2.298 & 0.141 & 14.303 & 0.411 & 0.603 & 16198 \\
+VGGT & 30 & 2.235 & 0.136 & 14.281 & 0.364 & 0.642 & 144124 \\
+VGGT & 40 & 1.322 & 0.069 & 14.671 & 0.283 & 0.644 & 1000000 \\
+VGGT & 50 & 0.871 & 0.042 & 15.394 & 0.234 & 0.672 & 1000000 \\
+VGGT & 60 & 0.627 & 0.029 & 16.666 & 0.183 & 0.705 & 1000000 \\
+VGGT & 70 & \underline{0.426} & \underline{0.021} & \underline{18.712} & \underline{0.125} & \underline{0.745} & 1000000 \\
+VGGT & 80 & \textbf{0.347} & \textbf{0.019} & \textbf{20.048} & \textbf{0.106} & \textbf{0.761} & 1000000 \\
+VGGT & 87 & 6.562 & 0.402 &  &  &  &  \\
+\bottomrule
+\end{tabular}
+\end{table}

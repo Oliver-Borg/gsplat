@@ -1,0 +1,16 @@
+\begin{table}[H]
+\caption{Test for combining relaxed COLMAP cameras using glue (Lego)}
+\label{tab:99_align_glue_relaxed_lego}
+\begin{tabular}{lllrrrrrr}
+\toprule
+Choice & Align Glue & Colmap Mode & RRE ↓ & RTE ↓ & Aligned Cameras ↑ & PSNR ↑ & SSIM ↑ & LPIPS ↓ \\
+\midrule
+COLMAP &  & default & 13.712 & 0.865 & \textbf{80} & \underline{10.611} & \underline{0.526} & \underline{0.527} \\
+VGGT & Align Glued & default & 13.712 & 0.865 & \textbf{80} &  &  &  \\
+VGGT & Align Glued & relaxed & \textbf{0.156} & \textbf{0.008} & \textbf{80} &  &  &  \\
+VGGT &  & default & 13.712 & 0.865 & \textbf{80} &  &  &  \\
+VGGT &  & relaxed & \textbf{0.156} & \textbf{0.008} & \textbf{80} &  &  &  \\
+VGGT &  &  & \underline{0.347} & \underline{0.019} & \textbf{80} & \textbf{19.998} & \textbf{0.760} & \textbf{0.106} \\
+\bottomrule
+\end{tabular}
+\end{table}

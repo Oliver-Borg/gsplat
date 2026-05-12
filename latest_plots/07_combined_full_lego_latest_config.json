@@ -1,0 +1,50 @@
+{
+    "seed": [
+        42
+    ],
+    "num_images": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+    ],
+    "sampling_mode": [
+        "random"
+    ],
+    "num_points_per_image": [
+        1000
+    ],
+    "pose_opt": [
+        true
+    ],
+    "gt_eval": true,
+    "choice": [
+        "combined",
+        "colmap",
+        "vggt"
+    ],
+    "pcd_src": [
+        "both"
+    ],
+    "align_mode": [
+        "local",
+        "global"
+    ],
+    "keep_backup_cams": [
+        true,
+        false
+    ],
+    "camera_src": [
+        "colmap"
+    ],
+    "num_steps": [
+        15000
+    ],
+    "dataset": "lego"
+}

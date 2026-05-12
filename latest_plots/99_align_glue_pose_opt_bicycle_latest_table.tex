@@ -3,16 +3,32 @@
 \label{tab:99_align_glue_pose_opt_bicycle}
 \begin{tabular}{lrlrrrrrr}
 \toprule
-Choice & Num Images & Align Glue & RRE ↓ ↓ & RTE ↓ ↓ & Aligned Cameras ↑ ↑ & PSNR ↑ ↑ & SSIM ↑ ↑ & LPIPS ↓ ↓ \\
+Choice & Num Images & Align Glue & Val RRE ↓ & Val RTE ↓ & Aligned Cameras ↑ & PSNR ↑ & SSIM ↑ & LPIPS ↓ \\
 \midrule
-COLMAP & 20 & Align Glued & NaN & NaN & NaN & 9.376 & 0.009 & 0.973 \\
-COLMAP & 30 & Align Glued & 0.592 & 0.010 & 8.000 & 12.659 & 0.162 & 0.677 \\
-COLMAP & 40 & Align Glued & 0.998 & 0.056 & 29.000 & 14.504 & 0.191 & 0.576 \\
-COLMAP & 50 & Align Glued & 1.258 & 0.053 & 47.000 & 16.925 & 0.258 & 0.471 \\
-COLMAP & 60 & Align Glued & 4.241 & 0.040 & 57.000 & 17.153 & 0.260 & 0.447 \\
-COLMAP & 70 & Align Glued & 0.968 & 0.045 & 68.000 & 17.291 & 0.257 & 0.448 \\
-COLMAP & 80 & Align Glued & 0.877 & 0.040 & 79.000 & 17.833 & 0.275 & 0.410 \\
-COLMAP & 100 & Align Glued & 0.107 & 0.008 & 100.000 & 22.545 & 0.592 & 0.275 \\
+COLMAP & 20 & Align Glued &  &  &  & 9.376 & 0.009 & 0.973 \\
+COLMAP & 20 &  &  &  &  & 9.442 & 0.019 & 0.975 \\
+COLMAP & 30 & Align Glued & 0.930 & \underline{0.003} & 8 & 12.659 & 0.162 & 0.677 \\
+COLMAP & 30 &  & 1.292 & 0.008 & 8 & 12.733 & 0.180 & 0.714 \\
+COLMAP & 40 & Align Glued & 0.992 & 0.012 & 29 & 14.504 & 0.191 & 0.576 \\
+COLMAP & 40 &  & 0.392 & \textbf{0.002} & 18 & 14.408 & 0.220 & 0.635 \\
+COLMAP & 50 & Align Glued & 1.227 & 0.012 & 47 & 16.925 & 0.258 & 0.471 \\
+COLMAP & 50 &  & 0.296 & \underline{0.003} & 29 & 16.111 & 0.258 & 0.536 \\
+COLMAP & 60 & Align Glued & 4.186 & 0.009 & 57 & 17.153 & 0.260 & 0.447 \\
+COLMAP & 60 &  & 0.189 & 0.004 & 35 & 16.497 & 0.272 & 0.489 \\
+COLMAP & 70 & Align Glued & 0.923 & 0.010 & 68 & 17.291 & 0.257 & 0.448 \\
+COLMAP & 70 &  & 0.174 & \underline{0.003} & 41 & 17.141 & 0.294 & 0.460 \\
+COLMAP & 80 & Align Glued & 0.815 & 0.009 & 79 & 17.833 & 0.275 & 0.410 \\
+COLMAP & 80 &  & 0.182 & \textbf{0.002} & 48 & 17.487 & 0.305 & 0.437 \\
+COLMAP & 100 & Align Glued & \textbf{0.087} & \textbf{0.002} & \textbf{100} & \textbf{22.545} & \textbf{0.592} & \textbf{0.275} \\
+COLMAP & 100 &  & \underline{0.093} & \textbf{0.002} & \textbf{100} & \underline{22.519} & \underline{0.584} & \underline{0.312} \\
+VGGT & 20 &  & 1.400 & 0.026 & 20 & 15.450 & 0.219 & 0.526 \\
+VGGT & 30 &  & 0.931 & 0.019 & 30 & 16.157 & 0.230 & 0.485 \\
+VGGT & 40 &  & 0.829 & 0.018 & 40 & 16.787 & 0.244 & 0.458 \\
+VGGT & 50 &  & 0.850 & 0.019 & 50 & 17.182 & 0.250 & 0.436 \\
+VGGT & 60 &  & 0.782 & 0.017 & 60 & 17.123 & 0.252 & 0.418 \\
+VGGT & 70 &  & 0.941 & 0.024 & 70 & 16.988 & 0.254 & 0.417 \\
+VGGT & 80 &  & 0.903 & 0.025 & \underline{80} & 17.309 & 0.261 & 0.393 \\
+VGGT & 100 &  & 0.914 & 0.025 & \textbf{100} & 17.483 & 0.268 & 0.376 \\
 \bottomrule
 \end{tabular}
 \end{table}

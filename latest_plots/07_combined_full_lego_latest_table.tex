@@ -1,0 +1,59 @@
+\begin{table}[H]
+\caption{Combining cameras and point clouds (Lego)}
+\label{tab:07_combined_full_lego}
+\begin{tabular}{lrllllrrrr}
+\toprule
+Choice & Num Images & Camera Src & Pcd Src & Align Mode & Keep Backup Cams & RRE ↓ & RTE ↓ & Aligned Cameras ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP & 20 & colmapcams & bothpcd & Global Alignment & Fallback Cams & 14.824 & 0.141 & 20 & 0.321 \\
+COLMAP & 20 & colmapcams & bothpcd & Global Alignment &  & 114.883 & 0.023 & 3 & 0.170 \\
+COLMAP & 20 & colmapcams & bothpcd & Local Alignment & Fallback Cams & 14.824 & 0.141 & 20 & 0.322 \\
+COLMAP & 20 & colmapcams & bothpcd & Local Alignment &  & 114.883 & 0.023 & 3 & 0.196 \\
+COLMAP & 20 &  &  &  &  & 114.883 & 0.023 & 3 & 0.196 \\
+COLMAP & 30 & colmapcams & bothpcd & Global Alignment & Fallback Cams & 46.684 & 2.815 & 30 & 0.253 \\
+COLMAP & 30 & colmapcams & bothpcd & Global Alignment &  & 75.873 & 2.953 & 18 & 0.187 \\
+COLMAP & 30 & colmapcams & bothpcd & Local Alignment & Fallback Cams & 46.684 & 2.815 & 30 & 0.150 \\
+COLMAP & 30 & colmapcams & bothpcd & Local Alignment &  & 75.873 & 2.953 & 18 & -0.017 \\
+COLMAP & 30 &  &  &  &  & 75.873 & 2.953 & 18 & 0.068 \\
+COLMAP & 40 & colmapcams & bothpcd & Global Alignment & Fallback Cams & 136.031 & 3.676 & 40 & 0.042 \\
+COLMAP & 40 & colmapcams & bothpcd & Global Alignment &  & 154.914 & 3.717 & 35 & 0.197 \\
+COLMAP & 40 & colmapcams & bothpcd & Local Alignment & Fallback Cams & 136.031 & 3.676 & 40 & -0.001 \\
+COLMAP & 40 & colmapcams & bothpcd & Local Alignment &  & 154.914 & 3.717 & 35 & 0.116 \\
+COLMAP & 40 &  &  &  &  & 154.914 & 3.717 & 35 & 0.196 \\
+COLMAP & 50 & colmapcams & bothpcd & Global Alignment & Fallback Cams & 147.002 & 3.561 & 50 & 0.171 \\
+COLMAP & 50 & colmapcams & bothpcd & Global Alignment &  & 170.769 & 3.637 & 43 & 0.196 \\
+COLMAP & 50 & colmapcams & bothpcd & Local Alignment & Fallback Cams & 147.002 & 3.561 & 50 & 0.120 \\
+COLMAP & 50 & colmapcams & bothpcd & Local Alignment &  & 170.769 & 3.637 & 43 & 0.121 \\
+COLMAP & 50 &  &  &  &  & 170.769 & 3.637 & 43 & 0.196 \\
+COLMAP & 60 & colmapcams & bothpcd & Global Alignment & Fallback Cams & 84.776 & 3.412 & 60 & 0.222 \\
+COLMAP & 60 & colmapcams & bothpcd & Global Alignment &  & 90.799 & 3.439 & 56 & 0.171 \\
+COLMAP & 60 & colmapcams & bothpcd & Local Alignment & Fallback Cams & 84.776 & 3.412 & 60 & 0.175 \\
+COLMAP & 60 & colmapcams & bothpcd & Local Alignment &  & 90.799 & 3.439 & 56 & 0.043 \\
+COLMAP & 60 &  &  &  &  & 90.799 & 3.439 & 56 & 0.183 \\
+COLMAP & 70 & colmapcams & bothpcd & Global Alignment & Fallback Cams & 76.429 & 3.072 & 70 & 0.119 \\
+COLMAP & 70 & colmapcams & bothpcd & Global Alignment &  & 76.429 & 3.072 & 70 & 0.167 \\
+COLMAP & 70 & colmapcams & bothpcd & Local Alignment & Fallback Cams & 76.429 & 3.072 & 70 & -0.094 \\
+COLMAP & 70 & colmapcams & bothpcd & Local Alignment &  & 76.429 & 3.072 & 70 & -0.084 \\
+COLMAP & 70 &  &  &  &  & 76.429 & 3.072 & 70 & 0.170 \\
+COLMAP & 80 & colmapcams & bothpcd & Global Alignment & Fallback Cams & 13.712 & 0.865 & \underline{80} & 0.085 \\
+COLMAP & 80 & colmapcams & bothpcd & Global Alignment &  & 13.712 & 0.865 & \underline{80} & 0.084 \\
+COLMAP & 80 & colmapcams & bothpcd & Local Alignment & Fallback Cams & 13.712 & 0.865 & \underline{80} & 0.086 \\
+COLMAP & 80 & colmapcams & bothpcd & Local Alignment &  & 13.712 & 0.865 & \underline{80} & 0.086 \\
+COLMAP & 80 &  &  &  &  & 13.712 & 0.865 & \underline{80} & 0.086 \\
+COLMAP & 87 &  &  &  &  & 12.794 & 0.785 & \textbf{87} & 0.095 \\
+VGGT & 10 &  &  &  &  & 2.592 & 0.160 & 10 & 0.290 \\
+VGGT & 20 &  &  &  &  & 2.298 & 0.141 & 20 & 0.324 \\
+VGGT & 30 &  &  &  &  & 2.235 & 0.136 & 30 & 0.339 \\
+VGGT & 40 &  &  &  &  & 1.322 & 0.069 & 40 & 0.392 \\
+VGGT & 50 &  &  &  &  & 0.871 & 0.042 & 50 & 0.449 \\
+VGGT & 60 &  &  &  &  & 0.627 & 0.029 & 60 & 0.522 \\
+VGGT & 70 &  &  &  &  & 0.426 & \underline{0.021} & 70 & 0.638 \\
+VGGT & 80 &  &  &  &  & \underline{0.347} & \textbf{0.019} & \underline{80} & \underline{0.686} \\
+VGGT & 87 & colmapcams & bothpcd & Global Alignment & Fallback Cams & 12.794 & 0.785 & \textbf{87} &  \\
+VGGT & 87 & colmapcams & bothpcd & Global Alignment &  & 12.794 & 0.785 & \textbf{87} &  \\
+VGGT & 87 & colmapcams & bothpcd & Local Alignment & Fallback Cams & 12.794 & 0.785 & \textbf{87} &  \\
+VGGT & 87 & colmapcams & bothpcd & Local Alignment &  & 12.794 & 0.785 & \textbf{87} &  \\
+VGGT & 87 &  &  &  &  & \textbf{0.331} & \textbf{0.019} & \textbf{87} & \textbf{0.699} \\
+\bottomrule
+\end{tabular}
+\end{table}

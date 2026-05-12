@@ -54,6 +54,7 @@
         "sfm_file_path":"\/home\/ojab2\/work\/git\/vggt\/combined_outputs\/bicycle_4_n20_s42_combined_colmapcams_bothpcd_amglobal_glued_default_c0.0_p22000_voxels_farthestpose_sharedcam\/eval_results.json",
         "input_folder":"bicycle_4_n20_s42_combined_colmapcams_bothpcd_amglobal_glued_default_c0.0_p22000_voxels_farthestpose_sharedcam",
         "output_folder":"bicycle_4_n20_s42_combined_colmapcams_bothpcd_amglobal_glued_default_c0.0_p22000_voxels_farthestpose_sharedcam_i20_gteval_steps15000_val_step14999.json",
+        "initial_points":2930,
         "plot_series":"combined | Align Glued",
         "num_images_jitter":20.0
     },
@@ -133,6 +134,7 @@
         "sfm_file_path":"\/home\/ojab2\/work\/git\/vggt\/combined_outputs\/bicycle_4_n30_s42_combined_colmapcams_bothpcd_amglobal_glued_default_c0.0_p33000_voxels_farthestpose_sharedcam\/eval_results.json",
         "input_folder":"bicycle_4_n30_s42_combined_colmapcams_bothpcd_amglobal_glued_default_c0.0_p33000_voxels_farthestpose_sharedcam",
         "output_folder":"bicycle_4_n30_s42_combined_colmapcams_bothpcd_amglobal_glued_default_c0.0_p33000_voxels_farthestpose_sharedcam_i30_gteval_steps15000_val_step14999.json",
+        "initial_points":11193,
         "plot_series":"combined | Align Glued",
         "num_images_jitter":30.0
     },
@@ -254,6 +256,7 @@
         "sfm_file_path":"\/home\/ojab2\/work\/git\/vggt\/combined_outputs\/bicycle_4_n40_s42_combined_colmapcams_bothpcd_amglobal_glued_default_c0.0_p44000_voxels_farthestpose_sharedcam\/eval_results.json",
         "input_folder":"bicycle_4_n40_s42_combined_colmapcams_bothpcd_amglobal_glued_default_c0.0_p44000_voxels_farthestpose_sharedcam",
         "output_folder":"bicycle_4_n40_s42_combined_colmapcams_bothpcd_amglobal_glued_default_c0.0_p44000_voxels_farthestpose_sharedcam_i40_gteval_steps15000_val_step14999.json",
+        "initial_points":40252,
         "plot_series":"combined | Align Glued",
         "num_images_jitter":40.0
     },
@@ -411,6 +414,7 @@
         "sfm_file_path":"\/home\/ojab2\/work\/git\/vggt\/combined_outputs\/bicycle_4_n50_s42_combined_colmapcams_bothpcd_amglobal_glued_default_c0.0_p55000_voxels_farthestpose_sharedcam\/eval_results.json",
         "input_folder":"bicycle_4_n50_s42_combined_colmapcams_bothpcd_amglobal_glued_default_c0.0_p55000_voxels_farthestpose_sharedcam",
         "output_folder":"bicycle_4_n50_s42_combined_colmapcams_bothpcd_amglobal_glued_default_c0.0_p55000_voxels_farthestpose_sharedcam_i50_gteval_steps15000_val_step14999.json",
+        "initial_points":58795,
         "plot_series":"combined | Align Glued",
         "num_images_jitter":50.0
     },
@@ -588,6 +592,7 @@
         "sfm_file_path":"\/home\/ojab2\/work\/git\/vggt\/combined_outputs\/bicycle_4_n60_s42_combined_colmapcams_bothpcd_amglobal_glued_default_c0.0_p66000_voxels_farthestpose_sharedcam\/eval_results.json",
         "input_folder":"bicycle_4_n60_s42_combined_colmapcams_bothpcd_amglobal_glued_default_c0.0_p66000_voxels_farthestpose_sharedcam",
         "output_folder":"bicycle_4_n60_s42_combined_colmapcams_bothpcd_amglobal_glued_default_c0.0_p66000_voxels_farthestpose_sharedcam_i60_gteval_steps15000_val_step14999.json",
+        "initial_points":71646,
         "plot_series":"combined | Align Glued",
         "num_images_jitter":60.0
     },
@@ -787,6 +792,7 @@
         "sfm_file_path":"\/home\/ojab2\/work\/git\/vggt\/combined_outputs\/bicycle_4_n70_s42_combined_colmapcams_bothpcd_amglobal_glued_default_c0.0_p77000_voxels_farthestpose_sharedcam\/eval_results.json",
         "input_folder":"bicycle_4_n70_s42_combined_colmapcams_bothpcd_amglobal_glued_default_c0.0_p77000_voxels_farthestpose_sharedcam",
         "output_folder":"bicycle_4_n70_s42_combined_colmapcams_bothpcd_amglobal_glued_default_c0.0_p77000_voxels_farthestpose_sharedcam_i70_gteval_steps15000_val_step14999.json",
+        "initial_points":84169,
         "plot_series":"combined | Align Glued",
         "num_images_jitter":70.0
     },
@@ -1008,6 +1014,7 @@
         "sfm_file_path":"\/home\/ojab2\/work\/git\/vggt\/combined_outputs\/bicycle_4_n80_s42_combined_colmapcams_bothpcd_amglobal_glued_default_c0.0_p88000_voxels_farthestpose_sharedcam\/eval_results.json",
         "input_folder":"bicycle_4_n80_s42_combined_colmapcams_bothpcd_amglobal_glued_default_c0.0_p88000_voxels_farthestpose_sharedcam",
         "output_folder":"bicycle_4_n80_s42_combined_colmapcams_bothpcd_amglobal_glued_default_c0.0_p88000_voxels_farthestpose_sharedcam_i80_gteval_steps15000_val_step14999.json",
+        "initial_points":100718,
         "plot_series":"combined | Align Glued",
         "num_images_jitter":80.0
     },
@@ -1271,6 +1278,7 @@
         "sfm_file_path":"\/home\/ojab2\/work\/git\/vggt\/combined_outputs\/bicycle_4_n100_s42_combined_colmapcams_bothpcd_amglobal_glued_default_c0.0_p110000_voxels_farthestpose_sharedcam\/eval_results.json",
         "input_folder":"bicycle_4_n100_s42_combined_colmapcams_bothpcd_amglobal_glued_default_c0.0_p110000_voxels_farthestpose_sharedcam",
         "output_folder":"bicycle_4_n100_s42_combined_colmapcams_bothpcd_amglobal_glued_default_c0.0_p110000_voxels_farthestpose_sharedcam_i100_gteval_steps15000_val_step14999.json",
+        "initial_points":124233,
         "plot_series":"combined | Align Glued",
         "num_images_jitter":100.0
     },
@@ -1329,6 +1337,7 @@
         "sfm_file_path":"\/home\/ojab2\/work\/git\/vggt\/colmap_outputs\/bicycle_4_n20_s42_default_farthestpose_sharedcam\/eval_results.json",
         "input_folder":"bicycle_4_n20_s42_default_farthestpose_sharedcam",
         "output_folder":"bicycle_4_n20_s42_default_farthestpose_sharedcam_i20_gteval_steps15000_val_step14999.json",
+        "initial_points":44,
         "plot_series":"colmap | ",
         "num_images_jitter":20.0
     },
@@ -1387,6 +1396,7 @@
         "sfm_file_path":"\/home\/ojab2\/work\/git\/vggt\/combined_outputs\/bicycle_4_n20_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p22000_voxels_farthestpose_sharedcam\/eval_results.json",
         "input_folder":"bicycle_4_n20_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p22000_voxels_farthestpose_sharedcam",
         "output_folder":"bicycle_4_n20_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p22000_voxels_farthestpose_sharedcam_i20_gteval_steps15000_val_step14999.json",
+        "initial_points":2930,
         "plot_series":"combined | ",
         "num_images_jitter":20.0
     },
@@ -1466,6 +1476,7 @@
         "sfm_file_path":"\/home\/ojab2\/work\/git\/vggt\/colmap_outputs\/bicycle_4_n30_s42_default_farthestpose_sharedcam\/eval_results.json",
         "input_folder":"bicycle_4_n30_s42_default_farthestpose_sharedcam",
         "output_folder":"bicycle_4_n30_s42_default_farthestpose_sharedcam_i30_gteval_steps15000_val_step14999.json",
+        "initial_points":729,
         "plot_series":"colmap | ",
         "num_images_jitter":30.0
     },
@@ -1545,6 +1556,7 @@
         "sfm_file_path":"\/home\/ojab2\/work\/git\/vggt\/combined_outputs\/bicycle_4_n30_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p33000_voxels_farthestpose_sharedcam\/eval_results.json",
         "input_folder":"bicycle_4_n30_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p33000_voxels_farthestpose_sharedcam",
         "output_folder":"bicycle_4_n30_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p33000_voxels_farthestpose_sharedcam_i30_gteval_steps15000_val_step14999.json",
+        "initial_points":11193,
         "plot_series":"combined | ",
         "num_images_jitter":30.0
     },
@@ -1644,6 +1656,7 @@
         "sfm_file_path":"\/home\/ojab2\/work\/git\/vggt\/colmap_outputs\/bicycle_4_n40_s42_default_farthestpose_sharedcam\/eval_results.json",
         "input_folder":"bicycle_4_n40_s42_default_farthestpose_sharedcam",
         "output_folder":"bicycle_4_n40_s42_default_farthestpose_sharedcam_i40_gteval_steps15000_val_step14999.json",
+        "initial_points":1994,
         "plot_series":"colmap | ",
         "num_images_jitter":40.0
     },
@@ -1743,6 +1756,7 @@
         "sfm_file_path":"\/home\/ojab2\/work\/git\/vggt\/combined_outputs\/bicycle_4_n40_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p44000_voxels_farthestpose_sharedcam\/eval_results.json",
         "input_folder":"bicycle_4_n40_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p44000_voxels_farthestpose_sharedcam",
         "output_folder":"bicycle_4_n40_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p44000_voxels_farthestpose_sharedcam_i40_gteval_steps15000_val_step14999.json",
+        "initial_points":23779,
         "plot_series":"combined | ",
         "num_images_jitter":40.0
     },
@@ -1864,6 +1878,7 @@
         "sfm_file_path":"\/home\/ojab2\/work\/git\/vggt\/colmap_outputs\/bicycle_4_n50_s42_default_farthestpose_sharedcam\/eval_results.json",
         "input_folder":"bicycle_4_n50_s42_default_farthestpose_sharedcam",
         "output_folder":"bicycle_4_n50_s42_default_farthestpose_sharedcam_i50_gteval_steps15000_val_step14999.json",
+        "initial_points":3071,
         "plot_series":"colmap | ",
         "num_images_jitter":50.0
     },
@@ -1985,6 +2000,7 @@
         "sfm_file_path":"\/home\/ojab2\/work\/git\/vggt\/combined_outputs\/bicycle_4_n50_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p55000_voxels_farthestpose_sharedcam\/eval_results.json",
         "input_folder":"bicycle_4_n50_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p55000_voxels_farthestpose_sharedcam",
         "output_folder":"bicycle_4_n50_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p55000_voxels_farthestpose_sharedcam_i50_gteval_steps15000_val_step14999.json",
+        "initial_points":35806,
         "plot_series":"combined | ",
         "num_images_jitter":50.0
     },
@@ -2118,6 +2134,7 @@
         "sfm_file_path":"\/home\/ojab2\/work\/git\/vggt\/colmap_outputs\/bicycle_4_n60_s42_default_farthestpose_sharedcam\/eval_results.json",
         "input_folder":"bicycle_4_n60_s42_default_farthestpose_sharedcam",
         "output_folder":"bicycle_4_n60_s42_default_farthestpose_sharedcam_i60_gteval_steps15000_val_step14999.json",
+        "initial_points":4084,
         "plot_series":"colmap | ",
         "num_images_jitter":60.0
     },
@@ -2251,6 +2268,7 @@
         "sfm_file_path":"\/home\/ojab2\/work\/git\/vggt\/combined_outputs\/bicycle_4_n60_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p66000_voxels_farthestpose_sharedcam\/eval_results.json",
         "input_folder":"bicycle_4_n60_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p66000_voxels_farthestpose_sharedcam",
         "output_folder":"bicycle_4_n60_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p66000_voxels_farthestpose_sharedcam_i60_gteval_steps15000_val_step14999.json",
+        "initial_points":43473,
         "plot_series":"combined | ",
         "num_images_jitter":60.0
     },
@@ -2396,6 +2414,7 @@
         "sfm_file_path":"\/home\/ojab2\/work\/git\/vggt\/colmap_outputs\/bicycle_4_n70_s42_default_farthestpose_sharedcam\/eval_results.json",
         "input_folder":"bicycle_4_n70_s42_default_farthestpose_sharedcam",
         "output_folder":"bicycle_4_n70_s42_default_farthestpose_sharedcam_i70_gteval_steps15000_val_step14999.json",
+        "initial_points":5456,
         "plot_series":"colmap | ",
         "num_images_jitter":70.0
     },
@@ -2541,6 +2560,7 @@
         "sfm_file_path":"\/home\/ojab2\/work\/git\/vggt\/combined_outputs\/bicycle_4_n70_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p77000_voxels_farthestpose_sharedcam\/eval_results.json",
         "input_folder":"bicycle_4_n70_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p77000_voxels_farthestpose_sharedcam",
         "output_folder":"bicycle_4_n70_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p77000_voxels_farthestpose_sharedcam_i70_gteval_steps15000_val_step14999.json",
+        "initial_points":50273,
         "plot_series":"combined | ",
         "num_images_jitter":70.0
     },
@@ -2700,6 +2720,7 @@
         "sfm_file_path":"\/home\/ojab2\/work\/git\/vggt\/colmap_outputs\/bicycle_4_n80_s42_default_farthestpose_sharedcam\/eval_results.json",
         "input_folder":"bicycle_4_n80_s42_default_farthestpose_sharedcam",
         "output_folder":"bicycle_4_n80_s42_default_farthestpose_sharedcam_i80_gteval_steps15000_val_step14999.json",
+        "initial_points":7165,
         "plot_series":"colmap | ",
         "num_images_jitter":80.0
     },
@@ -2859,6 +2880,7 @@
         "sfm_file_path":"\/home\/ojab2\/work\/git\/vggt\/combined_outputs\/bicycle_4_n80_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p88000_voxels_farthestpose_sharedcam\/eval_results.json",
         "input_folder":"bicycle_4_n80_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p88000_voxels_farthestpose_sharedcam",
         "output_folder":"bicycle_4_n80_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p88000_voxels_farthestpose_sharedcam_i80_gteval_steps15000_val_step14999.json",
+        "initial_points":60875,
         "plot_series":"combined | ",
         "num_images_jitter":80.0
     },
@@ -3122,6 +3144,7 @@
         "sfm_file_path":"\/home\/ojab2\/work\/git\/vggt\/colmap_outputs\/bicycle_4_n100_s42_default_farthestpose_sharedcam\/eval_results.json",
         "input_folder":"bicycle_4_n100_s42_default_farthestpose_sharedcam",
         "output_folder":"bicycle_4_n100_s42_default_farthestpose_sharedcam_i100_gteval_steps15000_val_step14999.json",
+        "initial_points":16687,
         "plot_series":"colmap | ",
         "num_images_jitter":100.0
     },
@@ -3385,6 +3408,7 @@
         "sfm_file_path":"\/home\/ojab2\/work\/git\/vggt\/combined_outputs\/bicycle_4_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p110000_voxels_farthestpose_sharedcam\/eval_results.json",
         "input_folder":"bicycle_4_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p110000_voxels_farthestpose_sharedcam",
         "output_folder":"bicycle_4_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p110000_voxels_farthestpose_sharedcam_i100_gteval_steps15000_val_step14999.json",
+        "initial_points":124233,
         "plot_series":"combined | ",
         "num_images_jitter":100.0
     },
@@ -3488,6 +3512,7 @@
         "sfm_file_path":"\/home\/ojab2\/work\/git\/vggt\/vggt_outputs\/bicycle_4_n20_s42_c0.0_p22000_voxels_farthestpose\/eval_results.json",
         "input_folder":"bicycle_4_n20_s42_c0.0_p22000_voxels_farthestpose",
         "output_folder":"bicycle_4_n20_s42_c0.0_p22000_voxels_farthestpose_i20_gteval_steps15000_val_step14999.json",
+        "initial_points":22628,
         "plot_series":"vggt | ",
         "num_images_jitter":20.0
     },
@@ -3611,6 +3636,7 @@
         "sfm_file_path":"\/home\/ojab2\/work\/git\/vggt\/vggt_outputs\/bicycle_4_n30_s42_c0.0_p33000_voxels_farthestpose\/eval_results.json",
         "input_folder":"bicycle_4_n30_s42_c0.0_p33000_voxels_farthestpose",
         "output_folder":"bicycle_4_n30_s42_c0.0_p33000_voxels_farthestpose_i30_gteval_steps15000_val_step14999.json",
+        "initial_points":33886,
         "plot_series":"vggt | ",
         "num_images_jitter":30.0
     },
@@ -3754,6 +3780,7 @@
         "sfm_file_path":"\/home\/ojab2\/work\/git\/vggt\/vggt_outputs\/bicycle_4_n40_s42_c0.0_p44000_voxels_farthestpose\/eval_results.json",
         "input_folder":"bicycle_4_n40_s42_c0.0_p44000_voxels_farthestpose",
         "output_folder":"bicycle_4_n40_s42_c0.0_p44000_voxels_farthestpose_i40_gteval_steps15000_val_step14999.json",
+        "initial_points":43515,
         "plot_series":"vggt | ",
         "num_images_jitter":40.0
     },
@@ -3917,6 +3944,7 @@
         "sfm_file_path":"\/home\/ojab2\/work\/git\/vggt\/vggt_outputs\/bicycle_4_n50_s42_c0.0_p55000_voxels_farthestpose\/eval_results.json",
         "input_folder":"bicycle_4_n50_s42_c0.0_p55000_voxels_farthestpose",
         "output_folder":"bicycle_4_n50_s42_c0.0_p55000_voxels_farthestpose_i50_gteval_steps15000_val_step14999.json",
+        "initial_points":55619,
         "plot_series":"vggt | ",
         "num_images_jitter":50.0
     },
@@ -4100,6 +4128,7 @@
         "sfm_file_path":"\/home\/ojab2\/work\/git\/vggt\/vggt_outputs\/bicycle_4_n60_s42_c0.0_p66000_voxels_farthestpose\/eval_results.json",
         "input_folder":"bicycle_4_n60_s42_c0.0_p66000_voxels_farthestpose",
         "output_folder":"bicycle_4_n60_s42_c0.0_p66000_voxels_farthestpose_i60_gteval_steps15000_val_step14999.json",
+        "initial_points":67566,
         "plot_series":"vggt | ",
         "num_images_jitter":60.0
     },
@@ -4303,6 +4332,7 @@
         "sfm_file_path":"\/home\/ojab2\/work\/git\/vggt\/vggt_outputs\/bicycle_4_n70_s42_c0.0_p77000_voxels_farthestpose\/eval_results.json",
         "input_folder":"bicycle_4_n70_s42_c0.0_p77000_voxels_farthestpose",
         "output_folder":"bicycle_4_n70_s42_c0.0_p77000_voxels_farthestpose_i70_gteval_steps15000_val_step14999.json",
+        "initial_points":76966,
         "plot_series":"vggt | ",
         "num_images_jitter":70.0
     },
@@ -4526,6 +4556,7 @@
         "sfm_file_path":"\/home\/ojab2\/work\/git\/vggt\/vggt_outputs\/bicycle_4_n80_s42_c0.0_p88000_voxels_farthestpose\/eval_results.json",
         "input_folder":"bicycle_4_n80_s42_c0.0_p88000_voxels_farthestpose",
         "output_folder":"bicycle_4_n80_s42_c0.0_p88000_voxels_farthestpose_i80_gteval_steps15000_val_step14999.json",
+        "initial_points":90156,
         "plot_series":"vggt | ",
         "num_images_jitter":80.0
     },
@@ -4789,6 +4820,7 @@
         "sfm_file_path":"\/home\/ojab2\/work\/git\/vggt\/vggt_outputs\/bicycle_4_n100_s42_c0.0_p110000_voxels_farthestpose\/eval_results.json",
         "input_folder":"bicycle_4_n100_s42_c0.0_p110000_voxels_farthestpose",
         "output_folder":"bicycle_4_n100_s42_c0.0_p110000_voxels_farthestpose_i100_gteval_steps15000_val_step14999.json",
+        "initial_points":107546,
         "plot_series":"vggt | ",
         "num_images_jitter":100.0
     }

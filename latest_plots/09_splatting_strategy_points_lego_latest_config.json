@@ -1,0 +1,32 @@
+{
+    "seed": [
+        42
+    ],
+    "num_images": [
+        100
+    ],
+    "num_points_per_image": [
+        10,
+        50,
+        100,
+        200,
+        300,
+        500,
+        750,
+        1000,
+        2500,
+        5000,
+        10000
+    ],
+    "sampling_mode": [
+        "voxels"
+    ],
+    "choice": [
+        "vggt"
+    ],
+    "nomcmc": [
+        true,
+        false
+    ],
+    "dataset": "lego"
+}

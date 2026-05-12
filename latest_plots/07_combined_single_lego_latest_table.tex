@@ -1,0 +1,14 @@
+\begin{table}[H]
+\caption{Combining cameras and point clouds (Lego)}
+\label{tab:07_combined_single_lego}
+\begin{tabular}{lllrrrrr}
+\toprule
+Choice & Camera Src & Pcd Src & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ \\
+\midrule
+COLMAP &  &  & \underline{12.801} & \underline{0.240} & \underline{10.687} & \underline{0.519} & \underline{0.532} \\
+VGGT & colmapcams & bothpcd &  &  &  &  &  \\
+VGGT & colmapcams & vggtpcd &  &  &  &  &  \\
+VGGT &  &  & \textbf{0.255} & \textbf{0.006} & \textbf{20.654} & \textbf{0.072} & \textbf{0.777} \\
+\bottomrule
+\end{tabular}
+\end{table}

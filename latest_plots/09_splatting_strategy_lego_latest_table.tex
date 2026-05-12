@@ -1,0 +1,28 @@
+\begin{table}[H]
+\caption{Splatting strategies with different number of images (Lego)}
+\label{tab:09_splatting_strategy_lego}
+\begin{tabular}{lrlrrrrrr}
+\toprule
+Choice & Num Images & Splatting Strategy & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Final Gaussian Count \\
+\midrule
+VGGT & 10 & Default & 2.592 & 0.160 & 13.554 & 0.365 & 0.581 & 121735 \\
+VGGT & 10 & MCMC & 2.592 & 0.160 & 13.674 & 0.368 & 0.592 & 891510 \\
+VGGT & 20 & Default & 2.298 & 0.141 & 13.726 & 0.340 & 0.607 & 185724 \\
+VGGT & 20 & MCMC & 2.298 & 0.141 & 14.237 & 0.408 & 0.611 & 17007 \\
+VGGT & 30 & Default & 2.235 & 0.136 & 13.973 & 0.327 & 0.615 & 227405 \\
+VGGT & 30 & MCMC & 2.235 & 0.136 & 14.073 & 0.329 & 0.615 & 1000000 \\
+VGGT & 40 & Default & 1.322 & 0.069 & 14.593 & 0.283 & 0.645 & 262470 \\
+VGGT & 40 & MCMC & 1.322 & 0.069 & 14.658 & 0.283 & 0.645 & 1000000 \\
+VGGT & 50 & Default & 0.871 & 0.042 & 15.364 & 0.237 & 0.673 & 303621 \\
+VGGT & 50 & MCMC & 0.871 & 0.042 & 15.393 & 0.235 & 0.672 & 1000000 \\
+VGGT & 60 & Default & 0.627 & 0.029 & 16.596 & 0.185 & 0.706 & 333779 \\
+VGGT & 60 & MCMC & 0.627 & 0.029 & 16.665 & 0.184 & 0.705 & 1000000 \\
+VGGT & 70 & Default & 0.426 & \underline{0.021} & 18.635 & 0.126 & 0.745 & 361618 \\
+VGGT & 70 & MCMC & 0.426 & \underline{0.021} & 18.675 & 0.125 & 0.744 & 1000000 \\
+VGGT & 80 & Default & \underline{0.347} & \textbf{0.019} & 19.958 & \underline{0.105} & \underline{0.760} & 380296 \\
+VGGT & 80 & MCMC & \underline{0.347} & \textbf{0.019} & 19.998 & 0.106 & \underline{0.760} & 1000000 \\
+VGGT & 87 & Default & \textbf{0.331} & \textbf{0.019} & \underline{20.360} & \textbf{0.102} & \textbf{0.767} & 379733 \\
+VGGT & 87 & MCMC & \textbf{0.331} & \textbf{0.019} & \textbf{20.394} & \textbf{0.102} & \textbf{0.767} & 1000000 \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,0 +1,34 @@
+\begin{table}[H]
+\caption{Combining cameras and point clouds (Lego)}
+\label{tab:07_combined_align_lego}
+\begin{tabular}{lrlllrrrr}
+\toprule
+Choice & Num Images & Sampling Mode & Align Mode & Keep Backup Cams & RRE ↓ & RTE ↓ & Aligned Cameras ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP & 25 & random & Global Alignment & Fallback Cams & 7.810 & 0.129 & 25 & 0.125 \\
+COLMAP & 25 & random & Global Alignment &  & 31.557 & 0.045 & 5 & 0.034 \\
+COLMAP & 25 & random & Local Alignment & Fallback Cams & 7.810 & 0.129 & 25 & 0.129 \\
+COLMAP & 25 & random & Local Alignment &  & 31.557 & 0.045 & 5 & 0.038 \\
+COLMAP & 25 &  &  &  & 31.557 & 0.045 & 5 & 0.002 \\
+COLMAP & 50 & random & Global Alignment & Fallback Cams & 147.002 & 3.561 & 50 & 0.171 \\
+COLMAP & 50 & random & Global Alignment &  & 170.769 & 3.637 & 43 & 0.196 \\
+COLMAP & 50 & random & Local Alignment & Fallback Cams & 147.002 & 3.561 & 50 & 0.120 \\
+COLMAP & 50 & random & Local Alignment &  & 170.769 & 3.637 & 43 & 0.121 \\
+COLMAP & 50 &  &  &  & 170.769 & 3.637 & 43 & 0.196 \\
+COLMAP & 75 & random & Global Alignment & Fallback Cams & 96.569 & 3.184 & \underline{75} & 0.192 \\
+COLMAP & 75 & random & Global Alignment &  & 96.569 & 3.184 & \underline{75} & 0.182 \\
+COLMAP & 75 & random & Local Alignment & Fallback Cams & 96.569 & 3.184 & \underline{75} & 0.002 \\
+COLMAP & 75 & random & Local Alignment &  & 96.569 & 3.184 & \underline{75} & -0.008 \\
+COLMAP & 75 &  &  &  & 96.569 & 3.184 & \underline{75} & 0.153 \\
+COLMAP & 87 &  &  &  & 12.794 & 0.785 & \textbf{87} & 0.095 \\
+VGGT & 25 & random &  &  & 2.139 & 0.132 & 25 & 0.325 \\
+VGGT & 50 & random &  &  & 0.871 & \underline{0.042} & 50 & 0.449 \\
+VGGT & 75 & random &  &  & \underline{0.368} & \textbf{0.019} & \underline{75} & \underline{0.674} \\
+VGGT & 87 & random & Global Alignment & Fallback Cams & 12.794 & 0.785 & \textbf{87} &  \\
+VGGT & 87 & random & Global Alignment &  & 12.794 & 0.785 & \textbf{87} &  \\
+VGGT & 87 & random & Local Alignment & Fallback Cams & 12.794 & 0.785 & \textbf{87} &  \\
+VGGT & 87 & random & Local Alignment &  & 12.794 & 0.785 & \textbf{87} &  \\
+VGGT & 87 & random &  &  & \textbf{0.331} & \textbf{0.019} & \textbf{87} & \textbf{0.699} \\
+\bottomrule
+\end{tabular}
+\end{table}

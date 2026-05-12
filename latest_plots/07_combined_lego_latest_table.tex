@@ -1,0 +1,34 @@
+\begin{table}[H]
+\caption{Combining cameras and point clouds (Lego)}
+\label{tab:07_combined_lego}
+\begin{tabular}{lrllrrrrrr}
+\toprule
+Choice & Num Images & Camera Src & Pcd Src & Val RRE ↓ & Val RTE ↓ & Aligned Cameras ↑ & PSNR ↑ & LPIPS ↓ & SSIM ↑ \\
+\midrule
+COLMAP & 25 & colmapcams & bothpcd & 28.412 & 0.043 & 5 & 11.134 & 0.603 & 0.501 \\
+COLMAP & 25 &  &  & 26.912 & 0.040 & 5 & 10.816 & 0.616 & 0.471 \\
+COLMAP & 50 & colmapcams & bothpcd & 170.489 & 1.064 & 43 & 11.361 & 0.509 & 0.673 \\
+COLMAP & 50 &  &  & 170.726 & 1.063 & 43 & 11.361 & 0.509 & 0.673 \\
+COLMAP & 75 & colmapcams & bothpcd & 107.840 & 0.977 & \underline{75} & 10.938 & 0.475 & 0.626 \\
+COLMAP & 75 &  &  & 107.899 & 0.977 & \underline{75} & 10.706 & 0.527 & 0.639 \\
+COLMAP & 87 &  &  & 12.801 & 0.240 & \textbf{87} & 10.687 & 0.519 & 0.532 \\
+VGGT & 25 & colmapcams & vggtpcd &  &  & 5 &  &  &  \\
+VGGT & 25 & vggtcams & bothpcd & 1.322 & 0.082 & 5 & 13.713 & 0.442 & 0.554 \\
+VGGT & 25 & vggtcams & colmappcd &  &  & 5 &  &  &  \\
+VGGT & 25 &  &  & 1.754 & 0.024 & 25 & 13.936 & 0.327 & 0.620 \\
+VGGT & 50 & colmapcams & vggtpcd &  &  & 43 &  &  &  \\
+VGGT & 50 & vggtcams & bothpcd & 0.883 & 0.009 & 43 & 15.384 & 0.231 & 0.675 \\
+VGGT & 50 & vggtcams & colmappcd &  &  & 43 &  &  &  \\
+VGGT & 50 &  &  & 0.771 & 0.010 & 50 & 15.382 & 0.224 & 0.678 \\
+VGGT & 75 & colmapcams & vggtpcd &  &  & \underline{75} &  &  &  \\
+VGGT & 75 & vggtcams & bothpcd & \textbf{0.243} & \textbf{0.004} & \underline{75} & 18.940 & 0.096 & 0.751 \\
+VGGT & 75 & vggtcams & colmappcd & 0.383 & 0.007 & \underline{75} & 11.361 & 0.509 & 0.673 \\
+VGGT & 75 &  &  & 0.287 & \underline{0.005} & \underline{75} & \underline{19.876} & \underline{0.081} & \underline{0.769} \\
+VGGT & 87 & colmapcams & bothpcd &  &  & \textbf{87} &  &  &  \\
+VGGT & 87 & colmapcams & vggtpcd &  &  & \textbf{87} &  &  &  \\
+VGGT & 87 & vggtcams & bothpcd &  &  & \textbf{87} &  &  &  \\
+VGGT & 87 & vggtcams & colmappcd &  &  & \textbf{87} &  &  &  \\
+VGGT & 87 &  &  & \underline{0.255} & 0.006 & \textbf{87} & \textbf{20.654} & \textbf{0.072} & \textbf{0.777} \\
+\bottomrule
+\end{tabular}
+\end{table}

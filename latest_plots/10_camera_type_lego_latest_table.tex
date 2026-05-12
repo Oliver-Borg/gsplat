@@ -1,0 +1,13 @@
+\begin{table}[H]
+\caption{A comparison of different camera types with bundle adjustment (Lego)}
+\label{tab:10_camera_type_lego}
+\begin{tabular}{llrrrrrr}
+\toprule
+Choice & Camera Type & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Final Gaussian Count \\
+\midrule
+COLMAP &  & 12.794 & \underline{0.785} & 10.700 & 0.519 & 0.532 & 1000000 \\
+VGGT & pinhole & \underline{0.269} & \textbf{0.015} & \underline{22.318} & \textbf{0.085} & \underline{0.821} & 1000000 \\
+VGGT & radial & \textbf{0.266} & \textbf{0.015} & \textbf{22.563} & \underline{0.096} & \textbf{0.826} & 1000000 \\
+\bottomrule
+\end{tabular}
+\end{table}
