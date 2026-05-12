@@ -104,6 +104,7 @@ class Config:
     num_points_per_image: float = 1100
     num_points_value: int | None = None
     sampling_mode: SAMPLING_MODE = "voxels"
+    near_filtering: bool = False
     use_ba: bool = False
     max_ba_iterations: int = 50
     image_mode: IMAGE_MODE = "farthestpose"
@@ -147,6 +148,7 @@ class Config:
         instance.num_points_per_image = data.get("num_points_per_image", cls.num_points_per_image)
         instance.num_points_value = data.get("num_points_value", cls.num_points_value)
         instance.sampling_mode = data.get("sampling_mode", cls.sampling_mode)
+        instance.near_filtering = data.get("near_filtering", cls.near_filtering)
         instance.use_ba = data.get("use_ba", cls.use_ba)
         instance.max_ba_iterations = data.get("max_ba_iterations", cls.max_ba_iterations)
         instance.image_mode = data.get("image_mode", cls.image_mode)
@@ -214,6 +216,7 @@ class Config:
 
         if self.choice != "vggt" and self.choice != "combined":
             self.depth_conf_mode = "disabled"
+            self.near_filtering = False
 
         if self.choice == "vggt" and not self.use_ba:
             self.shared_camera = False
@@ -292,6 +295,8 @@ class Config:
                     ]
                 )
             parts.append(self.sampling_mode)
+            if self.near_filtering:
+                parts.append("nearfilter")
 
             if self.error_opa:
                 parts.append("errconf")
@@ -325,6 +330,8 @@ class Config:
             if self.sampling_mode == "ba" and self.camera_src == "vggt":
                 parts.append(self.camera_type.lower().replace("simple_", "m"))
                 parts.append(self.sampling_mode)
+                if self.near_filtering:
+                    parts.append("nearfilter")
             elif self.pcd_src == "vggt" or self.pcd_src == "both":
                 parts.extend(
                     [
@@ -333,6 +340,8 @@ class Config:
                         self.sampling_mode,
                     ]
                 )
+                if self.near_filtering:
+                    parts.append("nearfilter")
 
             if self.error_opa:
                 parts.append("errconf")
@@ -462,14 +471,8 @@ class Config:
         if self.choice == "gt":
             return False
 
-        # if self.use_ba:
-        #     return True
-
-        # if self.error_opa:
-        #     return True
-
-        # if self.sampling_mode == "confidence":
-        #     return True
+        if self.near_filtering:
+            return True
 
         if self.choice == "combined":
             if self.reconstruction_time < datetime.datetime(2026, 4, 25, 11, 30, 0).timestamp():
@@ -513,6 +516,7 @@ class Config:
             "seed": self.seed,
             "conf_thres_value": self.conf_thres_value,
             "sampling_mode": self.sampling_mode,
+            "near_filtering": self.near_filtering,
             "image_mode": self.image_mode,
             "camera_type": self.camera_type,
             "colmap_mode": self.colmap_mode,
@@ -1080,7 +1084,7 @@ experiments = [
         1,
         "COLMAP versus VGGT over various number of images",
         {
-            "seed": [42, 43, 44],
+            "seed": [42],
             "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
             "sampling_mode": ["voxels"],
             "gt_eval": [True],
@@ -1093,6 +1097,7 @@ experiments = [
             single_legend=True,
             max_render_cols=4,
             show_gt=False,
+            raw_metrics=True,
         ),
         render_filter_override={
             "num_images": [20, 30, 40, 100],
@@ -1104,7 +1109,7 @@ experiments = [
         1,
         "COLMAP versus VGGT over various number of images with pose optimization",
         {
-            "seed": [42, 43],
+            "seed": [42],
             "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
             "sampling_mode": ["voxels"],
             "pose_opt": [True, False],
@@ -1117,6 +1122,7 @@ experiments = [
             split_param="pose_opt",
             max_render_cols=4,
             show_gt=False,
+            raw_metrics=True,
         ),
         render_filter_override={
             "num_images": [20, 30, 40, 100],
@@ -1161,7 +1167,7 @@ experiments = [
         4,
         "COLMAP versus VGGT with pose optimization",
         {
-            "seed": [42, 43, 44],
+            "seed": [42],
             "num_images": [100],
             "pose_opt": [True, False],
             "gt_eval": [True],
@@ -1172,6 +1178,7 @@ experiments = [
             x_axis="",
             split_param="choice,pose_opt",
             metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "quality"],
+            raw_metrics=True,
         ),
         val_steps=[30000],
     ),
@@ -1219,7 +1226,7 @@ experiments = [
         3,
         "A comparison of different VGGT point cloud sampling modes",
         {
-            "seed": [42, 43, 44],
+            "seed": [42],
             "num_images": [100],
             "sampling_mode": ["voxels", "random", "confidence", "ba"],
             "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 2500, 5000, 10000],
@@ -1227,7 +1234,12 @@ experiments = [
             "use_gt_cams": False,
             "gt_eval": True,
         },
-        PlotConfig(x_axis="num_points", split_param="sampling_mode", metric_keys=["psnr", "lpips", "ssim", "quality"]),
+        PlotConfig(
+            x_axis="num_points",
+            split_param="sampling_mode",
+            metric_keys=["psnr", "lpips", "ssim", "quality"],
+            raw_metrics=True,
+        ),
         render_filter_override={
             "seed": [42],
             "num_points_per_image": [1000],
@@ -1238,7 +1250,7 @@ experiments = [
         3,
         "A comparison of different VGGT point cloud sampling modes with GT cameras",
         {
-            "seed": [42, 43, 44],
+            "seed": [42],
             "num_images": [100],
             "sampling_mode": ["voxels", "random", "confidence", "ba"],
             "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 2500, 5000, 10000],
@@ -1246,7 +1258,12 @@ experiments = [
             "use_gt_cams": [True],
             "gt_eval": True,
         },
-        PlotConfig(x_axis="num_points", split_param="sampling_mode", metric_keys=["psnr", "lpips", "ssim", "quality"]),
+        PlotConfig(
+            x_axis="num_points",
+            split_param="sampling_mode",
+            metric_keys=["psnr", "lpips", "ssim", "quality"],
+            raw_metrics=True,
+        ),
         render_filter_override={
             "seed": [42],
             "num_points_per_image": [2500],
@@ -1257,7 +1274,7 @@ experiments = [
         99,
         "Small test for functionality",
         {
-            "seed": [42, 43, 44],  #
+            "seed": [42],  #
             "num_images": [100],
             "sampling_mode": ["random", "confidence", "voxels", "ba"],
             "num_points_per_image": [1000],
@@ -1266,7 +1283,12 @@ experiments = [
             "choice": ["vggt", "colmap"],
             "num_steps": [7000],
         },
-        PlotConfig(x_axis="val_step", split_param="sampling_mode,pose_opt", metric_keys=["eval_rre", "eval_rte"]),
+        PlotConfig(
+            x_axis="val_step",
+            split_param="sampling_mode,pose_opt",
+            metric_keys=["eval_rre", "eval_rte"],
+            raw_metrics=True,
+        ),
         val_steps=[1, 7000],
     ),
     Experiment(
@@ -1773,7 +1795,7 @@ experiments = [
         10,
         "Test for camera mode (extended)",
         {
-            "seed": [42, 43, 44],
+            "seed": [42],
             "num_images": [100],
             "sampling_mode": ["ba", "voxels"],
             "pose_opt": [True, False],
@@ -1781,21 +1803,21 @@ experiments = [
             "num_points_per_image": [1100],
             "choice": ["vggt", "colmap"],
         },
-        PlotConfig(x_axis="", split_param="camera_type,pose_opt,sampling_mode"),
+        PlotConfig(x_axis="", split_param="camera_type,pose_opt,sampling_mode", raw_metrics=True),
     ),
     Experiment(
         "dataset_type",
         99,
         "Test for dataset types",
         {
-            "seed": [42, 43, 44],
+            "seed": [42],
             "num_images": [50, 100],
             "sampling_mode": ["voxels"],
             "all_opt": [False],
             "num_points_per_image": [1100, 2200],
             "choice": ["vggt", "colmap"],
         },
-        PlotConfig(x_axis="num_images", split_param="num_points"),
+        PlotConfig(x_axis="num_images", split_param="num_points", raw_metrics=True),
     ),
     Experiment(
         "copy_mode",
@@ -1803,13 +1825,15 @@ experiments = [
         "A comparison of different image cropping modes",
         {
             "num_images": [100],
-            "seed": [42, 43, 44],
+            "seed": [42],
             "sampling_mode": ["voxels"],
             "all_opt": [False],
             "copy_mode": [None, "crop", "square"],
             "choice": ["vggt", "colmap"],
         },
-        PlotConfig(x_axis="", split_param="copy_mode", metric_keys=["rre", "rte", "num_aligned", "quality"]),
+        PlotConfig(
+            x_axis="", split_param="copy_mode", metric_keys=["rre", "rte", "num_aligned", "quality"], raw_metrics=True
+        ),
     ),
     Experiment(
         "shared_camera_colmap",
@@ -2015,7 +2039,7 @@ experiments = [
         99,
         "Test for combining BA with sampling mode.",
         {
-            "seed": [42, 43],
+            "seed": [42],
             "num_images": [25, 50, 75, 100],
             "sampling_mode": ["random"],
             "use_ba": [True, False],
@@ -2030,6 +2054,7 @@ experiments = [
             split_param="sampling_mode,use_ba,max_ba_iterations,shared_camera,camera_type",
             metric_keys=["rre", "rte", "num_aligned", "quality"],
             apply_jitter=False,
+            raw_metrics=True,
         ),
         render_filter_override={
             "seed": [42],
@@ -2145,6 +2170,29 @@ experiments = [
         render_filter_override={
             "seed": [42],
             "num_images": [80],
+        },
+    ),
+    Experiment(
+        "near_filtering",
+        99,
+        "Test for near filtering using VGGT depth map",
+        {
+            "seed": [42],
+            "num_images": [100],
+            "sampling_mode": ["random"],
+            "choice": ["vggt"],
+            "near_filtering": [True, False],
+        },
+        PlotConfig(
+            x_axis="",
+            split_param="near_filtering",
+            metric_keys=["eval_rre", "eval_rte", "num_aligned", "psnr", "ssim", "lpips"],
+            max_render_cols=4,
+            render_nums=[0, 2],
+        ),
+        render_filter_override={
+            "seed": [42],
+            "num_images": [25],
         },
     ),
 ]
