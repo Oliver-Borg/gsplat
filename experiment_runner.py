@@ -201,6 +201,12 @@ class Config:
             self.num_images = len(os.listdir(Path(self.dataset.directory) / Path(self.dataset.data_folder_name)))
             self.num_cameras = self.num_images
 
+        training_set_max_size = int(
+            len(os.listdir(Path(self.dataset.directory) / Path(self.dataset.data_folder_name))) * 7 / 8
+        )
+        if self.num_images > training_set_max_size:
+            self.num_images = training_set_max_size
+
         self.use_ba = self.sampling_mode == "ba" or self.use_ba or self.choice == "colmap"
 
         if not (self.use_ba and self.choice == "vggt"):
@@ -665,7 +671,9 @@ class Config:
         if self.is_evaluated and not self.force_eval and not force:
             return 0
         try:
-            examples.evaluation.main(self.data_dir, self.dataset.directory, force=self.force_eval or force)
+            examples.evaluation.main(
+                self.data_dir, self.dataset.gt_train_data_dir or self.dataset.directory, force=self.force_eval or force
+            )
             return 0
         except Exception as e:
             print(f"Error during evaluation of {self.data_dir}: {e}")
@@ -1281,7 +1289,7 @@ experiments = [
         PlotConfig(
             x_axis="num_images",
             split_param="camera_src,pcd_src",
-            metric_keys=["rre", "rte", "num_aligned", "quality"],
+            metric_keys=["eval_rre", "eval_rte", "num_aligned", "psnr", "lpips", "ssim"],
         ),
         val_steps=[15000],
         render_filter_override={
@@ -1302,16 +1310,14 @@ experiments = [
             "pose_opt": [True],
             "gt_eval": True,
             "choice": ["combined", "colmap", "vggt"],
-            "pcd_src": ["both"],
-            "align_mode": ["local", "global"],
-            "keep_backup_cams": [True, False],
+            "pcd_src": ["both", "vggt", "colmap"],
             "camera_src": ["colmap"],
             "num_steps": [15000],
         },
         PlotConfig(
             x_axis="",
-            split_param="camera_src,pcd_src,align_mode,keep_backup_cams",
-            metric_keys=["rre", "rte", "num_aligned", "quality"],
+            split_param="camera_src,pcd_src",
+            metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim"],
         ),
         val_steps=[15000],
         render_filter_override={
@@ -1908,7 +1914,7 @@ experiments = [
     Experiment(
         "isolated_cams_num_points",
         6,
-        "Test isolated cameras with random point clouds.",
+        "Isolated cameras with random point clouds.",
         {
             "seed": [42],
             "num_images": [25, 50, 75, 100],
@@ -1922,13 +1928,13 @@ experiments = [
         PlotConfig(
             x_axis="num_images",
             split_param="random_init,pose_opt,sampling_mode",
-            metric_keys=["eval_rre", "eval_rte", "num_aligned", "real_num_points", "quality"],
+            metric_keys=["eval_rre", "eval_rte", "real_num_points", "psnr", "ssim", "lpips"],
         ),
     ),
     Experiment(
         "isolated_cams_point_clouds",
         6,
-        "Test COLMAP cameras with different point cloud sources.",
+        "COLMAP cameras with different point cloud sources.",
         {
             "seed": [42],
             "num_images": [100],
@@ -1944,7 +1950,7 @@ experiments = [
         PlotConfig(
             x_axis="",
             split_param="random_init,pcd_src,real_num_points",
-            metric_keys=["eval_rre", "eval_rte", "num_aligned", "real_num_points", "quality"],
+            metric_keys=["eval_rre", "eval_rte", "psnr", "ssim", "lpips"],
         ),
         render_filter_override={
             "seed": [42],
@@ -1954,7 +1960,7 @@ experiments = [
     Experiment(
         "isolated_cams_vggt",
         6,
-        "Test COLMAP cameras with different point cloud sources.",
+        "VGGT cameras with different point cloud sources.",
         {
             "seed": [42],
             "num_images": [100],
@@ -1970,7 +1976,7 @@ experiments = [
         PlotConfig(
             x_axis="",
             split_param="random_init,pcd_src,real_num_points",
-            metric_keys=["eval_rre", "eval_rte", "num_aligned", "real_num_points", "quality"],
+            metric_keys=["eval_rre", "eval_rte", "psnr", "ssim", "lpips"],
         ),
         render_filter_override={
             "seed": [42],
@@ -1980,7 +1986,7 @@ experiments = [
     Experiment(
         "isolated_cams_vggt_ba",
         6,
-        "Test COLMAP cameras with different point cloud sources.",
+        "VGGT cameras with different point cloud sources and bundle adjustment.",
         {
             "seed": [42],
             "num_images": [100],
@@ -1997,7 +2003,7 @@ experiments = [
         PlotConfig(
             x_axis="",
             split_param="random_init,pcd_src,real_num_points,use_ba",
-            metric_keys=["eval_rre", "eval_rte", "num_aligned", "real_num_points", "quality"],
+            metric_keys=["eval_rre", "eval_rte", "psnr", "ssim", "lpips"],
         ),
         render_filter_override={
             "seed": [42],
@@ -2051,10 +2057,11 @@ experiments = [
             metric_keys=["rre", "rte", "num_aligned", "psnr", "ssim", "lpips"],
             max_render_cols=4,
             render_nums=[0, 2],
+            raw_metrics=True,
         ),
         render_filter_override={
             "seed": [42],
-            "num_images": [70],
+            "num_images": [80],
         },
     ),
     Experiment(
@@ -2074,13 +2081,13 @@ experiments = [
         PlotConfig(
             x_axis="num_images",
             split_param="align_glue",
-            metric_keys=["rre", "rte", "num_aligned", "psnr", "ssim", "lpips"],
+            metric_keys=["eval_rre", "eval_rte", "num_aligned", "psnr", "ssim", "lpips"],
             max_render_cols=4,
             render_nums=[0, 2],
         ),
         render_filter_override={
             "seed": [42],
-            "num_images": [70],
+            "num_images": [80],
         },
     ),
     Experiment(
@@ -2089,7 +2096,7 @@ experiments = [
         "Test for combining relaxed COLMAP cameras using glue",
         {
             "seed": [42],
-            "num_images": [70],
+            "num_images": [80],
             # "num_images": [40, 60, 80],
             # "num_images": [40],
             "choice": ["combined", "colmap", "vggt"],
@@ -2108,7 +2115,7 @@ experiments = [
         ),
         render_filter_override={
             "seed": [42],
-            "num_images": [70],
+            "num_images": [80],
         },
     ),
     Experiment(
@@ -2117,7 +2124,7 @@ experiments = [
         "Test for combining relaxed COLMAP cameras using glue with pose optimization",
         {
             "seed": [42],
-            "num_images": [70],
+            "num_images": [80],
             # "num_images": [40, 60, 80],
             # "num_images": [40],
             "choice": ["combined", "colmap", "vggt"],
@@ -2131,13 +2138,13 @@ experiments = [
         PlotConfig(
             x_axis="",
             split_param="align_glue,colmap_mode",
-            metric_keys=["rre", "rte", "num_aligned", "psnr", "ssim", "lpips"],
+            metric_keys=["eval_rre", "eval_rte", "num_aligned", "psnr", "ssim", "lpips"],
             max_render_cols=4,
             render_nums=[0, 2],
         ),
         render_filter_override={
             "seed": [42],
-            "num_images": [70],
+            "num_images": [80],
         },
     ),
 ]
@@ -2174,9 +2181,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--check_only", action="store_true", help="Only check the status of the experiments without running anything"
     )
-    parser.add_argument(
-        "--enable_viewer", action="store_true", help="Enable the splatting viewer"
-    )
+    parser.add_argument("--enable_viewer", action="store_true", help="Enable the splatting viewer")
 
     args = parser.parse_args()
 
