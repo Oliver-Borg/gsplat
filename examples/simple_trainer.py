@@ -1227,6 +1227,12 @@ class Runner:
         )
         ellipse_time = 0
         metrics = defaultdict(list)
+        # NOTE: This is actually evaluating the RTE/RRE for training cams instead of eval cams.
+        # This is actually what we want.
+        for i in range(len(self.common_names)):
+            if "all_rre" in align_metrics and "all_rte" in align_metrics:
+                metrics["eval_rre"].append(torch.tensor(align_metrics["all_rre"][i]))
+                metrics["eval_rte"].append(torch.tensor(align_metrics["all_rte"][i]))
         with ThreadPoolExecutor(max_workers=8) as executor:
             for i, data in enumerate(tqdm.tqdm(valloader)):
                 camtoworlds: torch.tensor = data["camtoworld"].to(device)
@@ -1272,9 +1278,6 @@ class Runner:
                     metrics["ssim"].append(self.ssim(colors_p, pixels_p))
                     metrics["lpips"].append(self.lpips(colors_p, pixels_p))
                     metrics["depth_factor"].append(depths.max())
-                    if "mean_rre_deg" in align_metrics and "mean_rte" in align_metrics:
-                        metrics["eval_rre"].append(torch.tensor(align_metrics.get("mean_rre_deg", 0.0)))
-                        metrics["eval_rte"].append(torch.tensor(align_metrics.get("mean_rte", 0.0)))
                     if cfg.use_bilateral_grid:
                         cc_colors = color_correct(colors, pixels)
                         cc_colors_p = cc_colors.permute(0, 3, 1, 2)  # [1, 3, H, W]
