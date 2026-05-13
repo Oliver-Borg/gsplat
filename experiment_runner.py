@@ -104,7 +104,8 @@ class Config:
     num_points_per_image: float = 1100
     num_points_value: int | None = None
     sampling_mode: SAMPLING_MODE = "voxels"
-    near_filtering: bool = False
+    near_filtering_strength: float = 0.0
+    near_filtering_quorum: int = 1
     use_ba: bool = False
     max_ba_iterations: int = 50
     image_mode: IMAGE_MODE = "farthestpose"
@@ -148,7 +149,8 @@ class Config:
         instance.num_points_per_image = data.get("num_points_per_image", cls.num_points_per_image)
         instance.num_points_value = data.get("num_points_value", cls.num_points_value)
         instance.sampling_mode = data.get("sampling_mode", cls.sampling_mode)
-        instance.near_filtering = data.get("near_filtering", cls.near_filtering)
+        instance.near_filtering_strength = data.get("near_filtering_strength", cls.near_filtering_strength)
+        instance.near_filtering_quorum = data.get("near_filtering_quorum", cls.near_filtering_quorum)
         instance.use_ba = data.get("use_ba", cls.use_ba)
         instance.max_ba_iterations = data.get("max_ba_iterations", cls.max_ba_iterations)
         instance.image_mode = data.get("image_mode", cls.image_mode)
@@ -202,6 +204,8 @@ class Config:
             self.depth_conf_mode = "disabled"
             self.num_images = len(os.listdir(Path(self.dataset.directory) / Path(self.dataset.data_folder_name)))
             self.num_cameras = self.num_images
+        else:
+            assert self.gt_eval
 
         training_set_max_size = int(
             len(os.listdir(Path(self.dataset.directory) / Path(self.dataset.data_folder_name))) * 7 / 8
@@ -216,7 +220,11 @@ class Config:
 
         if self.choice != "vggt" and self.choice != "combined":
             self.depth_conf_mode = "disabled"
-            self.near_filtering = False
+            self.near_filtering_strength = 0.0
+            self.near_filtering_quorum = 1
+
+        if self.near_filtering_strength == 0.0:
+            self.near_filtering_quorum = 1
 
         if self.choice == "vggt" and not self.use_ba:
             self.shared_camera = False
@@ -295,8 +303,9 @@ class Config:
                     ]
                 )
             parts.append(self.sampling_mode)
-            if self.near_filtering:
-                parts.append("nearfilter")
+            if self.near_filtering_strength > 0.0:
+                parts.append(f"nf{self.near_filtering_strength}")
+                parts.append(f"nq{self.near_filtering_quorum}")
 
             if self.error_opa:
                 parts.append("errconf")
@@ -330,8 +339,9 @@ class Config:
             if self.sampling_mode == "ba" and self.camera_src == "vggt":
                 parts.append(self.camera_type.lower().replace("simple_", "m"))
                 parts.append(self.sampling_mode)
-                if self.near_filtering:
-                    parts.append("nearfilter")
+                if self.near_filtering_strength > 0.0:
+                    parts.append(f"nf{self.near_filtering_strength}")
+                    parts.append(f"nq{self.near_filtering_quorum}")
             elif self.pcd_src == "vggt" or self.pcd_src == "both":
                 parts.extend(
                     [
@@ -340,8 +350,9 @@ class Config:
                         self.sampling_mode,
                     ]
                 )
-                if self.near_filtering:
-                    parts.append("nearfilter")
+                if self.near_filtering_strength > 0.0:
+                    parts.append(f"nf{self.near_filtering_strength}")
+                    parts.append(f"nq{self.near_filtering_quorum}")
 
             if self.error_opa:
                 parts.append("errconf")
@@ -471,8 +482,8 @@ class Config:
         if self.choice == "gt":
             return False
 
-        if self.near_filtering:
-            return True
+        # if self.near_filtering_strength > 0.0:
+        #     return True
 
         if self.choice == "combined":
             if self.reconstruction_time < datetime.datetime(2026, 4, 25, 11, 30, 0).timestamp():
@@ -516,7 +527,8 @@ class Config:
             "seed": self.seed,
             "conf_thres_value": self.conf_thres_value,
             "sampling_mode": self.sampling_mode,
-            "near_filtering": self.near_filtering,
+            "near_filtering_strength": self.near_filtering_strength,
+            "near_filtering_quorum": self.near_filtering_quorum,
             "image_mode": self.image_mode,
             "camera_type": self.camera_type,
             "colmap_mode": self.colmap_mode,
@@ -2180,19 +2192,48 @@ experiments = [
             "seed": [42],
             "num_images": [100],
             "sampling_mode": ["random"],
+            "pose_opt": [True],
+            "gt_eval": True,
             "choice": ["vggt"],
-            "near_filtering": [True, False],
+            "near_filtering_strength": [0.0, 0.5, 0.9, 1.0],
+            "near_filtering_quorum": [1, 2, 10],
         },
         PlotConfig(
             x_axis="",
-            split_param="near_filtering",
+            split_param="near_filtering_strength,near_filtering_quorum",
             metric_keys=["eval_rre", "eval_rte", "num_aligned", "psnr", "ssim", "lpips"],
             max_render_cols=4,
             render_nums=[0, 2],
         ),
         render_filter_override={
             "seed": [42],
-            "num_images": [25],
+            "num_images": [100],
+        },
+    ),
+    Experiment(
+        "near_filtering_gt_cams",
+        99,
+        "Test for near filtering using VGGT depth map",
+        {
+            "seed": [42],
+            "num_images": [100],
+            "sampling_mode": ["random"],
+            "gt_eval": True,
+            "choice": ["vggt"],
+            "use_gt_cams": True,
+            "near_filtering_strength": [0.0, 0.5, 0.9, 1.0],
+            "near_filtering_quorum": [1, 2, 10],
+        },
+        PlotConfig(
+            x_axis="",
+            split_param="near_filtering_strength,near_filtering_quorum",
+            metric_keys=["eval_rre", "eval_rte", "num_aligned", "psnr", "ssim", "lpips"],
+            max_render_cols=4,
+            render_nums=[0, 2],
+        ),
+        render_filter_override={
+            "seed": [42],
+            "num_images": [100],
         },
     ),
 ]
