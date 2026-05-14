@@ -1,0 +1,16 @@
+{
+    "seed": [
+        42
+    ],
+    "num_images": [
+        25
+    ],
+    "choice": [
+        "vggt"
+    ],
+    "near_filtering": [
+        true,
+        false
+    ],
+    "dataset": "lego"
+}

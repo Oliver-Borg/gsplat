@@ -3,12 +3,14 @@
 \label{tab:99_copy_mode_bicycle}
 \begin{tabular}{llrrrr}
 \toprule
-Choice & Copy Mode & RRE ↓ ↓ & RTE ↓ ↓ & Aligned Cameras ↑ ↑ & Composite Quality ↑ ↑ \\
+Choice & Copy Mode & RRE ↓ & RTE ↓ & Aligned Cameras ↑ & Composite Quality ↑ \\
 \midrule
-COLMAP & crop & 1.583 & 0.052 & 14.000 & -0.284 \\
-VGGT & crop & NaN & NaN & NaN & -0.099 \\
-COLMAP & square & 0.121 & 0.012 & 99.667 & 0.286 \\
-VGGT & square & 0.994 & 0.090 & 100.000 & 0.084 \\
+COLMAP & crop & 0.567 & 0.017 & \underline{14} & -0.271 \\
+COLMAP & square & \underline{0.115} & \underline{0.011} & \textbf{100} & \underline{0.283} \\
+COLMAP &  & \textbf{0.107} & \textbf{0.008} & \textbf{100} & \textbf{0.345} \\
+VGGT & crop & 4.618 & 0.377 & \textbf{100} & -0.102 \\
+VGGT & square & 1.002 & 0.090 & \textbf{100} & 0.084 \\
+VGGT &  & 0.857 & 0.067 & \textbf{100} & 0.086 \\
 \bottomrule
 \end{tabular}
 \end{table}

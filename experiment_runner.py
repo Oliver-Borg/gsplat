@@ -106,6 +106,9 @@ class Config:
     sampling_mode: SAMPLING_MODE = "voxels"
     near_filtering_strength: float = 0.0
     near_filtering_quorum: int = 1
+    reconstruct_pose_opt: bool = False
+    optimisation_iterations: int = 0
+    optimisation_neighbourhood: int = 10
     use_ba: bool = False
     max_ba_iterations: int = 50
     image_mode: IMAGE_MODE = "farthestpose"
@@ -151,6 +154,11 @@ class Config:
         instance.sampling_mode = data.get("sampling_mode", cls.sampling_mode)
         instance.near_filtering_strength = data.get("near_filtering_strength", cls.near_filtering_strength)
         instance.near_filtering_quorum = data.get("near_filtering_quorum", cls.near_filtering_quorum)
+        instance.reconstruct_pose_opt = data.get("reconstruct_pose_opt", cls.reconstruct_pose_opt)
+        instance.optimisation_iterations = data.get("optimisation_iterations", cls.optimisation_iterations)
+        instance.optimisation_neighbourhood = data.get(
+            "optimisation_neighbourhood", cls.optimisation_neighbourhood
+        )
         instance.use_ba = data.get("use_ba", cls.use_ba)
         instance.max_ba_iterations = data.get("max_ba_iterations", cls.max_ba_iterations)
         instance.image_mode = data.get("image_mode", cls.image_mode)
@@ -222,6 +230,10 @@ class Config:
             self.depth_conf_mode = "disabled"
             self.near_filtering_strength = 0.0
             self.near_filtering_quorum = 1
+
+        if self.choice != "vggt":
+            self.reconstruct_pose_opt = False
+            self.optimisation_iterations = 0
 
         if self.near_filtering_strength == 0.0:
             self.near_filtering_quorum = 1
@@ -307,6 +319,13 @@ class Config:
                 parts.append(f"nf{self.near_filtering_strength}")
                 parts.append(f"nq{self.near_filtering_quorum}")
 
+            if self.reconstruct_pose_opt:
+                parts.append("recposeopt")
+
+            if self.optimisation_iterations > 0:
+                parts.append(f"opti{self.optimisation_iterations}")
+                parts.append(f"optn{self.optimisation_neighbourhood}")
+
             if self.error_opa:
                 parts.append("errconf")
             parts.append(self.image_mode)
@@ -353,6 +372,13 @@ class Config:
                 if self.near_filtering_strength > 0.0:
                     parts.append(f"nf{self.near_filtering_strength}")
                     parts.append(f"nq{self.near_filtering_quorum}")
+
+            if self.reconstruct_pose_opt:
+                parts.append("recposeopt")
+
+            if self.optimisation_iterations > 0:
+                parts.append(f"opti{self.optimisation_iterations}")
+                parts.append(f"optn{self.optimisation_neighbourhood}")
 
             if self.error_opa:
                 parts.append("errconf")
@@ -485,6 +511,12 @@ class Config:
         # if self.near_filtering_strength > 0.0:
         #     return True
 
+        if self.reconstruct_pose_opt:
+            return True
+
+        if self.optimisation_iterations > 0:
+            return True
+
         if self.choice == "combined":
             if self.reconstruction_time < datetime.datetime(2026, 4, 25, 11, 30, 0).timestamp():
                 return True
@@ -529,6 +561,9 @@ class Config:
             "sampling_mode": self.sampling_mode,
             "near_filtering_strength": self.near_filtering_strength,
             "near_filtering_quorum": self.near_filtering_quorum,
+            "reconstruct_pose_opt": self.reconstruct_pose_opt,
+            "optimisation_iterations": self.optimisation_iterations,
+            "optimisation_neighbourhood": self.optimisation_neighbourhood,
             "image_mode": self.image_mode,
             "camera_type": self.camera_type,
             "colmap_mode": self.colmap_mode,
@@ -829,6 +864,7 @@ class PlotConfig:
     render_nums: list[int] = field(default_factory=lambda: [0])
     shared_colors: bool = False
     raw_metrics: bool = False
+    make_camera_plot: bool = False
 
 
 @dataclass
@@ -990,6 +1026,10 @@ class Experiment:
         configs = self.get_configs(dataset_name)
         return [Path(config.input_name) for config in configs]
 
+    def get_render_input_paths(self, dataset_name: str):
+        configs = self.get_render_configs(dataset_name)
+        return [Path(config.input_name) for config in configs]
+
     def get_render_output_paths(self, dataset_name: str):
         configs = self.get_render_configs(dataset_name)
         return [Path(config.output_name) for config in configs]
@@ -1016,6 +1056,11 @@ class Experiment:
                 if self.render_filter_override != {}
                 else None
             ),
+            camera_folders=(
+                list(path.name for path in self.get_render_input_paths(dataset_name))
+                if self.render_filter_override != {}
+                else None
+            ),
             create_pcp=create_pcp,
             val_steps=self.val_steps,
             title=self.description,
@@ -1034,6 +1079,7 @@ class Experiment:
             render_nums=self.plot_args.render_nums,
             shared_colors=self.plot_args.shared_colors,
             plot_raw=self.plot_args.raw_metrics,
+            make_camera_plot=self.plot_args.make_camera_plot,
         )
 
         # print("Plotted metrics from these files")
@@ -1844,7 +1890,11 @@ experiments = [
             "choice": ["vggt", "colmap"],
         },
         PlotConfig(
-            x_axis="", split_param="copy_mode", metric_keys=["rre", "rte", "num_aligned", "quality"], raw_metrics=True
+            x_axis="",
+            split_param="copy_mode",
+            metric_keys=["rre", "rte", "num_aligned", "quality"],
+            raw_metrics=True,
+            make_camera_plot=True,
         ),
     ),
     Experiment(
@@ -2013,6 +2063,7 @@ experiments = [
             x_axis="",
             split_param="random_init,pcd_src,real_num_points",
             metric_keys=["eval_rre", "eval_rte", "psnr", "ssim", "lpips"],
+            make_camera_plot=True,
         ),
         render_filter_override={
             "seed": [42],
@@ -2040,6 +2091,7 @@ experiments = [
             x_axis="",
             split_param="random_init,pcd_src,real_num_points,use_ba",
             metric_keys=["eval_rre", "eval_rte", "psnr", "ssim", "lpips"],
+            make_camera_plot=True,
         ),
         render_filter_override={
             "seed": [42],
@@ -2071,6 +2123,58 @@ experiments = [
         render_filter_override={
             "seed": [42],
             "num_images": [100],
+        },
+    ),
+    Experiment(
+        "camera_modes",
+        99,
+        "Test for different camera modes.",
+        {
+            "seed": [42],
+            "num_images": [100],
+            "sampling_mode": ["random"],
+            "use_ba": [True, False],
+            "pose_opt": [True],
+            "gt_eval": True,
+            "choice": ["vggt", "colmap"],
+            "max_ba_iterations": [50, 3000],
+            "camera_type": ["SIMPLE_RADIAL", "SIMPLE_PINHOLE"],
+        },
+        PlotConfig(
+            x_axis="",
+            split_param="sampling_mode,use_ba,max_ba_iterations,camera_type",
+            metric_keys=["rre", "rte", "num_aligned", "quality"],
+            apply_jitter=False,
+            raw_metrics=True,
+            make_camera_plot=True,
+        ),
+        render_filter_override={
+            "seed": [42],
+            "num_images": [100],
+        },
+    ),
+    Experiment(
+        "nearest_pose",
+        99,
+        "Test for different camera modes.",
+        {
+            "seed": [42],  # , 43, 44
+            "num_images": [5, 10, 20, 30, 40],
+            "sampling_mode": ["random"],
+            "image_mode": ["nearestpose", "farthestpose"],
+            "choice": ["vggt", "colmap"],
+        },
+        PlotConfig(
+            x_axis="num_images",
+            split_param="image_mode",
+            metric_keys=["rre", "rte", "num_aligned", "quality"],
+            apply_jitter=False,
+            raw_metrics=True,
+            make_camera_plot=True,
+        ),
+        render_filter_override={
+            "seed": [42],
+            "num_images": [5, 10, 20, 30, 40],
         },
     ),
     Experiment(
@@ -2230,6 +2334,58 @@ experiments = [
             metric_keys=["eval_rre", "eval_rte", "num_aligned", "psnr", "ssim", "lpips"],
             max_render_cols=4,
             render_nums=[0, 2],
+        ),
+        render_filter_override={
+            "seed": [42],
+            "num_images": [100],
+        },
+    ),
+    Experiment(
+        "reconstruct_pose_opt",
+        99,
+        "Test for reconstruct pose opt",
+        {
+            "seed": [42],
+            "num_images": [100],
+            "sampling_mode": ["random"],
+            "gt_eval": True,
+            "choice": ["vggt", "colmap"],
+            "reconstruct_pose_opt": [True, False],
+            "pose_opt": [True, False],
+        },
+        PlotConfig(
+            x_axis="",
+            split_param="reconstruct_pose_opt,pose_opt",
+            metric_keys=["rre", "rte", "num_aligned", "eval_rre", "eval_rte", "quality"],
+            max_render_cols=4,
+            render_nums=[0, 2],
+            make_camera_plot=True,
+        ),
+        render_filter_override={
+            "seed": [42],
+            "num_images": [100],
+        },
+    ),
+    Experiment(
+        "optimisation_iterations",
+        99,
+        "Test for reconstruct optimisation iterations",
+        {
+            "seed": [42],
+            "num_images": [100],
+            "sampling_mode": ["random"],
+            "gt_eval": True,
+            "choice": ["vggt"],
+            "optimisation_iterations": [0, 1, 10, 20, 30],  # , 100
+            "pose_opt": [True, False],
+        },
+        PlotConfig(
+            x_axis="",
+            split_param="optimisation_iterations,pose_opt",
+            metric_keys=["rre", "rte", "num_aligned", "eval_rre", "eval_rte", "quality"],
+            max_render_cols=4,
+            render_nums=[0, 2],
+            make_camera_plot=True,
         ),
         render_filter_override={
             "seed": [42],

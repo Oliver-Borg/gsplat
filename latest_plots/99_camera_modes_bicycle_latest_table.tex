@@ -1,0 +1,16 @@
+\begin{table}[H]
+\caption{Test for different camera modes. (Bicycle)}
+\label{tab:99_camera_modes_bicycle}
+\begin{tabular}{lllrlrrrr}
+\toprule
+Choice & Sampling Mode & Use Ba & Max Ba Iterations & Camera Type & RRE ↓ & RTE ↓ & Aligned Cameras ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP &  &  &  &  & \textbf{0.107} & \textbf{0.008} & \textbf{100} & \textbf{0.443} \\
+VGGT & random & Use BA & 50 & pinhole & 0.871 & \underline{0.047} & \textbf{100} & 0.130 \\
+VGGT & random & Use BA & 50 & radial & \underline{0.792} & 0.048 & \textbf{100} & 0.138 \\
+VGGT & random & Use BA & 3000 & pinhole & 0.871 & \underline{0.047} & \textbf{100} & 0.129 \\
+VGGT & random & Use BA & 3000 & radial & \underline{0.792} & 0.048 & \textbf{100} & 0.138 \\
+VGGT & random &  &  &  & 0.857 & 0.067 & \textbf{100} & \underline{0.165} \\
+\bottomrule
+\end{tabular}
+\end{table}

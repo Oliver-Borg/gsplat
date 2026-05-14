@@ -1,0 +1,23 @@
+\begin{table}[H]
+\caption{Test for different camera modes. (Bicycle)}
+\label{tab:99_nearest_pose_bicycle}
+\begin{tabular}{lrlrrrr}
+\toprule
+Choice & Num Images & Image Mode & RRE ↓ & RTE ↓ & Aligned Cameras ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP & 20 & farthestpose &  &  &  & -0.524 \\
+COLMAP & 30 & farthestpose & 0.592 & 0.010 & 8 & -0.216 \\
+COLMAP & 40 & farthestpose & \textbf{0.312} & 0.017 & 18 & -0.109 \\
+VGGT & 5 & farthestpose & 2.185 & 0.191 & 5 &  \\
+VGGT & 5 & nearestpose & 0.994 & \underline{0.009} & 5 &  \\
+VGGT & 10 & farthestpose & 1.569 & 0.142 & 10 & -0.091 \\
+VGGT & 10 & nearestpose & 0.807 & \textbf{0.008} & 10 &  \\
+VGGT & 20 & farthestpose & 1.345 & 0.119 & 20 & 0.004 \\
+VGGT & 20 & nearestpose & 0.515 & 0.010 & 20 &  \\
+VGGT & 30 & farthestpose & 0.980 & 0.091 & \underline{30} & \underline{0.030} \\
+VGGT & 30 & nearestpose & \underline{0.366} & 0.011 & \underline{30} &  \\
+VGGT & 40 & farthestpose & 0.886 & 0.087 & \textbf{40} & \textbf{0.045} \\
+VGGT & 40 & nearestpose & 0.497 & 0.013 & \textbf{40} &  \\
+\bottomrule
+\end{tabular}
+\end{table}
