@@ -1,10 +1,13 @@
 \begin{table}[H]
 \caption{A comparison of different camera types with bundle adjustment (Bonsai)}
 \label{tab:10_camera_type_bonsai}
-\begin{tabular}{lrrrrrrr}
+\begin{tabular}{llrr}
 \toprule
-Choice & Camera Type & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Final Gaussian Count ↓ \\
+Choice & Camera Type & RRE ↓ & RTE ↓ \\
 \midrule
+VGGT & pinhole & 0.714 & \underline{0.037} \\
+VGGT & radial & \underline{0.710} & \underline{0.037} \\
+VGGT &  & \textbf{0.199} & \textbf{0.012} \\
 \bottomrule
 \end{tabular}
 \end{table}

@@ -1,27 +1,18 @@
 \begin{table}[H]
 \caption{The effect of using ground truth extrinsics, intrinsics and points on VGGT and COLMAP results (Bonsai)}
 \label{tab:06_gt_cams_bonsai}
-\begin{tabular}{llllrrrrrr}
+\begin{tabular}{llllr}
 \toprule
-Choice & Use Gt Extrinsics & Use Gt Intrinsics & Use Gt Points & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Final Gaussian Count ↓ \\
+Choice & Use Gt Extrinsics & Use Gt Intrinsics & Use Gt Points & Composite Quality ↑ \\
 \midrule
-COLMAP &  &  &  & 0.513 & 0.057 & 18.647 & 0.314 & 0.585 & 1000000.000 \\
-GT &  &  &  & NaN & NaN & 31.678 & 0.117 & 0.948 & 1000000.000 \\
-VGGT &  &  &  & 0.790 & 0.107 & 17.542 & 0.437 & 0.575 & 1000000.000 \\
-COLMAP &  &  & GT Points & 0.513 & 0.057 & 18.657 & 0.309 & 0.584 & 1000000.000 \\
-VGGT &  &  & GT Points & 0.790 & 0.107 & 17.596 & 0.426 & 0.573 & 1000000.000 \\
-COLMAP &  & GT Intrinsics &  & 0.513 & 0.057 & 18.618 & 0.322 & 0.584 & 1000000.000 \\
-VGGT &  & GT Intrinsics &  & 0.790 & 0.107 & 18.617 & 0.402 & 0.607 & 1000000.000 \\
-COLMAP &  & GT Intrinsics & GT Points & 0.513 & 0.057 & 18.588 & 0.310 & 0.580 & 1000000.000 \\
-VGGT &  & GT Intrinsics & GT Points & 0.790 & 0.107 & 18.743 & 0.374 & 0.607 & 1000000.000 \\
-COLMAP & GT Extrinsics &  &  & 0.513 & 0.057 & 22.858 & 0.218 & 0.702 & 1000000.000 \\
-VGGT & GT Extrinsics &  &  & 0.790 & 0.107 & 18.512 & 0.369 & 0.586 & 1000000.000 \\
-COLMAP & GT Extrinsics &  & GT Points & 0.513 & 0.057 & 22.737 & 0.209 & 0.703 & 1000000.000 \\
-VGGT & GT Extrinsics &  & GT Points & 0.790 & 0.107 & 18.677 & 0.355 & 0.589 & 1000000.000 \\
-COLMAP & GT Extrinsics & GT Intrinsics &  & 0.513 & 0.057 & 28.554 & 0.166 & 0.890 & 1000000.000 \\
-VGGT & GT Extrinsics & GT Intrinsics &  & 0.790 & 0.107 & 25.861 & 0.212 & 0.831 & 1000000.000 \\
-COLMAP & GT Extrinsics & GT Intrinsics & GT Points & 0.513 & 0.057 & 29.009 & 0.144 & 0.914 & 1000000.000 \\
-VGGT & GT Extrinsics & GT Intrinsics & GT Points & 0.790 & 0.107 & 28.884 & 0.144 & 0.914 & 1000000.000 \\
+VGGT &  &  &  & 0.297 \\
+VGGT &  &  & GT Points & 0.306 \\
+VGGT &  & GT Intrinsics &  & 0.358 \\
+VGGT &  & GT Intrinsics & GT Points & 0.378 \\
+VGGT & GT Extrinsics &  &  & 0.365 \\
+VGGT & GT Extrinsics &  & GT Points & 0.376 \\
+VGGT & GT Extrinsics & GT Intrinsics &  & \underline{0.743} \\
+VGGT & GT Extrinsics & GT Intrinsics & GT Points & \textbf{0.889} \\
 \bottomrule
 \end{tabular}
 \end{table}

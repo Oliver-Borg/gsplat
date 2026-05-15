@@ -1,8 +1,6 @@
 {
     "seed": [
-        42,
-        43,
-        44
+        42
     ],
     "num_images": [
         100
@@ -11,7 +9,7 @@
         "ba",
         "voxels"
     ],
-    "all_opt": [
+    "pose_opt": [
         true,
         false
     ],
@@ -20,8 +18,7 @@
         "SIMPLE_PINHOLE"
     ],
     "num_points_per_image": [
-        1100,
-        2200
+        1100
     ],
     "choice": [
         "vggt",

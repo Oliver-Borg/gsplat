@@ -3,15 +3,14 @@
 \label{tab:99_dataset_type_bonsai}
 \begin{tabular}{lrrrrrrrr}
 \toprule
-Choice & Num Images & Num Points & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Final Gaussian Count ↓ \\
+Choice & Num Images & Num Points & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Final Gaussian Count \\
 \midrule
-COLMAP & 50 & 33432 & 0.924 & 0.127 & 17.315 & 0.420 & 0.549 & 1000000.000 \\
-COLMAP & 50 & 36535 & 0.526 & 0.082 & 18.348 & 0.355 & 0.576 & 1000000.000 \\
-VGGT & 50 & 55000 & 0.808 & 0.105 & 16.561 & 0.465 & 0.534 & 1000000.000 \\
-COLMAP & 100 & 79141 & 0.489 & 0.052 & 18.634 & 0.310 & 0.586 & 1000000.000 \\
-COLMAP & 100 & 80705 & 0.563 & 0.064 & 18.469 & 0.325 & 0.579 & 1000000.000 \\
-COLMAP & 100 & 80830 & 0.486 & 0.054 & 18.837 & 0.306 & 0.591 & 1000000.000 \\
-VGGT & 100 & 110000 & 0.790 & 0.107 & 17.542 & 0.437 & 0.575 & 1000000.000 \\
+VGGT & 50 & 55000 & 0.801 & 0.103 & \underline{16.604} & \underline{0.463} & \underline{0.535} & 1000000 \\
+VGGT & 50 & 110000 & 0.801 & 0.103 &  &  &  &  \\
+VGGT & 50 &  & \underline{0.363} & \underline{0.040} &  &  &  &  \\
+VGGT & 100 & 110000 & 0.790 & 0.107 & \textbf{17.535} & \textbf{0.437} & \textbf{0.574} & 1000000 \\
+VGGT & 100 & 220000 & 0.790 & 0.107 &  &  &  &  \\
+VGGT & 100 &  & \textbf{0.199} & \textbf{0.012} &  &  &  &  \\
 \bottomrule
 \end{tabular}
 \end{table}

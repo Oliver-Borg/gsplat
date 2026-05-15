@@ -1,0 +1,34 @@
+\begin{table}[H]
+\caption{Combining cameras and point clouds (Bonsai)}
+\label{tab:07_combined_align_bonsai}
+\begin{tabular}{lrlllrrrr}
+\toprule
+Choice & Num Images & Sampling Mode & Align Mode & Keep Backup Cams & RRE ↓ & RTE ↓ & Aligned Cameras ↑ & Composite Quality ↑ \\
+\midrule
+VGGT & 25 & random & Global Alignment & Fallback Cams & 1.213 & 0.109 & 25 &  \\
+VGGT & 25 & random & Global Alignment &  & 0.512 & 0.037 & 13 &  \\
+VGGT & 25 & random & Local Alignment & Fallback Cams & 1.213 & 0.109 & 25 &  \\
+VGGT & 25 & random & Local Alignment &  & 0.512 & 0.037 & 13 &  \\
+VGGT & 25 & random &  &  & 0.952 & 0.109 & 25 &  \\
+VGGT & 25 &  &  &  & 0.512 & 0.037 & 13 &  \\
+VGGT & 50 & random & Global Alignment & Fallback Cams & \underline{0.363} & 0.040 & 50 &  \\
+VGGT & 50 & random & Global Alignment &  & \underline{0.363} & 0.040 & 50 &  \\
+VGGT & 50 & random & Local Alignment & Fallback Cams & \underline{0.363} & 0.040 & 50 &  \\
+VGGT & 50 & random & Local Alignment &  & \underline{0.363} & 0.040 & 50 &  \\
+VGGT & 50 & random &  &  & 0.801 & 0.103 & 50 &  \\
+VGGT & 50 &  &  &  & \underline{0.363} & 0.040 & 50 &  \\
+VGGT & 75 & random & Global Alignment & Fallback Cams & 0.386 & \underline{0.020} & \underline{75} &  \\
+VGGT & 75 & random & Global Alignment &  & 0.386 & \underline{0.020} & \underline{75} &  \\
+VGGT & 75 & random & Local Alignment & Fallback Cams & 0.386 & \underline{0.020} & \underline{75} &  \\
+VGGT & 75 & random & Local Alignment &  & 0.386 & \underline{0.020} & \underline{75} &  \\
+VGGT & 75 & random &  &  & 0.901 & 0.113 & \underline{75} &  \\
+VGGT & 75 &  &  &  & 0.386 & \underline{0.020} & \underline{75} &  \\
+VGGT & 100 & random & Global Alignment & Fallback Cams & \textbf{0.199} & \textbf{0.012} & \textbf{100} &  \\
+VGGT & 100 & random & Global Alignment &  & \textbf{0.199} & \textbf{0.012} & \textbf{100} &  \\
+VGGT & 100 & random & Local Alignment & Fallback Cams & \textbf{0.199} & \textbf{0.012} & \textbf{100} &  \\
+VGGT & 100 & random & Local Alignment &  & \textbf{0.199} & \textbf{0.012} & \textbf{100} &  \\
+VGGT & 100 & random &  &  & 0.790 & 0.107 & \textbf{100} & \textbf{0.311} \\
+VGGT & 100 &  &  &  & \textbf{0.199} & \textbf{0.012} & \textbf{100} &  \\
+\bottomrule
+\end{tabular}
+\end{table}

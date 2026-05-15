@@ -1,1 +1,4 @@
-Choice,Camera Type,RRE ↓,RTE ↓,PSNR ↑,LPIPS ↓,SSIM ↑,Final Gaussian Count ↓
+choice,camera_type,rre,rte
+VGGT,pinhole,0.7144,0.037124
+VGGT,radial,0.7099,0.037375
+VGGT,,0.1993,0.012003

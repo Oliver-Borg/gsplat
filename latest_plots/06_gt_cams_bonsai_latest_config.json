@@ -1,8 +1,6 @@
 {
     "seed": [
-        42,
-        43,
-        44
+        42
     ],
     "num_images": [
         100
@@ -22,8 +20,7 @@
     ],
     "choice": [
         "vggt",
-        "colmap",
-        "gt"
+        "colmap"
     ],
     "num_steps": [
         15000

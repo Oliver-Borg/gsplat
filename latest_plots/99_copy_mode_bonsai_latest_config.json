@@ -3,9 +3,7 @@
         100
     ],
     "seed": [
-        42,
-        43,
-        44
+        42
     ],
     "sampling_mode": [
         "voxels"

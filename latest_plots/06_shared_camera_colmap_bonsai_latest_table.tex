@@ -1,0 +1,30 @@
+\begin{table}[H]
+\caption{A test for shared cameras with COLMAP (Bonsai)}
+\label{tab:06_shared_camera_colmap_bonsai}
+\begin{tabular}{lrlrrrr}
+\toprule
+Choice & Num Images & Shared Camera & RRE ↓ & RTE ↓ & Aligned Cameras ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP & 10 & Shared Cam & 12.083 & 0.176 & 4 & -0.270 \\
+COLMAP & 10 &  & 14.249 & 0.037 & 3 & -0.286 \\
+COLMAP & 20 & Shared Cam & 3.109 & \textbf{0.004} & 3 & -0.245 \\
+COLMAP & 20 &  & 1.215 & 0.031 & 9 & -0.064 \\
+COLMAP & 30 & Shared Cam & 49.752 & 1.663 & 15 & -0.247 \\
+COLMAP & 30 &  & 11.550 & 0.740 & 15 & -0.141 \\
+COLMAP & 40 & Shared Cam & 3.793 & 0.230 & 34 & 0.059 \\
+COLMAP & 40 &  & 7.063 & 0.674 & 26 & 0.063 \\
+COLMAP & 50 & Shared Cam & 0.363 & 0.040 & 50 & \textbf{0.439} \\
+COLMAP & 50 &  & 0.362 & 0.062 & 50 & 0.364 \\
+COLMAP & 60 &  & 0.659 & 0.115 & 60 & 0.373 \\
+COLMAP & 70 &  & 0.384 & 0.059 & 70 & 0.360 \\
+COLMAP & 80 &  & 10.797 & 1.673 & 80 & 0.353 \\
+COLMAP & 90 &  & 0.518 & 0.075 & \underline{90} & \underline{0.432} \\
+COLMAP & 100 &  & 0.870 & 0.093 & \textbf{100} & 0.386 \\
+VGGT & 60 & Shared Cam & 0.421 & 0.015 & 60 &  \\
+VGGT & 70 & Shared Cam & 0.325 & \underline{0.010} & 70 &  \\
+VGGT & 80 & Shared Cam & 0.295 & 0.012 & 80 &  \\
+VGGT & 90 & Shared Cam & \underline{0.262} & 0.012 & \underline{90} &  \\
+VGGT & 100 & Shared Cam & \textbf{0.199} & 0.012 & \textbf{100} &  \\
+\bottomrule
+\end{tabular}
+\end{table}

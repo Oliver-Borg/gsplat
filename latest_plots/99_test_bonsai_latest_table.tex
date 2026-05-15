@@ -3,24 +3,22 @@
 \label{tab:99_test_bonsai}
 \begin{tabular}{lrllrr}
 \toprule
-Choice & Val Step & Sampling Mode & Pose Opt & Validation Step RRE ↓ & Validation Step RTE ↓ \\
+Choice & Val Step & Sampling Mode & Pose Opt & Val RRE ↓ & Val RTE ↓ \\
 \midrule
-VGGT & 1 & ba &  & 0.628 & 0.008 \\
-VGGT & 1 & ba & Pose Opt & 0.628 & 0.008 \\
-VGGT & 1 & confidence &  & 0.790 & 0.025 \\
-VGGT & 1 & confidence & Pose Opt & 0.790 & 0.025 \\
-VGGT & 1 & random &  & 0.790 & 0.025 \\
-VGGT & 1 & random & Pose Opt & 0.790 & 0.025 \\
-VGGT & 1 & voxels &  & 0.790 & 0.025 \\
-VGGT & 1 & voxels & Pose Opt & 0.790 & 0.025 \\
-VGGT & 7000 & ba &  & 0.628 & 0.008 \\
-VGGT & 7000 & ba & Pose Opt & 0.468 & 0.007 \\
-VGGT & 7000 & confidence &  & 0.790 & 0.025 \\
-VGGT & 7000 & confidence & Pose Opt & 0.793 & 0.023 \\
-VGGT & 7000 & random &  & 0.790 & 0.025 \\
-VGGT & 7000 & random & Pose Opt & 0.798 & 0.023 \\
-VGGT & 7000 & voxels &  & 0.790 & 0.025 \\
-VGGT & 7000 & voxels & Pose Opt & 0.774 & 0.024 \\
+VGGT & 1 & confidence &  & 0.790 & \underline{0.025} \\
+VGGT & 1 & confidence & Pose Opt & 0.790 & \underline{0.025} \\
+VGGT & 1 & random &  & 0.790 & \underline{0.025} \\
+VGGT & 1 & random & Pose Opt & 0.790 & \underline{0.025} \\
+VGGT & 1 & voxels &  & 0.790 & \underline{0.025} \\
+VGGT & 1 & voxels & Pose Opt & 0.790 & \underline{0.025} \\
+VGGT & 7000 & confidence &  & 0.790 & \underline{0.025} \\
+VGGT & 7000 & confidence & Pose Opt & \underline{0.786} & \textbf{0.023} \\
+VGGT & 7000 & random &  & 0.790 & \underline{0.025} \\
+VGGT & 7000 & random & Pose Opt & 0.795 & \textbf{0.023} \\
+VGGT & 7000 & voxels &  & 0.790 & \underline{0.025} \\
+VGGT & 7000 & voxels & Pose Opt & \textbf{0.773} & \textbf{0.023} \\
+VGGT &  & ba &  &  &  \\
+VGGT &  &  &  &  &  \\
 \bottomrule
 \end{tabular}
 \end{table}

@@ -1,0 +1,4 @@
+choice,random_init,pose_opt,sampling_mode,num_aligned
+VGGT,,,ba,100
+VGGT,,,random,100
+VGGT,,,,100

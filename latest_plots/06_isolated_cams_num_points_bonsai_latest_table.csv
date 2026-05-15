@@ -1,0 +1,13 @@
+choice,num_images,random_init,pose_opt,sampling_mode
+VGGT,25,,,ba
+VGGT,25,,,random
+VGGT,25,,,
+VGGT,50,,,ba
+VGGT,50,,,random
+VGGT,50,,,
+VGGT,75,,,ba
+VGGT,75,,,random
+VGGT,75,,,
+VGGT,100,,,ba
+VGGT,100,,,random
+VGGT,100,,,

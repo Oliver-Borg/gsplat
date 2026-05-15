@@ -3,12 +3,12 @@
         42
     ],
     "num_images": [
-        80
+        100
     ],
     "sampling_mode": [
         "ba"
     ],
-    "all_opt": [
+    "pose_opt": [
         false
     ],
     "camera_type": [

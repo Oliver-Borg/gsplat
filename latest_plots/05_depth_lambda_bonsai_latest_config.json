@@ -3,18 +3,13 @@
         42
     ],
     "num_images": [
-        50
+        100
     ],
     "sampling_mode": [
-        "voxels",
         "random"
     ],
-    "depth_loss": [
-        true
-    ],
-    "depth_conf": [
-        true,
-        false
+    "depth_loss_mode": [
+        "points"
     ],
     "pose_opt": [
         true
@@ -24,10 +19,16 @@
         "colmap"
     ],
     "depth_lambda": [
+        0.0,
         0.01,
         0.1,
         1,
         10
+    ],
+    "depth_conf_mode": [
+        "disabled",
+        "standard",
+        "sigmoid"
     ],
     "dataset": "bonsai"
 }

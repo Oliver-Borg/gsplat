@@ -1,12 +1,15 @@
 \begin{table}[H]
 \caption{Test for camera mode (extended) (Bonsai)}
 \label{tab:10_camera_type_ext_bonsai}
-\begin{tabular}{lllllrrrrrrr}
+\begin{tabular}{llllrrrrrr}
 \toprule
-Choice & Camera Type & Pose Opt & Eval Opt & Sampling Mode & Num Images & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Final Gaussian Count ↓ \\
+Choice & Camera Type & Pose Opt & Sampling Mode & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Final Gaussian Count \\
 \midrule
-VGGT & pinhole &  &  & ba & 100 & 0.628 & 0.035 & 18.998 & 0.354 & 0.602 & 1000000.000 \\
-VGGT & pinhole & Pose Opt &  & ba & 100 & 0.628 & 0.035 & 19.621 & 0.306 & 0.619 & 1000000.000 \\
+VGGT & pinhole &  & ba & 0.714 & \underline{0.037} &  &  &  &  \\
+VGGT & radial &  & ba & \underline{0.710} & \underline{0.037} &  &  &  &  \\
+VGGT &  &  & voxels & 0.790 & 0.107 & \textbf{17.535} & \underline{0.437} & \textbf{0.574} & 1000000 \\
+VGGT &  &  &  & \textbf{0.199} & \textbf{0.012} &  &  &  &  \\
+VGGT &  & Pose Opt & voxels & 0.790 & 0.107 & \underline{17.388} & \textbf{0.403} & \underline{0.560} & 1000000 \\
 \bottomrule
 \end{tabular}
 \end{table}

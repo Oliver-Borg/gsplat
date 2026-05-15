@@ -1,0 +1,32 @@
+{
+    "seed": [
+        42
+    ],
+    "num_images": [
+        100
+    ],
+    "sampling_mode": [
+        "random"
+    ],
+    "num_points_per_image": [
+        1000
+    ],
+    "gt_eval": true,
+    "choice": [
+        "combined",
+        "colmap"
+    ],
+    "pcd_src": [
+        "both"
+    ],
+    "align_mode": [
+        "global"
+    ],
+    "keep_backup_cams": [
+        false
+    ],
+    "camera_src": [
+        "colmap"
+    ],
+    "dataset": "bonsai"
+}

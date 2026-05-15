@@ -1,0 +1,30 @@
+\begin{table}[H]
+\caption{Combining cameras and point clouds (Bonsai)}
+\label{tab:07_combined_bonsai}
+\begin{tabular}{lrllrrrrrr}
+\toprule
+Choice & Num Images & Camera Src & Pcd Src & Val RRE ↓ & Val RTE ↓ & Aligned Cameras ↑ & PSNR ↑ & LPIPS ↓ & SSIM ↑ \\
+\midrule
+VGGT & 25 & colmapcams & bothpcd &  &  & 13 &  &  &  \\
+VGGT & 25 & colmapcams & vggtpcd &  &  & 13 &  &  &  \\
+VGGT & 25 & vggtcams & bothpcd &  &  & 13 &  &  &  \\
+VGGT & 25 & vggtcams & colmappcd &  &  & 13 &  &  &  \\
+VGGT & 25 &  &  &  &  & 19 &  &  &  \\
+VGGT & 50 & colmapcams & bothpcd &  &  & 50 &  &  &  \\
+VGGT & 50 & colmapcams & vggtpcd &  &  & 50 &  &  &  \\
+VGGT & 50 & vggtcams & bothpcd &  &  & 50 &  &  &  \\
+VGGT & 50 & vggtcams & colmappcd &  &  & 50 &  &  &  \\
+VGGT & 50 &  &  &  &  & 50 &  &  &  \\
+VGGT & 75 & colmapcams & bothpcd &  &  & \underline{75} &  &  &  \\
+VGGT & 75 & colmapcams & vggtpcd &  &  & \underline{75} &  &  &  \\
+VGGT & 75 & vggtcams & bothpcd &  &  & \underline{75} &  &  &  \\
+VGGT & 75 & vggtcams & colmappcd &  &  & \underline{75} &  &  &  \\
+VGGT & 75 &  &  &  &  & \underline{75} &  &  &  \\
+VGGT & 100 & colmapcams & bothpcd &  &  & \textbf{100} &  &  &  \\
+VGGT & 100 & colmapcams & vggtpcd &  &  & \textbf{100} &  &  &  \\
+VGGT & 100 & vggtcams & bothpcd &  &  & \textbf{100} &  &  &  \\
+VGGT & 100 & vggtcams & colmappcd &  &  & \textbf{100} &  &  &  \\
+VGGT & 100 &  &  & \textbf{0.811} & \textbf{0.022} & \textbf{100} & \textbf{17.406} & \textbf{0.397} & \textbf{0.560} \\
+\bottomrule
+\end{tabular}
+\end{table}

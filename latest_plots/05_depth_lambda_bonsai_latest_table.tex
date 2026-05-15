@@ -1,16 +1,11 @@
 \begin{table}[H]
 \caption{COLMAP versus VGGT with depth loss (Bonsai)}
 \label{tab:05_depth_lambda_bonsai}
-\begin{tabular}{lrlllrrrrrr}
+\begin{tabular}{lrl}
 \toprule
-Choice & Depth Lambda & Depth Loss & Depth Conf & Sampling Mode & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Final Gaussian Count ↓ \\
+Choice & Depth Lambda & Depth Conf Mode \\
 \midrule
-VGGT & 0.000 & Depth Loss & Depth Confidence & voxels & 0.801 & 0.103 & 16.682 & 0.448 & 0.529 & 1000000.000 \\
-VGGT & 0.000 & Depth Loss & No Depth Confidence & voxels & 0.801 & 0.103 & 16.611 & 0.448 & 0.529 & 1000000.000 \\
-VGGT & 0.010 & Depth Loss & Depth Confidence & voxels & 0.801 & 0.103 & 16.830 & 0.427 & 0.537 & 1000000.000 \\
-VGGT & 0.010 & Depth Loss & No Depth Confidence & voxels & 0.801 & 0.103 & 16.848 & 0.426 & 0.538 & 1000000.000 \\
-VGGT & 0.100 & Depth Loss & Depth Confidence & voxels & 0.801 & 0.103 & 16.841 & 0.424 & 0.538 & 1000000.000 \\
-VGGT & 0.100 & Depth Loss & No Depth Confidence & voxels & 0.801 & 0.103 & 16.870 & 0.423 & 0.538 & 1000000.000 \\
+VGGT & 0 &  \\
 \bottomrule
 \end{tabular}
 \end{table}

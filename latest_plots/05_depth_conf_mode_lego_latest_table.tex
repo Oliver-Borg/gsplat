@@ -1,11 +1,12 @@
 \begin{table}[H]
 \caption{COLMAP versus VGGT with depth loss for different depth confidence modes. (Lego)}
 \label{tab:05_depth_conf_mode_lego}
-\begin{tabular}{ll}
+\begin{tabular}{llrrrr}
 \toprule
-Choice & Depth Conf Mode \\
+Choice & Depth Conf Mode & Composite Quality ↑ & Val RRE ↓ & Val RTE ↓ & Initial Points \\
 \midrule
-VGGT &  \\
+COLMAP &  & \underline{0.099} & \underline{12.833} & \underline{0.240} & 10350 \\
+VGGT &  & \textbf{0.568} & \textbf{0.272} & \textbf{0.006} & 95700 \\
 \bottomrule
 \end{tabular}
 \end{table}

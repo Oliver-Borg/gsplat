@@ -1,14 +1,12 @@
 \begin{table}[H]
 \caption{COLMAP versus VGGT with pose optimization (Bonsai)}
 \label{tab:04_pose_opt_bonsai}
-\begin{tabular}{llrrrrr}
+\begin{tabular}{llrrrrrr}
 \toprule
-Choice & Pose Opt & Validation Step RRE ↓ & Validation Step RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ \\
+Choice & Pose Opt & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
 \midrule
-COLMAP &  & 0.513 & 0.013 & 18.615 & 0.305 & 0.582 \\
-COLMAP & Pose Opt & 0.286 & 0.008 & 19.729 & 0.246 & 0.615 \\
-VGGT &  & 0.790 & 0.025 & 17.420 & 0.421 & 0.561 \\
-VGGT & Pose Opt & 0.774 & 0.021 & 17.354 & 0.385 & 0.555 \\
+VGGT &  & \underline{0.790} & \underline{0.025} & \textbf{17.425} & \underline{0.422} & \textbf{0.561} & \underline{0.297} \\
+VGGT & Pose Opt & \textbf{0.772} & \textbf{0.021} & \underline{17.345} & \textbf{0.386} & \underline{0.555} & \textbf{0.314} \\
 \bottomrule
 \end{tabular}
 \end{table}

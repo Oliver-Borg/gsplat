@@ -1,0 +1,4 @@
+choice,camera_src,pcd_src,eval_rre,eval_rte,psnr,lpips,ssim
+VGGT,colmapcams,bothpcd,,,,,
+VGGT,colmapcams,vggtpcd,,,,,
+VGGT,,,0.8112999200820923,0.0220319963991642,17.40581512451172,0.3973557949066162,0.559679388999939
