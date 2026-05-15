@@ -12,7 +12,7 @@ from pycolmap import SceneManager
 from tqdm import tqdm
 from typing_extensions import assert_never
 
-from .nerf_synth import SimpleParser
+from .nerf_synth import SimpleParser, get_rays_np
 
 from .normalize import (
     align_principal_axes,
@@ -20,6 +20,7 @@ from .normalize import (
     transform_cameras,
     transform_points,
 )
+
 
 def get_alignment_rotation(poses: np.ndarray):
     """Computes a rotation matrix to align the average camera 'up' with +Z."""
@@ -69,9 +70,7 @@ def _resize_image_folder(image_dir: str, resized_dir: str, factor: int) -> str:
     image_files = _get_rel_paths(image_dir)
     for image_file in tqdm(image_files):
         image_path = os.path.join(image_dir, image_file)
-        resized_path = os.path.join(
-            resized_dir, os.path.splitext(image_file)[0] + ".png"
-        )
+        resized_path = os.path.join(resized_dir, os.path.splitext(image_file)[0] + ".png")
         if os.path.isfile(resized_path):
             continue
         image = imageio.imread(image_path)[..., :3]
@@ -79,9 +78,7 @@ def _resize_image_folder(image_dir: str, resized_dir: str, factor: int) -> str:
             int(round(image.shape[1] / factor)),
             int(round(image.shape[0] / factor)),
         )
-        resized_image = np.array(
-            Image.fromarray(image).resize(resized_size, Image.BICUBIC)
-        )
+        resized_image = np.array(Image.fromarray(image).resize(resized_size, Image.BICUBIC))
         imageio.imwrite(resized_path, resized_image)
     return resized_dir
 
@@ -104,9 +101,7 @@ class Parser:
         colmap_dir = os.path.join(data_dir, "sparse/0/")
         if not os.path.exists(colmap_dir):
             colmap_dir = os.path.join(data_dir, "sparse")
-        assert os.path.exists(
-            colmap_dir
-        ), f"COLMAP directory {colmap_dir} does not exist."
+        assert os.path.exists(colmap_dir), f"COLMAP directory {colmap_dir} does not exist."
 
         manager = SceneManager(colmap_dir)
         manager.load_cameras()
@@ -167,9 +162,7 @@ class Parser:
             params_dict[camera_id] = params
             imsize_dict[camera_id] = (cam.width // factor, cam.height // factor)
             mask_dict[camera_id] = None
-        print(
-            f"[Parser] {len(imdata)} images, taken by {len(set(camera_ids))} cameras."
-        )
+        print(f"[Parser] {len(imdata)} images, taken by {len(set(camera_ids))} cameras.")
 
         if len(imdata) == 0:
             raise ValueError("No images found in COLMAP.")
@@ -224,9 +217,7 @@ class Parser:
         colmap_files = sorted(_get_rel_paths(colmap_image_dir))
         image_files = sorted(_get_rel_paths(image_dir))
         if factor > 1 and os.path.splitext(image_files[0])[1].lower() == ".jpg":
-            image_dir = _resize_image_folder(
-                colmap_image_dir, image_dir + "_png", factor=factor
-            )
+            image_dir = _resize_image_folder(colmap_image_dir, image_dir + "_png", factor=factor)
             image_files = sorted(_get_rel_paths(image_dir))
         colmap_to_image = dict(zip(colmap_files, image_files))
         image_paths = [os.path.join(image_dir, colmap_to_image[f]) for f in image_names]
@@ -243,9 +234,7 @@ class Parser:
                 image_name = image_id_to_name[image_id]
                 point_idx = manager.point3D_id_to_point3D_idx[point_id]
                 point_indices.setdefault(image_name, []).append(point_idx)
-        point_indices = {
-            k: np.array(v).astype(np.int32) for k, v in point_indices.items()
-        }
+        point_indices = {k: np.array(v).astype(np.int32) for k, v in point_indices.items()}
 
         # Normalize the world space.
         if normalize:
@@ -289,7 +278,6 @@ class Parser:
         self.R_align = R_align
         self.t_align = t_align
 
-
         self.image_names = image_names  # List[str], (num_images,)
         self.image_paths = image_paths  # List[str], (num_images,)
         self.camtoworlds = camtoworlds  # np.ndarray, (num_images, 4, 4)
@@ -326,19 +314,13 @@ class Parser:
             if len(params) == 0:
                 continue  # no distortion
             assert camera_id in self.Ks_dict, f"Missing K for camera {camera_id}"
-            assert (
-                camera_id in self.params_dict
-            ), f"Missing params for camera {camera_id}"
+            assert camera_id in self.params_dict, f"Missing params for camera {camera_id}"
             K = self.Ks_dict[camera_id]
             width, height = self.imsize_dict[camera_id]
 
             if camtype == "perspective":
-                K_undist, roi_undist = cv2.getOptimalNewCameraMatrix(
-                    K, params, (width, height), 0
-                )
-                mapx, mapy = cv2.initUndistortRectifyMap(
-                    K, params, None, K_undist, (width, height), cv2.CV_32FC1
-                )
+                K_undist, roi_undist = cv2.getOptimalNewCameraMatrix(K, params, (width, height), 0)
+                mapx, mapy = cv2.initUndistortRectifyMap(K, params, None, K_undist, (width, height), cv2.CV_32FC1)
                 mask = None
             elif camtype == "fisheye":
                 fx = K[0, 0]
@@ -353,13 +335,7 @@ class Parser:
                 x1 = (grid_x - cx) / fx
                 y1 = (grid_y - cy) / fy
                 theta = np.sqrt(x1**2 + y1**2)
-                r = (
-                    1.0
-                    + params[0] * theta**2
-                    + params[1] * theta**4
-                    + params[2] * theta**6
-                    + params[3] * theta**8
-                )
+                r = 1.0 + params[0] * theta**2 + params[1] * theta**4 + params[2] * theta**6 + params[3] * theta**8
                 mapx = (fx * x1 * r + width // 2).astype(np.float32)
                 mapy = (fy * y1 * r + height // 2).astype(np.float32)
 
@@ -391,7 +367,7 @@ class Parser:
         scene_center = np.mean(camera_locations, axis=0)
         dists = np.linalg.norm(camera_locations - scene_center, axis=1)
         self.scene_scale = np.max(dists)
-    
+
     def get_camera_positions(self, names: list[str]):
         indices = [self.image_names.index(name) for name in names]
         return np.array([self.camtoworlds[i] for i in indices])
@@ -400,16 +376,18 @@ class Parser:
         names = [self.image_names[i] for i in indices]
         return names
 
+
 def get_bbox_2d(arr):
     mask = ~np.isnan(arr)
     if not np.any(mask):
-        return None
+        return (0, 0, 0, 0)
     rows = np.any(mask, axis=1)
     cols = np.any(mask, axis=0)
     rmin, rmax = np.where(rows)[0][[0, -1]]
     cmin, cmax = np.where(cols)[0][[0, -1]]
-    
+
     return rmin, rmax, cmin, cmax
+
 
 class Dataset:
     """A simple dataset class."""
@@ -435,7 +413,7 @@ class Dataset:
             self.indices = indices[indices % self.parser.test_every == 0]
         else:
             self.indices = indices
-        
+
         if exclude_names is not None:
             self.indices = [i for i in self.indices if self.parser.image_names[i] not in exclude_names]
 
@@ -457,7 +435,6 @@ class Dataset:
         params = self.parser.params_dict[camera_id]
         camtoworlds = self.parser.camtoworlds[index]
 
-
         camtoworlds = np.array(camtoworlds).astype(np.float32)
         if self.transform_matrix is not None:
             camtoworlds = self.transform_matrix @ camtoworlds
@@ -472,61 +449,61 @@ class Dataset:
             )
             image = cv2.remap(image, mapx, mapy, cv2.INTER_LINEAR)
             x, y, w, h = self.parser.roi_undist_dict[camera_id]
-            image = image[y : y + h, x : x + w]
+            image = image[y: y + h, x: x + w]
 
         depth_conf = None
         image_name = self.parser.image_names[index]
         conf_path = os.path.join(
-            os.path.dirname(os.path.dirname(self.parser.image_paths[index])),
-            "depths",
-            f"raw_conf_{image_name}.npy"
+            os.path.dirname(os.path.dirname(self.parser.image_paths[index])), "depths", f"raw_conf_{image_name}.npy"
         )
 
         depth = None
         depth_path = os.path.join(
-            os.path.dirname(os.path.dirname(self.parser.image_paths[index])),
-            "depths",
-            f"depth_{image_name}.npy"
+            os.path.dirname(os.path.dirname(self.parser.image_paths[index])), "depths", f"depth_{image_name}.npy"
         )
-        
-        if os.path.exists(conf_path) and os.path.exists(depth_path):
-            
+
+        if isinstance(self.parser, Parser) and os.path.exists(depth_path):
             depth_data = np.load(depth_path)
             rmin, rmax, cmin, cmax = get_bbox_2d(depth_data)
-            depth_data = depth_data[rmin:rmax+1, cmin:cmax+1]
+            depth_data = depth_data[rmin: rmax + 1, cmin: cmax + 1]
             depth = torch.from_numpy(depth_data).float()
-            
+
             img_h, img_w = image.shape[:2]
             if depth.shape[-2:] != (img_h, img_w):
                 depth = torch.nn.functional.interpolate(
                     depth[None, None, ...],
                     size=(img_h, img_w),
                     mode="nearest",
-                )[0, 0]  # TODO Maybe undistort?
+                )[
+                    0, 0
+                ]  # TODO Maybe undistort?
 
+            if isinstance(self.parser, Parser) and os.path.exists(conf_path):
+                conf_data = np.load(conf_path)
+                conf_data = conf_data[rmin: rmax + 1, cmin: cmax + 1]
+                depth_conf = torch.from_numpy(conf_data).float()
 
-            conf_data = np.load(conf_path)
-            conf_data = conf_data[rmin:rmax+1, cmin:cmax+1]
-            depth_conf = torch.from_numpy(conf_data).float()
-            
-            img_h, img_w = image.shape[:2]
-            if depth_conf.shape[-2:] != (img_h, img_w):
-                depth_conf = torch.nn.functional.interpolate(
-                    depth_conf[None, None, ...],
-                    size=(img_h, img_w),
-                    mode="nearest",
-                )[0, 0]
+                img_h, img_w = image.shape[:2]
+                if depth_conf.shape[-2:] != (img_h, img_w):
+                    depth_conf = torch.nn.functional.interpolate(
+                        depth_conf[None, None, ...],
+                        size=(img_h, img_w),
+                        mode="nearest",
+                    )[0, 0]
+
+        if isinstance(self.parser, SimpleParser) and image_name in self.parser.depths:
+            depth = torch.from_numpy(self.parser.depths[image_name]).float()
 
         if self.patch_size is not None:
             # Random crop.
             h, w = image.shape[:2]
             x = np.random.randint(0, max(w - self.patch_size, 1))
             y = np.random.randint(0, max(h - self.patch_size, 1))
-            image = image[y : y + self.patch_size, x : x + self.patch_size]
+            image = image[y: y + self.patch_size, x: x + self.patch_size]
             if depth_conf is not None:
-                depth_conf = depth_conf[y : y + self.patch_size, x : x + self.patch_size]
+                depth_conf = depth_conf[y: y + self.patch_size, x: x + self.patch_size]
             if depth is not None:
-                depth = depth[y : y + self.patch_size, x : x + self.patch_size]
+                depth = depth[y: y + self.patch_size, x: x + self.patch_size]
             K[0, 2] -= x
             K[1, 2] -= y
 
@@ -540,7 +517,7 @@ class Dataset:
         }
         if mask is not None:
             data["mask"] = torch.from_numpy(mask).bool()
-        
+
         if depth_conf is not None:
             data["depth_conf"] = depth_conf
 
@@ -570,7 +547,22 @@ class Dataset:
             data["points"] = torch.from_numpy(points).float()
             data["depths"] = torch.from_numpy(depths).float()
         elif self.load_depths and isinstance(self.parser, SimpleParser):
-            raise NotImplementedError("Implement this with depth loading for SimpleParser.")
+            # Dense to Sparse conversion (Synthetic style)
+            # To mimic the sparse interface, we sample the depth map
+            d_map = self.parser.depths[image_name]
+            h, w = d_map.shape
+            rays_o, rays_d = get_rays_np(h, w, K, camtoworlds)
+            norm = np.linalg.norm(rays_d, axis=2, keepdims=True)
+            rays_d = rays_d / norm
+            step = 64  # Sample every 64th pixel to keep point count reasonable
+            grid_y, grid_x = np.mgrid[0:h:step, 0:w:step]
+            u, v = grid_x.flatten(), grid_y.flatten()
+            z = d_map[v, u]
+            valid = z > 0
+            u, v, z = u[valid], v[valid], z[valid]
+            world_points = rays_o[v, u] + rays_d[v, u] * d_map[v, u, None]
+            data["points"] = torch.from_numpy(world_points).float()
+            data["depths"] = torch.from_numpy(z).float()
 
         return data
 
@@ -587,9 +579,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # Parse COLMAP data.
-    parser = Parser(
-        data_dir=args.data_dir, factor=args.factor, normalize=True, test_every=8
-    )
+    parser = Parser(data_dir=args.data_dir, factor=args.factor, normalize=True, test_every=8)
     dataset = Dataset(parser, split="train", load_depths=True)
     print(f"Dataset: {len(dataset)} images.")
 
@@ -623,5 +613,5 @@ if __name__ == "__main__":
 
     with open(json_dir, "w") as f:
         json.dump(transforms_dict, f, indent=2)
-    
+
     print(f"Wrote cameras to {json_dir}")

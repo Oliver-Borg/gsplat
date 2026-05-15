@@ -690,7 +690,7 @@ def update_paths(vggt_sig: str, colmap_sig: str, combined_sig: str, seed_val: in
     gt_config = groups.get("gt", {}).get(gt_sigs[0], {}).get(seed_val) if gt_sigs else None
 
     pred_path = pred_config.data_dir if pred_config else ""
-    gt_path = gt_config.data_dir if gt_config else ""
+    gt_path = gt_config.dataset.gt_eval_data_dir if gt_config else ""
 
     return gr.update(value=pred_path), gr.update(value=gt_path)
 

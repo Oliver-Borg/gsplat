@@ -204,6 +204,8 @@ class Config:
     depth_conf_mode: Literal["disabled", "standard", "sigmoid"] = "disabled"
     # Weight for depth loss
     depth_lambda: float = 1e-2  # TODO Experiment with this
+    # Weight for background opacity loss
+    bg_opacity_lambda: float = 1e-1
 
     # Dump information to tensorboard every this steps
     tb_every: int = 100
@@ -786,21 +788,23 @@ class Runner:
             image_ids = data["image_id"].to(device)
             masks = data["mask"].to(device) if "mask" in data else None  # [1, H, W]
             depth_conf = None
-            depth_map_gt = None
+            full_depth_map = None
+            height, width = pixels.shape[1:3]
+            depth_bg_mask = torch.zeros(1, height, width, device=device)
             if cfg.depth_loss_mode != "disabled":
                 points = data["points"].to(device)  # [1, M, 2]
-                depths_gt = data["depths"].to(device)  # [1, M]
+                target_depths = data["depths"].to(device)  # [1, M]
                 if "depth_conf" in data and cfg.depth_conf_mode != "disabled":
                     depth_conf = data["depth_conf"].to(device)  # [1, H, W]
                 else:
                     depth_conf = None
 
                 if "depth" in data and cfg.depth_loss_mode in ("full", "closer"):
-                    depth_map_gt = data["depth"].to(device)  # [1, H, W]
+                    full_depth_map = data["depth"].to(device)  # [1, H, W]
+                    depth_bg_mask = ((full_depth_map == 0) | torch.isnan(full_depth_map)).to(device)
+                    full_depth_map = torch.nan_to_num(full_depth_map)
                 else:
-                    depth_map_gt = None
-
-            height, width = pixels.shape[1:3]
+                    full_depth_map = None
 
             if cfg.pose_noise:
                 camtoworlds = self.pose_perturb(camtoworlds, image_ids)
@@ -888,10 +892,10 @@ class Runner:
 
                 sampled_depths = sampled_depths.squeeze(3).squeeze(1)  # [1, M]
                 safe_depths = torch.clamp(sampled_depths, min=1e-3)
-                safe_depths_gt = torch.clamp(depths_gt, min=1e-3)
+                safe_target_depths = torch.clamp(target_depths, min=1e-3)
 
                 disp = torch.where(sampled_depths > 1e-3, 1.0 / safe_depths, torch.zeros_like(sampled_depths))
-                disp_gt = 1.0 / safe_depths_gt  # [1, M]
+                disp_gt = 1.0 / safe_target_depths  # [1, M]
 
                 if depth_conf is not None and cfg.depth_conf_mode != "disabled":
                     # depth_conf [1, H, W]
@@ -907,36 +911,50 @@ class Runner:
                 else:
                     sampled_depth_conf = 1.0
 
-                if depth_map_gt is not None:
-                    sampled_depth_map_gt = F.grid_sample(
-                        depth_map_gt.unsqueeze(0), grid, align_corners=True
+                if full_depth_map is not None:
+                    # Prevent NaNs from corrupting grid_sample and scaling_factors
+                    safe_fdm_sampling = torch.nan_to_num(full_depth_map, nan=1e-3, posinf=1e-3, neginf=1e-3)
+                    sampled_full_depth_map = F.grid_sample(
+                        safe_fdm_sampling.unsqueeze(0), grid, align_corners=True
                     )  # [1, 1, M, 1]
-                    sampled_depth_map_gt = sampled_depth_map_gt.squeeze(3).squeeze(1)  # [1, M]
-                    sampled_depth_map_gt = torch.clamp(sampled_depth_map_gt, min=1e-3)
-                    scaling_factors = safe_depths_gt / sampled_depth_map_gt
+                    sampled_full_depth_map = sampled_full_depth_map.squeeze(3).squeeze(1)  # [1, M]
+                    sampled_full_depth_map = torch.clamp(sampled_full_depth_map, min=1e-3)
+                    scaling_factors = safe_target_depths / sampled_full_depth_map
                     scaling_factors = torch.sort(scaling_factors.flatten()).values
                     # IQM for better stability
                     q1 = len(scaling_factors) // 4
                     q3 = 3 * len(scaling_factors) // 4
-                    depth_map_gt *= scaling_factors[q1: q3 + 1].mean()
+                    full_depth_map *= scaling_factors[q1: q3 + 1].mean()
                 else:
-                    sampled_depth_map_gt = None
+                    sampled_full_depth_map = None
 
                 if depth_conf is None:
                     depth_conf = 1.0
                 elif cfg.depth_conf_mode == "sigmoid":  # TODO Experiment with this
                     depth_conf = torch.sigmoid(depth_conf) * 2.0 - 1.0  # [1, H, W]
 
-                if depth_map_gt is not None:
-                    full_l1_diff = F.l1_loss(depth_map_gt, depths.squeeze(3), reduction='none')
-                    if cfg.depth_loss_mode == "closer":
-                        valid_mask = (depths.squeeze(3) <= depth_map_gt).to(depths.dtype)
-                        full_l1_diff *= valid_mask
+                if full_depth_map is not None:
+                    # Determine valid depth regions (exclude NaN, Inf, and 0)
+                    valid_depth_mask = ~torch.isnan(full_depth_map) & ~torch.isinf(full_depth_map) & (full_depth_map != 0)
 
-                    depthloss = (full_l1_diff * depth_conf).mean() * self.scene_scale
+                    full_l1_diff = F.l1_loss(full_depth_map, depths.squeeze(3), reduction='none')
+                    if cfg.depth_loss_mode == "closer":
+                        valid_mask_closer = (depths.squeeze(3) <= full_depth_map).to(depths.dtype)
+                        full_l1_diff *= valid_mask_closer
+
+                    # Apply depth loss exclusively to valid pixels
+                    valid_diffs = (full_l1_diff * depth_conf)[valid_depth_mask]
+                    depthloss = valid_diffs.mean() * self.scene_scale if valid_diffs.numel() > 0 else 0.0
+
+                    # Penalize opacity in background (NaN/Inf) regions
+                    bg_mask = ~valid_depth_mask
+                    if bg_mask.any():
+                        bg_opacity_lambda = cfg.bg_opacity_lambda
+                        bg_opacity_loss = alphas.squeeze()[bg_mask.squeeze()].mean()
+                        loss += bg_opacity_lambda * bg_opacity_loss
                 else:
                     l1_diff = F.l1_loss(disp, disp_gt, reduction='none')
-                    depthloss = (l1_diff * sampled_depth_conf).mean() * self.scene_scale
+                    depthloss = (l1_diff * sampled_depth_conf)[disp_gt != 0].mean() * self.scene_scale
                 loss += depthloss * cfg.depth_lambda
             if cfg.use_bilateral_grid:
                 tvloss = 10 * total_variation_loss(self.bil_grids.grids)
@@ -1243,6 +1261,12 @@ class Runner:
                 Ks = data["K"].to(device)
                 pixels = data["image"].to(device) / 255.0
                 masks = data["mask"].to(device) if "mask" in data else None
+                gt_depths = data["depth"].to(device) if "depth" in data else None
+                if gt_depths is not None and gt_depths.dim() == 3:
+                    gt_depths = gt_depths.unsqueeze(-1)
+                if gt_depths is not None:
+                    gt_depths = torch.nan_to_num(gt_depths)
+
                 height, width = pixels.shape[1:3]
 
                 torch.cuda.synchronize()
@@ -1266,10 +1290,44 @@ class Runner:
                 torch.cuda.synchronize()
                 ellipse_time += max(time.time() - tic, 1e-10)
 
+                # Compute depth loss
+                norm_val = 1.0
+                if gt_depths is not None:
+                    valid_mask = gt_depths > 0
+                    if valid_mask.sum() > 0:
+                        depth_l1 = torch.abs(depths[valid_mask] - gt_depths[valid_mask]).mean()
+                        # TODO Normalize this based on gt_depths max to allow comparison across datasets
+                        metrics["depth_l1"].append(depth_l1)
+                        norm_val = gt_depths.max()
+                else:
+                    gt_depths = torch.zeros_like(depths)
+                    valid_mask = torch.ones_like(depths)
+                    norm_val = depths.max()
+
                 colors = torch.clamp(colors, 0.0, 1.0)
                 distances = torch.sqrt(torch.sum((pixels - colors) ** 2, dim=-1)).squeeze(0).unsqueeze(-1)
                 distances = apply_float_colormap(distances / distances.max()).unsqueeze(0)
-                canvas_list = [pixels, colors, distances, (0.6 * pixels + 0.4 * colors), torch.stack([depths.squeeze(-1) / depths.max()] * 3, dim=-1)]
+
+                pred_depth_norm = torch.stack(
+                    [valid_mask.squeeze(-1) * torch.clip(depths.squeeze(-1) / norm_val, 0.0, 1.0)] * 3, dim=-1
+                )
+                gt_depth_norm = torch.stack([gt_depths.squeeze(-1) / norm_val] * 3, dim=-1)
+                depth_diff = torch.abs(pred_depth_norm - gt_depth_norm)
+                depth_diff = apply_float_colormap(depth_diff)
+
+                canvas_list = [
+                    pixels,
+                    colors,
+                    distances,
+                    (0.6 * pixels + 0.4 * colors),
+                    pred_depth_norm,
+                ]
+
+                depth_canvas_list = [
+                    pred_depth_norm,
+                    gt_depth_norm,
+                    depth_diff,
+                ]
 
                 if world_rank == 0:
                     pixels_p = pixels.permute(0, 3, 1, 2)  # [1, 3, H, W]
@@ -1278,6 +1336,7 @@ class Runner:
                     metrics["ssim"].append(self.ssim(colors_p, pixels_p))
                     metrics["lpips"].append(self.lpips(colors_p, pixels_p))
                     metrics["depth_factor"].append(depths.max())
+                    metrics["gt_depth_factor"].append(gt_depths.max())
                     if cfg.use_bilateral_grid:
                         cc_colors = color_correct(colors, pixels)
                         cc_colors_p = cc_colors.permute(0, 3, 1, 2)  # [1, 3, H, W]
@@ -1287,6 +1346,8 @@ class Runner:
                     # write images
                     canvas = torch.cat(canvas_list, dim=2).squeeze(0).cpu().numpy()
                     canvas = (canvas * 255).astype(np.uint8)
+                    depth_canvas = torch.cat(depth_canvas_list, dim=2).squeeze(0).cpu().numpy()
+                    depth_canvas = (depth_canvas * 255).astype(np.uint8)
                     for p in Path(self.render_dir).glob(f"{stage}_step{step}_{i:04d}*.png"):
                         if p.is_file():
                             p.unlink()
@@ -1295,13 +1356,14 @@ class Runner:
                             p.unlink()
                     executor.submit(
                         imageio.imwrite,
-                        f"{self.render_dir}/{stage}_step{step}_{i:04d}"
-                        f"_psnr{metrics['psnr'][-1]:.3f}"
-                        f"_lpips{metrics['lpips'][-1]:.3f}"
-                        f"_ssim{metrics['ssim'][-1]:.3f}.jpg",
+                        f"{self.render_dir}/{stage}_step{step}_{i:04d}.jpg",
                         canvas
                     )
-
+                    executor.submit(
+                        imageio.imwrite,
+                        f"{self.render_dir}/depth_{stage}_step{step}_{i:04d}.png",
+                        depth_canvas
+                    )
 
         if world_rank == 0:
             ellipse_time /= len(valloader)
@@ -1316,16 +1378,19 @@ class Runner:
                     "num_eval_images": len(valloader),
                 }
             )
+            depth_l1_str = f"Depth L1: {stats['depth_l1']:.4f} " if "depth_l1" in stats else ""
             if cfg.use_bilateral_grid:
                 print(
                     f"PSNR: {stats['psnr']:.3f}, SSIM: {stats['ssim']:.4f}, LPIPS: {stats['lpips']:.3f} "
                     f"CC_PSNR: {stats['cc_psnr']:.3f}, CC_SSIM: {stats['cc_ssim']:.4f}, CC_LPIPS: {stats['cc_lpips']:.3f} "
+                    f"{depth_l1_str}"
                     f"Time: {stats['ellipse_time']:.3f}s/image "
                     f"Number of GS: {stats['num_GS']}"
                 )
             else:
                 print(
                     f"PSNR: {stats['psnr']:.3f}, SSIM: {stats['ssim']:.4f}, LPIPS: {stats['lpips']:.3f} "
+                    f"{depth_l1_str}"
                     f"Time: {stats['ellipse_time']:.3f}s/image "
                     f"Number of GS: {stats['num_GS']}"
                 )
