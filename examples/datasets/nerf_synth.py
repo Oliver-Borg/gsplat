@@ -1,4 +1,3 @@
-from html import parser
 import json
 from typing import Iterable
 import cv2
@@ -6,6 +5,22 @@ import numpy as np
 import os
 
 from .normalize import transform_cameras
+
+
+def get_rays_np(H, W, K, c2w):
+    """
+    Get ray origins, directions from a pinhole camera.
+    Adapted from https://github.com/bmild/nerf
+    """
+    i, j = np.meshgrid(np.arange(W, dtype=np.float32), np.arange(H, dtype=np.float32), indexing="xy")
+    fx_i = K[0, 0]
+    fy_i = K[1, 1]
+    cx_i = K[0, 2]
+    cy_i = K[1, 2]
+    dirs = np.stack([(i - cx_i) / fx_i, (j - cy_i) / fy_i, np.ones_like(i)], -1)
+    rays_d = np.sum(dirs[..., np.newaxis, :] * c2w[:3, :3], -1)
+    rays_o = np.broadcast_to(c2w[:3, -1], np.shape(rays_d))
+    return rays_o, rays_d
 
 
 class SimpleParser:
@@ -53,15 +68,29 @@ class SimpleParser:
 
             return w, h, fl_x, fl_y, cx, cy
 
+        num_frames = len(frames)
+        max_points = 30000
+        points_per_frame = max_points // num_frames
+
         for i, frame in enumerate(frames):
             fname = frame["file_path"] + ".png"
+            depth_fname = frame["file_path"] + "_depth_0001.png"
             base_dir = os.path.dirname(self.path)
             im_path = os.path.join(base_dir, fname)
-            im = cv2.imread(im_path)
-            w_i, h_i, fx_i, fy_i, cx_i, cy_i = get_intrinsics(im.shape[0], im.shape[1])
+            if not os.path.exists(im_path):
+                continue
+
+            im_header = cv2.imread(im_path)
+            w_i, h_i, fx_i, fy_i, cx_i, cy_i = get_intrinsics(im_header.shape[1], im_header.shape[0])
 
             name = os.path.basename(fname)
             self.image_names.append(name)
+            full_depth_path = os.path.join(base_dir, depth_fname)
+            if os.path.exists(full_depth_path):
+                depth = cv2.imread(full_depth_path, cv2.IMREAD_UNCHANGED)
+                # 0 is background
+                self.depths[name] = (255.0 - depth[..., 0].astype(np.float32)) / 255.0 * 8.0
+                self.depths[name][depth[..., 0] == 0] = np.nan
 
             c2w = np.array(frame["transform_matrix"])
             c2w[0:3, 1:3] *= -1
@@ -80,6 +109,41 @@ class SimpleParser:
             self.image_paths.append(im_path)
             self.params_dict[cam_id] = np.empty(0, dtype=np.float32)
             self.mask_dict[cam_id] = None
+
+            if name in self.depths:
+                # Unproject depths to 3D points
+                depth_map = self.depths[name]
+                us = np.arange(depth_map.shape[0])
+                vs = np.arange(depth_map.shape[1])
+                vs, us = np.meshgrid(vs, us)
+                valid_mask: np.ndarray = ~np.isnan(depth_map)  # h, w
+
+                # Randomly sample points_per_frame points
+                if valid_mask.sum() > points_per_frame:
+                    valid_mask = valid_mask.reshape(-1)
+                    indices = np.random.choice(np.arange(valid_mask.sum()), points_per_frame, replace=False)
+                    true_indices = np.where(valid_mask)[0]
+                    indices = true_indices[indices]
+                    valid_mask[:] = False
+                    valid_mask[indices] = True
+                    valid_mask = valid_mask.reshape(depth_map.shape)
+
+                vs = vs[valid_mask]
+                us = us[valid_mask]
+
+                h, w = depth_map.shape[:2]
+                rays_o, rays_d = get_rays_np(h, w, K, c2w)
+                norm = np.linalg.norm(rays_d, axis=2, keepdims=True)
+                rays_d = rays_d / norm
+
+                world_points = rays_o[valid_mask] + rays_d[valid_mask] * depth_map[valid_mask, None]
+
+                if im_header.shape[:2] != depth_map.shape[:2]:
+                    im_header = cv2.resize(im_header, (depth_map.shape[1], depth_map.shape[0]))
+                rgb_values = cv2.cvtColor(im_header, cv2.COLOR_BGR2RGB)[us, vs]
+
+                self.points = np.concatenate([self.points, world_points])
+                self.points_rgb = np.concatenate([self.points_rgb, rgb_values])
 
         self.camtoworlds = transform_cameras(self.transform, np.array(self.camtoworlds))
 
