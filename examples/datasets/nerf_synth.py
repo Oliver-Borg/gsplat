@@ -26,7 +26,14 @@ def get_rays_np(H, W, K, c2w):
 class SimpleParser:
     """A simple parser for JSON transforms data."""
 
-    def __init__(self, path: str, test_every: int = 8, factor: int = 1, transform: np.ndarray = np.eye(4)):
+    def __init__(
+        self,
+        path: str,
+        test_every: int = 8,
+        factor: int = 1,
+        transform: np.ndarray = np.eye(4),
+        max_points: int = 100000,
+    ):
         self.image_names = []
         self.camtoworlds = []
         self.Ks_dict = {}
@@ -37,6 +44,7 @@ class SimpleParser:
         self.image_paths = []
         self.mapx_dict = {}
         self.mapy_dict = {}
+        self.max_points = max_points
 
         self.test_every = test_every
         self.path = path
@@ -69,7 +77,7 @@ class SimpleParser:
             return w, h, fl_x, fl_y, cx, cy
 
         num_frames = len(frames)
-        max_points = 30000
+        max_points = self.max_points
         points_per_frame = max_points // num_frames
 
         for i, frame in enumerate(frames):
@@ -89,8 +97,10 @@ class SimpleParser:
             if os.path.exists(full_depth_path):
                 depth = cv2.imread(full_depth_path, cv2.IMREAD_UNCHANGED)
                 # 0 is background
-                self.depths[name] = (255.0 - depth[..., 0].astype(np.float32)) / 255.0 * 8.0
-                self.depths[name][depth[..., 0] == 0] = np.nan
+                if len(depth.shape) > 2:
+                    depth = depth[..., 0]
+                self.depths[name] = (255.0 - depth.astype(np.float32)) / 255.0 * 8.0
+                self.depths[name][depth == 0] = np.nan
 
             c2w = np.array(frame["transform_matrix"])
             c2w[0:3, 1:3] *= -1
@@ -158,3 +168,56 @@ class SimpleParser:
 
 def load_json_data(path: str) -> SimpleParser:
     return SimpleParser(path)
+
+
+def reproject_depth(c2w: np.ndarray, K: np.ndarray, parser: SimpleParser, w: int, h: int):
+    """
+    Reproject the depth in the given parser to a new camera to recover a depth map for an arbitrary viewing angle.
+    """
+
+    # Invert camera-to-world matrix to get world-to-camera matrix
+    w2c = np.linalg.inv(c2w)
+
+    # Transform global point cloud to the new camera coordinate space
+    pts_cam = parser.points @ w2c[:3, :3].T + w2c[:3, 3]
+
+    # Extract depth (Z axis)
+    z = pts_cam[:, 2]
+
+    # Filter out points that are behind the camera
+    valid_z = z > 0
+    pts_cam = pts_cam[valid_z]
+    z = z[valid_z]
+
+    # Project the 3D points onto the 2D image plane
+    pts_img = pts_cam @ K.T
+    u = pts_img[:, 0] / z
+    v = pts_img[:, 1] / z
+
+    # Filter out points that project outside the image bounds
+    valid_uv = (u >= 0) & (u < w) & (v >= 0) & (v < h)
+    u = u[valid_uv]
+    v = v[valid_uv]
+    z = z[valid_uv]
+
+    # Convert coordinates to integer pixels
+    u = np.round(u).astype(int)
+    v = np.round(v).astype(int)
+
+    # Initialize a depth map with infinity
+    depth_map = np.full((h, w), np.inf)
+
+    # Simple Z-buffering: sort points by depth descending
+    # Closer points (smaller Z) will be evaluated last and overwrite further points
+    sort_idx = np.argsort(z)[::-1]
+    u = u[sort_idx]
+    v = v[sort_idx]
+    z = z[sort_idx]
+
+    # Map the depths to the image coordinates
+    depth_map[v, u] = z
+
+    # Optional: replace infinity with NaN for empty space
+    depth_map[depth_map == np.inf] = np.nan
+
+    return depth_map
