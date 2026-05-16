@@ -1,12 +1,12 @@
 \begin{table}[H]
 \caption{Test that COLMAP cams have the same metrics as combined with COLMAP cams. (Lego)}
 \label{tab:07_combined_test_lego}
-\begin{tabular}{lllrrrr}
+\begin{tabular}{lllrrrrr}
 \toprule
-Choice & Camera Src & Pcd Src & Keep Backup Cams & RRE ↓ & RTE ↓ & Aligned Cameras ↑ \\
+Choice & Camera Src & Pcd Src & Keep Backup Cams & RRE ↓ & RTE ↓ & Aligned Cameras ↑ & Composite Quality ↑ \\
 \midrule
-VGGT & colmapcams & bothpcd &  & \textbf{12.794} & \textbf{0.785} & \textbf{87} \\
-VGGT &  &  &  & \textbf{12.794} & \textbf{0.785} & \textbf{87} \\
+COLMAP &  &  &  & \underline{12.910} & \underline{0.790} & \textbf{87} & \textbf{0.073} \\
+VGGT & colmapcams & bothpcd &  & \textbf{12.794} & \textbf{0.785} & \textbf{87} &  \\
 \bottomrule
 \end{tabular}
 \end{table}

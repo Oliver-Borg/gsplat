@@ -1,2 +1,3 @@
-choice,depth_loss_mode
-VGGT,
+choice,depth_loss_mode,rre,rte,psnr,lpips,ssim,depth_l1
+COLMAP,,0.1993,0.012003,23.78042221069336,0.17764073610305786,0.7430458068847656,
+VGGT,,0.7897,0.107121,,,,

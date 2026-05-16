@@ -1,3 +1,3 @@
-choice,random_init,pcd_src
-VGGT,,vggtpcd
-VGGT,,
+choice,random_init,pcd_src,real_num_points,eval_rre,eval_rte,psnr,ssim,lpips
+COLMAP,,,80962,0.19934388995170593,0.0028074365109205246,21.817991256713867,0.6816845536231995,0.21005652844905853
+VGGT,,vggtpcd,,,,,,

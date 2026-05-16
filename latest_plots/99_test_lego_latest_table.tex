@@ -1,15 +1,18 @@
 \begin{table}[H]
 \caption{Small test for functionality (Lego)}
 \label{tab:99_test_lego}
-\begin{tabular}{lrll}
+\begin{tabular}{lrllrr}
 \toprule
-Choice & Val Step & Sampling Mode & Pose Opt \\
+Choice & Val Step & Sampling Mode & Pose Opt & Val RRE ↓ & Val RTE ↓ \\
 \midrule
-VGGT &  & ba &  \\
-VGGT &  & confidence &  \\
-VGGT &  & random &  \\
-VGGT &  & voxels &  \\
-VGGT &  &  &  \\
+VGGT & 1 & random &  & \underline{0.330} & \textbf{0.005} \\
+VGGT & 1 & random & Pose Opt & \underline{0.330} & \textbf{0.005} \\
+VGGT & 7000 & random &  & \underline{0.330} & \textbf{0.005} \\
+VGGT & 7000 & random & Pose Opt & \textbf{0.277} & \underline{0.006} \\
+VGGT &  & ba &  &  &  \\
+VGGT &  & confidence &  &  &  \\
+VGGT &  & voxels &  &  &  \\
+VGGT &  &  &  &  &  \\
 \bottomrule
 \end{tabular}
 \end{table}

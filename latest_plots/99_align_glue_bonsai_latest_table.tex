@@ -1,0 +1,34 @@
+\begin{table}[H]
+\caption{Test for combining COLMAP cameras using glue (Bonsai)}
+\label{tab:99_align_glue_bonsai}
+\begin{tabular}{lrlrrrrrr}
+\toprule
+Choice & Num Images & Align Glue & RRE ↓ & RTE ↓ & Aligned Cameras ↑ & PSNR ↑ & SSIM ↑ & LPIPS ↓ \\
+\midrule
+COLMAP & 20 &  & 3.109 & \textbf{0.004} & 3.000 & 8.915 & 0.312 & 0.809 \\
+COLMAP & 30 &  & 49.752 & 1.663 & 15.000 & 10.175 & 0.295 & 0.834 \\
+COLMAP & 40 &  & 3.793 & 0.230 & 34.000 & 14.029 & 0.461 & 0.611 \\
+COLMAP & 50 &  & 0.363 & 0.040 & 50.000 & 19.518 & 0.608 & 0.299 \\
+COLMAP & 60 &  & 0.421 & 0.015 & 60.000 & 19.009 & 0.589 & 0.309 \\
+COLMAP & 70 &  & 0.325 & \underline{0.010} & 70.000 & 19.917 & 0.613 & 0.267 \\
+COLMAP & 80 &  & \underline{0.295} & 0.012 & \underline{80.000} & \underline{20.425} & \underline{0.620} & \underline{0.244} \\
+COLMAP & 100 &  & \textbf{0.199} & 0.012 & \textbf{100.000} & \textbf{21.818} & \textbf{0.682} & \textbf{0.210} \\
+VGGT & 20 & Align Glued & 3.109 & \textbf{0.004} & 3.000 &  &  &  \\
+VGGT & 20 &  & 1.987 & 0.054 & 11.500 & 15.926 & 0.500 & 0.480 \\
+VGGT & 30 & Align Glued & 30.933 & 1.048 & 25.000 &  &  &  \\
+VGGT & 30 &  & 25.362 & 0.887 & 22.500 & 16.083 & 0.508 & 0.484 \\
+VGGT & 40 & Align Glued & 3.338 & 0.202 & 40.000 &  &  &  \\
+VGGT & 40 &  & 2.325 & 0.167 & 37.000 & 16.454 & 0.525 & 0.467 \\
+VGGT & 50 & Align Glued & 0.363 & 0.040 & 50.000 &  &  &  \\
+VGGT & 50 &  & 0.582 & 0.071 & 50.000 & 16.604 & 0.535 & 0.463 \\
+VGGT & 60 & Align Glued & 0.421 & 0.015 & 60.000 &  &  &  \\
+VGGT & 60 &  & 0.612 & 0.060 & 60.000 & 16.734 & 0.545 & 0.459 \\
+VGGT & 70 & Align Glued & 0.325 & \underline{0.010} & 70.000 &  &  &  \\
+VGGT & 70 &  & 0.616 & 0.061 & 70.000 & 16.979 & 0.550 & 0.455 \\
+VGGT & 80 & Align Glued & \underline{0.295} & 0.012 & \underline{80.000} &  &  &  \\
+VGGT & 80 &  & 0.588 & 0.062 & \underline{80.000} & 17.299 & 0.563 & 0.443 \\
+VGGT & 100 & Align Glued & \textbf{0.199} & 0.012 & \textbf{100.000} &  &  &  \\
+VGGT & 100 &  & 0.494 & 0.060 & \textbf{100.000} & 17.569 & 0.575 & 0.437 \\
+\bottomrule
+\end{tabular}
+\end{table}

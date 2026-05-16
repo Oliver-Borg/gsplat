@@ -1,0 +1,8 @@
+choice,sampling_mode,use_ba,max_ba_iterations,camera_type,rre,rte,num_aligned,quality
+COLMAP,,,,pinhole,12.9097,0.789921,87,0.1841184926776626
+COLMAP,,,,,13.7802,0.814052,87,0.09511625890688431
+VGGT,random,Use BA,50,pinhole,0.2685,0.015146,87,
+VGGT,random,Use BA,50,radial,0.2664,0.014903,87,
+VGGT,random,Use BA,3000,pinhole,0.2685,0.015146,87,
+VGGT,random,Use BA,3000,radial,0.2664,0.014903,87,
+VGGT,random,,,,0.3306,0.018825,87,0.6996038075563115

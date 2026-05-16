@@ -5,6 +5,8 @@
 \toprule
 Choice & Num Images & Camera Src & Pcd Src & Val RRE ↓ & Val RTE ↓ & Aligned Cameras ↑ & PSNR ↑ & LPIPS ↓ & SSIM ↑ \\
 \midrule
+COLMAP & 50 &  &  & \underline{0.260} & \underline{0.007} & 50 & \underline{21.167} & \underline{0.258} & \underline{0.672} \\
+COLMAP & 100 &  &  & \textbf{0.105} & \textbf{0.001} & \textbf{100} & \textbf{23.780} & \textbf{0.178} & \textbf{0.743} \\
 VGGT & 25 & colmapcams & bothpcd &  &  & 13 &  &  &  \\
 VGGT & 25 & colmapcams & vggtpcd &  &  & 13 &  &  &  \\
 VGGT & 25 & vggtcams & bothpcd &  &  & 13 &  &  &  \\
@@ -24,7 +26,7 @@ VGGT & 100 & colmapcams & bothpcd &  &  & \textbf{100} &  &  &  \\
 VGGT & 100 & colmapcams & vggtpcd &  &  & \textbf{100} &  &  &  \\
 VGGT & 100 & vggtcams & bothpcd &  &  & \textbf{100} &  &  &  \\
 VGGT & 100 & vggtcams & colmappcd &  &  & \textbf{100} &  &  &  \\
-VGGT & 100 &  &  & \textbf{0.811} & \textbf{0.022} & \textbf{100} & \textbf{17.406} & \textbf{0.397} & \textbf{0.560} \\
+VGGT & 100 &  &  & 0.811 & 0.022 & \textbf{100} & 17.406 & 0.397 & 0.560 \\
 \bottomrule
 \end{tabular}
 \end{table}

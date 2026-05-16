@@ -1,0 +1,11 @@
+choice,near_filtering_strength,near_filtering_quorum,num_aligned
+VGGT,0.5,1,87
+VGGT,0.5,2,87
+VGGT,0.5,10,87
+VGGT,0.9,1,87
+VGGT,0.9,2,87
+VGGT,0.9,10,87
+VGGT,1.0,1,87
+VGGT,1.0,2,87
+VGGT,1.0,10,87
+VGGT,,,87

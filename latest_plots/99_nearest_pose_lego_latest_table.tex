@@ -1,0 +1,23 @@
+\begin{table}[H]
+\caption{Test for different camera modes. (Lego)}
+\label{tab:99_nearest_pose_lego}
+\begin{tabular}{lrlrrrr}
+\toprule
+Choice & Num Images & Image Mode & RRE ↓ & RTE ↓ & Aligned Cameras ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP & 20 & farthestpose & 111.358 & 0.023 & 3 & \underline{0.182} \\
+COLMAP & 30 & farthestpose & 85.985 & 3.013 & 18 & 0.113 \\
+COLMAP & 40 & farthestpose & 176.250 & 3.722 & \underline{35} & \textbf{0.189} \\
+VGGT & 5 & farthestpose & 2.222 & 0.114 & 5 &  \\
+VGGT & 5 & nearestpose & 0.899 & 0.009 & 5 &  \\
+VGGT & 10 & farthestpose & 2.592 & 0.160 & 10 &  \\
+VGGT & 10 & nearestpose & 0.509 & \underline{0.006} & 10 &  \\
+VGGT & 20 & farthestpose & 2.298 & 0.141 & 20 &  \\
+VGGT & 20 & nearestpose & \underline{0.133} & \textbf{0.005} & 20 &  \\
+VGGT & 30 & farthestpose & 2.235 & 0.136 & 30 &  \\
+VGGT & 30 & nearestpose & \textbf{0.125} & 0.007 & 30 &  \\
+VGGT & 40 & farthestpose & 1.322 & 0.069 & \textbf{40} &  \\
+VGGT & 40 & nearestpose & 0.137 & 0.008 & \textbf{40} &  \\
+\bottomrule
+\end{tabular}
+\end{table}

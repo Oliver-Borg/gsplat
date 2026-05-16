@@ -5,11 +5,13 @@
 \toprule
 Choice & Camera Type & Pose Opt & Sampling Mode & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Final Gaussian Count \\
 \midrule
-VGGT & pinhole &  & ba & 0.714 & \underline{0.037} &  &  &  &  \\
-VGGT & radial &  & ba & \underline{0.710} & \underline{0.037} &  &  &  &  \\
-VGGT &  &  & voxels & 0.790 & 0.107 & \textbf{17.535} & \underline{0.437} & \textbf{0.574} & 1000000 \\
-VGGT &  &  &  & \textbf{0.199} & \textbf{0.012} &  &  &  &  \\
-VGGT &  & Pose Opt & voxels & 0.790 & 0.107 & \underline{17.388} & \textbf{0.403} & \underline{0.560} & 1000000 \\
+COLMAP &  &  &  & \textbf{0.199} & \textbf{0.012} & \underline{21.818} & \underline{0.210} & \underline{0.682} & 1000000 \\
+COLMAP &  & Pose Opt &  & \textbf{0.199} & \textbf{0.012} & \textbf{23.780} & \textbf{0.178} & \textbf{0.743} & 1000000 \\
+VGGT & pinhole &  & ba & 0.714 & 0.037 &  &  &  &  \\
+VGGT & pinhole &  &  & \underline{0.305} & \underline{0.017} &  &  &  &  \\
+VGGT & radial &  & ba & 0.710 & 0.037 &  &  &  &  \\
+VGGT &  &  & voxels & 0.790 & 0.107 & 17.569 & 0.437 & 0.575 & 1000000 \\
+VGGT &  & Pose Opt & voxels & 0.790 & 0.107 & 17.365 & 0.404 & 0.560 & 1000000 \\
 \bottomrule
 \end{tabular}
 \end{table}

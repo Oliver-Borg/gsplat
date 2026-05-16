@@ -1,12 +1,12 @@
 \begin{table}[H]
 \caption{COLMAP cameras with different point cloud sources. (Bonsai)}
 \label{tab:06_isolated_cams_point_clouds_bonsai}
-\begin{tabular}{lrl}
+\begin{tabular}{lrlrrrrrr}
 \toprule
-Choice & Random Init & Pcd Src \\
+Choice & Random Init & Pcd Src & Real Num Points & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & SSIM ↑ & LPIPS ↓ \\
 \midrule
-VGGT &  & vggtpcd \\
-VGGT &  &  \\
+COLMAP &  &  & 80962 & \textbf{0.199} & \textbf{0.003} & \textbf{21.818} & \textbf{0.682} & \textbf{0.210} \\
+VGGT &  & vggtpcd &  &  &  &  &  &  \\
 \bottomrule
 \end{tabular}
 \end{table}

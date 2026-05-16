@@ -1,0 +1,25 @@
+{
+    "seed": [
+        42
+    ],
+    "num_images": [
+        100
+    ],
+    "sampling_mode": [
+        "random"
+    ],
+    "gt_eval": true,
+    "choice": [
+        "vggt",
+        "colmap"
+    ],
+    "reconstruct_pose_opt": [
+        true,
+        false
+    ],
+    "pose_opt": [
+        true,
+        false
+    ],
+    "dataset": "bonsai"
+}

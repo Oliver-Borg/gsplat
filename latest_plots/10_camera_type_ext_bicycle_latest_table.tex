@@ -3,12 +3,17 @@
 \label{tab:10_camera_type_ext_bicycle}
 \begin{tabular}{llllrrrrrr}
 \toprule
-Choice & Camera Type & Pose Opt & Sampling Mode & RRE ↓ ↓ & RTE ↓ ↓ & PSNR ↑ ↑ & LPIPS ↓ ↓ & SSIM ↑ ↑ & Final Gaussian Count ↓ \\
+Choice & Camera Type & Pose Opt & Sampling Mode & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Final Gaussian Count \\
 \midrule
-VGGT & pinhole &  & ba & 0.860 & 0.046 & 17.085 & 0.535 & 0.284 & 1000000.000 \\
-VGGT & pinhole & Pose Opt & ba & 0.860 & 0.046 & 16.845 & 0.487 & 0.274 & 1000000.000 \\
-VGGT & radial &  & ba & 0.776 & 0.048 & 17.270 & 0.548 & 0.289 & 1000000.000 \\
-VGGT & radial & Pose Opt & ba & 0.776 & 0.048 & 17.130 & 0.495 & 0.280 & 1000000.000 \\
+COLMAP &  &  &  & \underline{0.107} & \underline{0.008} & \underline{21.166} & \underline{0.373} & \underline{0.473} & 1000000 \\
+COLMAP &  & Pose Opt &  & \underline{0.107} & \underline{0.008} & \textbf{22.471} & \textbf{0.351} & \textbf{0.577} & 1000000 \\
+VGGT & pinhole &  & ba & 0.871 & 0.047 & 17.029 & 0.535 & 0.282 & 1000000 \\
+VGGT & pinhole &  &  & \textbf{0.096} & \textbf{0.007} &  &  &  &  \\
+VGGT & pinhole & Pose Opt & ba & 0.871 & 0.047 & 16.741 & 0.490 & 0.272 & 1000000 \\
+VGGT & radial &  & ba & 0.792 & 0.048 & 17.200 & 0.549 & 0.288 & 1000000 \\
+VGGT & radial & Pose Opt & ba & 0.792 & 0.048 & 17.019 & 0.499 & 0.278 & 1000000 \\
+VGGT &  &  & voxels & 0.857 & 0.067 & 17.303 & 0.485 & 0.271 & 1000000 \\
+VGGT &  & Pose Opt & voxels & 0.857 & 0.067 & 17.483 & 0.376 & 0.268 & 1000000 \\
 \bottomrule
 \end{tabular}
 \end{table}

@@ -1,0 +1,28 @@
+{
+    "seed": [
+        42
+    ],
+    "num_images": [
+        80
+    ],
+    "choice": [
+        "combined",
+        "colmap",
+        "vggt"
+    ],
+    "colmap_mode": [
+        "default",
+        "relaxed"
+    ],
+    "pcd_src": [
+        "both"
+    ],
+    "camera_src": [
+        "colmap"
+    ],
+    "align_glue": [
+        true,
+        false
+    ],
+    "dataset": "bonsai"
+}

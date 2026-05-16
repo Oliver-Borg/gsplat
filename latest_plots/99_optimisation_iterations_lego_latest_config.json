@@ -19,5 +19,9 @@
         20,
         30
     ],
+    "pose_opt": [
+        true,
+        false
+    ],
     "dataset": "lego"
 }

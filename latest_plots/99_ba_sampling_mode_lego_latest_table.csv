@@ -1,21 +1,21 @@
-choice,num_images,sampling_mode,use_ba,max_ba_iterations,shared_camera,camera_type,rre,rte,num_aligned
-VGGT,25,random,Use BA,50,Shared Cam,pinhole,0.7202500000000001,0.0374535,25
-VGGT,25,random,Use BA,50,Shared Cam,radial,0.72,0.0371785,25
-VGGT,25,random,Use BA,3000,Shared Cam,pinhole,0.7202500000000001,0.0374535,25
-VGGT,25,random,Use BA,3000,Shared Cam,radial,0.72,0.0371785,25
-VGGT,25,random,,,,,2.2455499999999997,0.136376,25
-VGGT,50,random,Use BA,50,Shared Cam,pinhole,0.46465,0.0204745,50
-VGGT,50,random,Use BA,50,Shared Cam,radial,0.46495,0.020698,50
-VGGT,50,random,Use BA,3000,Shared Cam,pinhole,0.46465,0.0204745,50
-VGGT,50,random,Use BA,3000,Shared Cam,radial,0.46495,0.020698,50
-VGGT,50,random,,,,,0.89695,0.0430155,50
-VGGT,75,random,Use BA,50,Shared Cam,pinhole,0.28859999999999997,0.014272,75
-VGGT,75,random,Use BA,50,Shared Cam,radial,0.28559999999999997,0.014225999999999999,75
-VGGT,75,random,Use BA,3000,Shared Cam,pinhole,0.28859999999999997,0.014272,75
-VGGT,75,random,Use BA,3000,Shared Cam,radial,0.28559999999999997,0.014225999999999999,75
-VGGT,75,random,,,,,0.3684,0.019217,75
-VGGT,87,random,Use BA,50,Shared Cam,pinhole,0.2685,0.015146,87
-VGGT,87,random,Use BA,50,Shared Cam,radial,0.2664,0.014903,87
-VGGT,87,random,Use BA,3000,Shared Cam,pinhole,0.2685,0.015146,87
-VGGT,87,random,Use BA,3000,Shared Cam,radial,0.2664,0.014903,87
-VGGT,87,random,,,,,0.3306,0.018825,87
+choice,num_images,sampling_mode,use_ba,max_ba_iterations,shared_camera,camera_type,rre,rte,num_aligned,quality
+VGGT,25,random,Use BA,50,Shared Cam,pinhole,0.7176,0.037698,25,0.5927254883324348
+VGGT,25,random,Use BA,50,Shared Cam,radial,0.7175,0.037449,25,0.585319216817598
+VGGT,25,random,Use BA,3000,Shared Cam,pinhole,0.7176,0.037698,25,0.5926550495461878
+VGGT,25,random,Use BA,3000,Shared Cam,radial,0.7175,0.037449,25,0.5854656686637214
+VGGT,25,random,,,,,2.1388,0.131855,25,
+VGGT,50,random,Use BA,50,Shared Cam,pinhole,0.4792,0.021011,50,
+VGGT,50,random,Use BA,50,Shared Cam,radial,0.4795,0.021441,50,
+VGGT,50,random,Use BA,3000,Shared Cam,pinhole,0.4792,0.021011,50,
+VGGT,50,random,Use BA,3000,Shared Cam,radial,0.4795,0.021441,50,
+VGGT,50,random,,,,,0.8706,0.041593,50,
+VGGT,75,random,Use BA,50,Shared Cam,pinhole,0.2897,0.014361,75,
+VGGT,75,random,Use BA,50,Shared Cam,radial,0.2868,0.01433,75,
+VGGT,75,random,Use BA,3000,Shared Cam,pinhole,0.2897,0.014361,75,
+VGGT,75,random,Use BA,3000,Shared Cam,radial,0.2868,0.01433,75,
+VGGT,75,random,,,,,0.3684,0.019217,75,
+VGGT,87,random,Use BA,50,Shared Cam,pinhole,0.2685,0.015146,87,
+VGGT,87,random,Use BA,50,Shared Cam,radial,0.2664,0.014903,87,
+VGGT,87,random,Use BA,3000,Shared Cam,pinhole,0.2685,0.015146,87,
+VGGT,87,random,Use BA,3000,Shared Cam,radial,0.2664,0.014903,87,
+VGGT,87,random,,,,,0.3306,0.018825,87,0.6996038075563115

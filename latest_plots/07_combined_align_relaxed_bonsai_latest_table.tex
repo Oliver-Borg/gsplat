@@ -5,6 +5,8 @@
 \toprule
 Choice & Num Images & Colmap Mode & Pcd Src & RRE ↓ & RTE ↓ & Aligned Cameras ↑ & Composite Quality ↑ \\
 \midrule
+COLMAP & 50 & default &  & 0.363 & 0.040 & 50 & \underline{0.532} \\
+COLMAP & 100 & default &  & \underline{0.199} & \underline{0.012} & \textbf{100} & \textbf{0.672} \\
 VGGT & 25 & default & bothpcd & 0.512 & 0.037 & 13 &  \\
 VGGT & 25 & default & vggtpcd & 0.512 & 0.037 & 13 &  \\
 VGGT & 25 & default &  & 0.512 & 0.037 & 13 &  \\
@@ -14,7 +16,6 @@ VGGT & 25 & relaxed &  & 111.631 & 4.095 & 23 &  \\
 VGGT & 25 &  &  & 0.952 & 0.109 & 25 &  \\
 VGGT & 50 & default & bothpcd & 0.363 & 0.040 & 50 &  \\
 VGGT & 50 & default & vggtpcd & 0.363 & 0.040 & 50 &  \\
-VGGT & 50 & default &  & 0.363 & 0.040 & 50 &  \\
 VGGT & 50 & relaxed & bothpcd & 8.775 & 1.385 & 50 &  \\
 VGGT & 50 & relaxed & vggtpcd & 8.775 & 1.385 & 50 &  \\
 VGGT & 50 & relaxed &  & 8.775 & 1.385 & 50 &  \\
@@ -28,11 +29,10 @@ VGGT & 75 & relaxed &  & 7.568 & 2.075 & \underline{75} &  \\
 VGGT & 75 &  &  & 0.901 & 0.113 & \underline{75} &  \\
 VGGT & 100 & default & bothpcd & \underline{0.199} & \underline{0.012} & \textbf{100} &  \\
 VGGT & 100 & default & vggtpcd & \underline{0.199} & \underline{0.012} & \textbf{100} &  \\
-VGGT & 100 & default &  & \underline{0.199} & \underline{0.012} & \textbf{100} &  \\
 VGGT & 100 & relaxed & bothpcd & \textbf{0.082} & \textbf{0.008} & \textbf{100} &  \\
 VGGT & 100 & relaxed & vggtpcd & \textbf{0.082} & \textbf{0.008} & \textbf{100} &  \\
 VGGT & 100 & relaxed &  & \textbf{0.082} & \textbf{0.008} & \textbf{100} &  \\
-VGGT & 100 &  &  & 0.790 & 0.107 & \textbf{100} & \textbf{0.311} \\
+VGGT & 100 &  &  & 0.790 & 0.107 & \textbf{100} & 0.311 \\
 \bottomrule
 \end{tabular}
 \end{table}

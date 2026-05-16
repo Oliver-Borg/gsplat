@@ -1,0 +1,24 @@
+\begin{table}[H]
+\caption{Test for different camera modes. (Bonsai)}
+\label{tab:99_nearest_pose_bonsai}
+\begin{tabular}{lrlrrrr}
+\toprule
+Choice & Num Images & Image Mode & RRE ↓ & RTE ↓ & Aligned Cameras ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP & 10 & farthestpose & 12.083 & 0.176 & 4 & -0.270 \\
+COLMAP & 20 & farthestpose & 3.109 & \textbf{0.004} & 3 & \underline{-0.245} \\
+COLMAP & 30 & farthestpose & 49.752 & 1.663 & 15 & -0.247 \\
+COLMAP & 40 & farthestpose & 3.793 & 0.230 & \underline{34} & \textbf{0.059} \\
+VGGT & 5 & farthestpose & 1.367 & 0.054 & 5 &  \\
+VGGT & 5 & nearestpose & 3.696 & 0.010 & 5 &  \\
+VGGT & 10 & farthestpose & 1.202 & 0.111 & 10 &  \\
+VGGT & 10 & nearestpose & 2.955 & \underline{0.008} & 10 &  \\
+VGGT & 20 & farthestpose & 0.865 & 0.104 & 20 &  \\
+VGGT & 20 & nearestpose & 2.879 & 0.013 & 20 &  \\
+VGGT & 30 & farthestpose & 0.973 & 0.110 & 30 &  \\
+VGGT & 30 & nearestpose & 1.718 & 0.017 & 30 &  \\
+VGGT & 40 & farthestpose & 0.857 & 0.104 & \textbf{40} &  \\
+VGGT & 40 & nearestpose & 1.230 & 0.014 & \textbf{40} &  \\
+\bottomrule
+\end{tabular}
+\end{table}

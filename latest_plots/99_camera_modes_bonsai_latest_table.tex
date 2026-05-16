@@ -1,0 +1,17 @@
+\begin{table}[H]
+\caption{Test for different camera modes. (Bonsai)}
+\label{tab:99_camera_modes_bonsai}
+\begin{tabular}{lllrlrrrr}
+\toprule
+Choice & Sampling Mode & Use Ba & Max Ba Iterations & Camera Type & RRE ↓ & RTE ↓ & Aligned Cameras ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP &  &  &  &  & \textbf{0.199} & \textbf{0.012} & \textbf{100} & \textbf{0.672} \\
+VGGT & random & Use BA & 50 & pinhole & 0.714 & 0.037 & \textbf{100} &  \\
+VGGT & random & Use BA & 50 & radial & 0.710 & 0.037 & \textbf{100} &  \\
+VGGT & random & Use BA & 3000 & pinhole & 0.714 & 0.037 & \textbf{100} &  \\
+VGGT & random & Use BA & 3000 & radial & 0.710 & 0.037 & \textbf{100} &  \\
+VGGT & random &  &  &  & 0.790 & 0.107 & \textbf{100} &  \\
+VGGT &  &  &  & pinhole & \underline{0.305} & \underline{0.017} & \textbf{100} &  \\
+\bottomrule
+\end{tabular}
+\end{table}

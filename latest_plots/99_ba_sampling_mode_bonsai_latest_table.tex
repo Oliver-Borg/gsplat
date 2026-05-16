@@ -1,0 +1,30 @@
+\begin{table}[H]
+\caption{Test for combining BA with sampling mode. (Bonsai)}
+\label{tab:99_ba_sampling_mode_bonsai}
+\begin{tabular}{lrllrllrrr}
+\toprule
+Choice & Num Images & Sampling Mode & Use Ba & Max Ba Iterations & Shared Camera & Camera Type & RRE ↓ & RTE ↓ & Aligned Cameras ↑ \\
+\midrule
+VGGT & 25 & random & Use BA & 50 & Shared Cam & pinhole & 1.029 & 0.057 & 25 \\
+VGGT & 25 & random & Use BA & 50 & Shared Cam & radial & 0.977 & 0.055 & 25 \\
+VGGT & 25 & random & Use BA & 3000 & Shared Cam & pinhole & 1.029 & 0.057 & 25 \\
+VGGT & 25 & random & Use BA & 3000 & Shared Cam & radial & 0.977 & 0.055 & 25 \\
+VGGT & 25 & random &  &  &  &  & 0.952 & 0.109 & 25 \\
+VGGT & 50 & random & Use BA & 50 & Shared Cam & pinhole & 0.799 & \underline{0.050} & 50 \\
+VGGT & 50 & random & Use BA & 50 & Shared Cam & radial & 0.779 & 0.051 & 50 \\
+VGGT & 50 & random & Use BA & 3000 & Shared Cam & pinhole & 0.799 & \underline{0.050} & 50 \\
+VGGT & 50 & random & Use BA & 3000 & Shared Cam & radial & 0.779 & 0.051 & 50 \\
+VGGT & 50 & random &  &  &  &  & 0.801 & 0.103 & 50 \\
+VGGT & 75 & random & Use BA & 50 & Shared Cam & pinhole & 0.844 & 0.055 & \underline{75} \\
+VGGT & 75 & random & Use BA & 50 & Shared Cam & radial & 0.842 & 0.056 & \underline{75} \\
+VGGT & 75 & random & Use BA & 3000 & Shared Cam & pinhole & 0.844 & 0.055 & \underline{75} \\
+VGGT & 75 & random & Use BA & 3000 & Shared Cam & radial & 0.842 & 0.056 & \underline{75} \\
+VGGT & 75 & random &  &  &  &  & 0.901 & 0.113 & \underline{75} \\
+VGGT & 100 & random & Use BA & 50 & Shared Cam & pinhole & \underline{0.714} & \textbf{0.037} & \textbf{100} \\
+VGGT & 100 & random & Use BA & 50 & Shared Cam & radial & \textbf{0.710} & \textbf{0.037} & \textbf{100} \\
+VGGT & 100 & random & Use BA & 3000 & Shared Cam & pinhole & \underline{0.714} & \textbf{0.037} & \textbf{100} \\
+VGGT & 100 & random & Use BA & 3000 & Shared Cam & radial & \textbf{0.710} & \textbf{0.037} & \textbf{100} \\
+VGGT & 100 & random &  &  &  &  & 0.790 & 0.107 & \textbf{100} \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,12 +1,20 @@
 \begin{table}[H]
 \caption{Test for near filtering using VGGT depth map (Bonsai)}
 \label{tab:99_near_filtering_bonsai}
-\begin{tabular}{llr}
+\begin{tabular}{llrr}
 \toprule
-Choice & Near Filtering & Aligned Cameras ↑ \\
+Choice & Near Filtering Strength & Near Filtering Quorum & Aligned Cameras ↑ \\
 \midrule
-VGGT & nearfilter & \textbf{25} \\
-VGGT &  & \textbf{25} \\
+VGGT & 0.5 & 1 & \textbf{100} \\
+VGGT & 0.5 & 2 & \textbf{100} \\
+VGGT & 0.5 & 10 & \textbf{100} \\
+VGGT & 0.9 & 1 & \textbf{100} \\
+VGGT & 0.9 & 2 & \textbf{100} \\
+VGGT & 0.9 & 10 & \textbf{100} \\
+VGGT & 1.0 & 1 & \textbf{100} \\
+VGGT & 1.0 & 2 & \textbf{100} \\
+VGGT & 1.0 & 10 & \textbf{100} \\
+VGGT &  &  & \textbf{100} \\
 \bottomrule
 \end{tabular}
 \end{table}

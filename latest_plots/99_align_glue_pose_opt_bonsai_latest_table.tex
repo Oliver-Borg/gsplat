@@ -1,0 +1,34 @@
+\begin{table}[H]
+\caption{Test for combining COLMAP cameras using glue with pose optimization (Bonsai)}
+\label{tab:99_align_glue_pose_opt_bonsai}
+\begin{tabular}{lrlrrrrrr}
+\toprule
+Choice & Num Images & Align Glue & Val RRE ↓ & Val RTE ↓ & Aligned Cameras ↑ & PSNR ↑ & SSIM ↑ & LPIPS ↓ \\
+\midrule
+COLMAP & 20 &  & 9.822 & 0.028 & 3.000 & 8.534 & 0.306 & 0.840 \\
+COLMAP & 30 &  & 49.594 & 0.803 & 15.000 & 10.568 & 0.281 & 0.838 \\
+COLMAP & 40 &  & 3.696 & 0.058 & 34.000 & 13.747 & 0.458 & 0.621 \\
+COLMAP & 50 &  & 0.260 & 0.007 & 50.000 & 21.167 & 0.672 & 0.258 \\
+COLMAP & 60 &  & 0.210 & 0.003 & 60.000 & 20.578 & 0.637 & 0.254 \\
+COLMAP & 70 &  & 0.149 & \underline{0.002} & 70.000 & 21.993 & 0.696 & 0.222 \\
+COLMAP & 80 &  & \underline{0.138} & \underline{0.002} & \underline{80.000} & \underline{22.688} & \underline{0.717} & \underline{0.202} \\
+COLMAP & 100 &  & \textbf{0.105} & \textbf{0.001} & \textbf{100.000} & \textbf{23.780} & \textbf{0.743} & \textbf{0.178} \\
+VGGT & 20 & Align Glued &  &  & 3.000 &  &  &  \\
+VGGT & 20 &  & 0.753 & 0.017 & 11.500 & 16.577 & 0.521 & 0.432 \\
+VGGT & 30 & Align Glued &  &  & 25.000 &  &  &  \\
+VGGT & 30 &  & 0.850 & 0.019 & 22.500 & 16.596 & 0.526 & 0.435 \\
+VGGT & 40 & Align Glued &  &  & 40.000 &  &  &  \\
+VGGT & 40 &  & 0.723 & 0.020 & 37.000 & 16.780 & 0.535 & 0.430 \\
+VGGT & 50 & Align Glued &  &  & 50.000 &  &  &  \\
+VGGT & 50 &  & 0.684 & 0.019 & 50.000 & 16.852 & 0.539 & 0.426 \\
+VGGT & 60 & Align Glued &  &  & 60.000 &  &  &  \\
+VGGT & 60 &  & 0.744 & 0.021 & 60.000 & 16.838 & 0.542 & 0.427 \\
+VGGT & 70 & Align Glued &  &  & 70.000 &  &  &  \\
+VGGT & 70 &  & 0.799 & 0.023 & 70.000 & 17.023 & 0.546 & 0.423 \\
+VGGT & 80 & Align Glued &  &  & \underline{80.000} &  &  &  \\
+VGGT & 80 &  & 0.836 & 0.024 & \underline{80.000} & 17.294 & 0.555 & 0.412 \\
+VGGT & 100 & Align Glued &  &  & \textbf{100.000} &  &  &  \\
+VGGT & 100 &  & 0.786 & 0.023 & \textbf{100.000} & 17.365 & 0.560 & 0.404 \\
+\bottomrule
+\end{tabular}
+\end{table}

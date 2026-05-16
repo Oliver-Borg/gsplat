@@ -3,16 +3,32 @@
 \label{tab:07_combined_align_bicycle}
 \begin{tabular}{lrlllrrrr}
 \toprule
-Choice & Num Images & Sampling Mode & Align Mode & Keep Backup Cams & RRE ↓ ↓ & RTE ↓ ↓ & Aligned Cameras ↑ ↑ & Composite Quality ↑ ↑ \\
+Choice & Num Images & Sampling Mode & Align Mode & Keep Backup Cams & RRE ↓ & RTE ↓ & Aligned Cameras ↑ & Composite Quality ↑ \\
 \midrule
-COLMAP & 25 & random & Global Alignment & Fallback Cams & 1.294 & 0.089 & 25.000 & 0.014 \\
-COLMAP & 25 & random & Local Alignment & Fallback Cams & 1.294 & 0.089 & 25.000 & 0.012 \\
-COLMAP & 50 & random & Global Alignment & Fallback Cams & 0.660 & 0.068 & 50.000 & 0.165 \\
-COLMAP & 50 & random & Local Alignment & Fallback Cams & 0.660 & 0.068 & 50.000 & 0.163 \\
-COLMAP & 75 & random & Global Alignment & Fallback Cams & 0.719 & 0.059 & 75.000 & 0.172 \\
-COLMAP & 75 & random & Local Alignment & Fallback Cams & 0.719 & 0.059 & 75.000 & 0.169 \\
-COLMAP & 100 & random & Global Alignment & Fallback Cams & 0.107 & 0.008 & 100.000 & 0.528 \\
-COLMAP & 100 & random & Local Alignment & Fallback Cams & 0.107 & 0.008 & 100.000 & 0.518 \\
+COLMAP & 25 & random & Global Alignment & Fallback Cams & 1.294 & 0.089 & 25 & 0.014 \\
+COLMAP & 25 & random & Global Alignment &  & 0.879 & 0.012 & 7 & -0.184 \\
+COLMAP & 25 & random & Local Alignment & Fallback Cams & 1.294 & 0.089 & 25 & 0.012 \\
+COLMAP & 25 & random & Local Alignment &  & 0.879 & 0.012 & 7 & -0.186 \\
+COLMAP & 25 &  &  &  & 0.879 & 0.012 & 7 & -0.218 \\
+COLMAP & 50 & random & Global Alignment & Fallback Cams & 0.660 & 0.068 & 50 & 0.165 \\
+COLMAP & 50 & random & Global Alignment &  & 0.189 & \underline{0.009} & 29 & 0.081 \\
+COLMAP & 50 & random & Local Alignment & Fallback Cams & 0.660 & 0.068 & 50 & 0.163 \\
+COLMAP & 50 & random & Local Alignment &  & 0.189 & \underline{0.009} & 29 & 0.077 \\
+COLMAP & 50 &  &  &  & 0.189 & \underline{0.009} & 29 & -0.013 \\
+COLMAP & 75 & random & Global Alignment & Fallback Cams & 0.719 & 0.059 & \underline{75} & 0.172 \\
+COLMAP & 75 & random & Global Alignment &  & \textbf{0.101} & \textbf{0.008} & 44 & 0.203 \\
+COLMAP & 75 & random & Local Alignment & Fallback Cams & 0.719 & 0.059 & \underline{75} & 0.169 \\
+COLMAP & 75 & random & Local Alignment &  & \textbf{0.101} & \textbf{0.008} & 44 & 0.205 \\
+COLMAP & 75 &  &  &  & \textbf{0.101} & \textbf{0.008} & 44 & 0.084 \\
+COLMAP & 100 & random & Global Alignment & Fallback Cams & \underline{0.107} & \textbf{0.008} & \textbf{100} & \textbf{0.528} \\
+COLMAP & 100 & random & Global Alignment &  & \underline{0.107} & \textbf{0.008} & \textbf{100} & \textbf{0.528} \\
+COLMAP & 100 & random & Local Alignment & Fallback Cams & \underline{0.107} & \textbf{0.008} & \textbf{100} & 0.518 \\
+COLMAP & 100 & random & Local Alignment &  & \underline{0.107} & \textbf{0.008} & \textbf{100} & \underline{0.520} \\
+COLMAP & 100 &  &  &  & \underline{0.107} & \textbf{0.008} & \textbf{100} & 0.443 \\
+VGGT & 25 & random &  &  & 1.078 & 0.092 & 25 & 0.036 \\
+VGGT & 50 & random &  &  & 0.920 & 0.086 & 50 & 0.115 \\
+VGGT & 75 & random &  &  & 0.892 & 0.075 & \underline{75} & 0.146 \\
+VGGT & 100 & random &  &  & 0.857 & 0.067 & \textbf{100} & 0.165 \\
 \bottomrule
 \end{tabular}
 \end{table}

@@ -3,24 +3,28 @@
 \label{tab:99_ba_sampling_mode_bicycle}
 \begin{tabular}{lrllrllrrrr}
 \toprule
-Choice & Num Images & Sampling Mode & Use Ba & Max Ba Iterations & Shared Camera & Camera Type & RRE ↓ ↓ & RTE ↓ ↓ & Aligned Cameras ↑ ↑ & Composite Quality ↑ ↑ \\
+Choice & Num Images & Sampling Mode & Use Ba & Max Ba Iterations & Shared Camera & Camera Type & RRE ↓ & RTE ↓ & Aligned Cameras ↑ & Composite Quality ↑ \\
 \midrule
-VGGT & 25 & random & Use BA & 50 & Shared Cam & pinhole & 1.515 & 0.127 & 25.000 & 0.008 \\
-VGGT & 25 & random & Use BA & 50 & Shared Cam & radial & 1.482 & 0.129 & 25.000 & 0.010 \\
-VGGT & 25 & random & Use BA & 3000 & Shared Cam & pinhole & 1.515 & 0.127 & 25.000 & 0.009 \\
-VGGT & 25 & random & Use BA & 3000 & Shared Cam & radial & 1.482 & 0.129 & 25.000 & 0.011 \\
-VGGT & 50 & random & Use BA & 50 & Shared Cam & pinhole & 0.901 & 0.060 & 50.000 & 0.103 \\
-VGGT & 50 & random & Use BA & 50 & Shared Cam & radial & 0.825 & 0.062 & 50.000 & 0.109 \\
-VGGT & 50 & random & Use BA & 3000 & Shared Cam & pinhole & 0.901 & 0.060 & 50.000 & 0.103 \\
-VGGT & 50 & random & Use BA & 3000 & Shared Cam & radial & 0.825 & 0.062 & 50.000 & 0.108 \\
-VGGT & 75 & random & Use BA & 50 & Shared Cam & pinhole & 0.845 & 0.043 & 75.000 & 0.121 \\
-VGGT & 75 & random & Use BA & 50 & Shared Cam & radial & 0.772 & 0.044 & 75.000 & 0.130 \\
-VGGT & 75 & random & Use BA & 3000 & Shared Cam & pinhole & 0.845 & 0.043 & 75.000 & 0.122 \\
-VGGT & 75 & random & Use BA & 3000 & Shared Cam & radial & 0.772 & 0.044 & 75.000 & 0.130 \\
-VGGT & 100 & random & Use BA & 50 & Shared Cam & pinhole & 0.860 & 0.046 & 100.000 & 0.132 \\
-VGGT & 100 & random & Use BA & 50 & Shared Cam & radial & 0.776 & 0.048 & 100.000 & 0.141 \\
-VGGT & 100 & random & Use BA & 3000 & Shared Cam & pinhole & 0.860 & 0.046 & 100.000 & 0.131 \\
-VGGT & 100 & random & Use BA & 3000 & Shared Cam & radial & 0.776 & 0.048 & 100.000 & 0.141 \\
+VGGT & 25 & random & Use BA & 50 & Shared Cam & pinhole & 1.800 & 0.146 & 25 & 0.003 \\
+VGGT & 25 & random & Use BA & 50 & Shared Cam & radial & 1.764 & 0.146 & 25 & 0.005 \\
+VGGT & 25 & random & Use BA & 3000 & Shared Cam & pinhole & 1.800 & 0.146 & 25 & 0.004 \\
+VGGT & 25 & random & Use BA & 3000 & Shared Cam & radial & 1.764 & 0.146 & 25 & 0.005 \\
+VGGT & 25 & random &  &  &  &  & 1.078 & 0.092 & 25 & 0.037 \\
+VGGT & 50 & random & Use BA & 50 & Shared Cam & pinhole & 0.917 & 0.070 & 50 & 0.092 \\
+VGGT & 50 & random & Use BA & 50 & Shared Cam & radial & 0.840 & 0.073 & 50 & 0.094 \\
+VGGT & 50 & random & Use BA & 3000 & Shared Cam & pinhole & 0.917 & 0.070 & 50 & 0.091 \\
+VGGT & 50 & random & Use BA & 3000 & Shared Cam & radial & 0.840 & 0.073 & 50 & 0.092 \\
+VGGT & 50 & random &  &  &  &  & 0.920 & 0.086 & 50 & 0.116 \\
+VGGT & 75 & random & Use BA & 50 & Shared Cam & pinhole & 0.852 & \textbf{0.045} & \underline{75} & 0.120 \\
+VGGT & 75 & random & Use BA & 50 & Shared Cam & radial & \textbf{0.776} & \underline{0.047} & \underline{75} & 0.126 \\
+VGGT & 75 & random & Use BA & 3000 & Shared Cam & pinhole & 0.852 & \textbf{0.045} & \underline{75} & 0.120 \\
+VGGT & 75 & random & Use BA & 3000 & Shared Cam & radial & \textbf{0.776} & \underline{0.047} & \underline{75} & 0.126 \\
+VGGT & 75 & random &  &  &  &  & 0.892 & 0.075 & \underline{75} & \underline{0.146} \\
+VGGT & 100 & random & Use BA & 50 & Shared Cam & pinhole & 0.871 & \underline{0.047} & \textbf{100} & 0.130 \\
+VGGT & 100 & random & Use BA & 50 & Shared Cam & radial & \underline{0.792} & 0.048 & \textbf{100} & 0.138 \\
+VGGT & 100 & random & Use BA & 3000 & Shared Cam & pinhole & 0.871 & \underline{0.047} & \textbf{100} & 0.129 \\
+VGGT & 100 & random & Use BA & 3000 & Shared Cam & radial & \underline{0.792} & 0.048 & \textbf{100} & 0.138 \\
+VGGT & 100 & random &  &  &  &  & 0.857 & 0.067 & \textbf{100} & \textbf{0.165} \\
 \bottomrule
 \end{tabular}
 \end{table}

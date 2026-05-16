@@ -3,46 +3,66 @@
 \label{tab:08_colmap_mode_bicycle}
 \begin{tabular}{lrllrrrrrr}
 \toprule
-Choice & Num Images & Colmap Mode & Pose Opt & Validation Step RRE ↓ ↓ & Validation Step RTE ↓ ↓ & RRE ↓ ↓ & RTE ↓ ↓ & Aligned Cameras ↑ ↑ & Composite Quality ↑ ↑ \\
+Choice & Num Images & Colmap Mode & Pose Opt & Val RRE ↓ & Val RTE ↓ & RRE ↓ & RTE ↓ & Aligned Cameras ↑ & Composite Quality ↑ \\
 \midrule
-COLMAP & 10 & relaxed &  & NaN & NaN & NaN & NaN & NaN & -0.491 \\
-COLMAP & 10 & relaxed & Pose Opt & NaN & NaN & NaN & NaN & NaN & -0.453 \\
-COLMAP & 20 & default &  & NaN & NaN & NaN & NaN & NaN & -0.524 \\
-COLMAP & 20 & default & Pose Opt & NaN & NaN & NaN & NaN & NaN & -0.503 \\
-COLMAP & 20 & relaxed &  & 66.006 & 0.537 & 66.006 & 0.638 & 6.000 & -0.484 \\
-COLMAP & 20 & relaxed & Pose Opt & 63.599 & 0.536 & 66.006 & 0.638 & 6.000 & -0.472 \\
-COLMAP & 30 & default &  & 0.592 & 0.006 & 0.592 & 0.010 & 8.000 & -0.216 \\
-COLMAP & 30 & default & Pose Opt & 1.717 & 0.012 & 0.592 & 0.010 & 8.000 & -0.207 \\
-COLMAP & 30 & relaxed &  & 0.358 & 0.006 & 0.358 & 0.021 & 17.000 & -0.119 \\
-COLMAP & 30 & relaxed & Pose Opt & 0.372 & 0.005 & 0.358 & 0.021 & 17.000 & -0.116 \\
-COLMAP & 40 & default &  & 0.312 & 0.005 & 0.312 & 0.017 & 18.000 & -0.109 \\
-COLMAP & 40 & default & Pose Opt & 0.531 & 0.003 & 0.312 & 0.017 & 18.000 & -0.092 \\
-COLMAP & 40 & relaxed &  & 65.362 & 0.978 & 65.362 & 1.362 & 17.000 & -0.414 \\
-COLMAP & 40 & relaxed & Pose Opt & 65.519 & 0.977 & 65.362 & 1.362 & 17.000 & -0.435 \\
-COLMAP & 50 & default &  & 0.189 & 0.003 & 0.189 & 0.009 & 29.000 & 0.027 \\
-COLMAP & 50 & default & Pose Opt & 0.392 & 0.003 & 0.189 & 0.009 & 29.000 & -0.013 \\
-COLMAP & 50 & relaxed &  & 24.151 & 0.375 & 24.151 & 1.642 & 50.000 & -0.140 \\
-COLMAP & 50 & relaxed & Pose Opt & 24.099 & 0.373 & 24.151 & 1.642 & 50.000 & -0.136 \\
-COLMAP & 60 & default &  & 0.118 & 0.003 & 0.118 & 0.009 & 35.000 & 0.087 \\
-COLMAP & 60 & default & Pose Opt & 0.249 & 0.004 & 0.118 & 0.009 & 35.000 & 0.024 \\
-COLMAP & 60 & relaxed &  & 2.457 & 0.052 & 2.457 & 0.209 & 60.000 & 0.074 \\
-COLMAP & 60 & relaxed & Pose Opt & 2.415 & 0.052 & 2.457 & 0.209 & 60.000 & 0.077 \\
-COLMAP & 70 & default &  & 0.104 & 0.003 & 0.104 & 0.008 & 41.000 & 0.134 \\
-COLMAP & 70 & default & Pose Opt & 0.217 & 0.003 & 0.104 & 0.008 & 41.000 & 0.064 \\
-COLMAP & 70 & relaxed &  & 11.668 & 0.320 & 11.668 & 2.542 & 70.000 & -0.069 \\
-COLMAP & 70 & relaxed & Pose Opt & 11.666 & 0.319 & 11.668 & 2.542 & 70.000 & -0.070 \\
-COLMAP & 80 & default &  & 0.145 & 0.002 & 0.145 & 0.005 & 48.000 & 0.145 \\
-COLMAP & 80 & default & Pose Opt & 0.203 & 0.003 & 0.145 & 0.005 & 48.000 & 0.110 \\
-COLMAP & 80 & relaxed &  & 21.007 & 0.603 & 21.007 & 1.902 & 80.000 & -0.156 \\
-COLMAP & 80 & relaxed & Pose Opt & 21.030 & 0.602 & 21.007 & 1.902 & 80.000 & -0.158 \\
-COLMAP & 90 & default &  & 0.115 & 0.002 & 0.115 & 0.009 & 90.000 & 0.283 \\
-COLMAP & 90 & default & Pose Opt & 0.119 & 0.002 & 0.115 & 0.009 & 90.000 & 0.397 \\
-COLMAP & 90 & relaxed &  & 0.125 & 0.003 & 0.125 & 0.010 & 90.000 & 0.403 \\
-COLMAP & 90 & relaxed & Pose Opt & 0.122 & 0.002 & 0.125 & 0.010 & 90.000 & 0.453 \\
-COLMAP & 100 & default &  & 0.107 & 0.002 & 0.107 & 0.008 & 100.000 & 0.345 \\
-COLMAP & 100 & default & Pose Opt & 0.098 & 0.002 & 0.107 & 0.008 & 100.000 & 0.443 \\
-COLMAP & 100 & relaxed &  & 0.114 & 0.002 & 0.114 & 0.010 & 100.000 & 0.397 \\
-COLMAP & 100 & relaxed & Pose Opt & 0.112 & 0.002 & 0.114 & 0.010 & 100.000 & 0.452 \\
+COLMAP & 10 & relaxed &  &  &  &  &  &  & -0.491 \\
+COLMAP & 10 & relaxed & Pose Opt &  &  &  &  &  & -0.453 \\
+COLMAP & 20 & default &  &  &  &  &  &  & -0.524 \\
+COLMAP & 20 & default & Pose Opt &  &  &  &  &  & -0.503 \\
+COLMAP & 20 & relaxed &  & 66.006 & 0.537 & 66.006 & 0.638 & 6 & -0.484 \\
+COLMAP & 20 & relaxed & Pose Opt & 63.599 & 0.536 & 66.006 & 0.638 & 6 & -0.472 \\
+COLMAP & 30 & default &  & 0.592 & 0.006 & 0.592 & 0.010 & 8 & -0.216 \\
+COLMAP & 30 & default & Pose Opt & 1.717 & 0.012 & 0.592 & 0.010 & 8 & -0.207 \\
+COLMAP & 30 & relaxed &  & 0.358 & 0.006 & 0.358 & 0.021 & 17 & -0.119 \\
+COLMAP & 30 & relaxed & Pose Opt & 0.372 & 0.005 & 0.358 & 0.021 & 17 & -0.116 \\
+COLMAP & 40 & default &  & 0.312 & 0.005 & 0.312 & 0.017 & 18 & -0.109 \\
+COLMAP & 40 & default & Pose Opt & 0.531 & \underline{0.003} & 0.312 & 0.017 & 18 & -0.092 \\
+COLMAP & 40 & relaxed &  & 65.362 & 0.978 & 65.362 & 1.362 & 17 & -0.414 \\
+COLMAP & 40 & relaxed & Pose Opt & 65.519 & 0.977 & 65.362 & 1.362 & 17 & -0.435 \\
+COLMAP & 50 & default &  & 0.189 & \underline{0.003} & 0.189 & 0.009 & 29 & 0.027 \\
+COLMAP & 50 & default & Pose Opt & 0.392 & \underline{0.003} & 0.189 & 0.009 & 29 & -0.013 \\
+COLMAP & 50 & relaxed &  & 24.151 & 0.375 & 24.151 & 1.642 & 50 & -0.140 \\
+COLMAP & 50 & relaxed & Pose Opt & 24.099 & 0.373 & 24.151 & 1.642 & 50 & -0.136 \\
+COLMAP & 60 & default &  & 0.118 & \underline{0.003} & 0.118 & 0.009 & 35 & 0.087 \\
+COLMAP & 60 & default & Pose Opt & 0.249 & 0.004 & 0.118 & 0.009 & 35 & 0.024 \\
+COLMAP & 60 & relaxed &  & 2.457 & 0.052 & 2.457 & 0.209 & 60 & 0.074 \\
+COLMAP & 60 & relaxed & Pose Opt & 2.415 & 0.052 & 2.457 & 0.209 & 60 & 0.077 \\
+COLMAP & 70 & default &  & \underline{0.104} & \underline{0.003} & \textbf{0.104} & \underline{0.008} & 41 & 0.134 \\
+COLMAP & 70 & default & Pose Opt & 0.217 & \underline{0.003} & \textbf{0.104} & \underline{0.008} & 41 & 0.064 \\
+COLMAP & 70 & relaxed &  & 11.668 & 0.320 & 11.668 & 2.542 & 70 & -0.069 \\
+COLMAP & 70 & relaxed & Pose Opt & 11.666 & 0.319 & 11.668 & 2.542 & 70 & -0.070 \\
+COLMAP & 80 & default &  & 0.145 & \textbf{0.002} & 0.145 & \textbf{0.005} & 48 & 0.145 \\
+COLMAP & 80 & default & Pose Opt & 0.203 & \underline{0.003} & 0.145 & \textbf{0.005} & 48 & 0.110 \\
+COLMAP & 80 & relaxed &  & 21.007 & 0.603 & 21.007 & 1.902 & 80 & -0.156 \\
+COLMAP & 80 & relaxed & Pose Opt & 21.030 & 0.602 & 21.007 & 1.902 & 80 & -0.158 \\
+COLMAP & 90 & default &  & 0.115 & \textbf{0.002} & 0.115 & 0.009 & \underline{90} & 0.283 \\
+COLMAP & 90 & default & Pose Opt & 0.119 & \textbf{0.002} & 0.115 & 0.009 & \underline{90} & 0.397 \\
+COLMAP & 90 & relaxed &  & 0.125 & \underline{0.003} & 0.125 & 0.010 & \underline{90} & 0.403 \\
+COLMAP & 90 & relaxed & Pose Opt & 0.122 & \textbf{0.002} & 0.125 & 0.010 & \underline{90} & \textbf{0.453} \\
+COLMAP & 100 & default &  & 0.107 & \textbf{0.002} & \underline{0.107} & \underline{0.008} & \textbf{100} & 0.345 \\
+COLMAP & 100 & default & Pose Opt & \textbf{0.098} & \textbf{0.002} & \underline{0.107} & \underline{0.008} & \textbf{100} & 0.443 \\
+COLMAP & 100 & relaxed &  & 0.114 & \textbf{0.002} & 0.114 & 0.010 & \textbf{100} & 0.397 \\
+COLMAP & 100 & relaxed & Pose Opt & 0.112 & \textbf{0.002} & 0.114 & 0.010 & \textbf{100} & \underline{0.452} \\
+VGGT & 10 &  &  & 1.569 & 0.031 & 1.569 & 0.142 & 10 & -0.111 \\
+VGGT & 10 &  & Pose Opt & 1.698 & 0.032 & 1.569 & 0.142 & 10 & -0.107 \\
+VGGT & 20 &  &  & 1.345 & 0.026 & 1.345 & 0.119 & 20 & -0.019 \\
+VGGT & 20 &  & Pose Opt & 1.396 & 0.026 & 1.345 & 0.119 & 20 & -0.003 \\
+VGGT & 30 &  &  & 0.980 & 0.020 & 0.980 & 0.091 & 30 & 0.013 \\
+VGGT & 30 &  & Pose Opt & 0.931 & 0.019 & 0.980 & 0.091 & 30 & 0.041 \\
+VGGT & 40 &  &  & 0.886 & 0.019 & 0.886 & 0.087 & 40 & 0.033 \\
+VGGT & 40 &  & Pose Opt & 0.829 & 0.018 & 0.886 & 0.087 & 40 & 0.077 \\
+VGGT & 50 &  &  & 0.920 & 0.019 & 0.920 & 0.086 & 50 & 0.053 \\
+VGGT & 50 &  & Pose Opt & 0.850 & 0.019 & 0.920 & 0.086 & 50 & 0.102 \\
+VGGT & 60 &  &  & 0.837 & 0.017 & 0.837 & 0.071 & 60 & 0.065 \\
+VGGT & 60 &  & Pose Opt & 0.782 & 0.017 & 0.837 & 0.071 & 60 & 0.113 \\
+VGGT & 70 &  &  & 0.916 & 0.017 & 0.915 & 0.078 & 70 & 0.065 \\
+VGGT & 70 &  & Pose Opt & 0.941 & 0.024 & 0.915 & 0.078 & 70 & 0.112 \\
+VGGT & 80 &  &  & 0.873 & 0.017 & 0.873 & 0.073 & 80 & 0.077 \\
+VGGT & 80 &  & Pose Opt & 0.903 & 0.025 & 0.873 & 0.073 & 80 & 0.137 \\
+VGGT & 90 &  &  & 0.891 & 0.016 & 0.891 & 0.071 & \underline{90} & 0.081 \\
+VGGT & 90 &  & Pose Opt & 0.926 & 0.025 & 0.891 & 0.071 & \underline{90} & 0.138 \\
+VGGT & 100 &  &  & 0.857 & 0.015 & 0.857 & 0.067 & \textbf{100} & 0.086 \\
+VGGT & 100 &  & Pose Opt & 0.914 & 0.025 & 0.857 & 0.067 & \textbf{100} & 0.155 \\
 \bottomrule
 \end{tabular}
 \end{table}

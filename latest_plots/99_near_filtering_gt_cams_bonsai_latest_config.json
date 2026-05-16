@@ -1,0 +1,28 @@
+{
+    "seed": [
+        42
+    ],
+    "num_images": [
+        100
+    ],
+    "sampling_mode": [
+        "random"
+    ],
+    "gt_eval": true,
+    "choice": [
+        "vggt"
+    ],
+    "use_gt_cams": true,
+    "near_filtering_strength": [
+        0.0,
+        0.5,
+        0.9,
+        1.0
+    ],
+    "near_filtering_quorum": [
+        1,
+        2,
+        10
+    ],
+    "dataset": "bonsai"
+}

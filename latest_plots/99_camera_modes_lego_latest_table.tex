@@ -1,0 +1,17 @@
+\begin{table}[H]
+\caption{Test for different camera modes. (Lego)}
+\label{tab:99_camera_modes_lego}
+\begin{tabular}{lllrlrrrr}
+\toprule
+Choice & Sampling Mode & Use Ba & Max Ba Iterations & Camera Type & RRE ↓ & RTE ↓ & Aligned Cameras ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP &  &  &  & pinhole & 12.910 & 0.790 & \textbf{87} & \underline{0.184} \\
+COLMAP &  &  &  &  & 13.780 & 0.814 & \textbf{87} & 0.095 \\
+VGGT & random & Use BA & 50 & pinhole & 0.269 & \textbf{0.015} & \textbf{87} &  \\
+VGGT & random & Use BA & 50 & radial & \textbf{0.266} & \textbf{0.015} & \textbf{87} &  \\
+VGGT & random & Use BA & 3000 & pinhole & 0.269 & \textbf{0.015} & \textbf{87} &  \\
+VGGT & random & Use BA & 3000 & radial & \textbf{0.266} & \textbf{0.015} & \textbf{87} &  \\
+VGGT & random &  &  &  & 0.331 & \underline{0.019} & \textbf{87} & \textbf{0.700} \\
+\bottomrule
+\end{tabular}
+\end{table}

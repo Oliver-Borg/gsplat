@@ -1,0 +1,3 @@
+choice,random_init,pcd_src,use_ba
+VGGT,,colmappcd,Use BA
+VGGT,,,Use BA

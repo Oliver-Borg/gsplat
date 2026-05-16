@@ -1,0 +1,14 @@
+\begin{table}[H]
+\caption{Test for reconstruct pose opt (Bonsai)}
+\label{tab:99_reconstruct_pose_opt_bonsai}
+\begin{tabular}{lllrrrrrr}
+\toprule
+Choice & Reconstruct Pose Opt & Pose Opt & RRE ↓ & RTE ↓ & Aligned Cameras ↑ & Val RRE ↓ & Val RTE ↓ & Composite Quality ↑ \\
+\midrule
+COLMAP &  &  & \textbf{0.199} & \textbf{0.012} & \textbf{100} & \underline{0.199} & \underline{0.003} & \underline{0.579} \\
+COLMAP &  & Pose Opt & \textbf{0.199} & \textbf{0.012} & \textbf{100} & \textbf{0.105} & \textbf{0.001} & \textbf{0.672} \\
+VGGT &  &  & \underline{0.790} & \underline{0.107} & \textbf{100} &  &  &  \\
+VGGT & Rec Pose Opt &  & 1.218 & 0.210 & \textbf{100} &  &  &  \\
+\bottomrule
+\end{tabular}
+\end{table}

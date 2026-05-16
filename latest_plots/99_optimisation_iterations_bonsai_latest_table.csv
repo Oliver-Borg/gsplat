@@ -1,0 +1,6 @@
+choice,optimisation_iterations,pose_opt,rre,rte,num_aligned
+VGGT,0,,0.7897,0.107121,100
+VGGT,1,,1.3831,0.105295,100
+VGGT,10,,2.0018,0.102139,100
+VGGT,20,,2.1526,0.104175,100
+VGGT,30,,2.3261,0.101177,100

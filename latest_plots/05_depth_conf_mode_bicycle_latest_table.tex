@@ -3,12 +3,12 @@
 \label{tab:05_depth_conf_mode_bicycle}
 \begin{tabular}{llrrrr}
 \toprule
-Choice & Depth Conf Mode & Composite Quality ↑ ↑ & Validation Step RRE ↓ ↓ & Validation Step RTE ↓ ↓ & Initial Points ↑ \\
+Choice & Depth Conf Mode & Composite Quality ↑ & Val RRE ↓ & Val RTE ↓ & Initial Points \\
 \midrule
-COLMAP &  & 0.387 & 0.087 & 0.002 & 16687.000 \\
-VGGT &  & 0.174 & 0.662 & 0.013 & 110000.000 \\
-VGGT & sigmoid & 0.174 & 0.658 & 0.013 & 110000.000 \\
-VGGT & standard & 0.173 & 0.663 & 0.013 & 110000.000 \\
+COLMAP &  & \textbf{0.387} & \textbf{0.087} & \textbf{0.002} & 16687 \\
+VGGT &  & \underline{0.174} & 0.662 & \underline{0.013} & 110000 \\
+VGGT & sigmoid & \underline{0.174} & \underline{0.658} & \underline{0.013} & 110000 \\
+VGGT & standard & 0.173 & 0.663 & \underline{0.013} & 110000 \\
 \bottomrule
 \end{tabular}
 \end{table}

@@ -1,0 +1,32 @@
+{
+    "seed": [
+        42
+    ],
+    "num_images": [
+        100
+    ],
+    "sampling_mode": [
+        "random"
+    ],
+    "use_ba": [
+        true,
+        false
+    ],
+    "pose_opt": [
+        true
+    ],
+    "gt_eval": true,
+    "choice": [
+        "vggt",
+        "colmap"
+    ],
+    "max_ba_iterations": [
+        50,
+        3000
+    ],
+    "camera_type": [
+        "SIMPLE_RADIAL",
+        "SIMPLE_PINHOLE"
+    ],
+    "dataset": "bonsai"
+}

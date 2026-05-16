@@ -1,22 +1,24 @@
 \begin{table}[H]
 \caption{COLMAP versus VGGT initialized with different numbers of points and with pose optimization (Lego)}
 \label{tab:02_num_points_pose_opt_lego}
-\begin{tabular}{lrl}
+\begin{tabular}{lrlrrrrrr}
 \toprule
-Choice & Num Points & Pose Opt \\
+Choice & Num Points & Pose Opt & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
 \midrule
-VGGT & 870 &  \\
-VGGT & 4350 &  \\
-VGGT & 8700 &  \\
-VGGT & 17400 &  \\
-VGGT & 26100 &  \\
-VGGT & 43500 &  \\
-VGGT & 65250 &  \\
-VGGT & 87000 &  \\
-VGGT & 217500 &  \\
-VGGT & 435000 &  \\
-VGGT & 870000 &  \\
-VGGT &  &  \\
+COLMAP & 10092 &  & 12.910 & 0.240 & 10.170 & 0.530 & 0.522 & 0.073 \\
+COLMAP & 10092 & Pose Opt & 12.909 & 0.238 & 11.222 & 0.496 & 0.643 & 0.184 \\
+VGGT & 870 &  & \underline{0.330} & \textbf{0.005} & \underline{20.530} & 0.131 & \underline{0.773} & 0.658 \\
+VGGT & 4350 &  & \underline{0.330} & \textbf{0.005} & 20.443 & 0.113 & 0.769 & 0.665 \\
+VGGT & 8700 &  & \underline{0.330} & \textbf{0.005} & 20.415 & 0.110 & 0.768 & 0.666 \\
+VGGT & 17400 &  & \underline{0.330} & \textbf{0.005} & 20.418 & 0.106 & 0.768 & 0.668 \\
+VGGT & 26100 &  & \underline{0.330} & \textbf{0.005} & 20.478 & 0.104 & 0.769 & \underline{0.671} \\
+VGGT & 43500 &  & \underline{0.330} & \textbf{0.005} & 20.437 & 0.104 & 0.768 & 0.670 \\
+VGGT & 65250 &  & \underline{0.330} & \textbf{0.005} & 20.412 & 0.104 & 0.768 & 0.669 \\
+VGGT & 87000 &  & \underline{0.330} & \textbf{0.005} & 20.341 & 0.103 & 0.766 & 0.667 \\
+VGGT & 217500 &  & \underline{0.330} & \textbf{0.005} & 20.380 & \underline{0.101} & 0.766 & 0.669 \\
+VGGT & 435000 &  & \underline{0.330} & \textbf{0.005} & 20.445 & \underline{0.101} & 0.768 & \underline{0.671} \\
+VGGT & 435000 & Pose Opt & \textbf{0.255} & \underline{0.006} & \textbf{20.721} & \textbf{0.070} & \textbf{0.779} & \textbf{0.702} \\
+VGGT & 870000 &  & \underline{0.330} & \textbf{0.005} & 20.441 & 0.109 & 0.768 & 0.667 \\
 \bottomrule
 \end{tabular}
 \end{table}

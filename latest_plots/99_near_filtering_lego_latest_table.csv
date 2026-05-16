@@ -1,3 +1,11 @@
-choice,near_filtering,num_aligned
-VGGT,nearfilter,25
-VGGT,,25
+choice,near_filtering_strength,near_filtering_quorum,eval_rre,eval_rte,num_aligned,psnr,ssim,lpips
+VGGT,0.5,1,,,87,,,
+VGGT,0.5,2,,,87,,,
+VGGT,0.5,10,,,87,,,
+VGGT,0.9,1,,,87,,,
+VGGT,0.9,2,,,87,,,
+VGGT,0.9,10,,,87,,,
+VGGT,1.0,1,,,87,,,
+VGGT,1.0,2,,,87,,,
+VGGT,1.0,10,,,87,,,
+VGGT,,,0.25530245900154114,0.006085267756134272,87,20.664636611938477,0.7774803638458252,0.07156232744455338

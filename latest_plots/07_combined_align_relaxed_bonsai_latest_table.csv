@@ -1,4 +1,6 @@
 choice,num_images,colmap_mode,pcd_src,rre,rte,num_aligned,quality
+COLMAP,50,default,,0.3632,0.039699,50,0.5322860992132958
+COLMAP,100,default,,0.1993,0.012003,100,0.6716858738811855
 VGGT,25,default,bothpcd,0.5117,0.037079,13,
 VGGT,25,default,vggtpcd,0.5117,0.037079,13,
 VGGT,25,default,,0.5117,0.037079,13,
@@ -8,7 +10,6 @@ VGGT,25,relaxed,,111.6314,4.095362,23,
 VGGT,25,,,0.9517,0.109315,25,
 VGGT,50,default,bothpcd,0.3632,0.039699,50,
 VGGT,50,default,vggtpcd,0.3632,0.039699,50,
-VGGT,50,default,,0.3632,0.039699,50,
 VGGT,50,relaxed,bothpcd,8.7753,1.385471,50,
 VGGT,50,relaxed,vggtpcd,8.7753,1.385471,50,
 VGGT,50,relaxed,,8.7753,1.385471,50,
@@ -22,7 +23,6 @@ VGGT,75,relaxed,,7.568,2.074809,75,
 VGGT,75,,,0.9009,0.113361,75,
 VGGT,100,default,bothpcd,0.1993,0.012003,100,
 VGGT,100,default,vggtpcd,0.1993,0.012003,100,
-VGGT,100,default,,0.1993,0.012003,100,
 VGGT,100,relaxed,bothpcd,0.0819,0.007596,100,
 VGGT,100,relaxed,vggtpcd,0.0819,0.007596,100,
 VGGT,100,relaxed,,0.0819,0.007596,100,

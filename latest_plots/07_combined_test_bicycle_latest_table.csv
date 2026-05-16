@@ -1,1 +1,3 @@
-Choice,Camera Src,Pcd Src,Keep Backup Cams,RRE ↓ ↓,RTE ↓ ↓,Aligned Cameras ↑ ↑,Composite Quality ↑ ↑
+choice,camera_src,pcd_src,keep_backup_cams,rre,rte,num_aligned,quality
+COLMAP,colmapcams,bothpcd,,0.1069,0.008457,100,0.4075456381696164
+COLMAP,,,,0.1069,0.008457,100,0.3448348745965122

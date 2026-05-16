@@ -1,0 +1,15 @@
+choice,num_images,image_mode,rre,rte,num_aligned,quality
+COLMAP,10,farthestpose,12.0827,0.17584,4,-0.269747650220535
+COLMAP,20,farthestpose,3.1093,0.003574,3,-0.24525464944362324
+COLMAP,30,farthestpose,49.7519,1.662998,15,-0.24737961025808125
+COLMAP,40,farthestpose,3.7929,0.22965,34,0.05892436538445948
+VGGT,5,farthestpose,1.3673,0.054155,5,
+VGGT,5,nearestpose,3.6957,0.010145,5,
+VGGT,10,farthestpose,1.2025,0.110639,10,
+VGGT,10,nearestpose,2.95515,0.008460500000000001,10,
+VGGT,20,farthestpose,0.8645,0.10407,20,
+VGGT,20,nearestpose,2.8787,0.012992,20,
+VGGT,30,farthestpose,0.9727,0.110438,30,
+VGGT,30,nearestpose,1.7182,0.016518,30,
+VGGT,40,farthestpose,0.8565,0.104349,40,
+VGGT,40,nearestpose,1.2301,0.013979,40,

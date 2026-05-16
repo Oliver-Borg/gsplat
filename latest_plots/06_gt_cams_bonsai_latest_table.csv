@@ -1,5 +1,6 @@
 choice,use_gt_extrinsics,use_gt_intrinsics,use_gt_points,quality
-VGGT,,,,0.2969105112389979
+COLMAP,,,,0.5794510377197004
+VGGT,,,,0.298173693537015
 VGGT,,,GT Points,0.3057921296052146
 VGGT,,GT Intrinsics,,0.35842929674945456
 VGGT,,GT Intrinsics,GT Points,0.37787746813794554

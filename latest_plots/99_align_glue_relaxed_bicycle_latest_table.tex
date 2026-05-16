@@ -3,10 +3,14 @@
 \label{tab:99_align_glue_relaxed_bicycle}
 \begin{tabular}{lllrrrrrr}
 \toprule
-Choice & Align Glue & Colmap Mode & RRE ↓ ↓ & RTE ↓ ↓ & Aligned Cameras ↑ ↑ & PSNR ↑ ↑ & SSIM ↑ ↑ & LPIPS ↓ ↓ \\
+Choice & Align Glue & Colmap Mode & RRE ↓ & RTE ↓ & Aligned Cameras ↑ & PSNR ↑ & SSIM ↑ & LPIPS ↓ \\
 \midrule
-COLMAP & Align Glued & default & 0.968 & 0.045 & 68.000 & 17.126 & 0.251 & 0.462 \\
-COLMAP & Align Glued & relaxed & 11.668 & 2.542 & 70.000 & 14.033 & 0.201 & 0.567 \\
+COLMAP & Align Glued & default & 0.877 & \underline{0.040} & \underline{79} & \underline{17.502} & 0.260 & \textbf{0.428} \\
+COLMAP &  & default & \textbf{0.145} & \textbf{0.005} & 48 & \textbf{17.825} & \textbf{0.327} & \underline{0.444} \\
+COLMAP &  & relaxed & 21.007 & 1.902 & \textbf{80} & 13.884 & 0.217 & 0.724 \\
+VGGT & Align Glued & relaxed & 21.007 & 1.902 & \textbf{80} &  &  &  \\
+VGGT &  & relaxed & 21.007 & 1.902 & \textbf{80} &  &  &  \\
+VGGT &  &  & \underline{0.873} & 0.073 & \textbf{80} & 17.101 & \underline{0.261} & 0.484 \\
 \bottomrule
 \end{tabular}
 \end{table}

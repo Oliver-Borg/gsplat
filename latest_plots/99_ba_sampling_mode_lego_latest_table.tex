@@ -1,30 +1,30 @@
 \begin{table}[H]
 \caption{Test for combining BA with sampling mode. (Lego)}
 \label{tab:99_ba_sampling_mode_lego}
-\begin{tabular}{lrllrllrrr}
+\begin{tabular}{lrllrllrrrr}
 \toprule
-Choice & Num Images & Sampling Mode & Use Ba & Max Ba Iterations & Shared Camera & Camera Type & RRE ↓ & RTE ↓ & Aligned Cameras ↑ \\
+Choice & Num Images & Sampling Mode & Use Ba & Max Ba Iterations & Shared Camera & Camera Type & RRE ↓ & RTE ↓ & Aligned Cameras ↑ & Composite Quality ↑ \\
 \midrule
-VGGT & 25 & random & Use BA & 50 & Shared Cam & pinhole & 0.720 & 0.037 & 25 \\
-VGGT & 25 & random & Use BA & 50 & Shared Cam & radial & 0.720 & 0.037 & 25 \\
-VGGT & 25 & random & Use BA & 3000 & Shared Cam & pinhole & 0.720 & 0.037 & 25 \\
-VGGT & 25 & random & Use BA & 3000 & Shared Cam & radial & 0.720 & 0.037 & 25 \\
-VGGT & 25 & random &  &  &  &  & 2.246 & 0.136 & 25 \\
-VGGT & 50 & random & Use BA & 50 & Shared Cam & pinhole & 0.465 & 0.020 & 50 \\
-VGGT & 50 & random & Use BA & 50 & Shared Cam & radial & 0.465 & 0.021 & 50 \\
-VGGT & 50 & random & Use BA & 3000 & Shared Cam & pinhole & 0.465 & 0.020 & 50 \\
-VGGT & 50 & random & Use BA & 3000 & Shared Cam & radial & 0.465 & 0.021 & 50 \\
-VGGT & 50 & random &  &  &  &  & 0.897 & 0.043 & 50 \\
-VGGT & 75 & random & Use BA & 50 & Shared Cam & pinhole & 0.289 & \textbf{0.014} & \underline{75} \\
-VGGT & 75 & random & Use BA & 50 & Shared Cam & radial & 0.286 & \textbf{0.014} & \underline{75} \\
-VGGT & 75 & random & Use BA & 3000 & Shared Cam & pinhole & 0.289 & \textbf{0.014} & \underline{75} \\
-VGGT & 75 & random & Use BA & 3000 & Shared Cam & radial & 0.286 & \textbf{0.014} & \underline{75} \\
-VGGT & 75 & random &  &  &  &  & 0.368 & 0.019 & \underline{75} \\
-VGGT & 87 & random & Use BA & 50 & Shared Cam & pinhole & 0.269 & \underline{0.015} & \textbf{87} \\
-VGGT & 87 & random & Use BA & 50 & Shared Cam & radial & \textbf{0.266} & \underline{0.015} & \textbf{87} \\
-VGGT & 87 & random & Use BA & 3000 & Shared Cam & pinhole & 0.269 & \underline{0.015} & \textbf{87} \\
-VGGT & 87 & random & Use BA & 3000 & Shared Cam & radial & \textbf{0.266} & \underline{0.015} & \textbf{87} \\
-VGGT & 87 & random &  &  &  &  & 0.331 & 0.019 & \textbf{87} \\
+VGGT & 25 & random & Use BA & 50 & Shared Cam & pinhole & 0.718 & 0.038 & 25 & \underline{0.593} \\
+VGGT & 25 & random & Use BA & 50 & Shared Cam & radial & 0.718 & 0.037 & 25 & 0.585 \\
+VGGT & 25 & random & Use BA & 3000 & Shared Cam & pinhole & 0.718 & 0.038 & 25 & \underline{0.593} \\
+VGGT & 25 & random & Use BA & 3000 & Shared Cam & radial & 0.718 & 0.037 & 25 & 0.585 \\
+VGGT & 25 & random &  &  &  &  & 2.139 & 0.132 & 25 &  \\
+VGGT & 50 & random & Use BA & 50 & Shared Cam & pinhole & 0.479 & 0.021 & 50 &  \\
+VGGT & 50 & random & Use BA & 50 & Shared Cam & radial & 0.479 & 0.021 & 50 &  \\
+VGGT & 50 & random & Use BA & 3000 & Shared Cam & pinhole & 0.479 & 0.021 & 50 &  \\
+VGGT & 50 & random & Use BA & 3000 & Shared Cam & radial & 0.479 & 0.021 & 50 &  \\
+VGGT & 50 & random &  &  &  &  & 0.871 & 0.042 & 50 &  \\
+VGGT & 75 & random & Use BA & 50 & Shared Cam & pinhole & 0.290 & \textbf{0.014} & \underline{75} &  \\
+VGGT & 75 & random & Use BA & 50 & Shared Cam & radial & 0.287 & \textbf{0.014} & \underline{75} &  \\
+VGGT & 75 & random & Use BA & 3000 & Shared Cam & pinhole & 0.290 & \textbf{0.014} & \underline{75} &  \\
+VGGT & 75 & random & Use BA & 3000 & Shared Cam & radial & 0.287 & \textbf{0.014} & \underline{75} &  \\
+VGGT & 75 & random &  &  &  &  & 0.368 & 0.019 & \underline{75} &  \\
+VGGT & 87 & random & Use BA & 50 & Shared Cam & pinhole & 0.269 & \underline{0.015} & \textbf{87} &  \\
+VGGT & 87 & random & Use BA & 50 & Shared Cam & radial & \textbf{0.266} & \underline{0.015} & \textbf{87} &  \\
+VGGT & 87 & random & Use BA & 3000 & Shared Cam & pinhole & 0.269 & \underline{0.015} & \textbf{87} &  \\
+VGGT & 87 & random & Use BA & 3000 & Shared Cam & radial & \textbf{0.266} & \underline{0.015} & \textbf{87} &  \\
+VGGT & 87 & random &  &  &  &  & 0.331 & 0.019 & \textbf{87} & \textbf{0.700} \\
 \bottomrule
 \end{tabular}
 \end{table}

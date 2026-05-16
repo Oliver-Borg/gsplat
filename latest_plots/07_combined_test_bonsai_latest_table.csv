@@ -1,3 +1,3 @@
-choice,camera_src,pcd_src,keep_backup_cams,rre,rte,num_aligned
-VGGT,colmapcams,bothpcd,,0.1993,0.012003,100
-VGGT,,,,0.1993,0.012003,100
+choice,camera_src,pcd_src,keep_backup_cams,rre,rte,num_aligned,quality
+COLMAP,,,,0.1993,0.012003,100,0.5794510377197004
+VGGT,colmapcams,bothpcd,,0.1993,0.012003,100,

@@ -3,24 +3,28 @@
 \label{tab:99_test_bicycle}
 \begin{tabular}{lrllrr}
 \toprule
-Choice & Val Step & Sampling Mode & Pose Opt & Validation Step RRE ↓ ↓ & Validation Step RTE ↓ ↓ \\
+Choice & Val Step & Sampling Mode & Pose Opt & Val RRE ↓ & Val RTE ↓ \\
 \midrule
-VGGT & 1 & ba &  & 0.776 & 0.011 \\
-VGGT & 1 & ba & Pose Opt & 0.776 & 0.011 \\
-VGGT & 1 & confidence &  & 0.859 & 0.015 \\
-VGGT & 1 & confidence & Pose Opt & 0.859 & 0.015 \\
-VGGT & 1 & random &  & 0.859 & 0.015 \\
-VGGT & 1 & random & Pose Opt & 0.859 & 0.015 \\
-VGGT & 1 & voxels &  & 0.859 & 0.015 \\
-VGGT & 1 & voxels & Pose Opt & 0.859 & 0.015 \\
-VGGT & 7000 & ba &  & 0.776 & 0.011 \\
-VGGT & 7000 & ba & Pose Opt & 0.660 & 0.009 \\
-VGGT & 7000 & confidence &  & 0.859 & 0.015 \\
-VGGT & 7000 & confidence & Pose Opt & 0.781 & 0.014 \\
-VGGT & 7000 & random &  & 0.859 & 0.015 \\
-VGGT & 7000 & random & Pose Opt & 0.759 & 0.014 \\
-VGGT & 7000 & voxels &  & 0.859 & 0.015 \\
-VGGT & 7000 & voxels & Pose Opt & 0.726 & 0.014 \\
+COLMAP & 1 &  &  & \underline{0.107} & \textbf{0.002} \\
+COLMAP & 1 &  & Pose Opt & \underline{0.107} & \textbf{0.002} \\
+COLMAP & 7000 &  &  & \underline{0.107} & \textbf{0.002} \\
+COLMAP & 7000 &  & Pose Opt & \textbf{0.101} & \underline{0.003} \\
+VGGT & 1 & ba &  & 0.792 & 0.011 \\
+VGGT & 1 & ba & Pose Opt & 0.792 & 0.011 \\
+VGGT & 1 & confidence &  & 0.857 & 0.015 \\
+VGGT & 1 & confidence & Pose Opt & 0.857 & 0.015 \\
+VGGT & 1 & random &  & 0.857 & 0.015 \\
+VGGT & 1 & random & Pose Opt & 0.857 & 0.015 \\
+VGGT & 1 & voxels &  & 0.857 & 0.015 \\
+VGGT & 1 & voxels & Pose Opt & 0.857 & 0.015 \\
+VGGT & 7000 & ba &  & 0.792 & 0.011 \\
+VGGT & 7000 & ba & Pose Opt & 0.679 & 0.008 \\
+VGGT & 7000 & confidence &  & 0.857 & 0.015 \\
+VGGT & 7000 & confidence & Pose Opt & 0.778 & 0.014 \\
+VGGT & 7000 & random &  & 0.857 & 0.015 \\
+VGGT & 7000 & random & Pose Opt & 0.762 & 0.014 \\
+VGGT & 7000 & voxels &  & 0.857 & 0.015 \\
+VGGT & 7000 & voxels & Pose Opt & 0.724 & 0.014 \\
 \bottomrule
 \end{tabular}
 \end{table}

@@ -1,0 +1,16 @@
+\begin{table}[H]
+\caption{Test for combining relaxed COLMAP cameras using glue with pose optimization (Bonsai)}
+\label{tab:99_align_glue_relaxed_pose_opt_bonsai}
+\begin{tabular}{lllrrrrrr}
+\toprule
+Choice & Align Glue & Colmap Mode & Val RRE ↓ & Val RTE ↓ & Aligned Cameras ↑ & PSNR ↑ & SSIM ↑ & LPIPS ↓ \\
+\midrule
+COLMAP &  & default & \textbf{0.138} & \textbf{0.002} & \textbf{80} & \textbf{22.688} & \textbf{0.717} & \textbf{0.202} \\
+VGGT & Align Glued & default &  &  & \textbf{80} &  &  &  \\
+VGGT & Align Glued & relaxed &  &  & \textbf{80} &  &  &  \\
+VGGT &  & default &  &  & \textbf{80} &  &  &  \\
+VGGT &  & relaxed &  &  & \textbf{80} &  &  &  \\
+VGGT &  &  & \underline{0.836} & \underline{0.024} & \textbf{80} & \underline{17.294} & \underline{0.555} & \underline{0.412} \\
+\bottomrule
+\end{tabular}
+\end{table}
