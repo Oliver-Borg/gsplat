@@ -2,7 +2,7 @@ from dataclasses import dataclass, field, replace
 import datetime
 import json
 from pathlib import Path
-from typing import Literal
+from typing import Literal, get_args
 import os
 import subprocess
 import argparse
@@ -21,6 +21,12 @@ import examples.evaluation
 GSPLAT_PYTHON = os.path.expanduser("~/.conda/envs/gsplat/bin/python")
 GSPLAT_TORCHRUN = os.path.expanduser("~/.conda/envs/gsplat/bin/torchrun")
 VGGT_PYTHON = os.path.expanduser("~/.conda/envs/vggt/bin/python")
+PRIORITY = Literal["low", "medium", "high"]
+priority_map = {
+    "low": 0,
+    "medium": 1,
+    "high": 2,
+}
 
 
 @dataclass
@@ -66,7 +72,16 @@ datasets = {
         factor=1,
         directory="../vggt/data/nerf_synthetic/lego",
         gt_train_data_dir="../vggt/data/nerf_synthetic/lego/transforms_train.json",
-        gt_eval_data_dir="../vggt/data/nerf_synthetic/lego/transforms_val.json",
+        gt_eval_data_dir="../vggt/data/nerf_synthetic/lego/transforms_test.json",
+        data_folder_name="train",
+        camera_type="SIMPLE_PINHOLE",
+    ),
+    "drums": Dataset(
+        name="drums",
+        factor=1,
+        directory="../vggt/data/nerf_synthetic/drums",
+        gt_train_data_dir="../vggt/data/nerf_synthetic/drums/transforms_train.json",
+        gt_eval_data_dir="../vggt/data/nerf_synthetic/drums/transforms_test.json",
         data_folder_name="train",
         camera_type="SIMPLE_PINHOLE",
     ),
@@ -92,6 +107,21 @@ datasets = {
         camera_type="SIMPLE_PINHOLE",
     ),
 }
+
+datasets.update(
+    {
+        name: Dataset(
+            name=name,
+            factor=1,
+            directory=f"../vggt/data/nerf_synthetic/{name}",
+            gt_train_data_dir=f"../vggt/data/nerf_synthetic/{name}/transforms_train.json",
+            gt_eval_data_dir=f"../vggt/data/nerf_synthetic/{name}/transforms_test.json",
+            data_folder_name="train",
+            camera_type="SIMPLE_PINHOLE",
+        )
+        for name in ["chair", "ficus", "hotdog", "materials", "ship", "mic"]
+    }
+)
 
 
 @dataclass
@@ -139,6 +169,7 @@ class Config:
     match_colmap_points: bool = False
     pose_opt_module: Literal["default", "3rgs", "mcmc", "sgld"] = "default"
 
+    raw_metrics: bool = False
     construction_data: dict = field(default_factory=dict)
 
     @classmethod
@@ -156,9 +187,7 @@ class Config:
         instance.near_filtering_quorum = data.get("near_filtering_quorum", cls.near_filtering_quorum)
         instance.reconstruct_pose_opt = data.get("reconstruct_pose_opt", cls.reconstruct_pose_opt)
         instance.optimisation_iterations = data.get("optimisation_iterations", cls.optimisation_iterations)
-        instance.optimisation_neighbourhood = data.get(
-            "optimisation_neighbourhood", cls.optimisation_neighbourhood
-        )
+        instance.optimisation_neighbourhood = data.get("optimisation_neighbourhood", cls.optimisation_neighbourhood)
         instance.use_ba = data.get("use_ba", cls.use_ba)
         instance.max_ba_iterations = data.get("max_ba_iterations", cls.max_ba_iterations)
         instance.image_mode = data.get("image_mode", cls.image_mode)
@@ -298,6 +327,8 @@ class Config:
 
         if self.choice == "colmap":
             parts.append(self.colmap_mode)
+            if self.camera_type != "SIMPLE_RADIAL":
+                parts.append(self.camera_type.lower().replace("simple_", "m"))
             parts.append(self.image_mode)
             if self.shared_camera:
                 parts.append("sharedcam")
@@ -479,8 +510,11 @@ class Config:
         if self.pose_opt_module == "sgld":
             return True
 
-        if self.splatting_metrics.get("raw_metrics") is None:
+        if self.raw_metrics and self.splatting_metrics.get("raw_metrics") is None:
             return True
+
+        # if self.depth_loss_mode != "disabled":
+        #     return True
 
         if self.pose_opt and self.gt_eval and self.splatting_time < datetime.datetime(2026, 4, 16, 14, 0).timestamp():
             # Runs before this would not align before each evaluation
@@ -509,6 +543,9 @@ class Config:
             return False
 
         # if self.near_filtering_strength > 0.0:
+        #     return True
+
+        # if self.choice == "colmap":
         #     return True
 
         if self.reconstruct_pose_opt:
@@ -877,6 +914,7 @@ class Experiment:
     include_gt: bool = False
     val_steps: list[int] = field(default_factory=lambda: [15000])
     render_filter_override: dict = field(default_factory=lambda: {})
+    priority: PRIORITY = "low"
 
     @property
     def render_config_dict(self):
@@ -884,7 +922,7 @@ class Experiment:
         render_config_dict.update(self.render_filter_override)
         return render_config_dict
 
-    def get_configs(self, dataset_name: str, renders: bool = False) -> list[Config]:
+    def get_configs(self, dataset_name: str, renders: bool = False, reconstruct_only: bool = False) -> list[Config]:
         self.config_dict["dataset"] = dataset_name
         config_dicts = generate_configs(self.render_config_dict if renders else self.config_dict)
         configs = [Config.from_dict(config_dict) for config_dict in config_dicts]
@@ -894,13 +932,19 @@ class Experiment:
                 gt_config = replace(config, choice="gt")
                 gt_configs.append(gt_config)
 
+        if self.plot_args is not None and self.plot_args.raw_metrics:
+            configs = [replace(config, raw_metrics=True) for config in configs]
+
         configs += gt_configs
         config_set = set()
         unique_configs: list[Config] = []
         for config in configs:
-            if (config.result_dir, config.splatting_val_path, config.data_dir) not in config_set:
+            dupe_key = (
+                config.data_dir if reconstruct_only else (config.result_dir, config.splatting_val_path, config.data_dir)
+            )
+            if dupe_key not in config_set:
                 unique_configs.append(config)
-            config_set.add((config.result_dir, config.splatting_val_path, config.data_dir))
+            config_set.add(dupe_key)
         return unique_configs
 
     def get_render_configs(self, dataset_name: str) -> list[Config]:
@@ -950,11 +994,12 @@ class Experiment:
     ):
         print(self.progress_stats(dataset_name))
         configs = self.get_configs(dataset_name)
+        reconstruct_configs = self.get_configs(dataset_name, reconstruct_only=True)
         splat_failures: list[Config] = []
         eval_failures: list[Config] = []
 
         if do_reconstruct and bulk_reconstruct:
-            self.bulk_reconstruct(configs)
+            self.bulk_reconstruct(reconstruct_configs)
 
         if cuda_devices:
             gpu_queue = Queue()
@@ -967,6 +1012,7 @@ class Experiment:
                 eval_fail = False
                 try:
                     if do_reconstruct and not bulk_reconstruct:
+                        # TODO Remove duplicates here
                         reconstruction_returncode = config.reconstruct(force_all)
                         if reconstruction_returncode != 0:
                             return config, True, False
@@ -992,7 +1038,7 @@ class Experiment:
                     if eval_fail:
                         eval_failures.append(config)
         else:
-            for config in tqdm(configs):
+            for config in tqdm(reconstruct_configs):
                 if do_reconstruct and not bulk_reconstruct:
                     reconstruction_returncode = config.reconstruct(force=force_all)
                     if reconstruction_returncode != 0:
@@ -1003,6 +1049,7 @@ class Experiment:
                 if eval_returncode != 0:
                     eval_failures.append(config)
 
+            for config in tqdm(configs):
                 if do_splatting:
                     returncode = config.run(force_splat=force_all, enable_viewer=enable_viewer)
                     if returncode != 0:
@@ -1153,14 +1200,16 @@ experiments = [
             x_axis="num_images",
             split_param="",
             single_legend=True,
-            max_render_cols=4,
+            max_render_cols=5,
             show_gt=False,
             raw_metrics=True,
+            make_camera_plot=True,
         ),
         render_filter_override={
-            "num_images": [20, 30, 40, 100],
+            "num_images": [20, 30, 40, 70, 100],
             "seed": [42],
         },
+        priority="high",
     ),
     Experiment(
         "num_images_pose_opt",
@@ -1181,12 +1230,14 @@ experiments = [
             max_render_cols=4,
             show_gt=False,
             raw_metrics=True,
+            metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "quality"],
         ),
         render_filter_override={
             "num_images": [20, 30, 40, 100],
             "seed": [42],
             "pose_opt": [True],
         },
+        priority="high",
     ),
     Experiment(
         "num_images_fixed_points",
@@ -1258,6 +1309,7 @@ experiments = [
         render_filter_override={
             "num_points_per_image": [10, 100, 1000, 10000],
         },
+        priority="high",
     ),
     Experiment(
         "num_points_pose_opt",
@@ -1273,11 +1325,16 @@ experiments = [
             "pose_opt": [True, False],
             "gt_eval": True,
         },
-        PlotConfig(x_axis="num_points", split_param="pose_opt", metric_keys=["psnr", "lpips", "ssim"]),
+        PlotConfig(
+            x_axis="num_points",
+            split_param="pose_opt",
+            metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "quality"],
+        ),
         render_filter_override={
             "num_points_per_image": [10, 100, 1000, 10000],
             "pose_opt": [True],
         },
+        priority="high",
     ),
     Experiment(
         "sampling_mode",
@@ -1302,6 +1359,7 @@ experiments = [
             "seed": [42],
             "num_points_per_image": [1000],
         },
+        priority="high",
     ),
     Experiment(
         "sampling_mode_gt_cams",
@@ -1320,7 +1378,7 @@ experiments = [
             x_axis="num_points",
             split_param="sampling_mode",
             metric_keys=["psnr", "lpips", "ssim", "quality"],
-            raw_metrics=True,
+            raw_metrics=False,
         ),
         render_filter_override={
             "seed": [42],
@@ -1743,6 +1801,7 @@ experiments = [
             "num_images": [100],
             "depth_lambda": [0.0, 0.01, 1],
         },
+        priority="high",
     ),
     Experiment(
         "depth_loss_mode",
@@ -1761,17 +1820,19 @@ experiments = [
         PlotConfig(
             x_axis="",
             split_param="depth_loss_mode",
-            metric_keys=["quality", "eval_rre", "eval_rte", "real_num_points"],
+            metric_keys=["rre", "rte", "psnr", "lpips", "ssim", "depth_l1"],
             show_depth=True,
             show_gt=False,
             max_render_cols=5,
             render_nums=[0, 2, 3, 4, 5],
+            make_camera_plot=True,
         ),
         render_filter_override={
             "seed": [42],
             "num_images": [100],
             "depth_lambda": [1.0],
         },
+        priority="high",
     ),
     Experiment(
         "depth_conf_mode",
@@ -1805,6 +1866,7 @@ experiments = [
             "num_images": [100],
             "depth_lambda": [1.0],
         },
+        priority="high",
     ),
     Experiment(
         "depth_lambda_num_images",
@@ -1833,6 +1895,7 @@ experiments = [
             "num_images": [20, 30, 40, 100],
             "depth_lambda": [0.0, 0.01, 0.1, 1.0],
         },
+        priority="high",
     ),
     Experiment(
         "camera_type",
@@ -2402,7 +2465,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--experiment_names", type=str, required=True, help="Names of the experiments to run", nargs="+"
     )
-    parser.add_argument("--dataset_name", type=str, required=True, help="Name of the dataset to use")
+    parser.add_argument("--dataset_name", type=str, required=True, help="Name of the dataset to use", nargs="+")
     parser.add_argument("--skip_splatting", action="store_true", help="Whether to skip splatting")
     parser.add_argument("--do_reconstruct", action="store_true", help="Whether to run reconstruction")
     parser.add_argument("--plot_only", action="store_true", help="Whether to only plot")
@@ -2427,6 +2490,13 @@ if __name__ == "__main__":
         "--check_only", action="store_true", help="Only check the status of the experiments without running anything"
     )
     parser.add_argument("--enable_viewer", action="store_true", help="Enable the splatting viewer")
+    parser.add_argument(
+        "--min_priority",
+        type=str,
+        default="low",
+        choices=list(get_args(PRIORITY)),
+        help="Minimum priority to filter experiments.",
+    )
 
     args = parser.parse_args()
 
@@ -2437,25 +2507,28 @@ if __name__ == "__main__":
 
     for arg_experiment in args.experiment_names:
         for experiment in experiments:
-            if experiment.name == arg_experiment or arg_experiment == "all":
-                # try:
-                experiment = replace(experiment, include_gt=args.include_gt)
+            if priority_map[experiment.priority] < priority_map[args.min_priority]:
+                continue
+            for dataset_name in args.dataset_name:
+                if experiment.name == arg_experiment or arg_experiment == "all":
+                    # try:
+                    experiment = replace(experiment, include_gt=args.include_gt)
 
-                if args.check_only:
-                    print(f"Experiment: {experiment.name}")
-                    print(experiment.progress_stats(args.dataset_name, print_progress_bars=True))
-                    print()
-                    continue
+                    if args.check_only:
+                        print(f"Experiment: {experiment.name}")
+                        print(experiment.progress_stats(dataset_name, print_progress_bars=True))
+                        print()
+                        continue
 
-                if not args.plot_only:
-                    experiment.run(
-                        args.dataset_name,
-                        do_reconstruct=args.do_reconstruct,
-                        do_splatting=not args.skip_splatting,
-                        cuda_devices=cuda_devices,
-                        force_all=args.force_all,
-                        enable_viewer=args.enable_viewer,
-                    )
-                experiment.plot(args.dataset_name)
-                # except Exception as e:
-                #     print(e)
+                    if not args.plot_only:
+                        experiment.run(
+                            dataset_name,
+                            do_reconstruct=args.do_reconstruct,
+                            do_splatting=not args.skip_splatting,
+                            cuda_devices=cuda_devices,
+                            force_all=args.force_all,
+                            enable_viewer=args.enable_viewer,
+                        )
+                    experiment.plot(dataset_name)
+                    # except Exception as e:
+                    #     print(e)
