@@ -1,6 +1,7 @@
 import json
 from typing import Iterable
 import cv2
+from line_profiler import profile
 import numpy as np
 import os
 
@@ -33,6 +34,7 @@ class SimpleParser:
         factor: int = 1,
         transform: np.ndarray = np.eye(4),
         max_points: int = 100000,
+        create_pointcloud: bool = False,
     ):
         self.image_names = []
         self.camtoworlds = []
@@ -52,14 +54,16 @@ class SimpleParser:
         self.roi_undist_dict = {}  # This should be empty if there is no distortion
         self.mask_dict = {}
         self.depths = {}
+        self.depths_conf = {}
         self.transform = transform
         self.factor = factor
         self.R_align = np.eye(3)
         self.t_align = np.zeros(3)
 
-        self._load_json_data()
+        self._load_json_data(create_pointcloud)
 
-    def _load_json_data(self):
+    @profile
+    def _load_json_data(self, create_pointcloud: bool = False):
         with open(self.path, "r") as f:
             data = json.load(f)
 
@@ -120,7 +124,7 @@ class SimpleParser:
             self.params_dict[cam_id] = np.empty(0, dtype=np.float32)
             self.mask_dict[cam_id] = None
 
-            if name in self.depths:
+            if name in self.depths and create_pointcloud:
                 # Unproject depths to 3D points
                 depth_map = self.depths[name]
                 us = np.arange(depth_map.shape[0])
@@ -142,6 +146,8 @@ class SimpleParser:
                 us = us[valid_mask]
 
                 h, w = depth_map.shape[:2]
+                # TODO This function is slow and wasteful so
+                # we should actually just get the rays for valid points
                 rays_o, rays_d = get_rays_np(h, w, K, c2w)
                 norm = np.linalg.norm(rays_d, axis=2, keepdims=True)
                 rays_d = rays_d / norm

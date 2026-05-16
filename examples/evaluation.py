@@ -3,6 +3,7 @@ import datetime
 import glob
 import json
 import os
+import cv2
 import numpy as np
 import pycolmap
 from scipy.spatial.transform import Rotation as Rot
@@ -31,6 +32,12 @@ class EvalMetrics(TypedDict, total=False):
     error: str
     all_rre: list[float]
     all_rte: list[float]
+    mean_depth_l1: float | None
+    mean_depth_absrel: float | None
+    mean_depth_rmse: float | None
+    all_depth_l1: list[float] | None
+    all_depth_absrel: list[float] | None
+    all_depth_rmse: list[float] | None
 
 
 class EvalReport(TypedDict):
@@ -111,7 +118,11 @@ def load_parser_data(
 
 
 def calculate_metrics(
-    pred_poses: Dict[str, np.ndarray], gt_poses: Dict[str, np.ndarray], pred_parser: Parser | SimpleParser | None = None
+    pred_poses: Dict[str, np.ndarray],
+    gt_poses: Dict[str, np.ndarray],
+    pred_parser: Parser | SimpleParser | None = None,
+    gt_parser: Parser | SimpleParser | None = None,
+    output_path: str | None = None,
 ) -> EvalMetrics:
     common_names = sorted(list(set(pred_poses.keys()) & set(gt_poses.keys())))
     if len(common_names) < 3:
@@ -143,6 +154,44 @@ def calculate_metrics(
         rre_list.append(float(rre))
         rte_list.append(float(rte))
 
+    depth_l1_list = []
+    depth_absrel_list = []
+    depth_rmse_list = []
+
+    if pred_parser is not None and gt_parser is not None:
+        if hasattr(pred_parser, "depths") and hasattr(gt_parser, "depths"):
+            for name in common_names:
+                if name in gt_parser.depths and name in pred_parser.depths:
+                    gt_depth = gt_parser.depths[name]
+                    # Scale the predicted depth map by the alignment scale
+                    pred_depth = pred_parser.depths[name] * s
+
+                    # Mask out invalid (NaN or negative) depths
+                    valid_mask = ~np.isnan(gt_depth) & ~np.isnan(pred_depth) & (gt_depth > 0) & (pred_depth > 0)
+                    gt_depth = np.nan_to_num(gt_depth)
+                    pred_depth = np.nan_to_num(pred_depth)
+
+                    if np.any(valid_mask):
+                        d_gt = gt_depth[valid_mask]
+                        d_pr = pred_depth[valid_mask]
+
+                        depth_l1_list.append(float(np.mean(np.abs(d_gt - d_pr))))
+                        depth_absrel_list.append(float(np.mean(np.abs(d_gt - d_pr) / d_gt)))
+                        depth_rmse_list.append(float(np.sqrt(np.mean((d_gt - d_pr) ** 2))))
+
+                        # Normalise the depth maps and save them to output_path/depth_eval
+                        if output_path is None:
+                            continue
+                        depth_output_path = os.path.join(output_path, "depth_eval")
+                        os.makedirs(depth_output_path, exist_ok=True)
+                        side_by_side = np.concatenate(
+                            [gt_depth, pred_depth, np.abs(gt_depth - pred_depth)], axis=1
+                        ) / np.max(gt_depth)
+                        cv2.imwrite(
+                            os.path.join(depth_output_path, f"depth_{name}"),
+                            (side_by_side * 255).clip(0, 255).astype(np.uint8),
+                        )
+
     return {
         "mean_rre_deg": round(float(np.mean(rre_list)), 4),
         "mean_rte": round(float(np.mean(rte_list)), 6),
@@ -156,6 +205,12 @@ def calculate_metrics(
         "alignment_scale": round(s, 6),
         "all_rre": rre_list,
         "all_rte": rte_list,
+        "mean_depth_l1": round(float(np.mean(depth_l1_list)), 4) if depth_l1_list else None,
+        "mean_depth_absrel": round(float(np.mean(depth_absrel_list)), 4) if depth_absrel_list else None,
+        "mean_depth_rmse": round(float(np.mean(depth_rmse_list)), 4) if depth_rmse_list else None,
+        "all_depth_l1": depth_l1_list if depth_l1_list else None,
+        "all_depth_absrel": depth_absrel_list if depth_absrel_list else None,
+        "all_depth_rmse": depth_rmse_list if depth_rmse_list else None,
     }
 
 
@@ -180,7 +235,7 @@ def main(pred: str, gt: str, force: bool = False) -> None:
         print(f"Error: Missing or empty reconstruction in pred ({len(pred_poses)}) or gt ({len(gt_poses)})")
         return
 
-    metrics = calculate_metrics(pred_poses, gt_poses, pred_parser)
+    metrics = calculate_metrics(pred_poses, gt_poses, pred_parser, gt_parser, output_path=pred)
 
     stat_json_path = os.path.join(pred, "stat.json")
     profiling = {}

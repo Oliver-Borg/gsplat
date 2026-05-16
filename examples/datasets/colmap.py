@@ -5,6 +5,7 @@ from typing import Any, Dict, Iterable, List, Optional
 
 import cv2
 import imageio.v2 as imageio
+from line_profiler import profile
 import numpy as np
 import torch
 from PIL import Image
@@ -86,6 +87,7 @@ def _resize_image_folder(image_dir: str, resized_dir: str, factor: int) -> str:
 class Parser:
     """COLMAP parser."""
 
+    @profile
     def __init__(
         self,
         data_dir: str,
@@ -291,6 +293,8 @@ class Parser:
         self.points_rgb = points_rgb  # np.ndarray, (num_points, 3)
         self.point_indices = point_indices  # Dict[str, np.ndarray], image_name -> [M,]
         self.transform = transform  # np.ndarray, (4, 4)
+        self.depths = {}
+        self.depths_conf = {}
 
         # load one image to check the size. In the case of tanksandtemples dataset, the
         # intrinsics stored in COLMAP corresponds to 2x upsampled images.
@@ -368,6 +372,36 @@ class Parser:
         dists = np.linalg.norm(camera_locations - scene_center, axis=1)
         self.scene_scale = np.max(dists)
 
+        # Load depth maps and confidences
+        for index, image_name in enumerate(self.image_names):
+            depth_path = os.path.join(
+                os.path.dirname(os.path.dirname(self.image_paths[index])), "depths", f"depth_{image_name}.npy"
+            )
+            conf_path = os.path.join(
+                os.path.dirname(os.path.dirname(self.image_paths[index])), "depths", f"raw_conf_{image_name}.npy"
+            )
+
+            for path, dest_dict in ((depth_path, self.depths), (conf_path, self.depths_conf)):
+                if not os.path.exists(path):
+                    continue
+                # Make sure depth is cropped to the same aspect ratio as image and then resize it to match
+                depth_data: np.ndarray = np.load(path)
+                img_h, img_w = depth_data.shape[:2]
+                h_scale = actual_height / img_h
+                w_scale = actual_width / img_w
+                scaling_factor = min(h_scale, w_scale)
+                # Scale and then center crop to be the same size as image
+                depth_data = cv2.resize(
+                    depth_data, None, fx=scaling_factor, fy=scaling_factor, interpolation=cv2.INTER_NEAREST
+                )
+                img_h, img_w = depth_data.shape[:2]
+
+                depth_data = depth_data[
+                    img_h // 2 - actual_height // 2: img_h // 2 + actual_height // 2,
+                    img_w // 2 - actual_width // 2: img_w // 2 + actual_width // 2
+                ]
+                dest_dict[image_name] = depth_data
+
     def get_camera_positions(self, names: list[str]):
         indices = [self.image_names.index(name) for name in names]
         return np.array([self.camtoworlds[i] for i in indices])
@@ -375,18 +409,6 @@ class Parser:
     def get_camera_names(self, indices: Iterable[int]) -> list[str]:
         names = [self.image_names[i] for i in indices]
         return names
-
-
-def get_bbox_2d(arr):
-    mask = ~np.isnan(arr)
-    if not np.any(mask):
-        return (0, 0, 0, 0)
-    rows = np.any(mask, axis=1)
-    cols = np.any(mask, axis=0)
-    rmin, rmax = np.where(rows)[0][[0, -1]]
-    cmin, cmax = np.where(cols)[0][[0, -1]]
-
-    return rmin, rmax, cmin, cmax
 
 
 class Dataset:
@@ -452,20 +474,11 @@ class Dataset:
             image = image[y: y + h, x: x + w]
 
         depth_conf = None
-        image_name = self.parser.image_names[index]
-        conf_path = os.path.join(
-            os.path.dirname(os.path.dirname(self.parser.image_paths[index])), "depths", f"raw_conf_{image_name}.npy"
-        )
-
         depth = None
-        depth_path = os.path.join(
-            os.path.dirname(os.path.dirname(self.parser.image_paths[index])), "depths", f"depth_{image_name}.npy"
-        )
+        image_name = self.parser.image_names[index]
 
-        if isinstance(self.parser, Parser) and os.path.exists(depth_path):
-            depth_data = np.load(depth_path)
-            rmin, rmax, cmin, cmax = get_bbox_2d(depth_data)
-            depth_data = depth_data[rmin: rmax + 1, cmin: cmax + 1]
+        if hasattr(self.parser, "depths") and image_name in self.parser.depths:
+            depth_data = self.parser.depths[image_name]
             depth = torch.from_numpy(depth_data).float()
 
             img_h, img_w = image.shape[:2]
@@ -478,21 +491,17 @@ class Dataset:
                     0, 0
                 ]  # TODO Maybe undistort?
 
-            if isinstance(self.parser, Parser) and os.path.exists(conf_path):
-                conf_data = np.load(conf_path)
-                conf_data = conf_data[rmin: rmax + 1, cmin: cmax + 1]
-                depth_conf = torch.from_numpy(conf_data).float()
+        if hasattr(self.parser, "depths_conf") and image_name in self.parser.depths_conf:
+            conf_data = self.parser.depths_conf[image_name]
+            depth_conf = torch.from_numpy(conf_data).float()
 
-                img_h, img_w = image.shape[:2]
-                if depth_conf.shape[-2:] != (img_h, img_w):
-                    depth_conf = torch.nn.functional.interpolate(
-                        depth_conf[None, None, ...],
-                        size=(img_h, img_w),
-                        mode="nearest",
-                    )[0, 0]
-
-        if isinstance(self.parser, SimpleParser) and image_name in self.parser.depths:
-            depth = torch.from_numpy(self.parser.depths[image_name]).float()
+            img_h, img_w = image.shape[:2]
+            if depth_conf.shape[-2:] != (img_h, img_w):
+                depth_conf = torch.nn.functional.interpolate(
+                    depth_conf[None, None, ...],
+                    size=(img_h, img_w),
+                    mode="nearest",
+                )[0, 0]
 
         if self.patch_size is not None:
             # Random crop.
