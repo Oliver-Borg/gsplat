@@ -3,14 +3,14 @@
 \label{tab:05_depth_loss_mode_lego}
 \begin{tabular}{llrrrrrr}
 \toprule
-Choice & Depth Loss Mode & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Depth Loss ↓ \\
+Choice & Depth Loss Mode & RRE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Predicted Depth Abs Rel ↓ & Splatted Depth Abs Rel ↓ \\
 \midrule
-COLMAP &  & \underline{12.910} & \underline{0.790} & 11.222 & 0.496 & 0.643 & 3.428 \\
-COLMAP & points & \underline{12.910} & \underline{0.790} & 10.156 & 0.529 & 0.521 & 3.135 \\
-VGGT &  & \textbf{0.331} & \textbf{0.019} & \underline{20.665} & \underline{0.072} & \underline{0.777} &  \\
-VGGT & closer & \textbf{0.331} & \textbf{0.019} & 18.398 & 0.165 & 0.753 & 13.523 \\
-VGGT & full & \textbf{0.331} & \textbf{0.019} & 20.405 & 0.084 & 0.773 & \underline{0.387} \\
-VGGT & points & \textbf{0.331} & \textbf{0.019} & \textbf{21.766} & \textbf{0.066} & \textbf{0.807} & \textbf{0.379} \\
+COLMAP &  & \underline{13.926} & 11.222 & 0.496 & 0.643 &  &  \\
+COLMAP & points & \underline{13.926} & 10.159 & 0.529 & 0.522 &  & \underline{0.497} \\
+VGGT &  & \textbf{0.331} & \underline{20.479} & \underline{0.074} & \underline{0.777} & \textbf{0.013} & \textbf{0.105} \\
+VGGT & closer & \textbf{0.331} & 18.398 & 0.165 & 0.753 & \textbf{0.013} &  \\
+VGGT & full & \textbf{0.331} & 20.405 & 0.084 & 0.773 & \textbf{0.013} &  \\
+VGGT & points & \textbf{0.331} & \textbf{21.766} & \textbf{0.066} & \textbf{0.807} & \textbf{0.013} &  \\
 \bottomrule
 \end{tabular}
 \end{table}

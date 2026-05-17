@@ -1,0 +1,34 @@
+{
+    "seed": [
+        42
+    ],
+    "num_images": [
+        100
+    ],
+    "sampling_mode": [
+        "random"
+    ],
+    "depth_loss_mode": [
+        "points"
+    ],
+    "pose_opt": [
+        true
+    ],
+    "choice": [
+        "vggt",
+        "colmap"
+    ],
+    "depth_lambda": [
+        0.0,
+        0.01,
+        0.1,
+        1,
+        10
+    ],
+    "depth_conf_mode": [
+        "disabled",
+        "standard",
+        "sigmoid"
+    ],
+    "dataset": "legotest"
+}

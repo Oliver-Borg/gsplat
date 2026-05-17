@@ -1,34 +1,34 @@
 \begin{table}[H]
 \caption{COLMAP versus VGGT initialized with different numbers of points and with pose optimization (Bicycle)}
 \label{tab:02_num_points_pose_opt_bicycle}
-\begin{tabular}{lrlrrrrrr}
+\begin{tabular}{lrlrrr}
 \toprule
-Choice & Num Points & Pose Opt & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+Choice & Num Points & Pose Opt & PSNR ↑ & LPIPS ↓ & SSIM ↑ \\
 \midrule
-COLMAP & 16687 &  & \underline{0.107} & \textbf{0.002} & \underline{21.166} & \underline{0.373} & \underline{0.473} & \underline{0.345} \\
-COLMAP & 16687 & Pose Opt & \textbf{0.098} & \textbf{0.002} & \textbf{22.471} & \textbf{0.351} & \textbf{0.577} & \textbf{0.443} \\
-VGGT & 1000 &  & 0.857 & 0.015 & 17.835 & 0.704 & 0.325 & -0.008 \\
-VGGT & 1000 & Pose Opt & 0.909 & 0.016 & 17.102 & 0.686 & 0.307 & -0.020 \\
-VGGT & 5000 &  & 0.857 & 0.015 & 17.502 & 0.593 & 0.303 & 0.042 \\
-VGGT & 5000 & Pose Opt & 0.761 & 0.015 & 17.169 & 0.542 & 0.293 & 0.061 \\
-VGGT & 10000 &  & 0.857 & 0.015 & 17.401 & 0.553 & 0.294 & 0.059 \\
-VGGT & 10000 & Pose Opt & 0.762 & \underline{0.014} & 17.083 & 0.492 & 0.283 & 0.084 \\
-VGGT & 20000 &  & 0.857 & 0.015 & 17.334 & 0.529 & 0.286 & 0.069 \\
-VGGT & 20000 & Pose Opt & 0.691 & \underline{0.014} & 17.160 & 0.446 & 0.276 & 0.111 \\
-VGGT & 30000 &  & 0.857 & 0.015 & 17.348 & 0.515 & 0.283 & 0.075 \\
-VGGT & 30000 & Pose Opt & 0.712 & 0.015 & 17.283 & 0.426 & 0.273 & 0.124 \\
-VGGT & 50000 &  & 0.857 & 0.015 & 17.288 & 0.501 & 0.278 & 0.080 \\
-VGGT & 50000 & Pose Opt & 0.712 & \underline{0.014} & 17.275 & 0.402 & 0.267 & 0.135 \\
-VGGT & 75000 &  & 0.857 & 0.015 & 17.287 & 0.489 & 0.273 & 0.084 \\
-VGGT & 75000 & Pose Opt & 0.706 & \underline{0.014} & 17.428 & 0.381 & 0.267 & 0.150 \\
-VGGT & 100000 &  & 0.857 & 0.015 & 17.264 & 0.482 & 0.271 & 0.087 \\
-VGGT & 100000 & Pose Opt & 0.697 & \underline{0.014} & 17.426 & 0.379 & 0.267 & 0.152 \\
-VGGT & 250000 &  & 0.857 & 0.015 & 17.286 & 0.476 & 0.264 & 0.087 \\
-VGGT & 250000 & Pose Opt & 0.741 & 0.015 & 17.307 & 0.381 & 0.263 & 0.146 \\
-VGGT & 500000 &  & 0.857 & 0.015 & 17.189 & 0.460 & 0.252 & 0.088 \\
-VGGT & 500000 & Pose Opt & 0.735 & \underline{0.014} & 17.187 & 0.380 & 0.257 & 0.140 \\
-VGGT & 1000000 &  & 0.857 & 0.015 & 17.229 & 0.466 & 0.245 & 0.081 \\
-VGGT & 1000000 & Pose Opt & 0.790 & 0.015 & 17.192 & 0.406 & 0.251 & 0.121 \\
+COLMAP & 16687 &  & \underline{21.166} & \underline{0.373} & \underline{0.473} \\
+COLMAP & 16687 & Pose Opt & \textbf{22.471} & \textbf{0.351} & \textbf{0.577} \\
+VGGT & 1000 &  & 17.835 & 0.704 & 0.325 \\
+VGGT & 1000 & Pose Opt & 17.102 & 0.686 & 0.307 \\
+VGGT & 5000 &  & 17.502 & 0.593 & 0.303 \\
+VGGT & 5000 & Pose Opt & 17.169 & 0.542 & 0.293 \\
+VGGT & 10000 &  & 17.401 & 0.553 & 0.294 \\
+VGGT & 10000 & Pose Opt & 17.083 & 0.492 & 0.283 \\
+VGGT & 20000 &  & 17.334 & 0.529 & 0.286 \\
+VGGT & 20000 & Pose Opt & 17.160 & 0.446 & 0.276 \\
+VGGT & 30000 &  & 17.348 & 0.515 & 0.283 \\
+VGGT & 30000 & Pose Opt & 17.283 & 0.426 & 0.273 \\
+VGGT & 50000 &  & 17.288 & 0.501 & 0.278 \\
+VGGT & 50000 & Pose Opt & 17.275 & 0.402 & 0.267 \\
+VGGT & 75000 &  & 17.287 & 0.489 & 0.273 \\
+VGGT & 75000 & Pose Opt & 17.428 & 0.381 & 0.267 \\
+VGGT & 100000 &  & 17.264 & 0.482 & 0.271 \\
+VGGT & 100000 & Pose Opt & 17.426 & 0.379 & 0.267 \\
+VGGT & 250000 &  & 17.286 & 0.476 & 0.264 \\
+VGGT & 250000 & Pose Opt & 17.307 & 0.381 & 0.263 \\
+VGGT & 500000 &  & 17.189 & 0.460 & 0.252 \\
+VGGT & 500000 & Pose Opt & 17.187 & 0.380 & 0.257 \\
+VGGT & 1000000 &  & 17.229 & 0.466 & 0.245 \\
+VGGT & 1000000 & Pose Opt & 17.192 & 0.406 & 0.251 \\
 \bottomrule
 \end{tabular}
 \end{table}

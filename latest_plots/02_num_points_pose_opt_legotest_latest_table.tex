@@ -1,0 +1,12 @@
+\begin{table}[H]
+\caption{COLMAP versus VGGT initialized with different numbers of points and with pose optimization (Legotest)}
+\label{tab:02_num_points_pose_opt_legotest}
+\begin{tabular}{lrlrrrrrr}
+\toprule
+Choice & Num Points & Pose Opt & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP & 17846 &  & \underline{0.174} & \underline{0.003} & \underline{24.756} & \underline{0.054} & \underline{0.883} & \underline{0.848} \\
+COLMAP & 17846 & Pose Opt & \textbf{0.135} & \textbf{0.002} & \textbf{25.944} & \textbf{0.048} & \textbf{0.907} & \textbf{0.888} \\
+\bottomrule
+\end{tabular}
+\end{table}

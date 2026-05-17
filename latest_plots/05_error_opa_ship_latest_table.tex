@@ -1,0 +1,14 @@
+\begin{table}[H]
+\caption{Opacity initialization using error-based confidence (Ship)}
+\label{tab:05_error_opa_ship}
+\begin{tabular}{lllrrrrrr}
+\toprule
+Choice & Error Opa & Splatting Strategy & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Final Gaussian Count \\
+\midrule
+VGGT &  & Default & \textbf{0.467} & \textbf{0.027} & \textbf{21.937} & 0.168 & \textbf{0.724} & 380393 \\
+VGGT &  & MCMC & \textbf{0.467} & \textbf{0.027} & 21.930 & \textbf{0.159} & \underline{0.718} & 1000000 \\
+VGGT & Err Opa Init & Default & \textbf{0.467} & \textbf{0.027} & 21.925 & \underline{0.167} & \textbf{0.724} & 380835 \\
+VGGT & Err Opa Init & MCMC & \textbf{0.467} & \textbf{0.027} & \underline{21.936} & \textbf{0.159} & \underline{0.718} & 1000000 \\
+\bottomrule
+\end{tabular}
+\end{table}

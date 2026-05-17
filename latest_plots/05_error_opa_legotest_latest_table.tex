@@ -1,0 +1,14 @@
+\begin{table}[H]
+\caption{Opacity initialization using error-based confidence (Legotest)}
+\label{tab:05_error_opa_legotest}
+\begin{tabular}{lllrrrrrr}
+\toprule
+Choice & Error Opa & Splatting Strategy & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Final Gaussian Count \\
+\midrule
+VGGT &  & Default & \textbf{1.623} & \textbf{0.092} & 13.954 & 0.290 & \underline{0.658} & 256661 \\
+VGGT &  & MCMC & \textbf{1.623} & \textbf{0.092} & \underline{13.996} & \textbf{0.287} & 0.656 & 1000000 \\
+VGGT & Err Opa Init & Default & \textbf{1.623} & \textbf{0.092} & 13.949 & \underline{0.289} & \textbf{0.659} & 261898 \\
+VGGT & Err Opa Init & MCMC & \textbf{1.623} & \textbf{0.092} & \textbf{13.997} & \textbf{0.287} & 0.657 & 1000000 \\
+\bottomrule
+\end{tabular}
+\end{table}

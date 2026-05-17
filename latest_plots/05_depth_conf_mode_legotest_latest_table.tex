@@ -1,0 +1,14 @@
+\begin{table}[H]
+\caption{COLMAP versus VGGT with depth loss for different depth confidence modes. (Legotest)}
+\label{tab:05_depth_conf_mode_legotest}
+\begin{tabular}{llrrrrrr}
+\toprule
+Choice & Depth Conf Mode & RRE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Predicted Depth Abs Rel ↓ & Splatted Depth Abs Rel ↓ \\
+\midrule
+COLMAP &  & \textbf{0.174} & \textbf{25.080} & \textbf{0.052} & \textbf{0.889} &  & \textbf{0.062} \\
+VGGT &  & \underline{1.623} & 14.049 & \underline{0.274} & 0.662 & \textbf{0.029} & 0.091 \\
+VGGT & sigmoid & \underline{1.623} & 14.047 & \underline{0.274} & 0.662 & \textbf{0.029} & 0.091 \\
+VGGT & standard & \underline{1.623} & \underline{14.101} & 0.276 & \underline{0.663} & \textbf{0.029} & \underline{0.087} \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,0 +1,14 @@
+\begin{table}[H]
+\caption{COLMAP versus VGGT with depth loss (Ship)}
+\label{tab:05_depth_lambda_num_images_ship}
+\begin{tabular}{lrrrr}
+\toprule
+Choice & Num Images & Depth Lambda & RRE ↓ & Predicted Depth Abs Rel ↓ \\
+\midrule
+VGGT & 20 & 0 & 0.344 & \underline{0.097} \\
+VGGT & 30 & 0 & \underline{0.295} & 0.100 \\
+VGGT & 40 & 0 & \textbf{0.290} & 0.104 \\
+VGGT & 87 & 0 & 0.467 & \textbf{0.093} \\
+\bottomrule
+\end{tabular}
+\end{table}

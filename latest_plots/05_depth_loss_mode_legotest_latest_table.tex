@@ -1,0 +1,16 @@
+\begin{table}[H]
+\caption{COLMAP versus VGGT with depth loss for different depth loss modes. (Legotest)}
+\label{tab:05_depth_loss_mode_legotest}
+\begin{tabular}{llrrrrrr}
+\toprule
+Choice & Depth Loss Mode & RRE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Predicted Depth Abs Rel ↓ & Splatted Depth Abs Rel ↓ \\
+\midrule
+COLMAP &  & \textbf{0.174} & \textbf{25.887} & \textbf{0.048} & \textbf{0.906} &  & \textbf{0.062} \\
+COLMAP & points & \textbf{0.174} & \underline{25.080} & \underline{0.052} & \underline{0.889} &  & \textbf{0.062} \\
+VGGT &  & \underline{1.623} & 13.964 & 0.277 & 0.660 & \textbf{0.029} & \underline{0.090} \\
+VGGT & closer & \underline{1.623} & 14.049 & 0.274 & 0.662 & \textbf{0.029} & 0.091 \\
+VGGT & full & \underline{1.623} & 14.032 & 0.275 & 0.663 & \textbf{0.029} & 0.095 \\
+VGGT & points & \underline{1.623} & 14.010 & 0.274 & 0.660 & \textbf{0.029} & 0.091 \\
+\bottomrule
+\end{tabular}
+\end{table}

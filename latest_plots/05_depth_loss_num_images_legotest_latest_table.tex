@@ -1,0 +1,38 @@
+\begin{table}[H]
+\caption{COLMAP versus VGGT with depth loss for different depth loss modes. (Legotest)}
+\label{tab:05_depth_loss_num_images_legotest}
+\begin{tabular}{lrlrrrrrr}
+\toprule
+Choice & Num Images & Depth Loss Mode & RRE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Predicted Depth Abs Rel ↓ & Splatted Depth Abs Rel ↓ \\
+\midrule
+COLMAP & 20 &  & 94.398 & 10.925 & 0.515 & 0.652 &  & 3.980 \\
+COLMAP & 20 & points & 94.398 & 10.853 & 0.529 & 0.595 &  & 4.332 \\
+COLMAP & 30 &  & 122.682 & 10.853 & 0.516 & 0.669 &  & 10.388 \\
+COLMAP & 30 & points & 122.682 & 10.819 & 0.524 & 0.653 &  & 15.349 \\
+COLMAP & 40 &  & 91.327 & 10.877 & 0.500 & 0.655 &  & 2.170 \\
+COLMAP & 40 & points & 91.327 & 10.866 & 0.502 & 0.669 &  & 1.307 \\
+COLMAP & 100 &  & \textbf{0.174} & \textbf{25.887} & \textbf{0.048} & \textbf{0.906} &  & \textbf{0.062} \\
+COLMAP & 100 & points & \textbf{0.174} & \underline{25.080} & \underline{0.052} & \underline{0.889} &  & \textbf{0.062} \\
+VGGT & 10 &  & 1.632 & 13.718 & 0.338 & 0.618 & 0.035 & 0.097 \\
+VGGT & 10 & closer & 1.632 & 14.069 & 0.327 & 0.626 & 0.035 & \underline{0.089} \\
+VGGT & 10 & full & 1.632 & 14.080 & 0.315 & 0.632 & 0.035 & 0.095 \\
+VGGT & 10 & points & 1.632 & 13.648 & 0.339 & 0.615 & 0.035 & 0.103 \\
+VGGT & 20 &  & 2.209 & 13.588 & 0.315 & 0.627 & 0.034 & 0.102 \\
+VGGT & 20 & closer & 2.209 & 13.785 & 0.304 & 0.637 & 0.034 & 0.097 \\
+VGGT & 20 & full & 2.209 & 13.712 & 0.300 & 0.638 & 0.034 & 0.103 \\
+VGGT & 20 & points & 2.209 & 13.590 & 0.316 & 0.622 & 0.034 & 0.103 \\
+VGGT & 30 &  & 2.233 & 13.734 & 0.313 & 0.630 & \underline{0.033} & 0.096 \\
+VGGT & 30 & closer & 2.233 & 13.866 & 0.304 & 0.638 & \underline{0.033} & 0.094 \\
+VGGT & 30 & full & 2.233 & 13.788 & 0.302 & 0.638 & \underline{0.033} & 0.099 \\
+VGGT & 30 & points & 2.233 & 13.678 & 0.317 & 0.624 & \underline{0.033} & 0.098 \\
+VGGT & 40 &  & 1.723 & 13.884 & 0.302 & 0.640 & \underline{0.033} & 0.101 \\
+VGGT & 40 & closer & 1.723 & 13.986 & 0.298 & 0.645 & \underline{0.033} & 0.100 \\
+VGGT & 40 & full & 1.723 & 13.942 & 0.296 & 0.645 & \underline{0.033} & 0.106 \\
+VGGT & 40 & points & 1.723 & 13.884 & 0.305 & 0.637 & \underline{0.033} & 0.104 \\
+VGGT & 100 &  & \underline{1.623} & 13.964 & 0.277 & 0.660 & \textbf{0.029} & 0.090 \\
+VGGT & 100 & closer & \underline{1.623} & 14.049 & 0.274 & 0.662 & \textbf{0.029} & 0.091 \\
+VGGT & 100 & full & \underline{1.623} & 14.032 & 0.275 & 0.663 & \textbf{0.029} & 0.095 \\
+VGGT & 100 & points & \underline{1.623} & 14.010 & 0.274 & 0.660 & \textbf{0.029} & 0.091 \\
+\bottomrule
+\end{tabular}
+\end{table}
