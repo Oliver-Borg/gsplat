@@ -801,6 +801,8 @@ class Runner:
 
                 if "depth" in data and cfg.depth_loss_mode in ("full", "closer"):
                     full_depth_map = data["depth"].to(device)  # [1, H, W]
+                    parser_scale = float(np.linalg.norm(self.train_parser.transform[0, :3]))
+                    full_depth_map *= parser_scale
                     depth_bg_mask = ((full_depth_map == 0) | torch.isnan(full_depth_map)).to(device)
                     full_depth_map = torch.nan_to_num(full_depth_map)
                 else:
@@ -924,7 +926,10 @@ class Runner:
                     # IQM for better stability
                     q1 = len(scaling_factors) // 4
                     q3 = 3 * len(scaling_factors) // 4
-                    full_depth_map *= scaling_factors[q1: q3 + 1].mean()
+                    scaling_factor = scaling_factors[q1: q3 + 1].mean()
+                    if abs(scaling_factor - 1.0) > 0.1:
+                        print("Warning: Incorrect scaling detected")
+                    # full_depth_map *= scaling_factors[q1: q3 + 1].mean()
                 else:
                     sampled_full_depth_map = None
 
@@ -1241,6 +1246,7 @@ class Runner:
         else:
             matrix, align_metrics = None, {}
             scaling_factor = 1.0
+        scaling_factor *= float(np.linalg.norm(self.eval_parser.transform[0, :3]))
 
         valloader = torch.utils.data.DataLoader(
             self.valset, batch_size=1, shuffle=False, num_workers=1
