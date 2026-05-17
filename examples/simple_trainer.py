@@ -1236,9 +1236,11 @@ class Runner:
 
         if len(self.common_names) >= 3 and cfg.gt_train_data_dir is not None and not cfg.eval_opt:
             matrix, align_metrics = self.get_dataset_alignment_matrix(return_metrics=True)
+            scaling_factor = align_metrics["alignment_scale"]
             self.valset.transform_matrix = matrix
         else:
             matrix, align_metrics = None, {}
+            scaling_factor = 1.0
 
         valloader = torch.utils.data.DataLoader(
             self.valset, batch_size=1, shuffle=False, num_workers=1
@@ -1266,6 +1268,7 @@ class Runner:
                     gt_depths = gt_depths.unsqueeze(-1)
                 if gt_depths is not None:
                     gt_depths = torch.nan_to_num(gt_depths)
+                    gt_depths *= scaling_factor
 
                 height, width = pixels.shape[1:3]
 
@@ -1296,8 +1299,12 @@ class Runner:
                     valid_mask = gt_depths > 0
                     if valid_mask.sum() > 0:
                         depth_l1 = torch.abs(depths[valid_mask] - gt_depths[valid_mask]).mean()
+                        depth_abs_rel = (
+                            torch.abs(depths[valid_mask] - gt_depths[valid_mask]) / gt_depths[valid_mask]
+                        ).mean()
                         # TODO Normalize this based on gt_depths max to allow comparison across datasets
                         metrics["depth_l1"].append(depth_l1)
+                        metrics["depth_abs_rel"].append(depth_abs_rel)
                         norm_val = gt_depths.max()
                 else:
                     gt_depths = torch.zeros_like(depths)
@@ -1311,6 +1318,9 @@ class Runner:
                 pred_depth_norm = torch.stack(
                     [valid_mask.squeeze(-1) * torch.clip(depths.squeeze(-1) / norm_val, 0.0, 1.0)] * 3, dim=-1
                 )
+                pred_depth_raw = torch.stack(
+                    [torch.clip(depths.squeeze(-1) / norm_val, 0.0, 1.0)] * 3, dim=-1
+                )
                 gt_depth_norm = torch.stack([gt_depths.squeeze(-1) / norm_val] * 3, dim=-1)
                 depth_diff = torch.abs(pred_depth_norm - gt_depth_norm)
                 depth_diff = apply_float_colormap(depth_diff)
@@ -1320,13 +1330,14 @@ class Runner:
                     colors,
                     distances,
                     (0.6 * pixels + 0.4 * colors),
-                    pred_depth_norm,
+                    pred_depth_raw,
                 ]
 
                 depth_canvas_list = [
                     pred_depth_norm,
                     gt_depth_norm,
                     depth_diff,
+                    pred_depth_raw,
                 ]
 
                 if world_rank == 0:
@@ -1337,6 +1348,8 @@ class Runner:
                     metrics["lpips"].append(self.lpips(colors_p, pixels_p))
                     metrics["depth_factor"].append(depths.max())
                     metrics["gt_depth_factor"].append(gt_depths.max())
+                    metrics["image_cols"].append(torch.tensor(5, device=device, dtype=torch.float32))
+                    metrics["depth_cols"].append(torch.tensor(4, device=device, dtype=torch.float32))
                     if cfg.use_bilateral_grid:
                         cc_colors = color_correct(colors, pixels)
                         cc_colors_p = cc_colors.permute(0, 3, 1, 2)  # [1, 3, H, W]
