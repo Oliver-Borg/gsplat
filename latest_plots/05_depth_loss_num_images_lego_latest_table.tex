@@ -5,14 +5,14 @@
 \toprule
 Choice & Num Images & Depth Loss Mode & RRE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Predicted Depth Abs Rel ↓ & Splatted Depth Abs Rel ↓ \\
 \midrule
-COLMAP & 20 &  & 111.389 & 10.804 & 0.512 & 0.676 &  & 0.996 \\
-COLMAP & 20 & points & 111.389 & 10.804 & 0.511 & 0.676 &  & 1.004 \\
-COLMAP & 30 &  & 132.540 & 10.538 & 0.589 & 0.465 &  & 2.801 \\
-COLMAP & 30 & points & 132.540 & 10.549 & 0.566 & 0.580 &  & 3.403 \\
-COLMAP & 40 &  & 173.622 & 10.940 & 0.510 & 0.675 &  & 9.131 \\
-COLMAP & 40 & points & 173.622 & 10.940 & 0.510 & 0.675 &  & 1.003 \\
-COLMAP & 87 &  & 13.926 & 11.222 & 0.496 & 0.643 &  &  \\
-COLMAP & 87 & points & 13.926 & 10.159 & 0.529 & 0.522 &  & 0.497 \\
+COLMAP & 20 &  & 111.389 & 10.803 & 0.512 & 0.675 &  & 1.000 \\
+COLMAP & 20 & points & 111.389 & 10.804 & 0.511 & 0.676 &  & 1.009 \\
+COLMAP & 30 &  & 132.540 & 10.754 & 0.512 & 0.675 &  & 2.656 \\
+COLMAP & 30 & points & 132.540 & 10.754 & 0.512 & 0.675 &  & 1.092 \\
+COLMAP & 40 &  & 173.622 & 10.940 & 0.510 & 0.674 &  & 12.879 \\
+COLMAP & 40 & points & 173.622 & 10.938 & 0.512 & 0.674 &  & 2.229 \\
+COLMAP & 87 &  & 13.926 & 10.168 & 0.530 & 0.521 &  & 0.495 \\
+COLMAP & 87 & points & 13.926 & 10.149 & 0.531 & 0.520 &  & 0.506 \\
 VGGT & 10 &  & 2.592 & 13.137 & 0.358 & 0.601 & 0.023 & 0.096 \\
 VGGT & 10 & closer & 2.592 & 13.341 & 0.349 & 0.613 & 0.023 & 0.090 \\
 VGGT & 10 & full & 2.592 & 13.341 & 0.344 & 0.611 & 0.023 & 0.095 \\
@@ -29,10 +29,10 @@ VGGT & 40 &  & \underline{1.322} & 14.344 & 0.263 & 0.664 & \underline{0.015} & 
 VGGT & 40 & closer & \underline{1.322} & 14.392 & 0.261 & 0.666 & \underline{0.015} & 0.071 \\
 VGGT & 40 & full & \underline{1.322} & 14.345 & 0.263 & 0.666 & \underline{0.015} & 0.073 \\
 VGGT & 40 & points & \underline{1.322} & 14.336 & 0.264 & 0.663 & \underline{0.015} & 0.070 \\
-VGGT & 87 &  & \textbf{0.331} & \underline{20.479} & \underline{0.074} & \underline{0.777} & \textbf{0.013} & 0.105 \\
-VGGT & 87 & closer & \textbf{0.331} & 18.398 & 0.165 & 0.753 & \textbf{0.013} &  \\
-VGGT & 87 & full & \textbf{0.331} & 20.405 & 0.084 & 0.773 & \textbf{0.013} &  \\
-VGGT & 87 & points & \textbf{0.331} & \textbf{21.766} & \textbf{0.066} & \textbf{0.807} & \textbf{0.013} &  \\
+VGGT & 87 &  & \textbf{0.331} & 20.479 & 0.074 & 0.777 & \textbf{0.013} & 0.105 \\
+VGGT & 87 & closer & \textbf{0.331} & 20.518 & 0.077 & 0.778 & \textbf{0.013} & 2.965 \\
+VGGT & 87 & full & \textbf{0.331} & \textbf{21.883} & \underline{0.070} & \textbf{0.811} & \textbf{0.013} & 2.983 \\
+VGGT & 87 & points & \textbf{0.331} & \underline{21.788} & \textbf{0.066} & \underline{0.808} & \textbf{0.013} & 2.985 \\
 \bottomrule
 \end{tabular}
 \end{table}

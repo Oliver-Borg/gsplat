@@ -48,7 +48,9 @@
         "eval_rte":0.0150687508,
         "eval_rre":0.7821496725,
         "depth_l1":null,
+        "depth_abs_rel":null,
         "quality":0.1234977863,
+        "avge":0.4302039756,
         "real_num_points":110000,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s42_c0.0_p110000_random_nf0.5_nq1_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
         "gsplat_file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s42_c0.0_p110000_random_nf0.5_nq1_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
@@ -60,6 +62,9 @@
         "input_folder":"bicycle_4_n100_s42_c0.0_p110000_random_nf0.5_nq1_farthestpose",
         "output_folder":"bicycle_4_n100_s42_c0.0_p110000_random_nf0.5_nq1_farthestpose_i100_gteval_poseopt_steps15000_val_step14999.json",
         "initial_points":110000,
+        "pred_depth_l1":null,
+        "pred_depth_absrel":null,
+        "pred_depth_rmse":null,
         "plot_series":"vggt | 0.5 | 1.0"
     },
     {
@@ -111,7 +116,9 @@
         "eval_rte":0.0148750925,
         "eval_rre":0.783788085,
         "depth_l1":null,
+        "depth_abs_rel":null,
         "quality":0.1305863527,
+        "avge":0.4265667496,
         "real_num_points":110000,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s42_c0.0_p110000_random_nf0.5_nq2_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
         "gsplat_file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s42_c0.0_p110000_random_nf0.5_nq2_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
@@ -123,6 +130,9 @@
         "input_folder":"bicycle_4_n100_s42_c0.0_p110000_random_nf0.5_nq2_farthestpose",
         "output_folder":"bicycle_4_n100_s42_c0.0_p110000_random_nf0.5_nq2_farthestpose_i100_gteval_poseopt_steps15000_val_step14999.json",
         "initial_points":110000,
+        "pred_depth_l1":null,
+        "pred_depth_absrel":null,
+        "pred_depth_rmse":null,
         "plot_series":"vggt | 0.5 | 2.0"
     },
     {
@@ -174,7 +184,9 @@
         "eval_rte":0.0143377827,
         "eval_rre":0.7409411073,
         "depth_l1":null,
+        "depth_abs_rel":null,
         "quality":0.16254125,
+        "avge":0.4097334989,
         "real_num_points":110000,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s42_c0.0_p110000_random_nf0.5_nq10_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
         "gsplat_file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s42_c0.0_p110000_random_nf0.5_nq10_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
@@ -186,6 +198,9 @@
         "input_folder":"bicycle_4_n100_s42_c0.0_p110000_random_nf0.5_nq10_farthestpose",
         "output_folder":"bicycle_4_n100_s42_c0.0_p110000_random_nf0.5_nq10_farthestpose_i100_gteval_poseopt_steps15000_val_step14999.json",
         "initial_points":110000,
+        "pred_depth_l1":null,
+        "pred_depth_absrel":null,
+        "pred_depth_rmse":null,
         "plot_series":"vggt | 0.5 | 10.0"
     },
     {
@@ -237,7 +252,9 @@
         "eval_rte":0.0144942356,
         "eval_rre":0.7578892708,
         "depth_l1":null,
+        "depth_abs_rel":null,
         "quality":0.1301671254,
+        "avge":0.4279656162,
         "real_num_points":110000,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s42_c0.0_p110000_random_nf0.9_nq1_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
         "gsplat_file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s42_c0.0_p110000_random_nf0.9_nq1_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
@@ -249,6 +266,9 @@
         "input_folder":"bicycle_4_n100_s42_c0.0_p110000_random_nf0.9_nq1_farthestpose",
         "output_folder":"bicycle_4_n100_s42_c0.0_p110000_random_nf0.9_nq1_farthestpose_i100_gteval_poseopt_steps15000_val_step14999.json",
         "initial_points":110000,
+        "pred_depth_l1":null,
+        "pred_depth_absrel":null,
+        "pred_depth_rmse":null,
         "plot_series":"vggt | 0.9 | 1.0"
     },
     {
@@ -300,7 +320,9 @@
         "eval_rte":0.0146341491,
         "eval_rre":0.7530939579,
         "depth_l1":null,
+        "depth_abs_rel":null,
         "quality":0.1327447148,
+        "avge":0.4264702067,
         "real_num_points":110000,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s42_c0.0_p110000_random_nf0.9_nq2_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
         "gsplat_file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s42_c0.0_p110000_random_nf0.9_nq2_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
@@ -312,6 +334,9 @@
         "input_folder":"bicycle_4_n100_s42_c0.0_p110000_random_nf0.9_nq2_farthestpose",
         "output_folder":"bicycle_4_n100_s42_c0.0_p110000_random_nf0.9_nq2_farthestpose_i100_gteval_poseopt_steps15000_val_step14999.json",
         "initial_points":110000,
+        "pred_depth_l1":null,
+        "pred_depth_absrel":null,
+        "pred_depth_rmse":null,
         "plot_series":"vggt | 0.9 | 2.0"
     },
     {
@@ -363,7 +388,9 @@
         "eval_rte":0.0143919894,
         "eval_rre":0.752010107,
         "depth_l1":null,
+        "depth_abs_rel":null,
         "quality":0.1641854548,
+        "avge":0.4087859252,
         "real_num_points":110000,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s42_c0.0_p110000_random_nf0.9_nq10_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
         "gsplat_file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s42_c0.0_p110000_random_nf0.9_nq10_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
@@ -375,6 +402,9 @@
         "input_folder":"bicycle_4_n100_s42_c0.0_p110000_random_nf0.9_nq10_farthestpose",
         "output_folder":"bicycle_4_n100_s42_c0.0_p110000_random_nf0.9_nq10_farthestpose_i100_gteval_poseopt_steps15000_val_step14999.json",
         "initial_points":110000,
+        "pred_depth_l1":null,
+        "pred_depth_absrel":null,
+        "pred_depth_rmse":null,
         "plot_series":"vggt | 0.9 | 10.0"
     },
     {
@@ -426,7 +456,9 @@
         "eval_rte":0.0145226605,
         "eval_rre":0.7719777822,
         "depth_l1":null,
+        "depth_abs_rel":null,
         "quality":0.1232371496,
+        "avge":0.4298893953,
         "real_num_points":110000,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s42_c0.0_p110000_random_nf1.0_nq1_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
         "gsplat_file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s42_c0.0_p110000_random_nf1.0_nq1_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
@@ -438,6 +470,9 @@
         "input_folder":"bicycle_4_n100_s42_c0.0_p110000_random_nf1.0_nq1_farthestpose",
         "output_folder":"bicycle_4_n100_s42_c0.0_p110000_random_nf1.0_nq1_farthestpose_i100_gteval_poseopt_steps15000_val_step14999.json",
         "initial_points":110000,
+        "pred_depth_l1":null,
+        "pred_depth_absrel":null,
+        "pred_depth_rmse":null,
         "plot_series":"vggt | 1.0 | 1.0"
     },
     {
@@ -489,7 +524,9 @@
         "eval_rte":0.0143840602,
         "eval_rre":0.7601411939,
         "depth_l1":null,
+        "depth_abs_rel":null,
         "quality":0.1317636622,
+        "avge":0.42654694,
         "real_num_points":110000,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s42_c0.0_p110000_random_nf1.0_nq2_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
         "gsplat_file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s42_c0.0_p110000_random_nf1.0_nq2_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
@@ -501,6 +538,9 @@
         "input_folder":"bicycle_4_n100_s42_c0.0_p110000_random_nf1.0_nq2_farthestpose",
         "output_folder":"bicycle_4_n100_s42_c0.0_p110000_random_nf1.0_nq2_farthestpose_i100_gteval_poseopt_steps15000_val_step14999.json",
         "initial_points":110000,
+        "pred_depth_l1":null,
+        "pred_depth_absrel":null,
+        "pred_depth_rmse":null,
         "plot_series":"vggt | 1.0 | 2.0"
     },
     {
@@ -552,7 +592,9 @@
         "eval_rte":0.0141050601,
         "eval_rre":0.726180315,
         "depth_l1":null,
+        "depth_abs_rel":null,
         "quality":0.1666381327,
+        "avge":0.4080920576,
         "real_num_points":110000,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s42_c0.0_p110000_random_nf1.0_nq10_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
         "gsplat_file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s42_c0.0_p110000_random_nf1.0_nq10_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
@@ -564,6 +606,9 @@
         "input_folder":"bicycle_4_n100_s42_c0.0_p110000_random_nf1.0_nq10_farthestpose",
         "output_folder":"bicycle_4_n100_s42_c0.0_p110000_random_nf1.0_nq10_farthestpose_i100_gteval_poseopt_steps15000_val_step14999.json",
         "initial_points":110000,
+        "pred_depth_l1":null,
+        "pred_depth_absrel":null,
+        "pred_depth_rmse":null,
         "plot_series":"vggt | 1.0 | 10.0"
     },
     {
@@ -615,7 +660,9 @@
         "eval_rte":0.0140969995,
         "eval_rre":0.7236999273,
         "depth_l1":null,
+        "depth_abs_rel":null,
         "quality":0.1649977953,
+        "avge":0.4087893713,
         "real_num_points":110000,
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s42_c0.0_p110000_random_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
         "gsplat_file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/bicycle_4_n100_s42_c0.0_p110000_random_farthestpose_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
@@ -627,6 +674,9 @@
         "input_folder":"bicycle_4_n100_s42_c0.0_p110000_random_farthestpose",
         "output_folder":"bicycle_4_n100_s42_c0.0_p110000_random_farthestpose_i100_gteval_poseopt_steps15000_val_step14999.json",
         "initial_points":110000,
+        "pred_depth_l1":null,
+        "pred_depth_absrel":null,
+        "pred_depth_rmse":null,
         "plot_series":"vggt |  | "
     }
 ]

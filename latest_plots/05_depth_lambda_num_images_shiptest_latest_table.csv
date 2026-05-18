@@ -1,0 +1,5 @@
+choice,num_images,depth_lambda,rre,pred_depth_absrel
+VGGT,20,0,0.3307,0.0282
+VGGT,30,0,0.3467,0.0287
+VGGT,40,0,0.32,0.0289
+VGGT,100,0,0.3101,0.0275

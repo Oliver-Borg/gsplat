@@ -1,17 +1,15 @@
 \begin{table}[H]
 \caption{Test for different camera modes. (Bicycle)}
 \label{tab:99_camera_modes_bicycle}
-\begin{tabular}{lllrlrrrr}
+\begin{tabular}{llllrrrr}
 \toprule
-Choice & Sampling Mode & Use Ba & Max Ba Iterations & Camera Type & RRE ↓ & RTE ↓ & Aligned Cameras ↑ & Composite Quality ↑ \\
+Choice & Sampling Mode & Use Ba & Camera Type & RRE ↓ & RTE ↓ & Aligned Cameras ↑ & Composite Quality ↑ \\
 \midrule
-COLMAP &  &  &  &  & \underline{0.107} & \underline{0.008} & \textbf{100} & \textbf{0.443} \\
-VGGT & random & Use BA & 50 & pinhole & 0.871 & 0.047 & \textbf{100} & 0.130 \\
-VGGT & random & Use BA & 50 & radial & 0.792 & 0.048 & \textbf{100} & 0.138 \\
-VGGT & random & Use BA & 3000 & pinhole & 0.871 & 0.047 & \textbf{100} & 0.129 \\
-VGGT & random & Use BA & 3000 & radial & 0.792 & 0.048 & \textbf{100} & 0.138 \\
-VGGT & random &  &  &  & 0.857 & 0.067 & \textbf{100} & \underline{0.165} \\
-VGGT &  &  &  & pinhole & \textbf{0.096} & \textbf{0.007} & \textbf{100} &  \\
+COLMAP &  &  &  & \underline{0.107} & \underline{0.008} & \textbf{100} & \textbf{0.443} \\
+VGGT & random & Use BA & pinhole & 0.871 & 0.047 & \textbf{100} & 0.129 \\
+VGGT & random & Use BA & radial & 0.792 & 0.048 & \textbf{100} & 0.138 \\
+VGGT & random &  &  & 0.857 & 0.067 & \textbf{100} & \underline{0.165} \\
+VGGT &  &  & pinhole & \textbf{0.096} & \textbf{0.007} & \textbf{100} &  \\
 \bottomrule
 \end{tabular}
 \end{table}

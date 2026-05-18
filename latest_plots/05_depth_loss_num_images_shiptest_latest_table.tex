@@ -1,0 +1,15 @@
+\begin{table}[H]
+\caption{COLMAP versus VGGT with depth loss for different depth loss modes. (Shiptest)}
+\label{tab:05_depth_loss_num_images_shiptest}
+\begin{tabular}{lrlrr}
+\toprule
+Choice & Num Images & Depth Loss Mode & RRE ↓ & Predicted Depth Abs Rel ↓ \\
+\midrule
+VGGT & 10 &  & 0.473 & 0.030 \\
+VGGT & 20 &  & 0.419 & \textbf{0.028} \\
+VGGT & 30 &  & 0.390 & \underline{0.029} \\
+VGGT & 40 &  & \underline{0.339} & \underline{0.029} \\
+VGGT & 100 &  & \textbf{0.301} & \textbf{0.028} \\
+\bottomrule
+\end{tabular}
+\end{table}

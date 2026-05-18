@@ -1,14 +1,26 @@
 \begin{table}[H]
 \caption{COLMAP versus VGGT with depth loss (Ship)}
 \label{tab:05_depth_lambda_num_images_ship}
-\begin{tabular}{lrrrr}
+\begin{tabular}{lrrrrrrrr}
 \toprule
-Choice & Num Images & Depth Lambda & RRE ↓ & Predicted Depth Abs Rel ↓ \\
+Choice & Num Images & Depth Lambda & RRE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Predicted Depth Abs Rel ↓ & Splatted Depth Abs Rel ↓ \\
 \midrule
-VGGT & 20 & 0 & 0.344 & \underline{0.097} \\
-VGGT & 30 & 0 & \underline{0.295} & 0.100 \\
-VGGT & 40 & 0 & \textbf{0.290} & 0.104 \\
-VGGT & 87 & 0 & 0.467 & \textbf{0.093} \\
+VGGT & 20 & 0.000 & 0.344 & 21.473 & 0.142 & 0.711 & \underline{0.097} & 3.101 \\
+VGGT & 20 & 0.010 & 0.344 & 21.667 & 0.138 & 0.716 & \underline{0.097} & 3.101 \\
+VGGT & 20 & 0.100 & 0.344 & 21.996 & 0.145 & 0.724 & \underline{0.097} & 3.104 \\
+VGGT & 20 & 1.000 & 0.344 & 21.858 & 0.180 & 0.726 & \underline{0.097} & 3.100 \\
+VGGT & 30 & 0.000 & \underline{0.295} & 21.825 & 0.139 & 0.720 & 0.100 & 3.086 \\
+VGGT & 30 & 0.010 & \underline{0.295} & 21.952 & 0.138 & 0.723 & 0.100 & \textbf{3.081} \\
+VGGT & 30 & 0.100 & \underline{0.295} & 22.240 & 0.145 & 0.728 & 0.100 & 3.087 \\
+VGGT & 30 & 1.000 & \underline{0.295} & 22.307 & 0.178 & 0.735 & 0.100 & 3.086 \\
+VGGT & 40 & 0.000 & \textbf{0.290} & 21.710 & 0.139 & 0.716 & 0.104 & 3.093 \\
+VGGT & 40 & 0.010 & \textbf{0.290} & 21.814 & 0.138 & 0.719 & 0.104 & \underline{3.084} \\
+VGGT & 40 & 0.100 & \textbf{0.290} & 22.092 & 0.145 & 0.724 & 0.104 & 3.092 \\
+VGGT & 40 & 1.000 & \textbf{0.290} & 22.338 & 0.174 & 0.733 & 0.104 & 3.094 \\
+VGGT & 87 & 0.000 & 0.467 & 22.258 & \underline{0.132} & 0.733 & \textbf{0.093} & 3.219 \\
+VGGT & 87 & 0.010 & 0.467 & 22.571 & \textbf{0.131} & 0.740 & \textbf{0.093} & 3.210 \\
+VGGT & 87 & 0.100 & 0.467 & \underline{23.173} & 0.140 & \underline{0.755} & \textbf{0.093} & 3.219 \\
+VGGT & 87 & 1.000 & 0.467 & \textbf{23.312} & 0.185 & \textbf{0.763} & \textbf{0.093} & 3.219 \\
 \bottomrule
 \end{tabular}
 \end{table}

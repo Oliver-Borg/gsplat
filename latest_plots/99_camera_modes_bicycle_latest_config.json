@@ -21,7 +21,6 @@
         "colmap"
     ],
     "max_ba_iterations": [
-        50,
         3000
     ],
     "camera_type": [

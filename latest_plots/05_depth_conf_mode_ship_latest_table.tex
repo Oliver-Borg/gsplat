@@ -1,11 +1,14 @@
 \begin{table}[H]
 \caption{COLMAP versus VGGT with depth loss for different depth confidence modes. (Ship)}
 \label{tab:05_depth_conf_mode_ship}
-\begin{tabular}{llrl}
+\begin{tabular}{llrrrrrr}
 \toprule
-Choice & Depth Conf Mode & RRE ↓ & Predicted Depth Abs Rel ↓ \\
+Choice & Depth Conf Mode & RRE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Predicted Depth Abs Rel ↓ & Splatted Depth Abs Rel ↓ \\
 \midrule
-VGGT &  & \textbf{2.355} &  \\
+COLMAP &  & \underline{4.244} & \underline{22.078} & 0.169 & \textbf{0.745} &  & \underline{0.033} \\
+VGGT &  & \textbf{0.467} & 22.072 & \underline{0.142} & 0.729 & \textbf{0.027} & \textbf{0.032} \\
+VGGT & sigmoid & \textbf{0.467} & \textbf{22.092} & \textbf{0.141} & \underline{0.730} & \textbf{0.027} & \underline{0.033} \\
+VGGT & standard & \textbf{0.467} & 21.738 & 0.156 & 0.721 & \textbf{0.027} & 0.038 \\
 \bottomrule
 \end{tabular}
 \end{table}
