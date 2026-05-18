@@ -32,7 +32,7 @@ from torchmetrics.image.lpip import LearnedPerceptualImagePatchSimilarity
 from typing_extensions import Literal, assert_never
 from datasets.nerf_synth import SimpleParser
 from copy_cameras import copy_cameras
-from evaluation import EvalMetrics, calculate_metrics, umeyama_alignment
+from evaluation import EvalMetrics, calculate_metrics, stochastic_umeyama_alignment
 from utils import AnnealedSGLD, AppearanceOptModule, knn, rgb_to_sh, set_random_seed
 
 from gsplat import export_splats
@@ -1211,7 +1211,7 @@ class Runner:
                     torch.from_numpy(image_ids).to(self.device)
                 ).cpu().numpy()
         to_points = np.array([c2w[:3, 3] for c2w in train_c2ws])
-        s, R, t = umeyama_alignment(from_points, to_points)
+        s, R, t = stochastic_umeyama_alignment(from_points, to_points)
 
         align_poses = {name: c2w for name, c2w in zip(self.common_names, align_c2ws)}
         train_poses = {name: c2w for name, c2w in zip(self.used_training_names, train_c2ws)}
@@ -1239,15 +1239,15 @@ class Runner:
         device = self.device
         world_rank = self.world_rank
         world_size = self.world_size
+        align_scaling_factor = 1.0
 
         if len(self.common_names) >= 3 and cfg.gt_train_data_dir is not None and not cfg.eval_opt:
             matrix, align_metrics = self.get_dataset_alignment_matrix(return_metrics=True)
-            scaling_factor = 1.0  # align_metrics["alignment_scale"]
+            align_scaling_factor = align_metrics["alignment_scale"]
             self.valset.transform_matrix = matrix
         else:
             matrix, align_metrics = None, {}
-            scaling_factor = 1.0
-        scaling_factor *= float(np.linalg.norm(self.eval_parser.transform[0, :3]))
+        transform_scaling_factor = float(np.linalg.norm(self.eval_parser.transform[0, :3]))
 
         valloader = torch.utils.data.DataLoader(
             self.valset, batch_size=1, shuffle=False, num_workers=1
@@ -1275,7 +1275,6 @@ class Runner:
                     gt_depths = gt_depths.unsqueeze(-1)
                 if gt_depths is not None:
                     gt_depths = torch.nan_to_num(gt_depths)
-                    gt_depths *= scaling_factor
 
                 height, width = pixels.shape[1:3]
 
@@ -1305,6 +1304,23 @@ class Runner:
                 if gt_depths is not None:
                     valid_mask = gt_depths > 0
                     if valid_mask.sum() > 0:
+                        # I have had so many issues with getting the scaling
+                        # right so now I am just going to check all of them.
+                        # It seems to change depending on the dataset and SfM method.
+                        possible_scaling_factors = np.array(
+                            [
+                                1.0,
+                                align_scaling_factor,
+                                transform_scaling_factor,
+                                align_scaling_factor * transform_scaling_factor,
+                            ]
+                        )
+                        depth_abs_rels = [
+                            torch.abs(depths[valid_mask] - sf * gt_depths[valid_mask]).mean()
+                            for sf in possible_scaling_factors
+                        ]
+                        scaling_factor = possible_scaling_factors[torch.argmin(torch.tensor(depth_abs_rels))]
+                        gt_depths = gt_depths * scaling_factor
                         depth_l1 = torch.abs(depths[valid_mask] - gt_depths[valid_mask]).mean()
                         depth_abs_rel = (
                             torch.abs(depths[valid_mask] - gt_depths[valid_mask]) / gt_depths[valid_mask]

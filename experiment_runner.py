@@ -46,7 +46,7 @@ class Dataset:
     @property
     def eval_names(self):
         data_dir = Path(self.directory) / Path(self.data_folder_name)
-        images = sorted(os.listdir(data_dir))
+        images = sorted([f for f in os.listdir(data_dir) if "depth" not in f and "normal" not in f])
         return images[::8]
 
 
@@ -74,6 +74,24 @@ datasets = {
         gt_train_data_dir="../vggt/data/nerf_synthetic/lego/transforms_train.json",
         gt_eval_data_dir="../vggt/data/nerf_synthetic/lego/transforms_test.json",
         data_folder_name="train",
+        camera_type="SIMPLE_PINHOLE",
+    ),
+    "legotest": Dataset(
+        name="legotest",
+        factor=1,
+        directory="../vggt/data/nerf_synthetic/lego",
+        gt_train_data_dir="../vggt/data/nerf_synthetic/lego/transforms_test.json",
+        gt_eval_data_dir="../vggt/data/nerf_synthetic/lego/transforms_test.json",
+        data_folder_name="test",
+        camera_type="SIMPLE_PINHOLE",
+    ),
+    "shiptest": Dataset(
+        name="shiptest",
+        factor=1,
+        directory="../vggt/data/nerf_synthetic/ship",
+        gt_train_data_dir="../vggt/data/nerf_synthetic/ship/transforms_test.json",
+        gt_eval_data_dir="../vggt/data/nerf_synthetic/ship/transforms_test.json",
+        data_folder_name="test",
         camera_type="SIMPLE_PINHOLE",
     ),
     "drums": Dataset(
@@ -105,6 +123,12 @@ datasets = {
         directory="../vggt/data/blender",
         data_folder_name="dataset_N100_R5.5_H1.0_C-4.0_0.0_2.0_SIMPLE_PINHOLE_K-0.02_RMEevee_no_windows",
         camera_type="SIMPLE_PINHOLE",
+    ),
+    "facade": Dataset(
+        name="facade",
+        factor=4,
+        directory="../vggt/data/eth3d/facade",
+        data_folder_name="images_4",
     ),
 }
 
@@ -170,6 +194,7 @@ class Config:
     pose_opt_module: Literal["default", "3rgs", "mcmc", "sgld"] = "default"
 
     raw_metrics: bool = False
+    require_depth_metrics: bool = False
     construction_data: dict = field(default_factory=dict)
 
     @classmethod
@@ -245,7 +270,15 @@ class Config:
             assert self.gt_eval
 
         training_set_max_size = int(
-            len(os.listdir(Path(self.dataset.directory) / Path(self.dataset.data_folder_name))) * 7 / 8
+            len(
+                [
+                    name
+                    for name in os.listdir(Path(self.dataset.directory) / Path(self.dataset.data_folder_name))
+                    if "depth" not in name and "normal" not in name
+                ]
+            )
+            * 7
+            / 8
         )
         if self.num_images > training_set_max_size:
             self.num_images = training_set_max_size
@@ -513,8 +546,24 @@ class Config:
         if self.raw_metrics and self.splatting_metrics.get("raw_metrics") is None:
             return True
 
+        if self.splatting_metrics.get("depth_abs_rel") is None:
+            return True
+
         # if self.depth_loss_mode != "disabled":
         #     return True
+
+        if (
+            self.splatting_time < datetime.datetime(2026, 5, 18, 19, 45, 0).timestamp()
+            and "nerf_synthetic" in self.dataset.directory
+        ):
+            return True
+
+        if (
+            self.choice == "colmap"  # or self.depth_loss_mode == "full" or self.depth_loss_mode == "closer"
+            and self.splatting_time > datetime.datetime(2026, 5, 15, 20, 0).timestamp()
+            and self.splatting_time < datetime.datetime(2026, 5, 17, 12, 0).timestamp()
+        ):
+            return True
 
         if self.pose_opt and self.gt_eval and self.splatting_time < datetime.datetime(2026, 4, 16, 14, 0).timestamp():
             # Runs before this would not align before each evaluation
@@ -529,8 +578,21 @@ class Config:
             return True
 
         if self.gt_eval and self.is_splatted:
-            if len(list(filter(lambda x: "6999" in x, os.listdir(self.renders_folder)))) < len(self.dataset.eval_names):
+            if len(list(filter(lambda x: "14999" in x and "depth" not in x, os.listdir(self.renders_folder)))) < len(
+                self.dataset.eval_names
+            ):
                 return True
+            if self.require_depth_metrics and len(
+                list(filter(lambda x: "14999" in x and "depth" in x, os.listdir(self.renders_folder)))
+            ) < len(self.dataset.eval_names):
+                return True
+
+        if self.require_depth_metrics and self.splatting_time < datetime.datetime(2026, 5, 18, 14, 15, 0).timestamp():
+            return True  # 661406185708b56af3bcdcd990e0f6a7b052c22d
+
+        if self.require_depth_metrics and self.splatting_time < datetime.datetime(2026, 5, 18, 17, 30, 0).timestamp():
+            return True
+
         return False
         return self.sampling_mode == "ba" and self.camera_type == "SIMPLE_RADIAL" and self.choice == "vggt"
 
@@ -549,6 +611,13 @@ class Config:
         #     return True
 
         if self.reconstruct_pose_opt:
+            return True
+
+        if (
+            self.sampling_mode == "vox3"
+            or self.sampling_mode == "voxels"
+            and self.reconstruction_time < datetime.datetime(2026, 5, 17, 16, 30, 0).timestamp()
+        ):
             return True
 
         if self.optimisation_iterations > 0:
@@ -753,6 +822,9 @@ class Config:
         if not self.eval_metrics.get("real_num_points", 0):
             return True
 
+        if self.require_depth_metrics and self.eval_metrics.get("all_depth_absrel") is None:
+            return True
+
         return False
 
     def eval(self, force: bool = False):
@@ -902,6 +974,7 @@ class PlotConfig:
     shared_colors: bool = False
     raw_metrics: bool = False
     make_camera_plot: bool = False
+    make_pcd_plot: bool = False
 
 
 @dataclass
@@ -932,8 +1005,11 @@ class Experiment:
                 gt_config = replace(config, choice="gt")
                 gt_configs.append(gt_config)
 
-        if self.plot_args is not None and self.plot_args.raw_metrics:
-            configs = [replace(config, raw_metrics=True) for config in configs]
+        if self.plot_args is not None:
+            configs = [
+                replace(config, raw_metrics=self.plot_args.raw_metrics, require_depth_metrics=self.plot_args.show_depth)
+                for config in configs
+            ]
 
         configs += gt_configs
         config_set = set()
@@ -1127,6 +1203,7 @@ class Experiment:
             shared_colors=self.plot_args.shared_colors,
             plot_raw=self.plot_args.raw_metrics,
             make_camera_plot=self.plot_args.make_camera_plot,
+            make_pcd_plot=self.plot_args.make_pcd_plot,
         )
 
         # print("Plotted metrics from these files")
@@ -1204,6 +1281,7 @@ experiments = [
             show_gt=False,
             raw_metrics=True,
             make_camera_plot=True,
+            metric_keys=["rre", "rte", "psnr", "lpips", "ssim", "quality"],
         ),
         render_filter_override={
             "num_images": [20, 30, 40, 70, 100],
@@ -1354,6 +1432,7 @@ experiments = [
             split_param="sampling_mode",
             metric_keys=["psnr", "lpips", "ssim", "quality"],
             raw_metrics=True,
+            make_pcd_plot=True,
         ),
         render_filter_override={
             "seed": [42],
@@ -1705,8 +1784,7 @@ experiments = [
         val_steps=[1, 3_000, 7_000, 10_000, 15_000, 20_000, 25_000, 30_000],
         render_filter_override={
             "seed": [42],
-            "num_images": [30],
-            # "val_step": [7000],
+            "num_images": [100],
         },
     ),
     Experiment(
@@ -1792,7 +1870,7 @@ experiments = [
         PlotConfig(
             x_axis="depth_lambda",
             split_param="depth_conf_mode",
-            metric_keys=["psnr", "lpips", "ssim"],
+            metric_keys=["rre", "psnr", "lpips", "ssim", "pred_depth_absrel", "depth_abs_rel"],
             show_depth=True,
             show_gt=False,
         ),
@@ -1820,7 +1898,7 @@ experiments = [
         PlotConfig(
             x_axis="",
             split_param="depth_loss_mode",
-            metric_keys=["rre", "rte", "psnr", "lpips", "ssim", "depth_l1"],
+            metric_keys=["rre", "psnr", "lpips", "ssim", "pred_depth_absrel", "depth_abs_rel"],
             show_depth=True,
             show_gt=False,
             max_render_cols=5,
@@ -1830,6 +1908,38 @@ experiments = [
         render_filter_override={
             "seed": [42],
             "num_images": [100],
+            "depth_lambda": [1.0],
+        },
+        priority="high",
+    ),
+    Experiment(
+        "depth_loss_num_images",
+        5,
+        "COLMAP versus VGGT with depth loss for different depth loss modes.",
+        {
+            "seed": [42],  # , 43, 44
+            "num_images": [10, 20, 30, 40, 100],
+            "sampling_mode": ["random"],
+            "depth_loss_mode": ["disabled", "full", "points", "closer"],
+            "pose_opt": [True],
+            "choice": ["vggt", "colmap"],
+            "depth_lambda": [1.0],
+            "depth_conf_mode": ["disabled"],
+        },
+        PlotConfig(
+            x_axis="num_images",
+            split_param="depth_loss_mode",
+            metric_keys=["rre", "psnr", "lpips", "ssim", "pred_depth_absrel", "depth_abs_rel"],
+            show_depth=True,
+            show_gt=False,
+            max_render_cols=5,
+            render_nums=[0],
+            make_camera_plot=True,
+            raw_metrics=True,
+        ),
+        render_filter_override={
+            "seed": [42],
+            "num_images": [10, 20, 30, 40, 100],
             "depth_lambda": [1.0],
         },
         priority="high",
@@ -1855,7 +1965,7 @@ experiments = [
         PlotConfig(
             x_axis="",
             split_param="depth_conf_mode",
-            metric_keys=["quality", "eval_rre", "eval_rte", "real_num_points"],
+            metric_keys=["rre", "psnr", "lpips", "ssim", "pred_depth_absrel", "depth_abs_rel"],
             show_depth=True,
             show_gt=False,
             max_render_cols=5,
@@ -1885,7 +1995,7 @@ experiments = [
         PlotConfig(
             x_axis="num_images",
             split_param="depth_lambda",
-            metric_keys=["psnr", "lpips", "ssim", "quality"],
+            metric_keys=["rre", "psnr", "lpips", "ssim", "pred_depth_absrel", "depth_abs_rel"],
             max_render_cols=4,
             show_depth=True,
             show_gt=False,
@@ -2200,12 +2310,12 @@ experiments = [
             "pose_opt": [True],
             "gt_eval": True,
             "choice": ["vggt", "colmap"],
-            "max_ba_iterations": [50, 3000],
+            "max_ba_iterations": [3000],
             "camera_type": ["SIMPLE_RADIAL", "SIMPLE_PINHOLE"],
         },
         PlotConfig(
             x_axis="",
-            split_param="sampling_mode,use_ba,max_ba_iterations,camera_type",
+            split_param="sampling_mode,use_ba,camera_type",
             metric_keys=["rre", "rte", "num_aligned", "quality"],
             apply_jitter=False,
             raw_metrics=True,
@@ -2219,7 +2329,7 @@ experiments = [
     Experiment(
         "nearest_pose",
         99,
-        "Test for different camera modes.",
+        "Test for nearest pose selection for front facing reconstruction.",
         {
             "seed": [42],  # , 43, 44
             "num_images": [5, 10, 20, 30, 40],
@@ -2234,10 +2344,12 @@ experiments = [
             apply_jitter=False,
             raw_metrics=True,
             make_camera_plot=True,
+            max_render_cols=5,
         ),
         render_filter_override={
             "seed": [42],
             "num_images": [5, 10, 20, 30, 40],
+            "choice": ["vggt"],
         },
     ),
     Experiment(
@@ -2368,9 +2480,9 @@ experiments = [
         PlotConfig(
             x_axis="",
             split_param="near_filtering_strength,near_filtering_quorum",
-            metric_keys=["eval_rre", "eval_rte", "num_aligned", "psnr", "ssim", "lpips"],
+            metric_keys=["eval_rre", "eval_rte", "psnr", "ssim", "lpips", "quality"],
             max_render_cols=4,
-            render_nums=[0, 2],
+            make_pcd_plot=True,
         ),
         render_filter_override={
             "seed": [42],
@@ -2394,13 +2506,14 @@ experiments = [
         PlotConfig(
             x_axis="",
             split_param="near_filtering_strength,near_filtering_quorum",
-            metric_keys=["eval_rre", "eval_rte", "num_aligned", "psnr", "ssim", "lpips"],
+            metric_keys=["eval_rre", "eval_rte", "psnr", "ssim", "lpips", "quality"],
             max_render_cols=4,
-            render_nums=[0, 2],
         ),
         render_filter_override={
             "seed": [42],
             "num_images": [100],
+            "near_filtering_strength": [0.0, 1.0],
+            "near_filtering_quorum": [10],
         },
     ),
     Experiment(
@@ -2421,12 +2534,12 @@ experiments = [
             split_param="reconstruct_pose_opt,pose_opt",
             metric_keys=["rre", "rte", "num_aligned", "eval_rre", "eval_rte", "quality"],
             max_render_cols=4,
-            render_nums=[0, 2],
             make_camera_plot=True,
         ),
         render_filter_override={
             "seed": [42],
             "num_images": [100],
+            "pose_opt": True,
         },
     ),
     Experiment(
@@ -2440,19 +2553,19 @@ experiments = [
             "gt_eval": True,
             "choice": ["vggt"],
             "optimisation_iterations": [0, 1, 10, 20, 30],  # , 100
-            "pose_opt": [True, False],
+            "pose_opt": [True],  # , False
         },
         PlotConfig(
             x_axis="",
             split_param="optimisation_iterations,pose_opt",
-            metric_keys=["rre", "rte", "num_aligned", "eval_rre", "eval_rte", "quality"],
+            metric_keys=["rre", "rte", "eval_rre", "eval_rte", "quality"],
             max_render_cols=4,
-            render_nums=[0, 2],
             make_camera_plot=True,
         ),
         render_filter_override={
             "seed": [42],
             "num_images": [100],
+            "pose_opt": True,
         },
     ),
 ]
@@ -2463,7 +2576,7 @@ experiment_dict = {exp.name: exp for exp in experiments}
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run experiments")
     parser.add_argument(
-        "--experiment_names", type=str, required=True, help="Names of the experiments to run", nargs="+"
+        "--experiment_names", type=str, default="all", help="Names of the experiments to run", nargs="+"
     )
     parser.add_argument("--dataset_name", type=str, required=True, help="Name of the dataset to use", nargs="+")
     parser.add_argument("--skip_splatting", action="store_true", help="Whether to skip splatting")
@@ -2497,6 +2610,13 @@ if __name__ == "__main__":
         choices=list(get_args(PRIORITY)),
         help="Minimum priority to filter experiments.",
     )
+    parser.add_argument(
+        "--group_filter",
+        type=int,
+        default=[],
+        help="Groups to run. Can be given instead of experiment names.",
+        nargs="*",
+    )
 
     args = parser.parse_args()
 
@@ -2508,6 +2628,8 @@ if __name__ == "__main__":
     for arg_experiment in args.experiment_names:
         for experiment in experiments:
             if priority_map[experiment.priority] < priority_map[args.min_priority]:
+                continue
+            if args.group_filter and experiment.group not in args.group_filter:
                 continue
             for dataset_name in args.dataset_name:
                 if experiment.name == arg_experiment or arg_experiment == "all":

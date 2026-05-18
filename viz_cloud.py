@@ -12,7 +12,7 @@ import dataclasses
 from typing import Optional, Union, Tuple, Dict, List, Any
 
 from examples.datasets.colmap import Parser
-from examples.evaluation import umeyama_alignment, calculate_metrics, load_parser_data
+from examples.evaluation import stochastic_umeyama_alignment, umeyama_alignment, calculate_metrics, load_parser_data
 from geometry import unproject_depth_map_to_point_map
 from scipy.spatial import cKDTree  # type: ignore
 from vggt.cam_alignment import get_alignment_rotation
@@ -166,7 +166,7 @@ def run_gradio_eval(
     g_centers = np.array([gt_poses[n][:3, 3] for n in common_names])
 
     # 3. Alignment
-    s, R, t = umeyama_alignment(p_centers, g_centers)
+    s, R, t = stochastic_umeyama_alignment(p_centers, g_centers)
 
     fig_gt = go.Figure()
     fig_pred = go.Figure()
@@ -460,7 +460,7 @@ def get_projection_data(
 
     p_centers = np.array([pred_poses[n][:3, 3] for n in common_names])
     g_centers = np.array([gt_poses[n][:3, 3] for n in common_names])
-    s, R, t = umeyama_alignment(p_centers, g_centers)
+    s, R, t = stochastic_umeyama_alignment(p_centers, g_centers)
 
     # 2. Get Image and Intrinsics from Parser
     if camera_name in gt_parser.image_names:

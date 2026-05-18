@@ -132,3 +132,4 @@ plots/
 .gradio/
 *.sh
 experiment_log.txt
+chrome/

@@ -3,11 +3,11 @@ import numpy as np
 try:
     from .datasets.colmap import Parser
     from .datasets.nerf_synth import SimpleParser
-    from .evaluation import umeyama_alignment
+    from .evaluation import stochastic_umeyama_alignment
 except ImportError:  # TODO Figure out a better way to do this
     from datasets.colmap import Parser
     from datasets.nerf_synth import SimpleParser
-    from evaluation import umeyama_alignment
+    from evaluation import stochastic_umeyama_alignment
 
 
 def copy_cameras(
@@ -18,7 +18,8 @@ def copy_cameras(
     copy_points: bool = False,
 ):
     """
-    Copy the camera extrinsics, intrinsics, or 3D points from one parser to another in place after performing umeyama alignment
+    Copy the camera extrinsics, intrinsics, or 3D points from one
+    parser to another in place after performing umeyama alignment
     """
     # Convert set to a sorted list to guarantee deterministic iteration order for array alignment
     common_names = sorted(list(set(from_parser.image_names) & set(to_parser.image_names)))
@@ -35,7 +36,7 @@ def copy_cameras(
 
         from_centers = np.array([from_c2w_dict[name] for name in common_names])[:, :3, 3]
         to_centers = np.array([to_c2w_dict[name] for name in common_names])[:, :3, 3]
-        s, R, t = umeyama_alignment(from_centers, to_centers)
+        s, R, t = stochastic_umeyama_alignment(from_centers, to_centers)
     else:
         s, R, t = 1.0, np.eye(3), np.zeros(3)
 

@@ -3,6 +3,7 @@ import datetime
 import glob
 import json
 import os
+from pathlib import Path
 import cv2
 import numpy as np
 import pycolmap
@@ -91,6 +92,30 @@ def umeyama_alignment(
     return float(scale), rotation, translation
 
 
+def stochastic_umeyama_alignment(
+    from_points: np.ndarray, to_points: np.ndarray, with_scale: bool = True, num_trials: int = 10, num_samples: int = 3
+) -> tuple[float, np.ndarray, np.ndarray]:
+    best_score = float("inf")
+    best_transform = (1.0, np.eye(3), np.zeros(3))
+
+    for _ in range(num_trials):
+        indices = np.random.choice(
+            from_points.shape[0],
+            size=max(min(from_points.shape[0] // num_samples, from_points.shape[0]), 3),
+            replace=False,
+        )
+        s, R, t = umeyama_alignment(from_points[indices], to_points[indices], with_scale=with_scale)
+
+        transformed = s * (R @ from_points.T).T + t
+        score = np.mean(np.linalg.norm(transformed - to_points, axis=1))
+
+        if score < best_score:
+            best_score = score
+            best_transform = (s, R, t)
+
+    return best_transform
+
+
 def load_parser_data(
     path: str,
 ) -> Tuple[Optional[Union[Parser, SimpleParser]], Optional[Dict], Optional[Dict], Optional[Dict], Optional[str]]:
@@ -131,7 +156,7 @@ def calculate_metrics(
     p_centers = np.array([pred_poses[n][:3, 3] for n in common_names])
     g_centers = np.array([gt_poses[n][:3, 3] for n in common_names])
 
-    s, R_align, t_align = umeyama_alignment(p_centers, g_centers)
+    s, R_align, t_align = stochastic_umeyama_alignment(p_centers, g_centers)
 
     rre_list: List[float] = []
     rte_list: List[float] = []
@@ -160,6 +185,8 @@ def calculate_metrics(
 
     if pred_parser is not None and gt_parser is not None:
         if hasattr(pred_parser, "depths") and hasattr(gt_parser, "depths"):
+            if output_path is not None:
+                print("Writing depths to", (Path(output_path) / "depth_eval").absolute())
             for name in common_names:
                 if name in gt_parser.depths and name in pred_parser.depths:
                     gt_depth = gt_parser.depths[name]
