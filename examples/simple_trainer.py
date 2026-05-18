@@ -6,6 +6,7 @@ from collections import defaultdict
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple, Union
+import itertools
 
 from line_profiler import profile
 import imageio
@@ -1241,7 +1242,7 @@ class Runner:
 
         if len(self.common_names) >= 3 and cfg.gt_train_data_dir is not None and not cfg.eval_opt:
             matrix, align_metrics = self.get_dataset_alignment_matrix(return_metrics=True)
-            scaling_factor = align_metrics["alignment_scale"]
+            scaling_factor = 1.0  # align_metrics["alignment_scale"]
             self.valset.transform_matrix = matrix
         else:
             matrix, align_metrics = None, {}
@@ -1367,20 +1368,21 @@ class Runner:
                     canvas = (canvas * 255).astype(np.uint8)
                     depth_canvas = torch.cat(depth_canvas_list, dim=2).squeeze(0).cpu().numpy()
                     depth_canvas = (depth_canvas * 255).astype(np.uint8)
-                    for p in Path(self.render_dir).glob(f"{stage}_step{step}_{i:04d}*.png"):
-                        if p.is_file():
-                            p.unlink()
-                    for p in Path(self.render_dir).glob(f"{stage}_step{step}_{i:04d}*.jpg"):
-                        if p.is_file():
-                            p.unlink()
+                    for prefix, extension in itertools.product(["", "depth_"], ["png", "jpg"]):
+                        for p in Path(self.render_dir).glob(f"{prefix}{stage}_step{step}_{i:04d}*.{extension}"):
+                            if p.is_file():
+                                p.unlink()
+                    extension = (
+                        "png" if step == max([s for s in self.cfg.eval_steps if s <= self.cfg.max_steps]) - 1 else "jpg"
+                    )
                     executor.submit(
                         imageio.imwrite,
-                        f"{self.render_dir}/{stage}_step{step}_{i:04d}.jpg",
+                        f"{self.render_dir}/{stage}_step{step}_{i:04d}.{extension}",
                         canvas
                     )
                     executor.submit(
                         imageio.imwrite,
-                        f"{self.render_dir}/depth_{stage}_step{step}_{i:04d}.png",
+                        f"{self.render_dir}/depth_{stage}_step{step}_{i:04d}.{extension}",
                         depth_canvas
                     )
 
