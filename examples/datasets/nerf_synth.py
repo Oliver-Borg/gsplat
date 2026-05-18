@@ -86,7 +86,6 @@ class SimpleParser:
 
         for i, frame in enumerate(frames):
             fname = frame["file_path"] + ".png"
-            depth_fname = frame["file_path"] + "_depth_0001.png"
             base_dir = os.path.dirname(self.path)
             im_path = os.path.join(base_dir, fname)
             if not os.path.exists(im_path):
@@ -97,7 +96,16 @@ class SimpleParser:
 
             name = os.path.basename(fname)
             self.image_names.append(name)
-            full_depth_path = os.path.join(base_dir, depth_fname)
+
+            im_folder = os.path.dirname(im_path)
+            existing_files = os.listdir(im_folder)
+            im_name = name.split(".")[0]
+            depth_fname = (
+                list(filter(lambda x: "depth" in x and x.startswith(im_name + "_depth"), existing_files))
+                or [im_name + "_depth_0001.png"]
+            )[0]
+
+            full_depth_path = os.path.join(im_folder, depth_fname)
             if os.path.exists(full_depth_path):
                 depth = cv2.imread(full_depth_path, cv2.IMREAD_UNCHANGED)
                 # 0 is background
@@ -145,14 +153,17 @@ class SimpleParser:
                 vs = vs[valid_mask]
                 us = us[valid_mask]
 
-                h, w = depth_map.shape[:2]
-                # TODO This function is slow and wasteful so
-                # we should actually just get the rays for valid points
-                rays_o, rays_d = get_rays_np(h, w, K, c2w)
-                norm = np.linalg.norm(rays_d, axis=2, keepdims=True)
+                # Calculate rays only for valid sampled points
+                fx_k, fy_k = K[0, 0], K[1, 1]
+                cx_k, cy_k = K[0, 2], K[1, 2]
+
+                dirs = np.stack([(vs - cx_k) / fx_k, (us - cy_k) / fy_k, np.ones_like(vs)], axis=-1)
+                rays_d = np.sum(dirs[..., np.newaxis, :] * c2w[:3, :3], axis=-1)
+                norm = np.linalg.norm(rays_d, axis=-1, keepdims=True)
                 rays_d = rays_d / norm
 
-                world_points = rays_o[valid_mask] + rays_d[valid_mask] * depth_map[valid_mask, None]
+                rays_o = c2w[:3, -1]
+                world_points = rays_o + rays_d * depth_map[valid_mask][:, None]
 
                 if im_header.shape[:2] != depth_map.shape[:2]:
                     im_header = cv2.resize(im_header, (depth_map.shape[1], depth_map.shape[0]))
@@ -207,8 +218,8 @@ def reproject_depth(c2w: np.ndarray, K: np.ndarray, parser: SimpleParser, w: int
     z = z[valid_uv]
 
     # Convert coordinates to integer pixels
-    u = np.round(u).astype(int)
-    v = np.round(v).astype(int)
+    u = np.round(u).astype(int).clip(0, w - 1)
+    v = np.round(v).astype(int).clip(0, h - 1)
 
     # Initialize a depth map with infinity
     depth_map = np.full((h, w), np.inf)

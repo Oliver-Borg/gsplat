@@ -22,7 +22,7 @@ def main():
     train_dir = dataset.gt_train_data_dir
     eval_dir = dataset.gt_eval_data_dir
     train_parser = SimpleParser(train_dir)
-    eval_parser = SimpleParser(eval_dir, max_points=100000000)
+    eval_parser = SimpleParser(eval_dir, max_points=100_000_000, create_pointcloud=True)
 
     output_dir = Path(dataset.directory) / dataset.data_folder_name
     output_dir.mkdir(parents=True, exist_ok=True)
