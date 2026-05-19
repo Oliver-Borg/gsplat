@@ -916,20 +916,43 @@ class Runner:
 
                 if full_depth_map is not None:
                     # Prevent NaNs from corrupting grid_sample and scaling_factors
-                    safe_fdm_sampling = torch.nan_to_num(full_depth_map, nan=1e-3, posinf=1e-3, neginf=1e-3)
+                    safe_fdm_sampling = torch.nan_to_num(full_depth_map, nan=0.0, posinf=0.0, neginf=0.0)
                     sampled_full_depth_map = F.grid_sample(
                         safe_fdm_sampling.unsqueeze(0), grid, align_corners=True
                     )  # [1, 1, M, 1]
+                    valid_sample_mask = (sampled_full_depth_map > 1e-3).squeeze(3).squeeze(1)  # [1, M]
                     sampled_full_depth_map = sampled_full_depth_map.squeeze(3).squeeze(1)  # [1, M]
                     sampled_full_depth_map = torch.clamp(sampled_full_depth_map, min=1e-3)
-                    scaling_factors = safe_target_depths / sampled_full_depth_map
+                    scaling_factors = safe_target_depths[valid_sample_mask] / sampled_full_depth_map[valid_sample_mask]
                     scaling_factors = torch.sort(scaling_factors.flatten()).values
                     # IQM for better stability
                     q1 = len(scaling_factors) // 4
                     q3 = 3 * len(scaling_factors) // 4
                     scaling_factor = scaling_factors[q1: q3 + 1].mean()
                     if abs(scaling_factor - 1.0) > 0.1:
-                        print("Warning: Incorrect scaling detected")
+                        # Save the images to a debug folder for analysis
+                        save_debug_images = False
+                        if save_debug_images:
+                            debug_dir = f"{cfg.result_dir}/debug_rank{world_rank}"
+                            os.makedirs(debug_dir, exist_ok=True)
+                            # Save the full depth map, target depths, and sampled depths as images
+                            full_depth_vis = (full_depth_map - full_depth_map.min()) / (full_depth_map.max() - full_depth_map.min() + 1e-8)
+                            target_depth = torch.zeros_like(full_depth_map)
+                            sampled_depth = torch.zeros_like(full_depth_map)
+                            target_depth[0, points[0, :, 1].long(), points[0, :, 0].long()] = (
+                                target_depths.squeeze() - target_depths.min()
+                            ) / (target_depths.max() - target_depths.min() + 1e-8)
+                            sampled_depth[0, points[0, :, 1].long(), points[0, :, 0].long()] = (
+                                sampled_depths.squeeze() - sampled_depths.min()
+                            ) / (sampled_depths.max() - sampled_depths.min() + 1e-8)
+                            np_depth = np.nan_to_num(self.trainset.parser.depths[data["image_name"][0]])
+                            np_depth = (np_depth - np_depth.min()) / (np_depth.max() - np_depth.min() + 1e-8)
+                            imageio.imwrite(f"{debug_dir}/target_depth.png", (target_depth.squeeze().cpu().numpy() * 255).astype(np.uint8))
+                            imageio.imwrite(f"{debug_dir}/sampled_depth.png", (sampled_depth.detach().squeeze().cpu().numpy() * 255).astype(np.uint8))
+                            imageio.imwrite(f"{debug_dir}/full_depth_map.png", (full_depth_vis.squeeze().cpu().numpy() * 255).astype(np.uint8))
+                            imageio.imwrite(f"{debug_dir}/original_depth_map.png", (np_depth * 255).astype(np.uint8))
+                            print("Saved debug images to: ", debug_dir)
+                        print("Warning: Incorrect scaling detected. Scaling factor: ", scaling_factor)
                     # full_depth_map *= scaling_factors[q1: q3 + 1].mean()
                 else:
                     sampled_full_depth_map = None

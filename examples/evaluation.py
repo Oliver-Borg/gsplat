@@ -97,7 +97,8 @@ def stochastic_umeyama_alignment(
 ) -> tuple[float, np.ndarray, np.ndarray]:
     best_score = float("inf")
     best_transform = (1.0, np.eye(3), np.zeros(3))
-
+    base_seed = 42
+    np.random.seed(base_seed)
     for _ in range(num_trials):
         indices = np.random.choice(
             from_points.shape[0],

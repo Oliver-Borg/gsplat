@@ -84,6 +84,18 @@ def _resize_image_folder(image_dir: str, resized_dir: str, factor: int) -> str:
     return resized_dir
 
 
+def get_bbox_2d(arr):
+    mask = ~np.isnan(arr)
+    if not np.any(mask):
+        return (0, 0, 0, 0)
+    rows = np.any(mask, axis=1)
+    cols = np.any(mask, axis=0)
+    rmin, rmax = np.where(rows)[0][[0, -1]]
+    cmin, cmax = np.where(cols)[0][[0, -1]]
+
+    return rmin, rmax, cmin, cmax
+
+
 class Parser:
     """COLMAP parser."""
 
@@ -389,17 +401,29 @@ class Parser:
                 img_h, img_w = depth_data.shape[:2]
                 h_scale = actual_height / img_h
                 w_scale = actual_width / img_w
-                scaling_factor = min(h_scale, w_scale)
+                if h_scale != w_scale:
+                    rmin, rmax, cmin, cmax = get_bbox_2d(depth_data)
+                    depth_data = depth_data[rmin:rmax + 1, cmin:cmax + 1]
+                    img_h, img_w = depth_data.shape[:2]
+                    h_scale = actual_height / img_h
+                    w_scale = actual_width / img_w
+                scaling_factor = max(h_scale, w_scale)
                 # Scale and then center crop to be the same size as image
                 depth_data = cv2.resize(
                     depth_data, None, fx=scaling_factor, fy=scaling_factor, interpolation=cv2.INTER_NEAREST
                 )
                 img_h, img_w = depth_data.shape[:2]
+                begin_x = img_w // 2 - actual_width // 2
+                begin_y = img_h // 2 - actual_height // 2
 
                 depth_data = depth_data[
-                    img_h // 2 - actual_height // 2: img_h // 2 + actual_height // 2,
-                    img_w // 2 - actual_width // 2: img_w // 2 + actual_width // 2
+                    begin_y: begin_y + actual_height,
+                    begin_x: begin_x + actual_width,
                 ]
+                assert depth_data.shape[:2] == (
+                    actual_height,
+                    actual_width,
+                ), f"Depth map size {depth_data.shape[:2]} does not match image size {(actual_height, actual_width)}"
                 dest_dict[image_name] = depth_data
 
     def get_camera_positions(self, names: list[str]):
