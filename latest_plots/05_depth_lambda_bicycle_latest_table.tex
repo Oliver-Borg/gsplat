@@ -1,30 +1,30 @@
 \begin{table}[H]
 \caption{COLMAP versus VGGT with depth loss (Bicycle)}
 \label{tab:05_depth_lambda_bicycle}
-\begin{tabular}{lrlrrr}
+\begin{tabular}{lrlrrrrll}
 \toprule
-Choice & Depth Lambda & Depth Conf Mode & PSNR ↑ & LPIPS ↓ & SSIM ↑ \\
+Choice & Depth Lambda & Depth Conf Mode & RRE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Predicted Depth Abs Rel ↓ & Splatted Depth Abs Rel ↓ \\
 \midrule
-COLMAP & 0.000 &  & 22.422 & 0.349 & \textbf{0.575} \\
-COLMAP & 0.010 &  & \textbf{22.545} & 0.351 & \underline{0.567} \\
-COLMAP & 0.100 &  & \underline{22.447} & 0.367 & 0.554 \\
-COLMAP & 1.000 &  & 22.157 & 0.391 & 0.535 \\
-COLMAP & 10.000 &  & 21.365 & 0.435 & 0.487 \\
-VGGT & 0.000 &  & 17.291 & 0.349 & 0.262 \\
-VGGT & 0.000 & sigmoid & 17.314 & \underline{0.348} & 0.262 \\
-VGGT & 0.000 & standard & 17.301 & 0.349 & 0.263 \\
-VGGT & 0.010 &  & 17.347 & \underline{0.348} & 0.262 \\
-VGGT & 0.010 & sigmoid & 17.328 & \textbf{0.347} & 0.263 \\
-VGGT & 0.010 & standard & 17.312 & \underline{0.348} & 0.263 \\
-VGGT & 0.100 &  & 17.326 & 0.351 & 0.262 \\
-VGGT & 0.100 & sigmoid & 17.337 & \underline{0.348} & 0.262 \\
-VGGT & 0.100 & standard & 17.313 & 0.353 & 0.262 \\
-VGGT & 1.000 &  & 17.226 & 0.392 & 0.263 \\
-VGGT & 1.000 & sigmoid & 17.258 & 0.375 & 0.263 \\
-VGGT & 1.000 & standard & 17.236 & 0.399 & 0.264 \\
-VGGT & 10.000 &  & 17.251 & 0.454 & 0.263 \\
-VGGT & 10.000 & sigmoid & 17.221 & 0.438 & 0.262 \\
-VGGT & 10.000 & standard & 17.243 & 0.458 & 0.263 \\
+COLMAP & 0.000 &  & \textbf{0.102} & \textbf{22.571} & 0.349 & \textbf{0.569} &  &  \\
+COLMAP & 0.010 &  & \textbf{0.102} & \underline{22.531} & 0.355 & \underline{0.557} &  &  \\
+COLMAP & 0.100 &  & \textbf{0.102} & 22.321 & 0.373 & 0.535 &  &  \\
+COLMAP & 1.000 &  & \textbf{0.102} & 21.942 & 0.393 & 0.519 &  &  \\
+COLMAP & 10.000 &  & \textbf{0.102} & 21.211 & 0.435 & 0.470 &  &  \\
+VGGT & 0.000 &  & \underline{0.750} & 17.853 & 0.331 & 0.277 &  &  \\
+VGGT & 0.000 & sigmoid & \underline{0.750} & 17.917 & 0.331 & 0.278 &  &  \\
+VGGT & 0.000 & standard & \underline{0.750} & 17.878 & 0.331 & 0.277 &  &  \\
+VGGT & 0.010 &  & \underline{0.750} & 17.907 & \textbf{0.329} & 0.278 &  &  \\
+VGGT & 0.010 & sigmoid & \underline{0.750} & 17.940 & \textbf{0.329} & 0.278 &  &  \\
+VGGT & 0.010 & standard & \underline{0.750} & 17.895 & \textbf{0.329} & 0.278 &  &  \\
+VGGT & 0.100 &  & \underline{0.750} & 17.805 & 0.333 & 0.273 &  &  \\
+VGGT & 0.100 & sigmoid & \underline{0.750} & 17.857 & \underline{0.330} & 0.275 &  &  \\
+VGGT & 0.100 & standard & \underline{0.750} & 17.806 & 0.333 & 0.273 &  &  \\
+VGGT & 1.000 &  & \underline{0.750} & 17.347 & 0.380 & 0.257 &  &  \\
+VGGT & 1.000 & sigmoid & \underline{0.750} & 17.634 & 0.347 & 0.267 &  &  \\
+VGGT & 1.000 & standard & \underline{0.750} & 17.440 & 0.366 & 0.260 &  &  \\
+VGGT & 10.000 &  & \underline{0.750} & 17.326 & 0.446 & 0.258 &  &  \\
+VGGT & 10.000 & sigmoid & \underline{0.750} & 17.380 & 0.410 & 0.260 &  &  \\
+VGGT & 10.000 & standard & \underline{0.750} & 17.296 & 0.434 & 0.258 &  &  \\
 \bottomrule
 \end{tabular}
 \end{table}

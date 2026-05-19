@@ -5,26 +5,26 @@
 \toprule
 Choice & Depth Lambda & Depth Conf Mode & RRE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Predicted Depth Abs Rel ↓ & Splatted Depth Abs Rel ↓ \\
 \midrule
-COLMAP & 0.000 &  & \underline{4.244} & 17.716 & 0.386 & 0.618 &  & 0.162 \\
-COLMAP & 0.010 &  & \underline{4.244} & 17.714 & 0.385 & 0.618 &  & 0.162 \\
-COLMAP & 0.100 &  & \underline{4.244} & 17.758 & 0.384 & 0.620 &  & \textbf{0.157} \\
-COLMAP & 1.000 &  & \underline{4.244} & 17.759 & 0.387 & 0.621 &  & 0.162 \\
-COLMAP & 10.000 &  & \underline{4.244} & 17.804 & 0.391 & 0.626 &  & \underline{0.159} \\
-VGGT & 0.000 &  & \textbf{0.467} & 22.312 & 0.133 & 0.733 & \textbf{0.027} & 3.218 \\
-VGGT & 0.000 & sigmoid & \textbf{0.467} & 22.309 & 0.133 & 0.733 & \textbf{0.027} & 3.217 \\
-VGGT & 0.000 & standard & \textbf{0.467} & 22.296 & 0.133 & 0.733 & \textbf{0.027} & 3.217 \\
-VGGT & 0.010 &  & \textbf{0.467} & 22.356 & 0.132 & 0.735 & \textbf{0.027} & 3.213 \\
-VGGT & 0.010 & sigmoid & \textbf{0.467} & 22.371 & 0.132 & 0.735 & \textbf{0.027} & 3.213 \\
-VGGT & 0.010 & standard & \textbf{0.467} & 22.552 & \underline{0.131} & 0.739 & \textbf{0.027} & 3.205 \\
-VGGT & 0.100 &  & \textbf{0.467} & 22.425 & \underline{0.131} & 0.736 & \textbf{0.027} & 3.209 \\
-VGGT & 0.100 & sigmoid & \textbf{0.467} & 22.409 & \underline{0.131} & 0.736 & \textbf{0.027} & 3.209 \\
-VGGT & 0.100 & standard & \textbf{0.467} & 23.207 & \textbf{0.130} & 0.753 & \textbf{0.027} & 3.198 \\
-VGGT & 1.000 &  & \textbf{0.467} & 22.892 & \underline{0.131} & 0.747 & \textbf{0.027} & 3.208 \\
-VGGT & 1.000 & sigmoid & \textbf{0.467} & 22.892 & \textbf{0.130} & 0.747 & \textbf{0.027} & 3.208 \\
-VGGT & 1.000 & standard & \textbf{0.467} & 22.738 & 0.160 & 0.736 & \textbf{0.027} & 3.172 \\
-VGGT & 10.000 &  & \textbf{0.467} & \textbf{23.537} & 0.139 & \textbf{0.759} & \textbf{0.027} & 3.188 \\
-VGGT & 10.000 & sigmoid & \textbf{0.467} & \underline{23.487} & 0.138 & \underline{0.758} & \textbf{0.027} & 3.189 \\
-VGGT & 10.000 & standard & \textbf{0.467} & 22.609 & 0.220 & 0.718 & \textbf{0.027} & 3.153 \\
+COLMAP & 0.000 &  & \textbf{0.256} & 21.722 & 0.148 & \textbf{0.741} &  & 0.032 \\
+COLMAP & 0.010 &  & \textbf{0.256} & 21.711 & 0.148 & \textbf{0.741} &  & 0.032 \\
+COLMAP & 0.100 &  & \textbf{0.256} & 21.649 & 0.150 & 0.739 &  & 0.033 \\
+COLMAP & 1.000 &  & \textbf{0.256} & 21.681 & 0.157 & \underline{0.740} &  & 0.035 \\
+COLMAP & 10.000 &  & \textbf{0.256} & 21.370 & 0.181 & 0.732 &  & 0.037 \\
+VGGT & 0.000 &  & \underline{0.467} & 21.100 & 0.148 & 0.711 & \textbf{0.026} & \underline{0.030} \\
+VGGT & 0.000 & sigmoid & \underline{0.467} & 21.095 & 0.148 & 0.711 & \textbf{0.026} & \underline{0.030} \\
+VGGT & 0.000 & standard & \underline{0.467} & 21.096 & 0.148 & 0.710 & \textbf{0.026} & \underline{0.030} \\
+VGGT & 0.010 &  & \underline{0.467} & 21.115 & 0.148 & 0.711 & \textbf{0.026} & \underline{0.030} \\
+VGGT & 0.010 & sigmoid & \underline{0.467} & 21.097 & 0.147 & 0.711 & \textbf{0.026} & \underline{0.030} \\
+VGGT & 0.010 & standard & \underline{0.467} & 21.217 & \underline{0.146} & 0.713 & \textbf{0.026} & \underline{0.030} \\
+VGGT & 0.100 &  & \underline{0.467} & 21.127 & 0.147 & 0.711 & \textbf{0.026} & \underline{0.030} \\
+VGGT & 0.100 & sigmoid & \underline{0.467} & 21.139 & 0.147 & 0.712 & \textbf{0.026} & \underline{0.030} \\
+VGGT & 0.100 & standard & \underline{0.467} & 21.407 & 0.148 & 0.716 & \textbf{0.026} & \underline{0.030} \\
+VGGT & 1.000 &  & \underline{0.467} & 21.361 & \underline{0.146} & 0.715 & \textbf{0.026} & \textbf{0.029} \\
+VGGT & 1.000 & sigmoid & \underline{0.467} & 21.354 & \textbf{0.145} & 0.715 & \textbf{0.026} & \textbf{0.029} \\
+VGGT & 1.000 & standard & \underline{0.467} & 21.537 & 0.172 & 0.714 & \textbf{0.026} & 0.032 \\
+VGGT & 10.000 &  & \underline{0.467} & \textbf{21.975} & 0.154 & 0.726 & \textbf{0.026} & \underline{0.030} \\
+VGGT & 10.000 & sigmoid & \underline{0.467} & \underline{21.941} & 0.153 & 0.725 & \textbf{0.026} & \underline{0.030} \\
+VGGT & 10.000 & standard & \underline{0.467} & 21.546 & 0.233 & 0.701 & \textbf{0.026} & 0.035 \\
 \bottomrule
 \end{tabular}
 \end{table}

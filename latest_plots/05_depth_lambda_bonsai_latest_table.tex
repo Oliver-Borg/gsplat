@@ -1,11 +1,30 @@
 \begin{table}[H]
 \caption{COLMAP versus VGGT with depth loss (Bonsai)}
 \label{tab:05_depth_lambda_bonsai}
-\begin{tabular}{lrl}
+\begin{tabular}{lrlrrrrll}
 \toprule
-Choice & Depth Lambda & Depth Conf Mode \\
+Choice & Depth Lambda & Depth Conf Mode & RRE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Predicted Depth Abs Rel ↓ & Splatted Depth Abs Rel ↓ \\
 \midrule
-VGGT & 0 &  \\
+COLMAP & 0.000 &  & \textbf{0.173} & 24.936 & \underline{0.172} & 0.786 &  &  \\
+COLMAP & 0.010 &  & \textbf{0.173} & \underline{25.026} & \underline{0.172} & \underline{0.788} &  &  \\
+COLMAP & 0.100 &  & \textbf{0.173} & \textbf{26.852} & \textbf{0.169} & \textbf{0.850} &  &  \\
+COLMAP & 1.000 &  & \textbf{0.173} & 24.154 & 0.186 & 0.775 &  &  \\
+COLMAP & 10.000 &  & \textbf{0.173} & 22.470 & 0.217 & 0.708 &  &  \\
+VGGT & 0.000 &  & \underline{0.852} & 17.346 & 0.404 & 0.559 &  &  \\
+VGGT & 0.000 & sigmoid & \underline{0.852} & 17.341 & 0.404 & 0.559 &  &  \\
+VGGT & 0.000 & standard & \underline{0.852} & 17.342 & 0.405 & 0.558 &  &  \\
+VGGT & 0.010 &  & \underline{0.852} & 17.388 & 0.401 & 0.559 &  &  \\
+VGGT & 0.010 & sigmoid & \underline{0.852} & 17.335 & 0.403 & 0.558 &  &  \\
+VGGT & 0.010 & standard & \underline{0.852} & 17.369 & 0.402 & 0.558 &  &  \\
+VGGT & 0.100 &  & \underline{0.852} & 17.448 & 0.395 & 0.561 &  &  \\
+VGGT & 0.100 & sigmoid & \underline{0.852} & 17.327 & 0.404 & 0.558 &  &  \\
+VGGT & 0.100 & standard & \underline{0.852} & 17.356 & 0.404 & 0.558 &  &  \\
+VGGT & 1.000 &  & \underline{0.852} & 17.418 & 0.404 & 0.557 &  &  \\
+VGGT & 1.000 & sigmoid & \underline{0.852} & 17.424 & 0.402 & 0.558 &  &  \\
+VGGT & 1.000 & standard & \underline{0.852} & 17.465 & 0.404 & 0.558 &  &  \\
+VGGT & 10.000 &  & \underline{0.852} & 17.451 & 0.429 & 0.557 &  &  \\
+VGGT & 10.000 & sigmoid & \underline{0.852} & 17.500 & 0.415 & 0.559 &  &  \\
+VGGT & 10.000 & standard & \underline{0.852} & 17.515 & 0.428 & 0.561 &  &  \\
 \bottomrule
 \end{tabular}
 \end{table}
