@@ -7,7 +7,8 @@ import tqdm
 
 
 from experiment_runner import datasets
-from examples.datasets.nerf_synth import SimpleParser, reproject_depth
+from examples.datasets.nerf_synth import SimpleParser
+from vggt.cam_utils import reproject_depth
 
 
 def main():
@@ -33,7 +34,7 @@ def main():
         c2w = train_parser.camtoworlds[cam_id]
         K = train_parser.Ks_dict[cam_id]
         w, h = train_parser.imsize_dict[cam_id]
-        train_depth = reproject_depth(c2w, K, eval_parser, w, h)
+        train_depth = reproject_depth(c2w, K, eval_parser.points, eval_parser.points_rgb, w, h)
         image_name = train_parser.image_names[cam_id]
         # data/nerf_synthetic/lego/test/r_0.png data/nerf_synthetic/lego/test/r_0_depth_0001.png
         depth_output_name = output_dir / f"{image_name[:-4]}_depth_0001.png"
