@@ -13,7 +13,14 @@ from line_profiler import profile
 from tqdm import tqdm
 
 from vggt.plot_metrics import plot_graph, _parse_gsplat_json
-from vggt.reconstruct_args import ReconstructArgs, IMAGE_MODE, CAMERA_TYPE, COLMAP_MODE, SAMPLING_MODE, FEATURE_EXTRACTOR
+from vggt.reconstruct_args import (
+    ReconstructArgs,
+    IMAGE_MODE,
+    CAMERA_TYPE,
+    COLMAP_MODE,
+    SAMPLING_MODE,
+    FEATURE_EXTRACTOR,
+)
 
 
 import examples.evaluation
@@ -835,7 +842,8 @@ class Config:
         ]
         for key, value in self.reconstruct_args.items():
             if (
-                key in (
+                key
+                in (
                     "force",
                     "require_depth_conf",
                     "save_conf_as_errors",
@@ -1231,44 +1239,64 @@ class Experiment:
         configs = self.get_render_configs(dataset_name)
         return [Path(config.output_name) for config in configs]
 
-    def plot(self, dataset_name: str, create_pcp: bool = False, include_title: bool = False):
+    def plot(self, dataset_name: str | list[str], create_pcp: bool = False, include_title: bool = False):
         if self.plot_args is None:
             return
-        print(self.progress_stats(dataset_name))
+
+        # Normalize to list
+        dataset_names = dataset_name if isinstance(dataset_name, list) else [dataset_name]
+
+        # Collect scene names and dataset info
+        scene_names = [datasets[dn].scene_name for dn in dataset_names]
+        dataset_display_name = ",".join([datasets[dn].name for dn in dataset_names])
+
+        # Collect all folders across datasets
+        all_folders = []
+        for dn in dataset_names:
+            all_folders.extend(
+                list(
+                    zip(
+                        [path.name for path in self.get_input_paths(dn)],
+                        [path.name for path in self.get_output_paths(dn)],
+                    )
+                )
+            )
+
+        # Collect render and camera folders from first dataset (or all if needed)
+        render_folders = None
+        camera_folders = None
+        if self.render_filter_override != {}:
+            render_folders = []
+            camera_folders = []
+            for dn in dataset_names:
+                render_folders.extend([path.name for path in self.get_render_output_paths(dn)])
+                camera_folders.extend([path.name for path in self.get_render_input_paths(dn)])
+
+        split_param = self.plot_args.split_param
+
+        print(self.progress_stats(dataset_names[0]))
         plot_graph(
-            name=datasets[dataset_name].scene_name,
+            name=scene_names,
             prefix=self.name,
             x_axis=self.plot_args.x_axis,
-            split_param=self.plot_args.split_param,
+            split_param=split_param,
             filter=self.plot_args.filter,
-            # TODO This may cause incorrect data to be added to the plot but should be safe because of th i{n} part
-            folders=list(
-                zip(
-                    [path.name for path in self.get_input_paths(dataset_name)],
-                    [path.name for path in self.get_output_paths(dataset_name)],
-                )
-            ),
-            render_folders=(
-                list(path.name for path in self.get_render_output_paths(dataset_name))
-                if self.render_filter_override != {}
-                else None
-            ),
-            camera_folders=(
-                list(path.name for path in self.get_render_input_paths(dataset_name))
-                if self.render_filter_override != {}
-                else None
-            ),
+            # TODO This may cause incorrect data to be added to the plot but should be safe because of the i{n} part
+            folders=all_folders if all_folders else None,
+            render_folders=render_folders,
+            camera_folders=camera_folders,
             create_pcp=create_pcp,
             val_steps=self.val_steps,
             title=self.description,
             metric_keys=self.plot_args.metric_keys,
-            dataset_name=datasets[dataset_name].name,
+            dataset_name=dataset_display_name,
             experiment_name=f"{self.group:02d}_{self.name}",
             config_dict=self.config_dict,
             single_legend=self.plot_args.single_legend,
             create_table=True,
             print_title=include_title,
             split_choice=self.plot_args.split_choice,
+            split_dataset="dataset" not in str(split_param) and len(dataset_names) > 1,
             max_render_cols=self.plot_args.max_render_cols,
             show_depth=self.plot_args.show_depth,
             show_gt=self.plot_args.show_gt,
@@ -1510,7 +1538,7 @@ experiments = [
             metric_keys=["psnr", "lpips", "ssim", "quality"],
             raw_metrics=True,
             make_pcd_plot=True,
-            max_render_cols=4,
+            max_render_cols=6,
         ),
         render_filter_override={
             "seed": [42],
@@ -2814,7 +2842,7 @@ experiments = [
             "choice": ["colmap", "vggt"],
             "use_ba": [False, True],
             "max_ba_iterations": [50, 250],
-            "feature_extractor": ["sift", "aliked+sp", "aliked+sp+sift"]
+            "feature_extractor": ["sift", "aliked+sp", "aliked+sp+sift"],
         },
         PlotConfig(
             x_axis="",
@@ -2879,6 +2907,11 @@ if __name__ == "__main__":
         help="Groups to run. Can be given instead of experiment names.",
         nargs="*",
     )
+    parser.add_argument(
+        "--combined_datasets",
+        action="store_true",
+        help="Combine datasets into a single plot."
+    )
 
     args = parser.parse_args()
 
@@ -2893,8 +2926,8 @@ if __name__ == "__main__":
                 continue
             if args.group_filter and experiment.group not in args.group_filter:
                 continue
-            for dataset_name in args.dataset_name:
-                if experiment.name == arg_experiment or arg_experiment == "all":
+            if experiment.name == arg_experiment or arg_experiment == "all":
+                for dataset_name in args.dataset_name:
                     # try:
                     experiment = replace(experiment, include_gt=args.include_gt)
 
@@ -2913,6 +2946,9 @@ if __name__ == "__main__":
                             force_all=args.force_all,
                             enable_viewer=args.enable_viewer,
                         )
-                    experiment.plot(dataset_name)
+                    if not args.combined_datasets:
+                        experiment.plot(dataset_name)
                     # except Exception as e:
                     #     print(e)
+                if args.combined_datasets:
+                    experiment.plot(args.dataset_name)
