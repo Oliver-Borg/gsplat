@@ -13,7 +13,7 @@ from line_profiler import profile
 from tqdm import tqdm
 
 from vggt.plot_metrics import plot_graph, _parse_gsplat_json
-from vggt.reconstruct_args import ReconstructArgs, IMAGE_MODE, CAMERA_TYPE, COLMAP_MODE, SAMPLING_MODE
+from vggt.reconstruct_args import ReconstructArgs, IMAGE_MODE, CAMERA_TYPE, COLMAP_MODE, SAMPLING_MODE, FEATURE_EXTRACTOR
 
 
 import examples.evaluation
@@ -147,6 +147,36 @@ datasets.update(
     }
 )
 
+# MipNerf-360 indoor
+datasets.update(
+    {
+        name: Dataset(
+            name=name,
+            factor=2,
+            directory=f"../vggt/data/360_v2/{name}",
+            gt_eval_data_dir=f"../vggt/data/360_v2/{name}",
+            gt_train_data_dir=f"../vggt/data/360_v2/{name}",
+            data_folder_name="images_2",
+        )
+        for name in ["counter", "kitchen", "room"]
+    }
+)
+
+# MipNerf-360 outdoor
+datasets.update(
+    {
+        name: Dataset(
+            name=name,
+            factor=2,
+            directory=f"../vggt/data/360_v2/{name}",
+            gt_eval_data_dir=f"../vggt/data/360_v2/{name}",
+            gt_train_data_dir=f"../vggt/data/360_v2/{name}",
+            data_folder_name="images_2",
+        )
+        for name in ["garden", "stump"]
+    }
+)
+
 
 @dataclass
 class Config:
@@ -164,7 +194,7 @@ class Config:
     optimisation_iterations: int = 0
     optimisation_neighbourhood: int = 10
     use_ba: bool = False
-    max_ba_iterations: int = 50
+    max_ba_iterations: int = 250
     image_mode: IMAGE_MODE = "farthestpose"
     copy_mode: Literal[None, "crop", "square", "tiles"] = None
     shared_camera: bool = True
@@ -192,6 +222,7 @@ class Config:
     random_init: bool = False
     match_colmap_points: bool = False
     pose_opt_module: Literal["default", "3rgs", "mcmc", "sgld"] = "default"
+    feature_extractor: FEATURE_EXTRACTOR = "aliked+sp"
 
     raw_metrics: bool = False
     require_depth_metrics: bool = False
@@ -245,6 +276,14 @@ class Config:
         instance.random_init = data.get("random_init", cls.random_init)
         instance.match_colmap_points = data.get("match_colmap_points", cls.match_colmap_points)
         instance.pose_opt_module = data.get("pose_opt_module", cls.pose_opt_module)
+        instance.feature_extractor = data.get("feature_extractor", cls.feature_extractor)
+
+        # Loop over each key in data and print a warning if it is not a field on the Config dataclass
+        for key in data.keys():
+            if key in ("use_gt_cams", "all_opt"):
+                continue
+            if not hasattr(instance, key):
+                print(f"Warning: {key} is not a valid field on Config")
 
         instance.construction_data = data
         return replace(instance)
@@ -283,6 +322,10 @@ class Config:
         if self.num_images > training_set_max_size:
             self.num_images = training_set_max_size
 
+        if self.choice == "vggt":
+            # VGGT goes OOM after 100 images
+            self.num_images = min(100, self.num_images)
+
         self.use_ba = self.sampling_mode == "ba" or self.use_ba or self.choice == "colmap"
 
         if not (self.use_ba and self.choice == "vggt"):
@@ -308,6 +351,9 @@ class Config:
 
         if self.depth_loss_mode == "disabled":
             self.depth_lambda = 0.0
+
+        if self.depth_lambda == 0.0:
+            self.depth_loss_mode = "disabled"
 
         if self.depth_loss_mode != "disabled" and self.choice == "colmap":
             self.depth_loss_mode = "points"
@@ -371,6 +417,7 @@ class Config:
         elif self.choice == "vggt":
             if self.sampling_mode == "ba" or self.use_ba:
                 parts.append(self.camera_type.lower().replace("simple_", "m"))
+                parts.append(self.feature_extractor.replace("+", "-"))
             if self.sampling_mode != "ba":
                 parts.extend(
                     [
@@ -526,6 +573,8 @@ class Config:
 
     @property
     def splatting_time(self):
+        if not os.path.exists(self.splatting_val_path):
+            return 0
         return Path(self.splatting_val_path).stat().st_mtime
 
     @property
@@ -546,8 +595,8 @@ class Config:
         if self.raw_metrics and self.splatting_metrics.get("raw_metrics") is None:
             return True
 
-        if self.splatting_metrics.get("depth_abs_rel") is None:
-            return True
+        # if self.require_depth_metrics and self.splatting_metrics.get("depth_abs_rel") is None:
+        #     return True
 
         # if self.depth_loss_mode != "disabled":
         #     return True
@@ -556,6 +605,8 @@ class Config:
             self.splatting_time < datetime.datetime(2026, 5, 18, 19, 45, 0).timestamp()
             and "nerf_synthetic" in self.dataset.directory
         ):
+            # Technically this should be all runs because the alignment changed, but the ones that
+            # change drastically are the synthetic ones so we will just rerun those for now.
             return True
 
         if (
@@ -598,8 +649,8 @@ class Config:
 
     @property
     def force_reconstruct(self):
-        if not self.is_reconstructed:
-            return True
+        # if not self.is_reconstructed:
+        #     return True
 
         if self.choice == "gt":
             return False
@@ -608,6 +659,15 @@ class Config:
         #     return True
 
         # if self.choice == "colmap":
+        #     return True
+
+        if (
+            self.choice == "combined"
+            and self.reconstruction_time < datetime.datetime(2026, 5, 19, 18, 00, 0).timestamp()
+        ):
+            return True
+
+        # if self.sampling_mode == "imagefps":
         #     return True
 
         if self.reconstruct_pose_opt:
@@ -646,6 +706,8 @@ class Config:
 
     @property
     def reconstruction_time(self):
+        if not os.path.exists(self.reconstruction_stat_path):
+            return 0
         return Path(self.reconstruction_stat_path).stat().st_mtime
 
     @property
@@ -667,13 +729,13 @@ class Config:
             "sampling_mode": self.sampling_mode,
             "near_filtering_strength": self.near_filtering_strength,
             "near_filtering_quorum": self.near_filtering_quorum,
-            "reconstruct_pose_opt": self.reconstruct_pose_opt,
             "optimisation_iterations": self.optimisation_iterations,
             "optimisation_neighbourhood": self.optimisation_neighbourhood,
             "image_mode": self.image_mode,
             "camera_type": self.camera_type,
             "colmap_mode": self.colmap_mode,
             "max_ba_iterations": self.max_ba_iterations,
+            "feature_extractor": self.feature_extractor,
         }
 
         if (
@@ -682,6 +744,9 @@ class Config:
             args["require_depth_conf"] = True
         if self.error_opa:
             args["save_conf_as_errors"] = True
+
+        if self.reconstruct_pose_opt:
+            args["reconstruct_pose_opt"] = True
 
         if self.shared_camera:
             args["shared_camera"] = True
@@ -770,7 +835,14 @@ class Config:
         ]
         for key, value in self.reconstruct_args.items():
             if (
-                key in ("force", "require_depth_conf", "save_conf_as_errors", "shared_camera", "use_ba")
+                key in (
+                    "force",
+                    "require_depth_conf",
+                    "save_conf_as_errors",
+                    "shared_camera",
+                    "use_ba",
+                    "reconstruct_pose_opt",
+                )
                 and value is True
             ):
                 command.extend([f"--{key}"])
@@ -798,6 +870,8 @@ class Config:
 
     @property
     def eval_time(self):
+        if not os.path.exists(self.eval_path):
+            return 0
         return Path(self.eval_path).stat().st_mtime
 
     @property
@@ -1307,7 +1381,7 @@ experiments = [
             split_param="pose_opt",
             max_render_cols=4,
             show_gt=False,
-            raw_metrics=True,
+            raw_metrics=False,
             metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "quality"],
         ),
         render_filter_override={
@@ -1387,7 +1461,7 @@ experiments = [
         render_filter_override={
             "num_points_per_image": [10, 100, 1000, 10000],
         },
-        priority="high",
+        priority="low",
     ),
     Experiment(
         "num_points_pose_opt",
@@ -1412,7 +1486,7 @@ experiments = [
             "num_points_per_image": [10, 100, 1000, 10000],
             "pose_opt": [True],
         },
-        priority="high",
+        priority="low",
     ),
     Experiment(
         "sampling_mode",
@@ -1421,9 +1495,12 @@ experiments = [
         {
             "seed": [42],
             "num_images": [100],
-            "sampling_mode": ["voxels", "random", "confidence", "ba"],
+            "sampling_mode": ["voxels", "random", "confidence", "ba", "imagefps"],
+            # "sampling_mode": ["imagefps"],
             "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 2500, 5000, 10000],
+            # "num_points_per_image": [10, 100, 1000, 10000],
             "choice": ["vggt", "colmap"],
+            # "choice": ["vggt"],
             "use_gt_cams": False,
             "gt_eval": True,
         },
@@ -1433,6 +1510,7 @@ experiments = [
             metric_keys=["psnr", "lpips", "ssim", "quality"],
             raw_metrics=True,
             make_pcd_plot=True,
+            max_render_cols=4,
         ),
         render_filter_override={
             "seed": [42],
@@ -1447,9 +1525,13 @@ experiments = [
         {
             "seed": [42],
             "num_images": [100],
-            "sampling_mode": ["voxels", "random", "confidence", "ba"],
+            "sampling_mode": ["voxels", "random", "confidence", "ba", "imagefps"],
+            # "sampling_mode": ["imagefps"],
             "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 2500, 5000, 10000],
+            # "num_points_per_image": [10, 100, 1000, 10000],
+            # "num_points_per_image": [1000],
             "choice": ["vggt", "colmap"],
+            # "choice": ["vggt"],
             "use_gt_cams": [True],
             "gt_eval": True,
         },
@@ -1458,10 +1540,37 @@ experiments = [
             split_param="sampling_mode",
             metric_keys=["psnr", "lpips", "ssim", "quality"],
             raw_metrics=False,
+            max_render_cols=4,
         ),
         render_filter_override={
             "seed": [42],
-            "num_points_per_image": [2500],
+            "num_points_per_image": [1000],
+        },
+        priority="high",
+    ),
+    Experiment(
+        "sampling_mode_nomcmc",
+        3,
+        "A comparison of different VGGT point cloud sampling modes with GT cameras without MCMC.",
+        {
+            "seed": [42],
+            "num_images": [100],
+            "sampling_mode": ["voxels", "random", "confidence", "ba", "imagefps"],
+            "num_points_per_image": [10, 100, 1000, 10000],
+            "choice": ["vggt", "colmap"],
+            "use_gt_cams": [True],
+            "nomcmc": [True],
+            "gt_eval": True,
+        },
+        PlotConfig(
+            x_axis="num_points",
+            split_param="sampling_mode,splatting_strategy",
+            metric_keys=["psnr", "lpips", "ssim", "quality"],
+            raw_metrics=False,
+        ),
+        render_filter_override={
+            "seed": [42],
+            "num_points_per_image": [1000],
         },
     ),
     Experiment(
@@ -1687,6 +1796,97 @@ experiments = [
         },
     ),
     Experiment(
+        "combined_sampling_mode",
+        7,
+        "Combining cameras and point clouds with different sampling modes.",
+        {
+            "seed": [42],  #
+            "num_images": [100],
+            "sampling_mode": ["random", "confidence", "voxels", "ba", "imagefps"],
+            "pose_opt": [True],
+            "num_points_per_image": [10, 100, 1000],
+            "choice": ["combined"],
+            "pcd_src": ["both", "colmap"],
+            "camera_src": ["colmap"],
+            "num_steps": [15000],
+        },
+        PlotConfig(
+            x_axis="num_points",
+            split_param="sampling_mode",
+            metric_keys=["psnr", "lpips", "ssim", "quality"],
+            max_render_cols=4,
+            make_pcd_plot=True,
+        ),
+        val_steps=[15000],
+        render_filter_override={
+            "seed": [42],
+            # "sampling_mode": ["random", "confidence", "voxels", "ba", "imagefps"],
+            "sampling_mode": ["random", "confidence", "voxels", "imagefps"],
+            "num_points_per_image": [1000],
+            "num_images": [100],
+        },
+    ),
+    Experiment(
+        "combined_sampling_mode_full",
+        7,
+        "Combining cameras and point clouds with different sampling modes.",
+        {
+            "seed": [42],  #
+            "num_images": [300],
+            "sampling_mode": ["random", "confidence", "voxels", "ba", "imagefps"],
+            "pose_opt": [True],
+            "num_points_per_image": [10, 100, 1000],
+            "choice": ["combined"],
+            "pcd_src": ["both", "colmap"],
+            "camera_src": ["colmap"],
+            "num_steps": [15000],
+        },
+        PlotConfig(
+            x_axis="num_points",
+            split_param="sampling_mode",
+            metric_keys=["psnr", "lpips", "ssim", "quality"],
+            max_render_cols=4,
+            make_pcd_plot=True,
+        ),
+        val_steps=[15000],
+        render_filter_override={
+            "seed": [42],
+            # "sampling_mode": ["random", "confidence", "voxels", "ba", "imagefps"],
+            "sampling_mode": ["random", "confidence", "voxels", "imagefps"],
+            "num_points_per_image": [1000],
+            "num_images": [300],
+        },
+    ),
+    Experiment(
+        "combined_sampling_mode_single",
+        7,
+        "Combining cameras and point clouds with different sampling modes.",
+        {
+            "seed": [42],  #
+            "num_images": [300],
+            "sampling_mode": ["random", "confidence", "voxels", "ba", "imagefps"],
+            "pose_opt": [True],
+            "num_points_per_image": [1000],
+            "choice": ["combined"],
+            "pcd_src": ["both", "colmap"],
+            "camera_src": ["colmap"],
+            "num_steps": [15000, 30000],
+        },
+        PlotConfig(
+            x_axis="val_step",
+            split_param="sampling_mode,num_steps",
+            metric_keys=["psnr", "lpips", "ssim", "quality"],
+            max_render_cols=4,
+        ),
+        val_steps=[1, 3_000, 7_000, 10_000, 15_000, 20_000, 25_000, 30_000],
+        render_filter_override={
+            "seed": [42],
+            "sampling_mode": ["random", "confidence", "voxels", "ba", "imagefps"],
+            "num_points_per_image": [1000],
+            "num_images": [300],
+        },
+    ),
+    Experiment(
         "pose_opt_validation",
         4,
         "Pose optimization validation",
@@ -1861,7 +2061,7 @@ experiments = [
             "seed": [42],  # , 43, 44
             "num_images": [100],
             "sampling_mode": ["random"],
-            "depth_loss_mode": ["points"],
+            "depth_loss_mode": ["disabled", "points"],
             "pose_opt": [True],
             "choice": ["vggt", "colmap"],
             "depth_lambda": [0.0, 0.01, 0.1, 1, 10],
@@ -1869,7 +2069,7 @@ experiments = [
         },
         PlotConfig(
             x_axis="depth_lambda",
-            split_param="depth_conf_mode",
+            split_param="depth_conf_mode,depth_loss_mode",
             metric_keys=["rre", "psnr", "lpips", "ssim", "pred_depth_absrel", "depth_abs_rel"],
             show_depth=True,
             show_gt=False,
@@ -1889,7 +2089,7 @@ experiments = [
             "seed": [42],  # , 43, 44
             "num_images": [100],
             "sampling_mode": ["random"],
-            "depth_loss_mode": ["disabled", "full", "points", "closer"],
+            "depth_loss_mode": ["disabled", "points", "full", "closer"],
             "pose_opt": [True],
             "choice": ["vggt", "colmap"],
             "depth_lambda": [1.0],
@@ -1898,11 +2098,13 @@ experiments = [
         PlotConfig(
             x_axis="",
             split_param="depth_loss_mode",
-            metric_keys=["rre", "psnr", "lpips", "ssim", "pred_depth_absrel", "depth_abs_rel"],
+            metric_keys=["rre", "rte", "psnr", "lpips", "ssim", "quality"],
+            # metric_keys=["rre", "psnr", "lpips", "ssim", "pred_depth_absrel", "depth_abs_rel"],
             show_depth=True,
-            show_gt=False,
-            max_render_cols=5,
-            render_nums=[0, 2, 3, 4, 5],
+            show_gt=True,
+            max_render_cols=4,
+            # render_nums=[0, 2, 3, 4, 5],
+            render_nums=[3],
             make_camera_plot=True,
         ),
         render_filter_override={
@@ -1942,7 +2144,7 @@ experiments = [
             "num_images": [10, 20, 30, 40, 100],
             "depth_lambda": [1.0],
         },
-        priority="high",
+        priority="medium",
     ),
     Experiment(
         "depth_conf_mode",
@@ -2136,6 +2338,7 @@ experiments = [
             split_param="use_gt_extrinsics,use_gt_intrinsics,use_gt_points",
             metric_keys=["quality"],
             split_choice=True,
+            shared_colors=True,
             max_render_cols=4,
         ),
         render_filter_override={
@@ -2203,7 +2406,7 @@ experiments = [
             "pose_opt": [False],
             "gt_eval": True,
             "choice": ["combined"],
-            "pcd_src": ["colmap", "vggt"],
+            "pcd_src": ["colmap", "vggt", "both"],
             "camera_src": ["colmap"],
         },
         PlotConfig(
@@ -2545,7 +2748,7 @@ experiments = [
     Experiment(
         "optimisation_iterations",
         99,
-        "Test for reconstruct optimisation iterations",
+        "Test for reconstruct optimization iterations",
         {
             "seed": [42],
             "num_images": [100],
@@ -2566,6 +2769,65 @@ experiments = [
             "seed": [42],
             "num_images": [100],
             "pose_opt": True,
+        },
+    ),
+    Experiment(
+        "all_improvements",
+        99,
+        "Test for optimal configuration of all improvements.",
+        {
+            "seed": [42],
+            "num_images": [100],
+            "sampling_mode": ["random"],
+            "num_points_per_image": [1000],
+            "gt_eval": True,
+            "choice": ["combined", "colmap", "vggt"],
+            "camera_src": ["colmap"],
+            "pcd_src": ["both"],
+            "pose_opt": [True],  # , False
+            "depth_loss_mode": ["full", "closer", "points", "disabled"],
+            "depth_lambda": [0.0, 0.1, 1.0],
+        },
+        PlotConfig(
+            x_axis="",
+            split_param="depth_loss_mode,depth_lambda,real_num_points",
+            metric_keys=["eval_rre", "eval_rte", "psnr", "ssim", "lpips", "quality"],
+            max_render_cols=4,
+            make_camera_plot=True,
+            make_pcd_plot=True,
+            show_depth=True,
+        ),
+        render_filter_override={
+            "seed": [42],
+            "num_images": [100],
+        },
+    ),
+    Experiment(
+        "feature_extractor",
+        99,
+        "Test for feature extractors.",
+        {
+            "seed": [42],
+            "num_images": [100],
+            "sampling_mode": ["random"],
+            "num_points_per_image": [1000],
+            "choice": ["colmap", "vggt"],
+            "use_ba": [False, True],
+            "max_ba_iterations": [50, 250],
+            "feature_extractor": ["sift", "aliked+sp", "aliked+sp+sift"]
+        },
+        PlotConfig(
+            x_axis="",
+            split_param="use_ba,feature_extractor,max_ba_iterations",
+            metric_keys=["rre", "rte", "psnr", "ssim", "lpips", "quality"],
+            max_render_cols=4,
+            make_camera_plot=True,
+            make_pcd_plot=False,
+            show_depth=False,
+        ),
+        render_filter_override={
+            "seed": [42],
+            "num_images": [100],
         },
     ),
 ]
