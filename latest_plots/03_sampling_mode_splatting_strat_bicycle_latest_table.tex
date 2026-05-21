@@ -1,0 +1,25 @@
+\begin{table}[H]
+\caption{A comparison of different VGGT point cloud sampling modes with GT cameras and different splatting modes (Bicycle)}
+\label{tab:03_sampling_mode_splatting_strat_bicycle}
+\small
+\begin{tabular}{lrllrrrr}
+\toprule
+Choice & Num Points & Sampling Mode & Splatting Strategy & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+VGGT & 1000 & confidence & Default & 21.121 & 0.489 & 0.473 & 0.272 \\
+VGGT & 1000 & random & Default & 21.746 & 0.450 & 0.508 & 0.328 \\
+VGGT & 1000 & voxels & Default & 21.874 & 0.421 & 0.525 & 0.359 \\
+VGGT & 10000 & confidence & Default & 21.538 & 0.388 & 0.537 & 0.380 \\
+VGGT & 10000 & random & Default & 22.067 & 0.398 & 0.542 & 0.387 \\
+VGGT & 10000 & voxels & Default & 21.866 & 0.428 & 0.523 & 0.353 \\
+VGGT & 23318 & ba & Default & 22.238 & 0.387 & 0.549 & 0.400 \\
+VGGT & 100000 & confidence & Default & 22.109 & 0.283 & 0.596 & 0.490 \\
+VGGT & 100000 & imagefps & Default & 22.157 & 0.329 & 0.580 & 0.453 \\
+VGGT & 100000 & random & Default & \textbf{22.582} & 0.259 & \underline{0.620} & 0.527 \\
+VGGT & 100000 & voxels & Default & 22.035 & 0.382 & 0.547 & 0.398 \\
+VGGT & 1000000 & confidence & Default & 21.837 & 0.233 & 0.601 & 0.518 \\
+VGGT & 1000000 & random & Default & 22.132 & \textbf{0.205} & \underline{0.620} & \underline{0.552} \\
+VGGT & 1000000 & voxels & Default & \underline{22.433} & \underline{0.215} & \textbf{0.623} & \textbf{0.554} \\
+\bottomrule
+\end{tabular}
+\end{table}

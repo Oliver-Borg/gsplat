@@ -1,16 +1,17 @@
 \begin{table}[H]
 \caption{Test for reconstruct pose opt (Bicycle)}
 \label{tab:99_reconstruct_pose_opt_bicycle}
+\small
 \begin{tabular}{lllrrrrrr}
 \toprule
 Choice & Reconstruct Pose Opt & Pose Opt & RRE ↓ & RTE ↓ & Aligned Cameras ↑ & Val RRE ↓ & Val RTE ↓ & Composite Quality ↑ \\
 \midrule
-COLMAP &  &  & \textbf{0.107} & \textbf{0.008} & \textbf{100} & \underline{0.107} & \textbf{0.002} & \underline{0.345} \\
-COLMAP &  & Pose Opt & \textbf{0.107} & \textbf{0.008} & \textbf{100} & \textbf{0.098} & \textbf{0.002} & \textbf{0.443} \\
-VGGT &  &  & \underline{0.857} & \underline{0.067} & \textbf{100} & 0.857 & 0.015 & 0.104 \\
-VGGT &  & Pose Opt & \underline{0.857} & \underline{0.067} & \textbf{100} & 0.724 & \underline{0.014} & 0.165 \\
-VGGT & Rec Pose Opt &  & 0.907 & 0.182 & \textbf{100} & 1.319 & 0.103 & -0.033 \\
-VGGT & Rec Pose Opt & Pose Opt & 0.907 & 0.182 & \textbf{100} & 1.294 & 0.102 & -0.033 \\
+COLMAP &  &  & \textbf{0.099} & \textbf{0.007} & \textbf{100} & \textbf{0.102} & \textbf{0.002} & \underline{0.362} \\
+COLMAP &  & Pose Opt & \textbf{0.099} & \textbf{0.007} & \textbf{100} & \underline{0.111} & \textbf{0.002} & \textbf{0.428} \\
+VGGT &  &  & 0.750 & 0.067 & \textbf{100} & 0.857 & 0.015 & 0.104 \\
+VGGT &  & Pose Opt & 0.750 & 0.067 & \textbf{100} & 0.724 & \underline{0.014} & 0.165 \\
+VGGT & Rec Pose Opt &  & \underline{0.716} & \underline{0.066} & \textbf{100} & 1.319 & 0.103 & -0.033 \\
+VGGT & Rec Pose Opt & Pose Opt & \underline{0.716} & \underline{0.066} & \textbf{100} & 1.294 & 0.102 & -0.033 \\
 \bottomrule
 \end{tabular}
 \end{table}

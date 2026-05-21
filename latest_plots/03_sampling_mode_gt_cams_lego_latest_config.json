@@ -9,7 +9,8 @@
         "voxels",
         "random",
         "confidence",
-        "ba"
+        "ba",
+        "imagefps"
     ],
     "num_points_per_image": [
         10,

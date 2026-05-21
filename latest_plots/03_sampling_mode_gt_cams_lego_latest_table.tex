@@ -1,45 +1,56 @@
 \begin{table}[H]
 \caption{A comparison of different VGGT point cloud sampling modes with GT cameras (Lego)}
 \label{tab:03_sampling_mode_gt_cams_lego}
-\begin{tabular}{lrl}
+\small
+\begin{tabular}{lrlrrrr}
 \toprule
-Choice & Num Points & Sampling Mode \\
+Choice & Num Points & Sampling Mode & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
 \midrule
-VGGT & 870 & confidence \\
-VGGT & 870 & random \\
-VGGT & 870 & voxels \\
-VGGT & 4350 & confidence \\
-VGGT & 4350 & random \\
-VGGT & 4350 & voxels \\
-VGGT & 8700 & confidence \\
-VGGT & 8700 & random \\
-VGGT & 8700 & voxels \\
-VGGT & 17400 & confidence \\
-VGGT & 17400 & random \\
-VGGT & 17400 & voxels \\
-VGGT & 26100 & confidence \\
-VGGT & 26100 & random \\
-VGGT & 26100 & voxels \\
-VGGT & 43500 & confidence \\
-VGGT & 43500 & random \\
-VGGT & 43500 & voxels \\
-VGGT & 65250 & confidence \\
-VGGT & 65250 & random \\
-VGGT & 65250 & voxels \\
-VGGT & 87000 & confidence \\
-VGGT & 87000 & random \\
-VGGT & 87000 & voxels \\
-VGGT & 217500 & confidence \\
-VGGT & 217500 & random \\
-VGGT & 217500 & voxels \\
-VGGT & 435000 & confidence \\
-VGGT & 435000 & random \\
-VGGT & 435000 & voxels \\
-VGGT & 870000 & confidence \\
-VGGT & 870000 & random \\
-VGGT & 870000 & voxels \\
-VGGT &  & ba \\
-VGGT &  &  \\
+COLMAP & 10069 &  & 33.139 & 0.034 & \underline{0.980} & 1.072 \\
+VGGT & 870 & confidence &  &  &  &  \\
+VGGT & 870 & imagefps &  &  &  &  \\
+VGGT & 870 & random & 31.891 & 0.049 & 0.970 & 1.034 \\
+VGGT & 870 & voxels & 31.824 & 0.050 & 0.969 & 1.031 \\
+VGGT & 4350 & confidence &  &  &  &  \\
+VGGT & 4350 & imagefps &  &  &  &  \\
+VGGT & 4350 & random & 32.955 & 0.035 & 0.979 & 1.067 \\
+VGGT & 4350 & voxels & 32.927 & 0.036 & 0.978 & 1.066 \\
+VGGT & 8700 & confidence &  &  &  &  \\
+VGGT & 8700 & imagefps &  &  &  &  \\
+VGGT & 8700 & random & 33.128 & 0.033 & \underline{0.980} & 1.072 \\
+VGGT & 8700 & voxels & 33.175 & 0.033 & \underline{0.980} & 1.073 \\
+VGGT & 17400 & confidence &  &  &  &  \\
+VGGT & 17400 & imagefps &  &  &  &  \\
+VGGT & 17400 & random &  &  &  &  \\
+VGGT & 17400 & voxels & 33.247 & \underline{0.032} & \textbf{0.981} & 1.075 \\
+VGGT & 26100 & confidence &  &  &  &  \\
+VGGT & 26100 & imagefps &  &  &  &  \\
+VGGT & 26100 & random &  &  &  &  \\
+VGGT & 26100 & voxels & 33.279 & \underline{0.032} & \textbf{0.981} & \underline{1.076} \\
+VGGT & 43500 & confidence &  &  &  &  \\
+VGGT & 43500 & imagefps &  &  &  &  \\
+VGGT & 43500 & random &  &  &  &  \\
+VGGT & 43500 & voxels & 33.253 & \underline{0.032} & \textbf{0.981} & \underline{1.076} \\
+VGGT & 65250 & confidence &  &  &  &  \\
+VGGT & 65250 & imagefps &  &  &  &  \\
+VGGT & 65250 & random &  &  &  &  \\
+VGGT & 65250 & voxels & \underline{33.299} & \underline{0.032} & \textbf{0.981} & \textbf{1.077} \\
+VGGT & 87000 & confidence &  &  &  &  \\
+VGGT & 87000 & imagefps &  &  &  &  \\
+VGGT & 87000 & random &  &  &  &  \\
+VGGT & 87000 & voxels & \textbf{33.301} & \underline{0.032} & \textbf{0.981} & \textbf{1.077} \\
+VGGT & 217500 & confidence &  &  &  &  \\
+VGGT & 217500 & imagefps &  &  &  &  \\
+VGGT & 217500 & random &  &  &  &  \\
+VGGT & 217500 & voxels & 33.271 & \underline{0.032} & \underline{0.980} & \underline{1.076} \\
+VGGT & 435000 & confidence &  &  &  &  \\
+VGGT & 435000 & imagefps &  &  &  &  \\
+VGGT & 435000 & random &  &  &  &  \\
+VGGT & 435000 & voxels & 33.241 & \textbf{0.031} & \underline{0.980} & \underline{1.076} \\
+VGGT & 870000 & confidence &  &  &  &  \\
+VGGT & 870000 & imagefps &  &  &  &  \\
+VGGT & 870000 & random &  &  &  &  \\
+VGGT & 870000 & voxels & 33.288 & \textbf{0.031} & \underline{0.980} & \textbf{1.077} \\
 \bottomrule
 \end{tabular}
 \end{table}

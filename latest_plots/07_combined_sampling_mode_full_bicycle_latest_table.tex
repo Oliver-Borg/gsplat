@@ -1,0 +1,27 @@
+\begin{table}[H]
+\caption{Combining cameras and point clouds with different sampling modes. (Bicycle)}
+\label{tab:07_combined_sampling_mode_full_bicycle}
+\small
+\begin{tabular}{lrlrrrr}
+\toprule
+Choice & Num Points & Sampling Mode & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP & 1690 & ba & 22.717 & 0.250 & 0.603 & 0.525 \\
+COLMAP & 1690 & confidence & 22.869 & 0.259 & 0.624 & 0.535 \\
+COLMAP & 1690 & imagefps & 22.706 & 0.263 & 0.603 & 0.517 \\
+COLMAP & 1690 & random & 22.778 & 0.261 & 0.610 & 0.524 \\
+COLMAP & 1690 & voxels & 22.841 & 0.262 & 0.615 & 0.527 \\
+COLMAP & 16900 & ba & 22.786 & 0.251 & 0.613 & 0.532 \\
+COLMAP & 16900 & confidence & \textbf{22.876} & 0.251 & \underline{0.628} & \underline{0.542} \\
+COLMAP & 16900 & imagefps & 22.632 & 0.256 & 0.600 & 0.518 \\
+COLMAP & 16900 & random & 22.639 & 0.255 & 0.600 & 0.519 \\
+COLMAP & 16900 & voxels & 22.675 & 0.257 & 0.604 & 0.521 \\
+COLMAP & 44051 &  & 22.146 & 0.253 & 0.552 & 0.483 \\
+COLMAP & 169000 & ba & 22.821 & 0.249 & 0.618 & 0.537 \\
+COLMAP & 169000 & confidence & \underline{22.870} & \underline{0.231} & \textbf{0.630} & \textbf{0.556} \\
+COLMAP & 169000 & imagefps & 22.517 & 0.232 & 0.591 & 0.526 \\
+COLMAP & 169000 & random & 22.570 & \textbf{0.227} & 0.600 & 0.535 \\
+COLMAP & 169000 & voxels & 22.569 & 0.238 & 0.596 & 0.526 \\
+\bottomrule
+\end{tabular}
+\end{table}

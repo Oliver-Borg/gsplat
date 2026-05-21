@@ -1,0 +1,41 @@
+{
+    "seed": [
+        42
+    ],
+    "num_images": [
+        100
+    ],
+    "sampling_mode": [
+        "random"
+    ],
+    "num_points_per_image": [
+        1000
+    ],
+    "gt_eval": true,
+    "choice": [
+        "combined",
+        "colmap",
+        "vggt"
+    ],
+    "camera_src": [
+        "colmap"
+    ],
+    "pcd_src": [
+        "both"
+    ],
+    "pose_opt": [
+        true
+    ],
+    "depth_loss_mode": [
+        "full",
+        "closer",
+        "points",
+        "disabled"
+    ],
+    "depth_lambda": [
+        0.0,
+        0.1,
+        1.0
+    ],
+    "dataset": "bicycle"
+}

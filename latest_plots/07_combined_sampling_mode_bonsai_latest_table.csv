@@ -1,0 +1,5 @@
+choice,num_points,sampling_mode,psnr,lpips,ssim,quality
+COLMAP,80892,,24.653011322021484,0.17453931272029877,0.7761514782905579,0.7091194321343928
+VGGT,1000,random,,,,
+VGGT,10000,random,,,,
+VGGT,100000,random,,,,

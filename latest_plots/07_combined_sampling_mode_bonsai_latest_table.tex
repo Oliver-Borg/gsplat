@@ -1,0 +1,15 @@
+\begin{table}[H]
+\caption{Combining cameras and point clouds with different sampling modes. (Bonsai)}
+\label{tab:07_combined_sampling_mode_bonsai}
+\small
+\begin{tabular}{lrlrrrr}
+\toprule
+Choice & Num Points & Sampling Mode & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP & 80892 &  & \textbf{24.653} & \textbf{0.175} & \textbf{0.776} & \textbf{0.709} \\
+VGGT & 1000 & random &  &  &  &  \\
+VGGT & 10000 & random &  &  &  &  \\
+VGGT & 100000 & random &  &  &  &  \\
+\bottomrule
+\end{tabular}
+\end{table}

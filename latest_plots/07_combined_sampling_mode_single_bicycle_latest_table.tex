@@ -1,0 +1,59 @@
+\begin{table}[H]
+\caption{Combining cameras and point clouds with different sampling modes. (Bicycle)}
+\label{tab:07_combined_sampling_mode_single_bicycle}
+\small
+\begin{tabular}{lrlrrrr}
+\toprule
+Choice & Val Step & Sampling Mode & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP & 1 & ba & 10.383 & 0.786 & 0.092 & -0.333 \\
+COLMAP & 1 & confidence & 10.829 & 0.761 & 0.094 & -0.307 \\
+COLMAP & 1 & imagefps & 11.925 & 0.803 & 0.162 & -0.274 \\
+COLMAP & 1 & random & 11.242 & 0.761 & 0.124 & -0.282 \\
+COLMAP & 1 & voxels & 10.746 & 0.791 & 0.100 & -0.324 \\
+COLMAP & 1 &  & 10.223 & 0.800 & 0.086 & -0.348 \\
+COLMAP & 3000 & ba & 21.005 & 0.625 & 0.463 & 0.180 \\
+COLMAP & 3000 & confidence & 21.246 & 0.582 & 0.480 & 0.221 \\
+COLMAP & 3000 & imagefps & 20.975 & 0.596 & 0.466 & 0.200 \\
+COLMAP & 3000 & random & 21.111 & 0.577 & 0.476 & 0.220 \\
+COLMAP & 3000 & voxels & 21.037 & 0.596 & 0.472 & 0.204 \\
+COLMAP & 3000 &  & 20.929 & 0.655 & 0.450 & 0.153 \\
+COLMAP & 7000 & ba & 22.105 & 0.419 & 0.555 & 0.382 \\
+COLMAP & 7000 & confidence & 22.524 & 0.382 & 0.587 & 0.431 \\
+COLMAP & 7000 & imagefps & 22.104 & 0.382 & 0.561 & 0.408 \\
+COLMAP & 7000 & random & 22.424 & 0.375 & 0.573 & 0.425 \\
+COLMAP & 7000 & voxels & 22.422 & 0.384 & 0.570 & 0.418 \\
+COLMAP & 7000 &  & 21.886 & 0.456 & 0.529 & 0.340 \\
+COLMAP & 10000 & ba & 22.934 & 0.302 & 0.608 & 0.500 \\
+COLMAP & 10000 & confidence & \underline{22.972} & 0.284 & 0.631 & 0.525 \\
+COLMAP & 10000 & imagefps & 22.375 & 0.287 & 0.581 & 0.484 \\
+COLMAP & 10000 & random & 22.546 & 0.283 & 0.593 & 0.496 \\
+COLMAP & 10000 & voxels & 22.660 & 0.288 & 0.602 & 0.500 \\
+COLMAP & 10000 &  & 22.386 & 0.316 & 0.564 & 0.456 \\
+COLMAP & 15000 & ba & \textbf{22.974} & 0.239 & 0.625 & 0.550 \\
+COLMAP & 15000 & confidence & 22.971 & 0.230 & \textbf{0.634} & 0.561 \\
+COLMAP & 15000 & imagefps & 22.626 & 0.232 & 0.604 & 0.535 \\
+COLMAP & 15000 & random & 22.715 & 0.229 & 0.614 & 0.545 \\
+COLMAP & 15000 & voxels & 22.631 & 0.235 & 0.608 & 0.536 \\
+COLMAP & 15000 &  & 22.377 & 0.237 & 0.570 & 0.508 \\
+COLMAP & 20000 & ba & 22.939 & 0.223 & 0.625 & 0.559 \\
+COLMAP & 20000 & confidence & 22.946 & 0.215 & \underline{0.632} & \underline{0.568} \\
+COLMAP & 20000 & imagefps & 22.589 & 0.217 & 0.602 & 0.543 \\
+COLMAP & 20000 & random & 22.718 & 0.214 & 0.611 & 0.553 \\
+COLMAP & 20000 & voxels & 22.712 & 0.220 & 0.610 & 0.548 \\
+COLMAP & 20000 &  & 22.073 & 0.218 & 0.554 & 0.505 \\
+COLMAP & 25000 & ba & 22.887 & 0.216 & 0.624 & 0.561 \\
+COLMAP & 25000 & confidence & 22.921 & 0.209 & 0.630 & \textbf{0.570} \\
+COLMAP & 25000 & imagefps & 22.535 & 0.212 & 0.601 & 0.544 \\
+COLMAP & 25000 & random & 22.711 & 0.208 & 0.612 & 0.556 \\
+COLMAP & 25000 & voxels & 22.662 & 0.213 & 0.609 & 0.550 \\
+COLMAP & 25000 &  & 22.082 & 0.209 & 0.553 & 0.510 \\
+COLMAP & 30000 & ba & 22.866 & 0.213 & 0.622 & 0.562 \\
+COLMAP & 30000 & confidence & 22.878 & 0.206 & 0.628 & \textbf{0.570} \\
+COLMAP & 30000 & imagefps & 22.488 & 0.209 & 0.599 & 0.544 \\
+COLMAP & 30000 & random & 22.671 & \underline{0.205} & 0.610 & 0.556 \\
+COLMAP & 30000 & voxels & 22.644 & 0.210 & 0.607 & 0.551 \\
+COLMAP & 30000 &  & 22.066 & \textbf{0.204} & 0.553 & 0.513 \\
+\bottomrule
+\end{tabular}
+\end{table}

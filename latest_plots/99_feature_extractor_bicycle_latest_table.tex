@@ -1,0 +1,19 @@
+\begin{table}[H]
+\caption{Test for feature extractors. (Bicycle)}
+\label{tab:99_feature_extractor_bicycle}
+\small
+\begin{tabular}{lllrrrrrrr}
+\toprule
+Choice & Use Ba & Feature Extractor & Max Ba Iterations & RRE ↓ & RTE ↓ & PSNR ↑ & SSIM ↑ & LPIPS ↓ & Composite Quality ↑ \\
+\midrule
+COLMAP &  &  &  & \textbf{0.099} & \textbf{0.007} & \textbf{21.534} & \textbf{0.487} & \textbf{0.369} & \textbf{0.362} \\
+VGGT & Use BA & aliked+sp & 50 & 0.785 & 0.048 &  &  &  &  \\
+VGGT & Use BA & aliked+sp & 250 & \underline{0.590} & \underline{0.038} &  &  &  &  \\
+VGGT & Use BA & aliked+sp+sift & 50 & 0.949 & 0.058 &  &  &  &  \\
+VGGT & Use BA & aliked+sp+sift & 250 & 0.595 & \underline{0.038} &  &  &  &  \\
+VGGT & Use BA & sift & 50 & 0.865 & 0.062 &  &  &  &  \\
+VGGT & Use BA & sift & 250 & 0.729 & 0.048 &  &  &  &  \\
+VGGT &  &  &  & 0.716 & 0.066 & \underline{17.174} & \underline{0.257} & \underline{0.441} & \underline{0.103} \\
+\bottomrule
+\end{tabular}
+\end{table}

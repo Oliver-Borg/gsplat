@@ -1,16 +1,17 @@
 \begin{table}[H]
 \caption{COLMAP versus VGGT with depth loss for different depth loss modes. (Bicycle)}
 \label{tab:05_depth_loss_mode_bicycle}
-\begin{tabular}{llrrrrll}
+\small
+\begin{tabular}{llrrrrrr}
 \toprule
-Choice & Depth Loss Mode & RRE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Predicted Depth Abs Rel ↓ & Splatted Depth Abs Rel ↓ \\
+Choice & Depth Loss Mode & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
 \midrule
-COLMAP &  & \textbf{0.100} & \textbf{22.471} & 0.351 & \textbf{0.577} &  &  \\
-COLMAP & points & \textbf{0.100} & \underline{22.156} & 0.392 & \underline{0.534} &  &  \\
-VGGT &  & \underline{0.619} & 17.306 & \underline{0.349} & 0.262 &  &  \\
-VGGT & closer & \underline{0.619} & 17.438 & \textbf{0.339} & 0.264 &  &  \\
-VGGT & full & \underline{0.619} & 17.799 & 0.361 & 0.279 &  &  \\
-VGGT & points & \underline{0.619} & 17.218 & 0.393 & 0.263 &  &  \\
+COLMAP &  & \textbf{0.099} & \textbf{0.007} & \textbf{22.163} & \underline{0.349} & \textbf{0.559} & \textbf{0.428} \\
+COLMAP & points & \textbf{0.099} & \textbf{0.007} & \underline{21.745} & 0.395 & \underline{0.506} & \underline{0.361} \\
+VGGT &  & \underline{0.750} & \underline{0.067} & 17.306 & \underline{0.349} & 0.262 & 0.165 \\
+VGGT & closer & \underline{0.750} & \underline{0.067} & 17.438 & \textbf{0.339} & 0.264 & 0.174 \\
+VGGT & full & \underline{0.750} & \underline{0.067} & 17.799 & 0.361 & 0.279 & 0.176 \\
+VGGT & points & \underline{0.750} & \underline{0.067} & 17.218 & 0.393 & 0.263 & 0.137 \\
 \bottomrule
 \end{tabular}
 \end{table}

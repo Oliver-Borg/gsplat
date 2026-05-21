@@ -10,8 +10,8 @@
     ],
     "depth_loss_mode": [
         "disabled",
-        "full",
         "points",
+        "full",
         "closer"
     ],
     "pose_opt": [

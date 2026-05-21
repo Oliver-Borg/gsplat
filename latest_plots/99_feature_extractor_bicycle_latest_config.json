@@ -1,0 +1,32 @@
+{
+    "seed": [
+        42
+    ],
+    "num_images": [
+        100
+    ],
+    "sampling_mode": [
+        "random"
+    ],
+    "num_points_per_image": [
+        1000
+    ],
+    "choice": [
+        "colmap",
+        "vggt"
+    ],
+    "use_ba": [
+        false,
+        true
+    ],
+    "max_ba_iterations": [
+        50,
+        250
+    ],
+    "feature_extractor": [
+        "sift",
+        "aliked+sp",
+        "aliked+sp+sift"
+    ],
+    "dataset": "bicycle"
+}

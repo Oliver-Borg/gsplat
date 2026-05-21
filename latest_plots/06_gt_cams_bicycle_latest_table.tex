@@ -1,19 +1,20 @@
 \begin{table}[H]
 \caption{The effect of using ground truth extrinsics, intrinsics and points on VGGT and COLMAP results (Bicycle)}
 \label{tab:06_gt_cams_bicycle}
+\small
 \begin{tabular}{llllr}
 \toprule
 Choice & Use Gt Extrinsics & Use Gt Intrinsics & Use Gt Points & Composite Quality ↑ \\
 \midrule
-COLMAP &  &  &  & 0.345 \\
+COLMAP &  &  &  & 0.362 \\
 COLMAP &  &  & GT Points & 0.408 \\
 COLMAP &  & GT Intrinsics &  & 0.322 \\
 COLMAP &  & GT Intrinsics & GT Points & 0.381 \\
 COLMAP & GT Extrinsics &  &  & 0.389 \\
 COLMAP & GT Extrinsics &  & GT Points & 0.454 \\
-COLMAP & GT Extrinsics & GT Intrinsics &  & 0.469 \\
+COLMAP & GT Extrinsics & GT Intrinsics &  & 0.468 \\
 COLMAP & GT Extrinsics & GT Intrinsics & GT Points & \textbf{0.571} \\
-VGGT &  &  &  & 0.086 \\
+VGGT &  &  &  & 0.097 \\
 VGGT &  &  & GT Points & 0.106 \\
 VGGT &  & GT Intrinsics &  & 0.084 \\
 VGGT &  & GT Intrinsics & GT Points & 0.106 \\

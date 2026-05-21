@@ -1,6 +1,7 @@
 \begin{table}[H]
 \caption{COLMAP versus VGGT over various number of images with pose optimization (Bicycle)}
 \label{tab:01_num_images_pose_opt_bicycle}
+\small
 \begin{tabular}{lrlrrrrrr}
 \toprule
 Choice & Num Images & Pose Opt & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
@@ -20,9 +21,9 @@ COLMAP & 70 & Pose Opt & 0.217 & \underline{0.003} & 16.851 & 0.508 & 0.273 & 0.
 COLMAP & 80 &  & 0.145 & \textbf{0.002} & 18.049 & 0.480 & 0.343 & 0.145 \\
 COLMAP & 80 & Pose Opt & 0.203 & \underline{0.003} & 17.426 & 0.477 & 0.300 & 0.110 \\
 COLMAP & 90 &  & 0.115 & \textbf{0.002} & 20.386 & 0.401 & 0.422 & 0.283 \\
-COLMAP & 90 & Pose Opt & 0.119 & \textbf{0.002} & \underline{21.923} & \underline{0.371} & \underline{0.536} & \underline{0.397} \\
-COLMAP & 100 &  & 0.107 & \textbf{0.002} & 21.166 & 0.373 & 0.473 & 0.345 \\
-COLMAP & 100 & Pose Opt & \textbf{0.098} & \textbf{0.002} & \textbf{22.471} & \textbf{0.351} & \textbf{0.577} & \textbf{0.443} \\
+COLMAP & 90 & Pose Opt & 0.119 & \textbf{0.002} & \underline{21.923} & 0.371 & \underline{0.536} & \underline{0.397} \\
+COLMAP & 100 &  & \textbf{0.099} & \textbf{0.002} & 21.332 & \underline{0.364} & 0.480 & 0.357 \\
+COLMAP & 100 & Pose Opt & 0.111 & \textbf{0.002} & \textbf{22.163} & \textbf{0.349} & \textbf{0.559} & \textbf{0.428} \\
 VGGT & 10 &  & 1.569 & 0.031 & 13.667 & 0.605 & 0.175 & -0.111 \\
 VGGT & 10 & Pose Opt & 1.698 & 0.032 & 13.798 & 0.603 & 0.176 & -0.107 \\
 VGGT & 20 &  & 1.345 & 0.026 & 15.348 & 0.543 & 0.215 & -0.019 \\
@@ -41,7 +42,7 @@ VGGT & 80 &  & 0.873 & 0.017 & 17.101 & 0.484 & 0.261 & 0.077 \\
 VGGT & 80 & Pose Opt & 0.903 & 0.025 & 17.309 & 0.393 & 0.261 & 0.137 \\
 VGGT & 90 &  & 0.891 & 0.016 & 17.147 & 0.482 & 0.264 & 0.081 \\
 VGGT & 90 & Pose Opt & 0.926 & 0.025 & 17.207 & 0.386 & 0.259 & 0.138 \\
-VGGT & 100 &  & 0.857 & 0.015 & 17.303 & 0.485 & 0.271 & 0.086 \\
+VGGT & 100 &  & 0.648 & 0.015 & 17.484 & 0.475 & 0.273 & 0.097 \\
 VGGT & 100 & Pose Opt & 0.914 & 0.025 & 17.483 & 0.376 & 0.268 & 0.155 \\
 \bottomrule
 \end{tabular}
