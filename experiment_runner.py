@@ -1057,6 +1057,7 @@ class PlotConfig:
     raw_metrics: bool = False
     make_camera_plot: bool = False
     make_pcd_plot: bool = False
+    horizontal_dataset_renders: bool = True
 
 
 @dataclass
@@ -1306,6 +1307,7 @@ class Experiment:
             plot_raw=self.plot_args.raw_metrics,
             make_camera_plot=self.plot_args.make_camera_plot,
             make_pcd_plot=self.plot_args.make_pcd_plot,
+            stack_dataset_renders_horizontally=self.plot_args.horizontal_dataset_renders,
         )
 
         # print("Plotted metrics from these files")
@@ -1382,8 +1384,9 @@ experiments = [
             max_render_cols=5,
             show_gt=False,
             raw_metrics=True,
-            make_camera_plot=True,
+            make_camera_plot=False,
             metric_keys=["rre", "rte", "psnr", "lpips", "ssim", "quality"],
+            horizontal_dataset_renders=False,
         ),
         render_filter_override={
             "num_images": [20, 30, 40, 70, 100],
@@ -1411,6 +1414,7 @@ experiments = [
             show_gt=False,
             raw_metrics=False,
             metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "quality"],
+            horizontal_dataset_renders=False,
         ),
         render_filter_override={
             "num_images": [20, 30, 40, 100],
@@ -1538,7 +1542,8 @@ experiments = [
             metric_keys=["psnr", "lpips", "ssim", "quality"],
             raw_metrics=True,
             make_pcd_plot=True,
-            max_render_cols=6,
+            max_render_cols=4,
+            horizontal_dataset_renders=False,
         ),
         render_filter_override={
             "seed": [42],
@@ -1569,6 +1574,7 @@ experiments = [
             metric_keys=["psnr", "lpips", "ssim", "quality"],
             raw_metrics=False,
             max_render_cols=4,
+            horizontal_dataset_renders=False,
         ),
         render_filter_override={
             "seed": [42],
@@ -1814,6 +1820,7 @@ experiments = [
             split_param="sampling_mode",
             metric_keys=["rre", "rte", "num_aligned", "quality"],
             max_render_cols=4,
+            horizontal_dataset_renders=False,
         ),
         val_steps=[15000],
         render_filter_override={
@@ -1842,7 +1849,8 @@ experiments = [
             x_axis="num_points",
             split_param="sampling_mode",
             metric_keys=["psnr", "lpips", "ssim", "quality"],
-            max_render_cols=4,
+            max_render_cols=6,
+            horizontal_dataset_renders=False,
             make_pcd_plot=True,
         ),
         val_steps=[15000],
@@ -1873,7 +1881,8 @@ experiments = [
             x_axis="num_points",
             split_param="sampling_mode",
             metric_keys=["psnr", "lpips", "ssim", "quality"],
-            max_render_cols=4,
+            max_render_cols=6,
+            horizontal_dataset_renders=False,
             make_pcd_plot=True,
         ),
         val_steps=[15000],
@@ -1904,7 +1913,8 @@ experiments = [
             x_axis="val_step",
             split_param="sampling_mode,num_steps",
             metric_keys=["psnr", "lpips", "ssim", "quality"],
-            max_render_cols=4,
+            max_render_cols=6,
+            horizontal_dataset_renders=False,
         ),
         val_steps=[1, 3_000, 7_000, 10_000, 15_000, 20_000, 25_000, 30_000],
         render_filter_override={
@@ -2130,7 +2140,8 @@ experiments = [
             # metric_keys=["rre", "psnr", "lpips", "ssim", "pred_depth_absrel", "depth_abs_rel"],
             show_depth=True,
             show_gt=True,
-            max_render_cols=4,
+            max_render_cols=6,
+            horizontal_dataset_renders=False,
             # render_nums=[0, 2, 3, 4, 5],
             render_nums=[3],
             make_camera_plot=True,
@@ -2162,7 +2173,8 @@ experiments = [
             metric_keys=["rre", "psnr", "lpips", "ssim", "pred_depth_absrel", "depth_abs_rel"],
             show_depth=True,
             show_gt=False,
-            max_render_cols=5,
+            max_render_cols=6,
+            horizontal_dataset_renders=False,
             render_nums=[0],
             make_camera_plot=True,
             raw_metrics=True,
@@ -2200,6 +2212,7 @@ experiments = [
             show_gt=False,
             max_render_cols=5,
             render_nums=[0, 2, 3, 4, 5],
+            horizontal_dataset_renders=False,
         ),
         render_filter_override={
             "seed": [42],
@@ -2227,6 +2240,7 @@ experiments = [
             split_param="depth_lambda",
             metric_keys=["rre", "psnr", "lpips", "ssim", "pred_depth_absrel", "depth_abs_rel"],
             max_render_cols=4,
+            horizontal_dataset_renders=False,
             show_depth=True,
             show_gt=False,
         ),
@@ -2316,6 +2330,7 @@ experiments = [
             metric_keys=["rre", "rte", "num_aligned", "quality"],
             max_render_cols=5,
             render_nums=[0, 2, 3, 4, 5],
+            horizontal_dataset_renders=False,
         ),
         render_filter_override={
             "seed": [42],
@@ -2339,6 +2354,7 @@ experiments = [
             split_param="shared_camera,sampling_mode",
             metric_keys=["rre", "rte", "num_aligned", "quality"],
             max_render_cols=5,
+            horizontal_dataset_renders=False,
             render_nums=[0, 2, 3, 4, 5],
         ),
         render_filter_override={
@@ -2368,6 +2384,7 @@ experiments = [
             split_choice=True,
             shared_colors=True,
             max_render_cols=4,
+            horizontal_dataset_renders=False,
         ),
         render_filter_override={
             "seed": [42],
@@ -2394,6 +2411,7 @@ experiments = [
             split_param="random_init,pose_opt,sampling_mode",
             metric_keys=["eval_rre", "eval_rte", "num_aligned", "real_num_points", "quality"],
             max_render_cols=4,
+            horizontal_dataset_renders=False,
             render_nums=[0, 2],
         ),
         render_filter_override={
@@ -2576,6 +2594,7 @@ experiments = [
             raw_metrics=True,
             make_camera_plot=True,
             max_render_cols=5,
+            horizontal_dataset_renders=False,
         ),
         render_filter_override={
             "seed": [42],
@@ -2603,6 +2622,7 @@ experiments = [
             split_param="align_glue",
             metric_keys=["rre", "rte", "num_aligned", "psnr", "ssim", "lpips"],
             max_render_cols=4,
+            horizontal_dataset_renders=False,
             render_nums=[0, 2],
             raw_metrics=True,
         ),
@@ -2630,6 +2650,7 @@ experiments = [
             split_param="align_glue",
             metric_keys=["eval_rre", "eval_rte", "num_aligned", "psnr", "ssim", "lpips"],
             max_render_cols=4,
+            horizontal_dataset_renders=False,
             render_nums=[0, 2],
         ),
         render_filter_override={
@@ -2658,6 +2679,7 @@ experiments = [
             split_param="align_glue,colmap_mode",
             metric_keys=["rre", "rte", "num_aligned", "psnr", "ssim", "lpips"],
             max_render_cols=4,
+            horizontal_dataset_renders=False,
             render_nums=[0, 2],
         ),
         render_filter_override={
@@ -2687,6 +2709,7 @@ experiments = [
             split_param="align_glue,colmap_mode",
             metric_keys=["eval_rre", "eval_rte", "num_aligned", "psnr", "ssim", "lpips"],
             max_render_cols=4,
+            horizontal_dataset_renders=False,
             render_nums=[0, 2],
         ),
         render_filter_override={
@@ -2713,6 +2736,7 @@ experiments = [
             split_param="near_filtering_strength,near_filtering_quorum",
             metric_keys=["eval_rre", "eval_rte", "psnr", "ssim", "lpips", "quality"],
             max_render_cols=4,
+            horizontal_dataset_renders=False,
             make_pcd_plot=True,
         ),
         render_filter_override={
@@ -2739,6 +2763,7 @@ experiments = [
             split_param="near_filtering_strength,near_filtering_quorum",
             metric_keys=["eval_rre", "eval_rte", "psnr", "ssim", "lpips", "quality"],
             max_render_cols=4,
+            horizontal_dataset_renders=False,
         ),
         render_filter_override={
             "seed": [42],
@@ -2765,6 +2790,7 @@ experiments = [
             split_param="reconstruct_pose_opt,pose_opt",
             metric_keys=["rre", "rte", "num_aligned", "eval_rre", "eval_rte", "quality"],
             max_render_cols=4,
+            horizontal_dataset_renders=False,
             make_camera_plot=True,
         ),
         render_filter_override={
@@ -2791,6 +2817,7 @@ experiments = [
             split_param="optimisation_iterations,pose_opt",
             metric_keys=["rre", "rte", "eval_rre", "eval_rte", "quality"],
             max_render_cols=4,
+            horizontal_dataset_renders=False,
             make_camera_plot=True,
         ),
         render_filter_override={
@@ -2821,6 +2848,7 @@ experiments = [
             split_param="depth_loss_mode,depth_lambda,real_num_points",
             metric_keys=["eval_rre", "eval_rte", "psnr", "ssim", "lpips", "quality"],
             max_render_cols=4,
+            horizontal_dataset_renders=False,
             make_camera_plot=True,
             make_pcd_plot=True,
             show_depth=True,
@@ -2849,6 +2877,7 @@ experiments = [
             split_param="use_ba,feature_extractor,max_ba_iterations",
             metric_keys=["rre", "rte", "psnr", "ssim", "lpips", "quality"],
             max_render_cols=4,
+            horizontal_dataset_renders=False,
             make_camera_plot=True,
             make_pcd_plot=False,
             show_depth=False,
