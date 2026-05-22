@@ -192,7 +192,7 @@ class Config:
     dataset: Dataset = datasets["lego"]
     seed: int = 42
     conf_thres_value: float = 0.0
-    num_points_per_image: float = 1100
+    num_points_per_image: float = 1000
     num_points_value: int | None = None
     sampling_mode: SAMPLING_MODE = "voxels"
     near_filtering_strength: float = 0.0
@@ -240,7 +240,7 @@ class Config:
         instance = cls()
         instance.choice = data["choice"]
         instance.num_images = data.get("num_images", cls.num_images)
-        instance.dataset = datasets[data.get("dataset", "lego")]
+        instance.dataset = datasets[data.get("dataset", "bicycle")]
         instance.seed = data.get("seed", cls.seed)
         instance.conf_thres_value = data.get("conf_thres_value", cls.conf_thres_value)
         instance.num_points_per_image = data.get("num_points_per_image", cls.num_points_per_image)
@@ -1385,7 +1385,7 @@ experiments = [
             show_gt=False,
             raw_metrics=True,
             make_camera_plot=False,
-            metric_keys=["rre", "rte", "psnr", "lpips", "ssim", "quality"],
+            metric_keys=["rre", "rte", "psnr", "lpips", "ssim", "num_aligned"],
             horizontal_dataset_renders=False,
         ),
         render_filter_override={
@@ -1435,9 +1435,10 @@ experiments = [
             # "pose_opt": [True, False],
             "image_mode": ["farthestpose"],
             "choice": ["vggt", "colmap"],
-            "num_points_value": 100000,
+            "num_points_value": [None, 100000],
         },
-        PlotConfig(x_axis="num_images", split_param=""),
+        PlotConfig(x_axis="num_images", split_param="num_points"),
+        priority="high",
     ),
     Experiment(
         "num_images_30000",
@@ -2140,7 +2141,7 @@ experiments = [
             # metric_keys=["rre", "psnr", "lpips", "ssim", "pred_depth_absrel", "depth_abs_rel"],
             show_depth=True,
             show_gt=True,
-            max_render_cols=6,
+            max_render_cols=4,
             horizontal_dataset_renders=False,
             # render_nums=[0, 2, 3, 4, 5],
             render_nums=[3],
