@@ -4,14 +4,14 @@
 \small
 \begin{tabular}{llrrrrrr}
 \toprule
-Choice & Depth Loss Mode & RRE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Predicted Depth Abs Rel ↓ & Splatted Depth Abs Rel ↓ \\
+Choice & Depth Loss Mode & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
 \midrule
-COLMAP &  & \underline{10.428} & \textbf{25.238} & \textbf{0.053} & \textbf{0.906} &  & \underline{0.020} \\
-COLMAP & points & \underline{10.428} & \underline{25.143} & \underline{0.056} & \underline{0.901} &  & \underline{0.020} \\
-VGGT &  & \textbf{0.335} & 20.280 & 0.075 & 0.772 & \textbf{0.013} & 0.021 \\
-VGGT & closer & \textbf{0.335} & 20.273 & 0.078 & 0.774 & \textbf{0.013} & 0.022 \\
-VGGT & full & \textbf{0.335} & 21.838 & 0.070 & 0.810 & \textbf{0.013} & \textbf{0.018} \\
-VGGT & points & \textbf{0.335} & 21.715 & 0.066 & 0.806 & \textbf{0.013} & \textbf{0.018} \\
+COLMAP &  & \underline{10.427} & \underline{0.396} & \textbf{25.238} & \textbf{0.053} & \textbf{0.906} & \textbf{0.871} \\
+COLMAP & points & \underline{10.427} & \underline{0.396} & \underline{25.143} & \underline{0.056} & \underline{0.901} & \underline{0.864} \\
+VGGT &  & \textbf{0.335} & \textbf{0.019} & 20.280 & 0.075 & 0.772 & 0.687 \\
+VGGT & closer & \textbf{0.335} & \textbf{0.019} & 20.273 & 0.078 & 0.774 & 0.686 \\
+VGGT & full & \textbf{0.335} & \textbf{0.019} & 21.838 & 0.070 & 0.810 & 0.741 \\
+VGGT & points & \textbf{0.335} & \textbf{0.019} & 21.715 & 0.066 & 0.806 & 0.739 \\
 \bottomrule
 \end{tabular}
 \end{table}

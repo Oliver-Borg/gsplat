@@ -1,0 +1,53 @@
+\begin{table}[H]
+\caption{COLMAP versus VGGT with depth loss (Bonsai,Bicycle,Lego)}
+\label{tab:05_depth_lambda_num_images_bonsai,bicycle,lego}
+\small
+\begin{tabular}{llrrrrrrrr}
+\toprule
+Choice & Dataset & Num Images & Depth Lambda & RRE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Predicted Depth Abs Rel ↓ & Splatted Depth Abs Rel ↓ \\
+\midrule
+VGGT & bicycle & 20 & 0.000 & 1.149 & 15.666 & 0.517 & 0.219 &  &  \\
+VGGT & bicycle & 20 & 0.010 & 1.149 & 15.831 & 0.511 & 0.223 &  &  \\
+VGGT & bicycle & 20 & 0.100 & 1.149 & 15.938 & 0.512 & 0.232 &  &  \\
+VGGT & bicycle & 20 & 1.000 & 1.149 & 16.047 & 0.541 & 0.244 &  &  \\
+VGGT & bicycle & 30 & 0.000 & \underline{0.930} & 16.361 & 0.484 & 0.237 &  &  \\
+VGGT & bicycle & 30 & 0.010 & \underline{0.930} & 16.398 & 0.482 & 0.239 &  &  \\
+VGGT & bicycle & 30 & 0.100 & \underline{0.930} & 16.388 & 0.485 & 0.246 &  &  \\
+VGGT & bicycle & 30 & 1.000 & \underline{0.930} & 16.618 & 0.511 & 0.257 &  &  \\
+VGGT & bicycle & 40 & 0.000 & 0.997 & 16.518 & 0.468 & 0.237 &  &  \\
+VGGT & bicycle & 40 & 0.010 & 0.997 & 16.557 & 0.466 & 0.244 &  &  \\
+VGGT & bicycle & 40 & 0.100 & 0.997 & 16.577 & 0.472 & 0.251 &  &  \\
+VGGT & bicycle & 40 & 1.000 & 0.997 & 16.891 & 0.498 & 0.265 &  &  \\
+VGGT & bicycle & 100 & 0.000 & \textbf{0.716} & 17.904 & \textbf{0.362} & 0.285 &  &  \\
+VGGT & bicycle & 100 & 0.010 & \textbf{0.716} & 17.905 & \underline{0.366} & 0.285 &  &  \\
+VGGT & bicycle & 100 & 0.100 & \textbf{0.716} & \underline{18.072} & 0.381 & \underline{0.293} &  &  \\
+VGGT & bicycle & 100 & 1.000 & \textbf{0.716} & \textbf{18.135} & 0.430 & \textbf{0.304} &  &  \\
+\midrule
+VGGT & bonsai & 20 & 0.000 & \underline{0.872} & 16.887 & 0.420 & 0.526 &  &  \\
+VGGT & bonsai & 20 & 0.010 & \underline{0.872} & 16.900 & 0.407 & 0.529 &  &  \\
+VGGT & bonsai & 20 & 0.100 & \underline{0.872} & \underline{17.135} & \textbf{0.397} & \underline{0.536} &  &  \\
+VGGT & bonsai & 20 & 1.000 & \underline{0.872} & 16.921 & 0.426 & 0.532 &  &  \\
+VGGT & bonsai & 30 & 0.000 & 1.001 & 16.613 & 0.430 & 0.528 &  &  \\
+VGGT & bonsai & 30 & 0.010 & 1.001 & 16.544 & 0.426 & 0.526 &  &  \\
+VGGT & bonsai & 40 & 0.000 & 0.891 & 16.755 & 0.431 & 0.535 &  &  \\
+VGGT & bonsai & 100 & 0.000 & \textbf{0.722} & \textbf{17.405} & \underline{0.405} & \textbf{0.561} &  &  \\
+\midrule
+VGGT & lego & 20 & 0.000 & 2.298 & 13.444 & 0.323 & 0.620 & 0.026 & 0.041 \\
+VGGT & lego & 20 & 0.010 & 2.298 & 13.440 & 0.317 & 0.628 & 0.026 & 3.054 \\
+VGGT & lego & 20 & 0.100 & 2.298 & 13.494 & 0.314 & 0.629 & 0.026 & 3.064 \\
+VGGT & lego & 20 & 1.000 & 2.298 & 13.552 & 0.316 & 0.629 & 0.026 & 3.073 \\
+VGGT & lego & 30 & 0.000 & 2.235 & 13.827 & 0.304 & 0.634 & 0.026 & \underline{0.040} \\
+VGGT & lego & 30 & 0.010 & 2.235 & 13.703 & 0.305 & 0.636 & 0.026 & 3.043 \\
+VGGT & lego & 30 & 0.100 & 2.235 & 13.753 & 0.303 & 0.638 & 0.026 & 3.057 \\
+VGGT & lego & 30 & 1.000 & 2.235 & 13.788 & 0.307 & 0.638 & 0.026 & 3.065 \\
+VGGT & lego & 40 & 0.000 & \underline{1.322} & 14.311 & 0.264 & 0.665 & \underline{0.025} & \underline{0.040} \\
+VGGT & lego & 40 & 0.010 & \underline{1.322} & 14.351 & 0.262 & 0.666 & \underline{0.025} & 2.947 \\
+VGGT & lego & 40 & 0.100 & \underline{1.322} & 14.345 & 0.263 & 0.666 & \underline{0.025} & 2.958 \\
+VGGT & lego & 40 & 1.000 & \underline{1.322} & 14.377 & 0.272 & 0.668 & \underline{0.025} & 2.968 \\
+VGGT & lego & 87 & 0.000 & \textbf{0.331} & 20.349 & \underline{0.076} & 0.773 & 0.021 & \textbf{0.021} \\
+VGGT & lego & 87 & 0.010 & \textbf{0.331} & 21.371 & \textbf{0.068} & 0.797 & 0.021 & 2.989 \\
+VGGT & lego & 87 & 0.100 & \textbf{0.331} & \underline{23.103} & \underline{0.076} & \textbf{0.843} & 0.021 & 2.984 \\
+VGGT & lego & 87 & 1.000 & \textbf{0.331} & \textbf{23.366} & 0.102 & \underline{0.839} & 0.021 & 2.984 \\
+\bottomrule
+\end{tabular}
+\end{table}

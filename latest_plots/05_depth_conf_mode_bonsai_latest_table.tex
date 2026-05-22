@@ -1,11 +1,15 @@
 \begin{table}[H]
 \caption{COLMAP versus VGGT with depth loss for different depth confidence modes. (Bonsai)}
 \label{tab:05_depth_conf_mode_bonsai}
-\begin{tabular}{ll}
+\small
+\begin{tabular}{llrrrrll}
 \toprule
-Choice & Depth Conf Mode \\
+Choice & Depth Conf Mode & RRE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Predicted Depth Abs Rel ↓ & Splatted Depth Abs Rel ↓ \\
 \midrule
-VGGT &  \\
+COLMAP &  & \textbf{0.158} & \textbf{24.098} & \textbf{0.185} & \textbf{0.768} &  &  \\
+VGGT &  & \underline{0.722} & \underline{17.624} & 0.390 & \underline{0.562} &  &  \\
+VGGT & sigmoid & \underline{0.722} & 17.542 & \underline{0.388} & \underline{0.562} &  &  \\
+VGGT & standard & \underline{0.722} & 17.408 & 0.392 & 0.558 &  &  \\
 \bottomrule
 \end{tabular}
 \end{table}

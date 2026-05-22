@@ -1,0 +1,20 @@
+\begin{table}[H]
+\caption{COLMAP versus VGGT with pose optimization (Bicycle,Bonsai,Lego)}
+\label{tab:04_pose_opt_bicycle,bonsai,lego}
+\small
+\begin{tabular}{lllrrrrrr}
+\toprule
+Choice & Dataset & Pose Opt & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP & bicycle &  & \underline{0.107} & \textbf{0.002} & \underline{21.201} & \underline{0.286} & \underline{0.478} & \underline{0.402} \\
+COLMAP & bicycle & Pose Opt & \textbf{0.097} & \textbf{0.002} & \textbf{22.645} & \textbf{0.259} & \textbf{0.601} & \textbf{0.518} \\
+VGGT & bicycle &  & 0.857 & 0.015 & 17.055 & 0.435 & 0.250 & 0.100 \\
+VGGT & bicycle & Pose Opt & 0.665 & \underline{0.014} & 17.423 & 0.319 & 0.252 & 0.180 \\
+\midrule
+VGGT & bonsai &  & \underline{0.790} & \underline{0.025} & \textbf{17.425} & \underline{0.422} & \textbf{0.561} & \underline{0.297} \\
+VGGT & bonsai & Pose Opt & \textbf{0.772} & \textbf{0.021} & \underline{17.345} & \textbf{0.386} & \underline{0.555} & \textbf{0.314} \\
+\midrule
+VGGT & lego &  &  &  &  &  &  &  \\
+\bottomrule
+\end{tabular}
+\end{table}

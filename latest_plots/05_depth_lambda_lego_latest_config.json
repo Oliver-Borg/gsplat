@@ -9,6 +9,7 @@
         "random"
     ],
     "depth_loss_mode": [
+        "disabled",
         "points"
     ],
     "pose_opt": [
