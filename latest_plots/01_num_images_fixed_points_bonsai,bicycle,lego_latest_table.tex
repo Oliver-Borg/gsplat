@@ -1,0 +1,35 @@
+\begin{table}[H]
+\caption{VGGT for a fixed number of points or number of points proportional to the number of images. (Bonsai,Bicycle,Lego)}
+\label{tab:01_num_images_fixed_points_bonsai,bicycle,lego}
+\small
+\begin{tabular}{llrrrrrrrr}
+\toprule
+Choice & Dataset & Num Images & Num Points & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Final Gaussian Count \\
+\midrule
+VGGT & bicycle & 25 & 25000 & 1.078 & 0.092 & 15.645 & 0.501 & 0.215 & 1000000 \\
+VGGT & bicycle & 25 & 100000 & 0.904 & 0.091 &  &  &  &  \\
+VGGT & bicycle & 50 & 50000 & 0.920 & 0.086 & 16.593 & 0.458 & 0.231 & 1000000 \\
+VGGT & bicycle & 50 & 100000 & 0.872 & 0.087 &  &  &  &  \\
+VGGT & bicycle & 75 & 75000 & 0.892 & 0.075 & \underline{16.912} & \underline{0.448} & \underline{0.247} & 1000000 \\
+VGGT & bicycle & 75 & 100000 & \textbf{0.627} & \underline{0.074} &  &  &  &  \\
+VGGT & bicycle & 100 & 100000 & \underline{0.716} & \textbf{0.066} & \textbf{17.174} & \textbf{0.441} & \textbf{0.257} & 1000000 \\
+\midrule
+VGGT & bonsai & 25 & 25000 & 0.952 & 0.109 & 16.033 & 0.475 & 0.510 & 1000000 \\
+VGGT & bonsai & 25 & 100000 & 0.891 & 0.109 & 15.985 & 0.485 & 0.496 & 1000000 \\
+VGGT & bonsai & 50 & 50000 & \underline{0.801} & \underline{0.103} & 16.621 & 0.458 & 0.534 & 1000000 \\
+VGGT & bonsai & 50 & 100000 & 0.864 & \textbf{0.100} & 16.562 & 0.459 & 0.528 & 1000000 \\
+VGGT & bonsai & 75 & 75000 & 0.901 & 0.113 & \underline{17.104} & \underline{0.444} & \underline{0.554} & 1000000 \\
+VGGT & bonsai & 75 & 100000 & 0.883 & 0.111 & 17.071 & \underline{0.444} & 0.551 & 1000000 \\
+VGGT & bonsai & 100 & 100000 & \textbf{0.790} & 0.107 & \textbf{17.731} & \textbf{0.418} & \textbf{0.575} & 1000000 \\
+\midrule
+VGGT & lego & 25 & 25000 & 2.139 & 0.132 &  &  &  &  \\
+VGGT & lego & 25 & 100000 & 2.090 & 0.125 &  &  &  &  \\
+VGGT & lego & 50 & 50000 & 0.871 & \underline{0.042} &  &  &  &  \\
+VGGT & lego & 50 & 100000 & 0.901 & \underline{0.042} &  &  &  &  \\
+VGGT & lego & 75 & 75000 & 0.368 & \textbf{0.019} &  &  &  &  \\
+VGGT & lego & 75 & 100000 & 0.356 & \textbf{0.019} &  &  &  &  \\
+VGGT & lego & 87 & 87000 & \underline{0.331} & \textbf{0.019} & \textbf{20.620} & \textbf{0.095} & \textbf{0.775} & 1000000 \\
+VGGT & lego & 87 & 100000 & \textbf{0.298} & \textbf{0.019} &  &  &  &  \\
+\bottomrule
+\end{tabular}
+\end{table}

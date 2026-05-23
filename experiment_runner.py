@@ -192,9 +192,9 @@ class Config:
     dataset: Dataset = datasets["lego"]
     seed: int = 42
     conf_thres_value: float = 0.0
-    num_points_per_image: float = 1000
-    num_points_value: int | None = None
-    sampling_mode: SAMPLING_MODE = "voxels"
+    num_points_per_image: float | None = None
+    num_points_value: int = 100000
+    sampling_mode: SAMPLING_MODE = "random"
     near_filtering_strength: float = 0.0
     near_filtering_quorum: int = 1
     reconstruct_pose_opt: bool = False
@@ -392,9 +392,9 @@ class Config:
 
     @property
     def num_points(self):
-        if self.num_points_value is not None:
-            return self.num_points_value
-        return int(self.num_points_per_image * self.num_images)
+        if self.num_points_per_image is not None:
+            return int(self.num_points_per_image * self.num_images)
+        return self.num_points_value
 
     @property
     def num_cams(self):
@@ -1372,7 +1372,7 @@ experiments = [
         {
             "seed": [42],
             "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
-            "sampling_mode": ["voxels"],
+            "sampling_mode": ["random"],
             "gt_eval": [True],
             "image_mode": ["farthestpose"],
             "choice": ["vggt", "colmap"],
@@ -1401,7 +1401,7 @@ experiments = [
         {
             "seed": [42],
             "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
-            "sampling_mode": ["voxels"],
+            "sampling_mode": ["random"],
             "pose_opt": [True, False],
             "gt_eval": [True],
             "image_mode": ["farthestpose"],
@@ -1426,15 +1426,15 @@ experiments = [
     Experiment(
         "num_images_fixed_points",
         1,
-        "COLMAP versus VGGT over various number of images",
+        "VGGT for a fixed number of points or number of points proportional to the number of images.",
         {
             "seed": [42],  # , 43, 44
-            "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
-            "sampling_mode": ["voxels"],  # , "random"
+            "num_images": [25, 50, 75, 100],
+            "sampling_mode": ["random"],
             "gt_eval": [True],
             # "pose_opt": [True, False],
             "image_mode": ["farthestpose"],
-            "choice": ["vggt", "colmap"],
+            "choice": ["vggt"],
             "num_points_value": [None, 100000],
         },
         PlotConfig(x_axis="num_images", split_param="num_points"),
@@ -1447,7 +1447,7 @@ experiments = [
         {
             "seed": [42],  # , 43, 44
             "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
-            "sampling_mode": ["voxels"],
+            "sampling_mode": ["random"],
             "gt_eval": [True],
             "image_mode": ["farthestpose"],
             "choice": ["vggt", "colmap"],
@@ -1483,7 +1483,7 @@ experiments = [
         {
             "seed": [42],  #
             "num_images": [100],
-            "sampling_mode": ["voxels"],
+            "sampling_mode": ["random"],
             "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 2500, 5000, 10000],
             "image_mode": ["farthestpose"],
             "choice": ["vggt", "colmap"],
@@ -1503,7 +1503,7 @@ experiments = [
         {
             "seed": [42],  #
             "num_images": [100],
-            "sampling_mode": ["voxels"],
+            "sampling_mode": ["random"],
             "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 2500, 5000, 10000],
             "image_mode": ["farthestpose"],
             "choice": ["vggt", "colmap"],
@@ -1969,7 +1969,7 @@ experiments = [
         {
             "seed": [42],  # , 43, 44
             "num_images": [100],
-            "sampling_mode": ["voxels"],
+            "sampling_mode": ["random"],
             "choice": ["vggt"],
             "error_opa": [True, False],
             "nomcmc": [True, False],
@@ -1983,7 +1983,7 @@ experiments = [
         {
             "seed": [42],  # , 43, 44
             "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
-            "sampling_mode": ["voxels"],
+            "sampling_mode": ["random"],
             "choice": ["vggt"],
             "nomcmc": [True, False],
         },
@@ -1997,7 +1997,7 @@ experiments = [
             "seed": [42],  # , 43, 44
             "num_images": [100],
             "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 2500, 5000, 10000],
-            "sampling_mode": ["voxels"],
+            "sampling_mode": ["random"],
             "choice": ["vggt"],
             "nomcmc": [True, False],
         },
@@ -2034,7 +2034,7 @@ experiments = [
             "seed": [42],  # , 43, 44
             "num_images": [100],
             "num_points_per_image": [5000],
-            "sampling_mode": ["voxels"],
+            "sampling_mode": ["random"],
             "choice": ["vggt"],
             "nomcmc": [True, False],
             "pose_opt": [True, False],
@@ -2079,7 +2079,7 @@ experiments = [
     #     {
     #         "seed": [42],  # , 43, 44
     #         "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
-    #         "sampling_mode": ["voxels"],
+    #         "sampling_mode": ["random"],
     #         "depth_loss_mode": ["points"],
     #         "depth_conf_mode": ["disabled"],
     #         "pose_opt": [True],
@@ -2229,7 +2229,7 @@ experiments = [
         {
             "seed": [42],  # , 43, 44
             "num_images": [20, 30, 40, 100],
-            "sampling_mode": ["voxels"],  # "random"
+            "sampling_mode": ["random"],  # "random"
             "depth_loss_mode": ["full"],
             "pose_opt": [True],
             "choice": ["vggt"],  # , "colmap"
@@ -2288,7 +2288,7 @@ experiments = [
         {
             "seed": [42],
             "num_images": [50, 100],
-            "sampling_mode": ["voxels"],
+            "sampling_mode": ["random"],
             "all_opt": [False],
             "num_points_per_image": [1100, 2200],
             "choice": ["vggt", "colmap"],
@@ -2302,7 +2302,7 @@ experiments = [
         {
             "num_images": [100],
             "seed": [42],
-            "sampling_mode": ["voxels"],
+            "sampling_mode": ["random"],
             "all_opt": [False],
             "copy_mode": [None, "crop", "square"],
             "choice": ["vggt", "colmap"],

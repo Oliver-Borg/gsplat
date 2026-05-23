@@ -9,7 +9,7 @@
         100
     ],
     "sampling_mode": [
-        "voxels"
+        "random"
     ],
     "depth_loss_mode": [
         "full"

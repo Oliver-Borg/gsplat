@@ -3,6 +3,77 @@
         "method":"vggt",
         "num_images":87,
         "seed":42,
+        "conf_thres_value":null,
+        "num_points":27774,
+        "sampling_mode":"ba",
+        "near_filtering_strength":null,
+        "near_filtering_quorum":null,
+        "reconstruct_pose_opt":"",
+        "optimisation_iterations":0,
+        "optimisation_neighbourhood":10,
+        "image_mode":"farthestpose",
+        "num_cameras":87,
+        "gt_eval":"GT Eval",
+        "use_gt_extrinsics":"",
+        "use_gt_intrinsics":"",
+        "use_gt_points":"",
+        "pose_opt":"",
+        "pose_opt_module":"",
+        "eval_opt":"",
+        "depth_loss_mode":"",
+        "error_opa":"",
+        "depth_lambda":0.0,
+        "depth_conf_mode":"",
+        "choice":"vggt",
+        "dataset":"lego",
+        "camera_type":"pinhole",
+        "copy_mode":null,
+        "val_step":15000,
+        "num_steps":15000,
+        "colmap_mode":null,
+        "splatting_strategy":"MCMC",
+        "camera_src":null,
+        "pcd_src":null,
+        "align_mode":null,
+        "align_glue":null,
+        "shared_camera":"Shared Cam",
+        "keep_backup_cams":null,
+        "random_init":null,
+        "use_ba":"Use BA",
+        "feature_extractor":"aliked+sp",
+        "max_ba_iterations":250,
+        "source":"gsplat",
+        "psnr":22.9696521759,
+        "lpips":0.0745853558,
+        "ssim":0.8368433118,
+        "num_GS":1000000,
+        "eval_rte":0.0044213752,
+        "eval_rre":0.2679818571,
+        "depth_l1":0.0870860666,
+        "depth_abs_rel":0.0204711817,
+        "quality":0.7751383883,
+        "avge":0.1611863202,
+        "real_num_points":27774,
+        "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/lego_1_n87_s42_mpinhole_aliked-sp_ba_farthestpose_useba_maxba250_sharedcam_i87_gteval_steps15000\/stats\/val_step14999.json",
+        "gsplat_file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/vggt_outputs\/lego_1_n87_s42_mpinhole_aliked-sp_ba_farthestpose_useba_maxba250_sharedcam_i87_gteval_steps15000\/stats\/val_step14999.json",
+        "folder":"lego_1_n87_s42_mpinhole_aliked-sp_ba_farthestpose_useba_maxba250_sharedcam_i87_gteval_steps15000",
+        "rre":0.2685,
+        "rte":0.015949,
+        "num_aligned":87,
+        "pred_depth_l1":0.0438,
+        "pred_depth_absrel":0.0124,
+        "pred_depth_rmse":0.1148,
+        "sfm_file_path":"\/home\/ojab2\/work\/git\/vggt\/vggt_outputs\/lego_1_n87_s42_mpinhole_aliked-sp_ba_farthestpose_useba_maxba250_sharedcam\/eval_results.json",
+        "input_folder":"lego_1_n87_s42_mpinhole_aliked-sp_ba_farthestpose_useba_maxba250_sharedcam",
+        "output_folder":"lego_1_n87_s42_mpinhole_aliked-sp_ba_farthestpose_useba_maxba250_sharedcam_i87_gteval_steps15000_val_step14999.json",
+        "initial_points":27774,
+        "plot_series":"vggt | ba",
+        "num_points_jitter":24302.25
+    },
+    {
+        "method":"vggt",
+        "num_images":87,
+        "seed":42,
         "conf_thres_value":0.0,
         "num_points":870,
         "sampling_mode":"confidence",
@@ -68,7 +139,7 @@
         "output_folder":"lego_1_n87_s42_c0.0_p870_confidence_farthestpose_i87_gteval_steps15000_val_step14999.json",
         "initial_points":870,
         "plot_series":"vggt | confidence",
-        "num_points_jitter":783.0
+        "num_points_jitter":804.75
     },
     {
         "method":"vggt",
@@ -139,7 +210,7 @@
         "output_folder":"lego_1_n87_s42_c0.0_p4350_confidence_farthestpose_i87_gteval_steps15000_val_step14999.json",
         "initial_points":4350,
         "plot_series":"vggt | confidence",
-        "num_points_jitter":3915.0
+        "num_points_jitter":4023.75
     },
     {
         "method":"vggt",
@@ -210,7 +281,7 @@
         "output_folder":"lego_1_n87_s42_c0.0_p8700_confidence_farthestpose_i87_gteval_steps15000_val_step14999.json",
         "initial_points":8700,
         "plot_series":"vggt | confidence",
-        "num_points_jitter":7830.0
+        "num_points_jitter":8047.5
     },
     {
         "method":"vggt",
@@ -281,7 +352,7 @@
         "output_folder":"lego_1_n87_s42_c0.0_p17400_confidence_farthestpose_i87_gteval_steps15000_val_step14999.json",
         "initial_points":17400,
         "plot_series":"vggt | confidence",
-        "num_points_jitter":15660.0
+        "num_points_jitter":16095.0
     },
     {
         "method":"vggt",
@@ -352,7 +423,7 @@
         "output_folder":"lego_1_n87_s42_c0.0_p26100_confidence_farthestpose_i87_gteval_steps15000_val_step14999.json",
         "initial_points":26100,
         "plot_series":"vggt | confidence",
-        "num_points_jitter":23490.0
+        "num_points_jitter":24142.5
     },
     {
         "method":"vggt",
@@ -423,7 +494,7 @@
         "output_folder":"lego_1_n87_s42_c0.0_p43500_confidence_farthestpose_i87_gteval_steps15000_val_step14999.json",
         "initial_points":43500,
         "plot_series":"vggt | confidence",
-        "num_points_jitter":39150.0
+        "num_points_jitter":40237.5
     },
     {
         "method":"vggt",
@@ -494,7 +565,7 @@
         "output_folder":"lego_1_n87_s42_c0.0_p65250_confidence_farthestpose_i87_gteval_steps15000_val_step14999.json",
         "initial_points":65250,
         "plot_series":"vggt | confidence",
-        "num_points_jitter":58725.0
+        "num_points_jitter":60356.25
     },
     {
         "method":"vggt",
@@ -565,7 +636,7 @@
         "output_folder":"lego_1_n87_s42_c0.0_p87000_confidence_farthestpose_i87_gteval_steps15000_val_step14999.json",
         "initial_points":87000,
         "plot_series":"vggt | confidence",
-        "num_points_jitter":78300.0
+        "num_points_jitter":80475.0
     },
     {
         "method":"vggt",
@@ -636,7 +707,7 @@
         "output_folder":"lego_1_n87_s42_c0.0_p217500_confidence_farthestpose_i87_gteval_steps15000_val_step14999.json",
         "initial_points":217500,
         "plot_series":"vggt | confidence",
-        "num_points_jitter":195750.0
+        "num_points_jitter":201187.5
     },
     {
         "method":"vggt",
@@ -707,7 +778,7 @@
         "output_folder":"lego_1_n87_s42_c0.0_p435000_confidence_farthestpose_i87_gteval_steps15000_val_step14999.json",
         "initial_points":435000,
         "plot_series":"vggt | confidence",
-        "num_points_jitter":391500.0
+        "num_points_jitter":402375.0
     },
     {
         "method":"vggt",
@@ -778,7 +849,7 @@
         "output_folder":"lego_1_n87_s42_c0.0_p870000_confidence_farthestpose_i87_gteval_steps15000_val_step14999.json",
         "initial_points":870000,
         "plot_series":"vggt | confidence",
-        "num_points_jitter":783000.0
+        "num_points_jitter":804750.0
     },
     {
         "method":"vggt",
@@ -849,7 +920,7 @@
         "output_folder":"lego_1_n87_s42_c0.0_p870_imagefps_farthestpose_i87_gteval_steps15000_val_step14999.json",
         "initial_points":827,
         "plot_series":"vggt | imagefps",
-        "num_points_jitter":826.5
+        "num_points_jitter":848.25
     },
     {
         "method":"vggt",
@@ -920,7 +991,7 @@
         "output_folder":"lego_1_n87_s42_c0.0_p4350_imagefps_farthestpose_i87_gteval_steps15000_val_step14999.json",
         "initial_points":4307,
         "plot_series":"vggt | imagefps",
-        "num_points_jitter":4132.5
+        "num_points_jitter":4241.25
     },
     {
         "method":"vggt",
@@ -991,7 +1062,7 @@
         "output_folder":"lego_1_n87_s42_c0.0_p8700_imagefps_farthestpose_i87_gteval_steps15000_val_step14999.json",
         "initial_points":8657,
         "plot_series":"vggt | imagefps",
-        "num_points_jitter":8265.0
+        "num_points_jitter":8482.5
     },
     {
         "method":"vggt",
@@ -1062,7 +1133,7 @@
         "output_folder":"lego_1_n87_s42_c0.0_p17400_imagefps_farthestpose_i87_gteval_steps15000_val_step14999.json",
         "initial_points":17360,
         "plot_series":"vggt | imagefps",
-        "num_points_jitter":16530.0
+        "num_points_jitter":16965.0
     },
     {
         "method":"vggt",
@@ -1133,7 +1204,7 @@
         "output_folder":"lego_1_n87_s42_c0.0_p26100_imagefps_farthestpose_i87_gteval_steps15000_val_step14999.json",
         "initial_points":26056,
         "plot_series":"vggt | imagefps",
-        "num_points_jitter":24795.0
+        "num_points_jitter":25447.5
     },
     {
         "method":"vggt",
@@ -1204,7 +1275,7 @@
         "output_folder":"lego_1_n87_s42_c0.0_p43500_imagefps_farthestpose_i87_gteval_steps15000_val_step14999.json",
         "initial_points":43454,
         "plot_series":"vggt | imagefps",
-        "num_points_jitter":41325.0
+        "num_points_jitter":42412.5
     },
     {
         "method":"vggt",
@@ -1275,7 +1346,7 @@
         "output_folder":"lego_1_n87_s42_c0.0_p65250_imagefps_farthestpose_i87_gteval_steps15000_val_step14999.json",
         "initial_points":65209,
         "plot_series":"vggt | imagefps",
-        "num_points_jitter":61987.5
+        "num_points_jitter":63618.75
     },
     {
         "method":"vggt",
@@ -1346,7 +1417,7 @@
         "output_folder":"lego_1_n87_s42_c0.0_p87000_imagefps_farthestpose_i87_gteval_steps15000_val_step14999.json",
         "initial_points":86956,
         "plot_series":"vggt | imagefps",
-        "num_points_jitter":82650.0
+        "num_points_jitter":84825.0
     },
     {
         "method":"vggt",
@@ -1417,7 +1488,7 @@
         "output_folder":"lego_1_n87_s42_c0.0_p217500_imagefps_farthestpose_i87_gteval_steps15000_val_step14999.json",
         "initial_points":217457,
         "plot_series":"vggt | imagefps",
-        "num_points_jitter":206625.0
+        "num_points_jitter":212062.5
     },
     {
         "method":"vggt",
@@ -1488,7 +1559,7 @@
         "output_folder":"lego_1_n87_s42_c0.0_p435000_imagefps_farthestpose_i87_gteval_steps15000_val_step14999.json",
         "initial_points":434958,
         "plot_series":"vggt | imagefps",
-        "num_points_jitter":413250.0
+        "num_points_jitter":424125.0
     },
     {
         "method":"vggt",
@@ -1559,7 +1630,7 @@
         "output_folder":"lego_1_n87_s42_c0.0_p870000_imagefps_farthestpose_i87_gteval_steps15000_val_step14999.json",
         "initial_points":869958,
         "plot_series":"vggt | imagefps",
-        "num_points_jitter":826500.0
+        "num_points_jitter":848250.0
     },
     {
         "method":"vggt",
@@ -1630,7 +1701,7 @@
         "output_folder":"lego_1_n87_s42_c0.0_p870_random_farthestpose_i87_gteval_steps15000_val_step14999.json",
         "initial_points":870,
         "plot_series":"vggt | random",
-        "num_points_jitter":870.0
+        "num_points_jitter":891.75
     },
     {
         "method":"vggt",
@@ -1701,7 +1772,7 @@
         "output_folder":"lego_1_n87_s42_c0.0_p4350_random_farthestpose_i87_gteval_steps15000_val_step14999.json",
         "initial_points":4350,
         "plot_series":"vggt | random",
-        "num_points_jitter":4350.0
+        "num_points_jitter":4458.75
     },
     {
         "method":"vggt",
@@ -1772,7 +1843,7 @@
         "output_folder":"lego_1_n87_s42_c0.0_p8700_random_farthestpose_i87_gteval_steps15000_val_step14999.json",
         "initial_points":8700,
         "plot_series":"vggt | random",
-        "num_points_jitter":8700.0
+        "num_points_jitter":8917.5
     },
     {
         "method":"vggt",
@@ -1843,7 +1914,7 @@
         "output_folder":"lego_1_n87_s42_c0.0_p17400_random_farthestpose_i87_gteval_steps15000_val_step14999.json",
         "initial_points":17400,
         "plot_series":"vggt | random",
-        "num_points_jitter":17400.0
+        "num_points_jitter":17835.0
     },
     {
         "method":"vggt",
@@ -1914,7 +1985,7 @@
         "output_folder":"lego_1_n87_s42_c0.0_p26100_random_farthestpose_i87_gteval_steps15000_val_step14999.json",
         "initial_points":26100,
         "plot_series":"vggt | random",
-        "num_points_jitter":26100.0
+        "num_points_jitter":26752.5
     },
     {
         "method":"vggt",
@@ -1985,7 +2056,7 @@
         "output_folder":"lego_1_n87_s42_c0.0_p43500_random_farthestpose_i87_gteval_steps15000_val_step14999.json",
         "initial_points":43500,
         "plot_series":"vggt | random",
-        "num_points_jitter":43500.0
+        "num_points_jitter":44587.5
     },
     {
         "method":"vggt",
@@ -2056,7 +2127,7 @@
         "output_folder":"lego_1_n87_s42_c0.0_p65250_random_farthestpose_i87_gteval_steps15000_val_step14999.json",
         "initial_points":65250,
         "plot_series":"vggt | random",
-        "num_points_jitter":65250.0
+        "num_points_jitter":66881.25
     },
     {
         "method":"vggt",
@@ -2127,7 +2198,7 @@
         "output_folder":"lego_1_n87_s42_c0.0_p87000_random_farthestpose_i87_gteval_steps15000_val_step14999.json",
         "initial_points":87000,
         "plot_series":"vggt | random",
-        "num_points_jitter":87000.0
+        "num_points_jitter":89175.0
     },
     {
         "method":"vggt",
@@ -2198,7 +2269,7 @@
         "output_folder":"lego_1_n87_s42_c0.0_p217500_random_farthestpose_i87_gteval_steps15000_val_step14999.json",
         "initial_points":217500,
         "plot_series":"vggt | random",
-        "num_points_jitter":217500.0
+        "num_points_jitter":222937.5
     },
     {
         "method":"vggt",
@@ -2269,7 +2340,7 @@
         "output_folder":"lego_1_n87_s42_c0.0_p435000_random_farthestpose_i87_gteval_steps15000_val_step14999.json",
         "initial_points":435000,
         "plot_series":"vggt | random",
-        "num_points_jitter":435000.0
+        "num_points_jitter":445874.9999999999
     },
     {
         "method":"vggt",
@@ -2340,7 +2411,7 @@
         "output_folder":"lego_1_n87_s42_c0.0_p870000_random_farthestpose_i87_gteval_steps15000_val_step14999.json",
         "initial_points":870000,
         "plot_series":"vggt | random",
-        "num_points_jitter":870000.0
+        "num_points_jitter":891749.9999999999
     },
     {
         "method":"vggt",
@@ -2411,7 +2482,7 @@
         "output_folder":"lego_1_n87_s42_c0.0_p870_voxels_farthestpose_i87_gteval_steps15000_val_step14999.json",
         "initial_points":855,
         "plot_series":"vggt | voxels",
-        "num_points_jitter":913.5
+        "num_points_jitter":935.25
     },
     {
         "method":"vggt",
@@ -2482,7 +2553,7 @@
         "output_folder":"lego_1_n87_s42_c0.0_p4350_voxels_farthestpose_i87_gteval_steps15000_val_step14999.json",
         "initial_points":4042,
         "plot_series":"vggt | voxels",
-        "num_points_jitter":4567.5
+        "num_points_jitter":4676.25
     },
     {
         "method":"vggt",
@@ -2553,7 +2624,7 @@
         "output_folder":"lego_1_n87_s42_c0.0_p8700_voxels_farthestpose_i87_gteval_steps15000_val_step14999.json",
         "initial_points":8550,
         "plot_series":"vggt | voxels",
-        "num_points_jitter":9135.0
+        "num_points_jitter":9352.5
     },
     {
         "method":"vggt",
@@ -2624,7 +2695,7 @@
         "output_folder":"lego_1_n87_s42_c0.0_p17400_voxels_farthestpose_i87_gteval_steps15000_val_step14999.json",
         "initial_points":16987,
         "plot_series":"vggt | voxels",
-        "num_points_jitter":18270.0
+        "num_points_jitter":18705.0
     },
     {
         "method":"vggt",
@@ -2695,7 +2766,7 @@
         "output_folder":"lego_1_n87_s42_c0.0_p26100_voxels_farthestpose_i87_gteval_steps15000_val_step14999.json",
         "initial_points":25832,
         "plot_series":"vggt | voxels",
-        "num_points_jitter":27405.0
+        "num_points_jitter":28057.5
     },
     {
         "method":"vggt",
@@ -2766,7 +2837,7 @@
         "output_folder":"lego_1_n87_s42_c0.0_p43500_voxels_farthestpose_i87_gteval_steps15000_val_step14999.json",
         "initial_points":42004,
         "plot_series":"vggt | voxels",
-        "num_points_jitter":45675.0
+        "num_points_jitter":46762.5
     },
     {
         "method":"vggt",
@@ -2837,7 +2908,7 @@
         "output_folder":"lego_1_n87_s42_c0.0_p65250_voxels_farthestpose_i87_gteval_steps15000_val_step14999.json",
         "initial_points":64372,
         "plot_series":"vggt | voxels",
-        "num_points_jitter":68512.5
+        "num_points_jitter":70143.75
     },
     {
         "method":"vggt",
@@ -2908,7 +2979,7 @@
         "output_folder":"lego_1_n87_s42_c0.0_p87000_voxels_farthestpose_i87_gteval_steps15000_val_step14999.json",
         "initial_points":86657,
         "plot_series":"vggt | voxels",
-        "num_points_jitter":91350.0
+        "num_points_jitter":93525.0
     },
     {
         "method":"vggt",
@@ -2979,7 +3050,7 @@
         "output_folder":"lego_1_n87_s42_c0.0_p217500_voxels_farthestpose_i87_gteval_steps15000_val_step14999.json",
         "initial_points":210628,
         "plot_series":"vggt | voxels",
-        "num_points_jitter":228375.0
+        "num_points_jitter":233812.5
     },
     {
         "method":"vggt",
@@ -3050,7 +3121,7 @@
         "output_folder":"lego_1_n87_s42_c0.0_p435000_voxels_farthestpose_i87_gteval_steps15000_val_step14999.json",
         "initial_points":385832,
         "plot_series":"vggt | voxels",
-        "num_points_jitter":456750.0
+        "num_points_jitter":467625.0
     },
     {
         "method":"vggt",
@@ -3121,7 +3192,7 @@
         "output_folder":"lego_1_n87_s42_c0.0_p870000_voxels_farthestpose_i87_gteval_steps15000_val_step14999.json",
         "initial_points":706364,
         "plot_series":"vggt | voxels",
-        "num_points_jitter":913500.0
+        "num_points_jitter":935250.0
     },
     {
         "method":"colmap",
@@ -3181,8 +3252,8 @@
         "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/lego_1_n87_s42_default_mpinhole_farthestpose_sharedcam_i87_gteval_steps15000\/stats\/val_step14999.json",
         "gsplat_file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/colmap_outputs\/lego_1_n87_s42_default_mpinhole_farthestpose_sharedcam_i87_gteval_steps15000\/stats\/val_step14999.json",
         "folder":"lego_1_n87_s42_default_mpinhole_farthestpose_sharedcam_i87_gteval_steps15000",
-        "rre":10.4284,
-        "rte":0.396113,
+        "rre":10.4269,
+        "rte":0.396164,
         "num_aligned":87,
         "pred_depth_l1":null,
         "pred_depth_absrel":null,
@@ -3192,6 +3263,6 @@
         "output_folder":"lego_1_n87_s42_default_mpinhole_farthestpose_sharedcam_i87_gteval_steps15000_val_step14999.json",
         "initial_points":10069,
         "plot_series":"colmap | ",
-        "num_points_jitter":11075.9
+        "num_points_jitter":11327.625
     }
 ]

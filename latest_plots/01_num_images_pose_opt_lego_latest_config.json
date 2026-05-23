@@ -15,7 +15,7 @@
         100
     ],
     "sampling_mode": [
-        "voxels"
+        "random"
     ],
     "pose_opt": [
         true,

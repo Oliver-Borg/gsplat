@@ -1,27 +1,19 @@
 \begin{table}[H]
-\caption{COLMAP versus VGGT over various number of images (Lego)}
+\caption{VGGT for a fixed number of points or number of points proportional to the number of images. (Lego)}
 \label{tab:01_num_images_fixed_points_lego}
-\begin{tabular}{lrrrrrrr}
+\small
+\begin{tabular}{lrrrrrrrr}
 \toprule
-Choice & Num Images & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Final Gaussian Count \\
+Choice & Num Images & Num Points & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Final Gaussian Count \\
 \midrule
-COLMAP & 20 & 111.358 & 0.023 & 10.803 & 0.515 & 0.673 & 90482 \\
-COLMAP & 30 & 85.985 & 3.013 & 10.695 & 0.548 & 0.594 & 1000000 \\
-COLMAP & 40 & 176.250 & 3.722 & 10.940 & 0.510 & 0.675 & 1000000 \\
-COLMAP & 50 & 158.612 & 3.616 & 10.865 & 0.536 & 0.645 & 1000000 \\
-COLMAP & 60 & 151.228 & 3.590 & 10.812 & 0.544 & 0.629 & 1000000 \\
-COLMAP & 70 & \textbf{0.184} & \textbf{0.010} & \textbf{22.982} & \textbf{0.061} & \textbf{0.861} & 1000000 \\
-COLMAP & 80 & 14.344 & 0.884 & 9.913 & 0.540 & 0.515 & 1000000 \\
-COLMAP & 87 & 12.910 & 0.790 & 10.170 & 0.530 & 0.522 & 1000000 \\
-VGGT & 10 & 2.592 & 0.160 & 13.739 & 0.363 & 0.592 & 943923 \\
-VGGT & 20 & 2.298 & 0.141 & 14.303 & 0.411 & 0.603 & 16198 \\
-VGGT & 30 & 2.235 & 0.136 & 14.281 & 0.364 & 0.642 & 144124 \\
-VGGT & 40 & 1.322 & 0.069 & 14.671 & 0.283 & 0.644 & 1000000 \\
-VGGT & 50 & 0.871 & 0.042 & 15.394 & 0.234 & 0.672 & 1000000 \\
-VGGT & 60 & 0.627 & 0.029 & 16.666 & 0.183 & 0.705 & 1000000 \\
-VGGT & 70 & 0.426 & 0.021 & 18.712 & 0.125 & 0.745 & 1000000 \\
-VGGT & 80 & 0.347 & \underline{0.019} & 20.048 & 0.106 & 0.761 & 1000000 \\
-VGGT & 87 & \underline{0.331} & \underline{0.019} & \underline{20.573} & \underline{0.096} & \underline{0.774} & 1000000 \\
+VGGT & 25 & 25000 & 2.139 & 0.132 & 13.662 & 0.326 & 0.616 & 1000000 \\
+VGGT & 25 & 100000 & 2.090 & 0.125 & 13.671 & 0.329 & 0.613 & 1000000 \\
+VGGT & 50 & 50000 & 0.871 & \underline{0.042} & 15.186 & 0.233 & 0.686 & 1000000 \\
+VGGT & 50 & 100000 & 0.901 & \underline{0.042} & 15.188 & 0.232 & 0.685 & 1000000 \\
+VGGT & 75 & 75000 & 0.368 & \textbf{0.019} & 19.773 & \underline{0.104} & 0.767 & 1000000 \\
+VGGT & 75 & 100000 & 0.356 & \textbf{0.019} & 19.782 & \underline{0.104} & 0.767 & 1000000 \\
+VGGT & 87 & 87000 & \underline{0.331} & \textbf{0.019} & \textbf{20.620} & \textbf{0.095} & \textbf{0.775} & 1000000 \\
+VGGT & 87 & 100000 & \textbf{0.298} & \textbf{0.019} & \underline{20.573} & \textbf{0.095} & \underline{0.774} & 1000000 \\
 \bottomrule
 \end{tabular}
 \end{table}

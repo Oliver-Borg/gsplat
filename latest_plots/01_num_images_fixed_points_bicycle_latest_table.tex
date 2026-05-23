@@ -1,29 +1,18 @@
 \begin{table}[H]
-\caption{COLMAP versus VGGT over various number of images (Bicycle)}
+\caption{VGGT for a fixed number of points or number of points proportional to the number of images. (Bicycle)}
 \label{tab:01_num_images_fixed_points_bicycle}
-\begin{tabular}{lrrrrrrr}
+\small
+\begin{tabular}{lrrrrrrrr}
 \toprule
-Choice & Num Images & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Final Gaussian Count \\
+Choice & Num Images & Num Points & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Final Gaussian Count \\
 \midrule
-COLMAP & 20 &  &  & 9.328 & 0.987 & 0.011 & 38969 \\
-COLMAP & 30 & 0.592 & 0.010 & 12.015 & 0.740 & 0.191 & 811220 \\
-COLMAP & 40 & 0.312 & 0.017 & 13.919 & 0.660 & 0.229 & 1000000 \\
-COLMAP & 50 & 0.189 & 0.009 & 16.713 & 0.591 & 0.300 & 1000000 \\
-COLMAP & 60 & 0.118 & 0.009 & 17.369 & 0.541 & 0.331 & 1000000 \\
-COLMAP & 70 & \textbf{0.104} & \underline{0.008} & 18.045 & 0.514 & 0.360 & 1000000 \\
-COLMAP & 80 & 0.145 & \textbf{0.005} & 18.049 & 0.480 & 0.343 & 1000000 \\
-COLMAP & 90 & 0.115 & 0.009 & \underline{20.386} & \underline{0.401} & \underline{0.422} & 1000000 \\
-COLMAP & 100 & \underline{0.107} & \underline{0.008} & \textbf{21.166} & \textbf{0.373} & \textbf{0.473} & 1000000 \\
-VGGT & 10 & 1.569 & 0.142 & 13.907 & 0.566 & 0.153 & 1000000 \\
-VGGT & 20 & 1.345 & 0.119 & 15.342 & 0.508 & 0.194 & 1000000 \\
-VGGT & 30 & 0.980 & 0.091 & 15.792 & 0.498 & 0.208 & 1000000 \\
-VGGT & 40 & 0.886 & 0.087 & 16.266 & 0.499 & 0.223 & 1000000 \\
-VGGT & 50 & 0.920 & 0.086 & 16.662 & 0.485 & 0.234 & 1000000 \\
-VGGT & 60 & 0.837 & 0.071 & 16.848 & 0.481 & 0.246 & 1000000 \\
-VGGT & 70 & 0.915 & 0.078 & 16.922 & 0.488 & 0.251 & 1000000 \\
-VGGT & 80 & 0.873 & 0.073 & 17.099 & 0.477 & 0.260 & 1000000 \\
-VGGT & 90 & 0.891 & 0.071 & 17.167 & 0.485 & 0.264 & 1000000 \\
-VGGT & 100 & 0.857 & 0.067 & 17.264 & 0.482 & 0.271 & 1000000 \\
+VGGT & 25 & 25000 & 1.078 & 0.092 & 15.645 & 0.501 & 0.215 & 1000000 \\
+VGGT & 25 & 100000 & 0.904 & 0.091 & 15.624 & 0.479 & 0.194 & 1000000 \\
+VGGT & 50 & 50000 & 0.920 & 0.086 & 16.593 & 0.458 & 0.231 & 1000000 \\
+VGGT & 50 & 100000 & 0.872 & 0.087 & 16.468 & 0.444 & 0.218 & 1000000 \\
+VGGT & 75 & 75000 & 0.892 & 0.075 & 16.912 & 0.448 & 0.247 & 1000000 \\
+VGGT & 75 & 100000 & \textbf{0.627} & \underline{0.074} & \textbf{17.433} & \textbf{0.422} & \underline{0.253} & 1000000 \\
+VGGT & 100 & 100000 & \underline{0.716} & \textbf{0.066} & \underline{17.174} & \underline{0.441} & \textbf{0.257} & 1000000 \\
 \bottomrule
 \end{tabular}
 \end{table}
