@@ -1431,7 +1431,36 @@ experiments = [
             "seed": [42],
             "pose_opt": [True],
         },
-        priority="high",
+        priority="medium",
+    ),
+    Experiment(
+        "num_images_use_ba",
+        1,
+        "COLMAP versus VGGT+BA over various number of images",
+        {
+            "seed": [42],
+            "num_images": [20, 40, 60, 80, 100],
+            "sampling_mode": ["random"],
+            "use_ba": [True, False],
+            "gt_eval": [True],
+            "image_mode": ["farthestpose"],
+            "choice": ["vggt", "colmap"],
+        },
+        PlotConfig(
+            x_axis="num_images",
+            split_param="use_ba",
+            max_render_cols=4,
+            show_gt=False,
+            raw_metrics=True,
+            metric_keys=["rre", "rte", "psnr", "lpips", "ssim", "quality"],
+            horizontal_datasets=False,
+        ),
+        render_filter_override={
+            "num_images": [20, 40, 60, 100],
+            "seed": [42],
+            "pose_opt": [True],
+        },
+        priority="medium",
     ),
     Experiment(
         "num_images_fixed_points",
@@ -1448,7 +1477,7 @@ experiments = [
             "num_points_value": [None, 100000],
         },
         PlotConfig(x_axis="num_images", split_param="num_points"),
-        priority="high",
+        priority="medium",
     ),
     Experiment(
         "num_images_30000",
@@ -3029,7 +3058,7 @@ if __name__ == "__main__":
                             experiment.plot(
                                 dataset_collections[collection],
                                 split_dataset="individual",
-                                naming_labels=dataset_collections[collection],
+                                naming_labels=[collection],
                             )
                     else:
                         experiment.plot(dataset_names, split_dataset="individual", naming_labels=dataset_names)
