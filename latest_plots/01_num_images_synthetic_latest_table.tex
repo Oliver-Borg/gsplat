@@ -1,0 +1,64 @@
+\begin{table}[H]
+\caption{COLMAP versus VGGT over various number of images (Synthetic)}
+\label{tab:01_num_images_synthetic}
+\small
+\begin{tabular}{llrrrrrrr}
+\toprule
+Choice & Dataset & Num Images & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Aligned Cameras ↑ \\
+\midrule
+COLMAP & lego & 20 & 111.389 & 0.023 & 10.804 & 0.512 & 0.676 & 3 \\
+COLMAP & lego & 30 & 132.540 & 3.730 & 10.754 & 0.512 & 0.675 & 19 \\
+COLMAP & lego & 40 & 173.622 & 3.772 & 10.878 & 0.523 & 0.633 & 36 \\
+COLMAP & lego & 50 & 144.652 & 3.619 & 10.931 & 0.526 & 0.598 & 42 \\
+COLMAP & lego & 60 & 147.880 & 3.624 & 10.870 & 0.523 & 0.660 & 51 \\
+COLMAP & lego & 70 & \textbf{0.203} & \textbf{0.011} & \underline{21.826} & \underline{0.068} & \underline{0.825} & 70 \\
+COLMAP & lego & 80 & 15.392 & 0.895 & 10.939 & 0.474 & 0.562 & \underline{80} \\
+COLMAP & lego & 87 & 10.427 & 0.396 & \textbf{24.951} & \textbf{0.058} & \textbf{0.894} & \textbf{87} \\
+VGGT & lego & 10 & 2.548 & 0.158 & 13.424 & 0.358 & 0.604 & 10 \\
+VGGT & lego & 20 & 2.282 & 0.137 & 13.511 & 0.338 & 0.610 & 20 \\
+VGGT & lego & 30 & 2.223 & 0.131 & 13.876 & 0.318 & 0.624 & 30 \\
+VGGT & lego & 40 & 1.337 & 0.069 & 14.379 & 0.276 & 0.654 & 40 \\
+VGGT & lego & 50 & 0.901 & 0.042 & 15.188 & 0.232 & 0.685 & 50 \\
+VGGT & lego & 60 & 0.603 & 0.029 & 16.232 & 0.189 & 0.709 & 60 \\
+VGGT & lego & 70 & 0.439 & 0.021 & 18.458 & 0.126 & 0.753 & 70 \\
+VGGT & lego & 80 & 0.347 & \underline{0.019} & 19.915 & 0.103 & 0.765 & \underline{80} \\
+VGGT & lego & 87 & \underline{0.298} & \underline{0.019} & 20.573 & 0.095 & 0.774 & \textbf{87} \\
+\midrule
+COLMAP & ship & 20 & 0.279 & \textbf{0.010} & 15.900 & 0.413 & 0.527 & 5 \\
+COLMAP & ship & 30 & 3.397 & 0.045 & 16.679 & 0.388 & 0.574 & 10 \\
+COLMAP & ship & 40 & 12.248 & 0.483 & 17.629 & 0.342 & 0.593 & 17 \\
+COLMAP & ship & 50 & 8.876 & 0.363 & 18.537 & 0.265 & 0.634 & 22 \\
+COLMAP & ship & 60 & 0.706 & 0.026 & 20.769 & 0.177 & 0.710 & 52 \\
+COLMAP & ship & 70 & 0.341 & 0.020 & \textbf{22.829} & 0.151 & \underline{0.753} & 59 \\
+COLMAP & ship & 80 & \textbf{0.214} & \underline{0.012} & \underline{22.775} & \underline{0.146} & \textbf{0.760} & 73 \\
+COLMAP & ship & 87 & 0.277 & 0.015 & 21.593 & 0.155 & 0.733 & \underline{81} \\
+VGGT & ship & 10 & 0.323 & 0.021 & 20.607 & 0.196 & 0.685 & 10 \\
+VGGT & ship & 20 & 0.369 & 0.023 & 21.624 & 0.164 & 0.709 & 20 \\
+VGGT & ship & 30 & 0.274 & 0.019 & 21.372 & 0.170 & 0.695 & 30 \\
+VGGT & ship & 40 & \underline{0.270} & 0.018 & 21.399 & 0.162 & 0.698 & 40 \\
+VGGT & ship & 50 & 0.311 & 0.020 & 21.623 & 0.150 & 0.715 & 50 \\
+VGGT & ship & 60 & 0.379 & 0.021 & 22.637 & \textbf{0.144} & 0.727 & 60 \\
+VGGT & ship & 70 & 0.419 & 0.024 & 22.405 & 0.150 & 0.723 & 70 \\
+VGGT & ship & 80 & 0.457 & 0.026 & 21.483 & 0.164 & 0.712 & 80 \\
+VGGT & ship & 87 & 0.487 & 0.028 & 20.871 & 0.176 & 0.701 & \textbf{87} \\
+\midrule
+COLMAP & drums & 20 & 5.120 & \textbf{0.004} & 4.959 & 0.884 & 0.082 & 3 \\
+COLMAP & drums & 30 & 0.578 & 0.012 & 11.783 & 0.530 & 0.384 & 4 \\
+COLMAP & drums & 40 & 0.917 & \underline{0.006} & 12.097 & 0.463 & 0.462 & 5 \\
+COLMAP & drums & 50 & 0.324 & 0.013 & 17.201 & 0.162 & 0.780 & 18 \\
+COLMAP & drums & 60 & 0.295 & 0.013 & 18.549 & 0.150 & 0.804 & 22 \\
+COLMAP & drums & 70 & 0.278 & 0.013 & 16.646 & 0.172 & 0.766 & 25 \\
+COLMAP & drums & 80 & 0.227 & 0.012 & \underline{20.440} & \underline{0.101} & \underline{0.853} & 72 \\
+COLMAP & drums & 87 & \textbf{0.153} & 0.010 & \textbf{22.469} & \textbf{0.093} & \textbf{0.899} & 79 \\
+VGGT & drums & 10 & 1.153 & 0.078 & 12.486 & 0.422 & 0.599 & 10 \\
+VGGT & drums & 20 & 0.854 & 0.053 & 13.111 & 0.359 & 0.642 & 20 \\
+VGGT & drums & 30 & 0.695 & 0.041 & 13.974 & 0.296 & 0.680 & 30 \\
+VGGT & drums & 40 & 0.373 & 0.019 & 17.820 & 0.124 & 0.790 & 40 \\
+VGGT & drums & 50 & 0.326 & 0.018 & 19.441 & 0.102 & 0.831 & 50 \\
+VGGT & drums & 60 & 0.367 & 0.019 & 19.182 & 0.105 & 0.829 & 60 \\
+VGGT & drums & 70 & 0.175 & 0.009 & 19.235 & 0.104 & 0.827 & 70 \\
+VGGT & drums & 80 & 0.182 & 0.010 & 19.598 & 0.104 & 0.833 & \underline{80} \\
+VGGT & drums & 87 & \underline{0.173} & 0.010 & 19.668 & 0.106 & 0.836 & \textbf{87} \\
+\bottomrule
+\end{tabular}
+\end{table}

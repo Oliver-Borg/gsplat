@@ -12,7 +12,7 @@ from queue import Queue
 from line_profiler import profile
 from tqdm import tqdm
 
-from vggt.plot_metrics import plot_graph, _parse_gsplat_json
+from vggt.plot_metrics import plot_graph, _parse_gsplat_json, dataset_collections
 from vggt.reconstruct_args import (
     ReconstructArgs,
     IMAGE_MODE,
@@ -1240,7 +1240,14 @@ class Experiment:
         configs = self.get_render_configs(dataset_name)
         return [Path(config.output_name) for config in configs]
 
-    def plot(self, dataset_name: str | list[str], create_pcp: bool = False, include_title: bool = False):
+    def plot(
+        self,
+        dataset_name: str | list[str],
+        create_pcp: bool = False,
+        include_title: bool = False,
+        split_dataset: Literal["none", "individual", "collection"] = "none",
+        naming_labels: list[str] = [],
+    ):
         if self.plot_args is None:
             return
 
@@ -1249,7 +1256,10 @@ class Experiment:
 
         # Collect scene names and dataset info
         scene_names = [datasets[dn].scene_name for dn in dataset_names]
-        dataset_display_name = ",".join([datasets[dn].name for dn in dataset_names])
+        if naming_labels:
+            dataset_display_name = ",".join(naming_labels)
+        else:
+            dataset_display_name = ",".join([datasets[dn].name for dn in dataset_names])
 
         # Collect all folders across datasets
         all_folders = []
@@ -1297,7 +1307,7 @@ class Experiment:
             create_table=True,
             print_title=include_title,
             split_choice=self.plot_args.split_choice,
-            split_dataset="dataset" not in str(split_param) and len(dataset_names) > 1,
+            split_dataset=split_dataset,
             max_render_cols=self.plot_args.max_render_cols,
             show_depth=self.plot_args.show_depth,
             show_gt=self.plot_args.show_gt,
@@ -2898,21 +2908,12 @@ experiments = [
 
 experiment_dict = {exp.name: exp for exp in experiments}
 
-
-dataset_collections = {
-    "outdoor": ["bicycle", "garden", "stump"],
-    "indoor": ["bonsai", "kitchen", "counter"],
-    "synthetic": ["lego", "ship", "drums"],
-}
-
 dataset_values = []
 
 for v in dataset_collections.values():
     dataset_values.extend(v)
 
-dataset_collections.update({
-    "all": dataset_values
-})
+dataset_collections.update({"all": dataset_values})
 
 
 if __name__ == "__main__":
@@ -2959,11 +2960,7 @@ if __name__ == "__main__":
         help="Groups to run. Can be given instead of experiment names.",
         nargs="*",
     )
-    parser.add_argument(
-        "--combined_datasets",
-        action="store_true",
-        help="Combine datasets into a single plot."
-    )
+    parser.add_argument("--combined_datasets", action="store_true", help="Combine datasets into a single plot.")
     parser.add_argument(
         "--dataset_collections",
         type=str,
@@ -3022,7 +3019,17 @@ if __name__ == "__main__":
                     #     print(e)
                 if args.combined_datasets and not args.check_only:
                     if args.dataset_collections:
+                        if len(args.dataset_collections) > 1:
+                            experiment.plot(
+                                dataset_names,
+                                split_dataset="collection",
+                                naming_labels=args.dataset_collections,
+                            )
                         for collection in args.dataset_collections:
-                            experiment.plot(dataset_collections[collection])
+                            experiment.plot(
+                                dataset_collections[collection],
+                                split_dataset="individual",
+                                naming_labels=dataset_collections[collection],
+                            )
                     else:
-                        experiment.plot(dataset_names)
+                        experiment.plot(dataset_names, split_dataset="individual", naming_labels=dataset_names)

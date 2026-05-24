@@ -1,0 +1,103 @@
+\begin{table}[H]
+\caption{A comparison of different VGGT point cloud sampling modes (Bonsai,Kitchen,Counter)}
+\label{tab:03_sampling_mode_bonsai,kitchen,counter}
+\small
+\begin{tabular}{llrlrrrrrr}
+\toprule
+Choice & Dataset & Num Points & Sampling Mode & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP & bonsai & 80892 &  & \textbf{0.158} & \textbf{0.013} & \textbf{22.423} & \textbf{0.204} & \textbf{0.697} & \textbf{0.604} \\
+VGGT & bonsai & 1000 & confidence & 0.790 & 0.107 & 17.988 & 0.543 & 0.609 & 0.260 \\
+VGGT & bonsai & 1000 & imagefps & 0.722 & 0.106 & 18.063 & 0.546 & \underline{0.613} & 0.262 \\
+VGGT & bonsai & 1000 & random & 0.790 & 0.107 & 17.979 & 0.537 & 0.611 & 0.265 \\
+VGGT & bonsai & 1000 & voxels & 0.722 & 0.106 & 18.033 & 0.545 & \underline{0.613} & 0.263 \\
+VGGT & bonsai & 5000 & confidence & 0.790 & 0.107 & 17.859 & 0.475 & 0.597 & 0.293 \\
+VGGT & bonsai & 5000 & imagefps & 0.722 & 0.106 & 17.859 & 0.483 & 0.596 & 0.288 \\
+VGGT & bonsai & 5000 & random & 0.790 & 0.107 & 17.890 & 0.477 & 0.597 & 0.292 \\
+VGGT & bonsai & 5000 & voxels & 0.722 & 0.106 & 17.910 & 0.486 & 0.599 & 0.289 \\
+VGGT & bonsai & 10000 & confidence & 0.790 & 0.107 & 17.831 & 0.455 & 0.592 & 0.302 \\
+VGGT & bonsai & 10000 & imagefps & 0.722 & 0.106 & 17.824 & 0.468 & 0.592 & 0.294 \\
+VGGT & bonsai & 10000 & random & 0.790 & 0.107 & 17.873 & 0.460 & 0.592 & 0.300 \\
+VGGT & bonsai & 10000 & voxels & 0.722 & 0.106 & 17.837 & 0.470 & 0.594 & 0.294 \\
+VGGT & bonsai & 23220 & ba & \underline{0.579} & \underline{0.034} & \underline{19.146} & \underline{0.353} & 0.604 & \underline{0.396} \\
+VGGT & bonsai & 50000 & confidence & 0.790 & 0.107 & 17.740 & 0.424 & 0.579 & 0.312 \\
+VGGT & bonsai & 50000 & imagefps & 0.722 & 0.106 & 17.716 & 0.441 & 0.579 & 0.301 \\
+VGGT & bonsai & 50000 & random & 0.790 & 0.107 & 17.745 & 0.426 & 0.580 & 0.311 \\
+VGGT & bonsai & 50000 & voxels & 0.722 & 0.106 & 17.758 & 0.441 & 0.583 & 0.304 \\
+VGGT & bonsai & 100000 & confidence & 0.790 & 0.107 & 17.730 & 0.419 & 0.576 & 0.313 \\
+VGGT & bonsai & 100000 & imagefps & 0.722 & 0.106 & 17.691 & 0.434 & 0.573 & 0.301 \\
+VGGT & bonsai & 100000 & random & 0.722 & 0.106 & 17.731 & 0.418 & 0.575 & 0.313 \\
+VGGT & bonsai & 100000 & voxels & 0.722 & 0.106 & 17.696 & 0.433 & 0.578 & 0.305 \\
+VGGT & bonsai & 500000 & confidence & 0.790 & 0.107 & 17.688 & 0.417 & 0.568 & 0.309 \\
+VGGT & bonsai & 500000 & imagefps & 0.722 & 0.106 & 17.611 & 0.433 & 0.559 & 0.292 \\
+VGGT & bonsai & 500000 & random & 0.790 & 0.107 & 17.647 & 0.415 & 0.564 & 0.307 \\
+VGGT & bonsai & 500000 & voxels & 0.722 & 0.106 & 17.621 & 0.423 & 0.569 & 0.305 \\
+VGGT & bonsai & 1000000 & confidence & 0.790 & 0.107 & 17.688 & 0.419 & 0.568 & 0.307 \\
+VGGT & bonsai & 1000000 & imagefps & 0.722 & 0.106 & 17.569 & 0.434 & 0.555 & 0.289 \\
+VGGT & bonsai & 1000000 & random & 0.790 & 0.107 & 17.635 & 0.415 & 0.561 & 0.304 \\
+VGGT & bonsai & 1000000 & voxels & 0.722 & 0.106 & 17.608 & 0.422 & 0.566 & 0.303 \\
+\midrule
+COLMAP & kitchen & 92853 &  & \textbf{0.107} & \textbf{0.004} & \textbf{21.260} & \textbf{0.149} & \textbf{0.471} & \textbf{0.484} \\
+VGGT & kitchen & 1000 & confidence & \underline{0.339} & 0.031 &  &  &  &  \\
+VGGT & kitchen & 1000 & imagefps & \underline{0.339} & 0.031 &  &  &  &  \\
+VGGT & kitchen & 1000 & random & \underline{0.339} & 0.031 &  &  &  &  \\
+VGGT & kitchen & 1000 & voxels & \underline{0.339} & 0.031 &  &  &  &  \\
+VGGT & kitchen & 5000 & confidence & \underline{0.339} & 0.031 &  &  &  &  \\
+VGGT & kitchen & 5000 & imagefps & \underline{0.339} & 0.031 &  &  &  &  \\
+VGGT & kitchen & 5000 & random & \underline{0.339} & 0.031 &  &  &  &  \\
+VGGT & kitchen & 5000 & voxels & \underline{0.339} & 0.031 &  &  &  &  \\
+VGGT & kitchen & 10000 & confidence & \underline{0.339} & 0.031 &  &  &  &  \\
+VGGT & kitchen & 10000 & imagefps & \underline{0.339} & 0.031 &  &  &  &  \\
+VGGT & kitchen & 10000 & random & \underline{0.339} & 0.031 &  &  &  &  \\
+VGGT & kitchen & 10000 & voxels & \underline{0.339} & 0.031 &  &  &  &  \\
+VGGT & kitchen & 50000 & confidence & \underline{0.339} & 0.031 &  &  &  &  \\
+VGGT & kitchen & 50000 & imagefps & \underline{0.339} & 0.031 &  &  &  &  \\
+VGGT & kitchen & 50000 & random & \underline{0.339} & 0.031 &  &  &  &  \\
+VGGT & kitchen & 50000 & voxels & \underline{0.339} & 0.031 &  &  &  &  \\
+VGGT & kitchen & 100000 & confidence & \underline{0.339} & 0.031 &  &  &  &  \\
+VGGT & kitchen & 100000 & imagefps & \underline{0.339} & 0.031 &  &  &  &  \\
+VGGT & kitchen & 100000 & random & \underline{0.339} & 0.031 & \underline{19.821} & \underline{0.239} & \underline{0.463} & \underline{0.396} \\
+VGGT & kitchen & 100000 & voxels & \underline{0.339} & 0.031 &  &  &  &  \\
+VGGT & kitchen & 500000 & confidence & \underline{0.339} & 0.031 &  &  &  &  \\
+VGGT & kitchen & 500000 & imagefps & \underline{0.339} & 0.031 &  &  &  &  \\
+VGGT & kitchen & 500000 & random & \underline{0.339} & 0.031 &  &  &  &  \\
+VGGT & kitchen & 500000 & voxels & \underline{0.339} & 0.031 &  &  &  &  \\
+VGGT & kitchen & 1000000 & confidence & \underline{0.339} & 0.031 &  &  &  &  \\
+VGGT & kitchen & 1000000 & imagefps & \underline{0.339} & 0.031 &  &  &  &  \\
+VGGT & kitchen & 1000000 & random & \underline{0.339} & 0.031 &  &  &  &  \\
+VGGT & kitchen & 1000000 & voxels & \underline{0.339} & 0.031 &  &  &  &  \\
+VGGT & kitchen &  & ba & 0.454 & \underline{0.023} &  &  &  &  \\
+\midrule
+COLMAP & counter & 60980 &  & \textbf{0.029} & \textbf{0.002} & \textbf{25.221} & \textbf{0.189} & \textbf{0.852} & \textbf{0.755} \\
+VGGT & counter & 1000 & confidence & \underline{0.343} & 0.033 &  &  &  &  \\
+VGGT & counter & 1000 & imagefps & \underline{0.343} & 0.033 &  &  &  &  \\
+VGGT & counter & 1000 & random & \underline{0.343} & 0.033 &  &  &  &  \\
+VGGT & counter & 1000 & voxels & \underline{0.343} & 0.033 &  &  &  &  \\
+VGGT & counter & 5000 & confidence & \underline{0.343} & 0.033 &  &  &  &  \\
+VGGT & counter & 5000 & imagefps & \underline{0.343} & 0.033 &  &  &  &  \\
+VGGT & counter & 5000 & random & \underline{0.343} & 0.033 &  &  &  &  \\
+VGGT & counter & 5000 & voxels & \underline{0.343} & 0.033 &  &  &  &  \\
+VGGT & counter & 10000 & confidence & \underline{0.343} & 0.033 &  &  &  &  \\
+VGGT & counter & 10000 & imagefps & \underline{0.343} & 0.033 &  &  &  &  \\
+VGGT & counter & 10000 & random & \underline{0.343} & 0.033 &  &  &  &  \\
+VGGT & counter & 10000 & voxels & \underline{0.343} & 0.033 &  &  &  &  \\
+VGGT & counter & 50000 & confidence & \underline{0.343} & 0.033 &  &  &  &  \\
+VGGT & counter & 50000 & imagefps & \underline{0.343} & 0.033 &  &  &  &  \\
+VGGT & counter & 50000 & random & \underline{0.343} & 0.033 &  &  &  &  \\
+VGGT & counter & 50000 & voxels & \underline{0.343} & 0.033 &  &  &  &  \\
+VGGT & counter & 100000 & confidence & \underline{0.343} & 0.033 &  &  &  &  \\
+VGGT & counter & 100000 & imagefps & \underline{0.343} & 0.033 &  &  &  &  \\
+VGGT & counter & 100000 & random & \underline{0.343} & 0.033 & \underline{20.160} & \underline{0.307} & \underline{0.630} & \underline{0.459} \\
+VGGT & counter & 100000 & voxels & \underline{0.343} & 0.033 &  &  &  &  \\
+VGGT & counter & 500000 & confidence & \underline{0.343} & 0.033 &  &  &  &  \\
+VGGT & counter & 500000 & imagefps & \underline{0.343} & 0.033 &  &  &  &  \\
+VGGT & counter & 500000 & random & \underline{0.343} & 0.033 &  &  &  &  \\
+VGGT & counter & 500000 & voxels & \underline{0.343} & 0.033 &  &  &  &  \\
+VGGT & counter & 1000000 & confidence & \underline{0.343} & 0.033 &  &  &  &  \\
+VGGT & counter & 1000000 & imagefps & \underline{0.343} & 0.033 &  &  &  &  \\
+VGGT & counter & 1000000 & random & \underline{0.343} & 0.033 &  &  &  &  \\
+VGGT & counter & 1000000 & voxels & \underline{0.343} & 0.033 &  &  &  &  \\
+VGGT & counter &  & ba & 0.421 & \underline{0.017} &  &  &  &  \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,0 +1,103 @@
+\begin{table}[H]
+\caption{A comparison of different VGGT point cloud sampling modes with GT cameras (Bicycle,Garden,Stump)}
+\label{tab:03_sampling_mode_gt_cams_bicycle,garden,stump}
+\small
+\begin{tabular}{llrlrrrrr}
+\toprule
+Choice & Dataset & Num Points & Sampling Mode & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ & Average Error ↓ \\
+\midrule
+COLMAP & bicycle & 17352 &  & \textbf{22.997} & 0.349 & 0.610 & 0.474 & 0.326 \\
+VGGT & bicycle & 1000 & confidence & 21.560 & 0.573 & 0.486 & 0.237 & 0.432 \\
+VGGT & bicycle & 1000 & imagefps & 21.603 & 0.601 & 0.470 & 0.211 & 0.445 \\
+VGGT & bicycle & 1000 & random & 21.656 & 0.577 & 0.483 & 0.234 & 0.434 \\
+VGGT & bicycle & 1000 & voxels & 21.502 & 0.599 & 0.471 & 0.210 & 0.444 \\
+VGGT & bicycle & 5000 & confidence & 22.662 & 0.419 & 0.575 & 0.403 & 0.359 \\
+VGGT & bicycle & 5000 & imagefps & 22.195 & 0.455 & 0.538 & 0.351 & 0.380 \\
+VGGT & bicycle & 5000 & random & 22.493 & 0.420 & 0.566 & 0.395 & 0.362 \\
+VGGT & bicycle & 5000 & voxels & 22.131 & 0.476 & 0.528 & 0.331 & 0.390 \\
+VGGT & bicycle & 10000 & confidence & 22.801 & 0.377 & 0.598 & 0.446 & 0.339 \\
+VGGT & bicycle & 10000 & imagefps & 22.487 & 0.404 & 0.567 & 0.405 & 0.356 \\
+VGGT & bicycle & 10000 & random & 22.742 & 0.367 & 0.596 & 0.449 & 0.336 \\
+VGGT & bicycle & 10000 & voxels & 22.318 & 0.428 & 0.550 & 0.377 & 0.368 \\
+VGGT & bicycle & 23814 & ba & \underline{22.958} & 0.369 & 0.600 & 0.455 & 0.335 \\
+VGGT & bicycle & 50000 & confidence & 22.633 & 0.322 & 0.621 & 0.490 & 0.314 \\
+VGGT & bicycle & 50000 & imagefps & 22.618 & 0.290 & 0.620 & 0.509 & 0.304 \\
+VGGT & bicycle & 50000 & random & 22.830 & 0.273 & \textbf{0.634} & \underline{0.532} & 0.294 \\
+VGGT & bicycle & 50000 & voxels & 22.555 & 0.333 & 0.595 & 0.466 & 0.325 \\
+VGGT & bicycle & 100000 & confidence & 22.781 & 0.306 & 0.623 & 0.504 & 0.308 \\
+VGGT & bicycle & 100000 & imagefps & 22.643 & 0.260 & \underline{0.624} & 0.530 & 0.293 \\
+VGGT & bicycle & 100000 & random & 22.770 & 0.248 & \textbf{0.634} & \textbf{0.546} & \textbf{0.286} \\
+VGGT & bicycle & 100000 & voxels & 22.526 & 0.310 & 0.601 & 0.484 & 0.316 \\
+VGGT & bicycle & 500000 & confidence & 22.258 & 0.308 & 0.605 & 0.482 & 0.314 \\
+VGGT & bicycle & 500000 & imagefps & 22.114 & 0.264 & 0.586 & 0.496 & 0.304 \\
+VGGT & bicycle & 500000 & random & 22.331 & \textbf{0.233} & 0.605 & 0.530 & \underline{0.289} \\
+VGGT & bicycle & 500000 & voxels & 22.183 & 0.305 & 0.583 & 0.470 & 0.319 \\
+VGGT & bicycle & 1000000 & confidence & 22.040 & 0.325 & 0.592 & 0.461 & 0.323 \\
+VGGT & bicycle & 1000000 & imagefps & 21.670 & 0.299 & 0.549 & 0.444 & 0.326 \\
+VGGT & bicycle & 1000000 & random & 22.059 & \underline{0.243} & 0.585 & 0.507 & 0.298 \\
+VGGT & bicycle & 1000000 & voxels & 21.901 & 0.321 & 0.555 & 0.439 & 0.331 \\
+\midrule
+COLMAP & garden & 70656 &  & \textbf{24.718} & 0.249 & \textbf{0.722} & \textbf{0.633} & \underline{0.260} \\
+VGGT & garden & 1000 & confidence & 22.011 & 0.503 & 0.559 & 0.331 & 0.391 \\
+VGGT & garden & 1000 & imagefps & 22.325 & 0.500 & 0.563 & 0.341 & 0.389 \\
+VGGT & garden & 1000 & random & 22.328 & 0.492 & 0.566 & 0.347 & 0.386 \\
+VGGT & garden & 1000 & voxels & 22.256 & 0.499 & 0.562 & 0.339 & 0.389 \\
+VGGT & garden & 5000 & confidence & 23.027 & 0.385 & 0.624 & 0.460 & 0.334 \\
+VGGT & garden & 5000 & imagefps & 23.350 & 0.372 & 0.636 & 0.481 & 0.327 \\
+VGGT & garden & 5000 & random & 23.350 & 0.367 & 0.636 & 0.484 & 0.325 \\
+VGGT & garden & 5000 & voxels & 23.177 & 0.376 & 0.635 & 0.475 & 0.328 \\
+VGGT & garden & 10000 & confidence & 23.044 & 0.362 & 0.640 & 0.484 & 0.322 \\
+VGGT & garden & 10000 & imagefps & 23.600 & 0.338 & 0.657 & 0.519 & 0.309 \\
+VGGT & garden & 10000 & random & 23.597 & 0.332 & 0.660 & 0.524 & 0.307 \\
+VGGT & garden & 10000 & voxels & 23.389 & 0.343 & 0.657 & 0.512 & 0.311 \\
+VGGT & garden & 21147 & ba & \underline{23.913} & 0.316 & 0.671 & 0.547 & 0.298 \\
+VGGT & garden & 50000 & confidence & 23.108 & 0.326 & 0.668 & 0.523 & 0.303 \\
+VGGT & garden & 50000 & imagefps & 23.694 & 0.274 & 0.697 & 0.584 & 0.276 \\
+VGGT & garden & 50000 & random & 23.905 & 0.267 & 0.700 & 0.594 & 0.273 \\
+VGGT & garden & 50000 & voxels & 23.273 & 0.301 & 0.686 & 0.553 & 0.289 \\
+VGGT & garden & 100000 & confidence & 23.084 & 0.315 & 0.676 & 0.535 & 0.296 \\
+VGGT & garden & 100000 & imagefps & 23.596 & 0.257 & 0.704 & 0.597 & 0.268 \\
+VGGT & garden & 100000 & random & 23.762 & 0.249 & \underline{0.708} & 0.607 & 0.265 \\
+VGGT & garden & 100000 & voxels & 23.399 & 0.277 & 0.700 & 0.578 & 0.277 \\
+VGGT & garden & 500000 & confidence & 22.989 & 0.310 & 0.677 & 0.537 & 0.294 \\
+VGGT & garden & 500000 & imagefps & 23.725 & \underline{0.240} & 0.707 & 0.611 & 0.262 \\
+VGGT & garden & 500000 & random & 23.710 & \textbf{0.231} & \underline{0.708} & \underline{0.617} & \textbf{0.259} \\
+VGGT & garden & 500000 & voxels & 23.036 & 0.291 & 0.687 & 0.555 & 0.285 \\
+VGGT & garden & 1000000 & confidence & 22.681 & 0.326 & 0.664 & 0.514 & 0.304 \\
+VGGT & garden & 1000000 & imagefps & 23.331 & 0.264 & 0.688 & 0.578 & 0.276 \\
+VGGT & garden & 1000000 & random & 23.315 & 0.242 & 0.694 & 0.595 & 0.267 \\
+VGGT & garden & 1000000 & voxels & 22.722 & 0.307 & 0.670 & 0.529 & 0.296 \\
+\midrule
+COLMAP & stump & 19683 &  & 25.440 & 0.342 & 0.733 & 0.595 & 0.287 \\
+VGGT & stump & 1000 & confidence & 23.040 & 0.572 & 0.625 & 0.346 & 0.396 \\
+VGGT & stump & 1000 & imagefps & 23.183 & 0.568 & 0.627 & 0.351 & 0.395 \\
+VGGT & stump & 1000 & random & 23.287 & 0.562 & 0.630 & 0.359 & 0.392 \\
+VGGT & stump & 1000 & voxels & 22.656 & 0.603 & 0.609 & 0.310 & 0.411 \\
+VGGT & stump & 5000 & confidence & 24.723 & 0.430 & 0.698 & 0.507 & 0.328 \\
+VGGT & stump & 5000 & imagefps & 24.616 & 0.424 & 0.691 & 0.505 & 0.328 \\
+VGGT & stump & 5000 & random & 24.783 & 0.415 & 0.699 & 0.518 & 0.322 \\
+VGGT & stump & 5000 & voxels & 24.334 & 0.444 & 0.680 & 0.481 & 0.338 \\
+VGGT & stump & 10000 & confidence & 25.043 & 0.385 & 0.722 & 0.555 & 0.305 \\
+VGGT & stump & 10000 & imagefps & 25.166 & 0.378 & 0.715 & 0.558 & 0.305 \\
+VGGT & stump & 10000 & random & 25.355 & 0.368 & 0.723 & 0.572 & 0.299 \\
+VGGT & stump & 10000 & voxels & 24.719 & 0.405 & 0.698 & 0.522 & 0.320 \\
+VGGT & stump & 21431 & ba & 25.716 & 0.339 & 0.738 & 0.605 & 0.284 \\
+VGGT & stump & 50000 & confidence & \textbf{26.169} & 0.309 & \textbf{0.756} & 0.642 & 0.268 \\
+VGGT & stump & 50000 & imagefps & 25.808 & 0.303 & 0.749 & 0.635 & 0.269 \\
+VGGT & stump & 50000 & random & \underline{25.969} & 0.292 & \underline{0.755} & \underline{0.649} & \underline{0.263} \\
+VGGT & stump & 50000 & voxels & 25.490 & 0.329 & 0.733 & 0.604 & 0.283 \\
+VGGT & stump & 100000 & confidence & 25.464 & 0.308 & 0.749 & 0.626 & 0.271 \\
+VGGT & stump & 100000 & imagefps & 25.695 & 0.288 & 0.748 & 0.642 & 0.264 \\
+VGGT & stump & 100000 & random & 25.891 & \textbf{0.276} & \underline{0.755} & \textbf{0.657} & \textbf{0.258} \\
+VGGT & stump & 100000 & voxels & 25.608 & 0.310 & 0.737 & 0.621 & 0.275 \\
+VGGT & stump & 500000 & confidence & 25.351 & 0.308 & 0.728 & 0.611 & 0.278 \\
+VGGT & stump & 500000 & imagefps & 24.713 & 0.312 & 0.701 & 0.581 & 0.287 \\
+VGGT & stump & 500000 & random & 25.262 & \underline{0.283} & 0.716 & 0.618 & 0.273 \\
+VGGT & stump & 500000 & voxels & 25.448 & 0.303 & 0.728 & 0.617 & 0.276 \\
+VGGT & stump & 1000000 & confidence & 24.113 & 0.346 & 0.686 & 0.541 & 0.303 \\
+VGGT & stump & 1000000 & imagefps & 23.768 & 0.358 & 0.642 & 0.501 & 0.320 \\
+VGGT & stump & 1000000 & random & 24.385 & 0.312 & 0.669 & 0.557 & 0.297 \\
+VGGT & stump & 1000000 & voxels & 25.071 & 0.308 & 0.709 & 0.595 & 0.284 \\
+\bottomrule
+\end{tabular}
+\end{table}

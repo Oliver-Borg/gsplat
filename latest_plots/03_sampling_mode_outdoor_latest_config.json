@@ -1,0 +1,31 @@
+{
+    "seed": [
+        42
+    ],
+    "num_images": [
+        100
+    ],
+    "sampling_mode": [
+        "voxels",
+        "random",
+        "confidence",
+        "ba",
+        "imagefps"
+    ],
+    "num_points_per_image": [
+        10,
+        50,
+        100,
+        500,
+        1000,
+        5000,
+        10000
+    ],
+    "choice": [
+        "vggt",
+        "colmap"
+    ],
+    "use_gt_cams": false,
+    "gt_eval": true,
+    "dataset": "bicycle"
+}

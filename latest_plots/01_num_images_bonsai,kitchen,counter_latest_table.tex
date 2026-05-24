@@ -1,0 +1,72 @@
+\begin{table}[H]
+\caption{COLMAP versus VGGT over various number of images (Bonsai,Kitchen,Counter)}
+\label{tab:01_num_images_bonsai,kitchen,counter}
+\small
+\begin{tabular}{llrrrrrrr}
+\toprule
+Choice & Dataset & Num Images & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Aligned Cameras ↑ \\
+\midrule
+COLMAP & bonsai & 10 & 10.938 & 0.184 & 10.204 & 0.835 & 0.264 & 4 \\
+COLMAP & bonsai & 20 & 0.454 & \textbf{0.008} & 12.781 & 0.581 & 0.370 & 9 \\
+COLMAP & bonsai & 30 & 5.080 & 0.504 & 12.956 & 0.694 & 0.400 & 14 \\
+COLMAP & bonsai & 40 & 1.264 & 0.122 & 16.021 & 0.479 & 0.519 & 34 \\
+COLMAP & bonsai & 50 & 0.227 & 0.037 & 19.562 & 0.301 & 0.609 & 50 \\
+COLMAP & bonsai & 60 & 0.213 & \underline{0.012} & 20.667 & 0.253 & 0.639 & 60 \\
+COLMAP & bonsai & 70 & 0.230 & \underline{0.012} & 20.396 & 0.257 & 0.630 & 70 \\
+COLMAP & bonsai & 80 & 0.254 & 0.015 & 20.761 & 0.244 & 0.629 & 80 \\
+COLMAP & bonsai & 90 & \underline{0.187} & 0.060 & \underline{21.677} & \underline{0.221} & \underline{0.670} & \underline{90} \\
+COLMAP & bonsai & 100 & \textbf{0.158} & 0.013 & \textbf{22.423} & \textbf{0.204} & \textbf{0.697} & \textbf{100} \\
+VGGT & bonsai & 10 & 1.212 & 0.106 & 14.426 & 0.563 & 0.434 & 10 \\
+VGGT & bonsai & 20 & 0.872 & 0.106 & 16.017 & 0.489 & 0.489 & 20 \\
+VGGT & bonsai & 30 & 1.001 & 0.110 & 16.074 & 0.485 & 0.499 & 30 \\
+VGGT & bonsai & 40 & 0.891 & 0.104 & 16.336 & 0.469 & 0.516 & 40 \\
+VGGT & bonsai & 50 & 0.864 & 0.100 & 16.562 & 0.459 & 0.528 & 50 \\
+VGGT & bonsai & 60 & 0.864 & 0.103 & 16.860 & 0.449 & 0.540 & 60 \\
+VGGT & bonsai & 70 & 0.935 & 0.110 & 16.975 & 0.445 & 0.546 & 70 \\
+VGGT & bonsai & 80 & 0.902 & 0.112 & 17.384 & 0.431 & 0.561 & 80 \\
+VGGT & bonsai & 90 & 0.884 & 0.109 & 17.473 & 0.433 & 0.565 & \underline{90} \\
+VGGT & bonsai & 100 & 0.722 & 0.106 & 17.731 & 0.418 & 0.575 & \textbf{100} \\
+\midrule
+COLMAP & kitchen & 20 & 0.239 & 0.009 & 16.503 & 0.423 & 0.417 & 12 \\
+COLMAP & kitchen & 30 & 0.159 & 0.008 & 18.901 & 0.255 & 0.470 & 28 \\
+COLMAP & kitchen & 40 & 0.130 & 0.007 & 19.850 & 0.201 & 0.438 & 40 \\
+COLMAP & kitchen & 50 & 0.113 & 0.006 & 20.974 & 0.180 & \textbf{0.519} & 50 \\
+COLMAP & kitchen & 60 & 0.121 & 0.006 & 20.636 & 0.172 & 0.460 & 60 \\
+COLMAP & kitchen & 70 & 0.115 & \underline{0.005} & 20.936 & 0.165 & 0.472 & 70 \\
+COLMAP & kitchen & 80 & 0.111 & \underline{0.005} & 20.917 & 0.156 & 0.455 & 80 \\
+COLMAP & kitchen & 90 & \underline{0.110} & \underline{0.005} & \textbf{21.339} & \underline{0.150} & \underline{0.484} & \underline{90} \\
+COLMAP & kitchen & 100 & \textbf{0.107} & \textbf{0.004} & \underline{21.260} & \textbf{0.149} & 0.471 & \textbf{100} \\
+VGGT & kitchen & 10 & 0.335 & 0.030 & 16.928 & 0.363 & 0.383 & 10 \\
+VGGT & kitchen & 20 & 0.305 & 0.029 & 17.384 & 0.343 & 0.396 & 20 \\
+VGGT & kitchen & 30 & 0.267 & 0.028 & 18.028 & 0.300 & 0.398 & 30 \\
+VGGT & kitchen & 40 & 0.336 & 0.033 & 17.735 & 0.296 & 0.396 & 40 \\
+VGGT & kitchen & 50 & 0.292 & 0.035 & 18.671 & 0.267 & 0.435 & 50 \\
+VGGT & kitchen & 60 & 0.337 & 0.035 & 18.748 & 0.262 & 0.429 & 60 \\
+VGGT & kitchen & 70 & 0.356 & 0.033 & 19.219 & 0.248 & 0.444 & 70 \\
+VGGT & kitchen & 80 & 0.332 & 0.031 & 19.533 & 0.240 & 0.456 & 80 \\
+VGGT & kitchen & 90 & 0.359 & 0.032 & 19.328 & 0.245 & 0.455 & \underline{90} \\
+VGGT & kitchen & 100 & 0.339 & 0.031 & 19.821 & 0.239 & 0.463 & \textbf{100} \\
+\midrule
+COLMAP & counter & 10 & 0.821 & 0.012 & 9.640 & 0.744 & 0.387 & 4 \\
+COLMAP & counter & 20 & 0.116 & \textbf{0.001} & 9.049 & 0.806 & 0.385 & 3 \\
+COLMAP & counter & 30 & 0.678 & 0.044 & 15.701 & 0.505 & 0.514 & 16 \\
+COLMAP & counter & 40 & 0.178 & 0.004 & 16.444 & 0.448 & 0.517 & 21 \\
+COLMAP & counter & 50 & 0.097 & 0.006 & 21.530 & 0.265 & 0.739 & 50 \\
+COLMAP & counter & 60 & 0.123 & 0.009 & 21.973 & 0.249 & 0.729 & 60 \\
+COLMAP & counter & 70 & 0.052 & 0.003 & 23.574 & 0.221 & 0.812 & 70 \\
+COLMAP & counter & 80 & \underline{0.037} & \underline{0.002} & 24.332 & 0.205 & 0.836 & 80 \\
+COLMAP & counter & 90 & 0.038 & \underline{0.002} & \underline{24.801} & \underline{0.198} & \underline{0.841} & \underline{90} \\
+COLMAP & counter & 100 & \textbf{0.029} & \underline{0.002} & \textbf{25.221} & \textbf{0.189} & \textbf{0.852} & \textbf{100} \\
+VGGT & counter & 10 & 1.060 & 0.055 & 14.519 & 0.539 & 0.415 & 10 \\
+VGGT & counter & 20 & 0.487 & 0.036 & 16.006 & 0.454 & 0.467 & 20 \\
+VGGT & counter & 30 & 0.353 & 0.036 & 16.945 & 0.416 & 0.501 & 30 \\
+VGGT & counter & 40 & 0.357 & 0.041 & 18.036 & 0.375 & 0.545 & 40 \\
+VGGT & counter & 50 & 0.343 & 0.040 & 18.622 & 0.358 & 0.571 & 50 \\
+VGGT & counter & 60 & 0.408 & 0.037 & 18.857 & 0.347 & 0.582 & 60 \\
+VGGT & counter & 70 & 0.354 & 0.036 & 19.366 & 0.329 & 0.602 & 70 \\
+VGGT & counter & 80 & 0.353 & 0.035 & 19.900 & 0.316 & 0.620 & 80 \\
+VGGT & counter & 90 & 0.346 & 0.033 & 20.005 & 0.312 & 0.622 & \underline{90} \\
+VGGT & counter & 100 & 0.343 & 0.033 & 20.160 & 0.307 & 0.630 & \textbf{100} \\
+\bottomrule
+\end{tabular}
+\end{table}

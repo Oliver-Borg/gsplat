@@ -1,0 +1,103 @@
+\begin{table}[H]
+\caption{A comparison of different VGGT point cloud sampling modes with GT cameras (Synthetic)}
+\label{tab:03_sampling_mode_gt_cams_synthetic}
+\small
+\begin{tabular}{llrlrrrrr}
+\toprule
+Choice & Dataset & Num Points & Sampling Mode & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ & Average Error ↓ \\
+\midrule
+COLMAP & lego & 10069 &  & 33.139 & 0.034 & \underline{0.980} & 1.072 & 0.059 \\
+VGGT & lego & 870 & confidence & 31.849 & 0.049 & 0.969 & 1.033 & 0.075 \\
+VGGT & lego & 870 & imagefps & 31.569 & 0.052 & 0.967 & 1.024 & 0.078 \\
+VGGT & lego & 870 & random & 31.891 & 0.049 & 0.970 & 1.034 & 0.075 \\
+VGGT & lego & 870 & voxels & 31.824 & 0.050 & 0.969 & 1.031 & 0.076 \\
+VGGT & lego & 4350 & confidence & 32.950 & 0.035 & 0.978 & 1.067 & 0.061 \\
+VGGT & lego & 4350 & imagefps & 32.985 & 0.037 & 0.979 & 1.067 & 0.061 \\
+VGGT & lego & 4350 & random & 32.955 & 0.035 & 0.979 & 1.067 & 0.061 \\
+VGGT & lego & 4350 & voxels & 32.927 & 0.036 & 0.978 & 1.066 & 0.061 \\
+VGGT & lego & 8700 & confidence & 33.116 & 0.033 & \underline{0.980} & 1.072 & 0.059 \\
+VGGT & lego & 8700 & imagefps & 33.113 & 0.034 & \underline{0.980} & 1.071 & 0.059 \\
+VGGT & lego & 8700 & random & 33.128 & 0.033 & \underline{0.980} & 1.072 & 0.059 \\
+VGGT & lego & 8700 & voxels & 33.175 & 0.033 & \underline{0.980} & 1.073 & \underline{0.058} \\
+VGGT & lego & 27774 & ba & 33.294 & \underline{0.032} & \textbf{0.981} & \textbf{1.077} & \textbf{0.057} \\
+VGGT & lego & 43500 & confidence & 33.267 & \underline{0.032} & \textbf{0.981} & \underline{1.076} & \textbf{0.057} \\
+VGGT & lego & 43500 & imagefps & \textbf{33.309} & \underline{0.032} & \textbf{0.981} & \textbf{1.077} & \textbf{0.057} \\
+VGGT & lego & 43500 & random & 33.273 & \underline{0.032} & \textbf{0.981} & \underline{1.076} & \textbf{0.057} \\
+VGGT & lego & 43500 & voxels & 33.253 & \underline{0.032} & \textbf{0.981} & \underline{1.076} & \textbf{0.057} \\
+VGGT & lego & 87000 & confidence & \underline{33.304} & \underline{0.032} & \textbf{0.981} & \textbf{1.077} & \textbf{0.057} \\
+VGGT & lego & 87000 & imagefps & 33.297 & \underline{0.032} & \underline{0.980} & \textbf{1.077} & \textbf{0.057} \\
+VGGT & lego & 87000 & random & 33.302 & \underline{0.032} & \textbf{0.981} & \textbf{1.077} & \textbf{0.057} \\
+VGGT & lego & 87000 & voxels & 33.301 & \underline{0.032} & \textbf{0.981} & \textbf{1.077} & \textbf{0.057} \\
+VGGT & lego & 435000 & confidence & 33.263 & \textbf{0.031} & \underline{0.980} & \underline{1.076} & \textbf{0.057} \\
+VGGT & lego & 435000 & imagefps & 33.228 & \underline{0.032} & \underline{0.980} & 1.075 & \underline{0.058} \\
+VGGT & lego & 435000 & random & 33.262 & \textbf{0.031} & \underline{0.980} & \underline{1.076} & \underline{0.058} \\
+VGGT & lego & 435000 & voxels & 33.241 & \textbf{0.031} & \underline{0.980} & \underline{1.076} & \underline{0.058} \\
+VGGT & lego & 870000 & confidence & 33.202 & \textbf{0.031} & \underline{0.980} & 1.075 & \underline{0.058} \\
+VGGT & lego & 870000 & imagefps & 33.211 & \textbf{0.031} & 0.979 & 1.075 & \underline{0.058} \\
+VGGT & lego & 870000 & random & 33.191 & \textbf{0.031} & \underline{0.980} & 1.075 & \underline{0.058} \\
+VGGT & lego & 870000 & voxels & 33.288 & \textbf{0.031} & \underline{0.980} & \textbf{1.077} & \textbf{0.057} \\
+\midrule
+VGGT & ship & 870 & confidence &  &  &  &  &  \\
+VGGT & ship & 870 & imagefps &  &  &  &  &  \\
+VGGT & ship & 870 & random &  &  &  &  &  \\
+VGGT & ship & 870 & voxels &  &  &  &  &  \\
+VGGT & ship & 4350 & confidence &  &  &  &  &  \\
+VGGT & ship & 4350 & imagefps &  &  &  &  &  \\
+VGGT & ship & 4350 & random &  &  &  &  &  \\
+VGGT & ship & 4350 & voxels &  &  &  &  &  \\
+VGGT & ship & 8700 & confidence &  &  &  &  &  \\
+VGGT & ship & 8700 & imagefps &  &  &  &  &  \\
+VGGT & ship & 8700 & random &  &  &  &  &  \\
+VGGT & ship & 8700 & voxels &  &  &  &  &  \\
+VGGT & ship & 43500 & confidence &  &  &  &  &  \\
+VGGT & ship & 43500 & imagefps &  &  &  &  &  \\
+VGGT & ship & 43500 & random &  &  &  &  &  \\
+VGGT & ship & 43500 & voxels &  &  &  &  &  \\
+VGGT & ship & 87000 & confidence &  &  &  &  &  \\
+VGGT & ship & 87000 & imagefps &  &  &  &  &  \\
+VGGT & ship & 87000 & random &  &  &  &  &  \\
+VGGT & ship & 87000 & voxels &  &  &  &  &  \\
+VGGT & ship & 435000 & confidence &  &  &  &  &  \\
+VGGT & ship & 435000 & imagefps &  &  &  &  &  \\
+VGGT & ship & 435000 & random &  &  &  &  &  \\
+VGGT & ship & 435000 & voxels &  &  &  &  &  \\
+VGGT & ship & 870000 & confidence &  &  &  &  &  \\
+VGGT & ship & 870000 & imagefps &  &  &  &  &  \\
+VGGT & ship & 870000 & random &  &  &  &  &  \\
+VGGT & ship & 870000 & voxels &  &  &  &  &  \\
+VGGT & ship &  & ba &  &  &  &  &  \\
+VGGT & ship &  &  &  &  &  &  &  \\
+\midrule
+VGGT & drums & 870 & confidence &  &  &  &  &  \\
+VGGT & drums & 870 & imagefps &  &  &  &  &  \\
+VGGT & drums & 870 & random &  &  &  &  &  \\
+VGGT & drums & 870 & voxels &  &  &  &  &  \\
+VGGT & drums & 4350 & confidence &  &  &  &  &  \\
+VGGT & drums & 4350 & imagefps &  &  &  &  &  \\
+VGGT & drums & 4350 & random &  &  &  &  &  \\
+VGGT & drums & 4350 & voxels &  &  &  &  &  \\
+VGGT & drums & 8700 & confidence &  &  &  &  &  \\
+VGGT & drums & 8700 & imagefps &  &  &  &  &  \\
+VGGT & drums & 8700 & random &  &  &  &  &  \\
+VGGT & drums & 8700 & voxels &  &  &  &  &  \\
+VGGT & drums & 43500 & confidence &  &  &  &  &  \\
+VGGT & drums & 43500 & imagefps &  &  &  &  &  \\
+VGGT & drums & 43500 & random &  &  &  &  &  \\
+VGGT & drums & 43500 & voxels &  &  &  &  &  \\
+VGGT & drums & 87000 & confidence &  &  &  &  &  \\
+VGGT & drums & 87000 & imagefps &  &  &  &  &  \\
+VGGT & drums & 87000 & random &  &  &  &  &  \\
+VGGT & drums & 87000 & voxels &  &  &  &  &  \\
+VGGT & drums & 435000 & confidence &  &  &  &  &  \\
+VGGT & drums & 435000 & imagefps &  &  &  &  &  \\
+VGGT & drums & 435000 & random &  &  &  &  &  \\
+VGGT & drums & 435000 & voxels &  &  &  &  &  \\
+VGGT & drums & 870000 & confidence &  &  &  &  &  \\
+VGGT & drums & 870000 & imagefps &  &  &  &  &  \\
+VGGT & drums & 870000 & random &  &  &  &  &  \\
+VGGT & drums & 870000 & voxels &  &  &  &  &  \\
+VGGT & drums &  & ba &  &  &  &  &  \\
+VGGT & drums &  &  &  &  &  &  &  \\
+\bottomrule
+\end{tabular}
+\end{table}
