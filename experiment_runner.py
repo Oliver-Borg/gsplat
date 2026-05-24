@@ -1057,7 +1057,7 @@ class PlotConfig:
     raw_metrics: bool = False
     make_camera_plot: bool = False
     make_pcd_plot: bool = False
-    horizontal_dataset_renders: bool = True
+    horizontal_datasets: bool = True
 
 
 @dataclass
@@ -1307,7 +1307,7 @@ class Experiment:
             plot_raw=self.plot_args.raw_metrics,
             make_camera_plot=self.plot_args.make_camera_plot,
             make_pcd_plot=self.plot_args.make_pcd_plot,
-            stack_dataset_renders_horizontally=self.plot_args.horizontal_dataset_renders,
+            stack_datasets_horizontally=self.plot_args.horizontal_datasets,
         )
 
         # print("Plotted metrics from these files")
@@ -1386,7 +1386,7 @@ experiments = [
             raw_metrics=True,
             make_camera_plot=False,
             metric_keys=["rre", "rte", "psnr", "lpips", "ssim", "num_aligned"],
-            horizontal_dataset_renders=False,
+            horizontal_datasets=False,
         ),
         render_filter_override={
             "num_images": [20, 30, 40, 70, 100],
@@ -1414,7 +1414,7 @@ experiments = [
             show_gt=False,
             raw_metrics=False,
             metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "quality"],
-            horizontal_dataset_renders=False,
+            horizontal_datasets=False,
         ),
         render_filter_override={
             "num_images": [20, 30, 40, 100],
@@ -1530,7 +1530,8 @@ experiments = [
             "num_images": [100],
             "sampling_mode": ["voxels", "random", "confidence", "ba", "imagefps"],
             # "sampling_mode": ["imagefps"],
-            "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 2500, 5000, 10000],
+            # "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 2500, 5000, 10000],
+            "num_points_per_image": [10, 50, 100, 500, 1000, 5000, 10000],
             # "num_points_per_image": [10, 100, 1000, 10000],
             "choice": ["vggt", "colmap"],
             # "choice": ["vggt"],
@@ -1540,11 +1541,11 @@ experiments = [
         PlotConfig(
             x_axis="num_points",
             split_param="sampling_mode",
-            metric_keys=["psnr", "lpips", "ssim", "quality"],
+            metric_keys=["rre", "rte", "psnr", "lpips", "ssim", "quality"],
             raw_metrics=True,
             make_pcd_plot=True,
             max_render_cols=4,
-            horizontal_dataset_renders=False,
+            horizontal_datasets=False,
         ),
         render_filter_override={
             "seed": [42],
@@ -1561,7 +1562,8 @@ experiments = [
             "num_images": [100],
             "sampling_mode": ["voxels", "random", "confidence", "ba", "imagefps"],
             # "sampling_mode": ["imagefps"],
-            "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 2500, 5000, 10000],
+            # "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 2500, 5000, 10000],
+            "num_points_per_image": [10, 50, 100, 500, 1000, 5000, 10000],
             # "num_points_per_image": [10, 100, 1000, 10000],
             # "num_points_per_image": [1000],
             "choice": ["vggt", "colmap"],
@@ -1572,10 +1574,10 @@ experiments = [
         PlotConfig(
             x_axis="num_points",
             split_param="sampling_mode",
-            metric_keys=["psnr", "lpips", "ssim", "quality"],
+            metric_keys=["psnr", "lpips", "ssim", "quality", "avge"],
             raw_metrics=False,
             max_render_cols=4,
-            horizontal_dataset_renders=False,
+            horizontal_datasets=False,
         ),
         render_filter_override={
             "seed": [42],
@@ -1821,7 +1823,7 @@ experiments = [
             split_param="sampling_mode",
             metric_keys=["rre", "rte", "num_aligned", "quality"],
             max_render_cols=4,
-            horizontal_dataset_renders=False,
+            horizontal_datasets=False,
         ),
         val_steps=[15000],
         render_filter_override={
@@ -1851,7 +1853,7 @@ experiments = [
             split_param="sampling_mode",
             metric_keys=["psnr", "lpips", "ssim", "quality"],
             max_render_cols=6,
-            horizontal_dataset_renders=False,
+            horizontal_datasets=False,
             make_pcd_plot=True,
         ),
         val_steps=[15000],
@@ -1883,7 +1885,7 @@ experiments = [
             split_param="sampling_mode",
             metric_keys=["psnr", "lpips", "ssim", "quality"],
             max_render_cols=6,
-            horizontal_dataset_renders=False,
+            horizontal_datasets=False,
             make_pcd_plot=True,
         ),
         val_steps=[15000],
@@ -1915,7 +1917,7 @@ experiments = [
             split_param="sampling_mode,num_steps",
             metric_keys=["psnr", "lpips", "ssim", "quality"],
             max_render_cols=6,
-            horizontal_dataset_renders=False,
+            horizontal_datasets=False,
         ),
         val_steps=[1, 3_000, 7_000, 10_000, 15_000, 20_000, 25_000, 30_000],
         render_filter_override={
@@ -2142,7 +2144,7 @@ experiments = [
             show_depth=True,
             show_gt=True,
             max_render_cols=4,
-            horizontal_dataset_renders=False,
+            horizontal_datasets=False,
             # render_nums=[0, 2, 3, 4, 5],
             render_nums=[3],
             make_camera_plot=True,
@@ -2175,7 +2177,7 @@ experiments = [
             show_depth=True,
             show_gt=False,
             max_render_cols=6,
-            horizontal_dataset_renders=False,
+            horizontal_datasets=False,
             render_nums=[0],
             make_camera_plot=True,
             raw_metrics=True,
@@ -2213,7 +2215,7 @@ experiments = [
             show_gt=False,
             max_render_cols=5,
             render_nums=[0, 2, 3, 4, 5],
-            horizontal_dataset_renders=False,
+            horizontal_datasets=False,
         ),
         render_filter_override={
             "seed": [42],
@@ -2241,7 +2243,7 @@ experiments = [
             split_param="depth_lambda",
             metric_keys=["rre", "psnr", "lpips", "ssim", "pred_depth_absrel", "depth_abs_rel"],
             max_render_cols=4,
-            horizontal_dataset_renders=False,
+            horizontal_datasets=False,
             show_depth=True,
             show_gt=False,
         ),
@@ -2331,7 +2333,7 @@ experiments = [
             metric_keys=["rre", "rte", "num_aligned", "quality"],
             max_render_cols=5,
             render_nums=[0, 2, 3, 4, 5],
-            horizontal_dataset_renders=False,
+            horizontal_datasets=False,
         ),
         render_filter_override={
             "seed": [42],
@@ -2355,7 +2357,7 @@ experiments = [
             split_param="shared_camera,sampling_mode",
             metric_keys=["rre", "rte", "num_aligned", "quality"],
             max_render_cols=5,
-            horizontal_dataset_renders=False,
+            horizontal_datasets=False,
             render_nums=[0, 2, 3, 4, 5],
         ),
         render_filter_override={
@@ -2385,7 +2387,7 @@ experiments = [
             split_choice=True,
             shared_colors=True,
             max_render_cols=4,
-            horizontal_dataset_renders=False,
+            horizontal_datasets=False,
         ),
         render_filter_override={
             "seed": [42],
@@ -2400,25 +2402,27 @@ experiments = [
         {
             "seed": [42],
             "num_images": [100],
-            "sampling_mode": ["random", "ba"],
-            "match_colmap_points": [True],
+            "sampling_mode": ["random"],
+            "use_ba": [True, False],
+            "match_colmap_points": [True, False],
             "random_init": [True],
             "pose_opt": [True, False],
             "gt_eval": True,
             "choice": ["colmap", "vggt"],
         },
         PlotConfig(
-            x_axis="",
-            split_param="random_init,pose_opt,sampling_mode",
-            metric_keys=["eval_rre", "eval_rte", "num_aligned", "real_num_points", "quality"],
+            x_axis="real_num_points",
+            split_param="random_init,pose_opt,use_ba",
+            metric_keys=["eval_rre", "eval_rte", "num_aligned", "quality"],
             max_render_cols=4,
-            horizontal_dataset_renders=False,
+            horizontal_datasets=False,
             render_nums=[0, 2],
         ),
         render_filter_override={
             "seed": [42],
             "num_images": [100],
         },
+        priority="high",
     ),
     Experiment(
         "isolated_cams_num_points",
@@ -2427,8 +2431,8 @@ experiments = [
         {
             "seed": [42],
             "num_images": [25, 50, 75, 100],
-            "sampling_mode": ["random", "ba"],
-            "match_colmap_points": [True],
+            "sampling_mode": ["random"],
+            "use_ba": [True, False],
             "random_init": [True],
             "pose_opt": [True, False],
             "gt_eval": True,
@@ -2436,9 +2440,10 @@ experiments = [
         },
         PlotConfig(
             x_axis="num_images",
-            split_param="random_init,pose_opt,sampling_mode",
+            split_param="random_init,pose_opt,use_ba",
             metric_keys=["eval_rre", "eval_rte", "real_num_points", "psnr", "ssim", "lpips"],
         ),
+        priority="high",
     ),
     Experiment(
         "isolated_cams_point_clouds",
@@ -2465,6 +2470,7 @@ experiments = [
             "seed": [42],
             "num_images": [100],
         },
+        priority="high",
     ),
     Experiment(
         "isolated_cams_vggt",
@@ -2595,7 +2601,7 @@ experiments = [
             raw_metrics=True,
             make_camera_plot=True,
             max_render_cols=5,
-            horizontal_dataset_renders=False,
+            horizontal_datasets=False,
         ),
         render_filter_override={
             "seed": [42],
@@ -2623,7 +2629,7 @@ experiments = [
             split_param="align_glue",
             metric_keys=["rre", "rte", "num_aligned", "psnr", "ssim", "lpips"],
             max_render_cols=4,
-            horizontal_dataset_renders=False,
+            horizontal_datasets=False,
             render_nums=[0, 2],
             raw_metrics=True,
         ),
@@ -2651,7 +2657,7 @@ experiments = [
             split_param="align_glue",
             metric_keys=["eval_rre", "eval_rte", "num_aligned", "psnr", "ssim", "lpips"],
             max_render_cols=4,
-            horizontal_dataset_renders=False,
+            horizontal_datasets=False,
             render_nums=[0, 2],
         ),
         render_filter_override={
@@ -2680,7 +2686,7 @@ experiments = [
             split_param="align_glue,colmap_mode",
             metric_keys=["rre", "rte", "num_aligned", "psnr", "ssim", "lpips"],
             max_render_cols=4,
-            horizontal_dataset_renders=False,
+            horizontal_datasets=False,
             render_nums=[0, 2],
         ),
         render_filter_override={
@@ -2710,7 +2716,7 @@ experiments = [
             split_param="align_glue,colmap_mode",
             metric_keys=["eval_rre", "eval_rte", "num_aligned", "psnr", "ssim", "lpips"],
             max_render_cols=4,
-            horizontal_dataset_renders=False,
+            horizontal_datasets=False,
             render_nums=[0, 2],
         ),
         render_filter_override={
@@ -2737,7 +2743,7 @@ experiments = [
             split_param="near_filtering_strength,near_filtering_quorum",
             metric_keys=["eval_rre", "eval_rte", "psnr", "ssim", "lpips", "quality"],
             max_render_cols=4,
-            horizontal_dataset_renders=False,
+            horizontal_datasets=False,
             make_pcd_plot=True,
         ),
         render_filter_override={
@@ -2764,7 +2770,7 @@ experiments = [
             split_param="near_filtering_strength,near_filtering_quorum",
             metric_keys=["eval_rre", "eval_rte", "psnr", "ssim", "lpips", "quality"],
             max_render_cols=4,
-            horizontal_dataset_renders=False,
+            horizontal_datasets=False,
         ),
         render_filter_override={
             "seed": [42],
@@ -2791,7 +2797,7 @@ experiments = [
             split_param="reconstruct_pose_opt,pose_opt",
             metric_keys=["rre", "rte", "num_aligned", "eval_rre", "eval_rte", "quality"],
             max_render_cols=4,
-            horizontal_dataset_renders=False,
+            horizontal_datasets=False,
             make_camera_plot=True,
         ),
         render_filter_override={
@@ -2818,7 +2824,7 @@ experiments = [
             split_param="optimisation_iterations,pose_opt",
             metric_keys=["rre", "rte", "eval_rre", "eval_rte", "quality"],
             max_render_cols=4,
-            horizontal_dataset_renders=False,
+            horizontal_datasets=False,
             make_camera_plot=True,
         ),
         render_filter_override={
@@ -2849,7 +2855,7 @@ experiments = [
             split_param="depth_loss_mode,depth_lambda,real_num_points",
             metric_keys=["eval_rre", "eval_rte", "psnr", "ssim", "lpips", "quality"],
             max_render_cols=4,
-            horizontal_dataset_renders=False,
+            horizontal_datasets=False,
             make_camera_plot=True,
             make_pcd_plot=True,
             show_depth=True,
@@ -2878,7 +2884,7 @@ experiments = [
             split_param="use_ba,feature_extractor,max_ba_iterations",
             metric_keys=["rre", "rte", "psnr", "ssim", "lpips", "quality"],
             max_render_cols=4,
-            horizontal_dataset_renders=False,
+            horizontal_datasets=False,
             make_camera_plot=True,
             make_pcd_plot=False,
             show_depth=False,
@@ -2893,12 +2899,28 @@ experiments = [
 experiment_dict = {exp.name: exp for exp in experiments}
 
 
+dataset_collections = {
+    "outdoor": ["bicycle", "garden", "stump"],
+    "indoor": ["bonsai", "kitchen", "counter"],
+    "synthetic": ["lego", "ship", "drums"],
+}
+
+dataset_values = []
+
+for v in dataset_collections.values():
+    dataset_values.extend(v)
+
+dataset_collections.update({
+    "all": dataset_values
+})
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run experiments")
     parser.add_argument(
         "--experiment_names", type=str, default="all", help="Names of the experiments to run", nargs="+"
     )
-    parser.add_argument("--dataset_name", type=str, required=True, help="Name of the dataset to use", nargs="+")
+    parser.add_argument("--dataset_name", type=str, required=False, help="Name of the dataset to use", nargs="*")
     parser.add_argument("--skip_splatting", action="store_true", help="Whether to skip splatting")
     parser.add_argument("--do_reconstruct", action="store_true", help="Whether to run reconstruction")
     parser.add_argument("--plot_only", action="store_true", help="Whether to only plot")
@@ -2942,8 +2964,26 @@ if __name__ == "__main__":
         action="store_true",
         help="Combine datasets into a single plot."
     )
+    parser.add_argument(
+        "--dataset_collections",
+        type=str,
+        default=None,
+        help="Name of dataset collection to use (e.g., 'outdoor', 'indoor', 'synthetic')."
+        " Overrides --dataset_name if provided.",
+        nargs="*",
+    )
 
     args = parser.parse_args()
+
+    dataset_names = []
+    if args.dataset_collections:
+        for collection in args.dataset_collections:
+            if collection in dataset_collections:
+                dataset_names.extend(dataset_collections[collection])
+            else:
+                raise ValueError(f"Unknown dataset collection: {collection}")
+    else:
+        dataset_names = args.dataset_name
 
     cuda_devices = args.cuda_visible_devices.split(",") if args.cuda_visible_devices else None
 
@@ -2957,7 +2997,7 @@ if __name__ == "__main__":
             if args.group_filter and experiment.group not in args.group_filter:
                 continue
             if experiment.name == arg_experiment or arg_experiment == "all":
-                for dataset_name in args.dataset_name:
+                for dataset_name in dataset_names:
                     # try:
                     experiment = replace(experiment, include_gt=args.include_gt)
 
@@ -2980,5 +3020,9 @@ if __name__ == "__main__":
                         experiment.plot(dataset_name)
                     # except Exception as e:
                     #     print(e)
-                if args.combined_datasets:
-                    experiment.plot(args.dataset_name)
+                if args.combined_datasets and not args.check_only:
+                    if args.dataset_collections:
+                        for collection in args.dataset_collections:
+                            experiment.plot(dataset_collections[collection])
+                    else:
+                        experiment.plot(dataset_names)
