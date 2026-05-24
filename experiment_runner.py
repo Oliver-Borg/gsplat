@@ -939,6 +939,7 @@ class Config:
         print(f"Using data from: {Path(self.data_dir)}")
         print(f"Result dir: {Path(self.result_dir)}")
         command = [
+            "LD_PRELOAD=$(gcc --print-file-name=libstdc++.so.6)",
             GSPLAT_PYTHON,
             "examples/simple_trainer.py",
             "default" if self.nomcmc else "mcmc",
