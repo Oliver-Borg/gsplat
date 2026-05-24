@@ -1,13 +1,17 @@
 \begin{table}[H]
 \caption{Test isolated cameras with random point clouds. (Bonsai)}
 \label{tab:06_isolated_cams_bonsai}
-\begin{tabular}{lrllr}
+\small
+\begin{tabular}{llllrrrrr}
 \toprule
-Choice & Random Init & Pose Opt & Sampling Mode & Aligned Cameras ↑ \\
+Choice & Random Init & Pose Opt & Use Ba & Val RRE ↓ & Val RTE ↓ & Aligned Cameras ↑ & Initial Points & Composite Quality ↑ \\
 \midrule
-VGGT &  &  & ba & \textbf{100} \\
-VGGT &  &  & random & \textbf{100} \\
-VGGT &  &  &  & \textbf{100} \\
+COLMAP & Random Init &  &  & \underline{0.158} & \underline{0.003} & \textbf{100} & 90446 & \underline{0.567} \\
+COLMAP & Random Init & Pose Opt &  & \textbf{0.103} & \textbf{0.001} & \textbf{100} & 90446 & \textbf{0.691} \\
+VGGT & Random Init &  & Use BA & 0.579 & 0.008 & \textbf{100} & 90446 & 0.382 \\
+VGGT & Random Init &  &  & 0.722 & 0.024 & \textbf{100} & 90446 & 0.292 \\
+VGGT & Random Init & Pose Opt & Use BA & 0.405 & 0.006 & \textbf{100} & 90446 & 0.449 \\
+VGGT & Random Init & Pose Opt &  & 0.712 & 0.021 & \textbf{100} & 90446 & 0.307 \\
 \bottomrule
 \end{tabular}
 \end{table}

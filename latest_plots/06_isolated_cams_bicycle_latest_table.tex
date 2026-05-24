@@ -1,16 +1,17 @@
 \begin{table}[H]
 \caption{Test isolated cameras with random point clouds. (Bicycle)}
 \label{tab:06_isolated_cams_bicycle}
+\small
 \begin{tabular}{llllrrrrr}
 \toprule
-Choice & Random Init & Pose Opt & Sampling Mode & Val RRE ↓ & Val RTE ↓ & Aligned Cameras ↑ & Initial Points & Composite Quality ↑ \\
+Choice & Random Init & Pose Opt & Use Ba & Val RRE ↓ & Val RTE ↓ & Aligned Cameras ↑ & Initial Points & Composite Quality ↑ \\
 \midrule
-COLMAP & Random Init &  &  & \textbf{0.107} & \textbf{0.002} & \textbf{100} & 16687 & \textbf{0.235} \\
-COLMAP & Random Init & Pose Opt &  & \underline{0.389} & \underline{0.006} & \textbf{100} & 16687 & \underline{0.148} \\
-VGGT & Random Init &  & ba & 0.792 & 0.011 & \textbf{100} & 16687 & 0.030 \\
-VGGT & Random Init &  & random & 0.857 & 0.015 & \textbf{100} & 16687 & 0.040 \\
-VGGT & Random Init & Pose Opt & ba & 0.764 & 0.009 & \textbf{100} & 16687 & 0.033 \\
-VGGT & Random Init & Pose Opt & random & 0.782 & 0.016 & \textbf{100} & 16687 & 0.049 \\
+COLMAP & Random Init &  &  & \textbf{0.099} & \textbf{0.002} & \textbf{100} & 58676 & \textbf{0.252} \\
+COLMAP & Random Init & Pose Opt &  & \underline{0.302} & \underline{0.005} & \textbf{100} & 58676 & \underline{0.150} \\
+VGGT & Random Init &  & Use BA & 0.590 & 0.009 & \textbf{100} & 58676 & 0.061 \\
+VGGT & Random Init &  &  & 0.716 & 0.015 & \textbf{100} & 58676 & 0.056 \\
+VGGT & Random Init & Pose Opt & Use BA & 0.635 & 0.008 & \textbf{100} & 58676 & 0.059 \\
+VGGT & Random Init & Pose Opt &  & 0.609 & 0.014 & \textbf{100} & 58676 & 0.079 \\
 \bottomrule
 \end{tabular}
 \end{table}

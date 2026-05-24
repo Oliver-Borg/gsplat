@@ -1,22 +1,33 @@
 \begin{table}[H]
 \caption{Isolated cameras with random point clouds. (Lego)}
 \label{tab:06_isolated_cams_num_points_lego}
-\begin{tabular}{lrrll}
+\small
+\begin{tabular}{lrlllrrrrrr}
 \toprule
-Choice & Num Images & Random Init & Pose Opt & Sampling Mode \\
+Choice & Num Images & Random Init & Pose Opt & Use Ba & Val RRE ↓ & Val RTE ↓ & Initial Points & PSNR ↑ & SSIM ↑ & LPIPS ↓ \\
 \midrule
-VGGT & 25 &  &  & ba \\
-VGGT & 25 &  &  & random \\
-VGGT & 25 &  &  &  \\
-VGGT & 50 &  &  & ba \\
-VGGT & 50 &  &  & random \\
-VGGT & 50 &  &  &  \\
-VGGT & 75 &  &  & ba \\
-VGGT & 75 &  &  & random \\
-VGGT & 75 &  &  &  \\
-VGGT & 87 &  &  & ba \\
-VGGT & 87 &  &  & random \\
-VGGT & 87 &  &  &  \\
+COLMAP & 25 & Random Init &  &  & 104.834 & 0.873 & 100000 & 10.749 & 0.673 & 0.514 \\
+COLMAP & 25 & Random Init & Pose Opt &  & 104.778 & 0.885 & 100000 & 10.697 & 0.656 & 0.524 \\
+COLMAP & 75 & Random Init &  &  & 92.695 & 0.857 & 100000 & 10.967 & 0.678 & 0.509 \\
+COLMAP & 87 & Random Init &  &  & 10.431 & 0.113 & 100000 & \underline{24.453} & \underline{0.891} & 0.062 \\
+COLMAP & 87 & Random Init & Pose Opt &  & 10.572 & 0.114 & 100000 & 18.762 & 0.752 & 0.109 \\
+VGGT & 25 & Random Init &  & Use BA & 0.688 & 0.009 & 100000 & 16.555 & 0.688 & 0.247 \\
+VGGT & 25 & Random Init &  &  & 2.090 & 0.029 & 100000 & 13.746 & 0.603 & 0.372 \\
+VGGT & 25 & Random Init & Pose Opt & Use BA & 0.632 & 0.008 & 100000 & 17.284 & 0.707 & 0.216 \\
+VGGT & 25 & Random Init & Pose Opt &  & 1.961 & 0.025 & 100000 & 13.372 & 0.596 & 0.387 \\
+VGGT & 50 & Random Init &  & Use BA & 0.447 & \underline{0.004} & 100000 & 18.819 & 0.756 & 0.117 \\
+VGGT & 50 & Random Init &  &  & 0.901 & 0.010 & 100000 & 15.168 & 0.685 & 0.247 \\
+VGGT & 50 & Random Init & Pose Opt & Use BA & 0.320 & \underline{0.004} & 100000 & 19.991 & 0.778 & 0.089 \\
+VGGT & 50 & Random Init & Pose Opt &  & 0.725 & 0.009 & 100000 & 15.212 & 0.692 & 0.226 \\
+VGGT & 50 &  &  &  &  &  &  &  &  &  \\
+VGGT & 75 & Random Init &  & Use BA & 0.308 & \textbf{0.003} & 100000 & 21.246 & 0.788 & 0.084 \\
+VGGT & 75 & Random Init &  &  & 0.355 & 0.005 & 100000 & 19.763 & 0.769 & 0.111 \\
+VGGT & 75 & Random Init & Pose Opt & Use BA & \textbf{0.176} & \textbf{0.003} & 100000 & 24.075 & 0.867 & \underline{0.052} \\
+VGGT & 75 & Random Init & Pose Opt &  & 0.293 & 0.006 & 100000 & 20.011 & 0.779 & 0.081 \\
+VGGT & 87 & Random Init &  & Use BA & 0.268 & \underline{0.004} & 100000 & 22.919 & 0.837 & 0.077 \\
+VGGT & 87 & Random Init &  &  & 0.297 & 0.005 & 100000 & 20.615 & 0.776 & 0.102 \\
+VGGT & 87 & Random Init & Pose Opt & Use BA & \underline{0.196} & \textbf{0.003} & 100000 & \textbf{25.642} & \textbf{0.895} & \textbf{0.050} \\
+VGGT & 87 & Random Init & Pose Opt &  & 0.282 & 0.006 & 100000 & 20.033 & 0.769 & 0.083 \\
 \bottomrule
 \end{tabular}
 \end{table}

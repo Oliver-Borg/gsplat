@@ -6,11 +6,15 @@
         100
     ],
     "sampling_mode": [
-        "random",
-        "ba"
+        "random"
+    ],
+    "use_ba": [
+        true,
+        false
     ],
     "match_colmap_points": [
-        true
+        true,
+        false
     ],
     "random_init": [
         true

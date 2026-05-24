@@ -1,17 +1,18 @@
 \begin{table}[H]
 \caption{COLMAP cameras with different point cloud sources. (Bicycle)}
 \label{tab:06_isolated_cams_point_clouds_bicycle}
+\small
 \begin{tabular}{lllrrrrrr}
 \toprule
 Choice & Random Init & Pcd Src & Real Num Points & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & SSIM ↑ & LPIPS ↓ \\
 \midrule
-COLMAP & Random Init &  & 16763 & \underline{0.102} & \textbf{0.002} & 21.278 & 0.465 & 0.493 \\
-COLMAP & Random Init &  & 110000 & \underline{0.102} & \textbf{0.002} & 20.209 & 0.431 & 0.466 \\
-COLMAP &  & bothpcd & 33526 & \underline{0.102} & \textbf{0.002} & \underline{21.528} & \textbf{0.493} & 0.308 \\
-COLMAP &  & bothpcd & 126763 & \underline{0.102} & \textbf{0.002} & 21.282 & 0.486 & \textbf{0.262} \\
-COLMAP &  & vggtpcd & 16763 & \underline{0.102} & \textbf{0.002} & 21.326 & 0.479 & 0.351 \\
-COLMAP &  & vggtpcd & 110000 & \textbf{0.101} & \textbf{0.002} & 21.134 & 0.476 & \underline{0.277} \\
-COLMAP &  &  & 16763 & \underline{0.102} & \textbf{0.002} & \textbf{21.534} & \underline{0.487} & 0.369 \\
+COLMAP & Random Init &  & 17352 & \textbf{0.099} & \textbf{0.002} & 21.158 & 0.454 & 0.506 \\
+COLMAP & Random Init &  & 100000 & \textbf{0.099} & \textbf{0.002} & 20.353 & 0.433 & 0.460 \\
+COLMAP &  & bothpcd & 34704 & \textbf{0.099} & \textbf{0.002} & \underline{21.299} & \textbf{0.484} & 0.304 \\
+COLMAP &  & bothpcd & 116763 & \underline{0.101} & \textbf{0.002} & 21.208 & 0.476 & \textbf{0.263} \\
+COLMAP &  & vggtpcd & 17352 & \textbf{0.099} & \textbf{0.002} & 21.081 & 0.469 & 0.347 \\
+COLMAP &  & vggtpcd & 100000 & \textbf{0.099} & \textbf{0.002} & 20.945 & 0.466 & \underline{0.274} \\
+COLMAP &  &  & 17352 & \textbf{0.099} & \textbf{0.002} & \textbf{21.332} & \underline{0.480} & 0.364 \\
 \bottomrule
 \end{tabular}
 \end{table}

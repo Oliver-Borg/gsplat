@@ -1,13 +1,17 @@
 \begin{table}[H]
 \caption{Test isolated cameras with random point clouds. (Lego)}
 \label{tab:06_isolated_cams_lego}
-\begin{tabular}{lrllr}
+\small
+\begin{tabular}{llllrrrrr}
 \toprule
-Choice & Random Init & Pose Opt & Sampling Mode & Aligned Cameras ↑ \\
+Choice & Random Init & Pose Opt & Use Ba & Val RRE ↓ & Val RTE ↓ & Aligned Cameras ↑ & Initial Points & Composite Quality ↑ \\
 \midrule
-VGGT &  &  & ba & \textbf{87} \\
-VGGT &  &  & random & \textbf{87} \\
-VGGT &  &  &  & \textbf{87} \\
+COLMAP & Random Init &  &  & 10.431 & 0.113 & \textbf{87} & 55034.500 & \textbf{0.838} \\
+COLMAP & Random Init & Pose Opt &  & 10.514 & 0.114 & \textbf{87} & 55034.500 & 0.724 \\
+VGGT & Random Init &  & Use BA & \underline{0.268} & \underline{0.004} & \textbf{87} & 55034.500 & 0.772 \\
+VGGT & Random Init &  &  & 0.297 & 0.005 & \textbf{87} & 55034.500 & 0.677 \\
+VGGT & Random Init & Pose Opt & Use BA & \textbf{0.203} & \textbf{0.003} & \textbf{87} & 55034.500 & \underline{0.827} \\
+VGGT & Random Init & Pose Opt &  & 0.288 & 0.006 & \textbf{87} & 55034.500 & 0.664 \\
 \bottomrule
 \end{tabular}
 \end{table}

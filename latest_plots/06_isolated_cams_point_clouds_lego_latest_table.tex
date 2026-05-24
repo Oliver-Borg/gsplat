@@ -1,13 +1,18 @@
 \begin{table}[H]
 \caption{COLMAP cameras with different point cloud sources. (Lego)}
 \label{tab:06_isolated_cams_point_clouds_lego}
-\begin{tabular}{lrlrrrrrr}
+\small
+\begin{tabular}{lllrrrrrr}
 \toprule
 Choice & Random Init & Pcd Src & Real Num Points & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & SSIM ↑ & LPIPS ↓ \\
 \midrule
-COLMAP &  & vggtpcd & 95700 & \textbf{12.794} & \textbf{0.240} & \textbf{10.632} & \textbf{0.532} & \textbf{0.520} \\
-COLMAP &  &  & 10092 & \underline{12.910} & \textbf{0.240} & \underline{10.170} & \underline{0.522} & \underline{0.530} \\
-VGGT &  & vggtpcd &  &  &  &  &  &  \\
+COLMAP & Random Init &  & 10069 & \textbf{10.431} & \textbf{0.113} & 24.257 & 0.888 & 0.068 \\
+COLMAP & Random Init &  & 100000 & \textbf{10.431} & \textbf{0.113} & 24.453 & 0.891 & 0.062 \\
+COLMAP &  & bothpcd & 20138 & \textbf{10.431} & \textbf{0.113} & 24.870 & 0.893 & \underline{0.057} \\
+COLMAP &  & bothpcd & 110069 & \textbf{10.431} & \textbf{0.113} & 24.849 & 0.892 & \textbf{0.056} \\
+COLMAP &  & vggtpcd & 10069 & \textbf{10.431} & \textbf{0.113} & \textbf{24.966} & \textbf{0.895} & \underline{0.057} \\
+COLMAP &  & vggtpcd & 100000 & \textbf{10.431} & \textbf{0.113} & 24.884 & 0.892 & \textbf{0.056} \\
+COLMAP &  &  & 10069 & \textbf{10.431} & \textbf{0.113} & \underline{24.951} & \underline{0.894} & 0.058 \\
 \bottomrule
 \end{tabular}
 \end{table}

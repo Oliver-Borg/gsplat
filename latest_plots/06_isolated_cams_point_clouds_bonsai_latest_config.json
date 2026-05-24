@@ -25,7 +25,8 @@
     ],
     "pcd_src": [
         "colmap",
-        "vggt"
+        "vggt",
+        "both"
     ],
     "camera_src": [
         "colmap"

@@ -1,34 +1,35 @@
 \begin{table}[H]
 \caption{Isolated cameras with random point clouds. (Bicycle)}
 \label{tab:06_isolated_cams_num_points_bicycle}
+\small
 \begin{tabular}{lrlllrrrrrr}
 \toprule
-Choice & Num Images & Random Init & Pose Opt & Sampling Mode & Val RRE ↓ & Val RTE ↓ & Initial Points & PSNR ↑ & SSIM ↑ & LPIPS ↓ \\
+Choice & Num Images & Random Init & Pose Opt & Use Ba & Val RRE ↓ & Val RTE ↓ & Initial Points & PSNR ↑ & SSIM ↑ & LPIPS ↓ \\
 \midrule
-COLMAP & 25 & Random Init &  &  & 0.879 & 0.008 & 663 & 10.745 & 0.225 & 0.853 \\
-COLMAP & 25 & Random Init & Pose Opt &  & 3.210 & 0.038 & 663 & 13.477 & 0.248 & 0.839 \\
-COLMAP & 50 & Random Init &  &  & 0.189 & \underline{0.003} & 3071 & 15.908 & 0.279 & 0.620 \\
-COLMAP & 50 & Random Init & Pose Opt &  & 0.652 & 0.009 & 3071 & 14.838 & 0.242 & 0.652 \\
-COLMAP & 75 & Random Init &  &  & \textbf{0.101} & \underline{0.003} & 6068 & 16.999 & 0.327 & 0.586 \\
-COLMAP & 75 & Random Init & Pose Opt &  & 0.802 & 0.012 & 6068 & 14.895 & 0.238 & 0.644 \\
-COLMAP & 100 & Random Init &  &  & \underline{0.107} & \textbf{0.002} & 16687 & \textbf{21.063} & \textbf{0.445} & \textbf{0.522} \\
-COLMAP & 100 & Random Init & Pose Opt &  & 0.389 & 0.006 & 16687 & \underline{19.356} & \underline{0.364} & \underline{0.535} \\
-VGGT & 25 & Random Init &  & ba & 1.764 & 0.035 & 663 & 15.237 & 0.278 & 0.755 \\
-VGGT & 25 & Random Init &  & random & 1.078 & 0.020 & 663 & 15.401 & 0.276 & 0.725 \\
-VGGT & 25 & Random Init & Pose Opt & ba & 1.957 & 0.044 & 663 & 14.748 & 0.267 & 0.769 \\
-VGGT & 25 & Random Init & Pose Opt & random & 1.619 & 0.029 & 663 & 14.661 & 0.264 & 0.749 \\
-VGGT & 50 & Random Init &  & ba & 0.840 & 0.016 & 3071 & 16.770 & 0.291 & 0.653 \\
-VGGT & 50 & Random Init &  & random & 0.920 & 0.019 & 3071 & 16.729 & 0.288 & 0.650 \\
-VGGT & 50 & Random Init & Pose Opt & ba & 1.197 & 0.016 & 3071 & 15.733 & 0.277 & 0.680 \\
-VGGT & 50 & Random Init & Pose Opt & random & 1.083 & 0.023 & 3071 & 15.891 & 0.272 & 0.664 \\
-VGGT & 75 & Random Init &  & ba & 0.776 & 0.011 & 6068 & 17.286 & 0.296 & 0.605 \\
-VGGT & 75 & Random Init &  & random & 0.892 & 0.017 & 6068 & 17.236 & 0.295 & 0.595 \\
-VGGT & 75 & Random Init & Pose Opt & ba & 0.844 & 0.012 & 6068 & 16.896 & 0.290 & 0.637 \\
-VGGT & 75 & Random Init & Pose Opt & random & 0.906 & 0.020 & 6068 & 16.942 & 0.287 & 0.629 \\
-VGGT & 100 & Random Init &  & ba & 0.792 & 0.011 & 16687 & 17.247 & 0.293 & 0.595 \\
-VGGT & 100 & Random Init &  & random & 0.857 & 0.015 & 16687 & 17.402 & 0.298 & 0.588 \\
-VGGT & 100 & Random Init & Pose Opt & ba & 0.764 & 0.009 & 16687 & 17.172 & 0.291 & 0.586 \\
-VGGT & 100 & Random Init & Pose Opt & random & 0.782 & 0.016 & 16687 & 17.398 & 0.300 & 0.576 \\
+COLMAP & 25 & Random Init &  &  & 0.400 & 0.008 & 100000 & 10.556 & 0.178 & 0.765 \\
+COLMAP & 25 & Random Init & Pose Opt &  & 1.110 & 0.012 & 100000 & 11.097 & 0.178 & 0.755 \\
+COLMAP & 50 & Random Init &  &  & 0.201 & \underline{0.003} & 100000 & 13.433 & 0.180 & 0.698 \\
+COLMAP & 50 & Random Init & Pose Opt &  & 0.370 & 0.009 & 100000 & 13.241 & 0.171 & 0.707 \\
+COLMAP & 75 & Random Init &  &  & \underline{0.138} & \underline{0.003} & 100000 & 15.152 & 0.245 & 0.618 \\
+COLMAP & 75 & Random Init & Pose Opt &  & 0.232 & 0.008 & 100000 & 14.904 & 0.222 & 0.617 \\
+COLMAP & 100 & Random Init &  &  & \textbf{0.099} & \textbf{0.002} & 100000 & \textbf{20.353} & \textbf{0.433} & \textbf{0.460} \\
+COLMAP & 100 & Random Init & Pose Opt &  & 0.152 & \underline{0.003} & 100000 & \underline{19.881} & \underline{0.406} & \underline{0.473} \\
+VGGT & 25 & Random Init &  & Use BA & 0.604 & 0.012 & 100000 & 14.273 & 0.191 & 0.628 \\
+VGGT & 25 & Random Init &  &  & 0.904 & 0.020 & 100000 & 14.144 & 0.189 & 0.635 \\
+VGGT & 25 & Random Init & Pose Opt & Use BA & 0.628 & 0.014 & 100000 & 14.254 & 0.192 & 0.629 \\
+VGGT & 25 & Random Init & Pose Opt &  & 0.906 & 0.022 & 100000 & 14.081 & 0.189 & 0.634 \\
+VGGT & 50 & Random Init &  & Use BA & 0.636 & 0.010 & 100000 & 15.099 & 0.216 & 0.600 \\
+VGGT & 50 & Random Init &  &  & 0.872 & 0.020 & 100000 & 14.892 & 0.213 & 0.610 \\
+VGGT & 50 & Random Init & Pose Opt & Use BA & 0.681 & 0.011 & 100000 & 14.875 & 0.217 & 0.610 \\
+VGGT & 50 & Random Init & Pose Opt &  & 0.815 & 0.023 & 100000 & 14.855 & 0.214 & 0.617 \\
+VGGT & 75 & Random Init &  & Use BA & 0.586 & 0.009 & 100000 & 16.589 & 0.262 & 0.554 \\
+VGGT & 75 & Random Init &  &  & 0.627 & 0.017 & 100000 & 16.862 & 0.275 & 0.563 \\
+VGGT & 75 & Random Init & Pose Opt & Use BA & 0.520 & 0.008 & 100000 & 16.346 & 0.254 & 0.533 \\
+VGGT & 75 & Random Init & Pose Opt &  & 0.521 & 0.017 & 100000 & 17.790 & 0.307 & 0.508 \\
+VGGT & 100 & Random Init &  & Use BA & 0.590 & 0.009 & 100000 & 17.234 & 0.284 & 0.542 \\
+VGGT & 100 & Random Init &  &  & 0.716 & 0.015 & 100000 & 17.401 & 0.288 & 0.557 \\
+VGGT & 100 & Random Init & Pose Opt & Use BA & 0.529 & 0.007 & 100000 & 17.213 & 0.276 & 0.509 \\
+VGGT & 100 & Random Init & Pose Opt &  & 0.513 & 0.014 & 100000 & 17.646 & 0.294 & 0.497 \\
 \bottomrule
 \end{tabular}
 \end{table}

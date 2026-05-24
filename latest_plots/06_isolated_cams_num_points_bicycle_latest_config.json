@@ -9,11 +9,11 @@
         100
     ],
     "sampling_mode": [
-        "random",
-        "ba"
+        "random"
     ],
-    "match_colmap_points": [
-        true
+    "use_ba": [
+        true,
+        false
     ],
     "random_init": [
         true

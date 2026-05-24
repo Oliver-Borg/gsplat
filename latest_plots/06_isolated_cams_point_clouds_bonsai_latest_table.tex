@@ -1,12 +1,18 @@
 \begin{table}[H]
 \caption{COLMAP cameras with different point cloud sources. (Bonsai)}
 \label{tab:06_isolated_cams_point_clouds_bonsai}
-\begin{tabular}{lrlrrrrrr}
+\small
+\begin{tabular}{lllrrrrrr}
 \toprule
 Choice & Random Init & Pcd Src & Real Num Points & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & SSIM ↑ & LPIPS ↓ \\
 \midrule
-COLMAP &  &  & 80962 & \textbf{0.199} & \textbf{0.003} & \textbf{21.818} & \textbf{0.682} & \textbf{0.210} \\
-VGGT &  & vggtpcd &  &  &  &  &  &  \\
+COLMAP & Random Init &  & 80892 & \textbf{0.158} & \textbf{0.003} & 22.034 & 0.681 & 0.235 \\
+COLMAP & Random Init &  & 100000 & \textbf{0.158} & \textbf{0.003} & 21.991 & 0.682 & 0.238 \\
+COLMAP &  & bothpcd & 161784 & \textbf{0.158} & \textbf{0.003} & \underline{22.264} & \underline{0.691} & \textbf{0.200} \\
+COLMAP &  & bothpcd & 180892 & \textbf{0.158} & \textbf{0.003} & 22.250 & \underline{0.691} & \underline{0.201} \\
+COLMAP &  & vggtpcd & 80892 & \textbf{0.158} & \textbf{0.003} & 21.868 & 0.665 & 0.249 \\
+COLMAP &  & vggtpcd & 100000 & \textbf{0.158} & \textbf{0.003} & 21.844 & 0.663 & 0.249 \\
+COLMAP &  &  & 80892 & \textbf{0.158} & \textbf{0.003} & \textbf{22.423} & \textbf{0.697} & 0.204 \\
 \bottomrule
 \end{tabular}
 \end{table}
