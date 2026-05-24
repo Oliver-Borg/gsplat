@@ -938,8 +938,13 @@ class Config:
             print(f"{Path(self.splatting_val_path)} not found. Running splatting")
         print(f"Using data from: {Path(self.data_dir)}")
         print(f"Result dir: {Path(self.result_dir)}")
+        # Resolve the libstdc++.so.6 path before building the command
+        try:
+            libstdc_path = subprocess.check_output(["gcc", "--print-file-name=libstdc++.so.6"], text=True).strip()
+        except (subprocess.SubprocessError, FileNotFoundError):
+            libstdc_path = None
+
         command = [
-            "LD_PRELOAD=$(gcc --print-file-name=libstdc++.so.6)",
             GSPLAT_PYTHON,
             "examples/simple_trainer.py",
             "default" if self.nomcmc else "mcmc",
@@ -1010,6 +1015,8 @@ class Config:
             command.append(str(self.num_points))
 
         env = os.environ.copy()
+        if libstdc_path:
+            env["LD_PRELOAD"] = libstdc_path
         if gpu is not None:
             env["CUDA_VISIBLE_DEVICES"] = gpu
 
