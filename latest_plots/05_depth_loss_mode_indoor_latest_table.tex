@@ -1,0 +1,31 @@
+\begin{table}[H]
+\caption{COLMAP versus VGGT with depth loss for different depth loss modes. (Indoor)}
+\label{tab:05_depth_loss_mode_indoor}
+\small
+\begin{tabular}{lllrrrrrr}
+\toprule
+Choice & Dataset & Depth Loss Mode & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP & bonsai &  & \textbf{0.158} & \textbf{0.013} & \textbf{24.653} & \textbf{0.175} & \textbf{0.776} & \textbf{0.709} \\
+COLMAP & bonsai & points & \textbf{0.158} & \textbf{0.013} & \underline{24.098} & \underline{0.185} & \underline{0.768} & \underline{0.687} \\
+VGGT & bonsai &  & \underline{0.722} & \underline{0.106} & 17.423 & 0.399 & 0.560 & 0.310 \\
+VGGT & bonsai & closer & \underline{0.722} & \underline{0.106} & 17.637 & 0.389 & 0.563 & 0.322 \\
+VGGT & bonsai & full & \underline{0.722} & \underline{0.106} & 17.473 & 0.392 & 0.557 & 0.314 \\
+VGGT & bonsai & points & \underline{0.722} & \underline{0.106} & 17.559 & 0.396 & 0.559 & 0.314 \\
+\midrule
+COLMAP & kitchen &  & \textbf{0.107} & \textbf{0.004} & \textbf{21.597} & \textbf{0.142} & \underline{0.497} & \underline{0.510} \\
+COLMAP & kitchen & points & \textbf{0.107} & \textbf{0.004} & \underline{21.581} & \underline{0.148} & \textbf{0.512} & \textbf{0.514} \\
+VGGT & kitchen &  & \underline{0.339} & \underline{0.031} & 20.018 & 0.176 & 0.414 & 0.410 \\
+VGGT & kitchen & closer & \underline{0.339} & \underline{0.031} & 20.186 & 0.175 & 0.422 & 0.419 \\
+VGGT & kitchen & full & \underline{0.339} & \underline{0.031} & 19.044 & 0.210 & 0.400 & 0.363 \\
+VGGT & kitchen & points & \underline{0.339} & \underline{0.031} & 19.314 & 0.216 & 0.422 & 0.377 \\
+\midrule
+COLMAP & counter &  & \textbf{0.029} & \textbf{0.002} & \textbf{25.228} & \textbf{0.188} & \textbf{0.850} & \textbf{0.754} \\
+COLMAP & counter & points & \textbf{0.029} & \textbf{0.002} & \underline{24.923} & \underline{0.192} & \underline{0.845} & \underline{0.743} \\
+VGGT & counter &  & \underline{0.343} & \underline{0.033} & 20.807 & 0.237 & 0.641 & 0.520 \\
+VGGT & counter & closer & \underline{0.343} & \underline{0.033} & 21.081 & 0.234 & 0.655 & 0.536 \\
+VGGT & counter & full & \underline{0.343} & \underline{0.033} & 20.773 & 0.246 & 0.655 & 0.522 \\
+VGGT & counter & points & \underline{0.343} & \underline{0.033} & 20.874 & 0.247 & 0.652 & 0.522 \\
+\bottomrule
+\end{tabular}
+\end{table}

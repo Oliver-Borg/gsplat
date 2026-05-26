@@ -1,0 +1,31 @@
+{
+    "seed": [
+        42
+    ],
+    "num_images": [
+        100
+    ],
+    "sampling_mode": [
+        "random"
+    ],
+    "depth_loss_mode": [
+        "disabled",
+        "points",
+        "full",
+        "closer"
+    ],
+    "pose_opt": [
+        true
+    ],
+    "choice": [
+        "vggt",
+        "colmap"
+    ],
+    "depth_lambda": [
+        1.0
+    ],
+    "depth_conf_mode": [
+        "disabled"
+    ],
+    "dataset": "lego"
+}

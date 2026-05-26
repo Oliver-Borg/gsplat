@@ -1,0 +1,22 @@
+\begin{table}[H]
+\caption{Test isolated cameras with random point clouds. (Indoor)}
+\label{tab:06_isolated_cams_indoor}
+\small
+\begin{tabular}{llrllrrr}
+\toprule
+Choice & Dataset & Real Num Points & Random Init & Use Ba & Val RRE ↓ & Val RTE ↓ & Composite Quality ↑ \\
+\midrule
+COLMAP & bonsai & 80892 & Random Init &  & \textbf{0.158} & \textbf{0.003} & \textbf{0.568} \\
+VGGT & bonsai & 80892 & Random Init & Use BA & \underline{0.579} & \underline{0.008} & \underline{0.384} \\
+VGGT & bonsai & 80892 & Random Init &  & 0.722 & 0.024 & 0.295 \\
+\midrule
+COLMAP & kitchen & 92853 & Random Init &  & \textbf{0.107} & \textbf{0.001} & \textbf{0.460} \\
+VGGT & kitchen & 92853 & Random Init & Use BA & 0.454 & \underline{0.005} & 0.374 \\
+VGGT & kitchen & 92853 & Random Init &  & \underline{0.339} & 0.007 & \underline{0.386} \\
+\midrule
+COLMAP & counter & 60980 & Random Init &  & \textbf{0.029} & \textbf{0.000} & \textbf{0.676} \\
+VGGT & counter & 60980 & Random Init & Use BA & 0.421 & \underline{0.004} & 0.371 \\
+VGGT & counter & 60980 & Random Init &  & \underline{0.343} & 0.008 & \underline{0.438} \\
+\bottomrule
+\end{tabular}
+\end{table}

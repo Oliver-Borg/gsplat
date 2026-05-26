@@ -1,0 +1,40 @@
+\begin{table}[H]
+\caption{Test isolated cameras with random point clouds. (Indoor,Outdoor,Synthetic)}
+\label{tab:06_isolated_cams_indoor,outdoor,synthetic}
+\small
+\begin{tabular}{llrllrrr}
+\toprule
+Choice & Dataset Collection & Real Num Points & Random Init & Use Ba & Val RRE ↓ & Val RTE ↓ & Composite Quality ↑ \\
+\midrule
+COLMAP & indoor & 60980 & Random Init &  & \textbf{0.029} & \textbf{0.000} & \textbf{0.676} \\
+COLMAP & indoor & 80892 & Random Init &  & 0.158 & 0.003 & \underline{0.568} \\
+COLMAP & indoor & 92853 & Random Init &  & \underline{0.107} & \underline{0.001} & 0.460 \\
+VGGT & indoor & 60980 & Random Init & Use BA & 0.421 & 0.004 & 0.371 \\
+VGGT & indoor & 60980 & Random Init &  & 0.343 & 0.008 & 0.438 \\
+VGGT & indoor & 80892 & Random Init & Use BA & 0.579 & 0.008 & 0.384 \\
+VGGT & indoor & 80892 & Random Init &  & 0.722 & 0.024 & 0.295 \\
+VGGT & indoor & 92853 & Random Init & Use BA & 0.454 & 0.005 & 0.374 \\
+VGGT & indoor & 92853 & Random Init &  & 0.339 & 0.007 & 0.386 \\
+\midrule
+COLMAP & outdoor & 17352 & Random Init &  & 0.099 & \underline{0.002} & 0.252 \\
+COLMAP & outdoor & 19683 & Random Init &  & \textbf{0.022} & \textbf{0.001} & \textbf{0.504} \\
+COLMAP & outdoor & 70656 & Random Init &  & \underline{0.063} & \textbf{0.001} & \underline{0.370} \\
+VGGT & outdoor & 17352 & Random Init & Use BA & 0.590 & 0.009 & 0.066 \\
+VGGT & outdoor & 17352 & Random Init &  & 0.716 & 0.015 & 0.058 \\
+VGGT & outdoor & 19683 & Random Init & Use BA & 0.695 & 0.011 & 0.168 \\
+VGGT & outdoor & 19683 & Random Init &  & 0.856 & 0.040 & 0.143 \\
+VGGT & outdoor & 70656 & Random Init & Use BA & 0.329 & 0.003 & 0.175 \\
+VGGT & outdoor & 70656 & Random Init &  & 0.373 & 0.006 & 0.142 \\
+\midrule
+COLMAP & synthetic & 5138 & Random Init &  & 0.296 & 0.005 & 0.584 \\
+COLMAP & synthetic & 10069 & Random Init &  & 10.431 & 0.113 & \textbf{0.833} \\
+VGGT & synthetic & 3866 & Random Init & Use BA & \underline{0.235} & \textbf{0.003} & 0.653 \\
+VGGT & synthetic & 3866 & Random Init &  & \textbf{0.172} & \textbf{0.003} & 0.683 \\
+VGGT & synthetic & 5138 & Random Init & Use BA & 0.429 & 0.008 & 0.488 \\
+VGGT & synthetic & 5138 & Random Init &  & 0.487 & 0.009 & 0.589 \\
+VGGT & synthetic & 10069 & Random Init & Use BA & 0.268 & \underline{0.004} & \underline{0.771} \\
+VGGT & synthetic & 10069 & Random Init &  & 0.297 & 0.005 & 0.676 \\
+VGGT & synthetic &  &  &  &  &  &  \\
+\bottomrule
+\end{tabular}
+\end{table}

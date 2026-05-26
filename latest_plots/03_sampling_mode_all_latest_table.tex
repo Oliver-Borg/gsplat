@@ -1,0 +1,289 @@
+\begin{table}[H]
+\caption{A comparison of different VGGT point cloud sampling modes (All)}
+\label{tab:03_sampling_mode_all}
+\small
+\begin{tabular}{llrlrrrrrr}
+\toprule
+Choice & Dataset & Num Points & Sampling Mode & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP & bicycle & 17352 &  & \textbf{0.099} & \textbf{0.007} & \textbf{21.332} & \textbf{0.364} & \textbf{0.480} & \textbf{0.357} \\
+VGGT & bicycle & 1000 & confidence & 0.857 & 0.067 & 18.249 & 0.680 & 0.330 & 0.018 \\
+VGGT & bicycle & 1000 & imagefps & 0.716 & 0.066 & 18.240 & 0.695 & 0.331 & 0.009 \\
+VGGT & bicycle & 1000 & random & 0.857 & 0.067 & \underline{18.250} & 0.683 & 0.331 & 0.016 \\
+VGGT & bicycle & 1000 & voxels & 0.716 & 0.066 & 18.173 & 0.698 & \underline{0.332} & 0.007 \\
+VGGT & bicycle & 5000 & confidence & 0.857 & 0.067 & 17.834 & 0.557 & 0.306 & 0.072 \\
+VGGT & bicycle & 5000 & imagefps & 0.716 & 0.066 & 17.940 & 0.574 & 0.308 & 0.065 \\
+VGGT & bicycle & 5000 & random & 0.857 & 0.067 & 17.850 & 0.558 & 0.305 & 0.071 \\
+VGGT & bicycle & 5000 & voxels & 0.716 & 0.066 & 17.957 & 0.585 & 0.311 & 0.060 \\
+VGGT & bicycle & 10000 & confidence & 0.857 & 0.067 & 17.823 & 0.520 & 0.298 & 0.090 \\
+VGGT & bicycle & 10000 & imagefps & 0.716 & 0.066 & 17.849 & 0.536 & 0.300 & 0.082 \\
+VGGT & bicycle & 10000 & random & 0.857 & 0.067 & 17.796 & 0.518 & 0.298 & 0.090 \\
+VGGT & bicycle & 10000 & voxels & 0.716 & 0.066 & 17.848 & 0.549 & 0.302 & 0.075 \\
+VGGT & bicycle & 23814 & ba & \underline{0.590} & \underline{0.038} & 17.809 & 0.506 & 0.301 & 0.100 \\
+VGGT & bicycle & 50000 & confidence & 0.857 & 0.067 & 17.645 & 0.483 & 0.281 & 0.099 \\
+VGGT & bicycle & 50000 & imagefps & 0.716 & 0.066 & 17.637 & 0.463 & 0.277 & 0.109 \\
+VGGT & bicycle & 50000 & random & 0.857 & 0.067 & 17.598 & 0.449 & 0.274 & 0.116 \\
+VGGT & bicycle & 50000 & voxels & 0.716 & 0.066 & 17.716 & 0.491 & 0.286 & 0.099 \\
+VGGT & bicycle & 100000 & confidence & 0.857 & 0.067 & 17.631 & 0.479 & 0.273 & 0.097 \\
+VGGT & bicycle & 100000 & imagefps & 0.716 & 0.066 & 17.573 & 0.440 & 0.265 & 0.115 \\
+VGGT & bicycle & 100000 & random & 0.716 & 0.066 & 17.174 & 0.441 & 0.257 & 0.103 \\
+VGGT & bicycle & 100000 & voxels & 0.716 & 0.066 & 17.701 & 0.478 & 0.279 & 0.103 \\
+VGGT & bicycle & 500000 & confidence & 0.857 & 0.067 & 17.479 & 0.488 & 0.263 & 0.082 \\
+VGGT & bicycle & 500000 & imagefps & 0.716 & 0.066 & 17.416 & 0.435 & 0.244 & 0.104 \\
+VGGT & bicycle & 500000 & random & 0.857 & 0.067 & 17.480 & \underline{0.408} & 0.245 & \underline{0.122} \\
+VGGT & bicycle & 500000 & voxels & 0.716 & 0.066 & 17.656 & 0.459 & 0.263 & 0.104 \\
+VGGT & bicycle & 1000000 & confidence & 0.857 & 0.067 & 17.416 & 0.499 & 0.264 & 0.075 \\
+VGGT & bicycle & 1000000 & imagefps & 0.716 & 0.066 & 17.425 & 0.453 & 0.242 & 0.091 \\
+VGGT & bicycle & 1000000 & random & 0.857 & 0.067 & 17.437 & 0.411 & 0.238 & 0.115 \\
+VGGT & bicycle & 1000000 & voxels & 0.716 & 0.066 & 17.626 & 0.460 & 0.255 & 0.098 \\
+\midrule
+COLMAP & garden & 70656 &  & \textbf{0.063} & \textbf{0.003} & \textbf{21.593} & \textbf{0.271} & \textbf{0.467} & \textbf{0.412} \\
+VGGT & garden & 1000 & confidence & 0.373 & 0.027 & 19.120 & 0.700 & \underline{0.398} & 0.062 \\
+VGGT & garden & 1000 & imagefps & 0.373 & 0.027 & \underline{19.148} & 0.697 & \underline{0.398} & 0.064 \\
+VGGT & garden & 1000 & random & 0.373 & 0.027 & \underline{19.148} & 0.695 & \underline{0.398} & 0.065 \\
+VGGT & garden & 1000 & voxels & 0.373 & 0.027 & 19.145 & 0.698 & \underline{0.398} & 0.063 \\
+VGGT & garden & 5000 & confidence & 0.373 & 0.027 & 18.931 & 0.589 & 0.380 & 0.116 \\
+VGGT & garden & 5000 & imagefps & 0.373 & 0.027 & 18.930 & 0.587 & 0.381 & 0.118 \\
+VGGT & garden & 5000 & random & 0.373 & 0.027 & 18.921 & 0.584 & 0.381 & 0.119 \\
+VGGT & garden & 5000 & voxels & 0.373 & 0.027 & 18.929 & 0.590 & 0.382 & 0.116 \\
+VGGT & garden & 10000 & confidence & 0.373 & 0.027 & 18.900 & 0.562 & 0.375 & 0.129 \\
+VGGT & garden & 10000 & imagefps & 0.373 & 0.027 & 18.863 & 0.557 & 0.376 & 0.132 \\
+VGGT & garden & 10000 & random & 0.373 & 0.027 & 18.843 & 0.554 & 0.375 & 0.133 \\
+VGGT & garden & 10000 & voxels & 0.373 & 0.027 & 18.881 & 0.560 & 0.377 & 0.131 \\
+VGGT & garden & 21147 & ba & \underline{0.329} & \underline{0.014} & 18.608 & 0.463 & 0.360 & 0.176 \\
+VGGT & garden & 50000 & confidence & 0.373 & 0.027 & 18.806 & 0.524 & 0.366 & 0.145 \\
+VGGT & garden & 50000 & imagefps & 0.373 & 0.027 & 18.426 & 0.517 & 0.364 & 0.141 \\
+VGGT & garden & 50000 & random & 0.373 & 0.027 & 18.701 & 0.501 & 0.364 & 0.156 \\
+VGGT & garden & 50000 & voxels & 0.373 & 0.027 & 18.393 & 0.522 & 0.366 & 0.139 \\
+VGGT & garden & 100000 & confidence & 0.373 & 0.027 & 18.731 & 0.513 & 0.361 & 0.147 \\
+VGGT & garden & 100000 & imagefps & 0.373 & 0.027 & 18.499 & 0.489 & 0.358 & 0.157 \\
+VGGT & garden & 100000 & random & 0.373 & 0.027 & 18.582 & 0.482 & 0.357 & 0.162 \\
+VGGT & garden & 100000 & voxels & 0.373 & 0.027 & 18.372 & 0.509 & 0.362 & 0.144 \\
+VGGT & garden & 500000 & confidence & 0.373 & 0.027 & 18.604 & 0.497 & 0.352 & 0.150 \\
+VGGT & garden & 500000 & imagefps & 0.373 & 0.027 & 18.419 & 0.464 & 0.347 & 0.164 \\
+VGGT & garden & 500000 & random & 0.373 & 0.027 & 18.395 & 0.440 & 0.344 & 0.177 \\
+VGGT & garden & 500000 & voxels & 0.373 & 0.027 & 18.464 & 0.493 & 0.355 & 0.152 \\
+VGGT & garden & 1000000 & confidence & 0.373 & 0.027 & 18.531 & 0.502 & 0.350 & 0.145 \\
+VGGT & garden & 1000000 & imagefps & 0.373 & 0.027 & 18.414 & 0.463 & 0.345 & 0.164 \\
+VGGT & garden & 1000000 & random & 0.373 & 0.027 & 18.412 & \underline{0.432} & 0.341 & \underline{0.180} \\
+VGGT & garden & 1000000 & voxels & 0.373 & 0.027 & 18.394 & 0.490 & 0.352 & 0.150 \\
+\midrule
+COLMAP & stump & 19683 &  & \textbf{0.022} & \textbf{0.002} & \textbf{25.254} & \textbf{0.345} & \textbf{0.721} & \textbf{0.583} \\
+VGGT & stump & 1000 & confidence & 0.856 & 0.163 & 19.307 & 0.752 & 0.483 & 0.082 \\
+VGGT & stump & 1000 & imagefps & 0.856 & 0.163 & 19.286 & 0.747 & 0.482 & 0.084 \\
+VGGT & stump & 1000 & random & 0.856 & 0.163 & 19.354 & 0.753 & 0.483 & 0.082 \\
+VGGT & stump & 1000 & voxels & 0.856 & 0.163 & \underline{19.387} & 0.771 & \underline{0.486} & 0.074 \\
+VGGT & stump & 5000 & confidence & 0.856 & 0.163 & 19.033 & 0.633 & 0.457 & 0.135 \\
+VGGT & stump & 5000 & imagefps & 0.856 & 0.163 & 18.985 & 0.627 & 0.456 & 0.137 \\
+VGGT & stump & 5000 & random & 0.856 & 0.163 & 18.992 & 0.627 & 0.455 & 0.137 \\
+VGGT & stump & 5000 & voxels & 0.856 & 0.163 & 19.078 & 0.636 & 0.458 & 0.135 \\
+VGGT & stump & 10000 & confidence & 0.856 & 0.163 & 18.722 & 0.608 & 0.445 & 0.138 \\
+VGGT & stump & 10000 & imagefps & 0.856 & 0.163 & 18.862 & 0.602 & 0.446 & 0.145 \\
+VGGT & stump & 10000 & random & 0.856 & 0.163 & 18.885 & 0.594 & 0.444 & 0.149 \\
+VGGT & stump & 10000 & voxels & 0.856 & 0.163 & 18.971 & 0.607 & 0.449 & 0.146 \\
+VGGT & stump & 21431 & ba & \underline{0.695} & \underline{0.043} & 19.071 & 0.553 & 0.438 & \underline{0.175} \\
+VGGT & stump & 50000 & confidence & 0.856 & 0.163 & 18.732 & 0.561 & 0.421 & 0.153 \\
+VGGT & stump & 50000 & imagefps & 0.856 & 0.163 & 18.705 & 0.552 & 0.425 & 0.160 \\
+VGGT & stump & 50000 & random & 0.856 & 0.163 & 18.667 & 0.547 & 0.421 & 0.161 \\
+VGGT & stump & 50000 & voxels & 0.856 & 0.163 & 18.759 & 0.560 & 0.431 & 0.160 \\
+VGGT & stump & 100000 & confidence & 0.856 & 0.163 & 18.674 & 0.556 & 0.412 & 0.150 \\
+VGGT & stump & 100000 & imagefps & 0.856 & 0.163 & 18.571 & 0.541 & 0.416 & 0.160 \\
+VGGT & stump & 100000 & random & 0.856 & 0.163 & 18.644 & 0.530 & 0.412 & 0.166 \\
+VGGT & stump & 100000 & voxels & 0.856 & 0.163 & 18.706 & 0.546 & 0.424 & 0.164 \\
+VGGT & stump & 500000 & confidence & 0.856 & 0.163 & 18.560 & 0.554 & 0.399 & 0.141 \\
+VGGT & stump & 500000 & imagefps & 0.856 & 0.163 & 18.436 & 0.534 & 0.404 & 0.154 \\
+VGGT & stump & 500000 & random & 0.856 & 0.163 & 18.592 & 0.514 & 0.399 & 0.167 \\
+VGGT & stump & 500000 & voxels & 0.856 & 0.163 & 18.597 & 0.530 & 0.407 & 0.162 \\
+VGGT & stump & 1000000 & confidence & 0.856 & 0.163 & 18.561 & 0.562 & 0.399 & 0.137 \\
+VGGT & stump & 1000000 & imagefps & 0.856 & 0.163 & 18.480 & 0.535 & 0.405 & 0.155 \\
+VGGT & stump & 1000000 & random & 0.856 & 0.163 & 18.601 & \underline{0.512} & 0.397 & 0.167 \\
+VGGT & stump & 1000000 & voxels & 0.856 & 0.163 & 18.544 & 0.532 & 0.394 & 0.152 \\
+\midrule
+COLMAP & bonsai & 80892 &  & \textbf{0.158} & \textbf{0.013} & \textbf{22.423} & \textbf{0.204} & \textbf{0.697} & \textbf{0.604} \\
+VGGT & bonsai & 1000 & confidence & 0.790 & 0.107 & 17.988 & 0.543 & 0.609 & 0.260 \\
+VGGT & bonsai & 1000 & imagefps & 0.722 & 0.106 & 18.063 & 0.546 & \underline{0.613} & 0.262 \\
+VGGT & bonsai & 1000 & random & 0.790 & 0.107 & 17.979 & 0.537 & 0.611 & 0.265 \\
+VGGT & bonsai & 1000 & voxels & 0.722 & 0.106 & 18.033 & 0.545 & \underline{0.613} & 0.263 \\
+VGGT & bonsai & 5000 & confidence & 0.790 & 0.107 & 17.859 & 0.475 & 0.597 & 0.293 \\
+VGGT & bonsai & 5000 & imagefps & 0.722 & 0.106 & 17.859 & 0.483 & 0.596 & 0.288 \\
+VGGT & bonsai & 5000 & random & 0.790 & 0.107 & 17.890 & 0.477 & 0.597 & 0.292 \\
+VGGT & bonsai & 5000 & voxels & 0.722 & 0.106 & 17.910 & 0.486 & 0.599 & 0.289 \\
+VGGT & bonsai & 10000 & confidence & 0.790 & 0.107 & 17.831 & 0.455 & 0.592 & 0.302 \\
+VGGT & bonsai & 10000 & imagefps & 0.722 & 0.106 & 17.824 & 0.468 & 0.592 & 0.294 \\
+VGGT & bonsai & 10000 & random & 0.790 & 0.107 & 17.873 & 0.460 & 0.592 & 0.300 \\
+VGGT & bonsai & 10000 & voxels & 0.722 & 0.106 & 17.837 & 0.470 & 0.594 & 0.294 \\
+VGGT & bonsai & 23220 & ba & \underline{0.579} & \underline{0.034} & \underline{19.146} & \underline{0.353} & 0.604 & \underline{0.396} \\
+VGGT & bonsai & 50000 & confidence & 0.790 & 0.107 & 17.740 & 0.424 & 0.579 & 0.312 \\
+VGGT & bonsai & 50000 & imagefps & 0.722 & 0.106 & 17.716 & 0.441 & 0.579 & 0.301 \\
+VGGT & bonsai & 50000 & random & 0.790 & 0.107 & 17.745 & 0.426 & 0.580 & 0.311 \\
+VGGT & bonsai & 50000 & voxels & 0.722 & 0.106 & 17.758 & 0.441 & 0.583 & 0.304 \\
+VGGT & bonsai & 100000 & confidence & 0.790 & 0.107 & 17.730 & 0.419 & 0.576 & 0.313 \\
+VGGT & bonsai & 100000 & imagefps & 0.722 & 0.106 & 17.691 & 0.434 & 0.573 & 0.301 \\
+VGGT & bonsai & 100000 & random & 0.722 & 0.106 & 17.731 & 0.418 & 0.575 & 0.313 \\
+VGGT & bonsai & 100000 & voxels & 0.722 & 0.106 & 17.696 & 0.433 & 0.578 & 0.305 \\
+VGGT & bonsai & 500000 & confidence & 0.790 & 0.107 & 17.688 & 0.417 & 0.568 & 0.309 \\
+VGGT & bonsai & 500000 & imagefps & 0.722 & 0.106 & 17.611 & 0.433 & 0.559 & 0.292 \\
+VGGT & bonsai & 500000 & random & 0.790 & 0.107 & 17.647 & 0.415 & 0.564 & 0.307 \\
+VGGT & bonsai & 500000 & voxels & 0.722 & 0.106 & 17.621 & 0.423 & 0.569 & 0.305 \\
+VGGT & bonsai & 1000000 & confidence & 0.790 & 0.107 & 17.688 & 0.419 & 0.568 & 0.307 \\
+VGGT & bonsai & 1000000 & imagefps & 0.722 & 0.106 & 17.569 & 0.434 & 0.555 & 0.289 \\
+VGGT & bonsai & 1000000 & random & 0.790 & 0.107 & 17.635 & 0.415 & 0.561 & 0.304 \\
+VGGT & bonsai & 1000000 & voxels & 0.722 & 0.106 & 17.608 & 0.422 & 0.566 & 0.303 \\
+\midrule
+COLMAP & kitchen & 92853 &  & \textbf{0.107} & \textbf{0.004} & \textbf{21.260} & \textbf{0.149} & 0.471 & \textbf{0.484} \\
+VGGT & kitchen & 1000 & confidence & \underline{0.339} & 0.031 & 19.902 & 0.436 & 0.501 & 0.299 \\
+VGGT & kitchen & 1000 & imagefps & \underline{0.339} & 0.031 & 20.459 & 0.431 & \textbf{0.510} & 0.317 \\
+VGGT & kitchen & 1000 & random & \underline{0.339} & 0.031 & 20.464 & 0.424 & \underline{0.509} & 0.321 \\
+VGGT & kitchen & 1000 & voxels & \underline{0.339} & 0.031 & \underline{20.482} & 0.424 & 0.508 & 0.321 \\
+VGGT & kitchen & 5000 & confidence & \underline{0.339} & 0.031 & 19.700 & 0.317 & 0.480 & 0.356 \\
+VGGT & kitchen & 5000 & imagefps & \underline{0.339} & 0.031 & 20.200 & 0.311 & 0.488 & 0.373 \\
+VGGT & kitchen & 5000 & random & \underline{0.339} & 0.031 & 20.135 & 0.301 & 0.484 & 0.377 \\
+VGGT & kitchen & 5000 & voxels & \underline{0.339} & 0.031 & 20.153 & 0.317 & 0.487 & 0.369 \\
+VGGT & kitchen & 10000 & confidence & \underline{0.339} & 0.031 & 19.881 & 0.292 & 0.477 & 0.373 \\
+VGGT & kitchen & 10000 & imagefps & \underline{0.339} & 0.031 & 20.141 & 0.282 & 0.480 & 0.386 \\
+VGGT & kitchen & 10000 & random & \underline{0.339} & 0.031 & 20.096 & 0.276 & 0.481 & 0.389 \\
+VGGT & kitchen & 10000 & voxels & \underline{0.339} & 0.031 & 20.143 & 0.289 & 0.479 & 0.382 \\
+VGGT & kitchen & 20930 & ba & 0.454 & \underline{0.023} & 19.084 & 0.265 & 0.458 & 0.364 \\
+VGGT & kitchen & 50000 & confidence & \underline{0.339} & 0.031 & 19.597 & 0.267 & 0.466 & 0.377 \\
+VGGT & kitchen & 50000 & imagefps & \underline{0.339} & 0.031 & 19.733 & 0.254 & 0.465 & 0.387 \\
+VGGT & kitchen & 50000 & random & \underline{0.339} & 0.031 & 19.845 & 0.244 & 0.467 & \underline{0.396} \\
+VGGT & kitchen & 50000 & voxels & \underline{0.339} & 0.031 & 19.577 & 0.261 & 0.467 & 0.381 \\
+VGGT & kitchen & 100000 & confidence & \underline{0.339} & 0.031 & 19.371 & 0.270 & 0.464 & 0.370 \\
+VGGT & kitchen & 100000 & imagefps & \underline{0.339} & 0.031 & 19.724 & 0.249 & 0.463 & 0.389 \\
+VGGT & kitchen & 100000 & random & \underline{0.339} & 0.031 & 19.821 & \underline{0.239} & 0.463 & \underline{0.396} \\
+VGGT & kitchen & 100000 & voxels & \underline{0.339} & 0.031 & 19.859 & 0.249 & 0.466 & 0.393 \\
+VGGT & kitchen & 500000 & confidence & \underline{0.339} & 0.031 & 19.340 & 0.274 & 0.457 & 0.362 \\
+VGGT & kitchen & 500000 & imagefps & \underline{0.339} & 0.031 & 19.290 & 0.261 & 0.450 & 0.366 \\
+VGGT & kitchen & 500000 & random & \underline{0.339} & 0.031 & 19.656 & 0.240 & 0.454 & 0.388 \\
+VGGT & kitchen & 500000 & voxels & \underline{0.339} & 0.031 & 19.204 & 0.268 & 0.454 & 0.362 \\
+VGGT & kitchen & 1000000 & confidence & \underline{0.339} & 0.031 & 19.146 & 0.280 & 0.454 & 0.354 \\
+VGGT & kitchen & 1000000 & imagefps & \underline{0.339} & 0.031 & 19.328 & 0.261 & 0.448 & 0.365 \\
+VGGT & kitchen & 1000000 & random & \underline{0.339} & 0.031 & 19.416 & 0.243 & 0.450 & 0.379 \\
+VGGT & kitchen & 1000000 & voxels & \underline{0.339} & 0.031 & 18.790 & 0.281 & 0.450 & 0.344 \\
+\midrule
+COLMAP & counter & 60980 &  & \textbf{0.029} & \textbf{0.002} & \textbf{25.221} & \textbf{0.189} & \textbf{0.852} & \textbf{0.755} \\
+VGGT & counter & 1000 & confidence & \underline{0.343} & 0.033 & 20.590 & 0.468 & 0.672 & 0.392 \\
+VGGT & counter & 1000 & imagefps & \underline{0.343} & 0.033 & 20.660 & 0.468 & \underline{0.674} & 0.394 \\
+VGGT & counter & 1000 & random & \underline{0.343} & 0.033 & \underline{20.726} & 0.453 & \underline{0.674} & 0.405 \\
+VGGT & counter & 1000 & voxels & \underline{0.343} & 0.033 & 20.664 & 0.469 & \underline{0.674} & 0.394 \\
+VGGT & counter & 5000 & confidence & \underline{0.343} & 0.033 & 20.553 & 0.373 & 0.661 & 0.444 \\
+VGGT & counter & 5000 & imagefps & \underline{0.343} & 0.033 & 20.455 & 0.379 & 0.659 & 0.437 \\
+VGGT & counter & 5000 & random & \underline{0.343} & 0.033 & 20.571 & 0.367 & 0.660 & 0.447 \\
+VGGT & counter & 5000 & voxels & \underline{0.343} & 0.033 & 20.637 & 0.376 & 0.663 & 0.444 \\
+VGGT & counter & 10000 & confidence & \underline{0.343} & 0.033 & 20.551 & 0.347 & 0.655 & 0.456 \\
+VGGT & counter & 10000 & imagefps & \underline{0.343} & 0.033 & 20.422 & 0.353 & 0.652 & 0.448 \\
+VGGT & counter & 10000 & random & \underline{0.343} & 0.033 & 20.504 & 0.341 & 0.654 & 0.458 \\
+VGGT & counter & 10000 & voxels & \underline{0.343} & 0.033 & 20.496 & 0.352 & 0.655 & 0.452 \\
+VGGT & counter & 26752 & ba & 0.421 & \underline{0.017} & 18.957 & 0.353 & 0.601 & 0.391 \\
+VGGT & counter & 50000 & confidence & \underline{0.343} & 0.033 & 20.315 & 0.320 & 0.640 & 0.459 \\
+VGGT & counter & 50000 & imagefps & \underline{0.343} & 0.033 & 20.227 & 0.323 & 0.634 & 0.453 \\
+VGGT & counter & 50000 & random & \underline{0.343} & 0.033 & 20.279 & 0.311 & 0.638 & \underline{0.463} \\
+VGGT & counter & 50000 & voxels & \underline{0.343} & 0.033 & 20.268 & 0.323 & 0.639 & 0.456 \\
+VGGT & counter & 100000 & confidence & \underline{0.343} & 0.033 & 20.315 & 0.313 & 0.635 & 0.461 \\
+VGGT & counter & 100000 & imagefps & \underline{0.343} & 0.033 & 20.023 & 0.319 & 0.625 & 0.445 \\
+VGGT & counter & 100000 & random & \underline{0.343} & 0.033 & 20.160 & \underline{0.307} & 0.630 & 0.459 \\
+VGGT & counter & 100000 & voxels & \underline{0.343} & 0.033 & 20.272 & 0.318 & 0.635 & 0.457 \\
+VGGT & counter & 500000 & confidence & \underline{0.343} & 0.033 & 20.157 & 0.313 & 0.624 & 0.451 \\
+VGGT & counter & 500000 & imagefps & \underline{0.343} & 0.033 & 19.840 & 0.328 & 0.606 & 0.426 \\
+VGGT & counter & 500000 & random & \underline{0.343} & 0.033 & 19.931 & 0.310 & 0.615 & 0.443 \\
+VGGT & counter & 500000 & voxels & \underline{0.343} & 0.033 & 20.130 & 0.331 & 0.627 & 0.442 \\
+VGGT & counter & 1000000 & confidence & \underline{0.343} & 0.033 & 20.199 & 0.314 & 0.624 & 0.452 \\
+VGGT & counter & 1000000 & imagefps & \underline{0.343} & 0.033 & 19.804 & 0.329 & 0.603 & 0.423 \\
+VGGT & counter & 1000000 & random & \underline{0.343} & 0.033 & 19.907 & 0.309 & 0.612 & 0.442 \\
+VGGT & counter & 1000000 & voxels & \underline{0.343} & 0.033 & 20.139 & 0.351 & 0.629 & 0.430 \\
+\midrule
+COLMAP & lego & 10069 &  & 10.427 & 0.396 & \textbf{24.951} & \textbf{0.058} & \textbf{0.894} & \textbf{0.856} \\
+VGGT & lego & 870 & confidence & 0.331 & \underline{0.019} & 20.780 & 0.127 & 0.785 & 0.672 \\
+VGGT & lego & 870 & imagefps & \underline{0.298} & \underline{0.019} & 20.732 & 0.131 & 0.784 & 0.668 \\
+VGGT & lego & 870 & random & 0.331 & \underline{0.019} & 20.787 & 0.128 & 0.785 & 0.671 \\
+VGGT & lego & 870 & voxels & \underline{0.298} & \underline{0.019} & 20.662 & 0.129 & 0.783 & 0.667 \\
+VGGT & lego & 4350 & confidence & 0.331 & \underline{0.019} & 20.556 & 0.108 & 0.776 & 0.674 \\
+VGGT & lego & 4350 & imagefps & \underline{0.298} & \underline{0.019} & 20.587 & 0.108 & 0.777 & 0.676 \\
+VGGT & lego & 4350 & random & 0.331 & \underline{0.019} & 20.566 & 0.107 & 0.776 & 0.675 \\
+VGGT & lego & 4350 & voxels & \underline{0.298} & \underline{0.019} & 20.554 & 0.108 & 0.776 & 0.674 \\
+VGGT & lego & 8700 & confidence & 0.331 & \underline{0.019} & 20.560 & 0.103 & 0.775 & 0.677 \\
+VGGT & lego & 8700 & imagefps & \underline{0.298} & \underline{0.019} & 20.517 & 0.103 & 0.774 & 0.675 \\
+VGGT & lego & 8700 & random & 0.331 & \underline{0.019} & 20.553 & 0.103 & 0.775 & 0.677 \\
+VGGT & lego & 8700 & voxels & \underline{0.298} & \underline{0.019} & 20.601 & 0.103 & 0.777 & 0.679 \\
+VGGT & lego & 27774 & ba & 0.269 & \textbf{0.016} & \underline{22.970} & \underline{0.075} & \underline{0.837} & \underline{0.775} \\
+VGGT & lego & 43500 & confidence & 0.331 & \underline{0.019} & 20.571 & 0.097 & 0.774 & 0.680 \\
+VGGT & lego & 43500 & imagefps & \underline{0.298} & \underline{0.019} & 20.613 & 0.097 & 0.775 & 0.682 \\
+VGGT & lego & 43500 & random & 0.331 & \underline{0.019} & 20.577 & 0.097 & 0.774 & 0.680 \\
+VGGT & lego & 43500 & voxels & \underline{0.298} & \underline{0.019} & 20.540 & 0.097 & 0.774 & 0.679 \\
+VGGT & lego & 87000 & confidence & 0.331 & \underline{0.019} & 20.613 & 0.095 & 0.775 & 0.683 \\
+VGGT & lego & 87000 & imagefps & \underline{0.298} & \underline{0.019} & 20.584 & 0.096 & 0.774 & 0.681 \\
+VGGT & lego & 87000 & random & 0.331 & \underline{0.019} & 20.620 & 0.095 & 0.775 & 0.683 \\
+VGGT & lego & 87000 & voxels & \underline{0.298} & \underline{0.019} & 20.561 & 0.096 & 0.773 & 0.680 \\
+VGGT & lego & 435000 & confidence & 0.331 & \underline{0.019} & 20.577 & 0.093 & 0.773 & 0.682 \\
+VGGT & lego & 435000 & imagefps & \underline{0.298} & \underline{0.019} & 20.611 & 0.095 & 0.774 & 0.682 \\
+VGGT & lego & 435000 & random & 0.331 & \underline{0.019} & 20.581 & 0.094 & 0.773 & 0.682 \\
+VGGT & lego & 435000 & voxels & \underline{0.298} & \underline{0.019} & 20.573 & 0.093 & 0.774 & 0.683 \\
+VGGT & lego & 870000 & confidence & 0.331 & \underline{0.019} & 20.599 & 0.092 & 0.774 & 0.683 \\
+VGGT & lego & 870000 & imagefps & \underline{0.298} & \underline{0.019} & 20.606 & 0.093 & 0.773 & 0.683 \\
+VGGT & lego & 870000 & random & 0.331 & \underline{0.019} & 20.607 & 0.093 & 0.773 & 0.683 \\
+VGGT & lego & 870000 & voxels & \underline{0.298} & \underline{0.019} & 20.553 & 0.092 & 0.773 & 0.682 \\
+\midrule
+COLMAP & ship & 5138 &  & \textbf{0.277} & \textbf{0.015} & \textbf{21.593} & \textbf{0.155} & \textbf{0.733} & \textbf{0.639} \\
+VGGT & ship & 870 & confidence & 0.487 & 0.028 & 20.921 & 0.220 & \underline{0.719} & 0.578 \\
+VGGT & ship & 870 & imagefps & 0.487 & 0.028 & 20.914 & 0.216 & \underline{0.719} & 0.580 \\
+VGGT & ship & 870 & random & 0.487 & 0.028 & \underline{20.925} & 0.218 & 0.718 & 0.580 \\
+VGGT & ship & 870 & voxels & 0.487 & 0.028 & 20.923 & 0.217 & 0.718 & 0.580 \\
+VGGT & ship & 4350 & confidence & 0.487 & 0.028 & 20.849 & 0.193 & 0.709 & 0.588 \\
+VGGT & ship & 4350 & imagefps & 0.487 & 0.028 & 20.910 & 0.192 & 0.710 & 0.591 \\
+VGGT & ship & 4350 & random & 0.487 & 0.028 & 20.849 & 0.193 & 0.709 & 0.588 \\
+VGGT & ship & 4350 & voxels & 0.487 & 0.028 & 20.867 & 0.192 & 0.709 & 0.589 \\
+VGGT & ship & 8700 & confidence & 0.487 & 0.028 & 20.898 & 0.186 & 0.707 & 0.592 \\
+VGGT & ship & 8700 & imagefps & 0.487 & 0.028 & 20.914 & 0.187 & 0.708 & 0.592 \\
+VGGT & ship & 8700 & random & 0.487 & 0.028 & 20.893 & 0.187 & 0.707 & 0.591 \\
+VGGT & ship & 8700 & voxels & 0.487 & 0.028 & 20.866 & 0.187 & 0.707 & 0.591 \\
+VGGT & ship & 24264 & ba & \underline{0.429} & \underline{0.025} & 19.140 & 0.268 & 0.676 & 0.491 \\
+VGGT & ship & 43500 & confidence & 0.487 & 0.028 & 20.866 & 0.179 & 0.703 & 0.594 \\
+VGGT & ship & 43500 & imagefps & 0.487 & 0.028 & 20.882 & 0.179 & 0.703 & 0.593 \\
+VGGT & ship & 43500 & random & 0.487 & 0.028 & 20.865 & 0.179 & 0.703 & 0.593 \\
+VGGT & ship & 43500 & voxels & 0.487 & 0.028 & 20.886 & 0.179 & 0.704 & 0.594 \\
+VGGT & ship & 87000 & confidence & 0.487 & 0.028 & 20.877 & 0.176 & 0.702 & 0.595 \\
+VGGT & ship & 87000 & imagefps & 0.487 & 0.028 & 20.831 & 0.177 & 0.701 & 0.593 \\
+VGGT & ship & 87000 & random & 0.487 & 0.028 & 20.875 & 0.177 & 0.701 & 0.594 \\
+VGGT & ship & 87000 & voxels & 0.487 & 0.028 & 20.845 & 0.176 & 0.702 & 0.594 \\
+VGGT & ship & 435000 & confidence & 0.487 & 0.028 & 20.877 & 0.170 & 0.699 & \underline{0.597} \\
+VGGT & ship & 435000 & imagefps & 0.487 & 0.028 & 20.892 & 0.173 & 0.698 & 0.594 \\
+VGGT & ship & 435000 & random & 0.487 & 0.028 & 20.877 & 0.171 & 0.699 & 0.596 \\
+VGGT & ship & 435000 & voxels & 0.487 & 0.028 & 20.870 & 0.172 & 0.699 & 0.596 \\
+VGGT & ship & 870000 & confidence & 0.487 & 0.028 & 20.828 & 0.169 & 0.698 & 0.596 \\
+VGGT & ship & 870000 & imagefps & 0.487 & 0.028 & 20.918 & 0.171 & 0.697 & 0.596 \\
+VGGT & ship & 870000 & random & 0.487 & 0.028 & 20.834 & \underline{0.167} & 0.698 & \underline{0.597} \\
+VGGT & ship & 870000 & voxels & 0.487 & 0.028 & 20.852 & 0.172 & 0.699 & 0.595 \\
+\midrule
+COLMAP & drums & 3866 &  & \textbf{0.153} & \textbf{0.010} & \textbf{22.469} & \textbf{0.093} & \textbf{0.899} & \textbf{0.791} \\
+VGGT & drums & 870 & confidence & \underline{0.173} & \textbf{0.010} & 19.730 & 0.136 & 0.839 & 0.679 \\
+VGGT & drums & 870 & imagefps & \underline{0.173} & \textbf{0.010} & \underline{19.787} & 0.137 & \underline{0.841} & 0.680 \\
+VGGT & drums & 870 & random & \underline{0.173} & \textbf{0.010} & 19.729 & 0.135 & 0.840 & 0.679 \\
+VGGT & drums & 870 & voxels & \underline{0.173} & \textbf{0.010} & 19.770 & 0.137 & 0.840 & 0.679 \\
+VGGT & drums & 4350 & confidence & \underline{0.173} & \textbf{0.010} & 19.669 & 0.120 & 0.838 & 0.687 \\
+VGGT & drums & 4350 & imagefps & \underline{0.173} & \textbf{0.010} & 19.700 & 0.119 & 0.839 & 0.688 \\
+VGGT & drums & 4350 & random & \underline{0.173} & \textbf{0.010} & 19.669 & 0.120 & 0.837 & 0.686 \\
+VGGT & drums & 4350 & voxels & \underline{0.173} & \textbf{0.010} & 19.676 & 0.120 & 0.838 & 0.687 \\
+VGGT & drums & 8700 & confidence & \underline{0.173} & \textbf{0.010} & 19.665 & 0.116 & 0.837 & 0.689 \\
+VGGT & drums & 8700 & imagefps & \underline{0.173} & \textbf{0.010} & 19.672 & 0.116 & 0.838 & 0.689 \\
+VGGT & drums & 8700 & random & \underline{0.173} & \textbf{0.010} & 19.667 & 0.116 & 0.837 & 0.689 \\
+VGGT & drums & 8700 & voxels & \underline{0.173} & \textbf{0.010} & 19.650 & 0.116 & 0.837 & 0.688 \\
+VGGT & drums & 26382 & ba & 0.235 & \underline{0.011} & 18.584 & 0.111 & 0.815 & 0.658 \\
+VGGT & drums & 43500 & confidence & \underline{0.173} & \textbf{0.010} & 19.652 & 0.109 & 0.836 & 0.692 \\
+VGGT & drums & 43500 & imagefps & \underline{0.173} & \textbf{0.010} & 19.674 & 0.109 & 0.836 & 0.692 \\
+VGGT & drums & 43500 & random & \underline{0.173} & \textbf{0.010} & 19.649 & 0.108 & 0.836 & 0.692 \\
+VGGT & drums & 43500 & voxels & \underline{0.173} & \textbf{0.010} & 19.649 & 0.109 & 0.836 & 0.692 \\
+VGGT & drums & 87000 & confidence & \underline{0.173} & \textbf{0.010} & 19.683 & 0.107 & 0.836 & 0.694 \\
+VGGT & drums & 87000 & imagefps & \underline{0.173} & \textbf{0.010} & 19.636 & 0.107 & 0.835 & 0.692 \\
+VGGT & drums & 87000 & random & \underline{0.173} & \textbf{0.010} & 19.676 & 0.106 & 0.836 & 0.694 \\
+VGGT & drums & 87000 & voxels & \underline{0.173} & \textbf{0.010} & 19.639 & 0.106 & 0.835 & 0.693 \\
+VGGT & drums & 435000 & confidence & \underline{0.173} & \textbf{0.010} & 19.643 & 0.103 & 0.835 & 0.695 \\
+VGGT & drums & 435000 & imagefps & \underline{0.173} & \textbf{0.010} & 19.649 & 0.103 & 0.834 & 0.695 \\
+VGGT & drums & 435000 & random & \underline{0.173} & \textbf{0.010} & 19.641 & 0.103 & 0.834 & 0.695 \\
+VGGT & drums & 435000 & voxels & \underline{0.173} & \textbf{0.010} & 19.648 & 0.103 & 0.835 & 0.695 \\
+VGGT & drums & 870000 & confidence & \underline{0.173} & \textbf{0.010} & 19.668 & \underline{0.102} & 0.835 & \underline{0.696} \\
+VGGT & drums & 870000 & imagefps & \underline{0.173} & \textbf{0.010} & 19.653 & 0.103 & 0.834 & 0.695 \\
+VGGT & drums & 870000 & random & \underline{0.173} & \textbf{0.010} & 19.657 & \underline{0.102} & 0.834 & 0.695 \\
+VGGT & drums & 870000 & voxels & \underline{0.173} & \textbf{0.010} & 19.666 & \underline{0.102} & 0.835 & 0.695 \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,0 +1,43 @@
+\begin{table}[H]
+\caption{A comparison of random sampling the VGGT point cloud with GT cameras. (Indoor,Outdoor,Synthetic)}
+\label{tab:03_random_gt_cams_indoor,outdoor,synthetic}
+\small
+\begin{tabular}{llrlrrrrr}
+\toprule
+Choice & Dataset Collection & Num Points & Sampling Mode & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ & Average Error ↓ \\
+\midrule
+COLMAP & indoor & 60980 &  & 25.604 & 0.186 & 0.867 & 0.773 & 0.184 \\
+COLMAP & indoor & 80892 &  & \textbf{28.943} & \underline{0.158} & \textbf{0.908} & \textbf{0.876} & \underline{0.154} \\
+COLMAP & indoor & 92853 &  & \underline{27.952} & \textbf{0.122} & \underline{0.902} & \textbf{0.876} & \textbf{0.145} \\
+VGGT & indoor & 1000 & random & 24.451 & 0.307 & 0.800 & 0.638 & 0.253 \\
+VGGT & indoor & 5000 & random & 25.676 & 0.217 & 0.850 & 0.745 & 0.202 \\
+VGGT & indoor & 10000 & random & 25.940 & 0.196 & 0.862 & 0.769 & 0.190 \\
+VGGT & indoor & 50000 & random & 25.833 & 0.178 & 0.864 & \underline{0.780} & 0.183 \\
+VGGT & indoor & 100000 & random & 25.668 & 0.176 & 0.861 & 0.777 & 0.183 \\
+VGGT & indoor & 500000 & random & 25.066 & 0.180 & 0.848 & 0.756 & 0.190 \\
+VGGT & indoor & 1000000 & random & 24.711 & 0.184 & 0.842 & 0.742 & 0.195 \\
+\midrule
+COLMAP & outdoor & 17352 &  & 22.997 & 0.349 & 0.610 & 0.474 & 0.326 \\
+COLMAP & outdoor & 19683 &  & \textbf{25.440} & 0.342 & \textbf{0.733} & 0.595 & 0.287 \\
+COLMAP & outdoor & 70656 &  & \underline{24.718} & \textbf{0.249} & \underline{0.722} & \textbf{0.633} & \textbf{0.260} \\
+VGGT & outdoor & 1000 & random & 22.424 & 0.543 & 0.559 & 0.313 & 0.404 \\
+VGGT & outdoor & 5000 & random & 23.542 & 0.401 & 0.634 & 0.466 & 0.336 \\
+VGGT & outdoor & 10000 & random & 23.898 & 0.356 & 0.660 & 0.515 & 0.314 \\
+VGGT & outdoor & 50000 & random & 24.235 & 0.277 & 0.697 & 0.591 & 0.277 \\
+VGGT & outdoor & 100000 & random & 24.141 & \underline{0.258} & 0.699 & \underline{0.603} & \underline{0.270} \\
+VGGT & outdoor & 500000 & random & 23.768 & \textbf{0.249} & 0.677 & 0.588 & 0.274 \\
+VGGT & outdoor & 1000000 & random & 23.253 & 0.266 & 0.649 & 0.553 & 0.287 \\
+\midrule
+COLMAP & synthetic & 3866 &  & 24.164 & 0.084 & 0.930 & 0.845 & 0.118 \\
+COLMAP & synthetic & 5138 &  & 29.361 & 0.112 & 0.892 & 0.903 & 0.147 \\
+COLMAP & synthetic & 10069 &  & \textbf{33.139} & \textbf{0.034} & \textbf{0.980} & \textbf{1.072} & \textbf{0.059} \\
+VGGT & synthetic & 870 & random & 28.636 & 0.091 & 0.933 & 0.926 & 0.114 \\
+VGGT & synthetic & 4350 & random & 29.287 & 0.073 & \underline{0.940} & 0.953 & 0.103 \\
+VGGT & synthetic & 8700 & random & 29.357 & 0.071 & \underline{0.940} & 0.956 & 0.102 \\
+VGGT & synthetic & 43500 & random & \underline{29.413} & 0.067 & \underline{0.940} & \underline{0.959} & \underline{0.101} \\
+VGGT & synthetic & 87000 & random & 29.401 & 0.066 & 0.939 & \underline{0.959} & \underline{0.101} \\
+VGGT & synthetic & 435000 & random & 29.324 & 0.063 & 0.936 & 0.958 & \underline{0.101} \\
+VGGT & synthetic & 870000 & random & 29.286 & \underline{0.062} & 0.936 & 0.958 & \underline{0.101} \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,0 +1,40 @@
+\begin{table}[H]
+\caption{The effect of using ground truth extrinsics, intrinsics and points on VGGT and COLMAP results (Synthetic)}
+\label{tab:06_gt_cams_synthetic}
+\small
+\begin{tabular}{lllllrrr}
+\toprule
+Choice & Dataset & Use Gt Extrinsics & Use Gt Intrinsics & Use Gt Points & Val RRE ↓ & Val RTE ↓ & Composite Quality ↑ \\
+\midrule
+COLMAP & lego &  &  &  & \underline{10.431} & \underline{0.113} & 0.856 \\
+COLMAP & lego &  & GT Intrinsics &  & \underline{10.431} & \underline{0.113} & \underline{0.933} \\
+COLMAP & lego & GT Extrinsics &  &  & \textbf{0.000} & \textbf{0.000} & 0.889 \\
+COLMAP & lego & GT Extrinsics & GT Intrinsics &  & \textbf{0.000} & \textbf{0.000} & \textbf{1.072} \\
+\midrule
+VGGT & lego &  &  &  & \underline{0.297} & \underline{0.005} & 0.681 \\
+VGGT & lego &  & GT Intrinsics &  & \underline{0.297} & \underline{0.005} & 0.690 \\
+VGGT & lego & GT Extrinsics &  &  & \textbf{0.000} & \textbf{0.000} & \underline{0.850} \\
+VGGT & lego & GT Extrinsics & GT Intrinsics &  & \textbf{0.000} & \textbf{0.000} & \textbf{1.077} \\
+\midrule
+COLMAP & ship &  &  &  & \underline{0.296} & \underline{0.005} & 0.639 \\
+COLMAP & ship &  & GT Intrinsics &  & \underline{0.296} & \underline{0.005} & \underline{0.672} \\
+COLMAP & ship & GT Extrinsics &  &  & \textbf{0.000} & \textbf{0.000} & 0.668 \\
+COLMAP & ship & GT Extrinsics & GT Intrinsics &  & \textbf{0.000} & \textbf{0.000} & \textbf{0.903} \\
+\midrule
+VGGT & ship &  &  &  & \underline{0.487} & \underline{0.009} & 0.594 \\
+VGGT & ship &  & GT Intrinsics &  & \underline{0.487} & \underline{0.009} & 0.602 \\
+VGGT & ship & GT Extrinsics &  &  & \textbf{0.000} & \textbf{0.000} & \underline{0.809} \\
+VGGT & ship & GT Extrinsics & GT Intrinsics &  & \textbf{0.000} & \textbf{0.000} & \textbf{0.923} \\
+\midrule
+COLMAP & drums &  &  &  & \underline{0.152} & \underline{0.003} & 0.791 \\
+COLMAP & drums &  & GT Intrinsics &  & \underline{0.152} & \underline{0.003} & \underline{0.819} \\
+COLMAP & drums & GT Extrinsics &  &  & \textbf{0.000} & \textbf{0.000} & 0.812 \\
+COLMAP & drums & GT Extrinsics & GT Intrinsics &  & \textbf{0.000} & \textbf{0.000} & \textbf{0.845} \\
+\midrule
+VGGT & drums &  &  &  & \underline{0.172} & \underline{0.003} & 0.694 \\
+VGGT & drums &  & GT Intrinsics &  & \underline{0.172} & \underline{0.003} & 0.719 \\
+VGGT & drums & GT Extrinsics &  &  & \textbf{0.000} & \textbf{0.000} & \underline{0.760} \\
+VGGT & drums & GT Extrinsics & GT Intrinsics &  & \textbf{0.000} & \textbf{0.000} & \textbf{0.877} \\
+\bottomrule
+\end{tabular}
+\end{table}

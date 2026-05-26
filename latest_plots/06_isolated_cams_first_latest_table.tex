@@ -1,0 +1,22 @@
+\begin{table}[H]
+\caption{Test isolated cameras with random point clouds. (First)}
+\label{tab:06_isolated_cams_first}
+\small
+\begin{tabular}{llrlllrrrr}
+\toprule
+Choice & Dataset & Real Num Points & Random Init & Pose Opt & Use Ba & Val RRE ↓ & Val RTE ↓ & Aligned Cameras ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP & bicycle & 17352 & Random Init &  &  & \textbf{0.099} & \textbf{0.002} & \textbf{100} & \textbf{0.252} \\
+VGGT & bicycle & 17352 & Random Init &  & Use BA & \underline{0.590} & \underline{0.009} & \textbf{100} & \underline{0.066} \\
+VGGT & bicycle & 17352 & Random Init &  &  & 0.716 & 0.015 & \textbf{100} & 0.058 \\
+\midrule
+COLMAP & bonsai & 80892 & Random Init &  &  & \textbf{0.158} & \textbf{0.003} & \textbf{100} & \textbf{0.568} \\
+VGGT & bonsai & 80892 & Random Init &  & Use BA & \underline{0.579} & \underline{0.008} & \textbf{100} & \underline{0.384} \\
+VGGT & bonsai & 80892 & Random Init &  &  & 0.722 & 0.024 & \textbf{100} & 0.295 \\
+\midrule
+COLMAP & lego & 10069 & Random Init &  &  & 10.431 & 0.113 & \textbf{87} & \textbf{0.833} \\
+VGGT & lego & 10069 & Random Init &  & Use BA & \textbf{0.268} & \textbf{0.004} & \textbf{87} & \underline{0.771} \\
+VGGT & lego & 10069 & Random Init &  &  & \underline{0.297} & \underline{0.005} & \textbf{87} & 0.676 \\
+\bottomrule
+\end{tabular}
+\end{table}

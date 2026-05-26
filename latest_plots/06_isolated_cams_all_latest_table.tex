@@ -1,0 +1,46 @@
+\begin{table}[H]
+\caption{Test isolated cameras with random point clouds. (All)}
+\label{tab:06_isolated_cams_all}
+\small
+\begin{tabular}{llrllrrr}
+\toprule
+Choice & Dataset & Real Num Points & Random Init & Use Ba & Val RRE ↓ & Val RTE ↓ & Composite Quality ↑ \\
+\midrule
+COLMAP & ship & 5138 & Random Init &  & \textbf{0.296} & \textbf{0.005} & \underline{0.584} \\
+VGGT & ship & 5138 & Random Init & Use BA & \underline{0.429} & \underline{0.008} & 0.488 \\
+VGGT & ship & 5138 & Random Init &  & 0.487 & 0.009 & \textbf{0.589} \\
+\midrule
+COLMAP & garden & 70656 & Random Init &  & \textbf{0.063} & \textbf{0.001} & \textbf{0.370} \\
+VGGT & garden & 70656 & Random Init & Use BA & \underline{0.329} & \underline{0.003} & \underline{0.175} \\
+VGGT & garden & 70656 & Random Init &  & 0.373 & 0.006 & 0.142 \\
+\midrule
+COLMAP & bicycle & 17352 & Random Init &  & \textbf{0.099} & \textbf{0.002} & \textbf{0.252} \\
+VGGT & bicycle & 17352 & Random Init & Use BA & \underline{0.590} & \underline{0.009} & \underline{0.066} \\
+VGGT & bicycle & 17352 & Random Init &  & 0.716 & 0.015 & 0.058 \\
+\midrule
+VGGT & drums & 3866 & Random Init & Use BA & \underline{0.235} & \textbf{0.003} & \underline{0.653} \\
+VGGT & drums & 3866 & Random Init &  & \textbf{0.172} & \textbf{0.003} & \textbf{0.683} \\
+VGGT & drums &  &  &  &  &  &  \\
+\midrule
+COLMAP & kitchen & 92853 & Random Init &  & \textbf{0.107} & \textbf{0.001} & \textbf{0.460} \\
+VGGT & kitchen & 92853 & Random Init & Use BA & 0.454 & \underline{0.005} & 0.374 \\
+VGGT & kitchen & 92853 & Random Init &  & \underline{0.339} & 0.007 & \underline{0.386} \\
+\midrule
+COLMAP & counter & 60980 & Random Init &  & \textbf{0.029} & \textbf{0.000} & \textbf{0.676} \\
+VGGT & counter & 60980 & Random Init & Use BA & 0.421 & \underline{0.004} & 0.371 \\
+VGGT & counter & 60980 & Random Init &  & \underline{0.343} & 0.008 & \underline{0.438} \\
+\midrule
+COLMAP & stump & 19683 & Random Init &  & \textbf{0.022} & \textbf{0.001} & \textbf{0.504} \\
+VGGT & stump & 19683 & Random Init & Use BA & \underline{0.695} & \underline{0.011} & \underline{0.168} \\
+VGGT & stump & 19683 & Random Init &  & 0.856 & 0.040 & 0.143 \\
+\midrule
+COLMAP & bonsai & 80892 & Random Init &  & \textbf{0.158} & \textbf{0.003} & \textbf{0.568} \\
+VGGT & bonsai & 80892 & Random Init & Use BA & \underline{0.579} & \underline{0.008} & \underline{0.384} \\
+VGGT & bonsai & 80892 & Random Init &  & 0.722 & 0.024 & 0.295 \\
+\midrule
+COLMAP & lego & 10069 & Random Init &  & 10.431 & 0.113 & \textbf{0.833} \\
+VGGT & lego & 10069 & Random Init & Use BA & \textbf{0.268} & \textbf{0.004} & \underline{0.771} \\
+VGGT & lego & 10069 & Random Init &  & \underline{0.297} & \underline{0.005} & 0.676 \\
+\bottomrule
+\end{tabular}
+\end{table}

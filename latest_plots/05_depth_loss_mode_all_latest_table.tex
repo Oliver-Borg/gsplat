@@ -1,0 +1,42 @@
+\begin{table}[H]
+\caption{COLMAP versus VGGT with depth loss for different depth loss modes. (All)}
+\label{tab:05_depth_loss_mode_all}
+\small
+\begin{tabular}{lllrrrrrr}
+\toprule
+Choice & Dataset & Depth Loss Mode & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP & ship &  & \textbf{0.296} & \textbf{0.015} & \textbf{21.735} & \textbf{0.149} & \textbf{0.740} & \textbf{0.650} \\
+COLMAP & ship & points & \textbf{0.296} & \textbf{0.015} & \underline{21.669} & \underline{0.156} & \textbf{0.740} & \underline{0.644} \\
+VGGT & ship &  & \underline{0.487} & \underline{0.028} &  &  &  &  \\
+\midrule
+COLMAP & lego &  & \underline{10.427} & \underline{0.396} & \textbf{25.238} & \textbf{0.053} & \textbf{0.906} & \textbf{0.871} \\
+COLMAP & lego & points & \underline{10.427} & \underline{0.396} & \underline{25.143} & \underline{0.056} & \underline{0.901} & \underline{0.864} \\
+VGGT & lego &  & \textbf{0.298} & \textbf{0.019} &  &  &  &  \\
+\midrule
+VGGT & stump &  & \textbf{0.439} & \textbf{0.082} &  &  &  &  \\
+\midrule
+VGGT & counter &  & \textbf{0.186} & \textbf{0.018} &  &  &  &  \\
+\midrule
+COLMAP & bicycle &  & \textbf{0.099} & \textbf{0.007} & \textbf{22.163} & 0.349 & \textbf{0.559} & \textbf{0.428} \\
+COLMAP & bicycle & points & \textbf{0.099} & \textbf{0.007} & \underline{21.660} & 0.392 & \underline{0.505} & \underline{0.361} \\
+VGGT & bicycle &  & \underline{0.716} & \underline{0.066} & 17.384 & \underline{0.338} & 0.268 & 0.176 \\
+VGGT & bicycle & closer & \underline{0.716} & \underline{0.066} & 17.500 & \textbf{0.329} & 0.266 & 0.183 \\
+VGGT & bicycle & full & \underline{0.716} & \underline{0.066} & 18.110 & 0.351 & 0.293 & 0.196 \\
+VGGT & bicycle & points & \underline{0.716} & \underline{0.066} & 17.406 & 0.383 & 0.269 & 0.150 \\
+\midrule
+COLMAP & bonsai &  & \textbf{0.158} & \textbf{0.013} & \textbf{24.653} & \textbf{0.175} & \textbf{0.776} & \textbf{0.709} \\
+COLMAP & bonsai & points & \textbf{0.158} & \textbf{0.013} & \underline{24.098} & \underline{0.185} & \underline{0.768} & \underline{0.687} \\
+VGGT & bonsai &  & \underline{0.722} & \underline{0.106} & 17.423 & 0.399 & 0.560 & 0.310 \\
+VGGT & bonsai & closer & \underline{0.722} & \underline{0.106} & 17.637 & 0.389 & 0.563 & 0.322 \\
+VGGT & bonsai & full & \underline{0.722} & \underline{0.106} & 17.473 & 0.392 & 0.557 & 0.314 \\
+VGGT & bonsai & points & \underline{0.722} & \underline{0.106} & 17.559 & 0.396 & 0.559 & 0.314 \\
+\midrule
+VGGT & kitchen &  & \textbf{0.223} & \textbf{0.018} &  &  &  &  \\
+\midrule
+VGGT & garden &  & \textbf{0.218} & \textbf{0.015} &  &  &  &  \\
+\midrule
+VGGT & drums &  & \textbf{0.163} & \textbf{0.010} &  &  &  &  \\
+\bottomrule
+\end{tabular}
+\end{table}

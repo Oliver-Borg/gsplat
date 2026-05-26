@@ -1,0 +1,37 @@
+\begin{table}[H]
+\caption{A comparison of random sampling the VGGT point cloud with GT cameras. (Bicycle,Kitchen,Ship)}
+\label{tab:03_random_gt_cams_bicycle,kitchen,ship}
+\small
+\begin{tabular}{llrlrrrrr}
+\toprule
+Choice & Dataset & Num Points & Sampling Mode & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ & Average Error ↓ \\
+\midrule
+COLMAP & bicycle & 17352 &  & \textbf{22.997} & 0.349 & \underline{0.610} & 0.474 & 0.326 \\
+VGGT & bicycle & 1000 & random & 21.656 & 0.577 & 0.483 & 0.234 & 0.434 \\
+VGGT & bicycle & 5000 & random & 22.493 & 0.420 & 0.566 & 0.395 & 0.362 \\
+VGGT & bicycle & 10000 & random & 22.742 & 0.367 & 0.596 & 0.449 & 0.336 \\
+VGGT & bicycle & 50000 & random & \underline{22.830} & 0.273 & \textbf{0.634} & \underline{0.532} & 0.294 \\
+VGGT & bicycle & 100000 & random & 22.770 & 0.248 & \textbf{0.634} & \textbf{0.546} & \textbf{0.286} \\
+VGGT & bicycle & 500000 & random & 22.331 & \textbf{0.233} & 0.605 & 0.530 & \underline{0.289} \\
+VGGT & bicycle & 1000000 & random & 22.059 & \underline{0.243} & 0.585 & 0.507 & 0.298 \\
+\midrule
+COLMAP & kitchen & 92853 &  & \textbf{27.952} & \textbf{0.122} & \textbf{0.902} & \textbf{0.876} & \textbf{0.145} \\
+VGGT & kitchen & 1000 & random & 24.850 & 0.234 & 0.813 & 0.698 & 0.223 \\
+VGGT & kitchen & 5000 & random & 26.089 & 0.161 & 0.872 & 0.800 & 0.174 \\
+VGGT & kitchen & 10000 & random & \underline{26.189} & 0.144 & 0.884 & 0.820 & 0.162 \\
+VGGT & kitchen & 50000 & random & 25.982 & 0.132 & \underline{0.890} & \underline{0.826} & \underline{0.155} \\
+VGGT & kitchen & 100000 & random & 25.888 & \underline{0.130} & \underline{0.890} & \underline{0.826} & \underline{0.155} \\
+VGGT & kitchen & 500000 & random & 25.448 & 0.133 & 0.882 & 0.811 & 0.160 \\
+VGGT & kitchen & 1000000 & random & 25.199 & 0.136 & 0.879 & 0.803 & 0.162 \\
+\midrule
+COLMAP & ship & 5138 &  & 29.361 & 0.112 & 0.892 & 0.903 & 0.147 \\
+VGGT & ship & 870 & random & 29.384 & 0.135 & 0.893 & 0.889 & 0.155 \\
+VGGT & ship & 4350 & random & \textbf{29.945} & 0.108 & \textbf{0.900} & 0.920 & 0.142 \\
+VGGT & ship & 8700 & random & \underline{29.940} & 0.104 & \underline{0.899} & 0.922 & \underline{0.141} \\
+VGGT & ship & 43500 & random & 29.911 & 0.097 & 0.896 & \textbf{0.925} & \textbf{0.140} \\
+VGGT & ship & 87000 & random & 29.874 & 0.094 & 0.894 & \underline{0.924} & \textbf{0.140} \\
+VGGT & ship & 435000 & random & 29.730 & \underline{0.089} & 0.889 & 0.922 & \underline{0.141} \\
+VGGT & ship & 870000 & random & 29.696 & \textbf{0.087} & 0.887 & 0.921 & \underline{0.141} \\
+\bottomrule
+\end{tabular}
+\end{table}

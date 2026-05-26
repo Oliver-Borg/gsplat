@@ -1,0 +1,27 @@
+{
+    "seed": [
+        42
+    ],
+    "num_images": [
+        100
+    ],
+    "sampling_mode": [
+        "random"
+    ],
+    "use_ba": [
+        true,
+        false
+    ],
+    "match_colmap_points": [
+        true
+    ],
+    "random_init": [
+        true
+    ],
+    "gt_eval": true,
+    "choice": [
+        "colmap",
+        "vggt"
+    ],
+    "dataset": "bonsai"
+}

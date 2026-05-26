@@ -1,0 +1,56 @@
+\begin{table}[H]
+\caption{The effect of using ground truth extrinsics, intrinsics and points on VGGT and COLMAP results (First)}
+\label{tab:06_gt_cams_first}
+\small
+\begin{tabular}{lllllr}
+\toprule
+Choice & Dataset & Use Gt Extrinsics & Use Gt Intrinsics & Use Gt Points & Composite Quality ↑ \\
+\midrule
+COLMAP & bicycle &  &  &  & 0.357 \\
+COLMAP & bicycle &  &  & GT Points & 0.416 \\
+COLMAP & bicycle &  & GT Intrinsics &  & 0.349 \\
+COLMAP & bicycle &  & GT Intrinsics & GT Points & 0.401 \\
+COLMAP & bicycle & GT Extrinsics &  &  & 0.383 \\
+COLMAP & bicycle & GT Extrinsics &  & GT Points & 0.441 \\
+COLMAP & bicycle & GT Extrinsics & GT Intrinsics &  & \underline{0.474} \\
+COLMAP & bicycle & GT Extrinsics & GT Intrinsics & GT Points & \textbf{0.571} \\
+\midrule
+VGGT & bicycle &  &  &  & 0.103 \\
+VGGT & bicycle &  &  & GT Points & 0.127 \\
+VGGT & bicycle &  & GT Intrinsics &  & 0.122 \\
+VGGT & bicycle &  & GT Intrinsics & GT Points & 0.126 \\
+VGGT & bicycle & GT Extrinsics &  &  & 0.338 \\
+VGGT & bicycle & GT Extrinsics &  & GT Points & 0.363 \\
+VGGT & bicycle & GT Extrinsics & GT Intrinsics &  & \underline{0.546} \\
+VGGT & bicycle & GT Extrinsics & GT Intrinsics & GT Points & \textbf{0.569} \\
+\midrule
+COLMAP & bonsai &  &  &  & 0.604 \\
+COLMAP & bonsai &  &  & GT Points & 0.616 \\
+COLMAP & bonsai &  & GT Intrinsics &  & 0.605 \\
+COLMAP & bonsai &  & GT Intrinsics & GT Points & 0.615 \\
+COLMAP & bonsai & GT Extrinsics &  &  & 0.866 \\
+COLMAP & bonsai & GT Extrinsics &  & GT Points & \underline{0.876} \\
+COLMAP & bonsai & GT Extrinsics & GT Intrinsics &  & \underline{0.876} \\
+COLMAP & bonsai & GT Extrinsics & GT Intrinsics & GT Points & \textbf{0.891} \\
+\midrule
+VGGT & bonsai &  &  &  & 0.313 \\
+VGGT & bonsai &  &  & GT Points & 0.316 \\
+VGGT & bonsai &  & GT Intrinsics &  & 0.369 \\
+VGGT & bonsai &  & GT Intrinsics & GT Points & 0.382 \\
+VGGT & bonsai & GT Extrinsics &  &  & 0.370 \\
+VGGT & bonsai & GT Extrinsics &  & GT Points & 0.378 \\
+VGGT & bonsai & GT Extrinsics & GT Intrinsics &  & \underline{0.749} \\
+VGGT & bonsai & GT Extrinsics & GT Intrinsics & GT Points & \textbf{0.887} \\
+\midrule
+COLMAP & lego &  &  &  & 0.856 \\
+COLMAP & lego &  & GT Intrinsics &  & \underline{0.933} \\
+COLMAP & lego & GT Extrinsics &  &  & 0.889 \\
+COLMAP & lego & GT Extrinsics & GT Intrinsics &  & \textbf{1.072} \\
+\midrule
+VGGT & lego &  &  &  & 0.681 \\
+VGGT & lego &  & GT Intrinsics &  & 0.690 \\
+VGGT & lego & GT Extrinsics &  &  & \underline{0.850} \\
+VGGT & lego & GT Extrinsics & GT Intrinsics &  & \textbf{1.077} \\
+\bottomrule
+\end{tabular}
+\end{table}

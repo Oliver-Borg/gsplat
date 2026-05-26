@@ -1,0 +1,15 @@
+choice,dataset_collection,use_gt_extrinsics,use_gt_intrinsics,use_gt_points,quality
+COLMAP,outdoor,,,,0.45061284488275605
+COLMAP,outdoor,,,GT Points,0.40847170015989454
+COLMAP,outdoor,,GT Intrinsics,,0.3218466921856529
+COLMAP,outdoor,,GT Intrinsics,GT Points,0.3808534140707689
+COLMAP,outdoor,GT Extrinsics,,,0.38949222302111497
+COLMAP,outdoor,GT Extrinsics,,GT Points,0.45399054414347595
+COLMAP,outdoor,GT Extrinsics,GT Intrinsics,,0.567230813561876
+COLMAP,outdoor,GT Extrinsics,GT Intrinsics,GT Points,0.5707900462365909
+VGGT,outdoor,,,,0.14369096964087766
+VGGT,outdoor,GT Extrinsics,GT Intrinsics,,0.6029251259282629
+COLMAP,indoor,,,,0.61416954219096
+COLMAP,indoor,GT Extrinsics,GT Intrinsics,,0.8417277801164641
+VGGT,indoor,,,,0.389294575161559
+VGGT,indoor,GT Extrinsics,GT Intrinsics,,0.776744742846112

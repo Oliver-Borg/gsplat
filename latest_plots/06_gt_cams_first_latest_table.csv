@@ -1,0 +1,41 @@
+choice,dataset,use_gt_extrinsics,use_gt_intrinsics,use_gt_points,quality
+COLMAP,bicycle,,,,0.3573433696410345
+COLMAP,bicycle,,,GT Points,0.4161776872793524
+COLMAP,bicycle,,GT Intrinsics,,0.3486792184920803
+COLMAP,bicycle,,GT Intrinsics,GT Points,0.4014413858327562
+COLMAP,bicycle,GT Extrinsics,,,0.382532453986249
+COLMAP,bicycle,GT Extrinsics,,GT Points,0.4405011377449234
+COLMAP,bicycle,GT Extrinsics,GT Intrinsics,,0.4735277968230691
+COLMAP,bicycle,GT Extrinsics,GT Intrinsics,GT Points,0.5706081853391598
+VGGT,bicycle,,,,0.10288788805231015
+VGGT,bicycle,,,GT Points,0.12716225759792515
+VGGT,bicycle,,GT Intrinsics,,0.1218986206429589
+VGGT,bicycle,,GT Intrinsics,GT Points,0.12644155262506498
+VGGT,bicycle,GT Extrinsics,,,0.3383105552529576
+VGGT,bicycle,GT Extrinsics,,GT Points,0.3626229752186756
+VGGT,bicycle,GT Extrinsics,GT Intrinsics,,0.5455420087149113
+VGGT,bicycle,GT Extrinsics,GT Intrinsics,GT Points,0.5694049526298874
+COLMAP,bonsai,,,,0.6035285908886177
+COLMAP,bonsai,,,GT Points,0.6160128481439215
+COLMAP,bonsai,,GT Intrinsics,,0.6045298188285753
+COLMAP,bonsai,,GT Intrinsics,GT Points,0.6152609519132783
+COLMAP,bonsai,GT Extrinsics,,,0.8661177225164037
+COLMAP,bonsai,GT Extrinsics,,GT Points,0.8764181146767327
+COLMAP,bonsai,GT Extrinsics,GT Intrinsics,,0.8755625190287151
+COLMAP,bonsai,GT Extrinsics,GT Intrinsics,GT Points,0.8913670293575296
+VGGT,bonsai,,,,0.31275946366624285
+VGGT,bonsai,,,GT Points,0.3157532414962442
+VGGT,bonsai,,GT Intrinsics,,0.3692004225562345
+VGGT,bonsai,,GT Intrinsics,GT Points,0.3819916716948045
+VGGT,bonsai,GT Extrinsics,,,0.3695476130280424
+VGGT,bonsai,GT Extrinsics,,GT Points,0.37786367951932864
+VGGT,bonsai,GT Extrinsics,GT Intrinsics,,0.7491229822916052
+VGGT,bonsai,GT Extrinsics,GT Intrinsics,GT Points,0.8874214896720443
+COLMAP,lego,,,,0.8557490702280368
+COLMAP,lego,,GT Intrinsics,,0.9332785513481975
+COLMAP,lego,GT Extrinsics,,,0.8890466676169281
+COLMAP,lego,GT Extrinsics,GT Intrinsics,,1.0721918949064608
+VGGT,lego,,,,0.681244413590493
+VGGT,lego,,GT Intrinsics,,0.69027371461551
+VGGT,lego,GT Extrinsics,,,0.8500471238949765
+VGGT,lego,GT Extrinsics,GT Intrinsics,,1.0766449147391195

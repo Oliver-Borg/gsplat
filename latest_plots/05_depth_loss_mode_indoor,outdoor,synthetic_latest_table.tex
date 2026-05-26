@@ -1,0 +1,31 @@
+\begin{table}[H]
+\caption{COLMAP versus VGGT with depth loss for different depth loss modes. (Indoor,Outdoor,Synthetic)}
+\label{tab:05_depth_loss_mode_indoor,outdoor,synthetic}
+\small
+\begin{tabular}{lllrrrrrr}
+\toprule
+Choice & Dataset Collection & Depth Loss Mode & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP & indoor &  & \textbf{0.098} & \textbf{0.007} & \textbf{23.826} & \textbf{0.168} & \textbf{0.708} & \textbf{0.658} \\
+COLMAP & indoor & points & \textbf{0.098} & \textbf{0.007} & \underline{23.534} & \underline{0.175} & \textbf{0.708} & \underline{0.648} \\
+VGGT & indoor &  & \underline{0.468} & \underline{0.057} & 19.416 & 0.271 & 0.538 & 0.413 \\
+VGGT & indoor & closer & \underline{0.468} & \underline{0.057} & 19.635 & 0.266 & \underline{0.547} & 0.426 \\
+VGGT & indoor & full & \underline{0.468} & \underline{0.057} & 19.097 & 0.283 & 0.537 & 0.400 \\
+VGGT & indoor & points & \underline{0.468} & \underline{0.057} & 19.249 & 0.287 & 0.544 & 0.404 \\
+\midrule
+COLMAP & outdoor &  & \textbf{0.061} & \textbf{0.004} & \textbf{23.042} & \textbf{0.318} & \textbf{0.589} & \textbf{0.481} \\
+COLMAP & outdoor & points & \textbf{0.061} & \textbf{0.004} & \underline{22.849} & \underline{0.342} & \underline{0.571} & \underline{0.452} \\
+VGGT & outdoor &  & \underline{0.648} & \underline{0.085} & 18.343 & 0.389 & 0.344 & 0.207 \\
+VGGT & outdoor & closer & \underline{0.648} & \underline{0.085} & 18.449 & 0.385 & 0.342 & 0.210 \\
+VGGT & outdoor & full & \underline{0.648} & \underline{0.085} & 18.639 & 0.404 & 0.357 & 0.211 \\
+VGGT & outdoor & points & \underline{0.648} & \underline{0.085} & 18.383 & 0.422 & 0.350 & 0.191 \\
+\midrule
+COLMAP & synthetic &  & \underline{3.625} & \underline{0.140} & \textbf{23.258} & \underline{0.097} & \textbf{0.851} & \textbf{0.775} \\
+COLMAP & synthetic & points & \underline{3.625} & \underline{0.140} & \underline{23.176} & 0.101 & \underline{0.848} & \underline{0.769} \\
+VGGT & synthetic &  & \textbf{0.319} & \textbf{0.019} & 21.370 & \underline{0.097} & 0.797 & 0.709 \\
+VGGT & synthetic & closer & \textbf{0.319} & \textbf{0.019} & 21.006 & 0.103 & 0.790 & 0.694 \\
+VGGT & synthetic & full & \textbf{0.319} & \textbf{0.019} & 22.064 & \underline{0.097} & 0.814 & 0.732 \\
+VGGT & synthetic & points & \textbf{0.319} & \textbf{0.019} & 22.136 & \textbf{0.091} & 0.815 & 0.736 \\
+\bottomrule
+\end{tabular}
+\end{table}

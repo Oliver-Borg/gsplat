@@ -1,0 +1,37 @@
+\begin{table}[H]
+\caption{A comparison of random sampling the VGGT point cloud with GT cameras. (Outdoor)}
+\label{tab:03_random_gt_cams_outdoor}
+\small
+\begin{tabular}{llrlrrrrr}
+\toprule
+Choice & Dataset & Num Points & Sampling Mode & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ & Average Error ↓ \\
+\midrule
+COLMAP & bicycle & 17352 &  & \textbf{22.997} & 0.349 & \underline{0.610} & 0.474 & 0.326 \\
+VGGT & bicycle & 1000 & random & 21.656 & 0.577 & 0.483 & 0.234 & 0.434 \\
+VGGT & bicycle & 5000 & random & 22.493 & 0.420 & 0.566 & 0.395 & 0.362 \\
+VGGT & bicycle & 10000 & random & 22.742 & 0.367 & 0.596 & 0.449 & 0.336 \\
+VGGT & bicycle & 50000 & random & \underline{22.830} & 0.273 & \textbf{0.634} & \underline{0.532} & 0.294 \\
+VGGT & bicycle & 100000 & random & 22.770 & 0.248 & \textbf{0.634} & \textbf{0.546} & \textbf{0.286} \\
+VGGT & bicycle & 500000 & random & 22.331 & \textbf{0.233} & 0.605 & 0.530 & \underline{0.289} \\
+VGGT & bicycle & 1000000 & random & 22.059 & \underline{0.243} & 0.585 & 0.507 & 0.298 \\
+\midrule
+COLMAP & garden & 70656 &  & \textbf{24.718} & 0.249 & \textbf{0.722} & \textbf{0.633} & \underline{0.260} \\
+VGGT & garden & 1000 & random & 22.328 & 0.492 & 0.566 & 0.347 & 0.386 \\
+VGGT & garden & 5000 & random & 23.350 & 0.367 & 0.636 & 0.484 & 0.325 \\
+VGGT & garden & 10000 & random & 23.597 & 0.332 & 0.660 & 0.524 & 0.307 \\
+VGGT & garden & 50000 & random & \underline{23.905} & 0.267 & 0.700 & 0.594 & 0.273 \\
+VGGT & garden & 100000 & random & 23.762 & 0.249 & \underline{0.708} & 0.607 & 0.265 \\
+VGGT & garden & 500000 & random & 23.710 & \textbf{0.231} & \underline{0.708} & \underline{0.617} & \textbf{0.259} \\
+VGGT & garden & 1000000 & random & 23.315 & \underline{0.242} & 0.694 & 0.595 & 0.267 \\
+\midrule
+COLMAP & stump & 19683 &  & 25.440 & 0.342 & \underline{0.733} & 0.595 & 0.287 \\
+VGGT & stump & 1000 & random & 23.287 & 0.562 & 0.630 & 0.359 & 0.392 \\
+VGGT & stump & 5000 & random & 24.783 & 0.415 & 0.699 & 0.518 & 0.322 \\
+VGGT & stump & 10000 & random & 25.355 & 0.368 & 0.723 & 0.572 & 0.299 \\
+VGGT & stump & 50000 & random & \textbf{25.969} & 0.292 & \textbf{0.755} & \underline{0.649} & \underline{0.263} \\
+VGGT & stump & 100000 & random & \underline{25.891} & \textbf{0.276} & \textbf{0.755} & \textbf{0.657} & \textbf{0.258} \\
+VGGT & stump & 500000 & random & 25.262 & \underline{0.283} & 0.716 & 0.618 & 0.273 \\
+VGGT & stump & 1000000 & random & 24.385 & 0.312 & 0.669 & 0.557 & 0.297 \\
+\bottomrule
+\end{tabular}
+\end{table}

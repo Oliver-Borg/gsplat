@@ -1,0 +1,31 @@
+\begin{table}[H]
+\caption{COLMAP versus VGGT with depth loss for different depth loss modes. (Outdoor)}
+\label{tab:05_depth_loss_mode_outdoor}
+\small
+\begin{tabular}{lllrrrrrr}
+\toprule
+Choice & Dataset & Depth Loss Mode & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP & bicycle &  & \textbf{0.099} & \textbf{0.007} & \textbf{22.163} & 0.349 & \textbf{0.559} & \textbf{0.428} \\
+COLMAP & bicycle & points & \textbf{0.099} & \textbf{0.007} & \underline{21.660} & 0.392 & \underline{0.505} & \underline{0.361} \\
+VGGT & bicycle &  & \underline{0.716} & \underline{0.066} & 17.384 & \underline{0.338} & 0.268 & 0.176 \\
+VGGT & bicycle & closer & \underline{0.716} & \underline{0.066} & 17.500 & \textbf{0.329} & 0.266 & 0.183 \\
+VGGT & bicycle & full & \underline{0.716} & \underline{0.066} & 18.110 & 0.351 & 0.293 & 0.196 \\
+VGGT & bicycle & points & \underline{0.716} & \underline{0.066} & 17.406 & 0.383 & 0.269 & 0.150 \\
+\midrule
+COLMAP & garden &  & \textbf{0.063} & \textbf{0.003} & \textbf{22.130} & \textbf{0.264} & \textbf{0.512} & \textbf{0.453} \\
+COLMAP & garden & points & \textbf{0.063} & \textbf{0.003} & \underline{21.959} & \underline{0.272} & \underline{0.499} & \underline{0.437} \\
+VGGT & garden &  & \underline{0.373} & \underline{0.027} & 19.351 & 0.338 & 0.366 & 0.270 \\
+VGGT & garden & closer & \underline{0.373} & \underline{0.027} & 19.498 & 0.332 & 0.360 & 0.273 \\
+VGGT & garden & full & \underline{0.373} & \underline{0.027} & 19.402 & 0.346 & 0.371 & 0.269 \\
+VGGT & garden & points & \underline{0.373} & \underline{0.027} & 19.362 & 0.361 & 0.374 & 0.261 \\
+\midrule
+COLMAP & stump &  & \textbf{0.022} & \textbf{0.002} & \underline{24.833} & \textbf{0.340} & \underline{0.696} & \textbf{0.563} \\
+COLMAP & stump & points & \textbf{0.022} & \textbf{0.002} & \textbf{24.930} & \underline{0.363} & \textbf{0.709} & \underline{0.558} \\
+VGGT & stump &  & \underline{0.856} & \underline{0.163} & 18.294 & 0.492 & 0.398 & 0.174 \\
+VGGT & stump & closer & \underline{0.856} & \underline{0.163} & 18.349 & 0.494 & 0.398 & 0.174 \\
+VGGT & stump & full & \underline{0.856} & \underline{0.163} & 18.406 & 0.515 & 0.408 & 0.168 \\
+VGGT & stump & points & \underline{0.856} & \underline{0.163} & 18.381 & 0.521 & 0.407 & 0.163 \\
+\bottomrule
+\end{tabular}
+\end{table}

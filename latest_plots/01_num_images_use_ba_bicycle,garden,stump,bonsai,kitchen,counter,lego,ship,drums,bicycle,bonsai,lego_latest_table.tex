@@ -1,0 +1,154 @@
+\begin{table}[H]
+\caption{COLMAP versus VGGT+BA over various number of images (Bicycle,Garden,Stump,Bonsai,Kitchen,Counter,Lego,Ship,Drums,Bicycle,Bonsai,Lego)}
+\label{tab:01_num_images_use_ba_bicycle,garden,stump,bonsai,kitchen,counter,lego,ship,drums,bicycle,bonsai,lego}
+\small
+\begin{tabular}{llrlrrrrrr}
+\toprule
+Choice & Dataset & Num Images & Use Ba & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP & bicycle & 20 &  & 19.486 & 0.240 & 9.328 & 0.987 & 0.011 & -0.524 \\
+COLMAP & bicycle & 40 &  & 0.263 & 0.018 & 14.498 & 0.694 & 0.265 & -0.098 \\
+COLMAP & bicycle & 60 &  & \underline{0.122} & 0.010 & 17.236 & 0.545 & \underline{0.331} & 0.082 \\
+COLMAP & bicycle & 80 &  & 0.160 & \textbf{0.006} & \underline{17.764} & 0.481 & 0.330 & \underline{0.131} \\
+COLMAP & bicycle & 100 &  & \textbf{0.099} & \underline{0.007} & \textbf{21.332} & \textbf{0.364} & \textbf{0.480} & \textbf{0.357} \\
+VGGT & bicycle & 20 & Use BA & 1.342 & 0.085 &  &  &  &  \\
+VGGT & bicycle & 20 &  & 1.149 & 0.124 & 15.574 & 0.478 & 0.191 & 0.012 \\
+VGGT & bicycle & 40 & Use BA & 0.660 & 0.049 &  &  &  &  \\
+VGGT & bicycle & 40 &  & 0.997 & 0.089 & 15.946 & 0.472 & 0.207 & 0.032 \\
+VGGT & bicycle & 60 & Use BA & 0.631 & 0.041 &  &  &  &  \\
+VGGT & bicycle & 60 &  & 0.671 & 0.071 & 16.939 & \underline{0.425} & 0.236 & 0.096 \\
+VGGT & bicycle & 80 & Use BA & 0.586 & 0.040 &  &  &  &  \\
+VGGT & bicycle & 80 &  & 0.660 & 0.070 & 17.035 & 0.433 & 0.248 & 0.100 \\
+VGGT & bicycle & 100 & Use BA & 0.590 & 0.038 &  &  &  &  \\
+VGGT & bicycle & 100 &  & 0.716 & 0.066 & 17.174 & 0.441 & 0.257 & 0.103 \\
+\midrule
+COLMAP & garden & 20 &  & 0.071 & \underline{0.005} & 20.025 & 0.411 & 0.428 & 0.273 \\
+COLMAP & garden & 40 &  & \textbf{0.055} & \textbf{0.003} & \underline{21.741} & 0.325 & \textbf{0.506} & 0.404 \\
+COLMAP & garden & 60 &  & 0.061 & \textbf{0.003} & 21.491 & 0.294 & 0.475 & 0.401 \\
+COLMAP & garden & 80 &  & \underline{0.060} & \textbf{0.003} & \textbf{21.892} & \underline{0.279} & \underline{0.492} & \textbf{0.428} \\
+COLMAP & garden & 100 &  & 0.063 & \textbf{0.003} & 21.593 & \textbf{0.271} & 0.467 & \underline{0.412} \\
+VGGT & garden & 20 & Use BA & 0.553 & 0.024 &  &  &  &  \\
+VGGT & garden & 20 &  & 0.304 & 0.021 & 17.636 & 0.388 & 0.292 & 0.164 \\
+VGGT & garden & 40 & Use BA & 0.422 & 0.016 &  &  &  &  \\
+VGGT & garden & 40 &  & 0.289 & 0.025 & 18.478 & 0.399 & 0.332 & 0.196 \\
+VGGT & garden & 60 & Use BA & 0.368 & 0.014 &  &  &  &  \\
+VGGT & garden & 60 &  & 0.345 & 0.027 & 18.577 & 0.428 & 0.343 & 0.187 \\
+VGGT & garden & 80 & Use BA & 0.333 & 0.014 &  &  &  &  \\
+VGGT & garden & 80 &  & 0.337 & 0.027 & 18.649 & 0.454 & 0.352 & 0.177 \\
+VGGT & garden & 100 & Use BA & 0.329 & 0.014 &  &  &  &  \\
+VGGT & garden & 100 &  & 0.373 & 0.027 & 18.582 & 0.482 & 0.357 & 0.162 \\
+\midrule
+COLMAP & stump & 20 &  & 0.868 & 0.031 & 13.261 & 0.903 & 0.219 & -0.277 \\
+COLMAP & stump & 40 &  & 0.170 & 0.004 & 14.148 & 0.660 & 0.318 & -0.053 \\
+COLMAP & stump & 60 &  & 0.046 & 0.006 & 22.321 & 0.456 & 0.594 & 0.386 \\
+COLMAP & stump & 80 &  & \underline{0.028} & \underline{0.003} & \underline{24.567} & \underline{0.375} & \underline{0.696} & \underline{0.537} \\
+COLMAP & stump & 100 &  & \textbf{0.022} & \textbf{0.002} & \textbf{25.254} & \textbf{0.345} & \textbf{0.721} & \textbf{0.583} \\
+VGGT & stump & 20 & Use BA & 2.217 & 0.235 &  &  &  &  \\
+VGGT & stump & 20 &  & 1.511 & 0.299 & 15.908 & 0.552 & 0.288 & 0.029 \\
+VGGT & stump & 40 & Use BA & 1.251 & 0.073 &  &  &  &  \\
+VGGT & stump & 40 &  & 0.870 & 0.126 & 17.673 & 0.509 & 0.353 & 0.126 \\
+VGGT & stump & 60 & Use BA & 0.856 & 0.057 &  &  &  &  \\
+VGGT & stump & 60 &  & 0.979 & 0.149 & 17.935 & 0.517 & 0.372 & 0.137 \\
+VGGT & stump & 80 & Use BA & 0.847 & 0.050 &  &  &  &  \\
+VGGT & stump & 80 &  & 1.059 & 0.163 & 18.664 & 0.508 & 0.402 & 0.174 \\
+VGGT & stump & 100 & Use BA & 0.695 & 0.043 &  &  &  &  \\
+VGGT & stump & 100 &  & 0.856 & 0.163 & 18.644 & 0.530 & 0.412 & 0.166 \\
+\midrule
+COLMAP & bonsai & 20 &  & 0.454 & \textbf{0.008} & 12.781 & 0.581 & 0.370 & 0.001 \\
+COLMAP & bonsai & 40 &  & 1.264 & 0.122 & 16.021 & 0.479 & 0.519 & 0.211 \\
+COLMAP & bonsai & 60 &  & \underline{0.213} & \underline{0.012} & 20.667 & 0.253 & \underline{0.639} & 0.507 \\
+COLMAP & bonsai & 80 &  & 0.254 & 0.015 & \underline{20.761} & \underline{0.244} & 0.629 & \underline{0.508} \\
+COLMAP & bonsai & 100 &  & \textbf{0.158} & 0.013 & \textbf{22.423} & \textbf{0.204} & \textbf{0.697} & \textbf{0.604} \\
+VGGT & bonsai & 20 & Use BA & 0.722 & 0.035 &  &  &  &  \\
+VGGT & bonsai & 20 &  & 0.872 & 0.106 & 16.017 & 0.489 & 0.489 & 0.188 \\
+VGGT & bonsai & 40 & Use BA & 0.723 & 0.040 &  &  &  &  \\
+VGGT & bonsai & 40 &  & 0.891 & 0.104 & 16.336 & 0.469 & 0.516 & 0.221 \\
+VGGT & bonsai & 60 & Use BA & 0.658 & 0.040 &  &  &  &  \\
+VGGT & bonsai & 60 &  & 0.864 & 0.103 & 16.860 & 0.449 & 0.540 & 0.257 \\
+VGGT & bonsai & 80 & Use BA & 0.755 & 0.041 &  &  &  &  \\
+VGGT & bonsai & 80 &  & 0.902 & 0.112 & 17.384 & 0.431 & 0.561 & 0.290 \\
+VGGT & bonsai & 100 & Use BA & 0.579 & 0.034 &  &  &  &  \\
+VGGT & bonsai & 100 &  & 0.722 & 0.106 & 17.731 & 0.418 & 0.575 & 0.313 \\
+\midrule
+COLMAP & kitchen & 20 &  & 0.239 & 0.009 & 16.503 & 0.423 & 0.417 & 0.195 \\
+COLMAP & kitchen & 40 &  & 0.130 & 0.007 & 19.850 & 0.201 & 0.438 & 0.406 \\
+COLMAP & kitchen & 60 &  & 0.121 & 0.006 & 20.636 & 0.172 & 0.460 & 0.451 \\
+COLMAP & kitchen & 80 &  & \underline{0.111} & \underline{0.005} & \underline{20.917} & \underline{0.156} & 0.455 & \underline{0.464} \\
+COLMAP & kitchen & 100 &  & \textbf{0.107} & \textbf{0.004} & \textbf{21.260} & \textbf{0.149} & \textbf{0.471} & \textbf{0.484} \\
+VGGT & kitchen & 20 & Use BA & 0.535 & 0.025 &  &  &  &  \\
+VGGT & kitchen & 20 &  & 0.305 & 0.029 & 17.384 & 0.343 & 0.396 & 0.248 \\
+VGGT & kitchen & 40 & Use BA & 0.447 & 0.018 &  &  &  &  \\
+VGGT & kitchen & 40 &  & 0.336 & 0.033 & 17.735 & 0.296 & 0.396 & 0.283 \\
+VGGT & kitchen & 60 & Use BA & 0.431 & 0.023 &  &  &  &  \\
+VGGT & kitchen & 60 &  & 0.337 & 0.035 & 18.748 & 0.262 & 0.429 & 0.343 \\
+VGGT & kitchen & 80 & Use BA & 0.440 & 0.023 &  &  &  &  \\
+VGGT & kitchen & 80 &  & 0.332 & 0.031 & 19.533 & 0.240 & 0.456 & 0.387 \\
+VGGT & kitchen & 100 & Use BA & 0.454 & 0.023 &  &  &  &  \\
+VGGT & kitchen & 100 &  & 0.339 & 0.031 & 19.821 & 0.239 & \underline{0.463} & 0.396 \\
+\midrule
+COLMAP & counter & 20 &  & 0.116 & \textbf{0.001} & 9.049 & 0.806 & 0.385 & -0.199 \\
+COLMAP & counter & 40 &  & 0.178 & 0.004 & 16.444 & 0.448 & 0.517 & 0.237 \\
+COLMAP & counter & 60 &  & 0.123 & 0.009 & 21.973 & 0.249 & 0.729 & 0.586 \\
+COLMAP & counter & 80 &  & \underline{0.037} & \underline{0.002} & \underline{24.332} & \underline{0.205} & \underline{0.836} & \underline{0.720} \\
+COLMAP & counter & 100 &  & \textbf{0.029} & \underline{0.002} & \textbf{25.221} & \textbf{0.189} & \textbf{0.852} & \textbf{0.755} \\
+VGGT & counter & 20 & Use BA & 0.486 & 0.028 &  &  &  &  \\
+VGGT & counter & 20 &  & 0.487 & 0.036 & 16.006 & 0.454 & 0.467 & 0.196 \\
+VGGT & counter & 40 & Use BA & 0.423 & 0.020 &  &  &  &  \\
+VGGT & counter & 40 &  & 0.357 & 0.041 & 18.036 & 0.375 & 0.545 & 0.328 \\
+VGGT & counter & 60 & Use BA & 0.440 & 0.017 &  &  &  &  \\
+VGGT & counter & 60 &  & 0.408 & 0.037 & 18.857 & 0.347 & 0.582 & 0.382 \\
+VGGT & counter & 80 & Use BA & 0.450 & 0.017 &  &  &  &  \\
+VGGT & counter & 80 &  & 0.353 & 0.035 & 19.900 & 0.316 & 0.620 & 0.442 \\
+VGGT & counter & 100 & Use BA & 0.421 & 0.017 &  &  &  &  \\
+VGGT & counter & 100 &  & 0.343 & 0.033 & 20.160 & 0.307 & 0.630 & 0.459 \\
+\midrule
+COLMAP & lego & 20 &  & 111.389 & 0.023 & 10.804 & 0.512 & 0.676 & 0.186 \\
+COLMAP & lego & 40 &  & 173.622 & 3.772 & 10.878 & 0.523 & 0.633 & 0.155 \\
+COLMAP & lego & 60 &  & 147.880 & 3.624 & 10.870 & 0.523 & 0.660 & 0.171 \\
+COLMAP & lego & 80 &  & 15.392 & 0.895 & 10.939 & 0.474 & 0.562 & 0.145 \\
+COLMAP & lego & 87 &  & 10.427 & 0.396 & \textbf{24.951} & \textbf{0.058} & \textbf{0.894} & \textbf{0.856} \\
+VGGT & lego & 20 & Use BA & 0.799 & 0.045 &  &  &  &  \\
+VGGT & lego & 20 &  & 2.282 & 0.137 & 13.511 & 0.338 & 0.610 & 0.304 \\
+VGGT & lego & 40 & Use BA & 0.518 & 0.020 &  &  &  &  \\
+VGGT & lego & 40 &  & 1.337 & 0.069 & 14.379 & 0.276 & 0.654 & 0.385 \\
+VGGT & lego & 60 & Use BA & 0.341 & \underline{0.016} &  &  &  &  \\
+VGGT & lego & 60 &  & 0.603 & 0.029 & 16.232 & 0.189 & 0.709 & 0.505 \\
+VGGT & lego & 80 & Use BA & 0.299 & \textbf{0.014} &  &  &  &  \\
+VGGT & lego & 80 &  & 0.347 & 0.019 & 19.915 & 0.103 & 0.765 & 0.659 \\
+VGGT & lego & 87 & Use BA & 0.269 & \underline{0.016} &  &  &  &  \\
+VGGT & lego & 87 &  & \underline{0.298} & 0.019 & \underline{20.573} & \underline{0.095} & \underline{0.774} & \underline{0.681} \\
+\midrule
+COLMAP & ship & 20 &  & 0.279 & \textbf{0.010} & 15.900 & 0.413 & 0.527 & 0.255 \\
+COLMAP & ship & 40 &  & 12.248 & 0.483 & 17.629 & 0.342 & 0.593 & 0.368 \\
+COLMAP & ship & 60 &  & 0.706 & 0.026 & 20.769 & 0.177 & 0.710 & 0.597 \\
+COLMAP & ship & 80 &  & \textbf{0.214} & \underline{0.012} & \textbf{22.775} & \underline{0.146} & \textbf{0.760} & \textbf{0.683} \\
+COLMAP & ship & 87 &  & 0.277 & 0.015 & 21.593 & 0.155 & \underline{0.733} & 0.639 \\
+VGGT & ship & 20 & Use BA & 0.507 & 0.025 &  &  &  &  \\
+VGGT & ship & 20 &  & 0.369 & 0.023 & 21.624 & 0.164 & 0.709 & 0.620 \\
+VGGT & ship & 40 & Use BA & 0.413 & 0.016 &  &  &  &  \\
+VGGT & ship & 40 &  & \underline{0.270} & 0.018 & 21.399 & 0.162 & 0.698 & 0.611 \\
+VGGT & ship & 60 & Use BA & 0.332 & 0.018 &  &  &  &  \\
+VGGT & ship & 60 &  & 0.379 & 0.021 & \underline{22.637} & \textbf{0.144} & 0.727 & \underline{0.662} \\
+VGGT & ship & 80 & Use BA & 0.402 & 0.024 &  &  &  &  \\
+VGGT & ship & 80 &  & 0.457 & 0.026 & 21.483 & 0.164 & 0.712 & 0.619 \\
+VGGT & ship & 87 & Use BA & 0.429 & 0.025 &  &  &  &  \\
+VGGT & ship & 87 &  & 0.487 & 0.028 & 20.871 & 0.176 & 0.701 & 0.594 \\
+\midrule
+COLMAP & drums & 20 &  & 5.120 & \textbf{0.004} & 4.959 & 0.884 & 0.082 & -0.499 \\
+COLMAP & drums & 40 &  & 0.917 & \underline{0.006} & 12.097 & 0.463 & 0.462 & 0.115 \\
+COLMAP & drums & 60 &  & 0.295 & 0.013 & 18.549 & 0.150 & 0.804 & 0.627 \\
+COLMAP & drums & 80 &  & 0.227 & 0.012 & \underline{20.440} & \underline{0.101} & \underline{0.853} & \underline{0.721} \\
+COLMAP & drums & 87 &  & \textbf{0.153} & 0.010 & \textbf{22.469} & \textbf{0.093} & \textbf{0.899} & \textbf{0.791} \\
+VGGT & drums & 20 & Use BA & 0.337 & 0.014 &  &  &  &  \\
+VGGT & drums & 20 &  & 0.854 & 0.053 & 13.111 & 0.359 & 0.642 & 0.303 \\
+VGGT & drums & 40 & Use BA & 0.254 & 0.011 &  &  &  &  \\
+VGGT & drums & 40 &  & 0.373 & 0.019 & 17.820 & 0.124 & 0.790 & 0.622 \\
+VGGT & drums & 60 & Use BA & 0.250 & 0.013 &  &  &  &  \\
+VGGT & drums & 60 &  & 0.367 & 0.019 & 19.182 & 0.105 & 0.829 & 0.682 \\
+VGGT & drums & 80 & Use BA & 0.234 & 0.010 &  &  &  &  \\
+VGGT & drums & 80 &  & 0.182 & 0.010 & 19.598 & 0.104 & 0.833 & 0.692 \\
+VGGT & drums & 87 & Use BA & 0.235 & 0.011 &  &  &  &  \\
+VGGT & drums & 87 &  & \underline{0.173} & 0.010 & 19.668 & 0.106 & 0.836 & 0.694 \\
+\bottomrule
+\end{tabular}
+\end{table}
