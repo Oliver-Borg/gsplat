@@ -668,6 +668,9 @@ class Config:
         # if self.choice == "colmap":
         #     return True
 
+        # if self.sampling_mode == "imagefreq":
+        #     return True
+
         if (
             self.choice == "combined"
             and self.reconstruction_time < datetime.datetime(2026, 5, 19, 18, 00, 0).timestamp()
@@ -938,6 +941,12 @@ class Config:
             print(f"{Path(self.splatting_val_path)} not found. Running splatting")
         print(f"Using data from: {Path(self.data_dir)}")
         print(f"Result dir: {Path(self.result_dir)}")
+        # Resolve the libstdc++.so.6 path before building the command
+        try:
+            libstdc_path = subprocess.check_output(["gcc", "--print-file-name=libstdc++.so.6"], text=True).strip()
+        except (subprocess.SubprocessError, FileNotFoundError):
+            libstdc_path = None
+
         command = [
             GSPLAT_PYTHON,
             "examples/simple_trainer.py",
@@ -1009,6 +1018,8 @@ class Config:
             command.append(str(self.num_points))
 
         env = os.environ.copy()
+        if libstdc_path:
+            env["LD_PRELOAD"] = libstdc_path
         if gpu is not None:
             env["CUDA_VISIBLE_DEVICES"] = gpu
 
@@ -1058,6 +1069,7 @@ class PlotConfig:
     make_camera_plot: bool = False
     make_pcd_plot: bool = False
     horizontal_datasets: bool = True
+    only_best_rows: bool = False
 
 
 @dataclass
@@ -1318,6 +1330,7 @@ class Experiment:
             make_camera_plot=self.plot_args.make_camera_plot,
             make_pcd_plot=self.plot_args.make_pcd_plot,
             stack_datasets_horizontally=self.plot_args.horizontal_datasets,
+            only_best_rows=self.plot_args.only_best_rows,
         )
 
         # print("Plotted metrics from these files")
@@ -1454,11 +1467,11 @@ experiments = [
             raw_metrics=True,
             metric_keys=["rre", "rte", "psnr", "lpips", "ssim", "quality"],
             horizontal_datasets=False,
+            make_pcd_plot=True,
         ),
         render_filter_override={
-            "num_images": [20, 40, 60, 100],
+            "num_images": [100],
             "seed": [42],
-            "pose_opt": [True],
         },
         priority="medium",
     ),
@@ -1581,7 +1594,7 @@ experiments = [
             x_axis="num_points",
             split_param="sampling_mode",
             metric_keys=["rre", "rte", "psnr", "lpips", "ssim", "quality"],
-            raw_metrics=True,
+            raw_metrics=False,
             make_pcd_plot=True,
             max_render_cols=4,
             horizontal_datasets=False,
@@ -1617,7 +1630,73 @@ experiments = [
             raw_metrics=False,
             max_render_cols=4,
             horizontal_datasets=False,
+            only_best_rows=True,
         ),
+        render_filter_override={
+            "seed": [42],
+            "num_points_per_image": [1000],
+            "sampling_mode": ["voxels", "random", "confidence"]
+        },
+        priority="high",
+    ),
+    Experiment(
+        "random_gt_cams",
+        3,
+        "A comparison of random sampling of the VGGT point cloud with GT cameras.",
+        {
+            "seed": [42],
+            "num_images": [100],
+            "sampling_mode": ["random"],
+            "num_points_per_image": [10, 50, 100, 500, 1000, 5000, 10000],
+            "choice": ["vggt", "colmap"],
+            "use_gt_cams": [True],
+            "gt_eval": True,
+        },
+        PlotConfig(
+            x_axis="num_points",
+            split_param="sampling_mode",
+            metric_keys=["psnr", "lpips", "ssim", "quality", "avge"],
+            raw_metrics=False,
+            max_render_cols=3,
+            horizontal_datasets=False,
+            only_best_rows=False,
+            make_pcd_plot=True,
+        ),
+        render_filter_override={
+            "seed": [42],
+            "num_points_per_image": [10, 100, 1000, 10000],
+        },
+        priority="high",
+    ),
+    Experiment(
+        "sampling_mode_single",
+        3,
+        "A comparison of different VGGT point cloud sampling modes for 100000 points",
+        {
+            "seed": [42],
+            "num_images": [100],
+            # "sampling_mode": ["voxels", "random", "confidence", "ba", "imagefps", "imagefreq"],
+            "sampling_mode": ["random", "imagefreqnovis", "imagefreqvoxels"],  # , "imagefreq"
+            "num_points_per_image": [100, 500, 1000, 5000],
+            # "num_points_per_image": [1000],
+            # "near_filtering_strength": [0.0, 0.9],
+            # "near_filtering_quorum": 10,
+            "choice": ["vggt", "colmap"],
+            # "choice": ["vggt"],
+            "use_gt_cams": [True],
+            "gt_eval": True,
+            "num_steps": 7000,
+        },
+        PlotConfig(
+            x_axis="num_points",
+            split_param="sampling_mode,near_filtering_strength",
+            metric_keys=["psnr", "lpips", "ssim", "quality", "avge"],
+            raw_metrics=False,
+            max_render_cols=4,
+            make_pcd_plot=True,
+            horizontal_datasets=False,
+        ),
+        val_steps=[7000],
         render_filter_override={
             "seed": [42],
             "num_points_per_image": [1000],
@@ -2178,8 +2257,43 @@ experiments = [
         PlotConfig(
             x_axis="",
             split_param="depth_loss_mode",
-            metric_keys=["rre", "rte", "psnr", "lpips", "ssim", "quality"],
-            # metric_keys=["rre", "psnr", "lpips", "ssim", "pred_depth_absrel", "depth_abs_rel"],
+            # metric_keys=["rre", "rte", "psnr", "lpips", "ssim", "quality"],
+            metric_keys=["rre", "psnr", "lpips", "ssim", "pred_depth_absrel", "depth_abs_rel"],
+            show_depth=True,
+            show_gt=True,
+            max_render_cols=4,
+            horizontal_datasets=False,
+            # render_nums=[0, 2, 3, 4, 5],
+            render_nums=[3],
+            make_camera_plot=True,
+        ),
+        render_filter_override={
+            "seed": [42],
+            "num_images": [100],
+            "depth_lambda": [1.0],
+        },
+        priority="high",
+    ),
+    Experiment(
+        "depth_loss_mode_colmap_cams",
+        5,
+        "VGGT with depth loss for different depth loss modes with COLMAP cameras.",
+        {
+            "seed": [42],  # , 43, 44
+            "num_images": [100],
+            "sampling_mode": ["random"],
+            "depth_loss_mode": ["disabled", "points", "full", "closer"],
+            "choice": ["combined"],
+            "camera_src": ["colmap"],
+            "pcd_src": ["vggt"],
+            "depth_lambda": [1.0],
+            "depth_conf_mode": ["disabled"],
+        },
+        PlotConfig(
+            x_axis="",
+            split_param="depth_loss_mode",
+            # metric_keys=["rre", "rte", "psnr", "lpips", "ssim", "quality"],
+            metric_keys=["rre", "psnr", "lpips", "ssim", "pred_depth_absrel", "depth_abs_rel"],
             show_depth=True,
             show_gt=True,
             max_render_cols=4,
@@ -2231,14 +2345,14 @@ experiments = [
     Experiment(
         "depth_conf_mode",
         5,
-        "COLMAP versus VGGT with depth loss for different depth confidence modes.",
+        "VGGT with depth loss for different depth confidence modes.",
         {
             "seed": [42],  # , 43, 44
             "num_images": [100],
             "sampling_mode": ["random"],
             "depth_loss_mode": ["closer"],
             "pose_opt": [True],
-            "choice": ["vggt", "colmap"],
+            "choice": ["vggt"],
             "depth_lambda": [1.0],
             "depth_conf_mode": [
                 "disabled",
@@ -2422,17 +2536,18 @@ experiments = [
         PlotConfig(
             x_axis="",
             split_param="use_gt_extrinsics,use_gt_intrinsics,use_gt_points",
-            metric_keys=["quality"],
+            metric_keys=["eval_rre", "eval_rte", "quality"],
             split_choice=True,
             shared_colors=True,
             max_render_cols=4,
             horizontal_datasets=False,
         ),
-        render_filter_override={
-            "seed": [42],
-            "num_images": [100],
-        },
+        # render_filter_override={
+        #     "seed": [42],
+        #     "num_images": [100],
+        # },
         val_steps=[15000],
+        priority="high",
     ),
     Experiment(
         "isolated_cams",
@@ -2443,16 +2558,16 @@ experiments = [
             "num_images": [100],
             "sampling_mode": ["random"],
             "use_ba": [True, False],
-            "match_colmap_points": [True, False],
+            "match_colmap_points": [True],
             "random_init": [True],
-            "pose_opt": [True, False],
+            # "pose_opt": [True, False],
             "gt_eval": True,
             "choice": ["colmap", "vggt"],
         },
         PlotConfig(
             x_axis="real_num_points",
-            split_param="random_init,pose_opt,use_ba",
-            metric_keys=["eval_rre", "eval_rte", "num_aligned", "quality"],
+            split_param="random_init,use_ba",
+            metric_keys=["eval_rre", "eval_rte", "quality"],
             max_render_cols=4,
             horizontal_datasets=False,
             render_nums=[0, 2],
@@ -2473,7 +2588,7 @@ experiments = [
             "sampling_mode": ["random"],
             "use_ba": [True, False],
             "random_init": [True],
-            "pose_opt": [True, False],
+            # "pose_opt": [True, False],
             "gt_eval": True,
             "choice": ["colmap", "vggt"],
         },
@@ -2482,10 +2597,10 @@ experiments = [
             split_param="random_init,pose_opt,use_ba",
             metric_keys=["eval_rre", "eval_rte", "real_num_points", "psnr", "ssim", "lpips"],
         ),
-        priority="high",
+        priority="medium",
     ),
     Experiment(
-        "isolated_cams_point_clouds",
+        "isolated_cams_point_clouds",  # TODO I think this should be in the combined section
         6,
         "COLMAP cameras with different point cloud sources.",
         {
@@ -2509,7 +2624,7 @@ experiments = [
             "seed": [42],
             "num_images": [100],
         },
-        priority="high",
+        priority="medium",
     ),
     Experiment(
         "isolated_cams_vggt",
@@ -2939,8 +3054,13 @@ experiment_dict = {exp.name: exp for exp in experiments}
 
 dataset_values = []
 
-for v in dataset_collections.values():
-    dataset_values.extend(v)
+for collection in dataset_collections.values():
+    for v in collection:
+        if v in dataset_values:
+            continue
+        dataset_values.append(v)
+
+dataset_values = list(set(dataset_values))
 
 dataset_collections.update({"all": dataset_values})
 
