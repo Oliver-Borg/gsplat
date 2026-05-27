@@ -1,0 +1,23 @@
+{
+    "seed": [
+        42
+    ],
+    "num_images": [
+        100
+    ],
+    "pose_opt": [
+        true,
+        false
+    ],
+    "gt_eval": [
+        true
+    ],
+    "choice": [
+        "vggt",
+        "colmap"
+    ],
+    "num_steps": [
+        15000
+    ],
+    "dataset": "bicycle"
+}

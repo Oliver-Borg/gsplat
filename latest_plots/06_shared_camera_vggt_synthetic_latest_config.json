@@ -1,0 +1,19 @@
+{
+    "num_images": [
+        100
+    ],
+    "seed": [
+        42
+    ],
+    "sampling_mode": [
+        "random"
+    ],
+    "choice": [
+        "vggt"
+    ],
+    "shared_camera": [
+        true,
+        false
+    ],
+    "dataset": "lego"
+}

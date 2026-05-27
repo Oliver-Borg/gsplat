@@ -1,0 +1,28 @@
+\begin{table}[H]
+\caption{COLMAP versus VGGT with pose optimization (Indoor)}
+\label{tab:04_pose_opt_indoor}
+\footnotesize
+\begin{tabular}{lllrrrrrr}
+\toprule
+Choice & Dataset & Pose Opt & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP & bonsai &  & \underline{0.158} & \underline{0.003} & \underline{22.423} & \underline{0.204} & \underline{0.697} & \underline{0.604} \\
+COLMAP & bonsai & Pose Opt & \textbf{0.097} & \textbf{0.001} & \textbf{24.653} & \textbf{0.175} & \textbf{0.776} & \textbf{0.709} \\
+\midrule
+VGGT & bonsai &  & \textbf{0.722} & \underline{0.024} & \textbf{17.731} & \underline{0.418} & \textbf{0.575} & \textbf{0.313} \\
+VGGT & bonsai & Pose Opt & \underline{0.789} & \textbf{0.022} & \underline{17.423} & \textbf{0.399} & \underline{0.560} & \underline{0.310} \\
+\midrule
+COLMAP & kitchen &  & \underline{0.107} & \textbf{0.001} & \underline{21.260} & \underline{0.149} & \underline{0.471} & \underline{0.484} \\
+COLMAP & kitchen & Pose Opt & \textbf{0.094} & \textbf{0.001} & \textbf{21.597} & \textbf{0.142} & \textbf{0.497} & \textbf{0.510} \\
+\midrule
+VGGT & kitchen &  & \underline{0.339} & \underline{0.007} & \underline{19.821} & \underline{0.239} & \textbf{0.463} & \underline{0.396} \\
+VGGT & kitchen & Pose Opt & \textbf{0.236} & \textbf{0.005} & \textbf{20.018} & \textbf{0.176} & \underline{0.414} & \textbf{0.410} \\
+\midrule
+COLMAP & counter &  & \underline{0.029} & \textbf{0.000} & \underline{25.221} & \underline{0.189} & \textbf{0.852} & \textbf{0.755} \\
+COLMAP & counter & Pose Opt & \textbf{0.026} & \textbf{0.000} & \textbf{25.228} & \textbf{0.188} & \underline{0.850} & \underline{0.754} \\
+\midrule
+VGGT & counter &  & \underline{0.343} & \underline{0.008} & \underline{20.160} & \underline{0.307} & \underline{0.630} & \underline{0.459} \\
+VGGT & counter & Pose Opt & \textbf{0.254} & \textbf{0.006} & \textbf{20.807} & \textbf{0.237} & \textbf{0.641} & \textbf{0.520} \\
+\bottomrule
+\end{tabular}
+\end{table}

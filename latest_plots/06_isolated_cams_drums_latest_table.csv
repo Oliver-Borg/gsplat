@@ -1,0 +1,4 @@
+choice,dataset,real_num_points,random_init,use_ba,eval_rre,eval_rte,quality
+VGGT,drums,3866,Random Init,Use BA,0.2348719835281372,0.003188657807186246,0.6527734141097277
+VGGT,drums,3866,Random Init,,0.17242297530174255,0.0029657548293471336,0.683176907163072
+VGGT,drums,,,,,,

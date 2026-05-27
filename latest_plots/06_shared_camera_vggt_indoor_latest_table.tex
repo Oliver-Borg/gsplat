@@ -1,0 +1,19 @@
+\begin{table}[H]
+\caption{A test for shared cameras with VGGT (Indoor)}
+\label{tab:06_shared_camera_vggt_indoor}
+\footnotesize
+\begin{tabular}{llllrrrrrr}
+\toprule
+Choice & Dataset & Shared Camera & Sampling Mode & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+VGGT & bonsai & Shared Cam & random & \textbf{0.722} & \textbf{0.106} & \textbf{17.851} & \textbf{0.418} & \textbf{0.579} & \textbf{0.318} \\
+VGGT & bonsai &  & random & \textbf{0.722} & \textbf{0.106} & \underline{17.731} & \textbf{0.418} & \underline{0.575} & \underline{0.313} \\
+\midrule
+VGGT & kitchen & Shared Cam & random & \textbf{0.339} & \textbf{0.031} & \underline{19.793} & \underline{0.255} & \textbf{0.468} & \underline{0.390} \\
+VGGT & kitchen &  & random & \textbf{0.339} & \textbf{0.031} & \textbf{19.821} & \textbf{0.239} & \underline{0.463} & \textbf{0.396} \\
+\midrule
+VGGT & counter & Shared Cam & random & \textbf{0.343} & \textbf{0.033} & \underline{20.147} & \underline{0.321} & \textbf{0.632} & \underline{0.451} \\
+VGGT & counter &  & random & \textbf{0.343} & \textbf{0.033} & \textbf{20.160} & \textbf{0.307} & \underline{0.630} & \textbf{0.459} \\
+\bottomrule
+\end{tabular}
+\end{table}

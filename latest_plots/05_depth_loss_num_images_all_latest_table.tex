@@ -1,0 +1,91 @@
+\begin{table}[H]
+\caption{COLMAP versus VGGT with depth loss for different depth loss modes. (All)}
+\label{tab:05_depth_loss_num_images_all}
+\small
+\begin{tabular}{llrlrrrrrr}
+\toprule
+Choice & Dataset & Num Images & Depth Loss Mode & RRE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Predicted Depth Abs Rel ↓ & Splatted Depth Abs Rel ↓ \\
+\midrule
+VGGT & drums & 10 &  & 1.153 &  &  &  &  &  \\
+VGGT & drums & 20 &  & 0.854 &  &  &  &  &  \\
+VGGT & drums & 30 &  & 0.695 &  &  &  &  &  \\
+VGGT & drums & 40 &  & \underline{0.373} &  &  &  &  &  \\
+VGGT & drums & 87 &  & \textbf{0.173} & \underline{20.899} & \underline{0.085} & \textbf{0.869} &  & \underline{0.018} \\
+VGGT & drums & 87 & closer & \textbf{0.173} & 20.030 & 0.091 & 0.851 &  & 0.026 \\
+VGGT & drums & 87 & full & \textbf{0.173} & 20.728 & 0.089 & 0.866 &  & \underline{0.018} \\
+VGGT & drums & 87 & points & \textbf{0.173} & \textbf{20.910} & \textbf{0.082} & \underline{0.868} &  & \textbf{0.017} \\
+\midrule
+VGGT & bonsai & 10 &  & 1.212 &  &  &  &  &  \\
+VGGT & bonsai & 20 &  & \underline{0.872} &  &  &  &  &  \\
+VGGT & bonsai & 30 &  & 1.001 &  &  &  &  &  \\
+VGGT & bonsai & 40 &  & 0.891 &  &  &  &  &  \\
+VGGT & bonsai & 100 &  & \textbf{0.722} & 17.423 & 0.399 & \underline{0.560} &  &  \\
+VGGT & bonsai & 100 & closer & \textbf{0.722} & \textbf{17.637} & \textbf{0.389} & \textbf{0.563} &  &  \\
+VGGT & bonsai & 100 & full & \textbf{0.722} & 17.473 & \underline{0.392} & 0.557 &  &  \\
+VGGT & bonsai & 100 & points & \textbf{0.722} & \underline{17.559} & 0.396 & 0.559 &  &  \\
+\midrule
+VGGT & lego & 10 &  & 2.548 &  &  &  & 0.027 &  \\
+VGGT & lego & 20 &  & 2.282 &  &  &  & 0.019 &  \\
+VGGT & lego & 30 &  & 2.223 &  &  &  & 0.018 &  \\
+VGGT & lego & 40 &  & 1.337 &  &  &  & \underline{0.015} &  \\
+VGGT & lego & 87 &  & \textbf{0.298} & 20.353 & 0.076 & 0.773 & 0.013 & \underline{0.021} \\
+VGGT & lego & 87 & closer & \textbf{0.298} & 20.368 & 0.079 & \underline{0.775} & 0.013 & 0.022 \\
+VGGT & lego & 87 & full & \textbf{0.298} & \underline{21.973} & \underline{0.070} & \textbf{0.812} & 0.013 & \textbf{0.018} \\
+VGGT & lego & 87 & points & \textbf{0.298} & \textbf{21.992} & \textbf{0.065} & \textbf{0.812} & 0.013 & \textbf{0.018} \\
+\midrule
+VGGT & ship & 10 &  & 0.323 &  &  &  & \underline{0.028} &  \\
+VGGT & ship & 20 &  & 0.369 &  &  &  & \textbf{0.027} &  \\
+VGGT & ship & 30 &  & \underline{0.274} &  &  &  & \underline{0.028} &  \\
+VGGT & ship & 40 &  & \textbf{0.270} &  &  &  & \underline{0.028} &  \\
+VGGT & ship & 87 &  & 0.487 & 22.859 & \underline{0.130} & 0.748 & \underline{0.028} & \textbf{0.027} \\
+VGGT & ship & 87 & closer & 0.487 & 22.619 & 0.139 & 0.743 & \underline{0.028} & 0.032 \\
+VGGT & ship & 87 & full & 0.487 & \underline{23.491} & 0.132 & \textbf{0.765} & \underline{0.028} & \underline{0.028} \\
+VGGT & ship & 87 & points & 0.487 & \textbf{23.507} & \textbf{0.126} & \underline{0.763} & \underline{0.028} & \underline{0.028} \\
+\midrule
+VGGT & bicycle & 10 &  & 1.748 & 13.876 & 0.564 & 0.149 &  &  \\
+VGGT & bicycle & 20 &  & 1.149 &  &  &  &  &  \\
+VGGT & bicycle & 30 &  & \underline{0.930} &  &  &  &  &  \\
+VGGT & bicycle & 40 &  & 0.997 &  &  &  &  &  \\
+VGGT & bicycle & 100 &  & \textbf{0.716} & 17.384 & \underline{0.338} & 0.268 &  &  \\
+VGGT & bicycle & 100 & closer & \textbf{0.716} & \underline{17.500} & \textbf{0.329} & 0.266 &  &  \\
+VGGT & bicycle & 100 & full & \textbf{0.716} & \textbf{18.110} & 0.351 & \textbf{0.293} &  &  \\
+VGGT & bicycle & 100 & points & \textbf{0.716} & 17.406 & 0.383 & \underline{0.269} &  &  \\
+\midrule
+VGGT & stump & 10 &  & 2.389 &  &  &  &  &  \\
+VGGT & stump & 20 &  & 1.511 &  &  &  &  &  \\
+VGGT & stump & 30 &  & 1.238 &  &  &  &  &  \\
+VGGT & stump & 40 &  & \underline{0.870} &  &  &  &  &  \\
+VGGT & stump & 100 &  & \textbf{0.856} & 18.294 & \textbf{0.492} & 0.398 &  &  \\
+VGGT & stump & 100 & closer & \textbf{0.856} & 18.349 & \underline{0.494} & 0.398 &  &  \\
+VGGT & stump & 100 & full & \textbf{0.856} & \textbf{18.406} & 0.515 & \textbf{0.408} &  &  \\
+VGGT & stump & 100 & points & \textbf{0.856} & \underline{18.381} & 0.521 & \underline{0.407} &  &  \\
+\midrule
+VGGT & kitchen & 10 &  & 0.335 &  &  &  &  &  \\
+VGGT & kitchen & 20 &  & \underline{0.305} &  &  &  &  &  \\
+VGGT & kitchen & 30 &  & \textbf{0.267} &  &  &  &  &  \\
+VGGT & kitchen & 40 &  & 0.336 &  &  &  &  &  \\
+VGGT & kitchen & 100 &  & 0.339 & \underline{20.018} & \underline{0.176} & \underline{0.414} &  &  \\
+VGGT & kitchen & 100 & closer & 0.339 & \textbf{20.186} & \textbf{0.175} & \textbf{0.422} &  &  \\
+VGGT & kitchen & 100 & full & 0.339 & 19.044 & 0.210 & 0.400 &  &  \\
+VGGT & kitchen & 100 & points & 0.339 & 19.314 & 0.216 & \textbf{0.422} &  &  \\
+\midrule
+VGGT & garden & 10 &  & 0.716 &  &  &  &  &  \\
+VGGT & garden & 20 &  & 0.304 &  &  &  &  &  \\
+VGGT & garden & 30 &  & \textbf{0.276} &  &  &  &  &  \\
+VGGT & garden & 40 &  & 0.289 &  &  &  &  &  \\
+VGGT & garden & 100 &  & 0.373 & 19.351 & \underline{0.338} & 0.366 &  &  \\
+VGGT & garden & 100 & closer & 0.373 & \textbf{19.498} & \textbf{0.332} & 0.360 &  &  \\
+VGGT & garden & 100 & full & 0.373 & \underline{19.402} & 0.346 & \underline{0.371} &  &  \\
+VGGT & garden & 100 & points & 0.373 & 19.362 & 0.361 & \textbf{0.374} &  &  \\
+\midrule
+VGGT & counter & 10 &  & 1.060 &  &  &  &  &  \\
+VGGT & counter & 20 &  & 0.487 &  &  &  &  &  \\
+VGGT & counter & 30 &  & \underline{0.353} &  &  &  &  &  \\
+VGGT & counter & 40 &  & 0.357 &  &  &  &  &  \\
+VGGT & counter & 100 &  & \textbf{0.343} & 20.807 & \underline{0.237} & 0.641 &  &  \\
+VGGT & counter & 100 & closer & \textbf{0.343} & \textbf{21.081} & \textbf{0.234} & \textbf{0.655} &  &  \\
+VGGT & counter & 100 & full & \textbf{0.343} & 20.773 & 0.246 & \textbf{0.655} &  &  \\
+VGGT & counter & 100 & points & \textbf{0.343} & \underline{20.874} & 0.247 & \underline{0.652} &  &  \\
+\bottomrule
+\end{tabular}
+\end{table}

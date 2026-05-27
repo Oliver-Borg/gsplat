@@ -1,0 +1,28 @@
+\begin{table}[H]
+\caption{COLMAP versus VGGT with pose optimization (Bicycle,Bonsai,Ship)}
+\label{tab:04_pose_opt_bicycle,bonsai,ship}
+\footnotesize
+\begin{tabular}{lllrrrrrr}
+\toprule
+Choice & Dataset & Pose Opt & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP & bicycle &  & \textbf{0.099} & \textbf{0.002} & \underline{21.332} & \underline{0.364} & \underline{0.480} & \underline{0.357} \\
+COLMAP & bicycle & Pose Opt & \underline{0.111} & \textbf{0.002} & \textbf{22.163} & \textbf{0.349} & \textbf{0.559} & \textbf{0.428} \\
+\midrule
+VGGT & bicycle &  & \underline{0.857} & \underline{0.015} & \underline{17.174} & \underline{0.441} & \underline{0.257} & \underline{0.103} \\
+VGGT & bicycle & Pose Opt & \textbf{0.489} & \textbf{0.014} & \textbf{17.384} & \textbf{0.338} & \textbf{0.268} & \textbf{0.176} \\
+\midrule
+COLMAP & bonsai &  & \underline{0.158} & \underline{0.003} & \underline{22.423} & \underline{0.204} & \underline{0.697} & \underline{0.604} \\
+COLMAP & bonsai & Pose Opt & \textbf{0.097} & \textbf{0.001} & \textbf{24.653} & \textbf{0.175} & \textbf{0.776} & \textbf{0.709} \\
+\midrule
+VGGT & bonsai &  & \textbf{0.722} & \underline{0.024} & \textbf{17.731} & \underline{0.418} & \textbf{0.575} & \textbf{0.313} \\
+VGGT & bonsai & Pose Opt & \underline{0.789} & \textbf{0.022} & \underline{17.423} & \textbf{0.399} & \underline{0.560} & \underline{0.310} \\
+\midrule
+COLMAP & ship &  & \underline{0.296} & \underline{0.005} & \underline{21.593} & \underline{0.155} & \underline{0.733} & \underline{0.639} \\
+COLMAP & ship & Pose Opt & \textbf{0.192} & \textbf{0.003} & \textbf{21.735} & \textbf{0.149} & \textbf{0.740} & \textbf{0.650} \\
+\midrule
+VGGT & ship &  & \underline{0.487} & \underline{0.009} & \underline{20.871} & \underline{0.176} & \underline{0.701} & \underline{0.594} \\
+VGGT & ship & Pose Opt & \textbf{0.377} & \textbf{0.008} & \textbf{22.859} & \textbf{0.130} & \textbf{0.748} & \textbf{0.687} \\
+\bottomrule
+\end{tabular}
+\end{table}

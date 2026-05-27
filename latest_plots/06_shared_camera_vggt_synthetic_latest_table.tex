@@ -1,0 +1,19 @@
+\begin{table}[H]
+\caption{A test for shared cameras with VGGT (Synthetic)}
+\label{tab:06_shared_camera_vggt_synthetic}
+\footnotesize
+\begin{tabular}{llllrrrrrr}
+\toprule
+Choice & Dataset & Shared Camera & Sampling Mode & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+VGGT & lego & Shared Cam & random & \textbf{0.298} & \textbf{0.019} & \textbf{20.905} & \underline{0.096} & \textbf{0.779} & \textbf{0.690} \\
+VGGT & lego &  & random & \textbf{0.298} & \textbf{0.019} & \underline{20.573} & \textbf{0.095} & \underline{0.774} & \underline{0.681} \\
+\midrule
+VGGT & ship & Shared Cam & random & \textbf{0.487} & \textbf{0.028} & \textbf{20.880} & \textbf{0.175} & \textbf{0.702} & \textbf{0.596} \\
+VGGT & ship &  & random & \textbf{0.487} & \textbf{0.028} & \underline{20.871} & \underline{0.176} & \underline{0.701} & \underline{0.594} \\
+\midrule
+VGGT & drums & Shared Cam & random & \textbf{0.173} & \textbf{0.010} & \underline{18.868} & \underline{0.113} & \underline{0.824} & \underline{0.668} \\
+VGGT & drums &  & random & \textbf{0.173} & \textbf{0.010} & \textbf{19.668} & \textbf{0.106} & \textbf{0.836} & \textbf{0.694} \\
+\bottomrule
+\end{tabular}
+\end{table}

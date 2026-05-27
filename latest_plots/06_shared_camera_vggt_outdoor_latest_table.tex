@@ -1,0 +1,19 @@
+\begin{table}[H]
+\caption{A test for shared cameras with VGGT (Outdoor)}
+\label{tab:06_shared_camera_vggt_outdoor}
+\footnotesize
+\begin{tabular}{llllrrrrrr}
+\toprule
+Choice & Dataset & Shared Camera & Sampling Mode & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+VGGT & bicycle & Shared Cam & random & \textbf{0.716} & \textbf{0.066} & \textbf{17.540} & \textbf{0.428} & \textbf{0.264} & \textbf{0.122} \\
+VGGT & bicycle &  & random & \textbf{0.716} & \textbf{0.066} & \underline{17.174} & \underline{0.441} & \underline{0.257} & \underline{0.103} \\
+\midrule
+VGGT & garden & Shared Cam & random & \textbf{0.373} & \textbf{0.027} & \underline{18.557} & \underline{0.484} & \textbf{0.359} & \textbf{0.162} \\
+VGGT & garden &  & random & \textbf{0.373} & \textbf{0.027} & \textbf{18.582} & \textbf{0.482} & \underline{0.357} & \textbf{0.162} \\
+\midrule
+VGGT & stump & Shared Cam & random & \textbf{0.856} & \textbf{0.163} & \textbf{18.735} & \underline{0.538} & \textbf{0.416} & \underline{0.165} \\
+VGGT & stump &  & random & \textbf{0.856} & \textbf{0.163} & \underline{18.644} & \textbf{0.530} & \underline{0.412} & \textbf{0.166} \\
+\bottomrule
+\end{tabular}
+\end{table}
