@@ -1,0 +1,29 @@
+\begin{table}[H]
+\caption{COLMAP versus VGGT with depth loss (Indoor)}
+\label{tab:05_depth_lambda_gt_cams_indoor}
+\centering
+\scriptsize
+\begin{tabular}{llrlrrrrrr}
+\toprule
+Choice & Dataset & Depth Lambda & Depth Loss Mode & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+VGGT & bonsai & 0.000 &  & \textbf{0} & \textbf{0} & 26.099 & 0.212 & 0.838 & 0.749 \\
+VGGT & bonsai & 0.010 & closer & \textbf{0} & \textbf{0} & 25.771 & 0.218 & 0.830 & 0.735 \\
+VGGT & bonsai & 0.100 & closer & \textbf{0} & \textbf{0} & 26.058 & 0.205 & 0.838 & 0.752 \\
+VGGT & bonsai & 1.000 & closer & \textbf{0} & \textbf{0} & \textbf{26.380} & \underline{0.199} & \underline{0.845} & \underline{0.766} \\
+VGGT & bonsai & 10.000 & closer & \textbf{0} & \textbf{0} & \underline{26.330} & \textbf{0.198} & \textbf{0.847} & \textbf{0.767} \\
+\midrule
+VGGT & kitchen & 0.000 &  & \textbf{0} & \textbf{0} & 25.888 & 0.130 & 0.890 & 0.826 \\
+VGGT & kitchen & 0.010 & closer & \textbf{0} & \textbf{0} & 25.735 & 0.130 & 0.888 & 0.822 \\
+VGGT & kitchen & 0.100 & closer & \textbf{0} & \textbf{0} & 26.159 & \underline{0.127} & \underline{0.892} & 0.834 \\
+VGGT & kitchen & 1.000 & closer & \textbf{0} & \textbf{0} & \underline{26.288} & \textbf{0.126} & \textbf{0.894} & \textbf{0.838} \\
+VGGT & kitchen & 10.000 & closer & \textbf{0} & \textbf{0} & \textbf{26.299} & \underline{0.127} & 0.891 & \underline{0.836} \\
+\midrule
+VGGT & counter & 0.000 &  & \textbf{0} & \textbf{0} & \underline{25.016} & \underline{0.187} & \underline{0.856} & \underline{0.755} \\
+VGGT & counter & 0.010 & closer & \textbf{0} & \textbf{0} & 24.960 & \underline{0.187} & \underline{0.856} & 0.754 \\
+VGGT & counter & 0.100 & closer & \textbf{0} & \textbf{0} & \textbf{25.062} & \textbf{0.184} & \textbf{0.857} & \textbf{0.759} \\
+VGGT & counter & 1.000 & closer & \textbf{0} & \textbf{0} & 24.822 & 0.189 & 0.853 & 0.748 \\
+VGGT & counter & 10.000 & closer & \textbf{0} & \textbf{0} & 24.395 & 0.205 & 0.842 & 0.724 \\
+\bottomrule
+\end{tabular}
+\end{table}

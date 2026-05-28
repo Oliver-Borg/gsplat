@@ -1,0 +1,29 @@
+\begin{table}[H]
+\caption{VGGT with \textit{closer} depth loss over different Depth Lambda values. (Indoor,Outdoor,Synthetic)}
+\label{tab:05_depth_lambda_indoor,outdoor,synthetic}
+\centering
+\scriptsize
+\begin{tabular}{llrrrrrrr}
+\toprule
+Choice & Dataset Collection & Depth Lambda & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+VGGT & indoor & 0.000 & 0.426 & \textbf{0.011} & 19.416 & 0.271 & 0.538 & 0.413 \\
+VGGT & indoor & 0.010 & 0.426 & \textbf{0.011} & 19.409 & \underline{0.270} & 0.538 & 0.414 \\
+VGGT & indoor & 0.100 & 0.416 & \textbf{0.011} & 19.386 & \underline{0.270} & 0.537 & 0.413 \\
+VGGT & indoor & 1.000 & \underline{0.408} & \textbf{0.011} & \underline{19.535} & \textbf{0.268} & \underline{0.543} & \underline{0.421} \\
+VGGT & indoor & 10.000 & \textbf{0.407} & \textbf{0.011} & \textbf{19.721} & 0.271 & \textbf{0.559} & \textbf{0.431} \\
+\midrule
+VGGT & outdoor & 0.000 & 0.467 & \textbf{0.018} & 18.343 & 0.389 & \textbf{0.344} & 0.207 \\
+VGGT & outdoor & 0.010 & 0.464 & \textbf{0.018} & 18.408 & 0.387 & \textbf{0.344} & 0.210 \\
+VGGT & outdoor & 0.100 & \underline{0.452} & \textbf{0.018} & \underline{18.456} & \textbf{0.383} & \textbf{0.344} & \textbf{0.213} \\
+VGGT & outdoor & 1.000 & \textbf{0.447} & \textbf{0.018} & \underline{18.456} & \underline{0.385} & 0.342 & \underline{0.211} \\
+VGGT & outdoor & 10.000 & 0.490 & \underline{0.019} & \textbf{18.526} & 0.402 & \underline{0.343} & 0.202 \\
+\midrule
+VGGT & synthetic & 0.000 & \underline{0.248} & \textbf{0.006} & \textbf{21.370} & \textbf{0.097} & \textbf{0.797} & \textbf{0.709} \\
+VGGT & synthetic & 0.010 & \textbf{0.247} & \textbf{0.006} & \underline{21.353} & \textbf{0.097} & \textbf{0.797} & \underline{0.708} \\
+VGGT & synthetic & 0.100 & 0.249 & \textbf{0.006} & 21.248 & \underline{0.098} & \underline{0.794} & 0.704 \\
+VGGT & synthetic & 1.000 & 0.254 & \textbf{0.006} & 21.003 & 0.103 & 0.790 & 0.693 \\
+VGGT & synthetic & 10.000 & 0.271 & \textbf{0.006} & 20.613 & 0.116 & 0.781 & 0.673 \\
+\bottomrule
+\end{tabular}
+\end{table}

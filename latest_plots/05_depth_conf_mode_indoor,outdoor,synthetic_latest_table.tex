@@ -1,0 +1,23 @@
+\begin{table}[H]
+\caption{VGGT with depth loss for different depth confidence modes. (Indoor,Outdoor,Synthetic)}
+\label{tab:05_depth_conf_mode_indoor,outdoor,synthetic}
+\centering
+\scriptsize
+\begin{tabular}{lllrrrrrr}
+\toprule
+Choice & Dataset Collection & Depth Conf Mode & RRE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Predicted Depth Abs Rel ↓ & Splatted Depth Abs Rel ↓ \\
+\midrule
+VGGT & indoor &  & \textbf{0.468} & 19.097 & \underline{0.283} & 0.537 &  &  \\
+VGGT & indoor & sigmoid & \textbf{0.468} & \underline{19.148} & \textbf{0.281} & \underline{0.539} &  &  \\
+VGGT & indoor & standard & \textbf{0.468} & \textbf{19.331} & 0.294 & \textbf{0.563} &  &  \\
+\midrule
+VGGT & outdoor &  & \textbf{0.648} & \underline{18.639} & \underline{0.404} & \underline{0.357} &  &  \\
+VGGT & outdoor & sigmoid & \textbf{0.648} & 18.566 & \textbf{0.398} & 0.353 &  &  \\
+VGGT & outdoor & standard & \textbf{0.648} & \textbf{18.652} & 0.409 & \textbf{0.359} &  &  \\
+\midrule
+VGGT & synthetic &  & \textbf{0.319} & 22.064 & \underline{0.097} & 0.814 & \textbf{0.021} & \textbf{0.021} \\
+VGGT & synthetic & sigmoid & \textbf{0.319} & \underline{22.101} & \textbf{0.096} & \underline{0.815} & \textbf{0.021} & \textbf{0.021} \\
+VGGT & synthetic & standard & \textbf{0.319} & \textbf{22.516} & 0.140 & \textbf{0.826} & \textbf{0.021} & \underline{0.026} \\
+\bottomrule
+\end{tabular}
+\end{table}

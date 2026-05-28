@@ -1,22 +1,23 @@
 \begin{table}[H]
 \caption{VGGT with depth loss for different depth confidence modes. (Outdoor)}
 \label{tab:05_depth_conf_mode_outdoor}
-\small
+\centering
+\scriptsize
 \begin{tabular}{lllrrrrll}
 \toprule
 Choice & Dataset & Depth Conf Mode & RRE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Predicted Depth Abs Rel ↓ & Splatted Depth Abs Rel ↓ \\
 \midrule
-VGGT & bicycle &  & \textbf{0.716} & \underline{17.500} & \textbf{0.329} & \underline{0.266} &  &  \\
-VGGT & bicycle & sigmoid & \textbf{0.716} & 17.498 & \textbf{0.329} & \textbf{0.270} &  &  \\
-VGGT & bicycle & standard & \textbf{0.716} & \textbf{17.509} & \textbf{0.329} & \underline{0.266} &  &  \\
+VGGT & bicycle &  & \textbf{0.716} & \textbf{18.110} & \underline{0.351} & \textbf{0.293} &  &  \\
+VGGT & bicycle & sigmoid & \textbf{0.716} & 17.927 & \textbf{0.342} & 0.284 &  &  \\
+VGGT & bicycle & standard & \textbf{0.716} & \underline{18.087} & 0.353 & \underline{0.292} &  &  \\
 \midrule
-VGGT & garden &  & \textbf{0.373} & \underline{19.498} & 0.332 & \underline{0.360} &  &  \\
-VGGT & garden & sigmoid & \textbf{0.373} & \textbf{19.564} & \underline{0.331} & \textbf{0.362} &  &  \\
-VGGT & garden & standard & \textbf{0.373} & 19.480 & \textbf{0.330} & 0.359 &  &  \\
+VGGT & garden &  & \textbf{0.373} & 19.402 & \textbf{0.346} & \underline{0.371} &  &  \\
+VGGT & garden & sigmoid & \textbf{0.373} & \underline{19.434} & \underline{0.347} & \underline{0.371} &  &  \\
+VGGT & garden & standard & \textbf{0.373} & \textbf{19.454} & 0.354 & \textbf{0.375} &  &  \\
 \midrule
-VGGT & stump &  & \textbf{0.856} & \underline{18.349} & \underline{0.494} & \underline{0.398} &  &  \\
-VGGT & stump & sigmoid & \textbf{0.856} & 18.343 & \textbf{0.490} & \underline{0.398} &  &  \\
-VGGT & stump & standard & \textbf{0.856} & \textbf{18.354} & 0.495 & \textbf{0.399} &  &  \\
+VGGT & stump &  & \textbf{0.856} & \underline{18.406} & \underline{0.515} & \underline{0.408} &  &  \\
+VGGT & stump & sigmoid & \textbf{0.856} & 18.336 & \textbf{0.507} & 0.404 &  &  \\
+VGGT & stump & standard & \textbf{0.856} & \textbf{18.416} & 0.519 & \textbf{0.409} &  &  \\
 \bottomrule
 \end{tabular}
 \end{table}

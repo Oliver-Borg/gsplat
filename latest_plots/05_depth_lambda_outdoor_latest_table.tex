@@ -1,0 +1,29 @@
+\begin{table}[H]
+\caption{VGGT with \textit{closer} depth loss over different Depth Lambda values. (Outdoor)}
+\label{tab:05_depth_lambda_outdoor}
+\centering
+\scriptsize
+\begin{tabular}{llrrrrrrr}
+\toprule
+Choice & Dataset & Depth Lambda & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+VGGT & bicycle & 0.000 & 0.489 & \underline{0.014} & 17.384 & 0.338 & 0.268 & 0.176 \\
+VGGT & bicycle & 0.010 & \underline{0.488} & \underline{0.014} & 17.437 & 0.335 & \underline{0.269} & 0.180 \\
+VGGT & bicycle & 0.100 & \textbf{0.483} & \textbf{0.013} & \underline{17.523} & \underline{0.330} & \textbf{0.270} & \textbf{0.185} \\
+VGGT & bicycle & 1.000 & 0.501 & \textbf{0.013} & 17.493 & \textbf{0.329} & 0.267 & \underline{0.183} \\
+VGGT & bicycle & 10.000 & 0.616 & \textbf{0.013} & \textbf{17.860} & 0.346 & \textbf{0.270} & 0.181 \\
+\midrule
+VGGT & garden & 0.000 & 0.135 & \textbf{0.004} & 19.351 & 0.338 & \underline{0.366} & 0.270 \\
+VGGT & garden & 0.010 & 0.135 & \textbf{0.004} & \underline{19.506} & 0.335 & \textbf{0.367} & \textbf{0.275} \\
+VGGT & garden & 0.100 & \underline{0.134} & \textbf{0.004} & 19.503 & \underline{0.334} & 0.365 & \textbf{0.275} \\
+VGGT & garden & 1.000 & \textbf{0.122} & \textbf{0.004} & \textbf{19.535} & \textbf{0.332} & 0.361 & \underline{0.274} \\
+VGGT & garden & 10.000 & 0.141 & \textbf{0.004} & 19.209 & 0.346 & 0.351 & 0.254 \\
+\midrule
+VGGT & stump & 0.000 & 0.777 & \textbf{0.035} & 18.294 & 0.492 & \underline{0.398} & 0.174 \\
+VGGT & stump & 0.010 & 0.769 & \underline{0.036} & 18.281 & \underline{0.490} & 0.397 & \underline{0.175} \\
+VGGT & stump & 0.100 & 0.738 & \underline{0.036} & \underline{18.343} & \textbf{0.486} & \underline{0.398} & \textbf{0.179} \\
+VGGT & stump & 1.000 & \underline{0.716} & 0.037 & 18.340 & 0.493 & \underline{0.398} & \underline{0.175} \\
+VGGT & stump & 10.000 & \textbf{0.712} & 0.040 & \textbf{18.508} & 0.515 & \textbf{0.407} & 0.170 \\
+\bottomrule
+\end{tabular}
+\end{table}

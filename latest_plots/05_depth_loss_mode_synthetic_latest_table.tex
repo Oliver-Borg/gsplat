@@ -1,31 +1,34 @@
 \begin{table}[H]
 \caption{COLMAP versus VGGT with depth loss for different depth loss modes. (Synthetic)}
 \label{tab:05_depth_loss_mode_synthetic}
-\small
+\scriptsize
 \begin{tabular}{lllrrrrrr}
 \toprule
-Choice & Dataset & Depth Loss Mode & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+Choice & Dataset & Depth Loss Mode & RRE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Predicted Depth Abs Rel ↓ & Splatted Depth Abs Rel ↓ \\
 \midrule
-COLMAP & lego &  & \underline{10.427} & \underline{0.396} & \textbf{25.238} & \textbf{0.053} & \textbf{0.906} & \textbf{0.871} \\
-COLMAP & lego & points & \underline{10.427} & \underline{0.396} & \underline{25.143} & \underline{0.056} & \underline{0.901} & \underline{0.864} \\
-VGGT & lego &  & \textbf{0.298} & \textbf{0.019} & 20.353 & 0.076 & 0.773 & 0.689 \\
-VGGT & lego & closer & \textbf{0.298} & \textbf{0.019} & 20.368 & 0.079 & 0.775 & 0.688 \\
-VGGT & lego & full & \textbf{0.298} & \textbf{0.019} & 21.973 & 0.070 & 0.812 & 0.745 \\
-VGGT & lego & points & \textbf{0.298} & \textbf{0.019} & 21.992 & 0.065 & 0.812 & 0.748 \\
+COLMAP & lego &  & \textbf{10.427} & \textbf{25.238} & \textbf{0.053} & \textbf{0.906} &  & \textbf{0.020} \\
+COLMAP & lego & points & \textbf{10.427} & \underline{25.143} & \underline{0.056} & \underline{0.901} &  & \textbf{0.020} \\
 \midrule
-COLMAP & ship &  & \textbf{0.296} & \textbf{0.015} & 21.735 & 0.149 & 0.740 & 0.650 \\
-COLMAP & ship & points & \textbf{0.296} & \textbf{0.015} & 21.669 & 0.156 & 0.740 & 0.644 \\
-VGGT & ship &  & \underline{0.487} & \underline{0.028} & 22.859 & \underline{0.130} & 0.748 & 0.687 \\
-VGGT & ship & closer & \underline{0.487} & \underline{0.028} & 22.619 & 0.139 & 0.743 & 0.674 \\
-VGGT & ship & full & \underline{0.487} & \underline{0.028} & \underline{23.491} & 0.132 & \textbf{0.765} & \underline{0.707} \\
-VGGT & ship & points & \underline{0.487} & \underline{0.028} & \textbf{23.507} & \textbf{0.126} & \underline{0.763} & \textbf{0.710} \\
+VGGT & lego &  & \textbf{0.298} & 20.353 & 0.076 & 0.773 & 0.013 & \underline{0.021} \\
+VGGT & lego & closer & \textbf{0.298} & 20.368 & 0.079 & \underline{0.775} & 0.013 & 0.022 \\
+VGGT & lego & full & \textbf{0.298} & \underline{21.973} & \underline{0.070} & \textbf{0.812} & 0.013 & \textbf{0.018} \\
+VGGT & lego & points & \textbf{0.298} & \textbf{21.992} & \textbf{0.065} & \textbf{0.812} & 0.013 & \textbf{0.018} \\
 \midrule
-COLMAP & drums &  & \textbf{0.153} & \textbf{0.010} & \textbf{22.801} & 0.089 & \textbf{0.906} & \textbf{0.803} \\
-COLMAP & drums & points & \textbf{0.153} & \textbf{0.010} & \underline{22.718} & 0.092 & \underline{0.903} & \underline{0.799} \\
-VGGT & drums &  & \underline{0.173} & \textbf{0.010} & 20.899 & \underline{0.085} & 0.869 & 0.749 \\
-VGGT & drums & closer & \underline{0.173} & \textbf{0.010} & 20.030 & 0.091 & 0.851 & 0.719 \\
-VGGT & drums & full & \underline{0.173} & \textbf{0.010} & 20.728 & 0.089 & 0.866 & 0.742 \\
-VGGT & drums & points & \underline{0.173} & \textbf{0.010} & 20.910 & \textbf{0.082} & 0.868 & 0.751 \\
+COLMAP & ship &  & \textbf{0.296} & \textbf{21.735} & \textbf{0.149} & \textbf{0.740} &  & \textbf{0.032} \\
+COLMAP & ship & points & \textbf{0.296} & \underline{21.669} & \underline{0.156} & \textbf{0.740} &  & \underline{0.035} \\
+\midrule
+VGGT & ship &  & \textbf{0.487} & 22.859 & \underline{0.130} & 0.748 & \textbf{0.028} & \textbf{0.027} \\
+VGGT & ship & closer & \textbf{0.487} & 22.619 & 0.139 & 0.743 & \textbf{0.028} & 0.032 \\
+VGGT & ship & full & \textbf{0.487} & \underline{23.491} & 0.132 & \textbf{0.765} & \textbf{0.028} & \underline{0.028} \\
+VGGT & ship & points & \textbf{0.487} & \textbf{23.507} & \textbf{0.126} & \underline{0.763} & \textbf{0.028} & \underline{0.028} \\
+\midrule
+COLMAP & drums &  & \textbf{0.153} & \textbf{22.801} & \textbf{0.089} & \textbf{0.906} &  & \textbf{0.016} \\
+COLMAP & drums & points & \textbf{0.153} & \underline{22.718} & \underline{0.092} & \underline{0.903} &  & \underline{0.017} \\
+\midrule
+VGGT & drums &  & \textbf{0.173} & \underline{20.899} & \underline{0.085} & \textbf{0.869} &  & \underline{0.018} \\
+VGGT & drums & closer & \textbf{0.173} & 20.030 & 0.091 & 0.851 &  & 0.026 \\
+VGGT & drums & full & \textbf{0.173} & 20.728 & 0.089 & 0.866 &  & \underline{0.018} \\
+VGGT & drums & points & \textbf{0.173} & \textbf{20.910} & \textbf{0.082} & \underline{0.868} &  & \textbf{0.017} \\
 \bottomrule
 \end{tabular}
 \end{table}

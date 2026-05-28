@@ -9,7 +9,7 @@
         "random"
     ],
     "depth_loss_mode": [
-        "closer"
+        "full"
     ],
     "pose_opt": [
         true

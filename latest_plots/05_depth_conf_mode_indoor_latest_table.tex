@@ -1,0 +1,23 @@
+\begin{table}[H]
+\caption{VGGT with depth loss for different depth confidence modes. (Indoor)}
+\label{tab:05_depth_conf_mode_indoor}
+\centering
+\scriptsize
+\begin{tabular}{lllrrrrll}
+\toprule
+Choice & Dataset & Depth Conf Mode & RRE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Predicted Depth Abs Rel ↓ & Splatted Depth Abs Rel ↓ \\
+\midrule
+VGGT & bonsai &  & \textbf{0.722} & 17.473 & \underline{0.392} & 0.557 &  &  \\
+VGGT & bonsai & sigmoid & \textbf{0.722} & \underline{17.478} & \textbf{0.391} & \underline{0.558} &  &  \\
+VGGT & bonsai & standard & \textbf{0.722} & \textbf{17.554} & 0.394 & \textbf{0.561} &  &  \\
+\midrule
+VGGT & kitchen &  & \textbf{0.339} & 19.044 & \textbf{0.210} & 0.400 &  &  \\
+VGGT & kitchen & sigmoid & \textbf{0.339} & \underline{19.094} & \underline{0.211} & \underline{0.404} &  &  \\
+VGGT & kitchen & standard & \textbf{0.339} & \textbf{19.660} & 0.225 & \textbf{0.471} &  &  \\
+\midrule
+VGGT & counter &  & \textbf{0.343} & 20.773 & \underline{0.246} & 0.655 &  &  \\
+VGGT & counter & sigmoid & \textbf{0.343} & \textbf{20.872} & \textbf{0.242} & \underline{0.656} &  &  \\
+VGGT & counter & standard & \textbf{0.343} & \underline{20.778} & 0.263 & \textbf{0.657} &  &  \\
+\bottomrule
+\end{tabular}
+\end{table}

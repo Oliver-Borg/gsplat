@@ -1,0 +1,32 @@
+\begin{table}[H]
+\caption{COLMAP versus VGGT with depth loss for different depth loss modes. (Synthetic)}
+\label{tab:05_depth_loss_mode_pose_opt_synthetic}
+\centering
+\scriptsize
+\begin{tabular}{llllrrrrrrr}
+\toprule
+Choice & Dataset & Depth Loss Mode & Pose Opt & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Predicted Depth Abs Rel ↓ & Splatted Depth Abs Rel ↓ \\
+\midrule
+VGGT & lego &  &  & 0.297 & \underline{0.005} & 20.573 & 0.095 & 0.774 & 0.013 & 0.020 \\
+VGGT & lego &  & Pose Opt & 0.252 & 0.006 & 20.353 & \underline{0.076} & 0.773 & 0.013 & 0.021 \\
+VGGT & lego & closer &  & 0.297 & \underline{0.005} & \underline{20.593} & 0.100 & 0.773 & 0.013 & \underline{0.019} \\
+VGGT & lego & closer & Pose Opt & \underline{0.250} & 0.006 & 20.368 & 0.079 & \underline{0.775} & 0.013 & 0.022 \\
+VGGT & lego & full &  & 0.297 & \underline{0.005} & 20.557 & 0.097 & 0.774 & 0.013 & \underline{0.019} \\
+VGGT & lego & full & Pose Opt & \textbf{0.223} & \textbf{0.004} & \textbf{21.973} & \textbf{0.070} & \textbf{0.812} & 0.013 & \textbf{0.018} \\
+\midrule
+VGGT & ship &  &  & 0.487 & \underline{0.009} & 20.871 & 0.176 & 0.701 & \textbf{0.028} & 0.031 \\
+VGGT & ship &  & Pose Opt & \underline{0.377} & \textbf{0.008} & \underline{22.859} & \textbf{0.130} & \underline{0.748} & \textbf{0.028} & \textbf{0.027} \\
+VGGT & ship & closer &  & 0.487 & \underline{0.009} & 20.868 & 0.192 & 0.702 & \textbf{0.028} & 0.040 \\
+VGGT & ship & closer & Pose Opt & 0.379 & \textbf{0.008} & 22.619 & 0.139 & 0.743 & \textbf{0.028} & 0.032 \\
+VGGT & ship & full &  & 0.487 & \underline{0.009} & 20.877 & 0.186 & 0.706 & \textbf{0.028} & 0.034 \\
+VGGT & ship & full & Pose Opt & \textbf{0.365} & \underline{0.009} & \textbf{23.491} & \underline{0.132} & \textbf{0.765} & \textbf{0.028} & \underline{0.028} \\
+\midrule
+VGGT & drums &  &  & 0.172 & \underline{0.003} & 19.668 & 0.106 & 0.836 &  & \underline{0.019} \\
+VGGT & drums &  & Pose Opt & \underline{0.116} & \underline{0.003} & \textbf{20.899} & \textbf{0.085} & \textbf{0.869} &  & \textbf{0.018} \\
+VGGT & drums & closer &  & 0.172 & \underline{0.003} & 19.660 & 0.112 & 0.835 &  & 0.024 \\
+VGGT & drums & closer & Pose Opt & 0.134 & \underline{0.003} & 20.030 & 0.091 & 0.851 &  & 0.026 \\
+VGGT & drums & full &  & 0.172 & \underline{0.003} & 19.688 & 0.111 & 0.836 &  & 0.020 \\
+VGGT & drums & full & Pose Opt & \textbf{0.112} & \textbf{0.002} & \underline{20.728} & \underline{0.089} & \underline{0.866} &  & \textbf{0.018} \\
+\bottomrule
+\end{tabular}
+\end{table}
