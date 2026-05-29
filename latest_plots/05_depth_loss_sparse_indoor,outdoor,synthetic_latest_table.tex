@@ -1,0 +1,26 @@
+\begin{table}[H]
+\caption{VGGT with depth loss for different depth loss modes and $30$ images. (Indoor,Outdoor,Synthetic)}
+\label{tab:05_depth_loss_sparse_indoor,outdoor,synthetic}
+\centering
+\scriptsize
+\begin{tabular}{llrlrrrrrrr}
+\toprule
+Choice & Dataset Collection & Num Images & Depth Loss Mode & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Predicted Depth Abs Rel ↓ & Splatted Depth Abs Rel ↓ \\
+\midrule
+VGGT & indoor & 30 &  & \underline{0.475} & \underline{0.012} & \underline{17.739} & \underline{0.345} & \underline{0.517} &  &  \\
+VGGT & indoor & 30 & closer & \textbf{0.449} & \underline{0.012} & \textbf{17.913} & \textbf{0.337} & \textbf{0.522} &  &  \\
+VGGT & indoor & 30 & full & 0.487 & \textbf{0.010} & 17.042 & 0.354 & 0.490 &  &  \\
+VGGT & indoor & 30 & points & 0.502 & \underline{0.012} & 17.226 & 0.375 & 0.499 &  &  \\
+\midrule
+VGGT & outdoor & 30 &  & 0.730 & 0.019 & \underline{17.547} & \underline{0.418} & \underline{0.309} &  &  \\
+VGGT & outdoor & 30 & closer & \underline{0.669} & \underline{0.018} & 17.452 & \underline{0.418} & \underline{0.309} &  &  \\
+VGGT & outdoor & 30 & full & \textbf{0.569} & \textbf{0.017} & \textbf{17.747} & \textbf{0.412} & \textbf{0.322} &  &  \\
+VGGT & outdoor & 30 & points & 0.745 & 0.019 & 17.411 & 0.428 & 0.295 &  &  \\
+\midrule
+VGGT & synthetic & 30 &  & 0.993 & 0.015 & 16.548 & 0.245 & 0.680 & \textbf{0.023} & \underline{0.042} \\
+VGGT & synthetic & 30 & closer & \underline{0.989} & 0.015 & 16.602 & \underline{0.243} & \underline{0.683} & \textbf{0.023} & 0.064 \\
+VGGT & synthetic & 30 & full & \textbf{0.972} & \textbf{0.013} & \textbf{16.644} & \textbf{0.239} & \textbf{0.685} & \textbf{0.023} & 0.054 \\
+VGGT & synthetic & 30 & points & 1.016 & \underline{0.014} & \underline{16.617} & 0.247 & 0.677 & \textbf{0.023} & \textbf{0.039} \\
+\bottomrule
+\end{tabular}
+\end{table}

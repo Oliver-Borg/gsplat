@@ -1,0 +1,28 @@
+\begin{table}[H]
+\caption{Combining cameras and point clouds from VGGT and COLMAP. (Indoor)}
+\label{tab:07_combined_single_indoor}
+\centering
+\scriptsize
+\begin{tabular}{lllllrrrrrr}
+\toprule
+Choice & Dataset & Camera Src & Pcd Src & Sampling Mode & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP & bonsai &  &  &  & \textbf{0.097} & \textbf{0.001} & \textbf{24.653} & \textbf{0.175} & \textbf{0.776} & \textbf{0.709} \\
+VGGT & bonsai & COLMAP & Both & random &  &  &  &  &  &  \\
+VGGT & bonsai & COLMAP & VGGT & random &  &  &  &  &  &  \\
+VGGT & bonsai &  &  & confidence &  &  &  &  &  &  \\
+VGGT & bonsai &  &  & random & 0.789 & \underline{0.022} & \underline{17.423} & \underline{0.399} & 0.560 & \underline{0.310} \\
+VGGT & bonsai &  &  & voxels & \underline{0.784} & \underline{0.022} & 17.390 & 0.404 & \underline{0.561} & 0.307 \\
+\midrule
+COLMAP & kitchen &  &  &  & \textbf{0.094} & \textbf{0.001} & \textbf{21.597} & \textbf{0.142} & \textbf{0.497} & \textbf{0.510} \\
+VGGT & kitchen &  &  & confidence &  &  &  &  &  &  \\
+VGGT & kitchen &  &  & random & \underline{0.236} & \underline{0.005} & \underline{20.018} & \underline{0.176} & \underline{0.414} & \underline{0.410} \\
+VGGT & kitchen &  &  & voxels &  &  &  &  &  &  \\
+\midrule
+COLMAP & counter &  &  &  & \textbf{0.026} & \textbf{0.000} & \textbf{25.228} & \textbf{0.188} & \textbf{0.850} & \textbf{0.754} \\
+VGGT & counter &  &  & confidence &  &  &  &  &  &  \\
+VGGT & counter &  &  & random & \underline{0.254} & \underline{0.006} & \underline{20.807} & \underline{0.237} & \underline{0.641} & \underline{0.520} \\
+VGGT & counter &  &  & voxels &  &  &  &  &  &  \\
+\bottomrule
+\end{tabular}
+\end{table}

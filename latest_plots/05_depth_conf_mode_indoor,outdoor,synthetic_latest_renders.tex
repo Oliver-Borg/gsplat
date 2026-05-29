@@ -1,6 +1,10 @@
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1.0\linewidth]{Images/04-Results/Renders/05_depth_conf_mode_indoor,outdoor,synthetic_latest_renders.pdf}
+    \ifhighres
+        \includegraphics[width=1.0\linewidth]{Images/04-Results/Renders/05_depth_conf_mode_indoor,outdoor,synthetic_latest_renders.pdf}
+    \else
+        \includegraphics[width=1.0\linewidth]{Images/04-Results/Renders/05_depth_conf_mode_indoor,outdoor,synthetic_latest_renders.jpg}
+    \fi
     \caption{VGGT with depth loss for different depth confidence modes. (Indoor,Outdoor,Synthetic).}
     \label{fig:renders_05_depth_conf_mode_indoor,outdoor,synthetic}
 \end{figure}

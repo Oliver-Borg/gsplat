@@ -7,6 +7,16 @@
 \toprule
 Choice & Dataset & Num Images & Depth Loss Mode & RRE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Predicted Depth Abs Rel ↓ & Splatted Depth Abs Rel ↓ \\
 \midrule
+COLMAP & lego & 20 &  & 111.389 & 10.804 & 0.512 & \textbf{0.676} &  & 1.116 \\
+COLMAP & lego & 20 & points & 111.389 & 10.807 & 0.512 & 0.666 &  & 1.225 \\
+COLMAP & lego & 30 &  & 132.540 & 10.755 & 0.512 & \underline{0.675} &  & 0.492 \\
+COLMAP & lego & 30 & points & 132.540 & 10.754 & 0.512 & \underline{0.675} &  & 0.994 \\
+COLMAP & lego & 40 &  & 173.622 & 10.944 & 0.520 & 0.645 &  & 0.637 \\
+COLMAP & lego & 40 & points & 173.622 & 10.867 & 0.524 & 0.638 &  & 0.851 \\
+VGGT & lego & 5 &  & 3.494 & 12.364 & 0.425 & 0.570 & 0.022 & 0.087 \\
+VGGT & lego & 5 & closer & 3.494 & 12.550 & 0.425 & 0.571 & 0.022 & 0.083 \\
+VGGT & lego & 5 & full & 3.494 & 12.539 & 0.419 & 0.569 & 0.022 & 0.088 \\
+VGGT & lego & 5 & points & 3.494 & 12.478 & 0.411 & 0.575 & 0.022 & 0.088 \\
 VGGT & lego & 10 &  & 2.548 & 13.161 & 0.365 & 0.598 & 0.027 & 0.053 \\
 VGGT & lego & 10 & closer & 2.548 & 13.341 & 0.357 & 0.607 & 0.027 & 0.059 \\
 VGGT & lego & 10 & full & 2.548 & 13.507 & 0.345 & 0.613 & 0.027 & 0.048 \\
@@ -15,40 +25,52 @@ VGGT & lego & 20 &  & 2.282 & 13.528 & 0.329 & 0.618 & 0.019 & 0.041 \\
 VGGT & lego & 20 & closer & 2.282 & 13.658 & 0.319 & 0.625 & 0.019 & 0.045 \\
 VGGT & lego & 20 & full & 2.282 & 13.540 & 0.317 & 0.624 & 0.019 & 0.043 \\
 VGGT & lego & 20 & points & 2.282 & 13.514 & 0.335 & 0.612 & 0.019 & 0.041 \\
-VGGT & lego & 30 &  & 2.223 & 13.846 & 0.308 & 0.632 & 0.018 & 0.040 \\
-VGGT & lego & 30 & closer & 2.223 & 13.961 & 0.300 & 0.639 & 0.018 & 0.044 \\
-VGGT & lego & 30 & full & 2.223 & 13.896 & 0.298 & 0.638 & 0.018 & 0.042 \\
-VGGT & lego & 30 & points & 2.223 & 13.859 & 0.312 & 0.626 & 0.018 & 0.039 \\
-VGGT & lego & 40 &  & 1.337 & 14.321 & 0.265 & 0.663 & \underline{0.015} & 0.038 \\
-VGGT & lego & 40 & closer & 1.337 & 14.416 & 0.260 & 0.666 & \underline{0.015} & 0.045 \\
-VGGT & lego & 40 & full & 1.337 & 14.403 & 0.261 & 0.666 & \underline{0.015} & 0.041 \\
-VGGT & lego & 40 & points & 1.337 & 14.411 & 0.262 & 0.662 & \underline{0.015} & 0.038 \\
-VGGT & lego & 87 &  & \textbf{0.298} & 20.353 & 0.076 & 0.773 & 0.013 & \underline{0.021} \\
-VGGT & lego & 87 & closer & \textbf{0.298} & 20.368 & 0.079 & \underline{0.775} & 0.013 & 0.022 \\
-VGGT & lego & 87 & full & \textbf{0.298} & \underline{21.973} & \underline{0.070} & \textbf{0.812} & 0.013 & \textbf{0.018} \\
-VGGT & lego & 87 & points & \textbf{0.298} & \textbf{21.992} & \textbf{0.065} & \textbf{0.812} & 0.013 & \textbf{0.018} \\
+VGGT & lego & 30 &  & \underline{2.223} & 13.846 & 0.308 & 0.632 & \underline{0.018} & 0.040 \\
+VGGT & lego & 30 & closer & \underline{2.223} & 13.961 & 0.300 & 0.639 & \underline{0.018} & 0.044 \\
+VGGT & lego & 30 & full & \underline{2.223} & 13.896 & 0.298 & 0.638 & \underline{0.018} & 0.042 \\
+VGGT & lego & 30 & points & \underline{2.223} & 13.859 & 0.312 & 0.626 & \underline{0.018} & \underline{0.039} \\
+VGGT & lego & 40 &  & 1.337 & 14.321 & 0.265 & 0.663 & \textbf{0.015} & \textbf{0.038} \\
+VGGT & lego & 40 & closer & 1.337 & \textbf{14.416} & \textbf{0.260} & 0.666 & \textbf{0.015} & 0.045 \\
+VGGT & lego & 40 & full & 1.337 & 14.403 & \underline{0.261} & 0.666 & \textbf{0.015} & 0.041 \\
+VGGT & lego & 40 & points & 1.337 & \underline{14.411} & 0.262 & 0.662 & \textbf{0.015} & \textbf{0.038} \\
 \midrule
-VGGT & ship & 10 &  & 0.323 & 20.742 & 0.174 & 0.694 & \underline{0.028} & 0.034 \\
-VGGT & ship & 10 & closer & 0.323 & 20.824 & 0.176 & 0.694 & \underline{0.028} & 0.036 \\
-VGGT & ship & 10 & full & 0.323 & 21.074 & 0.163 & 0.701 & \underline{0.028} & 0.031 \\
-VGGT & ship & 10 & points & 0.323 & 20.908 & 0.183 & 0.691 & \underline{0.028} & 0.033 \\
-VGGT & ship & 20 &  & 0.369 & 22.298 & 0.132 & 0.731 & \textbf{0.027} & \underline{0.025} \\
-VGGT & ship & 20 & closer & 0.369 & 22.272 & 0.140 & 0.728 & \textbf{0.027} & 0.031 \\
-VGGT & ship & 20 & full & 0.369 & 22.572 & 0.132 & 0.739 & \textbf{0.027} & \textbf{0.024} \\
-VGGT & ship & 20 & points & 0.369 & 22.268 & 0.139 & 0.728 & \textbf{0.027} & \underline{0.025} \\
-VGGT & ship & 30 &  & \underline{0.274} & 21.942 & 0.138 & 0.716 & \underline{0.028} & \textbf{0.024} \\
-VGGT & ship & 30 & closer & \underline{0.274} & 21.875 & 0.147 & 0.715 & \underline{0.028} & 0.032 \\
-VGGT & ship & 30 & full & \underline{0.274} & 22.059 & 0.141 & 0.718 & \underline{0.028} & \underline{0.025} \\
-VGGT & ship & 30 & points & \underline{0.274} & 22.004 & 0.142 & 0.715 & \underline{0.028} & \textbf{0.024} \\
-VGGT & ship & 40 &  & \textbf{0.270} & 21.673 & 0.138 & 0.713 & \underline{0.028} & 0.029 \\
-VGGT & ship & 40 & closer & \textbf{0.270} & 21.592 & 0.146 & 0.712 & \underline{0.028} & 0.032 \\
-VGGT & ship & 40 & full & \textbf{0.270} & 21.754 & 0.142 & 0.715 & \underline{0.028} & 0.029 \\
-VGGT & ship & 40 & points & \textbf{0.270} & 21.795 & 0.140 & 0.713 & \underline{0.028} & 0.029 \\
-VGGT & ship & 87 &  & 0.487 & 22.859 & \underline{0.130} & 0.748 & \underline{0.028} & 0.027 \\
-VGGT & ship & 87 & closer & 0.487 & 22.619 & 0.139 & 0.743 & \underline{0.028} & 0.032 \\
-VGGT & ship & 87 & full & 0.487 & \underline{23.491} & 0.132 & \textbf{0.765} & \underline{0.028} & 0.028 \\
-VGGT & ship & 87 & points & 0.487 & \textbf{23.507} & \textbf{0.126} & \underline{0.763} & \underline{0.028} & 0.028 \\
+COLMAP & ship & 20 &  & 0.279 & 16.435 & 0.378 & 0.592 &  & 0.062 \\
+COLMAP & ship & 20 & points & 0.279 & 15.591 & 0.421 & 0.555 &  & 0.100 \\
+COLMAP & ship & 30 &  & 3.397 & 16.763 & 0.351 & 0.593 &  & 0.057 \\
+COLMAP & ship & 30 & points & 3.397 & 16.550 & 0.393 & 0.581 &  & 0.069 \\
+COLMAP & ship & 40 &  & 12.248 & 17.697 & 0.326 & 0.593 &  & 0.065 \\
+COLMAP & ship & 40 & points & 12.248 & 17.733 & 0.343 & 0.594 &  & 0.072 \\
+VGGT & ship & 5 &  & 0.509 & 19.268 & 0.249 & 0.663 & \textbf{0.026} & 0.044 \\
+VGGT & ship & 5 & closer & 0.509 & 19.738 & 0.242 & 0.674 & \textbf{0.026} & 0.040 \\
+VGGT & ship & 5 & full & 0.509 & 19.670 & 0.225 & 0.671 & \textbf{0.026} & 0.038 \\
+VGGT & ship & 5 & points & 0.509 & 19.458 & 0.240 & 0.662 & \textbf{0.026} & 0.043 \\
+VGGT & ship & 10 &  & 0.323 & 20.742 & 0.174 & 0.694 & 0.028 & 0.034 \\
+VGGT & ship & 10 & closer & 0.323 & 20.824 & 0.176 & 0.694 & 0.028 & 0.036 \\
+VGGT & ship & 10 & full & 0.323 & 21.074 & 0.163 & 0.701 & 0.028 & 0.031 \\
+VGGT & ship & 10 & points & 0.323 & 20.908 & 0.183 & 0.691 & 0.028 & 0.033 \\
+VGGT & ship & 20 &  & 0.369 & \underline{22.298} & \textbf{0.132} & \underline{0.731} & \underline{0.027} & \underline{0.025} \\
+VGGT & ship & 20 & closer & 0.369 & 22.272 & 0.140 & 0.728 & \underline{0.027} & 0.031 \\
+VGGT & ship & 20 & full & 0.369 & \textbf{22.572} & \textbf{0.132} & \textbf{0.739} & \underline{0.027} & \textbf{0.024} \\
+VGGT & ship & 20 & points & 0.369 & 22.268 & 0.139 & 0.728 & \underline{0.027} & \underline{0.025} \\
+VGGT & ship & 30 &  & \underline{0.274} & 21.942 & \underline{0.138} & 0.716 & 0.028 & \textbf{0.024} \\
+VGGT & ship & 30 & closer & \underline{0.274} & 21.875 & 0.147 & 0.715 & 0.028 & 0.032 \\
+VGGT & ship & 30 & full & \underline{0.274} & 22.059 & 0.141 & 0.718 & 0.028 & \underline{0.025} \\
+VGGT & ship & 30 & points & \underline{0.274} & 22.004 & 0.142 & 0.715 & 0.028 & \textbf{0.024} \\
+VGGT & ship & 40 &  & \textbf{0.270} & 21.673 & \underline{0.138} & 0.713 & 0.028 & 0.029 \\
+VGGT & ship & 40 & closer & \textbf{0.270} & 21.592 & 0.146 & 0.712 & 0.028 & 0.032 \\
+VGGT & ship & 40 & full & \textbf{0.270} & 21.754 & 0.142 & 0.715 & 0.028 & 0.029 \\
+VGGT & ship & 40 & points & \textbf{0.270} & 21.795 & 0.140 & 0.713 & 0.028 & 0.029 \\
 \midrule
+COLMAP & drums & 20 &  & 5.120 & 6.574 & 0.861 & 0.094 &  & 0.261 \\
+COLMAP & drums & 20 & points & 5.120 & 6.633 & 0.864 & 0.089 &  & 0.372 \\
+COLMAP & drums & 30 &  & \underline{0.578} & 11.876 & 0.514 & 0.405 &  & 0.072 \\
+COLMAP & drums & 30 & points & \underline{0.578} & 11.079 & 0.522 & 0.425 &  & 0.079 \\
+COLMAP & drums & 40 &  & 0.917 & 12.677 & 0.409 & 0.503 &  & 0.057 \\
+COLMAP & drums & 40 & points & 0.917 & 12.632 & 0.393 & 0.574 &  & 0.054 \\
+VGGT & drums & 5 &  & 0.952 & 12.329 & 0.443 & 0.581 & \textbf{0.030} & 0.084 \\
+VGGT & drums & 5 & closer & 0.952 & 12.432 & 0.434 & 0.580 & \textbf{0.030} & 0.117 \\
+VGGT & drums & 5 & full & 0.952 & 12.483 & 0.433 & 0.577 & \textbf{0.030} & 0.096 \\
+VGGT & drums & 5 & points & 0.952 & 12.357 & 0.436 & 0.579 & \textbf{0.030} & 0.078 \\
 VGGT & drums & 10 &  & 1.153 & 12.553 & 0.418 & 0.603 &  & 0.069 \\
 VGGT & drums & 10 & closer & 1.153 & 12.728 & 0.410 & 0.609 &  & 0.126 \\
 VGGT & drums & 10 & full & 1.153 & 12.605 & 0.407 & 0.609 &  & 0.096 \\
@@ -61,14 +83,10 @@ VGGT & drums & 30 &  & 0.695 & 13.857 & 0.287 & 0.692 &  & 0.061 \\
 VGGT & drums & 30 & closer & 0.695 & 13.969 & 0.284 & 0.696 &  & 0.115 \\
 VGGT & drums & 30 & full & 0.695 & 13.978 & 0.279 & 0.698 &  & 0.095 \\
 VGGT & drums & 30 & points & 0.695 & 13.989 & 0.287 & 0.688 &  & 0.052 \\
-VGGT & drums & 40 &  & \underline{0.373} & 17.645 & 0.112 & 0.795 &  & 0.024 \\
-VGGT & drums & 40 & closer & \underline{0.373} & 17.639 & 0.114 & 0.794 &  & 0.043 \\
-VGGT & drums & 40 & full & \underline{0.373} & 17.690 & 0.112 & 0.799 &  & 0.036 \\
-VGGT & drums & 40 & points & \underline{0.373} & 17.852 & 0.109 & 0.798 &  & 0.023 \\
-VGGT & drums & 87 &  & \textbf{0.173} & \underline{20.899} & \underline{0.085} & \textbf{0.869} &  & \underline{0.018} \\
-VGGT & drums & 87 & closer & \textbf{0.173} & 20.030 & 0.091 & 0.851 &  & 0.026 \\
-VGGT & drums & 87 & full & \textbf{0.173} & 20.728 & 0.089 & 0.866 &  & \underline{0.018} \\
-VGGT & drums & 87 & points & \textbf{0.173} & \textbf{20.910} & \textbf{0.082} & \underline{0.868} &  & \textbf{0.017} \\
+VGGT & drums & 40 &  & \textbf{0.373} & 17.645 & \underline{0.112} & 0.795 &  & \underline{0.024} \\
+VGGT & drums & 40 & closer & \textbf{0.373} & 17.639 & 0.114 & 0.794 &  & 0.043 \\
+VGGT & drums & 40 & full & \textbf{0.373} & \underline{17.690} & \underline{0.112} & \textbf{0.799} &  & 0.036 \\
+VGGT & drums & 40 & points & \textbf{0.373} & \textbf{17.852} & \textbf{0.109} & \underline{0.798} &  & \textbf{0.023} \\
 \bottomrule
 \end{tabular}
 \end{table}

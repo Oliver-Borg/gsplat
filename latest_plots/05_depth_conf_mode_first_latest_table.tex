@@ -1,0 +1,26 @@
+\begin{table}[H]
+\caption{VGGT with depth loss for different depth confidence modes. (First)}
+\label{tab:05_depth_conf_mode_first}
+\centering
+\scriptsize
+\begin{tabular}{lllrrrrr}
+\toprule
+Choice & Dataset & Depth Conf Mode & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ \\
+\midrule
+VGGT & bicycle &  & \textbf{0.481} & \underline{0.013} & \textbf{18.110} & \underline{0.351} & \textbf{0.293} \\
+VGGT & bicycle & shifted & \underline{0.482} & \textbf{0.012} & \underline{18.094} & 0.352 & \underline{0.292} \\
+VGGT & bicycle & sigmoid & \underline{0.482} & \textbf{0.012} & 17.927 & \textbf{0.342} & 0.284 \\
+VGGT & bicycle & standard & \textbf{0.481} & \textbf{0.012} & 18.087 & 0.353 & \underline{0.292} \\
+\midrule
+VGGT & bonsai &  & \textbf{0.794} & \textbf{0.017} & 17.473 & \underline{0.392} & 0.557 \\
+VGGT & bonsai & shifted & \underline{0.803} & \textbf{0.017} & \underline{17.552} & 0.394 & \textbf{0.562} \\
+VGGT & bonsai & sigmoid & 0.823 & \textbf{0.017} & 17.478 & \textbf{0.391} & 0.558 \\
+VGGT & bonsai & standard & \underline{0.803} & \textbf{0.017} & \textbf{17.554} & 0.394 & \underline{0.561} \\
+\midrule
+VGGT & lego &  & 0.223 & \underline{0.004} & 21.973 & \textbf{0.070} & \underline{0.812} \\
+VGGT & lego & shifted & \textbf{0.202} & \textbf{0.003} & \underline{23.505} & \underline{0.094} & \textbf{0.845} \\
+VGGT & lego & sigmoid & 0.223 & \underline{0.004} & 21.973 & \textbf{0.070} & \underline{0.812} \\
+VGGT & lego & standard & \underline{0.204} & \textbf{0.003} & \textbf{23.506} & 0.095 & \textbf{0.845} \\
+\bottomrule
+\end{tabular}
+\end{table}

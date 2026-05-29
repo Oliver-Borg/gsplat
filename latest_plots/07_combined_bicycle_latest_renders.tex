@@ -1,6 +1,10 @@
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\linewidth]{Images/04-Results/Renders/07_combined_bicycle_latest_renders.pdf}
+    \ifhighres
+        \includegraphics[width=1.0\linewidth]{Images/04-Results/Renders/07_combined_bicycle_latest_renders.pdf}
+    \else
+        \includegraphics[width=1.0\linewidth]{Images/04-Results/Renders/07_combined_bicycle_latest_renders.jpg}
+    \fi
     \caption{Combining cameras and point clouds (Bicycle).}
     \label{fig:renders_07_combined_bicycle}
 \end{figure}

@@ -3,10 +3,19 @@
 \label{tab:05_depth_loss_num_images_outdoor}
 \centering
 \scriptsize
-\begin{tabular}{llrlrrrrll}
+\begin{tabular}{llrlrrrrlr}
 \toprule
 Choice & Dataset & Num Images & Depth Loss Mode & RRE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Predicted Depth Abs Rel ↓ & Splatted Depth Abs Rel ↓ \\
 \midrule
+COLMAP & bicycle & 20 &  & 19.486 & 9.541 & 0.975 & 0.026 &  &  \\
+COLMAP & bicycle & 30 &  & \underline{0.511} & 10.860 & 0.810 & 0.155 &  &  \\
+COLMAP & bicycle & 30 & points & \underline{0.511} & 11.842 & 0.781 & 0.170 &  &  \\
+COLMAP & bicycle & 40 &  & \textbf{0.263} & 13.764 & 0.685 & \textbf{0.244} &  &  \\
+COLMAP & bicycle & 40 & points & \textbf{0.263} & 14.165 & 0.667 & \underline{0.240} &  &  \\
+VGGT & bicycle & 5 &  & 3.538 & 12.060 & 0.649 & 0.111 &  &  \\
+VGGT & bicycle & 5 & closer & 3.538 & 12.090 & 0.650 & 0.114 &  &  \\
+VGGT & bicycle & 5 & full & 3.538 & 12.072 & 0.645 & 0.111 &  &  \\
+VGGT & bicycle & 5 & points & 3.538 & 12.039 & 0.648 & 0.100 &  &  \\
 VGGT & bicycle & 10 &  & 1.748 & 13.894 & 0.566 & 0.150 &  &  \\
 VGGT & bicycle & 10 & closer & 1.748 & 13.562 & 0.588 & 0.143 &  &  \\
 VGGT & bicycle & 10 & full & 1.748 & 13.885 & 0.552 & 0.155 &  &  \\
@@ -15,19 +24,27 @@ VGGT & bicycle & 20 &  & 1.149 & 15.618 & 0.472 & 0.191 &  &  \\
 VGGT & bicycle & 20 & closer & 1.149 & 15.334 & 0.479 & 0.188 &  &  \\
 VGGT & bicycle & 20 & full & 1.149 & 15.717 & 0.449 & 0.205 &  &  \\
 VGGT & bicycle & 20 & points & 1.149 & 15.663 & 0.469 & 0.189 &  &  \\
-VGGT & bicycle & 30 &  & \underline{0.930} & 16.091 & 0.446 & 0.210 &  &  \\
-VGGT & bicycle & 30 & closer & \underline{0.930} & 15.813 & 0.451 & 0.208 &  &  \\
-VGGT & bicycle & 30 & full & \underline{0.930} & 16.446 & 0.423 & 0.229 &  &  \\
-VGGT & bicycle & 30 & points & \underline{0.930} & 16.007 & 0.455 & 0.203 &  &  \\
+VGGT & bicycle & 30 &  & 0.930 & 16.091 & 0.446 & 0.210 &  &  \\
+VGGT & bicycle & 30 & closer & 0.930 & 15.813 & 0.451 & 0.208 &  &  \\
+VGGT & bicycle & 30 & full & 0.930 & \underline{16.446} & \underline{0.423} & 0.229 &  &  \\
+VGGT & bicycle & 30 & points & 0.930 & 16.007 & 0.455 & 0.203 &  &  \\
 VGGT & bicycle & 40 &  & 0.997 & 16.245 & 0.434 & 0.218 &  &  \\
-VGGT & bicycle & 40 & closer & 0.997 & 16.235 & 0.423 & 0.221 &  &  \\
-VGGT & bicycle & 40 & full & 0.997 & 16.771 & 0.410 & 0.239 &  &  \\
+VGGT & bicycle & 40 & closer & 0.997 & 16.235 & \underline{0.423} & 0.221 &  &  \\
+VGGT & bicycle & 40 & full & 0.997 & \textbf{16.771} & \textbf{0.410} & 0.239 &  &  \\
 VGGT & bicycle & 40 & points & 0.997 & 16.108 & 0.455 & 0.212 &  &  \\
-VGGT & bicycle & 100 &  & \textbf{0.716} & 17.384 & \underline{0.338} & 0.268 &  &  \\
-VGGT & bicycle & 100 & closer & \textbf{0.716} & \underline{17.500} & \textbf{0.329} & 0.266 &  &  \\
-VGGT & bicycle & 100 & full & \textbf{0.716} & \textbf{18.110} & 0.351 & \textbf{0.293} &  &  \\
-VGGT & bicycle & 100 & points & \textbf{0.716} & 17.406 & 0.383 & \underline{0.269} &  &  \\
 \midrule
+COLMAP & garden & 10 &  & 0.155 & 12.356 & 0.798 & 0.309 &  &  \\
+COLMAP & garden & 10 & points & 0.155 & 11.012 & 0.835 & 0.283 &  &  \\
+COLMAP & garden & 20 &  & 0.071 & 19.310 & 0.414 & 0.369 &  &  \\
+COLMAP & garden & 20 & points & 0.071 & 19.535 & 0.431 & 0.384 &  &  \\
+COLMAP & garden & 30 &  & \underline{0.060} & 20.770 & 0.349 & 0.429 &  &  \\
+COLMAP & garden & 30 & points & \underline{0.060} & 20.915 & 0.364 & 0.444 &  &  \\
+COLMAP & garden & 40 &  & \textbf{0.055} & \textbf{21.583} & 0.322 & \textbf{0.491} &  &  \\
+COLMAP & garden & 40 & points & \textbf{0.055} & \underline{21.543} & 0.331 & \underline{0.487} &  &  \\
+VGGT & garden & 5 &  & 0.920 & 14.669 & 0.505 & 0.217 &  &  \\
+VGGT & garden & 5 & closer & 0.920 & 13.833 & 0.538 & 0.218 &  &  \\
+VGGT & garden & 5 & full & 0.920 & 14.672 & 0.485 & 0.226 &  &  \\
+VGGT & garden & 5 & points & 0.920 & 14.552 & 0.502 & 0.215 &  &  \\
 VGGT & garden & 10 &  & 0.716 & 15.862 & 0.443 & 0.248 &  &  \\
 VGGT & garden & 10 & closer & 0.716 & 15.714 & 0.425 & 0.272 &  &  \\
 VGGT & garden & 10 & full & 0.716 & 16.632 & 0.402 & 0.274 &  &  \\
@@ -36,19 +53,23 @@ VGGT & garden & 20 &  & 0.304 & 18.335 & 0.332 & 0.326 &  &  \\
 VGGT & garden & 20 & closer & 0.304 & 18.250 & 0.326 & 0.350 &  &  \\
 VGGT & garden & 20 & full & 0.304 & 18.929 & 0.314 & 0.360 &  &  \\
 VGGT & garden & 20 & points & 0.304 & 18.065 & 0.351 & 0.312 &  &  \\
-VGGT & garden & 30 &  & \textbf{0.276} & 19.416 & 0.292 & 0.385 &  &  \\
-VGGT & garden & 30 & closer & \textbf{0.276} & 19.450 & \textbf{0.287} & 0.385 &  &  \\
-VGGT & garden & 30 & full & \textbf{0.276} & 19.644 & 0.293 & 0.396 &  &  \\
-VGGT & garden & 30 & points & \textbf{0.276} & 19.115 & 0.313 & 0.357 &  &  \\
-VGGT & garden & 40 &  & 0.289 & \underline{19.921} & \underline{0.291} & \underline{0.404} &  &  \\
+VGGT & garden & 30 &  & 0.276 & 19.416 & 0.292 & 0.385 &  &  \\
+VGGT & garden & 30 & closer & 0.276 & 19.450 & \textbf{0.287} & 0.385 &  &  \\
+VGGT & garden & 30 & full & 0.276 & 19.644 & 0.293 & 0.396 &  &  \\
+VGGT & garden & 30 & points & 0.276 & 19.115 & 0.313 & 0.357 &  &  \\
+VGGT & garden & 40 &  & 0.289 & 19.921 & \underline{0.291} & 0.404 &  &  \\
 VGGT & garden & 40 & closer & 0.289 & 19.075 & 0.308 & 0.398 &  &  \\
-VGGT & garden & 40 & full & 0.289 & \textbf{20.035} & 0.296 & \textbf{0.412} &  &  \\
+VGGT & garden & 40 & full & 0.289 & 20.035 & 0.296 & 0.412 &  &  \\
 VGGT & garden & 40 & points & 0.289 & 19.802 & 0.309 & 0.398 &  &  \\
-VGGT & garden & 100 &  & 0.373 & 19.351 & 0.338 & 0.366 &  &  \\
-VGGT & garden & 100 & closer & 0.373 & 19.498 & 0.332 & 0.360 &  &  \\
-VGGT & garden & 100 & full & 0.373 & 19.402 & 0.346 & 0.371 &  &  \\
-VGGT & garden & 100 & points & 0.373 & 19.362 & 0.361 & 0.374 &  &  \\
 \midrule
+COLMAP & stump & 20 &  & \underline{0.868} & 12.789 & 0.926 & 0.149 &  &  \\
+COLMAP & stump & 20 & points & \underline{0.868} & 12.716 & 0.924 & 0.166 &  &  \\
+COLMAP & stump & 40 &  & \textbf{0.170} & 14.788 & 0.651 & 0.343 &  &  \\
+COLMAP & stump & 40 & points & \textbf{0.170} & 14.425 & 0.684 & \underline{0.360} &  &  \\
+VGGT & stump & 5 &  & 2.566 & 14.817 & 0.623 & 0.253 &  &  \\
+VGGT & stump & 5 & closer & 2.566 & 14.759 & 0.624 & 0.245 &  &  \\
+VGGT & stump & 5 & full & 2.566 & 14.513 & 0.630 & 0.230 &  &  \\
+VGGT & stump & 5 & points & 2.566 & 14.468 & 0.626 & 0.216 &  &  \\
 VGGT & stump & 10 &  & 2.389 & 14.980 & 0.599 & 0.273 &  &  \\
 VGGT & stump & 10 & closer & 2.389 & 15.239 & 0.600 & 0.281 &  &  \\
 VGGT & stump & 10 & full & 2.389 & 15.267 & 0.605 & 0.292 &  &  \\
@@ -57,18 +78,14 @@ VGGT & stump & 20 &  & 1.511 & 15.881 & 0.557 & 0.290 &  &  \\
 VGGT & stump & 20 & closer & 1.511 & 16.100 & 0.544 & 0.292 &  &  \\
 VGGT & stump & 20 & full & 1.511 & 16.156 & 0.548 & 0.306 &  &  \\
 VGGT & stump & 20 & points & 1.511 & 15.759 & 0.555 & 0.282 &  &  \\
-VGGT & stump & 30 &  & 1.238 & 17.133 & 0.517 & 0.331 &  &  \\
+VGGT & stump & 30 &  & 5.382 & 17.133 & 0.517 & 0.331 &  &  \\
 VGGT & stump & 30 & closer & 1.238 & 17.094 & 0.516 & 0.333 &  &  \\
 VGGT & stump & 30 & full & 1.238 & 17.151 & 0.521 & 0.342 &  &  \\
 VGGT & stump & 30 & points & 1.238 & 17.111 & 0.517 & 0.326 &  &  \\
-VGGT & stump & 40 &  & \underline{0.870} & 17.802 & 0.498 & 0.359 &  &  \\
-VGGT & stump & 40 & closer & \underline{0.870} & 17.834 & 0.497 & 0.360 &  &  \\
-VGGT & stump & 40 & full & \underline{0.870} & 17.914 & 0.496 & 0.370 &  &  \\
-VGGT & stump & 40 & points & \underline{0.870} & 17.691 & 0.505 & 0.354 &  &  \\
-VGGT & stump & 100 &  & \textbf{0.856} & 18.294 & \textbf{0.492} & 0.398 &  &  \\
-VGGT & stump & 100 & closer & \textbf{0.856} & 18.349 & \underline{0.494} & 0.398 &  &  \\
-VGGT & stump & 100 & full & \textbf{0.856} & \textbf{18.406} & 0.515 & \textbf{0.408} &  &  \\
-VGGT & stump & 100 & points & \textbf{0.856} & \underline{18.381} & 0.521 & \underline{0.407} &  &  \\
+VGGT & stump & 40 &  & 0.870 & 17.802 & 0.498 & 0.359 &  &  \\
+VGGT & stump & 40 & closer & 0.870 & \underline{17.834} & \underline{0.497} & \underline{0.360} &  &  \\
+VGGT & stump & 40 & full & 0.870 & \textbf{17.914} & \textbf{0.496} & \textbf{0.370} &  &  \\
+VGGT & stump & 40 & points & 0.870 & 17.691 & 0.505 & 0.354 &  &  \\
 \bottomrule
 \end{tabular}
 \end{table}

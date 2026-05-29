@@ -1,0 +1,34 @@
+\begin{table}[H]
+\caption{Combining cameras and point clouds from VGGT and COLMAP. (Indoor,Outdoor,Synthetic)}
+\label{tab:07_combined_single_indoor,outdoor,synthetic}
+\centering
+\scriptsize
+\begin{tabular}{lllllrrrrrr}
+\toprule
+Choice & Dataset Collection & Camera Src & Pcd Src & Sampling Mode & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP & indoor &  &  &  & \textbf{0.072} & \textbf{0.001} & \textbf{23.826} & \textbf{0.168} & \textbf{0.708} & \textbf{0.658} \\
+VGGT & indoor & COLMAP & Both & random &  &  &  &  &  &  \\
+VGGT & indoor & COLMAP & VGGT & random &  &  &  &  &  &  \\
+VGGT & indoor &  &  & confidence &  &  &  &  &  &  \\
+VGGT & indoor &  &  & random & \underline{0.426} & \underline{0.011} & \underline{19.416} & \underline{0.271} & 0.538 & \underline{0.413} \\
+VGGT & indoor &  &  & voxels & 0.784 & 0.022 & 17.390 & 0.404 & \underline{0.561} & 0.307 \\
+\midrule
+COLMAP & outdoor & COLMAP & Both & confidence & 0.101 & \underline{0.002} & 22.228 & 0.257 & 0.566 & \underline{0.491} \\
+COLMAP & outdoor & COLMAP & Both & random & 0.095 & \underline{0.002} & 21.908 & \textbf{0.242} & 0.542 & 0.480 \\
+COLMAP & outdoor & COLMAP & Both & voxels & \underline{0.092} & \underline{0.002} & 21.884 & 0.277 & 0.532 & 0.452 \\
+COLMAP & outdoor & COLMAP & VGGT & random & 0.094 & 0.003 & \underline{22.363} & \underline{0.252} & \textbf{0.592} & \textbf{0.512} \\
+COLMAP & outdoor &  &  &  & \textbf{0.064} & \textbf{0.001} & \textbf{23.042} & 0.318 & \underline{0.589} & 0.481 \\
+VGGT & outdoor &  &  & confidence & 0.727 & 0.013 & 17.051 & 0.394 & 0.269 & 0.137 \\
+VGGT & outdoor &  &  & random & 0.467 & 0.018 & 18.343 & 0.389 & 0.344 & 0.207 \\
+VGGT & outdoor &  &  & voxels & 0.473 & 0.013 & 17.941 & 0.363 & 0.286 & 0.182 \\
+\midrule
+COLMAP & synthetic &  &  &  & 3.556 & \underline{0.039} & \textbf{23.258} & 0.097 & \textbf{0.851} & \textbf{0.775} \\
+VGGT & synthetic & COLMAP & Both & random &  &  &  &  &  &  \\
+VGGT & synthetic & COLMAP & VGGT & random &  &  &  &  &  &  \\
+VGGT & synthetic &  &  & confidence &  &  &  &  &  &  \\
+VGGT & synthetic &  &  & random & \textbf{0.251} & \textbf{0.006} & 20.378 & \underline{0.076} & 0.774 & 0.690 \\
+VGGT & synthetic &  &  & voxels & \underline{0.255} & \textbf{0.006} & \underline{20.510} & \textbf{0.074} & \underline{0.777} & \underline{0.695} \\
+\bottomrule
+\end{tabular}
+\end{table}

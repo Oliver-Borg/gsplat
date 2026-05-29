@@ -1,0 +1,26 @@
+\begin{table}[H]
+\caption{VGGT with depth loss for different depth loss modes and $30$ images. (Synthetic)}
+\label{tab:05_depth_loss_sparse_synthetic}
+\centering
+\scriptsize
+\begin{tabular}{llrlrrrrrrr}
+\toprule
+Choice & Dataset & Num Images & Depth Loss Mode & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Predicted Depth Abs Rel ↓ & Splatted Depth Abs Rel ↓ \\
+\midrule
+VGGT & lego & 30 &  & 2.117 & \underline{0.029} & 13.846 & 0.308 & 0.632 & \textbf{0.018} & \underline{0.040} \\
+VGGT & lego & 30 & closer & \underline{2.108} & \underline{0.029} & \textbf{13.961} & \underline{0.300} & \textbf{0.639} & \textbf{0.018} & 0.044 \\
+VGGT & lego & 30 & full & \textbf{2.070} & \textbf{0.027} & \underline{13.896} & \textbf{0.298} & \underline{0.638} & \textbf{0.018} & 0.042 \\
+VGGT & lego & 30 & points & 2.133 & \underline{0.029} & 13.859 & 0.312 & 0.626 & \textbf{0.018} & \textbf{0.039} \\
+\midrule
+VGGT & ship & 30 &  & 0.216 & \underline{0.004} & 21.942 & \textbf{0.138} & \underline{0.716} & \textbf{0.028} & \textbf{0.024} \\
+VGGT & ship & 30 & closer & \textbf{0.211} & \underline{0.004} & 21.875 & 0.147 & 0.715 & \textbf{0.028} & 0.032 \\
+VGGT & ship & 30 & full & \underline{0.213} & \textbf{0.003} & \textbf{22.059} & \underline{0.141} & \textbf{0.718} & \textbf{0.028} & \underline{0.025} \\
+VGGT & ship & 30 & points & 0.244 & \underline{0.004} & \underline{22.004} & 0.142 & 0.715 & \textbf{0.028} & \textbf{0.024} \\
+\midrule
+VGGT & drums & 30 &  & \underline{0.645} & 0.012 & 13.857 & 0.287 & 0.692 &  & \underline{0.061} \\
+VGGT & drums & 30 & closer & 0.649 & \underline{0.011} & 13.969 & \underline{0.284} & \underline{0.696} &  & 0.115 \\
+VGGT & drums & 30 & full & \textbf{0.632} & \textbf{0.008} & \underline{13.978} & \textbf{0.279} & \textbf{0.698} &  & 0.095 \\
+VGGT & drums & 30 & points & 0.669 & \textbf{0.008} & \textbf{13.989} & 0.287 & 0.688 &  & \textbf{0.052} \\
+\bottomrule
+\end{tabular}
+\end{table}

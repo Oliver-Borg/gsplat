@@ -1,0 +1,30 @@
+\begin{table}[H]
+\caption{Combining cameras and point clouds from VGGT and COLMAP. (Outdoor)}
+\label{tab:07_combined_single_outdoor}
+\centering
+\scriptsize
+\begin{tabular}{lllllrrrrrr}
+\toprule
+Choice & Dataset & Camera Src & Pcd Src & Sampling Mode & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP & bicycle & COLMAP & Both & confidence & 0.101 & \textbf{0.002} & \underline{22.228} & 0.257 & \underline{0.566} & \underline{0.491} \\
+COLMAP & bicycle & COLMAP & Both & random & 0.095 & \textbf{0.002} & 21.908 & \textbf{0.242} & 0.542 & 0.480 \\
+COLMAP & bicycle & COLMAP & Both & voxels & \textbf{0.092} & \textbf{0.002} & 21.884 & 0.277 & 0.532 & 0.452 \\
+COLMAP & bicycle & COLMAP & VGGT & random & \underline{0.094} & \underline{0.003} & \textbf{22.363} & \underline{0.252} & \textbf{0.592} & \textbf{0.512} \\
+COLMAP & bicycle &  &  &  & 0.111 & \textbf{0.002} & 22.163 & 0.349 & 0.559 & 0.428 \\
+VGGT & bicycle &  &  & confidence & 0.727 & 0.013 & 17.051 & 0.394 & 0.269 & 0.137 \\
+VGGT & bicycle &  &  & random & 0.489 & 0.014 & 17.384 & 0.338 & 0.268 & 0.176 \\
+VGGT & bicycle &  &  & voxels & 0.473 & 0.013 & 17.941 & 0.363 & 0.286 & 0.182 \\
+\midrule
+COLMAP & garden &  &  &  & \textbf{0.049} & \textbf{0.001} & \textbf{22.130} & \textbf{0.264} & \textbf{0.512} & \textbf{0.453} \\
+VGGT & garden &  &  & confidence &  &  &  &  &  &  \\
+VGGT & garden &  &  & random & \underline{0.135} & \underline{0.004} & \underline{19.351} & \underline{0.338} & \underline{0.366} & \underline{0.270} \\
+VGGT & garden &  &  & voxels &  &  &  &  &  &  \\
+\midrule
+COLMAP & stump &  &  &  & \textbf{0.034} & \textbf{0.001} & \textbf{24.833} & \textbf{0.340} & \textbf{0.696} & \textbf{0.563} \\
+VGGT & stump &  &  & confidence &  &  &  &  &  &  \\
+VGGT & stump &  &  & random & \underline{0.777} & \underline{0.035} & \underline{18.294} & \underline{0.492} & \underline{0.398} & \underline{0.174} \\
+VGGT & stump &  &  & voxels &  &  &  &  &  &  \\
+\bottomrule
+\end{tabular}
+\end{table}

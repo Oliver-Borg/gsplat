@@ -1,7 +1,8 @@
 \begin{table}[H]
 \caption{COLMAP versus VGGT over various number of images (Indoor,Outdoor,Synthetic)}
 \label{tab:01_num_images_indoor,outdoor,synthetic}
-\small
+\centering
+\scriptsize
 \begin{tabular}{llrrrrrrr}
 \toprule
 Choice & Dataset Collection & Num Images & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Aligned Cameras ↑ \\
@@ -16,7 +17,7 @@ COLMAP & indoor & 70 & 0.132 & \underline{0.007} & 21.635 & 0.214 & 0.638 & 70.0
 COLMAP & indoor & 80 & 0.134 & \underline{0.007} & 22.004 & 0.201 & 0.640 & 80.000 \\
 COLMAP & indoor & 90 & \underline{0.112} & 0.022 & \underline{22.606} & \underline{0.189} & \underline{0.665} & \underline{90.000} \\
 COLMAP & indoor & 100 & \textbf{0.098} & \underline{0.007} & \textbf{22.968} & \textbf{0.180} & \textbf{0.673} & \textbf{100.000} \\
-VGGT & indoor & 10 & 0.869 & 0.064 & 15.291 & 0.488 & 0.411 & 10.000 \\
+VGGT & indoor & 10 & 0.862 & 0.065 & 15.291 & 0.488 & 0.411 & 10.000 \\
 VGGT & indoor & 20 & 0.555 & 0.057 & 16.469 & 0.429 & 0.451 & 20.000 \\
 VGGT & indoor & 30 & 0.540 & 0.058 & 17.016 & 0.400 & 0.466 & 30.000 \\
 VGGT & indoor & 40 & 0.528 & 0.059 & 17.369 & 0.380 & 0.486 & 40.000 \\
@@ -55,7 +56,7 @@ COLMAP & synthetic & 50 & 51.284 & 1.332 & 15.557 & 0.318 & 0.671 & 27.333 \\
 COLMAP & synthetic & 60 & 49.627 & 1.221 & 16.729 & 0.283 & 0.725 & 41.667 \\
 COLMAP & synthetic & 70 & \textbf{0.274} & \underline{0.015} & \underline{20.433} & 0.130 & \underline{0.781} & 51.333 \\
 COLMAP & synthetic & 80 & 5.277 & 0.307 & 18.051 & 0.240 & 0.725 & 75.000 \\
-COLMAP & synthetic & 87 & 3.619 & 0.140 & \textbf{23.004} & \textbf{0.102} & \textbf{0.842} & \underline{82.333} \\
+COLMAP & synthetic & 87 & 3.625 & 0.140 & \textbf{23.004} & \textbf{0.102} & \textbf{0.842} & \underline{82.333} \\
 VGGT & synthetic & 10 & 1.341 & 0.086 & 15.506 & 0.325 & 0.629 & 10.000 \\
 VGGT & synthetic & 20 & 1.168 & 0.071 & 16.082 & 0.287 & 0.654 & 20.000 \\
 VGGT & synthetic & 30 & 1.064 & 0.064 & 16.407 & 0.261 & 0.666 & 30.000 \\

@@ -7,48 +7,76 @@
 \toprule
 Choice & Dataset & Num Images & Depth Loss Mode & RRE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Predicted Depth Abs Rel ↓ & Splatted Depth Abs Rel ↓ \\
 \midrule
+COLMAP & bonsai & 10 &  & 10.938 & 10.370 & 0.821 & 0.303 &  &  \\
+COLMAP & bonsai & 10 & points & 10.938 & 10.336 & 0.832 & 0.269 &  &  \\
+COLMAP & bonsai & 20 &  & \textbf{0.454} & 12.160 & 0.596 & 0.350 &  &  \\
+COLMAP & bonsai & 20 & points & \textbf{0.454} & 13.301 & 0.556 & 0.410 &  &  \\
+COLMAP & bonsai & 30 &  & 5.080 & 12.844 & 0.696 & 0.410 &  &  \\
+COLMAP & bonsai & 30 & points & 5.080 & 12.020 & 0.719 & 0.353 &  &  \\
+COLMAP & bonsai & 40 &  & 1.264 & 16.200 & 0.466 & 0.521 &  &  \\
+COLMAP & bonsai & 40 & points & 1.264 & 16.177 & 0.473 & \textbf{0.527} &  &  \\
+VGGT & bonsai & 5 &  & 1.351 & 12.755 & 0.646 & 0.366 &  &  \\
+VGGT & bonsai & 5 & closer & 1.351 & 12.234 & 0.643 & 0.324 &  &  \\
+VGGT & bonsai & 5 & full & 1.351 & 12.188 & 0.641 & 0.309 &  &  \\
+VGGT & bonsai & 5 & points & 1.351 & 12.138 & 0.642 & 0.306 &  &  \\
 VGGT & bonsai & 10 &  & 1.212 & 14.488 & 0.561 & 0.437 &  &  \\
 VGGT & bonsai & 10 & closer & 1.212 & 14.286 & 0.548 & 0.425 &  &  \\
 VGGT & bonsai & 10 & full & 1.212 & 14.106 & 0.535 & 0.412 &  &  \\
 VGGT & bonsai & 10 & points & 1.212 & 14.112 & 0.550 & 0.403 &  &  \\
 VGGT & bonsai & 20 &  & \underline{0.872} & 16.241 & 0.465 & 0.501 &  &  \\
 VGGT & bonsai & 20 & closer & \underline{0.872} & 16.079 & 0.464 & 0.493 &  &  \\
-VGGT & bonsai & 20 & full & \underline{0.872} & 16.300 & 0.430 & 0.500 &  &  \\
+VGGT & bonsai & 20 & full & \underline{0.872} & 16.300 & \underline{0.430} & 0.500 &  &  \\
 VGGT & bonsai & 20 & points & \underline{0.872} & 15.897 & 0.470 & 0.480 &  &  \\
 VGGT & bonsai & 30 &  & 1.001 & 16.325 & 0.450 & 0.513 &  &  \\
 VGGT & bonsai & 30 & closer & 1.001 & 16.389 & 0.452 & 0.509 &  &  \\
 VGGT & bonsai & 30 & full & 1.001 & 16.213 & 0.436 & 0.505 &  &  \\
 VGGT & bonsai & 30 & points & 1.001 & 16.116 & 0.455 & 0.496 &  &  \\
-VGGT & bonsai & 40 &  & 0.891 & 16.529 & 0.439 & 0.524 &  &  \\
+VGGT & bonsai & 40 &  & 0.891 & \underline{16.529} & 0.439 & \underline{0.524} &  &  \\
 VGGT & bonsai & 40 & closer & 0.891 & 16.521 & 0.436 & 0.523 &  &  \\
-VGGT & bonsai & 40 & full & 0.891 & 16.676 & 0.423 & 0.523 &  &  \\
+VGGT & bonsai & 40 & full & 0.891 & \textbf{16.676} & \textbf{0.423} & 0.523 &  &  \\
 VGGT & bonsai & 40 & points & 0.891 & 16.493 & 0.441 & 0.516 &  &  \\
-VGGT & bonsai & 100 &  & \textbf{0.722} & 17.423 & 0.399 & \underline{0.560} &  &  \\
-VGGT & bonsai & 100 & closer & \textbf{0.722} & \textbf{17.637} & \textbf{0.389} & \textbf{0.563} &  &  \\
-VGGT & bonsai & 100 & full & \textbf{0.722} & 17.473 & \underline{0.392} & 0.557 &  &  \\
-VGGT & bonsai & 100 & points & \textbf{0.722} & \underline{17.559} & 0.396 & 0.559 &  &  \\
 \midrule
+COLMAP & kitchen & 10 &  & 2.024 & 13.384 & 0.725 & 0.377 &  &  \\
+COLMAP & kitchen & 10 & points & 2.024 & 14.055 & 0.704 & 0.395 &  &  \\
+COLMAP & kitchen & 20 &  & 0.239 & 17.510 & 0.407 & \textbf{0.559} &  &  \\
+COLMAP & kitchen & 20 & points & 0.239 & 16.559 & 0.430 & 0.432 &  &  \\
+COLMAP & kitchen & 30 &  & \underline{0.159} & 19.522 & 0.228 & 0.482 &  &  \\
+COLMAP & kitchen & 30 & points & \underline{0.159} & 19.087 & 0.242 & 0.465 &  &  \\
+COLMAP & kitchen & 40 &  & \textbf{0.130} & \textbf{21.045} & \textbf{0.183} & \underline{0.539} &  &  \\
+COLMAP & kitchen & 40 & points & \textbf{0.130} & \underline{20.684} & \underline{0.192} & 0.509 &  &  \\
+VGGT & kitchen & 5 &  & 0.501 & 14.838 & 0.466 & 0.318 &  &  \\
+VGGT & kitchen & 5 & closer & 0.501 & 13.885 & 0.496 & 0.299 &  &  \\
+VGGT & kitchen & 5 & full & 0.501 & 14.731 & 0.454 & 0.320 &  &  \\
+VGGT & kitchen & 5 & points & 0.501 & 14.682 & 0.467 & 0.319 &  &  \\
 VGGT & kitchen & 10 &  & 0.313 & 16.831 & 0.354 & 0.377 &  &  \\
 VGGT & kitchen & 10 & closer & 0.313 & 15.178 & 0.358 & 0.365 &  &  \\
 VGGT & kitchen & 10 & full & 0.313 & 16.152 & 0.362 & 0.352 &  &  \\
 VGGT & kitchen & 10 & points & 0.313 & 16.412 & 0.369 & 0.357 &  &  \\
-VGGT & kitchen & 20 &  & \underline{0.305} & 17.509 & 0.290 & 0.411 &  &  \\
-VGGT & kitchen & 20 & closer & \underline{0.305} & 17.361 & 0.290 & 0.402 &  &  \\
-VGGT & kitchen & 20 & full & \underline{0.305} & 16.414 & 0.341 & 0.399 &  &  \\
-VGGT & kitchen & 20 & points & \underline{0.305} & 16.909 & 0.344 & 0.408 &  &  \\
-VGGT & kitchen & 30 &  & \textbf{0.267} & 19.270 & 0.226 & \textbf{0.496} &  &  \\
-VGGT & kitchen & 30 & closer & \textbf{0.267} & 19.099 & 0.223 & \underline{0.487} &  &  \\
-VGGT & kitchen & 30 & full & \textbf{0.267} & 17.627 & 0.267 & 0.437 &  &  \\
-VGGT & kitchen & 30 & points & \textbf{0.267} & 18.290 & 0.297 & 0.479 &  &  \\
+VGGT & kitchen & 20 &  & 0.305 & 17.509 & 0.290 & 0.411 &  &  \\
+VGGT & kitchen & 20 & closer & 0.305 & 17.361 & 0.290 & 0.402 &  &  \\
+VGGT & kitchen & 20 & full & 0.305 & 16.414 & 0.341 & 0.399 &  &  \\
+VGGT & kitchen & 20 & points & 0.305 & 16.909 & 0.344 & 0.408 &  &  \\
+VGGT & kitchen & 30 &  & 0.267 & 19.270 & 0.226 & 0.496 &  &  \\
+VGGT & kitchen & 30 & closer & 0.267 & 19.099 & 0.223 & 0.487 &  &  \\
+VGGT & kitchen & 30 & full & 0.267 & 17.627 & 0.267 & 0.437 &  &  \\
+VGGT & kitchen & 30 & points & 0.267 & 18.290 & 0.297 & 0.479 &  &  \\
 VGGT & kitchen & 40 &  & 0.336 & 18.968 & 0.211 & 0.448 &  &  \\
 VGGT & kitchen & 40 & closer & 0.336 & 19.169 & 0.209 & 0.456 &  &  \\
 VGGT & kitchen & 40 & full & 0.336 & 17.673 & 0.264 & 0.427 &  &  \\
 VGGT & kitchen & 40 & points & 0.336 & 18.144 & 0.264 & 0.431 &  &  \\
-VGGT & kitchen & 100 &  & 0.339 & \underline{20.018} & \underline{0.176} & 0.414 &  &  \\
-VGGT & kitchen & 100 & closer & 0.339 & \textbf{20.186} & \textbf{0.175} & 0.422 &  &  \\
-VGGT & kitchen & 100 & full & 0.339 & 19.044 & 0.210 & 0.400 &  &  \\
-VGGT & kitchen & 100 & points & 0.339 & 19.314 & 0.216 & 0.422 &  &  \\
 \midrule
+COLMAP & counter & 10 &  & 0.821 & 8.503 & 0.794 & 0.381 &  &  \\
+COLMAP & counter & 10 & points & 0.821 & 9.947 & 0.783 & 0.419 &  &  \\
+COLMAP & counter & 20 &  & \textbf{0.116} & 9.180 & 0.830 & 0.385 &  &  \\
+COLMAP & counter & 20 & points & \textbf{0.116} & 8.216 & 0.839 & 0.385 &  &  \\
+COLMAP & counter & 30 &  & 0.678 & 15.262 & 0.509 & 0.489 &  &  \\
+COLMAP & counter & 30 & points & 0.678 & 15.271 & 0.511 & 0.502 &  &  \\
+COLMAP & counter & 40 &  & \underline{0.178} & 16.691 & 0.445 & 0.539 &  &  \\
+COLMAP & counter & 40 & points & \underline{0.178} & 16.394 & 0.456 & 0.515 &  &  \\
+VGGT & counter & 5 &  & 1.194 & 12.962 & 0.602 & 0.354 &  &  \\
+VGGT & counter & 5 & closer & 1.194 & 12.447 & 0.613 & 0.332 &  &  \\
+VGGT & counter & 5 & full & 1.194 & 12.770 & 0.580 & 0.340 &  &  \\
+VGGT & counter & 5 & points & 1.194 & 12.701 & 0.587 & 0.329 &  &  \\
 VGGT & counter & 10 &  & 1.060 & 14.631 & 0.530 & 0.429 &  &  \\
 VGGT & counter & 10 & closer & 1.060 & 14.173 & 0.531 & 0.405 &  &  \\
 VGGT & counter & 10 & full & 1.060 & 14.250 & 0.504 & 0.416 &  &  \\
@@ -57,18 +85,14 @@ VGGT & counter & 20 &  & 0.487 & 16.503 & 0.410 & 0.495 &  &  \\
 VGGT & counter & 20 & closer & 0.487 & 16.380 & 0.408 & 0.489 &  &  \\
 VGGT & counter & 20 & full & 0.487 & 16.309 & 0.398 & 0.491 &  &  \\
 VGGT & counter & 20 & points & 0.487 & 16.231 & 0.418 & 0.476 &  &  \\
-VGGT & counter & 30 &  & \underline{0.353} & 17.623 & 0.358 & 0.541 &  &  \\
-VGGT & counter & 30 & closer & \underline{0.353} & 18.250 & 0.337 & 0.570 &  &  \\
-VGGT & counter & 30 & full & \underline{0.353} & 17.287 & 0.359 & 0.529 &  &  \\
-VGGT & counter & 30 & points & \underline{0.353} & 17.272 & 0.373 & 0.520 &  &  \\
-VGGT & counter & 40 &  & 0.357 & 18.961 & 0.311 & 0.592 &  &  \\
-VGGT & counter & 40 & closer & 0.357 & 19.053 & 0.311 & 0.596 &  &  \\
-VGGT & counter & 40 & full & 0.357 & 18.835 & 0.313 & 0.602 &  &  \\
+VGGT & counter & 30 &  & 0.353 & 17.623 & 0.358 & 0.541 &  &  \\
+VGGT & counter & 30 & closer & 0.353 & 18.250 & 0.337 & 0.570 &  &  \\
+VGGT & counter & 30 & full & 0.353 & 17.287 & 0.359 & 0.529 &  &  \\
+VGGT & counter & 30 & points & 0.353 & 17.272 & 0.373 & 0.520 &  &  \\
+VGGT & counter & 40 &  & 0.357 & \underline{18.961} & \textbf{0.311} & 0.592 &  &  \\
+VGGT & counter & 40 & closer & 0.357 & \textbf{19.053} & \textbf{0.311} & \underline{0.596} &  &  \\
+VGGT & counter & 40 & full & 0.357 & 18.835 & \underline{0.313} & \textbf{0.602} &  &  \\
 VGGT & counter & 40 & points & 0.357 & 18.609 & 0.326 & 0.574 &  &  \\
-VGGT & counter & 100 &  & \textbf{0.343} & 20.807 & \underline{0.237} & 0.641 &  &  \\
-VGGT & counter & 100 & closer & \textbf{0.343} & \textbf{21.081} & \textbf{0.234} & \textbf{0.655} &  &  \\
-VGGT & counter & 100 & full & \textbf{0.343} & 20.773 & 0.246 & \textbf{0.655} &  &  \\
-VGGT & counter & 100 & points & \textbf{0.343} & \underline{20.874} & 0.247 & \underline{0.652} &  &  \\
 \bottomrule
 \end{tabular}
 \end{table}

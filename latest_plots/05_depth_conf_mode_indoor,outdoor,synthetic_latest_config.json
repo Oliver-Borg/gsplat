@@ -23,7 +23,8 @@
     "depth_conf_mode": [
         "disabled",
         "standard",
-        "sigmoid"
+        "sigmoid",
+        "shifted"
     ],
     "dataset": "bonsai"
 }

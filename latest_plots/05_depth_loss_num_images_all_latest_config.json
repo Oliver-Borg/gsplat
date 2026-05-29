@@ -3,11 +3,11 @@
         42
     ],
     "num_images": [
+        5,
         10,
         20,
         30,
-        40,
-        100
+        40
     ],
     "sampling_mode": [
         "random"
@@ -30,5 +30,5 @@
     "depth_conf_mode": [
         "disabled"
     ],
-    "dataset": "drums"
+    "dataset": "ship"
 }

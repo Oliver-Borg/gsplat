@@ -1,0 +1,26 @@
+\begin{table}[H]
+\caption{VGGT with depth loss for different depth loss modes and $30$ images. (Indoor)}
+\label{tab:05_depth_loss_sparse_indoor}
+\centering
+\scriptsize
+\begin{tabular}{llrlrrrrrll}
+\toprule
+Choice & Dataset & Num Images & Depth Loss Mode & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Predicted Depth Abs Rel ↓ & Splatted Depth Abs Rel ↓ \\
+\midrule
+VGGT & bonsai & 30 &  & \underline{0.921} & 0.024 & \underline{16.325} & \underline{0.450} & \textbf{0.513} &  &  \\
+VGGT & bonsai & 30 & closer & \textbf{0.920} & \underline{0.022} & \textbf{16.389} & 0.452 & \underline{0.509} &  &  \\
+VGGT & bonsai & 30 & full & 0.945 & \textbf{0.019} & 16.213 & \textbf{0.436} & 0.505 &  &  \\
+VGGT & bonsai & 30 & points & \underline{0.921} & 0.023 & 16.116 & 0.455 & 0.496 &  &  \\
+\midrule
+VGGT & kitchen & 30 &  & \textbf{0.163} & \textbf{0.005} & \textbf{19.270} & \underline{0.226} & \textbf{0.496} &  &  \\
+VGGT & kitchen & 30 & closer & \underline{0.175} & \textbf{0.005} & \underline{19.099} & \textbf{0.223} & \underline{0.487} &  &  \\
+VGGT & kitchen & 30 & full & 0.191 & \textbf{0.005} & 17.627 & 0.267 & 0.437 &  &  \\
+VGGT & kitchen & 30 & points & 0.222 & \underline{0.006} & 18.290 & 0.297 & 0.479 &  &  \\
+\midrule
+VGGT & counter & 30 &  & 0.341 & \textbf{0.007} & \underline{17.623} & \underline{0.358} & \underline{0.541} &  &  \\
+VGGT & counter & 30 & closer & \textbf{0.253} & \textbf{0.007} & \textbf{18.250} & \textbf{0.337} & \textbf{0.570} &  &  \\
+VGGT & counter & 30 & full & \underline{0.326} & \textbf{0.007} & 17.287 & 0.359 & 0.529 &  &  \\
+VGGT & counter & 30 & points & 0.365 & \textbf{0.007} & 17.272 & 0.373 & 0.520 &  &  \\
+\bottomrule
+\end{tabular}
+\end{table}

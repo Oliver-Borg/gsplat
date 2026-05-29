@@ -1,34 +1,36 @@
 \begin{table}[H]
 \caption{Combining cameras and point clouds (Bicycle)}
 \label{tab:07_combined_bicycle}
-\begin{tabular}{lrllrrrrrr}
+\centering
+\scriptsize
+\begin{tabular}{llrllrrrrrr}
 \toprule
-Choice & Num Images & Camera Src & Pcd Src & Val RRE ↓ & Val RTE ↓ & Aligned Cameras ↑ & PSNR ↑ & LPIPS ↓ & SSIM ↑ \\
+Choice & Dataset & Num Images & Camera Src & Pcd Src & Val RRE ↓ & Val RTE ↓ & Aligned Cameras ↑ & PSNR ↑ & LPIPS ↓ & SSIM ↑ \\
 \midrule
-COLMAP & 25 & colmapcams & bothpcd & 1.028 & 0.011 & 7 & 12.870 & 0.676 & 0.151 \\
-COLMAP & 25 & colmapcams & vggtpcd & 0.726 & 0.012 & 7 & 12.693 & 0.670 & 0.152 \\
-COLMAP & 25 &  &  & 1.558 & 0.006 & 7 & 12.472 & 0.772 & 0.208 \\
-COLMAP & 50 & colmapcams & bothpcd & 0.204 & \underline{0.003} & 29 & 16.304 & 0.451 & 0.259 \\
-COLMAP & 50 & colmapcams & vggtpcd & 0.247 & \underline{0.003} & 29 & 15.948 & 0.462 & 0.239 \\
-COLMAP & 50 &  &  & 0.392 & \underline{0.003} & 29 & 15.933 & 0.593 & 0.260 \\
-COLMAP & 75 & colmapcams & bothpcd & 0.134 & \underline{0.003} & 44 & 17.704 & 0.374 & 0.341 \\
-COLMAP & 75 & colmapcams & vggtpcd & 0.158 & \underline{0.003} & 44 & 17.235 & 0.385 & 0.293 \\
-COLMAP & 75 &  &  & 0.213 & \underline{0.003} & 44 & 17.055 & 0.486 & 0.276 \\
-COLMAP & 100 & colmapcams & bothpcd & \textbf{0.089} & \textbf{0.002} & \textbf{100} & \textbf{22.568} & \textbf{0.237} & \textbf{0.598} \\
-COLMAP & 100 & colmapcams & vggtpcd & \underline{0.094} & \underline{0.003} & \textbf{100} & 22.363 & \underline{0.252} & \underline{0.592} \\
-COLMAP & 100 &  &  & 0.098 & \textbf{0.002} & \textbf{100} & \underline{22.471} & 0.351 & 0.577 \\
-VGGT & 25 & vggtcams & bothpcd & 2.152 & 0.006 & 7 & 12.401 & 0.666 & 0.139 \\
-VGGT & 25 & vggtcams & colmappcd & 4.210 & 0.018 & 7 & 11.541 & 0.797 & 0.196 \\
-VGGT & 25 &  &  & 1.073 & 0.020 & 25 & 15.882 & 0.476 & 0.221 \\
-VGGT & 50 & vggtcams & bothpcd & 0.588 & 0.010 & 29 & 14.709 & 0.494 & 0.180 \\
-VGGT & 50 & vggtcams & colmappcd & 0.754 & 0.006 & 29 & 14.969 & 0.611 & 0.240 \\
-VGGT & 50 &  &  & 0.830 & 0.018 & 50 & 16.947 & 0.398 & 0.239 \\
-VGGT & 75 & vggtcams & bothpcd & 0.416 & 0.008 & 44 & 15.669 & 0.410 & 0.209 \\
-VGGT & 75 & vggtcams & colmappcd & 0.475 & 0.005 & 44 & 16.440 & 0.505 & 0.265 \\
-VGGT & 75 &  &  & 0.757 & 0.016 & \underline{75} & 17.116 & 0.366 & 0.253 \\
-VGGT & 100 & vggtcams & bothpcd & 0.670 & 0.012 & \textbf{100} & 17.613 & 0.330 & 0.267 \\
-VGGT & 100 & vggtcams & colmappcd & 0.596 & 0.010 & \textbf{100} & 17.783 & 0.418 & 0.294 \\
-VGGT & 100 &  &  & 0.727 & 0.014 & \textbf{100} & 17.321 & 0.351 & 0.264 \\
+COLMAP & bicycle & 25 & COLMAP Cams & Both Pcds & 1.028 & 0.011 & 7 & 12.870 & 0.676 & 0.151 \\
+COLMAP & bicycle & 25 & COLMAP Cams & VGGT Pcd & 0.726 & 0.012 & 7 & 12.693 & 0.670 & 0.152 \\
+COLMAP & bicycle & 25 &  &  & 1.558 & 0.006 & 7 & 12.472 & 0.772 & 0.208 \\
+COLMAP & bicycle & 50 & COLMAP Cams & Both Pcds & 0.204 & \underline{0.003} & 29 & 16.304 & 0.451 & 0.259 \\
+COLMAP & bicycle & 50 & COLMAP Cams & VGGT Pcd & 0.247 & \underline{0.003} & 29 & 15.948 & 0.462 & 0.239 \\
+COLMAP & bicycle & 50 &  &  & 0.387 & \underline{0.003} & 29 & 15.719 & 0.586 & 0.252 \\
+COLMAP & bicycle & 75 & COLMAP Cams & Both Pcds & 0.134 & \underline{0.003} & 44 & 17.704 & 0.374 & 0.341 \\
+COLMAP & bicycle & 75 & COLMAP Cams & VGGT Pcd & 0.158 & \underline{0.003} & 44 & 17.235 & 0.385 & 0.293 \\
+COLMAP & bicycle & 75 &  &  & 0.213 & \underline{0.003} & 44 & 17.055 & 0.486 & 0.276 \\
+COLMAP & bicycle & 100 & COLMAP Cams & Both Pcds & \underline{0.095} & \textbf{0.002} & \textbf{100} & 21.908 & \textbf{0.242} & 0.542 \\
+COLMAP & bicycle & 100 & COLMAP Cams & VGGT Pcd & \textbf{0.094} & \underline{0.003} & \textbf{100} & \textbf{22.363} & \underline{0.252} & \textbf{0.592} \\
+COLMAP & bicycle & 100 &  &  & 0.111 & \textbf{0.002} & \textbf{100} & \underline{22.163} & 0.349 & \underline{0.559} \\
+VGGT & bicycle & 25 & VGGT Cams & Both Pcds & 2.152 & 0.006 & 7 & 12.401 & 0.666 & 0.139 \\
+VGGT & bicycle & 25 & VGGT Cams & COLMAP Pcd & 4.210 & 0.018 & 7 & 11.541 & 0.797 & 0.196 \\
+VGGT & bicycle & 25 &  &  & 1.073 & 0.020 & 25 & 15.882 & 0.476 & 0.221 \\
+VGGT & bicycle & 50 & VGGT Cams & Both Pcds & 0.588 & 0.010 & 29 & 14.709 & 0.494 & 0.180 \\
+VGGT & bicycle & 50 & VGGT Cams & COLMAP Pcd & 0.754 & 0.006 & 29 & 14.969 & 0.611 & 0.240 \\
+VGGT & bicycle & 50 &  &  & 0.830 & 0.018 & 50 & 16.947 & 0.398 & 0.239 \\
+VGGT & bicycle & 75 & VGGT Cams & Both Pcds & 0.416 & 0.008 & 44 & 15.669 & 0.410 & 0.209 \\
+VGGT & bicycle & 75 & VGGT Cams & COLMAP Pcd & 0.475 & 0.005 & 44 & 16.440 & 0.505 & 0.265 \\
+VGGT & bicycle & 75 &  &  & 0.757 & 0.016 & \underline{75} & 17.116 & 0.366 & 0.253 \\
+VGGT & bicycle & 100 & VGGT Cams & Both Pcds & 0.670 & 0.012 & \textbf{100} & 17.613 & 0.330 & 0.267 \\
+VGGT & bicycle & 100 & VGGT Cams & COLMAP Pcd & 0.596 & 0.010 & \textbf{100} & 17.783 & 0.418 & 0.294 \\
+VGGT & bicycle & 100 &  &  & 0.489 & 0.014 & \textbf{100} & 17.384 & 0.338 & 0.268 \\
 \bottomrule
 \end{tabular}
 \end{table}

@@ -1,6 +1,10 @@
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1.0\linewidth]{Images/04-Results/Renders/06_isolated_cams_point_clouds_bicycle_latest_renders.pdf}
+    \ifhighres
+        \includegraphics[width=1.0\linewidth]{Images/04-Results/Renders/06_isolated_cams_point_clouds_bicycle_latest_renders.pdf}
+    \else
+        \includegraphics[width=1.0\linewidth]{Images/04-Results/Renders/06_isolated_cams_point_clouds_bicycle_latest_renders.jpg}
+    \fi
     \caption{COLMAP cameras with different point cloud sources. (Bicycle).}
     \label{fig:renders_06_isolated_cams_point_clouds_bicycle}
 \end{figure}

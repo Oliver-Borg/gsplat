@@ -3,21 +3,21 @@
 \label{tab:05_depth_conf_mode_indoor,outdoor,synthetic}
 \centering
 \scriptsize
-\begin{tabular}{lllrrrrrr}
+\begin{tabular}{lllrrrrr}
 \toprule
-Choice & Dataset Collection & Depth Conf Mode & RRE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Predicted Depth Abs Rel ↓ & Splatted Depth Abs Rel ↓ \\
+Choice & Dataset Collection & Depth Conf Mode & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ \\
 \midrule
-VGGT & indoor &  & \textbf{0.468} & 19.097 & \underline{0.283} & 0.537 &  &  \\
-VGGT & indoor & sigmoid & \textbf{0.468} & \underline{19.148} & \textbf{0.281} & \underline{0.539} &  &  \\
-VGGT & indoor & standard & \textbf{0.468} & \textbf{19.331} & 0.294 & \textbf{0.563} &  &  \\
+VGGT & indoor &  & \underline{0.431} & \textbf{0.010} & \underline{19.298} & \underline{0.287} & \underline{0.558} \\
+VGGT & indoor & sigmoid & \textbf{0.430} & \textbf{0.010} & 19.148 & \textbf{0.281} & 0.539 \\
+VGGT & indoor & standard & 0.435 & \textbf{0.010} & \textbf{19.331} & 0.294 & \textbf{0.563} \\
 \midrule
-VGGT & outdoor &  & \textbf{0.648} & \underline{18.639} & \underline{0.404} & \underline{0.357} &  &  \\
-VGGT & outdoor & sigmoid & \textbf{0.648} & 18.566 & \textbf{0.398} & 0.353 &  &  \\
-VGGT & outdoor & standard & \textbf{0.648} & \textbf{18.652} & 0.409 & \textbf{0.359} &  &  \\
+VGGT & outdoor &  & 0.465 & \textbf{0.019} & \underline{18.639} & \underline{0.404} & \underline{0.357} \\
+VGGT & outdoor & sigmoid & \textbf{0.452} & \textbf{0.019} & 18.566 & \textbf{0.398} & 0.353 \\
+VGGT & outdoor & standard & \underline{0.458} & \textbf{0.019} & \textbf{18.652} & 0.409 & \textbf{0.359} \\
 \midrule
-VGGT & synthetic &  & \textbf{0.319} & 22.064 & \underline{0.097} & 0.814 & \textbf{0.021} & \textbf{0.021} \\
-VGGT & synthetic & sigmoid & \textbf{0.319} & \underline{22.101} & \textbf{0.096} & \underline{0.815} & \textbf{0.021} & \textbf{0.021} \\
-VGGT & synthetic & standard & \textbf{0.319} & \textbf{22.516} & 0.140 & \textbf{0.826} & \textbf{0.021} & \underline{0.026} \\
+VGGT & synthetic &  & \underline{0.252} & \textbf{0.005} & 21.910 & \underline{0.117} & 0.812 \\
+VGGT & synthetic & sigmoid & \textbf{0.236} & \textbf{0.005} & \underline{22.101} & \textbf{0.096} & \underline{0.815} \\
+VGGT & synthetic & standard & 0.255 & \textbf{0.005} & \textbf{22.516} & 0.140 & \textbf{0.826} \\
 \bottomrule
 \end{tabular}
 \end{table}

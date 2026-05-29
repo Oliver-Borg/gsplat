@@ -1,0 +1,26 @@
+\begin{table}[H]
+\caption{VGGT with depth loss for different depth loss modes and $30$ images. (Outdoor)}
+\label{tab:05_depth_loss_sparse_outdoor}
+\centering
+\scriptsize
+\begin{tabular}{llrlrrrrrll}
+\toprule
+Choice & Dataset & Num Images & Depth Loss Mode & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Predicted Depth Abs Rel ↓ & Splatted Depth Abs Rel ↓ \\
+\midrule
+VGGT & bicycle & 30 &  & 0.898 & 0.019 & \underline{16.091} & \underline{0.446} & \underline{0.210} &  &  \\
+VGGT & bicycle & 30 & closer & \underline{0.858} & \underline{0.018} & 15.813 & 0.451 & 0.208 &  &  \\
+VGGT & bicycle & 30 & full & \textbf{0.770} & \textbf{0.017} & \textbf{16.446} & \textbf{0.423} & \textbf{0.229} &  &  \\
+VGGT & bicycle & 30 & points & 0.899 & 0.019 & 16.007 & 0.455 & 0.203 &  &  \\
+\midrule
+VGGT & garden & 30 &  & 0.095 & \textbf{0.003} & 19.416 & \underline{0.292} & \underline{0.385} &  &  \\
+VGGT & garden & 30 & closer & \underline{0.088} & \textbf{0.003} & \underline{19.450} & \textbf{0.287} & \underline{0.385} &  &  \\
+VGGT & garden & 30 & full & \textbf{0.073} & \textbf{0.003} & \textbf{19.644} & 0.293 & \textbf{0.396} &  &  \\
+VGGT & garden & 30 & points & 0.129 & \textbf{0.003} & 19.115 & 0.313 & 0.357 &  &  \\
+\midrule
+VGGT & stump & 30 &  & 1.197 & \underline{0.033} & \underline{17.133} & \underline{0.517} & 0.331 &  &  \\
+VGGT & stump & 30 & closer & \underline{1.060} & 0.034 & 17.094 & \textbf{0.516} & \underline{0.333} &  &  \\
+VGGT & stump & 30 & full & \textbf{0.863} & \textbf{0.032} & \textbf{17.151} & 0.521 & \textbf{0.342} &  &  \\
+VGGT & stump & 30 & points & 1.206 & 0.034 & 17.111 & \underline{0.517} & 0.326 &  &  \\
+\bottomrule
+\end{tabular}
+\end{table}
