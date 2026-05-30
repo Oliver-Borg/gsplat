@@ -1,0 +1,44 @@
+\begin{table}[H]
+\caption{Combining cameras and point clouds from VGGT and COLMAP. (First)}
+\label{tab:07_combined_single_first}
+\centering
+\scriptsize
+\begin{tabular}{lllllrrrrrr}
+\toprule
+Choice & Dataset & Camera Src & Pcd Src & Sampling Mode & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP & bicycle & COLMAP Cams & Both Pcds & confidence & 0.101 & \textbf{0.002} & \textbf{22.228} & \underline{0.257} & \textbf{0.566} & \textbf{0.491} \\
+COLMAP & bicycle & COLMAP Cams & Both Pcds & random & 0.095 & \textbf{0.002} & 21.908 & \textbf{0.242} & 0.542 & \underline{0.480} \\
+COLMAP & bicycle & COLMAP Cams & Both Pcds & voxels & \textbf{0.092} & \textbf{0.002} & 21.884 & 0.277 & 0.532 & 0.452 \\
+COLMAP & bicycle & COLMAP Cams & VGGT Pcd & confidence & 0.108 & \underline{0.003} & 21.798 & 0.302 & 0.541 & 0.440 \\
+COLMAP & bicycle & COLMAP Cams & VGGT Pcd & random & \textbf{0.092} & \textbf{0.002} & 21.494 & 0.258 & 0.517 & 0.447 \\
+COLMAP & bicycle & COLMAP Cams & VGGT Pcd & voxels & \underline{0.093} & \textbf{0.002} & 21.492 & 0.309 & 0.515 & 0.415 \\
+COLMAP & bicycle &  &  &  & 0.111 & \textbf{0.002} & \underline{22.163} & 0.349 & \underline{0.559} & 0.428 \\
+VGGT & bicycle &  &  & confidence & 0.727 & 0.013 & 17.051 & 0.394 & 0.269 & 0.137 \\
+VGGT & bicycle &  &  & random & 0.489 & 0.014 & 17.384 & 0.338 & 0.268 & 0.176 \\
+VGGT & bicycle &  &  & voxels & 0.473 & 0.013 & 17.941 & 0.363 & 0.286 & 0.182 \\
+\midrule
+COLMAP & bonsai & COLMAP Cams & Both Pcds & confidence & \underline{0.096} & \textbf{0.001} & \textbf{25.200} & \textbf{0.169} & \textbf{0.797} & \textbf{0.735} \\
+COLMAP & bonsai & COLMAP Cams & Both Pcds & random & 0.099 & \textbf{0.001} & 24.778 & 0.171 & 0.778 & 0.715 \\
+COLMAP & bonsai & COLMAP Cams & Both Pcds & voxels & \textbf{0.094} & \textbf{0.001} & \underline{25.160} & \underline{0.170} & \underline{0.795} & \underline{0.732} \\
+COLMAP & bonsai & COLMAP Cams & VGGT Pcd & confidence & 0.176 & \underline{0.002} & 22.524 & 0.229 & 0.695 & 0.589 \\
+COLMAP & bonsai & COLMAP Cams & VGGT Pcd & random & 0.164 & \underline{0.002} & 22.354 & 0.227 & 0.682 & 0.579 \\
+COLMAP & bonsai & COLMAP Cams & VGGT Pcd & voxels & 0.244 & 0.003 & 21.631 & 0.240 & 0.664 & 0.547 \\
+COLMAP & bonsai &  &  &  & 0.097 & \textbf{0.001} & 24.653 & 0.175 & 0.776 & 0.709 \\
+VGGT & bonsai &  &  & confidence & 0.777 & 0.022 & 17.407 & 0.400 & 0.559 & 0.309 \\
+VGGT & bonsai &  &  & random & 0.789 & 0.022 & 17.423 & 0.399 & 0.560 & 0.310 \\
+VGGT & bonsai &  &  & voxels & 0.752 & 0.022 & 17.413 & 0.404 & 0.561 & 0.308 \\
+\midrule
+COLMAP & lego & COLMAP Cams & Both Pcds & confidence & 10.389 & 0.113 & 25.149 & \textbf{0.050} & \underline{0.904} & 0.870 \\
+COLMAP & lego & COLMAP Cams & Both Pcds & random & 10.389 & 0.113 & \underline{25.262} & \textbf{0.050} & \textbf{0.905} & \underline{0.873} \\
+COLMAP & lego & COLMAP Cams & Both Pcds & voxels & 10.389 & 0.113 & 25.122 & \textbf{0.050} & 0.903 & 0.869 \\
+COLMAP & lego & COLMAP Cams & VGGT Pcd & confidence & 10.395 & \underline{0.112} & 25.253 & \textbf{0.050} & \textbf{0.905} & 0.872 \\
+COLMAP & lego & COLMAP Cams & VGGT Pcd & random & 10.389 & \underline{0.112} & 25.133 & \underline{0.051} & 0.903 & 0.869 \\
+COLMAP & lego & COLMAP Cams & VGGT Pcd & voxels & 10.392 & \underline{0.112} & \textbf{25.321} & \textbf{0.050} & \textbf{0.905} & \textbf{0.874} \\
+COLMAP & lego &  &  &  & 10.429 & 0.116 & 23.416 & 0.061 & 0.866 & 0.809 \\
+VGGT & lego &  &  & confidence & \textbf{0.251} & \textbf{0.006} & 20.370 & 0.075 & 0.774 & 0.690 \\
+VGGT & lego &  &  & random & \textbf{0.251} & \textbf{0.006} & 20.365 & 0.076 & 0.774 & 0.689 \\
+VGGT & lego &  &  & voxels & \underline{0.252} & \textbf{0.006} & 20.346 & 0.076 & 0.773 & 0.689 \\
+\bottomrule
+\end{tabular}
+\end{table}

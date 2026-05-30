@@ -1,0 +1,15 @@
+\begin{table}[H]
+\caption{Test for combining COLMAP cameras using glue (Drums)}
+\label{tab:99_align_glue_drums}
+\centering
+\scriptsize
+\begin{tabular}{lrlrrrrrr}
+\toprule
+Choice & Num Images & Align Glue & RRE ↓ & RTE ↓ & Aligned Cameras ↑ & PSNR ↑ & SSIM ↑ & LPIPS ↓ \\
+\midrule
+COLMAP & 70 & Align Glued & 0.304 & \underline{0.013} & \underline{49} & \underline{18.137} & \underline{0.798} & \underline{0.129} \\
+COLMAP & 70 &  & \underline{0.278} & \underline{0.013} & 25 & 16.606 & 0.761 & 0.173 \\
+VGGT & 70 &  & \textbf{0.175} & \textbf{0.009} & \textbf{70} & \textbf{19.235} & \textbf{0.827} & \textbf{0.104} \\
+\bottomrule
+\end{tabular}
+\end{table}

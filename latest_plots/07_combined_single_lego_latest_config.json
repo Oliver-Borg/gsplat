@@ -6,7 +6,9 @@
         100
     ],
     "sampling_mode": [
-        "random"
+        "random",
+        "confidence",
+        "voxels"
     ],
     "num_points_per_image": [
         1000

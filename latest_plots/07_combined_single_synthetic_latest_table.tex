@@ -7,22 +7,38 @@
 \toprule
 Choice & Dataset & Camera Src & Pcd Src & Sampling Mode & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
 \midrule
-COLMAP & lego &  &  &  & 10.381 & \underline{0.112} & \textbf{25.238} & \textbf{0.053} & \textbf{0.906} & \textbf{0.871} \\
-VGGT & lego & COLMAP & Both & random &  &  &  &  &  &  \\
-VGGT & lego & COLMAP & VGGT & random &  &  &  &  &  &  \\
-VGGT & lego &  &  & confidence &  &  &  &  &  &  \\
-VGGT & lego &  &  & random & \textbf{0.251} & \textbf{0.006} & 20.378 & 0.076 & 0.774 & 0.690 \\
-VGGT & lego &  &  & voxels & \underline{0.255} & \textbf{0.006} & \underline{20.510} & \underline{0.074} & \underline{0.777} & \underline{0.695} \\
+COLMAP & lego & COLMAP Cams & Both Pcds & confidence & 10.389 & 0.113 & 25.149 & \textbf{0.050} & \underline{0.904} & 0.870 \\
+COLMAP & lego & COLMAP Cams & Both Pcds & random & 10.389 & 0.113 & \underline{25.262} & \textbf{0.050} & \textbf{0.905} & \underline{0.873} \\
+COLMAP & lego & COLMAP Cams & Both Pcds & voxels & 10.389 & 0.113 & 25.122 & \textbf{0.050} & 0.903 & 0.869 \\
+COLMAP & lego & COLMAP Cams & VGGT Pcd & confidence & 10.395 & \underline{0.112} & 25.253 & \textbf{0.050} & \textbf{0.905} & 0.872 \\
+COLMAP & lego & COLMAP Cams & VGGT Pcd & random & 10.389 & \underline{0.112} & 25.133 & \underline{0.051} & 0.903 & 0.869 \\
+COLMAP & lego & COLMAP Cams & VGGT Pcd & voxels & 10.392 & \underline{0.112} & \textbf{25.321} & \textbf{0.050} & \textbf{0.905} & \textbf{0.874} \\
+COLMAP & lego &  &  &  & 10.429 & 0.116 & 23.416 & 0.061 & 0.866 & 0.809 \\
+VGGT & lego &  &  & confidence & \textbf{0.251} & \textbf{0.006} & 20.370 & 0.075 & 0.774 & 0.690 \\
+VGGT & lego &  &  & random & \textbf{0.251} & \textbf{0.006} & 20.365 & 0.076 & 0.774 & 0.689 \\
+VGGT & lego &  &  & voxels & \underline{0.252} & \textbf{0.006} & 20.346 & 0.076 & 0.773 & 0.689 \\
 \midrule
-COLMAP & ship &  &  &  & \textbf{0.192} & \textbf{0.003} & \textbf{21.735} & \textbf{0.149} & \textbf{0.740} & \textbf{0.650} \\
-VGGT & ship &  &  & confidence &  &  &  &  &  &  \\
-VGGT & ship &  &  & random &  &  &  &  &  &  \\
-VGGT & ship &  &  & voxels &  &  &  &  &  &  \\
+COLMAP & ship & COLMAP Cams & Both Pcds & confidence & 0.197 & \underline{0.003} & 21.877 & 0.135 & 0.734 & 0.657 \\
+COLMAP & ship & COLMAP Cams & Both Pcds & random & 0.203 & \underline{0.003} & 21.754 & 0.136 & 0.732 & 0.653 \\
+COLMAP & ship & COLMAP Cams & Both Pcds & voxels & 0.195 & \underline{0.003} & 21.850 & 0.137 & 0.734 & 0.656 \\
+COLMAP & ship & COLMAP Cams & VGGT Pcd & confidence & \underline{0.193} & \underline{0.003} & 21.956 & 0.135 & 0.736 & 0.660 \\
+COLMAP & ship & COLMAP Cams & VGGT Pcd & random & 0.201 & \underline{0.003} & 21.831 & 0.136 & 0.734 & 0.656 \\
+COLMAP & ship & COLMAP Cams & VGGT Pcd & voxels & \underline{0.193} & \underline{0.003} & 21.917 & 0.136 & 0.736 & 0.659 \\
+COLMAP & ship &  &  &  & \textbf{0.129} & \textbf{0.002} & 22.677 & 0.142 & \textbf{0.759} & 0.683 \\
+VGGT & ship &  &  & confidence & 0.379 & 0.008 & \underline{22.838} & \textbf{0.129} & 0.748 & \underline{0.687} \\
+VGGT & ship &  &  & random & 0.377 & 0.008 & \textbf{22.873} & \underline{0.130} & \underline{0.749} & \textbf{0.688} \\
+VGGT & ship &  &  & voxels & 0.379 & 0.008 & 22.768 & 0.131 & 0.747 & 0.684 \\
 \midrule
-COLMAP & drums &  &  &  & \textbf{0.095} & \textbf{0.002} & \textbf{22.801} & \textbf{0.089} & \textbf{0.906} & \textbf{0.803} \\
-VGGT & drums &  &  & confidence &  &  &  &  &  &  \\
-VGGT & drums &  &  & random &  &  &  &  &  &  \\
-VGGT & drums &  &  & voxels &  &  &  &  &  &  \\
+COLMAP & drums & COLMAP Cams & Both Pcds & confidence & \underline{0.107} & \textbf{0.002} & 22.768 & \textbf{0.082} & 0.902 & 0.805 \\
+COLMAP & drums & COLMAP Cams & Both Pcds & random & 0.108 & \textbf{0.002} & \underline{22.813} & \textbf{0.082} & \underline{0.903} & \underline{0.806} \\
+COLMAP & drums & COLMAP Cams & Both Pcds & voxels & 0.108 & \textbf{0.002} & \textbf{22.840} & \textbf{0.082} & \underline{0.903} & \textbf{0.807} \\
+COLMAP & drums & COLMAP Cams & VGGT Pcd & confidence & 0.108 & \textbf{0.002} & 22.785 & \underline{0.083} & 0.901 & 0.805 \\
+COLMAP & drums & COLMAP Cams & VGGT Pcd & random & 0.108 & \textbf{0.002} & 22.760 & \textbf{0.082} & 0.901 & 0.804 \\
+COLMAP & drums & COLMAP Cams & VGGT Pcd & voxels & 0.108 & \textbf{0.002} & 22.774 & \textbf{0.082} & 0.902 & 0.805 \\
+COLMAP & drums &  &  &  & \textbf{0.095} & \textbf{0.002} & 22.801 & 0.089 & \textbf{0.906} & 0.803 \\
+VGGT & drums &  &  & confidence & 0.116 & \underline{0.003} & 20.874 & 0.085 & 0.868 & 0.748 \\
+VGGT & drums &  &  & random & 0.117 & \underline{0.003} & 20.829 & 0.085 & 0.867 & 0.747 \\
+VGGT & drums &  &  & voxels & 0.116 & \underline{0.003} & 20.871 & 0.085 & 0.868 & 0.748 \\
 \bottomrule
 \end{tabular}
 \end{table}

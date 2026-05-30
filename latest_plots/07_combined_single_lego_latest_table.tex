@@ -1,14 +1,22 @@
 \begin{table}[H]
-\caption{Combining cameras and point clouds (Lego)}
+\caption{Combining cameras and point clouds from VGGT and COLMAP. (Lego)}
 \label{tab:07_combined_single_lego}
-\begin{tabular}{lllrrrrr}
+\centering
+\scriptsize
+\begin{tabular}{llllrrrrrr}
 \toprule
-Choice & Camera Src & Pcd Src & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ \\
+Choice & Camera Src & Pcd Src & Sampling Mode & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
 \midrule
-COLMAP &  &  & \underline{12.909} & \underline{0.238} & \underline{11.222} & \underline{0.496} & \underline{0.643} \\
-VGGT & colmapcams & bothpcd &  &  &  &  &  \\
-VGGT & colmapcams & vggtpcd &  &  &  &  &  \\
-VGGT &  &  & \textbf{0.255} & \textbf{0.006} & \textbf{20.654} & \textbf{0.072} & \textbf{0.777} \\
+COLMAP & COLMAP Cams & Both Pcds & confidence & 10.389 & 0.113 & 25.149 & \textbf{0.050} & 0.904 & 0.870 \\
+COLMAP & COLMAP Cams & Both Pcds & random & 10.389 & 0.113 & \underline{25.262} & \textbf{0.050} & \underline{0.905} & \underline{0.873} \\
+COLMAP & COLMAP Cams & Both Pcds & voxels & 10.389 & 0.113 & 25.122 & \textbf{0.050} & 0.903 & 0.869 \\
+COLMAP & COLMAP Cams & VGGT Pcd & confidence & 10.395 & \underline{0.112} & 25.253 & \textbf{0.050} & \underline{0.905} & 0.872 \\
+COLMAP & COLMAP Cams & VGGT Pcd & random & 10.389 & \underline{0.112} & 25.133 & \underline{0.051} & 0.903 & 0.869 \\
+COLMAP & COLMAP Cams & VGGT Pcd & voxels & 10.392 & \underline{0.112} & \textbf{25.321} & \textbf{0.050} & \underline{0.905} & \textbf{0.874} \\
+COLMAP &  &  &  & 10.381 & \underline{0.112} & 25.238 & 0.053 & \textbf{0.906} & 0.871 \\
+VGGT &  &  & confidence & \textbf{0.251} & \textbf{0.006} & 20.373 & 0.075 & 0.774 & 0.690 \\
+VGGT &  &  & random & \textbf{0.251} & \textbf{0.006} & 20.378 & 0.076 & 0.774 & 0.690 \\
+VGGT &  &  & voxels & \underline{0.252} & \textbf{0.006} & 20.346 & 0.076 & 0.773 & 0.689 \\
 \bottomrule
 \end{tabular}
 \end{table}

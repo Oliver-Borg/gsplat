@@ -1,0 +1,37 @@
+{
+    "seed": [
+        42
+    ],
+    "num_images": [
+        100
+    ],
+    "sampling_mode": [
+        "random",
+        "confidence",
+        "voxels"
+    ],
+    "num_points_per_image": [
+        1000
+    ],
+    "pose_opt": [
+        true
+    ],
+    "gt_eval": true,
+    "choice": [
+        "combined",
+        "colmap",
+        "vggt"
+    ],
+    "pcd_src": [
+        "both",
+        "vggt",
+        "colmap"
+    ],
+    "camera_src": [
+        "colmap"
+    ],
+    "num_steps": [
+        15000
+    ],
+    "dataset": "ship"
+}

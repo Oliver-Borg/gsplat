@@ -1,0 +1,23 @@
+\begin{table}[H]
+\caption{Loss multiplier for VGGT. (First)}
+\label{tab:99_pose_loss_multiplier_first}
+\centering
+\scriptsize
+\begin{tabular}{llrrrrrrr}
+\toprule
+Choice & Dataset & Pose Loss Multiplier & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+VGGT & bicycle & 1 & \underline{0.489} & \textbf{0.014} & 17.384 & \underline{0.338} & \textbf{0.268} & 0.176 \\
+VGGT & bicycle & 10 & \underline{0.489} & \textbf{0.014} & \underline{17.420} & \underline{0.338} & \textbf{0.268} & \underline{0.177} \\
+VGGT & bicycle & 100 & \textbf{0.487} & \textbf{0.014} & \textbf{17.421} & \textbf{0.337} & \textbf{0.268} & \textbf{0.178} \\
+\midrule
+VGGT & bonsai & 1 & 0.789 & \textbf{0.022} & 17.423 & \textbf{0.399} & \textbf{0.560} & \underline{0.310} \\
+VGGT & bonsai & 10 & \underline{0.788} & \textbf{0.022} & \textbf{17.441} & \textbf{0.399} & \underline{0.559} & \textbf{0.311} \\
+VGGT & bonsai & 100 & \textbf{0.787} & \textbf{0.022} & \underline{17.430} & \textbf{0.399} & \textbf{0.560} & \underline{0.310} \\
+\midrule
+VGGT & lego & 1 & \textbf{0.252} & \textbf{0.006} & \textbf{20.353} & \textbf{0.076} & \textbf{0.773} & \textbf{0.689} \\
+VGGT & lego & 10 & \underline{0.253} & \textbf{0.006} & 20.343 & \textbf{0.076} & \textbf{0.773} & \textbf{0.689} \\
+VGGT & lego & 100 & \underline{0.253} & \textbf{0.006} & \underline{20.351} & \textbf{0.076} & \textbf{0.773} & \textbf{0.689} \\
+\bottomrule
+\end{tabular}
+\end{table}

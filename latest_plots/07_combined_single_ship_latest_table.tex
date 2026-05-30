@@ -1,0 +1,22 @@
+\begin{table}[H]
+\caption{Combining cameras and point clouds from VGGT and COLMAP. (Ship)}
+\label{tab:07_combined_single_ship}
+\centering
+\scriptsize
+\begin{tabular}{llllrrrrrr}
+\toprule
+Choice & Camera Src & Pcd Src & Sampling Mode & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP & COLMAP Cams & Both Pcds & confidence & 0.197 & \textbf{0.003} & 21.877 & 0.135 & 0.734 & 0.657 \\
+COLMAP & COLMAP Cams & Both Pcds & random & 0.203 & \textbf{0.003} & 21.754 & 0.136 & 0.732 & 0.653 \\
+COLMAP & COLMAP Cams & Both Pcds & voxels & 0.195 & \textbf{0.003} & 21.850 & 0.137 & 0.734 & 0.656 \\
+COLMAP & COLMAP Cams & VGGT Pcd & confidence & \underline{0.193} & \textbf{0.003} & 21.956 & 0.135 & 0.736 & 0.660 \\
+COLMAP & COLMAP Cams & VGGT Pcd & random & 0.201 & \textbf{0.003} & 21.831 & 0.136 & 0.734 & 0.656 \\
+COLMAP & COLMAP Cams & VGGT Pcd & voxels & \underline{0.193} & \textbf{0.003} & 21.917 & 0.136 & 0.736 & 0.659 \\
+COLMAP &  &  &  & \textbf{0.192} & \textbf{0.003} & 21.735 & 0.149 & 0.740 & 0.650 \\
+VGGT &  &  & confidence & 0.379 & \underline{0.008} & \underline{22.838} & \textbf{0.129} & \underline{0.748} & \underline{0.687} \\
+VGGT &  &  & random & 0.377 & \underline{0.008} & \textbf{22.873} & \underline{0.130} & \textbf{0.749} & \textbf{0.688} \\
+VGGT &  &  & voxels & 0.379 & \underline{0.008} & 22.768 & 0.131 & 0.747 & 0.684 \\
+\bottomrule
+\end{tabular}
+\end{table}

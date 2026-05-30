@@ -1,0 +1,23 @@
+{
+    "seed": [
+        42
+    ],
+    "num_images": [
+        100
+    ],
+    "sampling_mode": [
+        "random"
+    ],
+    "pose_opt": [
+        true
+    ],
+    "choice": [
+        "vggt"
+    ],
+    "loss_multiplier": [
+        1.0,
+        10.0,
+        100.0
+    ],
+    "dataset": "bicycle"
+}

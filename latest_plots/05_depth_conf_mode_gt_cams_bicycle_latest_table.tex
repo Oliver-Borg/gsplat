@@ -1,0 +1,17 @@
+\begin{table}[H]
+\caption{VGGT with depth loss for different depth confidence modes and GT Cameras. (Bicycle)}
+\label{tab:05_depth_conf_mode_gt_cams_bicycle}
+\centering
+\scriptsize
+\begin{tabular}{llllrrrr}
+\toprule
+Choice & Dataset & Depth Conf Mode & Depth Loss Mode & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+VGGT & bicycle &  &  & \textbf{22.770} & \textbf{0.248} & \textbf{0.634} & \textbf{0.546} \\
+VGGT & bicycle &  & full & 21.792 & 0.276 & 0.606 & 0.494 \\
+VGGT & bicycle & shifted & full & \underline{22.269} & \underline{0.261} & \underline{0.620} & \underline{0.520} \\
+VGGT & bicycle & sigmoid & full & 21.771 & 0.277 & 0.606 & 0.493 \\
+VGGT & bicycle & standard & full & 21.792 & 0.276 & 0.606 & 0.494 \\
+\bottomrule
+\end{tabular}
+\end{table}

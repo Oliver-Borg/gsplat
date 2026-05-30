@@ -1,0 +1,24 @@
+{
+    "seed": [
+        42
+    ],
+    "num_images": [
+        70
+    ],
+    "choice": [
+        "combined",
+        "colmap",
+        "vggt"
+    ],
+    "pcd_src": [
+        "both"
+    ],
+    "camera_src": [
+        "colmap"
+    ],
+    "align_glue": [
+        true,
+        false
+    ],
+    "dataset": "drums"
+}

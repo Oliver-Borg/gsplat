@@ -1,0 +1,22 @@
+\begin{table}[H]
+\caption{Combining cameras and point clouds from VGGT and COLMAP. (Drums)}
+\label{tab:07_combined_single_drums}
+\centering
+\scriptsize
+\begin{tabular}{llllrrrrrr}
+\toprule
+Choice & Camera Src & Pcd Src & Sampling Mode & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP &  &  &  & \textbf{0.095} & \textbf{0.002} & \textbf{22.801} & \underline{0.089} & \textbf{0.906} & \textbf{0.803} \\
+VGGT & COLMAP Cams & Both Pcds & confidence &  &  &  &  &  &  \\
+VGGT & COLMAP Cams & Both Pcds & random &  &  &  &  &  &  \\
+VGGT & COLMAP Cams & Both Pcds & voxels &  &  &  &  &  &  \\
+VGGT & COLMAP Cams & VGGT Pcd & confidence &  &  &  &  &  &  \\
+VGGT & COLMAP Cams & VGGT Pcd & random &  &  &  &  &  &  \\
+VGGT & COLMAP Cams & VGGT Pcd & voxels &  &  &  &  &  &  \\
+VGGT &  &  & confidence & \underline{0.116} & \underline{0.003} & \underline{20.874} & \textbf{0.085} & \underline{0.868} & \underline{0.748} \\
+VGGT &  &  & random & 0.117 & \underline{0.003} & 20.829 & \textbf{0.085} & 0.867 & 0.747 \\
+VGGT &  &  & voxels & \underline{0.116} & \underline{0.003} & 20.871 & \textbf{0.085} & \underline{0.868} & \underline{0.748} \\
+\bottomrule
+\end{tabular}
+\end{table}

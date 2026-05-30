@@ -215,7 +215,7 @@ class Config:
     num_cameras: int | None = None
     depth_loss_mode: Literal["disabled", "points", "full", "closer"] = "disabled"
     depth_lambda: float = 0.0
-    depth_conf_mode: Literal["disabled", "standard", "sigmoid"] = "disabled"
+    depth_conf_mode: Literal["disabled", "standard", "sigmoid", "shifted", "sigshifted"] = "disabled"
     error_opa: bool = False
     camera_type: CAMERA_TYPE = "SIMPLE_PINHOLE"
     num_steps: Literal[7000, 15000, 30000] = 15000
@@ -230,6 +230,8 @@ class Config:
     match_colmap_points: bool = False
     pose_opt_module: Literal["default", "3rgs", "mcmc", "sgld"] = "default"
     feature_extractor: FEATURE_EXTRACTOR = "aliked+sp"
+    loss_multiplier: float = 1.0
+    pose_loss_multiplier: float = 1.0
 
     raw_metrics: bool = False
     require_depth_metrics: bool = False
@@ -284,6 +286,8 @@ class Config:
         instance.match_colmap_points = data.get("match_colmap_points", cls.match_colmap_points)
         instance.pose_opt_module = data.get("pose_opt_module", cls.pose_opt_module)
         instance.feature_extractor = data.get("feature_extractor", cls.feature_extractor)
+        instance.loss_multiplier = data.get("loss_multiplier", cls.loss_multiplier)
+        instance.pose_loss_multiplier = data.get("pose_loss_multiplier", cls.pose_loss_multiplier)
 
         # Loop over each key in data and print a warning if it is not a field on the Config dataclass
         for key in data.keys():
@@ -350,6 +354,7 @@ class Config:
         if self.near_filtering_strength == 0.0:
             self.near_filtering_quorum = 1
 
+        # TODO Maybe remove
         if self.choice == "vggt" and not self.use_ba:
             self.shared_camera = False
 
@@ -556,6 +561,10 @@ class Config:
         if self.pose_opt and self.pose_opt_module != "default":
             parts.append(f"pomod{self.pose_opt_module}")
         parts.append(f"steps{self.num_steps}")
+        if self.loss_multiplier != 1.0:
+            parts.append(f"lossm{self.loss_multiplier}")
+        if self.pose_loss_multiplier != 1.0:
+            parts.append(f"plossm{self.pose_loss_multiplier}")
 
         parts = "_".join(parts)
         return f"{self.input_name}_{parts}"
@@ -605,15 +614,9 @@ class Config:
         # if self.require_depth_metrics and self.splatting_metrics.get("depth_abs_rel") is None:
         #     return True
 
-        # if self.depth_loss_mode != "disabled":
-        #     return True
-
         if (
-            self.splatting_time < datetime.datetime(2026, 5, 18, 19, 45, 0).timestamp()
-            and "nerf_synthetic" in self.dataset.directory
-        ):
-            # Technically this should be all runs because the alignment changed, but the ones that
-            # change drastically are the synthetic ones so we will just rerun those for now.
+            "shifted" in self.depth_conf_mode or "sig" in self.depth_conf_mode
+        ) and self.splatting_time < datetime.datetime(2026, 5, 30, 11, 20, 0).timestamp():
             return True
 
         if (
@@ -677,6 +680,14 @@ class Config:
         ):
             return True
 
+        if (
+            self.choice == "vggt"
+            and not self.use_ba
+            and self.shared_camera
+            and self.reconstruction_time < datetime.datetime(2026, 5, 26, 16, 55, 0).timestamp()
+        ):
+            return True
+
         # if self.sampling_mode == "imagefps":
         #     return True
 
@@ -696,6 +707,17 @@ class Config:
         if self.choice == "combined":
             if self.reconstruction_time < datetime.datetime(2026, 4, 25, 11, 30, 0).timestamp():
                 return True
+
+        # if self.num_images == 20 and self.choice == "colmap":
+        #     return True
+
+        if (
+            self.reconstruction_time < datetime.datetime(2026, 5, 18, 19, 45, 0).timestamp()
+            and ("nerf_synthetic" in self.dataset.directory or self.align_glue)
+        ):
+            # Technically this should be all runs because the alignment changed, but the ones that
+            # change drastically are the synthetic ones so we will just rerun those for now.
+            return True
 
         # if self.is_splatted and self.choice == "vggt":
         #     with open(self.splatting_val_path, "r") as f:
@@ -907,7 +929,11 @@ class Config:
         if not self.eval_metrics.get("real_num_points", 0):
             return True
 
-        if self.require_depth_metrics and self.eval_metrics.get("all_depth_absrel") is None:
+        if (
+            self.require_depth_metrics
+            and self.eval_metrics.get("all_depth_absrel") is None
+            and "nerf_synthetic" in self.data_dir
+        ):
             return True
 
         return False
@@ -1017,6 +1043,14 @@ class Config:
             command.append("--init_num_pts")
             command.append(str(self.num_points))
 
+        if self.loss_multiplier != 1.0:
+            command.append("--loss_multiplier")
+            command.append(str(self.loss_multiplier))
+
+        if self.pose_loss_multiplier != 1.0:
+            command.append("--pose_loss_multiplier")
+            command.append(str(self.pose_loss_multiplier))
+
         env = os.environ.copy()
         if libstdc_path:
             env["LD_PRELOAD"] = libstdc_path
@@ -1092,8 +1126,13 @@ class Experiment:
 
     def get_configs(self, dataset_name: str, renders: bool = False, reconstruct_only: bool = False) -> list[Config]:
         self.config_dict["dataset"] = dataset_name
-        config_dicts = generate_configs(self.render_config_dict if renders else self.config_dict)
+        config_dicts = generate_configs(self.config_dict)
         configs = [Config.from_dict(config_dict) for config_dict in config_dicts]
+        if renders:
+            render_config_dicts = generate_configs(self.render_config_dict)
+            render_configs = [Config.from_dict(config_dict) for config_dict in render_config_dicts]
+            configs = [config for config in configs if config in render_configs]
+
         gt_configs = []
         if self.include_gt:
             for config in configs:
@@ -1404,15 +1443,46 @@ experiments = [
             x_axis="num_images",
             split_param="",
             single_legend=True,
-            max_render_cols=5,
+            max_render_cols=3,
             show_gt=False,
             raw_metrics=True,
             make_camera_plot=False,
             metric_keys=["rre", "rte", "psnr", "lpips", "ssim", "num_aligned"],
+            render_nums=[0],
             horizontal_datasets=False,
         ),
         render_filter_override={
-            "num_images": [20, 30, 40, 70, 100],
+            "num_images": [20, 40, 100],
+            "seed": [42],
+        },
+        priority="high",
+    ),
+    Experiment(
+        "num_images_sparse",
+        1,
+        "COLMAP versus VGGT for $20$ images.",
+        {
+            "seed": [42],
+            "num_images": [20],
+            "sampling_mode": ["random"],
+            "gt_eval": [True],
+            "image_mode": ["farthestpose"],
+            "choice": ["vggt", "colmap"],
+        },
+        PlotConfig(
+            x_axis="",
+            split_param="",
+            single_legend=True,
+            max_render_cols=3,
+            show_gt=False,
+            raw_metrics=True,
+            make_camera_plot=False,
+            metric_keys=["rre", "rte", "psnr", "lpips", "ssim", "num_aligned"],
+            render_nums=[0, 19, -1],
+            horizontal_datasets=False,
+        ),
+        render_filter_override={
+            "num_images": [20],
             "seed": [42],
         },
         priority="high",
@@ -1518,15 +1588,22 @@ experiments = [
             "pose_opt": [True, False],
             "gt_eval": [True],
             "choice": ["vggt", "colmap"],
-            "num_steps": [30000],
+            "num_steps": [15000],
         },
         PlotConfig(
             x_axis="",
-            split_param="choice,pose_opt",
+            split_param="pose_opt",
             metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "quality"],
             raw_metrics=True,
+            split_choice=True,
+            horizontal_datasets=False,
+            max_render_cols=5,
         ),
-        val_steps=[30000],
+        val_steps=[15000],
+        render_filter_override={
+            "seed": [42],
+            "num_images": [100],
+        },
     ),
     Experiment(
         "num_points",
@@ -1635,7 +1712,7 @@ experiments = [
         render_filter_override={
             "seed": [42],
             "num_points_per_image": [1000],
-            "sampling_mode": ["voxels", "random", "confidence"]
+            "sampling_mode": ["voxels", "random", "confidence"],
         },
         priority="high",
     ),
@@ -1701,7 +1778,7 @@ experiments = [
             "seed": [42],
             "num_points_per_image": [1000],
         },
-        priority="high",
+        priority="medium",
     ),
     Experiment(
         "sampling_mode_nomcmc",
@@ -1782,28 +1859,30 @@ experiments = [
     Experiment(
         "combined_single",
         7,
-        "Combining cameras and point clouds",
+        "Combining cameras and point clouds from VGGT and COLMAP.",
         {
             "seed": [42],  #
             "num_images": [100],
-            "sampling_mode": ["random"],  # , "confidence", "voxels", "ba"
+            "sampling_mode": ["voxels", "random", "confidence"],  # , "ba"
             "num_points_per_image": [1000],
             "pose_opt": [True],
             "gt_eval": True,
-            "choice": ["combined", "colmap", "vggt"],
-            "pcd_src": ["both", "vggt", "colmap"],
+            "choice": ["colmap", "vggt", "combined"],
+            "pcd_src": ["colmap", "vggt", "both"],
             "camera_src": ["colmap"],
             "num_steps": [15000],
         },
         PlotConfig(
             x_axis="",
-            split_param="camera_src,pcd_src",
-            metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim"],
+            split_param="camera_src,pcd_src,sampling_mode",
+            metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "quality"],
+            make_pcd_plot=True,
         ),
         val_steps=[15000],
         render_filter_override={
             "seed": [42],
-            "sampling_mode": ["random"],
+            "sampling_mode": ["confidence"],
+            "choice": "combined",
             "num_images": [100],
         },
     ),
@@ -1928,18 +2007,19 @@ experiments = [
         {
             "seed": [42],  #
             "num_images": [100],
-            "sampling_mode": ["random"],
+            # "sampling_mode": ["random", "confidence", "voxels"],
+            "sampling_mode": ["confidence"],
             "pose_opt": [True],
             "num_points_per_image": [10, 50, 100, 500, 1000, 2500],
             "choice": ["combined", "vggt", "colmap"],
-            "pcd_src": ["both"],
+            "pcd_src": ["both", "vggt", "colmap"],
             "camera_src": ["colmap"],
             "num_steps": [15000],
         },
         PlotConfig(
             x_axis="num_points",
-            split_param="sampling_mode",
-            metric_keys=["rre", "rte", "num_aligned", "quality"],
+            split_param="sampling_mode,pcd_src",
+            metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "quality"],
             max_render_cols=4,
             horizontal_datasets=False,
         ),
@@ -2215,30 +2295,65 @@ experiments = [
     Experiment(
         "depth_lambda",
         5,
+        "VGGT with \\textit{closer} depth loss over different Depth Lambda values.",
+        {
+            "seed": [42],  # , 43, 44
+            "num_images": [100],
+            "sampling_mode": ["random"],
+            "depth_loss_mode": ["closer"],
+            "pose_opt": [True],
+            "choice": ["vggt"],
+            "depth_lambda": [0.0, 0.01, 0.1, 1, 10],
+            "depth_conf_mode": ["disabled"],
+        },
+        PlotConfig(
+            x_axis="depth_lambda",
+            split_param="",
+            # metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "pred_depth_absrel", "depth_abs_rel"],
+            metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "quality"],
+            raw_metrics=True,
+            horizontal_datasets=False,
+            show_depth=True,
+            show_gt=False,
+            max_render_cols=5,
+        ),
+        render_filter_override={
+            "seed": [42],
+            "num_images": [100],
+            # "depth_lambda": [0.0, 0.01, 0.1, 1.0, 10.0],
+        },
+        priority="high",
+    ),
+    Experiment(
+        "depth_lambda_gt_cams",
+        5,
         "COLMAP versus VGGT with depth loss",
         {
             "seed": [42],  # , 43, 44
             "num_images": [100],
             "sampling_mode": ["random"],
-            "depth_loss_mode": ["disabled", "points"],
-            "pose_opt": [True],
-            "choice": ["vggt", "colmap"],
+            "depth_loss_mode": ["closer"],
+            "use_gt_cams": True,
+            "choice": ["vggt"],
             "depth_lambda": [0.0, 0.01, 0.1, 1, 10],
-            "depth_conf_mode": ["disabled", "standard", "sigmoid"],
+            "depth_conf_mode": ["disabled"],
         },
         PlotConfig(
             x_axis="depth_lambda",
-            split_param="depth_conf_mode,depth_loss_mode",
-            metric_keys=["rre", "psnr", "lpips", "ssim", "pred_depth_absrel", "depth_abs_rel"],
+            split_param="depth_loss_mode",
+            # metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "pred_depth_absrel", "depth_abs_rel"],
+            metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "quality"],
+            raw_metrics=True,
+            horizontal_datasets=False,
             show_depth=True,
             show_gt=False,
+            max_render_cols=5,
         ),
         render_filter_override={
             "seed": [42],
             "num_images": [100],
-            "depth_lambda": [0.0, 0.01, 1],
         },
-        priority="high",
+        priority="medium",
     ),
     Experiment(
         "depth_loss_mode",
@@ -2263,9 +2378,11 @@ experiments = [
             show_gt=True,
             max_render_cols=4,
             horizontal_datasets=False,
+            split_choice=True,
             # render_nums=[0, 2, 3, 4, 5],
-            render_nums=[3],
-            make_camera_plot=True,
+            # render_nums=[3],
+            render_nums=[0],
+            make_camera_plot=False,
         ),
         render_filter_override={
             "seed": [42],
@@ -2273,6 +2390,41 @@ experiments = [
             "depth_lambda": [1.0],
         },
         priority="high",
+    ),
+    Experiment(
+        "depth_loss_mode_pose_opt",
+        5,
+        "COLMAP versus VGGT with depth loss for different depth loss modes.",
+        {
+            "seed": [42],  # , 43, 44
+            "num_images": [100],
+            "sampling_mode": ["random"],
+            "depth_loss_mode": ["disabled", "full", "closer"],
+            "pose_opt": [True, False],
+            "choice": ["vggt"],
+            "depth_lambda": [1.0],
+            "depth_conf_mode": ["disabled"],
+        },
+        PlotConfig(
+            x_axis="",
+            split_param="depth_loss_mode,pose_opt",
+            # metric_keys=["rre", "rte", "psnr", "lpips", "ssim", "quality"],
+            metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "pred_depth_absrel", "depth_abs_rel"],
+            show_depth=True,
+            show_gt=True,
+            max_render_cols=4,
+            horizontal_datasets=False,
+            # render_nums=[0, 2, 3, 4, 5],
+            # render_nums=[3],
+            render_nums=[0],
+            make_camera_plot=False,
+        ),
+        render_filter_override={
+            "seed": [42],
+            "num_images": [100],
+            "depth_lambda": [1.0],
+        },
+        priority="medium",
     ),
     Experiment(
         "depth_loss_mode_colmap_cams",
@@ -2307,15 +2459,15 @@ experiments = [
             "num_images": [100],
             "depth_lambda": [1.0],
         },
-        priority="high",
+        priority="medium",
     ),
     Experiment(
         "depth_loss_num_images",
         5,
-        "COLMAP versus VGGT with depth loss for different depth loss modes.",
+        "VGGT with depth loss for different depth loss modes over varying image counts.",
         {
             "seed": [42],  # , 43, 44
-            "num_images": [10, 20, 30, 40, 100],
+            "num_images": [5, 10, 20, 30, 40],
             "sampling_mode": ["random"],
             "depth_loss_mode": ["disabled", "full", "points", "closer"],
             "pose_opt": [True],
@@ -2329,7 +2481,7 @@ experiments = [
             metric_keys=["rre", "psnr", "lpips", "ssim", "pred_depth_absrel", "depth_abs_rel"],
             show_depth=True,
             show_gt=False,
-            max_render_cols=6,
+            max_render_cols=5,
             horizontal_datasets=False,
             render_nums=[0],
             make_camera_plot=True,
@@ -2337,7 +2489,39 @@ experiments = [
         ),
         render_filter_override={
             "seed": [42],
-            "num_images": [10, 20, 30, 40, 100],
+            "num_images": [5, 10, 20, 30, 40],
+            "depth_lambda": [1.0],
+        },
+        priority="medium",
+    ),
+    Experiment(
+        "depth_loss_sparse",
+        5,
+        "VGGT with depth loss for different depth loss modes and $30$ images.",
+        {
+            "seed": [42],  # , 43, 44
+            "num_images": [30],
+            "sampling_mode": ["random"],
+            "depth_loss_mode": ["disabled", "full", "points", "closer"],
+            "pose_opt": [True],
+            "choice": ["vggt"],
+            "depth_lambda": [1.0],
+            "depth_conf_mode": ["disabled"],
+        },
+        PlotConfig(
+            x_axis="num_images",
+            split_param="depth_loss_mode",
+            metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "pred_depth_absrel", "depth_abs_rel"],
+            show_depth=True,
+            show_gt=False,
+            max_render_cols=4,
+            horizontal_datasets=False,
+            # render_nums=[0, 2, 3, 4, 5],
+            make_camera_plot=False,
+            raw_metrics=True,
+        ),
+        render_filter_override={
+            "seed": [42],
             "depth_lambda": [1.0],
         },
         priority="medium",
@@ -2350,7 +2534,7 @@ experiments = [
             "seed": [42],  # , 43, 44
             "num_images": [100],
             "sampling_mode": ["random"],
-            "depth_loss_mode": ["closer"],
+            "depth_loss_mode": ["disabled", "full"],
             "pose_opt": [True],
             "choice": ["vggt"],
             "depth_lambda": [1.0],
@@ -2358,24 +2542,125 @@ experiments = [
                 "disabled",
                 "standard",
                 "sigmoid",
+                "shifted",
+                "scaled",
+                "scaleshifted",
+                "sigshifted",
             ],
         },
         PlotConfig(
             x_axis="",
-            split_param="depth_conf_mode",
-            metric_keys=["rre", "psnr", "lpips", "ssim", "pred_depth_absrel", "depth_abs_rel"],
+            split_param="depth_conf_mode,depth_loss_mode",
+            metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "quality"],
             show_depth=True,
             show_gt=False,
             max_render_cols=5,
-            render_nums=[0, 2, 3, 4, 5],
-            horizontal_datasets=False,
+            # render_nums=[0, 2, 3, 4, 5],
+            horizontal_datasets=True,
         ),
         render_filter_override={
             "seed": [42],
             "num_images": [100],
             "depth_lambda": [1.0],
+            "depth_conf_mode": ["standard", "shifted"],
         },
         priority="high",
+    ),
+    Experiment(
+        "loss_multiplier",
+        99,
+        "Loss multiplier for VGGT.",
+        {
+            "seed": [42],  # , 43, 44
+            "num_images": [100],
+            "sampling_mode": ["random"],
+            "pose_opt": [True],
+            "choice": ["vggt"],
+            "loss_multiplier": [1.0, 10.0, 100.0],
+        },
+        PlotConfig(
+            x_axis="",
+            split_param="loss_multiplier",
+            metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "quality"],
+            show_depth=True,
+            show_gt=False,
+            max_render_cols=5,
+            # render_nums=[0, 2, 3, 4, 5],
+            horizontal_datasets=True,
+        ),
+        render_filter_override={
+            "seed": [42],
+            "num_images": [100],
+        },
+        priority="medium",
+    ),
+    Experiment(
+        "pose_loss_multiplier",
+        99,
+        "Loss multiplier for VGGT.",
+        {
+            "seed": [42],  # , 43, 44
+            "num_images": [100],
+            "sampling_mode": ["random"],
+            "pose_opt": [True],
+            "choice": ["vggt"],
+            "pose_loss_multiplier": [1.0, 10.0, 100.0],
+        },
+        PlotConfig(
+            x_axis="",
+            split_param="pose_loss_multiplier",
+            metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "quality"],
+            show_depth=True,
+            show_gt=False,
+            max_render_cols=5,
+            # render_nums=[0, 2, 3, 4, 5],
+            horizontal_datasets=True,
+        ),
+        render_filter_override={
+            "seed": [42],
+            "num_images": [100],
+        },
+        priority="medium",
+    ),
+    Experiment(
+        "depth_conf_mode_gt_cams",
+        5,
+        "VGGT with depth loss for different depth confidence modes and GT Cameras.",
+        {
+            "seed": [42],  # , 43, 44
+            "num_images": [100],
+            "sampling_mode": ["random"],
+            "depth_loss_mode": ["disabled", "full"],
+            "use_gt_cams": [True],
+            "choice": ["vggt"],
+            "depth_lambda": [1.0],
+            "depth_conf_mode": [
+                "disabled",
+                "standard",
+                "sigmoid",
+                "shifted",
+                "scaled",
+                "scaleshifted",
+                "sigshifted",
+            ],
+        },
+        PlotConfig(
+            x_axis="",
+            split_param="depth_conf_mode,depth_loss_mode",
+            metric_keys=["psnr", "lpips", "ssim", "quality"],
+            show_depth=True,
+            show_gt=False,
+            max_render_cols=5,
+            # render_nums=[0, 2, 3, 4, 5],
+            horizontal_datasets=True,
+        ),
+        render_filter_override={
+            "seed": [42],
+            "num_images": [100],
+            "depth_lambda": [1.0],
+            "depth_conf_mode": ["scaled", "scaleshifted"],
+        },
+        priority="medium",
     ),
     Experiment(
         "depth_lambda_num_images",
@@ -2405,7 +2690,7 @@ experiments = [
             "num_images": [20, 30, 40, 100],
             "depth_lambda": [0.0, 0.01, 0.1, 1.0],
         },
-        priority="high",
+        priority="medium",
     ),
     Experiment(
         "camera_type",
@@ -2498,24 +2783,23 @@ experiments = [
         6,
         "A test for shared cameras with VGGT",
         {
-            "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+            "num_images": [100],
             "seed": [42],
-            "sampling_mode": ["ba", "voxels"],
-            "pose_opt": [True],
+            "sampling_mode": ["random"],
             "choice": ["vggt"],
             "shared_camera": [True, False],
         },
         PlotConfig(
-            x_axis="num_images",
+            x_axis="",
             split_param="shared_camera,sampling_mode",
-            metric_keys=["rre", "rte", "num_aligned", "quality"],
+            metric_keys=["rre", "rte", "psnr", "lpips", "ssim", "quality"],
             max_render_cols=5,
             horizontal_datasets=False,
             render_nums=[0, 2, 3, 4, 5],
         ),
         render_filter_override={
             "seed": [42],
-            "num_images": [70],
+            "num_images": [100],
         },
     ),
     Experiment(
@@ -2536,16 +2820,19 @@ experiments = [
         PlotConfig(
             x_axis="",
             split_param="use_gt_extrinsics,use_gt_intrinsics,use_gt_points",
-            metric_keys=["eval_rre", "eval_rte", "quality"],
+            metric_keys=["quality"],
             split_choice=True,
             shared_colors=True,
             max_render_cols=4,
-            horizontal_datasets=False,
+            horizontal_datasets=True,
+            # make_pcd_plot=True,
+            make_camera_plot=True,
         ),
-        # render_filter_override={
-        #     "seed": [42],
-        #     "num_images": [100],
-        # },
+        render_filter_override={
+            "seed": [42],
+            "num_images": [100],
+            "use_gt_points": [True],
+        },
         val_steps=[15000],
         priority="high",
     ),
@@ -2566,7 +2853,7 @@ experiments = [
         },
         PlotConfig(
             x_axis="real_num_points",
-            split_param="random_init,use_ba",
+            split_param="random_init,use_ba,pose_opt",
             metric_keys=["eval_rre", "eval_rte", "quality"],
             max_render_cols=4,
             horizontal_datasets=False,
@@ -2769,7 +3056,7 @@ experiments = [
         "Test for combining COLMAP cameras using glue",
         {
             "seed": [42],
-            "num_images": [20, 30, 40, 50, 60, 70, 80, 100],
+            "num_images": [70],
             # "num_images": [40, 60, 80],
             # "num_images": [40],
             "choice": ["combined", "colmap", "vggt"],
@@ -2786,10 +3073,11 @@ experiments = [
             horizontal_datasets=False,
             render_nums=[0, 2],
             raw_metrics=True,
+            make_camera_plot=True,
         ),
         render_filter_override={
             "seed": [42],
-            "num_images": [80],
+            "num_images": [70],
         },
     ),
     Experiment(
@@ -2816,7 +3104,7 @@ experiments = [
         ),
         render_filter_override={
             "seed": [42],
-            "num_images": [80],
+            "num_images": [70],
         },
     ),
     Experiment(

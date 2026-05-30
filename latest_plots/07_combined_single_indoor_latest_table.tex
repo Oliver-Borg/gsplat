@@ -7,22 +7,38 @@
 \toprule
 Choice & Dataset & Camera Src & Pcd Src & Sampling Mode & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
 \midrule
-COLMAP & bonsai &  &  &  & \textbf{0.097} & \textbf{0.001} & \textbf{24.653} & \textbf{0.175} & \textbf{0.776} & \textbf{0.709} \\
-VGGT & bonsai & COLMAP & Both & random &  &  &  &  &  &  \\
-VGGT & bonsai & COLMAP & VGGT & random &  &  &  &  &  &  \\
-VGGT & bonsai &  &  & confidence &  &  &  &  &  &  \\
-VGGT & bonsai &  &  & random & 0.789 & \underline{0.022} & \underline{17.423} & \underline{0.399} & 0.560 & \underline{0.310} \\
-VGGT & bonsai &  &  & voxels & \underline{0.784} & \underline{0.022} & 17.390 & 0.404 & \underline{0.561} & 0.307 \\
+COLMAP & bonsai & COLMAP Cams & Both Pcds & confidence & \underline{0.096} & \textbf{0.001} & \textbf{25.200} & \textbf{0.169} & \textbf{0.797} & \textbf{0.735} \\
+COLMAP & bonsai & COLMAP Cams & Both Pcds & random & 0.099 & \textbf{0.001} & 24.778 & 0.171 & 0.778 & 0.715 \\
+COLMAP & bonsai & COLMAP Cams & Both Pcds & voxels & \textbf{0.094} & \textbf{0.001} & \underline{25.160} & \underline{0.170} & \underline{0.795} & \underline{0.732} \\
+COLMAP & bonsai & COLMAP Cams & VGGT Pcd & confidence & 0.176 & \underline{0.002} & 22.524 & 0.229 & 0.695 & 0.589 \\
+COLMAP & bonsai & COLMAP Cams & VGGT Pcd & random & 0.164 & \underline{0.002} & 22.354 & 0.227 & 0.682 & 0.579 \\
+COLMAP & bonsai & COLMAP Cams & VGGT Pcd & voxels & 0.244 & 0.003 & 21.631 & 0.240 & 0.664 & 0.547 \\
+COLMAP & bonsai &  &  &  & 0.097 & \textbf{0.001} & 24.653 & 0.175 & 0.776 & 0.709 \\
+VGGT & bonsai &  &  & confidence & 0.777 & 0.022 & 17.407 & 0.400 & 0.559 & 0.309 \\
+VGGT & bonsai &  &  & random & 0.789 & 0.022 & 17.423 & 0.399 & 0.560 & 0.310 \\
+VGGT & bonsai &  &  & voxels & 0.752 & 0.022 & 17.413 & 0.404 & 0.561 & 0.308 \\
 \midrule
-COLMAP & kitchen &  &  &  & \textbf{0.094} & \textbf{0.001} & \textbf{21.597} & \textbf{0.142} & \textbf{0.497} & \textbf{0.510} \\
-VGGT & kitchen &  &  & confidence &  &  &  &  &  &  \\
-VGGT & kitchen &  &  & random & \underline{0.236} & \underline{0.005} & \underline{20.018} & \underline{0.176} & \underline{0.414} & \underline{0.410} \\
-VGGT & kitchen &  &  & voxels &  &  &  &  &  &  \\
+COLMAP & kitchen & COLMAP Cams & Both Pcds & confidence & 0.082 & \textbf{0.001} & \textbf{22.169} & \underline{0.136} & 0.546 & 0.552 \\
+COLMAP & kitchen & COLMAP Cams & Both Pcds & random & 0.080 & \textbf{0.001} & \underline{22.089} & \textbf{0.135} & 0.556 & \underline{0.557} \\
+COLMAP & kitchen & COLMAP Cams & Both Pcds & voxels & 0.083 & \textbf{0.001} & 21.832 & 0.140 & 0.522 & 0.530 \\
+COLMAP & kitchen & COLMAP Cams & VGGT Pcd & confidence & 0.077 & \textbf{0.001} & 21.751 & 0.168 & \underline{0.586} & 0.548 \\
+COLMAP & kitchen & COLMAP Cams & VGGT Pcd & random & \textbf{0.073} & \textbf{0.001} & 21.919 & 0.146 & \textbf{0.598} & \textbf{0.572} \\
+COLMAP & kitchen & COLMAP Cams & VGGT Pcd & voxels & \underline{0.075} & \textbf{0.001} & 21.237 & 0.161 & 0.564 & 0.531 \\
+COLMAP & kitchen &  &  &  & 0.094 & \textbf{0.001} & 21.597 & 0.142 & 0.497 & 0.510 \\
+VGGT & kitchen &  &  & confidence & 0.222 & \underline{0.005} & 20.043 & 0.199 & 0.425 & 0.403 \\
+VGGT & kitchen &  &  & random & 0.236 & \underline{0.005} & 20.018 & 0.176 & 0.414 & 0.410 \\
+VGGT & kitchen &  &  & voxels & 0.230 & \underline{0.005} & 20.059 & 0.184 & 0.416 & 0.408 \\
 \midrule
-COLMAP & counter &  &  &  & \textbf{0.026} & \textbf{0.000} & \textbf{25.228} & \textbf{0.188} & \textbf{0.850} & \textbf{0.754} \\
-VGGT & counter &  &  & confidence &  &  &  &  &  &  \\
-VGGT & counter &  &  & random & \underline{0.254} & \underline{0.006} & \underline{20.807} & \underline{0.237} & \underline{0.641} & \underline{0.520} \\
-VGGT & counter &  &  & voxels &  &  &  &  &  &  \\
+COLMAP & counter & COLMAP Cams & Both Pcds & confidence & \underline{0.028} & \textbf{0.000} & 24.978 & 0.185 & \underline{0.844} & 0.748 \\
+COLMAP & counter & COLMAP Cams & Both Pcds & random & 0.033 & \textbf{0.000} & 24.680 & \underline{0.184} & 0.835 & 0.738 \\
+COLMAP & counter & COLMAP Cams & Both Pcds & voxels & 0.030 & \textbf{0.000} & \underline{24.988} & \textbf{0.183} & 0.842 & \underline{0.749} \\
+COLMAP & counter & COLMAP Cams & VGGT Pcd & confidence & 0.038 & \textbf{0.000} & 24.604 & 0.199 & 0.835 & 0.728 \\
+COLMAP & counter & COLMAP Cams & VGGT Pcd & random & 0.044 & \textbf{0.000} & 24.387 & 0.190 & 0.827 & 0.724 \\
+COLMAP & counter & COLMAP Cams & VGGT Pcd & voxels & 0.042 & \textbf{0.000} & 24.195 & 0.203 & 0.825 & 0.712 \\
+COLMAP & counter &  &  &  & \textbf{0.026} & \textbf{0.000} & \textbf{25.228} & 0.188 & \textbf{0.850} & \textbf{0.754} \\
+VGGT & counter &  &  & confidence & 0.253 & \underline{0.006} & 20.955 & 0.243 & 0.647 & 0.523 \\
+VGGT & counter &  &  & random & 0.254 & \underline{0.006} & 20.807 & 0.237 & 0.641 & 0.520 \\
+VGGT & counter &  &  & voxels & 0.251 & \underline{0.006} & 20.839 & 0.247 & 0.644 & 0.517 \\
 \bottomrule
 \end{tabular}
 \end{table}

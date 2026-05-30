@@ -961,6 +961,7 @@ class Runner:
 
                 if depth_conf is None:
                     depth_conf = 1.0
+                    sampled_depth_conf = 1.0
                 elif cfg.depth_conf_mode == "sigmoid":  # TODO Experiment with this
                     # Range [0.0 - 2.0]
                     depth_conf = (torch.sigmoid(depth_conf) - 0.5) * 4.0  # [1, H, W]
@@ -980,14 +981,17 @@ class Runner:
                     max_val = self.trainset.parser.max_depth_conf_val
                     if max_val > 1.0:
                         max_val -= 1.0
+                    max_val = max(max_val, 1e-8)  # Prevent division by zero
                     depth_conf = depth_conf / max_val * 2.0  # [1, H, W]
                     sampled_depth_conf = sampled_depth_conf / max_val * 2.0  # [1, M]
                 elif cfg.depth_conf_mode == "scaleshifted":
                     # Range [0.0 - 2.0]
                     depth_conf = torch.maximum(depth_conf - 1.0, torch.zeros_like(depth_conf))  # [1, H, W]
+                    sampled_depth_conf = torch.maximum(sampled_depth_conf - 1.0, torch.zeros_like(sampled_depth_conf))  # [1, M]
                     max_val = self.trainset.parser.max_depth_conf_val
                     if max_val > 1.0:
                         max_val -= 1.0
+                    max_val = max(max_val, 1e-8)  # Prevent division by zero
                     depth_conf = depth_conf / max_val * 2.0  # [1, H, W]
                     sampled_depth_conf = sampled_depth_conf / max_val * 2.0  # [1, M]
                 else:
