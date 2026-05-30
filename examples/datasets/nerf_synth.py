@@ -59,6 +59,7 @@ class SimpleParser:
         self.factor = factor
         self.R_align = np.eye(3)
         self.t_align = np.zeros(3)
+        self.max_depth_conf_val = 1.0
 
         self._load_json_data(create_pointcloud)
 

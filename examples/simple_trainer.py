@@ -202,11 +202,19 @@ class Config:
     # Enable depth loss. (experimental)
     depth_loss_mode: Literal["disabled", "points", "full", "closer"] = "disabled"
     # Enable depth confidence. (experimental)
-    depth_conf_mode: Literal["disabled", "standard", "sigmoid"] = "disabled"
+    depth_conf_mode: Literal[
+        "disabled", "standard", "sigmoid", "shifted", "sigshifted", "scaleshifted", "scaled"
+    ] = "disabled"
     # Weight for depth loss
     depth_lambda: float = 1e-2  # TODO Experiment with this
     # Weight for background opacity loss
     bg_opacity_lambda: float = 1e-1
+
+    # Experimental: multiply the loss to increase overall learning rate
+    loss_multiplier: float = 1.0
+
+    # Experimental: multiply the pose loss to increase overall learning rate
+    pose_loss_multiplier: float = 1.0
 
     # Dump information to tensorboard every this steps
     tb_every: int = 100
@@ -499,7 +507,7 @@ class Runner:
             self.pose_optimizers = [
                 AnnealedSGLD(
                     self.pose_adjust.parameters(),
-                    lr=cfg.pose_opt_lr * math.sqrt(cfg.batch_size),
+                    lr=cfg.pose_opt_lr * math.sqrt(cfg.batch_size) * cfg.pose_loss_multiplier,
                     weight_decay=cfg.pose_opt_reg,
                     total_steps=cfg.max_steps,
                     noise_scale=1e-2,
@@ -904,13 +912,7 @@ class Runner:
                     # depth_conf [1, H, W]
                     sampled_depth_conf = F.grid_sample(
                         depth_conf.unsqueeze(0), grid, align_corners=True
-                    )  # [1, 1, M, 1]
-                    if cfg.depth_conf_mode == "sigmoid":
-                        sampled_depth_conf = torch.sigmoid(
-                            sampled_depth_conf.squeeze(3).squeeze(1)
-                        ) * 2.0 - 1.0  # [1, M]
-                    else:
-                        sampled_depth_conf = sampled_depth_conf.squeeze(3).squeeze(1)  # [1, M]
+                    ).squeeze(3).squeeze(1)  # [1, M] (1.0 - inf)
                 else:
                     sampled_depth_conf = 1.0
 
@@ -960,9 +962,39 @@ class Runner:
                 if depth_conf is None:
                     depth_conf = 1.0
                 elif cfg.depth_conf_mode == "sigmoid":  # TODO Experiment with this
-                    depth_conf = torch.sigmoid(depth_conf) * 2.0 - 1.0  # [1, H, W]
+                    # Range [0.0 - 2.0]
+                    depth_conf = (torch.sigmoid(depth_conf) - 0.5) * 4.0  # [1, H, W]
+                    sampled_depth_conf = (torch.sigmoid(sampled_depth_conf) - 0.5) * 4.0  # [1, M]
+                elif cfg.depth_conf_mode == "shifted":
+                    # Range [0.0 - inf)
+                    depth_conf = torch.maximum(depth_conf - 1.0, torch.zeros_like(depth_conf))  # [1, H, W]
+                    sampled_depth_conf = torch.maximum(sampled_depth_conf - 1.0, torch.zeros_like(sampled_depth_conf))  # [1, M]
+                elif cfg.depth_conf_mode == "sigshifted":
+                    # Range [0.0 - 2.0]
+                    depth_conf = torch.maximum(depth_conf - 1.0, torch.zeros_like(depth_conf))  # [1, H, W]
+                    depth_conf = (torch.sigmoid(depth_conf) - 0.5) * 4.0  # [1, H, W]
+                    sampled_depth_conf = torch.maximum(sampled_depth_conf - 1.0, torch.zeros_like(sampled_depth_conf))  # [1, M]
+                    sampled_depth_conf = (torch.sigmoid(sampled_depth_conf) - 0.5) * 4.0  # [1, M]
+                elif cfg.depth_conf_mode == "scaled":
+                    # Range (0.0 - 2.0]
+                    max_val = self.trainset.parser.max_depth_conf_val
+                    if max_val > 1.0:
+                        max_val -= 1.0
+                    depth_conf = depth_conf / max_val * 2.0  # [1, H, W]
+                    sampled_depth_conf = sampled_depth_conf / max_val * 2.0  # [1, M]
+                elif cfg.depth_conf_mode == "scaleshifted":
+                    # Range [0.0 - 2.0]
+                    depth_conf = torch.maximum(depth_conf - 1.0, torch.zeros_like(depth_conf))  # [1, H, W]
+                    max_val = self.trainset.parser.max_depth_conf_val
+                    if max_val > 1.0:
+                        max_val -= 1.0
+                    depth_conf = depth_conf / max_val * 2.0  # [1, H, W]
+                    sampled_depth_conf = sampled_depth_conf / max_val * 2.0  # [1, M]
+                else:
+                    depth_conf = 1.0
+                    sampled_depth_conf = 1.0
 
-                if full_depth_map is not None:
+                if full_depth_map is not None and cfg.depth_loss_mode in ("full", "closer"):
                     # Determine valid depth regions (exclude NaN, Inf, and 0)
                     valid_depth_mask = ~torch.isnan(full_depth_map) & ~torch.isinf(full_depth_map) & (full_depth_map != 0)
 
@@ -994,6 +1026,9 @@ class Runner:
                 loss += cfg.opacity_reg * torch.sigmoid(self.splats["opacities"]).mean()
             if cfg.scale_reg > 0.0:
                 loss += cfg.scale_reg * torch.exp(self.splats["scales"]).mean()
+
+            if cfg.loss_multiplier != 1.0:
+                loss *= cfg.loss_multiplier
 
             loss.backward()
 

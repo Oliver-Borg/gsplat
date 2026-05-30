@@ -307,6 +307,7 @@ class Parser:
         self.transform = transform  # np.ndarray, (4, 4)
         self.depths = {}
         self.depths_conf = {}
+        self.max_depth_conf_val = 1.0
 
         # load one image to check the size. In the case of tanksandtemples dataset, the
         # intrinsics stored in COLMAP corresponds to 2x upsampled images.
@@ -425,6 +426,11 @@ class Parser:
                     actual_width,
                 ), f"Depth map size {depth_data.shape[:2]} does not match image size {(actual_height, actual_width)}"
                 dest_dict[image_name] = depth_data
+
+            self.max_depth_conf_val = max(
+                self.max_depth_conf_val,
+                np.max(self.depths_conf.get(image_name, np.zeros((actual_height, actual_width))))
+            )
 
     def get_camera_positions(self, names: list[str]):
         indices = [self.image_names.index(name) for name in names]
