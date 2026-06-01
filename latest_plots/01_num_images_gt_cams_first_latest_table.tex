@@ -1,0 +1,44 @@
+\begin{table}[H]
+\caption{GT Cams vs VGGT with pose optimization over various number of images. (First)}
+\label{tab:01_num_images_gt_cams_first}
+\centering
+\scriptsize
+\begin{tabular}{llrlllrrrrrr}
+\toprule
+Choice & Dataset & Num Images & Pose Opt & Use Gt Extrinsics & Use Gt Points & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+VGGT & bicycle & 20 &  & GT Extrinsics &  & \textbf{0.000} & \textbf{0.000} & 17.824 & 0.407 & 0.327 & 0.176 \\
+VGGT & bicycle & 20 &  & GT Extrinsics & GT Points & \textbf{0.000} & \textbf{0.000} & 18.565 & 0.383 & 0.395 & 0.245 \\
+VGGT & bicycle & 20 & Pose Opt &  &  & 1.113 & 0.027 & 15.618 & 0.472 & 0.191 & 0.016 \\
+VGGT & bicycle & 20 & Pose Opt &  & GT Points & 1.154 & 0.026 & 15.811 & 0.470 & 0.204 & 0.028 \\
+VGGT & bicycle & 40 &  & GT Extrinsics &  & \textbf{0.000} & \textbf{0.000} & 19.573 & 0.342 & 0.430 & 0.309 \\
+VGGT & bicycle & 40 &  & GT Extrinsics & GT Points & \textbf{0.000} & \textbf{0.000} & 20.504 & 0.315 & 0.502 & 0.385 \\
+VGGT & bicycle & 40 & Pose Opt &  &  & 0.995 & 0.019 & 16.245 & 0.434 & 0.218 & 0.067 \\
+VGGT & bicycle & 40 & Pose Opt &  & GT Points & 0.851 & 0.018 & 16.440 & 0.407 & 0.223 & 0.090 \\
+VGGT & bicycle & 100 &  & GT Extrinsics &  & \textbf{0.000} & \textbf{0.000} & \underline{22.770} & \textbf{0.248} & \underline{0.634} & \underline{0.546} \\
+VGGT & bicycle & 100 &  & GT Extrinsics & GT Points & \textbf{0.000} & \textbf{0.000} & \textbf{23.288} & \underline{0.251} & \textbf{0.662} & \textbf{0.569} \\
+VGGT & bicycle & 100 & Pose Opt &  &  & 0.489 & 0.014 & 17.384 & 0.338 & 0.268 & 0.176 \\
+VGGT & bicycle & 100 & Pose Opt &  & GT Points & \underline{0.392} & \underline{0.013} & 18.451 & 0.315 & 0.300 & 0.229 \\
+\midrule
+VGGT & bonsai & 20 &  & GT Extrinsics &  & \textbf{0.000} & \textbf{0.000} & 19.711 & 0.335 & 0.658 & 0.450 \\
+VGGT & bonsai & 20 &  & GT Extrinsics & GT Points & \textbf{0.000} & \textbf{0.000} & 21.996 & 0.267 & 0.782 & 0.606 \\
+VGGT & bonsai & 20 & Pose Opt &  &  & 0.904 & 0.024 & 16.241 & 0.465 & 0.501 & 0.214 \\
+VGGT & bonsai & 20 & Pose Opt &  & GT Points & 0.948 & 0.024 & 15.892 & 0.490 & 0.499 & 0.190 \\
+VGGT & bonsai & 40 &  & GT Extrinsics &  & \textbf{0.000} & \textbf{0.000} & 22.450 & 0.260 & 0.759 & 0.606 \\
+VGGT & bonsai & 40 &  & GT Extrinsics & GT Points & \textbf{0.000} & \textbf{0.000} & 25.041 & \underline{0.201} & \underline{0.854} & 0.746 \\
+VGGT & bonsai & 40 & Pose Opt &  &  & 0.788 & 0.022 & 16.529 & 0.439 & 0.524 & 0.248 \\
+VGGT & bonsai & 40 & Pose Opt &  & GT Points & 0.916 & 0.022 & 16.425 & 0.455 & 0.524 & 0.236 \\
+VGGT & bonsai & 100 &  & GT Extrinsics &  & \textbf{0.000} & \textbf{0.000} & \underline{26.099} & 0.212 & 0.838 & \underline{0.749} \\
+VGGT & bonsai & 100 &  & GT Extrinsics & GT Points & \textbf{0.000} & \textbf{0.000} & \textbf{29.000} & \textbf{0.146} & \textbf{0.913} & \textbf{0.887} \\
+VGGT & bonsai & 100 & Pose Opt &  &  & 0.789 & 0.022 & 17.423 & 0.399 & 0.560 & 0.310 \\
+VGGT & bonsai & 100 & Pose Opt &  & GT Points & \underline{0.732} & \underline{0.019} & 17.599 & 0.392 & 0.567 & 0.322 \\
+\midrule
+VGGT & lego & 20 &  & GT Extrinsics &  & \textbf{0.000} & \textbf{0.000} & 26.837 & 0.062 & 0.905 & 0.894 \\
+VGGT & lego & 20 & Pose Opt &  &  & 2.172 & 0.031 & 13.528 & 0.329 & 0.618 & 0.315 \\
+VGGT & lego & 40 &  & GT Extrinsics &  & \textbf{0.000} & \textbf{0.000} & \underline{31.477} & \underline{0.035} & \underline{0.966} & \underline{1.032} \\
+VGGT & lego & 40 & Pose Opt &  &  & 1.189 & 0.014 & 14.321 & 0.265 & 0.663 & 0.396 \\
+VGGT & lego & 87 &  & GT Extrinsics &  & \textbf{0.000} & \textbf{0.000} & \textbf{33.284} & \textbf{0.032} & \textbf{0.981} & \textbf{1.077} \\
+VGGT & lego & 87 & Pose Opt &  &  & \underline{0.252} & \underline{0.006} & 20.353 & 0.076 & 0.773 & 0.689 \\
+\bottomrule
+\end{tabular}
+\end{table}

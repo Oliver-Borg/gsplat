@@ -1,0 +1,20 @@
+\begin{table}[H]
+\caption{COLMAP versus VGGT for $20$ images. (Indoor,Outdoor,Synthetic)}
+\label{tab:01_num_images_sparse_indoor,outdoor,synthetic}
+\centering
+\scriptsize
+\begin{tabular}{llrrrrrr}
+\toprule
+Choice & Dataset Collection & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Aligned Cameras ↑ \\
+\midrule
+COLMAP & indoor & \textbf{0.240} & \textbf{0.007} & \underline{12.737} & \underline{0.600} & \underline{0.389} & \underline{8.000} \\
+VGGT & indoor & \underline{0.555} & \underline{0.057} & \textbf{16.469} & \textbf{0.429} & \textbf{0.451} & \textbf{20.000} \\
+\midrule
+COLMAP & outdoor & \underline{6.809} & \textbf{0.092} & \underline{14.205} & \underline{0.767} & \underline{0.219} & \underline{9.333} \\
+VGGT & outdoor & \textbf{0.988} & \underline{0.148} & \textbf{16.372} & \textbf{0.473} & \textbf{0.257} & \textbf{20.000} \\
+\midrule
+COLMAP & synthetic & \underline{22.784} & \underline{0.830} & \underline{10.545} & \underline{0.604} & \underline{0.424} & \underline{6.000} \\
+VGGT & synthetic & \textbf{1.168} & \textbf{0.071} & \textbf{16.082} & \textbf{0.287} & \textbf{0.654} & \textbf{20.000} \\
+\bottomrule
+\end{tabular}
+\end{table}

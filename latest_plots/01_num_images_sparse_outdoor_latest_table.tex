@@ -1,0 +1,20 @@
+\begin{table}[H]
+\caption{COLMAP versus VGGT for $20$ images. (Outdoor)}
+\label{tab:01_num_images_sparse_outdoor}
+\centering
+\scriptsize
+\begin{tabular}{llrrrrrr}
+\toprule
+Choice & Dataset & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Aligned Cameras ↑ \\
+\midrule
+COLMAP & bicycle & \underline{19.486} & \underline{0.240} & \underline{9.328} & \underline{0.987} & \underline{0.011} & \underline{2} \\
+VGGT & bicycle & \textbf{1.149} & \textbf{0.124} & \textbf{15.574} & \textbf{0.478} & \textbf{0.191} & \textbf{20} \\
+\midrule
+COLMAP & garden & \textbf{0.071} & \textbf{0.005} & \textbf{20.025} & \underline{0.411} & \textbf{0.428} & \textbf{20} \\
+VGGT & garden & \underline{0.304} & \underline{0.021} & \underline{17.636} & \textbf{0.388} & \underline{0.292} & \textbf{20} \\
+\midrule
+COLMAP & stump & \textbf{0.868} & \textbf{0.031} & \underline{13.261} & \underline{0.903} & \underline{0.219} & \underline{6} \\
+VGGT & stump & \underline{1.511} & \underline{0.299} & \textbf{15.908} & \textbf{0.552} & \textbf{0.288} & \textbf{20} \\
+\bottomrule
+\end{tabular}
+\end{table}

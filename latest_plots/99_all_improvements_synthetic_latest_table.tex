@@ -1,0 +1,23 @@
+\begin{table}[H]
+\caption{Test for optimal configuration of all improvements. (Synthetic)}
+\label{tab:99_all_improvements_synthetic}
+\centering
+\scriptsize
+\begin{tabular}{lllrrrrrrrr}
+\toprule
+Choice & Dataset & Depth Loss Mode & Depth Lambda & Real Num Points & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & SSIM ↑ & LPIPS ↓ & Composite Quality ↑ \\
+\midrule
+COLMAP & lego & closer & 0.100 & 97069 & \underline{10.381} & \underline{0.114} & \textbf{25.060} & \textbf{0.894} & \underline{0.062} & \textbf{0.855} \\
+COLMAP & lego & points & 0.100 & 10313 & 10.429 & 0.116 & \underline{23.402} & \underline{0.865} & \textbf{0.061} & \underline{0.808} \\
+VGGT & lego & closer & 0.100 & 87000 & \textbf{0.248} & \textbf{0.006} & 20.174 & 0.772 & 0.079 & 0.683 \\
+\midrule
+COLMAP & ship & closer & 0.100 & 86262 & \underline{0.174} & \underline{0.003} & \underline{22.441} & 0.733 & 0.155 & 0.655 \\
+COLMAP & ship & points & 0.100 & 5146 & \textbf{0.129} & \textbf{0.002} & \textbf{22.707} & \textbf{0.761} & \underline{0.142} & \textbf{0.684} \\
+VGGT & ship & closer & 0.100 & 87000 & 0.383 & 0.008 & 22.427 & \underline{0.739} & \textbf{0.139} & \underline{0.668} \\
+\midrule
+COLMAP & drums & closer & 0.100 & 85712 & \underline{0.139} & \textbf{0.002} & \underline{21.453} & \underline{0.870} & \underline{0.094} & \underline{0.755} \\
+COLMAP & drums & points & 0.100 & 3866 & \textbf{0.099} & \textbf{0.002} & \textbf{22.895} & \textbf{0.906} & \textbf{0.090} & \textbf{0.805} \\
+VGGT & drums & closer & 0.100 & 87000 & 0.148 & \underline{0.003} & 19.480 & 0.839 & 0.095 & 0.699 \\
+\bottomrule
+\end{tabular}
+\end{table}

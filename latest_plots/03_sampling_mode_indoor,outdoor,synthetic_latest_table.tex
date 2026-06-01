@@ -1,7 +1,8 @@
 \begin{table}[H]
 \caption{A comparison of different VGGT point cloud sampling modes (Indoor,Outdoor,Synthetic)}
 \label{tab:03_sampling_mode_indoor,outdoor,synthetic}
-\small
+\centering
+\scriptsize
 \begin{tabular}{llrlrrrrrr}
 \toprule
 Choice & Dataset Collection & Num Points & Sampling Mode & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
@@ -76,39 +77,39 @@ VGGT & outdoor & 1000000 & imagefps & 0.648 & 0.085 & 18.107 & 0.483 & 0.331 & 0
 VGGT & outdoor & 1000000 & random & 0.695 & 0.086 & 18.150 & 0.452 & 0.325 & 0.154 \\
 VGGT & outdoor & 1000000 & voxels & 0.648 & 0.085 & 18.188 & 0.494 & 0.334 & 0.134 \\
 \midrule
-COLMAP & synthetic & 3866 &  & \textbf{0.153} & \textbf{0.010} & 22.469 & 0.093 & \textbf{0.899} & \underline{0.791} \\
-COLMAP & synthetic & 5138 &  & 0.277 & 0.015 & 21.593 & 0.155 & 0.733 & 0.639 \\
-COLMAP & synthetic & 10069 &  & 10.427 & 0.396 & \textbf{24.951} & \textbf{0.058} & \underline{0.894} & \textbf{0.856} \\
-VGGT & synthetic & 870 & confidence & 0.330 & 0.019 & 20.477 & 0.161 & 0.781 & 0.643 \\
+COLMAP & synthetic & 3866 &  & \textbf{0.153} & \textbf{0.010} & 22.469 & 0.093 & \textbf{0.899} & \textbf{0.791} \\
+COLMAP & synthetic & 5146 &  & 0.246 & \underline{0.011} & 22.401 & 0.149 & 0.751 & 0.668 \\
+COLMAP & synthetic & 10313 &  & 10.478 & 0.404 & \underline{22.787} & \textbf{0.066} & \underline{0.851} & \underline{0.785} \\
+VGGT & synthetic & 870 & confidence & 0.319 & 0.019 & 20.475 & 0.161 & 0.781 & 0.643 \\
 VGGT & synthetic & 870 & imagefps & 0.319 & 0.019 & 20.477 & 0.162 & 0.781 & 0.643 \\
-VGGT & synthetic & 870 & random & 0.330 & 0.019 & 20.480 & 0.160 & 0.781 & 0.643 \\
+VGGT & synthetic & 870 & random & 0.319 & 0.019 & 20.487 & 0.160 & 0.781 & 0.644 \\
 VGGT & synthetic & 870 & voxels & 0.319 & 0.019 & 20.452 & 0.161 & 0.780 & 0.642 \\
-VGGT & synthetic & 4350 & confidence & 0.330 & 0.019 & 20.358 & 0.140 & 0.774 & 0.650 \\
+VGGT & synthetic & 4350 & confidence & 0.319 & 0.019 & 20.358 & 0.140 & 0.774 & 0.650 \\
 VGGT & synthetic & 4350 & imagefps & 0.319 & 0.019 & 20.399 & 0.140 & 0.775 & 0.651 \\
-VGGT & synthetic & 4350 & random & 0.330 & 0.019 & 20.361 & 0.140 & 0.774 & 0.650 \\
+VGGT & synthetic & 4350 & random & 0.319 & 0.019 & 20.362 & 0.140 & 0.774 & 0.650 \\
 VGGT & synthetic & 4350 & voxels & 0.319 & 0.019 & 20.366 & 0.140 & 0.774 & 0.650 \\
-VGGT & synthetic & 8700 & confidence & 0.330 & 0.019 & 20.374 & 0.135 & 0.773 & 0.653 \\
+VGGT & synthetic & 8700 & confidence & 0.319 & 0.019 & 20.372 & 0.135 & 0.773 & 0.652 \\
 VGGT & synthetic & 8700 & imagefps & 0.319 & 0.019 & 20.367 & 0.135 & 0.773 & 0.652 \\
-VGGT & synthetic & 8700 & random & 0.330 & 0.019 & 20.371 & 0.135 & 0.773 & 0.652 \\
+VGGT & synthetic & 8700 & random & 0.319 & 0.019 & 20.372 & 0.135 & 0.773 & 0.652 \\
 VGGT & synthetic & 8700 & voxels & 0.319 & 0.019 & 20.372 & 0.135 & 0.774 & 0.653 \\
 VGGT & synthetic & 24264 & ba & 0.429 & 0.025 & 19.140 & 0.268 & 0.676 & 0.491 \\
 VGGT & synthetic & 26382 & ba & \underline{0.235} & \underline{0.011} & 18.584 & 0.111 & 0.815 & 0.658 \\
-VGGT & synthetic & 27774 & ba & 0.269 & 0.016 & \underline{22.970} & \underline{0.075} & 0.837 & 0.775 \\
-VGGT & synthetic & 43500 & confidence & 0.330 & 0.019 & 20.363 & 0.128 & 0.771 & 0.655 \\
+VGGT & synthetic & 27774 & ba & 0.269 & 0.016 & \textbf{22.970} & \underline{0.075} & 0.837 & 0.775 \\
+VGGT & synthetic & 43500 & confidence & 0.319 & 0.019 & 20.365 & 0.128 & 0.771 & 0.655 \\
 VGGT & synthetic & 43500 & imagefps & 0.319 & 0.019 & 20.390 & 0.128 & 0.771 & 0.656 \\
-VGGT & synthetic & 43500 & random & 0.330 & 0.019 & 20.363 & 0.128 & 0.771 & 0.655 \\
+VGGT & synthetic & 43500 & random & 0.319 & 0.019 & 20.362 & 0.128 & 0.771 & 0.655 \\
 VGGT & synthetic & 43500 & voxels & 0.319 & 0.019 & 20.359 & 0.128 & 0.771 & 0.655 \\
-VGGT & synthetic & 87000 & confidence & 0.330 & 0.019 & 20.391 & 0.126 & 0.771 & 0.657 \\
+VGGT & synthetic & 87000 & confidence & 0.319 & 0.019 & 20.392 & 0.126 & 0.771 & 0.657 \\
 VGGT & synthetic & 87000 & imagefps & 0.319 & 0.019 & 20.350 & 0.127 & 0.770 & 0.655 \\
-VGGT & synthetic & 87000 & random & 0.330 & 0.019 & 20.390 & 0.126 & 0.771 & 0.657 \\
+VGGT & synthetic & 87000 & random & 0.319 & 0.019 & 20.390 & 0.126 & 0.771 & 0.657 \\
 VGGT & synthetic & 87000 & voxels & 0.319 & 0.019 & 20.348 & 0.126 & 0.770 & 0.656 \\
-VGGT & synthetic & 435000 & confidence & 0.330 & 0.019 & 20.366 & 0.122 & 0.769 & 0.658 \\
+VGGT & synthetic & 435000 & confidence & 0.319 & 0.019 & 20.366 & 0.122 & 0.769 & 0.658 \\
 VGGT & synthetic & 435000 & imagefps & 0.319 & 0.019 & 20.384 & 0.124 & 0.769 & 0.657 \\
-VGGT & synthetic & 435000 & random & 0.330 & 0.019 & 20.366 & 0.123 & 0.769 & 0.657 \\
+VGGT & synthetic & 435000 & random & 0.319 & 0.019 & 20.366 & 0.122 & 0.769 & 0.657 \\
 VGGT & synthetic & 435000 & voxels & 0.319 & 0.019 & 20.364 & 0.123 & 0.769 & 0.658 \\
-VGGT & synthetic & 870000 & confidence & 0.330 & 0.019 & 20.365 & 0.121 & 0.769 & 0.658 \\
+VGGT & synthetic & 870000 & confidence & 0.319 & 0.019 & 20.364 & 0.121 & 0.769 & 0.658 \\
 VGGT & synthetic & 870000 & imagefps & 0.319 & 0.019 & 20.392 & 0.122 & 0.768 & 0.658 \\
-VGGT & synthetic & 870000 & random & 0.330 & 0.019 & 20.366 & 0.121 & 0.768 & 0.658 \\
+VGGT & synthetic & 870000 & random & 0.319 & 0.019 & 20.366 & 0.121 & 0.768 & 0.658 \\
 VGGT & synthetic & 870000 & voxels & 0.319 & 0.019 & 20.357 & 0.122 & 0.769 & 0.658 \\
 \bottomrule
 \end{tabular}

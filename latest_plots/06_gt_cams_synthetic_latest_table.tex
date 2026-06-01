@@ -1,14 +1,15 @@
 \begin{table}[H]
 \caption{The effect of using ground truth extrinsics, intrinsics and points on VGGT and COLMAP results (Synthetic)}
 \label{tab:06_gt_cams_synthetic}
-\small
+\centering
+\scriptsize
 \begin{tabular}{lllllr}
 \toprule
 Choice & Dataset & Use Gt Extrinsics & Use Gt Intrinsics & Use Gt Points & Composite Quality ↑ \\
 \midrule
-COLMAP & lego &  &  &  & 0.856 \\
-COLMAP & lego &  & GT Intrinsics &  & \underline{0.933} \\
-COLMAP & lego & GT Extrinsics &  &  & 0.889 \\
+COLMAP & lego &  &  &  & 0.785 \\
+COLMAP & lego &  & GT Intrinsics &  & 0.805 \\
+COLMAP & lego & GT Extrinsics &  &  & \underline{0.850} \\
 COLMAP & lego & GT Extrinsics & GT Intrinsics &  & \textbf{1.072} \\
 \midrule
 VGGT & lego &  &  &  & 0.681 \\
@@ -16,10 +17,10 @@ VGGT & lego &  & GT Intrinsics &  & 0.690 \\
 VGGT & lego & GT Extrinsics &  &  & \underline{0.850} \\
 VGGT & lego & GT Extrinsics & GT Intrinsics &  & \textbf{1.077} \\
 \midrule
-COLMAP & ship &  &  &  & 0.639 \\
-COLMAP & ship &  & GT Intrinsics &  & \underline{0.672} \\
-COLMAP & ship & GT Extrinsics &  &  & 0.668 \\
-COLMAP & ship & GT Extrinsics & GT Intrinsics &  & \textbf{0.903} \\
+COLMAP & ship &  &  &  & 0.668 \\
+COLMAP & ship &  & GT Intrinsics &  & \underline{0.745} \\
+COLMAP & ship & GT Extrinsics &  &  & 0.686 \\
+COLMAP & ship & GT Extrinsics & GT Intrinsics &  & \textbf{0.896} \\
 \midrule
 VGGT & ship &  &  &  & 0.594 \\
 VGGT & ship &  & GT Intrinsics &  & 0.602 \\

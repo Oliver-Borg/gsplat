@@ -1,0 +1,32 @@
+\begin{table}[H]
+\caption{Combining cameras and point clouds with different point coints (Outdoor)}
+\label{tab:07_combined_num_points_outdoor}
+\centering
+\scriptsize
+\begin{tabular}{llrllrrrrrr}
+\toprule
+Choice & Dataset & Num Points & Sampling Mode & Pcd Src & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP & bicycle & 1000 & confidence & Both Pcds & 0.107 & \underline{0.003} & \underline{22.285} & 0.333 & 0.570 & 0.447 \\
+COLMAP & bicycle & 5000 & confidence & Both Pcds & 0.108 & \textbf{0.002} & 22.217 & 0.315 & 0.568 & 0.455 \\
+COLMAP & bicycle & 10000 & confidence & Both Pcds & 0.107 & \textbf{0.002} & \textbf{22.291} & 0.304 & \textbf{0.573} & 0.467 \\
+COLMAP & bicycle & 50000 & confidence & Both Pcds & 0.103 & \textbf{0.002} & 22.225 & 0.268 & \underline{0.571} & \underline{0.487} \\
+COLMAP & bicycle & 100000 & confidence & Both Pcds & \underline{0.101} & \textbf{0.002} & 22.228 & \underline{0.257} & 0.566 & \textbf{0.491} \\
+COLMAP & bicycle & 250000 & confidence & Both Pcds & \textbf{0.099} & \textbf{0.002} & 22.059 & \textbf{0.252} & 0.556 & 0.484 \\
+\midrule
+COLMAP & garden & 1000 & confidence & Both Pcds & 0.053 & \textbf{0.001} & 22.031 & 0.264 & 0.503 & 0.445 \\
+COLMAP & garden & 5000 & confidence & Both Pcds & 0.051 & \textbf{0.001} & 22.060 & 0.261 & 0.508 & 0.450 \\
+COLMAP & garden & 10000 & confidence & Both Pcds & \underline{0.050} & \textbf{0.001} & \underline{22.086} & 0.258 & \underline{0.510} & 0.454 \\
+COLMAP & garden & 50000 & confidence & Both Pcds & 0.051 & \textbf{0.001} & 22.067 & 0.250 & 0.508 & \underline{0.458} \\
+COLMAP & garden & 100000 & confidence & Both Pcds & \textbf{0.049} & \textbf{0.001} & \textbf{22.162} & \underline{0.246} & \textbf{0.518} & \textbf{0.468} \\
+COLMAP & garden & 250000 & confidence & Both Pcds & 0.054 & \textbf{0.001} & 21.926 & \textbf{0.244} & 0.501 & 0.455 \\
+\midrule
+COLMAP & stump & 1000 & confidence & Both Pcds & 0.032 & \textbf{0.001} & 25.008 & 0.328 & 0.701 & 0.577 \\
+COLMAP & stump & 5000 & confidence & Both Pcds & 0.030 & \textbf{0.001} & 25.310 & 0.315 & 0.714 & 0.598 \\
+COLMAP & stump & 10000 & confidence & Both Pcds & 0.031 & \textbf{0.001} & 25.583 & 0.305 & 0.724 & 0.615 \\
+COLMAP & stump & 50000 & confidence & Both Pcds & \textbf{0.025} & \textbf{0.001} & 25.883 & 0.276 & 0.740 & 0.648 \\
+COLMAP & stump & 100000 & confidence & Both Pcds & \underline{0.027} & \textbf{0.001} & \underline{25.997} & \underline{0.265} & \textbf{0.745} & \underline{0.660} \\
+COLMAP & stump & 250000 & confidence & Both Pcds & \textbf{0.025} & \textbf{0.001} & \textbf{26.014} & \textbf{0.259} & \underline{0.743} & \textbf{0.663} \\
+\bottomrule
+\end{tabular}
+\end{table}

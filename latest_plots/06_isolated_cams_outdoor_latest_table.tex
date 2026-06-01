@@ -1,22 +1,23 @@
 \begin{table}[H]
 \caption{Test isolated cameras with random point clouds. (Outdoor)}
 \label{tab:06_isolated_cams_outdoor}
-\small
-\begin{tabular}{llrllrrr}
+\centering
+\scriptsize
+\begin{tabular}{llrlllrrr}
 \toprule
-Choice & Dataset & Real Num Points & Random Init & Use Ba & Val RRE ↓ & Val RTE ↓ & Composite Quality ↑ \\
+Choice & Dataset & Real Num Points & Random Init & Use Ba & Pose Opt & Val RRE ↓ & Val RTE ↓ & Composite Quality ↑ \\
 \midrule
-COLMAP & bicycle & 17352 & Random Init &  & \textbf{0.099} & \textbf{0.002} & \textbf{0.252} \\
-VGGT & bicycle & 17352 & Random Init & Use BA & \underline{0.590} & \underline{0.009} & \underline{0.066} \\
-VGGT & bicycle & 17352 & Random Init &  & 0.716 & 0.015 & 0.058 \\
+COLMAP & bicycle & 17352 & Random Init &  &  & \textbf{0.099} & \textbf{0.002} & \textbf{0.252} \\
+VGGT & bicycle & 17352 & Random Init & Use BA &  & \underline{0.590} & \underline{0.009} & \underline{0.066} \\
+VGGT & bicycle & 17352 & Random Init &  &  & 0.716 & 0.015 & 0.058 \\
 \midrule
-COLMAP & garden & 70656 & Random Init &  & \textbf{0.063} & \textbf{0.001} & \textbf{0.370} \\
-VGGT & garden & 70656 & Random Init & Use BA & \underline{0.329} & \underline{0.003} & \underline{0.175} \\
-VGGT & garden & 70656 & Random Init &  & 0.373 & 0.006 & 0.142 \\
+COLMAP & garden & 70656 & Random Init &  &  & \textbf{0.063} & \textbf{0.001} & \textbf{0.370} \\
+VGGT & garden & 70656 & Random Init & Use BA &  & \underline{0.329} & \underline{0.003} & \underline{0.175} \\
+VGGT & garden & 70656 & Random Init &  &  & 0.373 & 0.006 & 0.142 \\
 \midrule
-COLMAP & stump & 19683 & Random Init &  & \textbf{0.022} & \textbf{0.001} & \textbf{0.504} \\
-VGGT & stump & 19683 & Random Init & Use BA & \underline{0.695} & \underline{0.011} & \underline{0.168} \\
-VGGT & stump & 19683 & Random Init &  & 0.856 & 0.040 & 0.143 \\
+COLMAP & stump & 19683 & Random Init &  &  & \textbf{0.022} & \textbf{0.001} & \textbf{0.504} \\
+VGGT & stump & 19683 & Random Init & Use BA &  & \underline{0.695} & \underline{0.011} & \underline{0.168} \\
+VGGT & stump & 19683 & Random Init &  &  & 0.856 & 0.040 & 0.143 \\
 \bottomrule
 \end{tabular}
 \end{table}

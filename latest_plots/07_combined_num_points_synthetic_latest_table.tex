@@ -1,0 +1,32 @@
+\begin{table}[H]
+\caption{Combining cameras and point clouds with different point coints (Synthetic)}
+\label{tab:07_combined_num_points_synthetic}
+\centering
+\scriptsize
+\begin{tabular}{llrllrrrrrr}
+\toprule
+Choice & Dataset & Num Points & Sampling Mode & Pcd Src & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP & lego & 870 & confidence & Both Pcds & \underline{10.389} & \textbf{0.112} & 25.044 & 0.054 & 0.901 & 0.864 \\
+COLMAP & lego & 4350 & confidence & Both Pcds & 10.390 & \textbf{0.112} & \underline{25.279} & 0.052 & \underline{0.905} & \underline{0.872} \\
+COLMAP & lego & 8700 & confidence & Both Pcds & 10.391 & \textbf{0.112} & \textbf{25.368} & \underline{0.051} & \textbf{0.906} & \textbf{0.875} \\
+COLMAP & lego & 43500 & confidence & Both Pcds & \textbf{10.388} & \textbf{0.112} & 25.112 & \underline{0.051} & 0.903 & 0.868 \\
+COLMAP & lego & 87000 & confidence & Both Pcds & \underline{10.389} & \underline{0.113} & 25.149 & \textbf{0.050} & 0.904 & 0.870 \\
+COLMAP & lego & 217500 & confidence & Both Pcds & 10.394 & \underline{0.113} & 25.089 & \underline{0.051} & 0.902 & 0.868 \\
+\midrule
+COLMAP & ship & 870 & confidence & Both Pcds & \textbf{0.130} & \textbf{0.002} & \underline{22.684} & 0.141 & \textbf{0.758} & \underline{0.682} \\
+COLMAP & ship & 4350 & confidence & Both Pcds & \underline{0.131} & \textbf{0.002} & \textbf{22.700} & 0.138 & \underline{0.756} & \textbf{0.684} \\
+COLMAP & ship & 8700 & confidence & Both Pcds & 0.147 & \textbf{0.002} & 22.593 & 0.138 & 0.751 & 0.679 \\
+COLMAP & ship & 43500 & confidence & Both Pcds & 0.152 & \textbf{0.002} & 22.570 & \underline{0.134} & 0.747 & 0.679 \\
+COLMAP & ship & 87000 & confidence & Both Pcds & 0.197 & \underline{0.003} & 21.877 & 0.135 & 0.734 & 0.657 \\
+COLMAP & ship & 217500 & confidence & Both Pcds & 0.156 & \underline{0.003} & 22.502 & \textbf{0.131} & 0.742 & 0.676 \\
+\midrule
+COLMAP & drums & 870 & confidence & Both Pcds & \textbf{0.095} & \textbf{0.002} & 22.873 & 0.088 & \textbf{0.907} & \underline{0.806} \\
+COLMAP & drums & 4350 & confidence & Both Pcds & \underline{0.097} & \textbf{0.002} & \textbf{22.900} & 0.087 & \textbf{0.907} & \textbf{0.808} \\
+COLMAP & drums & 8700 & confidence & Both Pcds & 0.102 & \textbf{0.002} & \underline{22.889} & 0.085 & \textbf{0.907} & \textbf{0.808} \\
+COLMAP & drums & 43500 & confidence & Both Pcds & 0.108 & \textbf{0.002} & 22.808 & 0.084 & 0.902 & 0.805 \\
+COLMAP & drums & 87000 & confidence & Both Pcds & 0.107 & \textbf{0.002} & 22.768 & \underline{0.082} & 0.902 & 0.805 \\
+COLMAP & drums & 217500 & confidence & Both Pcds & 0.103 & \textbf{0.002} & 22.821 & \textbf{0.080} & \underline{0.903} & \textbf{0.808} \\
+\bottomrule
+\end{tabular}
+\end{table}

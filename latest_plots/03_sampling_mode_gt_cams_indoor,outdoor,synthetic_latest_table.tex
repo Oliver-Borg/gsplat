@@ -1,7 +1,8 @@
 \begin{table}[H]
 \caption{A comparison of different VGGT point cloud sampling modes with GT cameras (Indoor,Outdoor,Synthetic)}
 \label{tab:03_sampling_mode_gt_cams_indoor,outdoor,synthetic}
-\small
+\centering
+\scriptsize
 \begin{tabular}{llrlrrrrr}
 \toprule
 Choice & Dataset Collection & Num Points & Sampling Mode & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ & Average Error ↓ \\
@@ -16,7 +17,7 @@ VGGT & outdoor & 21431 & ba & \textbf{25.716} & 0.339 & \textbf{0.738} & \underl
 VGGT & outdoor & 100000 & random & 24.141 & \underline{0.258} & 0.699 & 0.603 & \underline{0.270} \\
 VGGT & outdoor & 500000 & random & 23.768 & \textbf{0.249} & 0.677 & 0.588 & 0.274 \\
 \midrule
-COLMAP & synthetic & 10069 &  & \underline{33.139} & \underline{0.034} & \underline{0.980} & \underline{1.072} & \underline{0.059} \\
+COLMAP & synthetic & 10313 &  & \underline{33.117} & \underline{0.034} & \underline{0.980} & \underline{1.072} & \underline{0.059} \\
 VGGT & synthetic & 27774 & ba & \textbf{33.294} & \textbf{0.032} & \textbf{0.981} & \textbf{1.077} & \textbf{0.057} \\
 \bottomrule
 \end{tabular}

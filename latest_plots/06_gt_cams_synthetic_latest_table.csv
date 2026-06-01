@@ -1,16 +1,16 @@
 choice,dataset,use_gt_extrinsics,use_gt_intrinsics,use_gt_points,quality
-COLMAP,lego,,,,0.8557490702280368
-COLMAP,lego,,GT Intrinsics,,0.9332785513481975
-COLMAP,lego,GT Extrinsics,,,0.8890466676169281
-COLMAP,lego,GT Extrinsics,GT Intrinsics,,1.0721918949064608
+COLMAP,lego,,,,0.7853716059773675
+COLMAP,lego,,GT Intrinsics,,0.804511408132148
+COLMAP,lego,GT Extrinsics,,,0.8499588578058344
+COLMAP,lego,GT Extrinsics,GT Intrinsics,,1.0715809865643484
 VGGT,lego,,,,0.681244413590493
 VGGT,lego,,GT Intrinsics,,0.69027371461551
 VGGT,lego,GT Extrinsics,,,0.8500471238949765
 VGGT,lego,GT Extrinsics,GT Intrinsics,,1.0766449147391195
-COLMAP,ship,,,,0.6393269793486889
-COLMAP,ship,,GT Intrinsics,,0.671805912813945
-COLMAP,ship,GT Extrinsics,,,0.667634772491424
-COLMAP,ship,GT Extrinsics,GT Intrinsics,,0.9030424091163743
+COLMAP,ship,,,,0.6681527490736681
+COLMAP,ship,,GT Intrinsics,,0.7449985900778829
+COLMAP,ship,GT Extrinsics,,,0.685985180272771
+COLMAP,ship,GT Extrinsics,GT Intrinsics,,0.8960803434339879
 VGGT,ship,,,,0.5943074305774795
 VGGT,ship,,GT Intrinsics,,0.6021259593413665
 VGGT,ship,GT Extrinsics,,,0.8092820723677239

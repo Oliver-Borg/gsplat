@@ -9,6 +9,7 @@
         "random"
     ],
     "depth_loss_mode": [
+        "disabled",
         "full"
     ],
     "pose_opt": [
@@ -24,7 +25,10 @@
         "disabled",
         "standard",
         "sigmoid",
-        "shifted"
+        "shifted",
+        "scaled",
+        "scaleshifted",
+        "sigshifted"
     ],
     "dataset": "bonsai"
 }

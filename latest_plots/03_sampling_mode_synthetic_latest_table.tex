@@ -1,43 +1,44 @@
 \begin{table}[H]
 \caption{A comparison of different VGGT point cloud sampling modes (Synthetic)}
 \label{tab:03_sampling_mode_synthetic}
-\small
+\centering
+\scriptsize
 \begin{tabular}{llrlrrrrrr}
 \toprule
 Choice & Dataset & Num Points & Sampling Mode & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
 \midrule
-COLMAP & lego & 10069 &  & 10.427 & 0.396 & \textbf{24.951} & \textbf{0.058} & \textbf{0.894} & \textbf{0.856} \\
-VGGT & lego & 870 & confidence & 0.331 & \underline{0.019} & 20.780 & 0.127 & 0.785 & 0.672 \\
+COLMAP & lego & 10313 &  & 10.478 & 0.404 & \underline{22.787} & \textbf{0.066} & \textbf{0.851} & \textbf{0.785} \\
+VGGT & lego & 870 & confidence & \underline{0.298} & \underline{0.019} & 20.773 & 0.128 & 0.785 & 0.671 \\
 VGGT & lego & 870 & imagefps & \underline{0.298} & \underline{0.019} & 20.732 & 0.131 & 0.784 & 0.668 \\
-VGGT & lego & 870 & random & 0.331 & \underline{0.019} & 20.787 & 0.128 & 0.785 & 0.671 \\
+VGGT & lego & 870 & random & \underline{0.298} & \underline{0.019} & 20.806 & 0.126 & 0.785 & 0.673 \\
 VGGT & lego & 870 & voxels & \underline{0.298} & \underline{0.019} & 20.662 & 0.129 & 0.783 & 0.667 \\
-VGGT & lego & 4350 & confidence & 0.331 & \underline{0.019} & 20.556 & 0.108 & 0.776 & 0.674 \\
+VGGT & lego & 4350 & confidence & \underline{0.298} & \underline{0.019} & 20.557 & 0.108 & 0.776 & 0.675 \\
 VGGT & lego & 4350 & imagefps & \underline{0.298} & \underline{0.019} & 20.587 & 0.108 & 0.777 & 0.676 \\
-VGGT & lego & 4350 & random & 0.331 & \underline{0.019} & 20.566 & 0.107 & 0.776 & 0.675 \\
+VGGT & lego & 4350 & random & \underline{0.298} & \underline{0.019} & 20.567 & 0.107 & 0.776 & 0.675 \\
 VGGT & lego & 4350 & voxels & \underline{0.298} & \underline{0.019} & 20.554 & 0.108 & 0.776 & 0.674 \\
-VGGT & lego & 8700 & confidence & 0.331 & \underline{0.019} & 20.560 & 0.103 & 0.775 & 0.677 \\
+VGGT & lego & 8700 & confidence & \underline{0.298} & \underline{0.019} & 20.552 & 0.103 & 0.775 & 0.677 \\
 VGGT & lego & 8700 & imagefps & \underline{0.298} & \underline{0.019} & 20.517 & 0.103 & 0.774 & 0.675 \\
-VGGT & lego & 8700 & random & 0.331 & \underline{0.019} & 20.553 & 0.103 & 0.775 & 0.677 \\
+VGGT & lego & 8700 & random & \underline{0.298} & \underline{0.019} & 20.556 & 0.103 & 0.775 & 0.677 \\
 VGGT & lego & 8700 & voxels & \underline{0.298} & \underline{0.019} & 20.601 & 0.103 & 0.777 & 0.679 \\
-VGGT & lego & 27774 & ba & 0.269 & \textbf{0.016} & \underline{22.970} & \underline{0.075} & \underline{0.837} & \underline{0.775} \\
-VGGT & lego & 43500 & confidence & 0.331 & \underline{0.019} & 20.571 & 0.097 & 0.774 & 0.680 \\
+VGGT & lego & 27774 & ba & 0.269 & \textbf{0.016} & \textbf{22.970} & \underline{0.075} & \underline{0.837} & \underline{0.775} \\
+VGGT & lego & 43500 & confidence & \underline{0.298} & \underline{0.019} & 20.576 & 0.097 & 0.774 & 0.681 \\
 VGGT & lego & 43500 & imagefps & \underline{0.298} & \underline{0.019} & 20.613 & 0.097 & 0.775 & 0.682 \\
-VGGT & lego & 43500 & random & 0.331 & \underline{0.019} & 20.577 & 0.097 & 0.774 & 0.680 \\
+VGGT & lego & 43500 & random & \underline{0.298} & \underline{0.019} & 20.572 & 0.097 & 0.774 & 0.680 \\
 VGGT & lego & 43500 & voxels & \underline{0.298} & \underline{0.019} & 20.540 & 0.097 & 0.774 & 0.679 \\
-VGGT & lego & 87000 & confidence & 0.331 & \underline{0.019} & 20.613 & 0.095 & 0.775 & 0.683 \\
+VGGT & lego & 87000 & confidence & \underline{0.298} & \underline{0.019} & 20.615 & 0.095 & 0.775 & 0.683 \\
 VGGT & lego & 87000 & imagefps & \underline{0.298} & \underline{0.019} & 20.584 & 0.096 & 0.774 & 0.681 \\
-VGGT & lego & 87000 & random & 0.331 & \underline{0.019} & 20.620 & 0.095 & 0.775 & 0.683 \\
+VGGT & lego & 87000 & random & \underline{0.298} & \underline{0.019} & 20.617 & 0.095 & 0.775 & 0.683 \\
 VGGT & lego & 87000 & voxels & \underline{0.298} & \underline{0.019} & 20.561 & 0.096 & 0.773 & 0.680 \\
-VGGT & lego & 435000 & confidence & 0.331 & \underline{0.019} & 20.577 & 0.093 & 0.773 & 0.682 \\
+VGGT & lego & 435000 & confidence & \underline{0.298} & \underline{0.019} & 20.576 & 0.093 & 0.773 & 0.682 \\
 VGGT & lego & 435000 & imagefps & \underline{0.298} & \underline{0.019} & 20.611 & 0.095 & 0.774 & 0.682 \\
-VGGT & lego & 435000 & random & 0.331 & \underline{0.019} & 20.581 & 0.094 & 0.773 & 0.682 \\
+VGGT & lego & 435000 & random & \underline{0.298} & \underline{0.019} & 20.580 & 0.094 & 0.773 & 0.682 \\
 VGGT & lego & 435000 & voxels & \underline{0.298} & \underline{0.019} & 20.573 & 0.093 & 0.774 & 0.683 \\
-VGGT & lego & 870000 & confidence & 0.331 & \underline{0.019} & 20.599 & 0.092 & 0.774 & 0.683 \\
+VGGT & lego & 870000 & confidence & \underline{0.298} & \underline{0.019} & 20.597 & 0.092 & 0.773 & 0.683 \\
 VGGT & lego & 870000 & imagefps & \underline{0.298} & \underline{0.019} & 20.606 & 0.093 & 0.773 & 0.683 \\
-VGGT & lego & 870000 & random & 0.331 & \underline{0.019} & 20.607 & 0.093 & 0.773 & 0.683 \\
+VGGT & lego & 870000 & random & \underline{0.298} & \underline{0.019} & 20.607 & 0.093 & 0.773 & 0.683 \\
 VGGT & lego & 870000 & voxels & \underline{0.298} & \underline{0.019} & 20.553 & 0.092 & 0.773 & 0.682 \\
 \midrule
-COLMAP & ship & 5138 &  & \textbf{0.277} & \textbf{0.015} & \textbf{21.593} & \textbf{0.155} & \textbf{0.733} & \textbf{0.639} \\
+COLMAP & ship & 5146 &  & \textbf{0.246} & \textbf{0.011} & \textbf{22.401} & \textbf{0.149} & \textbf{0.751} & \textbf{0.668} \\
 VGGT & ship & 870 & confidence & 0.487 & 0.028 & 20.921 & 0.220 & \underline{0.719} & 0.578 \\
 VGGT & ship & 870 & imagefps & 0.487 & 0.028 & 20.914 & 0.216 & \underline{0.719} & 0.580 \\
 VGGT & ship & 870 & random & 0.487 & 0.028 & \underline{20.925} & 0.218 & 0.718 & 0.580 \\

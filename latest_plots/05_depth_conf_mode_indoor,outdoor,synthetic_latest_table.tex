@@ -3,21 +3,36 @@
 \label{tab:05_depth_conf_mode_indoor,outdoor,synthetic}
 \centering
 \scriptsize
-\begin{tabular}{lllrrrrr}
+\begin{tabular}{llllrrrrrr}
 \toprule
-Choice & Dataset Collection & Depth Conf Mode & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ \\
+Choice & Dataset Collection & Depth Conf Mode & Depth Loss Mode & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
 \midrule
-VGGT & indoor &  & \underline{0.431} & \textbf{0.010} & \underline{19.298} & \underline{0.287} & \underline{0.558} \\
-VGGT & indoor & sigmoid & \textbf{0.430} & \textbf{0.010} & 19.148 & \textbf{0.281} & 0.539 \\
-VGGT & indoor & standard & 0.435 & \textbf{0.010} & \textbf{19.331} & 0.294 & \textbf{0.563} \\
+VGGT & indoor &  &  & \underline{0.426} & 0.011 & 19.416 & \underline{0.271} & 0.538 & 0.413 \\
+VGGT & indoor &  & full & \textbf{0.421} & \underline{0.010} & 19.097 & 0.283 & 0.537 & 0.400 \\
+VGGT & indoor & Scaled & full & \underline{0.426} & \textbf{0.009} & 19.382 & 0.272 & 0.545 & 0.416 \\
+VGGT & indoor & Scaled Shifted & full & \textbf{0.421} & \underline{0.010} & 19.513 & \textbf{0.268} & 0.543 & 0.420 \\
+VGGT & indoor & Sigmoid & full & 0.428 & \textbf{0.009} & 19.203 & 0.286 & 0.546 & 0.405 \\
+VGGT & indoor & Sigmoid Shifted & full & 0.433 & \underline{0.010} & \textbf{19.693} & 0.272 & \underline{0.560} & \textbf{0.431} \\
+VGGT & indoor & Standard & full & 0.435 & \underline{0.010} & 19.331 & 0.294 & \textbf{0.563} & 0.412 \\
+VGGT & indoor & Standard Shifted & full & 0.440 & \underline{0.010} & \underline{19.579} & 0.280 & 0.559 & \underline{0.423} \\
 \midrule
-VGGT & outdoor &  & 0.465 & \textbf{0.019} & \underline{18.639} & \underline{0.404} & \underline{0.357} \\
-VGGT & outdoor & sigmoid & \textbf{0.452} & \textbf{0.019} & 18.566 & \textbf{0.398} & 0.353 \\
-VGGT & outdoor & standard & \underline{0.458} & \textbf{0.019} & \textbf{18.652} & 0.409 & \textbf{0.359} \\
+VGGT & outdoor &  &  & 0.467 & \underline{0.018} & 18.343 & \textbf{0.389} & 0.344 & 0.207 \\
+VGGT & outdoor &  & full & 0.465 & 0.019 & 18.639 & 0.404 & 0.357 & \underline{0.211} \\
+VGGT & outdoor & Scaled & full & \textbf{0.457} & 0.019 & 18.617 & 0.401 & 0.356 & \textbf{0.212} \\
+VGGT & outdoor & Scaled Shifted & full & 0.462 & \underline{0.018} & 18.447 & \underline{0.392} & 0.347 & 0.209 \\
+VGGT & outdoor & Sigmoid & full & 0.460 & 0.019 & \underline{18.644} & 0.405 & \underline{0.358} & \underline{0.211} \\
+VGGT & outdoor & Sigmoid Shifted & full & 0.459 & \textbf{0.017} & 18.447 & 0.394 & 0.348 & 0.208 \\
+VGGT & outdoor & Standard & full & \underline{0.458} & 0.019 & \textbf{18.652} & 0.409 & \textbf{0.359} & 0.209 \\
+VGGT & outdoor & Standard Shifted & full & \underline{0.458} & \textbf{0.017} & 18.441 & 0.395 & 0.348 & 0.208 \\
 \midrule
-VGGT & synthetic &  & \underline{0.252} & \textbf{0.005} & 21.910 & \underline{0.117} & 0.812 \\
-VGGT & synthetic & sigmoid & \textbf{0.236} & \textbf{0.005} & \underline{22.101} & \textbf{0.096} & \underline{0.815} \\
-VGGT & synthetic & standard & 0.255 & \textbf{0.005} & \textbf{22.516} & 0.140 & \textbf{0.826} \\
+VGGT & synthetic &  &  & 0.248 & \underline{0.006} & 21.370 & \underline{0.097} & 0.797 & 0.709 \\
+VGGT & synthetic &  & full & \underline{0.233} & \textbf{0.005} & 22.064 & \underline{0.097} & 0.814 & 0.732 \\
+VGGT & synthetic & Scaled & full & \underline{0.233} & \textbf{0.005} & 22.014 & \textbf{0.093} & 0.813 & 0.732 \\
+VGGT & synthetic & Scaled Shifted & full & \textbf{0.232} & \textbf{0.005} & 22.053 & \textbf{0.093} & 0.813 & 0.733 \\
+VGGT & synthetic & Sigmoid & full & 0.235 & \textbf{0.005} & 22.325 & 0.100 & \underline{0.821} & \underline{0.738} \\
+VGGT & synthetic & Sigmoid Shifted & full & 0.235 & \textbf{0.005} & 22.327 & 0.099 & \underline{0.821} & \textbf{0.739} \\
+VGGT & synthetic & Standard & full & 0.255 & \textbf{0.005} & \underline{22.516} & 0.140 & \textbf{0.826} & 0.720 \\
+VGGT & synthetic & Standard Shifted & full & 0.255 & \textbf{0.005} & \textbf{22.552} & 0.139 & \textbf{0.826} & 0.721 \\
 \bottomrule
 \end{tabular}
 \end{table}

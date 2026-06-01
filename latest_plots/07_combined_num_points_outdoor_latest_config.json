@@ -1,0 +1,35 @@
+{
+    "seed": [
+        42
+    ],
+    "num_images": [
+        100
+    ],
+    "sampling_mode": [
+        "confidence"
+    ],
+    "pose_opt": [
+        true
+    ],
+    "num_points_per_image": [
+        10,
+        50,
+        100,
+        500,
+        1000,
+        2500
+    ],
+    "choice": [
+        "combined"
+    ],
+    "pcd_src": [
+        "both"
+    ],
+    "camera_src": [
+        "colmap"
+    ],
+    "num_steps": [
+        15000
+    ],
+    "dataset": "bicycle"
+}

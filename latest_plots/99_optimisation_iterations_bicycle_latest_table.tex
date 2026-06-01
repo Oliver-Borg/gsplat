@@ -1,15 +1,13 @@
 \begin{table}[H]
-\caption{Test for reconstruct optimisation iterations (Bicycle)}
+\caption{Test for reconstruct optimization iterations (Bicycle)}
 \label{tab:99_optimisation_iterations_bicycle}
-\begin{tabular}{lrlrrrrrr}
+\centering
+\scriptsize
+\begin{tabular}{llrlrrrrr}
 \toprule
-Choice & Optimisation Iterations & Pose Opt & RRE ↓ & RTE ↓ & Aligned Cameras ↑ & Val RRE ↓ & Val RTE ↓ & Composite Quality ↑ \\
+Choice & Dataset & Optimisation Iterations & Pose Opt & RRE ↓ & RTE ↓ & Val RRE ↓ & Val RTE ↓ & Composite Quality ↑ \\
 \midrule
-VGGT & 0 & Pose Opt & \textbf{0.857} & 0.067 & \textbf{100} & \textbf{0.724} & \underline{0.014} & \underline{0.165} \\
-VGGT & 1 & Pose Opt & \underline{0.864} & 0.064 & \textbf{100} & \underline{0.725} & \underline{0.014} & \textbf{0.175} \\
-VGGT & 10 & Pose Opt & 1.485 & 0.051 & \textbf{100} & 1.799 & \textbf{0.013} & 0.078 \\
-VGGT & 20 & Pose Opt & 1.811 & \underline{0.050} & \textbf{100} & 1.884 & \textbf{0.013} & 0.057 \\
-VGGT & 30 &  & 1.582 & \textbf{0.048} & \textbf{100} &  &  &  \\
+VGGT & bicycle & 0 & Pose Opt & \textbf{0.716} & \textbf{0.066} & \textbf{0.489} & \textbf{0.014} & \textbf{0.176} \\
 \bottomrule
 \end{tabular}
 \end{table}

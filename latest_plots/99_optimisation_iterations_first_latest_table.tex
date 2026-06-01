@@ -1,0 +1,29 @@
+\begin{table}[H]
+\caption{Test for reconstruct optimization iterations (First)}
+\label{tab:99_optimisation_iterations_first}
+\centering
+\scriptsize
+\begin{tabular}{llrlrrrrr}
+\toprule
+Choice & Dataset & Optimisation Iterations & Pose Opt & RRE ↓ & RTE ↓ & Val RRE ↓ & Val RTE ↓ & Composite Quality ↑ \\
+\midrule
+VGGT & bicycle & 0 & Pose Opt & \underline{0.716} & \underline{0.066} & \textbf{0.489} & \textbf{0.014} & \textbf{0.176} \\
+VGGT & bicycle & 1 &  & \textbf{0.678} & \textbf{0.063} &  &  &  \\
+VGGT & bicycle & 10 &  & 0.732 & 0.067 &  &  &  \\
+VGGT & bicycle & 20 &  & 1.183 & 0.092 &  &  &  \\
+VGGT & bicycle & 30 &  & 1.305 & 0.135 &  &  &  \\
+\midrule
+VGGT & bonsai & 0 & Pose Opt & \textbf{0.722} & 0.106 & \textbf{0.789} & \textbf{0.022} & \textbf{0.310} \\
+VGGT & bonsai & 1 &  & \underline{0.974} & \underline{0.102} &  &  &  \\
+VGGT & bonsai & 10 &  & 1.284 & \textbf{0.099} &  &  &  \\
+VGGT & bonsai & 20 &  & 1.486 & 0.103 &  &  &  \\
+VGGT & bonsai & 30 &  & 1.504 & 0.103 &  &  &  \\
+\midrule
+VGGT & lego & 0 & Pose Opt & \textbf{0.298} & \textbf{0.019} & \textbf{0.252} & \textbf{0.006} & \textbf{0.689} \\
+VGGT & lego & 1 &  & \underline{0.347} & \textbf{0.019} &  &  &  \\
+VGGT & lego & 10 &  & 0.589 & \underline{0.034} &  &  &  \\
+VGGT & lego & 20 &  & 0.795 & 0.045 &  &  &  \\
+VGGT & lego & 30 &  & 1.030 & 0.058 &  &  &  \\
+\bottomrule
+\end{tabular}
+\end{table}

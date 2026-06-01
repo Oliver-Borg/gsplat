@@ -1,0 +1,20 @@
+\begin{table}[H]
+\caption{COLMAP versus VGGT for $20$ images. (Synthetic)}
+\label{tab:01_num_images_sparse_synthetic}
+\centering
+\scriptsize
+\begin{tabular}{llrrrrrr}
+\toprule
+Choice & Dataset & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Aligned Cameras ↑ \\
+\midrule
+COLMAP & lego & 62.953 & \underline{2.476} & \underline{10.774} & \underline{0.517} & \textbf{0.664} & \underline{10} \\
+VGGT & lego & \textbf{2.282} & \textbf{0.137} & \textbf{13.511} & \textbf{0.338} & \underline{0.610} & \textbf{20} \\
+\midrule
+COLMAP & ship & \textbf{0.279} & \textbf{0.010} & \underline{15.900} & \underline{0.413} & \underline{0.527} & \underline{5} \\
+VGGT & ship & \underline{0.369} & \underline{0.023} & \textbf{21.624} & \textbf{0.164} & \textbf{0.709} & \textbf{20} \\
+\midrule
+COLMAP & drums & \underline{5.120} & \textbf{0.004} & \underline{4.959} & \underline{0.884} & \underline{0.082} & \underline{3} \\
+VGGT & drums & \textbf{0.854} & \underline{0.053} & \textbf{13.111} & \textbf{0.359} & \textbf{0.642} & \textbf{20} \\
+\bottomrule
+\end{tabular}
+\end{table}

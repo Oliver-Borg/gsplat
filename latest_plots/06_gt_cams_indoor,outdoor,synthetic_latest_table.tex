@@ -1,7 +1,8 @@
 \begin{table}[H]
 \caption{The effect of using ground truth extrinsics, intrinsics and points on VGGT and COLMAP results (Indoor,Outdoor,Synthetic)}
 \label{tab:06_gt_cams_indoor,outdoor,synthetic}
-\small
+\centering
+\scriptsize
 \begin{tabular}{lllllr}
 \toprule
 Choice & Dataset Collection & Use Gt Extrinsics & Use Gt Intrinsics & Use Gt Points & Composite Quality ↑ \\
@@ -42,10 +43,10 @@ VGGT & outdoor & GT Extrinsics &  & GT Points & 0.365 \\
 VGGT & outdoor & GT Extrinsics & GT Intrinsics &  & \underline{0.603} \\
 VGGT & outdoor & GT Extrinsics & GT Intrinsics & GT Points & \textbf{0.622} \\
 \midrule
-COLMAP & synthetic &  &  &  & 0.762 \\
-COLMAP & synthetic &  & GT Intrinsics &  & \underline{0.808} \\
-COLMAP & synthetic & GT Extrinsics &  &  & 0.790 \\
-COLMAP & synthetic & GT Extrinsics & GT Intrinsics &  & \textbf{0.940} \\
+COLMAP & synthetic &  &  &  & 0.748 \\
+COLMAP & synthetic &  & GT Intrinsics &  & \underline{0.790} \\
+COLMAP & synthetic & GT Extrinsics &  &  & 0.783 \\
+COLMAP & synthetic & GT Extrinsics & GT Intrinsics &  & \textbf{0.938} \\
 \midrule
 VGGT & synthetic &  &  &  & 0.656 \\
 VGGT & synthetic &  & GT Intrinsics &  & 0.671 \\

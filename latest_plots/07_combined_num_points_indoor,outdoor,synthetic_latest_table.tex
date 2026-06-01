@@ -1,0 +1,32 @@
+\begin{table}[H]
+\caption{Combining cameras and point clouds with different point coints (Indoor,Outdoor,Synthetic)}
+\label{tab:07_combined_num_points_indoor,outdoor,synthetic}
+\centering
+\scriptsize
+\begin{tabular}{llrllrrrrrr}
+\toprule
+Choice & Dataset Collection & Num Points & Sampling Mode & Pcd Src & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP & indoor & 1000 & confidence & Both Pcds & 0.072 & \textbf{0.001} & 24.012 & 0.167 & 0.716 & 0.667 \\
+COLMAP & indoor & 5000 & confidence & Both Pcds & 0.073 & \textbf{0.001} & 23.835 & 0.167 & 0.710 & 0.660 \\
+COLMAP & indoor & 10000 & confidence & Both Pcds & 0.073 & \textbf{0.001} & 23.820 & 0.167 & 0.710 & 0.659 \\
+COLMAP & indoor & 50000 & confidence & Both Pcds & 0.070 & \textbf{0.001} & 23.968 & \underline{0.164} & 0.723 & 0.672 \\
+COLMAP & indoor & 100000 & confidence & Both Pcds & \underline{0.069} & \textbf{0.001} & \underline{24.116} & \textbf{0.163} & \underline{0.729} & \underline{0.679} \\
+COLMAP & indoor & 250000 & confidence & Both Pcds & \textbf{0.066} & \textbf{0.001} & \textbf{24.225} & \textbf{0.163} & \textbf{0.732} & \textbf{0.682} \\
+\midrule
+COLMAP & outdoor & 1000 & confidence & Both Pcds & 0.064 & \textbf{0.001} & 23.108 & 0.308 & 0.591 & 0.490 \\
+COLMAP & outdoor & 5000 & confidence & Both Pcds & 0.063 & \textbf{0.001} & 23.196 & 0.297 & 0.596 & 0.501 \\
+COLMAP & outdoor & 10000 & confidence & Both Pcds & 0.062 & \textbf{0.001} & 23.320 & 0.289 & 0.602 & 0.512 \\
+COLMAP & outdoor & 50000 & confidence & Both Pcds & \underline{0.060} & \textbf{0.001} & \underline{23.392} & 0.265 & \underline{0.607} & 0.531 \\
+COLMAP & outdoor & 100000 & confidence & Both Pcds & \textbf{0.059} & \textbf{0.001} & \textbf{23.462} & \underline{0.256} & \textbf{0.610} & \textbf{0.539} \\
+COLMAP & outdoor & 250000 & confidence & Both Pcds & \textbf{0.059} & \textbf{0.001} & 23.333 & \textbf{0.252} & 0.600 & \underline{0.534} \\
+\midrule
+COLMAP & synthetic & 870 & confidence & Both Pcds & \textbf{3.538} & \textbf{0.039} & 23.534 & 0.094 & \underline{0.855} & 0.784 \\
+COLMAP & synthetic & 4350 & confidence & Both Pcds & \underline{3.540} & \textbf{0.039} & \textbf{23.626} & 0.092 & \textbf{0.856} & \textbf{0.788} \\
+COLMAP & synthetic & 8700 & confidence & Both Pcds & 3.547 & \textbf{0.039} & \underline{23.617} & 0.092 & \underline{0.855} & \underline{0.787} \\
+COLMAP & synthetic & 43500 & confidence & Both Pcds & 3.549 & \textbf{0.039} & 23.497 & \underline{0.089} & 0.851 & 0.784 \\
+COLMAP & synthetic & 87000 & confidence & Both Pcds & 3.564 & \textbf{0.039} & 23.265 & \underline{0.089} & 0.846 & 0.777 \\
+COLMAP & synthetic & 217500 & confidence & Both Pcds & 3.551 & \textbf{0.039} & 23.471 & \textbf{0.087} & 0.849 & 0.784 \\
+\bottomrule
+\end{tabular}
+\end{table}

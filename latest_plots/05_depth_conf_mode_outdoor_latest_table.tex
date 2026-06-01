@@ -3,21 +3,36 @@
 \label{tab:05_depth_conf_mode_outdoor}
 \centering
 \scriptsize
-\begin{tabular}{lllrrrrr}
+\begin{tabular}{llllrrrrrr}
 \toprule
-Choice & Dataset & Depth Conf Mode & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ \\
+Choice & Dataset & Depth Conf Mode & Depth Loss Mode & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
 \midrule
-VGGT & bicycle &  & \textbf{0.481} & \underline{0.013} & \textbf{18.110} & \underline{0.351} & \textbf{0.293} \\
-VGGT & bicycle & sigmoid & \underline{0.482} & \textbf{0.012} & 17.927 & \textbf{0.342} & 0.284 \\
-VGGT & bicycle & standard & \textbf{0.481} & \textbf{0.012} & \underline{18.087} & 0.353 & \underline{0.292} \\
+VGGT & bicycle &  &  & 0.489 & 0.014 & 17.384 & \textbf{0.338} & 0.268 & 0.176 \\
+VGGT & bicycle &  & full & \textbf{0.481} & \underline{0.013} & \textbf{18.110} & 0.351 & \textbf{0.293} & \underline{0.196} \\
+VGGT & bicycle & Scaled & full & \underline{0.484} & \textbf{0.012} & 18.078 & 0.348 & \underline{0.292} & \textbf{0.197} \\
+VGGT & bicycle & Scaled Shifted & full & 0.497 & \underline{0.013} & 17.422 & \underline{0.345} & 0.269 & 0.173 \\
+VGGT & bicycle & Sigmoid & full & \underline{0.484} & \underline{0.013} & \underline{18.088} & 0.352 & \underline{0.292} & 0.195 \\
+VGGT & bicycle & Sigmoid Shifted & full & 0.495 & \underline{0.013} & 17.418 & 0.346 & 0.270 & 0.173 \\
+VGGT & bicycle & Standard & full & \textbf{0.481} & \textbf{0.012} & 18.087 & 0.353 & \underline{0.292} & 0.194 \\
+VGGT & bicycle & Standard Shifted & full & 0.495 & \underline{0.013} & 17.421 & 0.346 & 0.270 & 0.173 \\
 \midrule
-VGGT & garden &  & \underline{0.113} & \textbf{0.004} & 19.402 & \textbf{0.346} & \underline{0.371} \\
-VGGT & garden & sigmoid & \underline{0.113} & \textbf{0.004} & \underline{19.434} & \underline{0.347} & \underline{0.371} \\
-VGGT & garden & standard & \textbf{0.109} & \textbf{0.004} & \textbf{19.454} & 0.354 & \textbf{0.375} \\
+VGGT & garden &  &  & 0.135 & \textbf{0.004} & 19.351 & 0.338 & 0.366 & 0.270 \\
+VGGT & garden &  & full & 0.113 & \textbf{0.004} & 19.402 & 0.346 & 0.371 & 0.269 \\
+VGGT & garden & Scaled & full & 0.112 & \textbf{0.004} & 19.410 & 0.344 & 0.370 & 0.270 \\
+VGGT & garden & Scaled Shifted & full & 0.117 & \textbf{0.004} & \underline{19.630} & \textbf{0.333} & 0.371 & \underline{0.282} \\
+VGGT & garden & Sigmoid & full & \textbf{0.109} & \textbf{0.004} & 19.448 & 0.348 & \underline{0.374} & 0.270 \\
+VGGT & garden & Sigmoid Shifted & full & \underline{0.111} & \textbf{0.004} & \textbf{19.645} & \textbf{0.333} & 0.373 & \textbf{0.283} \\
+VGGT & garden & Standard & full & \textbf{0.109} & \textbf{0.004} & 19.454 & 0.354 & \textbf{0.375} & 0.268 \\
+VGGT & garden & Standard Shifted & full & \textbf{0.109} & \textbf{0.004} & 19.600 & \underline{0.335} & \underline{0.374} & 0.281 \\
 \midrule
-VGGT & stump &  & 0.801 & \underline{0.041} & \underline{18.406} & \underline{0.515} & \underline{0.408} \\
-VGGT & stump & sigmoid & \textbf{0.761} & \textbf{0.039} & 18.336 & \textbf{0.507} & 0.404 \\
-VGGT & stump & standard & \underline{0.785} & \underline{0.041} & \textbf{18.416} & 0.519 & \textbf{0.409} \\
+VGGT & stump &  &  & 0.777 & \textbf{0.035} & 18.294 & \textbf{0.492} & 0.398 & \textbf{0.174} \\
+VGGT & stump &  & full & 0.801 & 0.041 & \underline{18.406} & 0.515 & \underline{0.408} & 0.168 \\
+VGGT & stump & Scaled & full & 0.773 & \underline{0.040} & 18.363 & 0.513 & 0.406 & 0.168 \\
+VGGT & stump & Scaled Shifted & full & 0.774 & \textbf{0.035} & 18.288 & \underline{0.500} & 0.400 & \underline{0.171} \\
+VGGT & stump & Sigmoid & full & 0.788 & 0.041 & 18.397 & 0.517 & \underline{0.408} & 0.167 \\
+VGGT & stump & Sigmoid Shifted & full & \underline{0.771} & \textbf{0.035} & 18.278 & 0.502 & 0.400 & 0.169 \\
+VGGT & stump & Standard & full & 0.785 & 0.041 & \textbf{18.416} & 0.519 & \textbf{0.409} & 0.166 \\
+VGGT & stump & Standard Shifted & full & \textbf{0.769} & \textbf{0.035} & 18.303 & 0.504 & 0.401 & 0.169 \\
 \bottomrule
 \end{tabular}
 \end{table}

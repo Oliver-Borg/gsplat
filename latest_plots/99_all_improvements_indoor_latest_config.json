@@ -1,0 +1,39 @@
+{
+    "seed": [
+        42
+    ],
+    "num_images": [
+        100
+    ],
+    "sampling_mode": [
+        "confidence"
+    ],
+    "num_points_per_image": [
+        1000
+    ],
+    "gt_eval": true,
+    "choice": [
+        "combined",
+        "colmap",
+        "vggt"
+    ],
+    "camera_src": [
+        "colmap"
+    ],
+    "pcd_src": [
+        "both"
+    ],
+    "pose_opt": [
+        true
+    ],
+    "depth_loss_mode": [
+        "closer"
+    ],
+    "depth_conf_mode": [
+        "shifted"
+    ],
+    "depth_lambda": [
+        0.1
+    ],
+    "dataset": "bonsai"
+}

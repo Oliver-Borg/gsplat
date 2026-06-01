@@ -1,0 +1,34 @@
+{
+    "seed": [
+        42
+    ],
+    "num_images": [
+        20,
+        40,
+        100
+    ],
+    "sampling_mode": [
+        "random"
+    ],
+    "pose_opt": [
+        true
+    ],
+    "gt_eval": [
+        true
+    ],
+    "image_mode": [
+        "farthestpose"
+    ],
+    "choice": [
+        "vggt"
+    ],
+    "use_gt_cams": [
+        false,
+        true
+    ],
+    "use_gt_points": [
+        false,
+        true
+    ],
+    "dataset": "bicycle"
+}

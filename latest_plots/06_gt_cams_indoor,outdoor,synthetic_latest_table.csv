@@ -31,10 +31,10 @@ VGGT,outdoor,GT Extrinsics,,,0.3440362899133543
 VGGT,outdoor,GT Extrinsics,,GT Points,0.3651328427026817
 VGGT,outdoor,GT Extrinsics,GT Intrinsics,,0.6029251259282629
 VGGT,outdoor,GT Extrinsics,GT Intrinsics,GT Points,0.6216426590368399
-COLMAP,synthetic,,,,0.7618680578987913
-COLMAP,synthetic,,GT Intrinsics,,0.8081694127778379
-COLMAP,synthetic,GT Extrinsics,,,0.7895010042147304
-COLMAP,synthetic,GT Extrinsics,GT Intrinsics,,0.9402380094548595
+COLMAP,synthetic,,,,0.7480174930568945
+COLMAP,synthetic,,GT Intrinsics,,0.7896445907938007
+COLMAP,synthetic,GT Extrinsics,,,0.7825885368714814
+COLMAP,synthetic,GT Extrinsics,GT Intrinsics,,0.9377136847800265
 VGGT,synthetic,,,,0.6564520223750834
 VGGT,synthetic,,GT Intrinsics,,0.6705211099735039
 VGGT,synthetic,GT Extrinsics,,,0.8064381403048523
