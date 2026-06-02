@@ -46,6 +46,7 @@
         "feature_extractor":"aliked+sp",
         "max_ba_iterations":250,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"outdoor",
         "psnr":17.7136211395,
         "lpips":0.5619108677,
@@ -72,8 +73,7 @@
         "input_folder":"bicycle_4_n100_s42_mradial_aliked-sp_c0.0_p17352_random_farthestpose_useba_maxba250_sharedcam",
         "output_folder":"bicycle_4_n100_s42_mradial_aliked-sp_c0.0_p17352_random_farthestpose_useba_maxba250_sharedcam_i100_gteval_randinit17352_steps15000_val_step14999.json",
         "initial_points":17352,
-        "plot_series":"vggt | Random Init | Use BA | ",
-        "real_num_points_jitter":17352.0
+        "plot_series":"vggt | Random Init | Use BA"
     },
     {
         "method":"vggt",
@@ -122,6 +122,7 @@
         "feature_extractor":"aliked+sp",
         "max_ba_iterations":250,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"outdoor",
         "psnr":19.1168746948,
         "lpips":0.5691958666,
@@ -148,8 +149,7 @@
         "input_folder":"stump_2_n100_s42_mradial_aliked-sp_c0.0_p19683_random_farthestpose_useba_maxba250_sharedcam",
         "output_folder":"stump_2_n100_s42_mradial_aliked-sp_c0.0_p19683_random_farthestpose_useba_maxba250_sharedcam_i100_gteval_randinit19683_steps15000_val_step14999.json",
         "initial_points":19683,
-        "plot_series":"vggt | Random Init | Use BA | ",
-        "real_num_points_jitter":19683.0
+        "plot_series":"vggt | Random Init | Use BA"
     },
     {
         "method":"vggt",
@@ -198,6 +198,7 @@
         "feature_extractor":"aliked+sp",
         "max_ba_iterations":250,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"outdoor",
         "psnr":18.5215892792,
         "lpips":0.4600361288,
@@ -224,8 +225,7 @@
         "input_folder":"garden_2_n100_s42_mradial_aliked-sp_c0.0_p70656_random_farthestpose_useba_maxba250_sharedcam",
         "output_folder":"garden_2_n100_s42_mradial_aliked-sp_c0.0_p70656_random_farthestpose_useba_maxba250_sharedcam_i100_gteval_randinit70656_steps15000_val_step14999.json",
         "initial_points":70656,
-        "plot_series":"vggt | Random Init | Use BA | ",
-        "real_num_points_jitter":70656.0
+        "plot_series":"vggt | Random Init | Use BA"
     },
     {
         "method":"colmap",
@@ -274,6 +274,7 @@
         "feature_extractor":"",
         "max_ba_iterations":null,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"outdoor",
         "psnr":21.1576976776,
         "lpips":0.5056108236,
@@ -300,8 +301,7 @@
         "input_folder":"bicycle_4_n100_s42_default_farthestpose_sharedcam",
         "output_folder":"bicycle_4_n100_s42_default_farthestpose_sharedcam_i100_gteval_randinit17352_steps15000_val_step14999.json",
         "initial_points":17352,
-        "plot_series":"colmap | Random Init |  | ",
-        "real_num_points_jitter":17352.0
+        "plot_series":"colmap | Random Init | "
     },
     {
         "method":"colmap",
@@ -350,6 +350,7 @@
         "feature_extractor":"",
         "max_ba_iterations":null,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"outdoor",
         "psnr":24.3889694214,
         "lpips":0.4114316106,
@@ -376,8 +377,7 @@
         "input_folder":"stump_2_n100_s42_default_farthestpose_sharedcam",
         "output_folder":"stump_2_n100_s42_default_farthestpose_sharedcam_i100_gteval_randinit19683_steps15000_val_step14999.json",
         "initial_points":19683,
-        "plot_series":"colmap | Random Init |  | ",
-        "real_num_points_jitter":19683.0
+        "plot_series":"colmap | Random Init | "
     },
     {
         "method":"colmap",
@@ -426,6 +426,7 @@
         "feature_extractor":"",
         "max_ba_iterations":null,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"outdoor",
         "psnr":21.4810295105,
         "lpips":0.3382422924,
@@ -452,8 +453,7 @@
         "input_folder":"garden_2_n100_s42_default_farthestpose_sharedcam",
         "output_folder":"garden_2_n100_s42_default_farthestpose_sharedcam_i100_gteval_randinit70656_steps15000_val_step14999.json",
         "initial_points":70656,
-        "plot_series":"colmap | Random Init |  | ",
-        "real_num_points_jitter":70656.0
+        "plot_series":"colmap | Random Init | "
     },
     {
         "method":"vggt",
@@ -502,6 +502,7 @@
         "feature_extractor":"",
         "max_ba_iterations":null,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"outdoor",
         "psnr":17.8556957245,
         "lpips":0.5818175673,
@@ -528,8 +529,7 @@
         "input_folder":"bicycle_4_n100_s42_c0.0_p17352_random_farthestpose",
         "output_folder":"bicycle_4_n100_s42_c0.0_p17352_random_farthestpose_i100_gteval_randinit17352_steps15000_val_step14999.json",
         "initial_points":17352,
-        "plot_series":"vggt | Random Init |  | ",
-        "real_num_points_jitter":17352.0
+        "plot_series":"vggt | Random Init | "
     },
     {
         "method":"vggt",
@@ -578,6 +578,7 @@
         "feature_extractor":"",
         "max_ba_iterations":null,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"outdoor",
         "psnr":18.9012203217,
         "lpips":0.6045355201,
@@ -604,8 +605,7 @@
         "input_folder":"stump_2_n100_s42_c0.0_p19683_random_farthestpose",
         "output_folder":"stump_2_n100_s42_c0.0_p19683_random_farthestpose_i100_gteval_randinit19683_steps15000_val_step14999.json",
         "initial_points":19683,
-        "plot_series":"vggt | Random Init |  | ",
-        "real_num_points_jitter":19683.0
+        "plot_series":"vggt | Random Init | "
     },
     {
         "method":"vggt",
@@ -654,6 +654,7 @@
         "feature_extractor":"",
         "max_ba_iterations":null,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"outdoor",
         "psnr":18.7526226044,
         "lpips":0.5294361115,
@@ -680,7 +681,6 @@
         "input_folder":"garden_2_n100_s42_c0.0_p70656_random_farthestpose",
         "output_folder":"garden_2_n100_s42_c0.0_p70656_random_farthestpose_i100_gteval_randinit70656_steps15000_val_step14999.json",
         "initial_points":70656,
-        "plot_series":"vggt | Random Init |  | ",
-        "real_num_points_jitter":70656.0
+        "plot_series":"vggt | Random Init | "
     }
 ]

@@ -1,23 +1,23 @@
 \begin{table}[H]
-\caption{Test isolated cameras with random point clouds. (Synthetic)}
+\caption{\ifdefined\customcaption \customcaption \else Test isolated cameras with random point clouds. (Synthetic) \fi}
 \label{tab:06_isolated_cams_synthetic}
 \centering
 \scriptsize
-\begin{tabular}{llrlllrrr}
+\begin{tabular}{llllrrr}
 \toprule
-Choice & Dataset & Real Num Points & Random Init & Use Ba & Pose Opt & Val RRE ↓ & Val RTE ↓ & Composite Quality ↑ \\
+Choice & Dataset & Random Init & Use Ba & Val RRE ↓ & Val RTE ↓ & Composite Quality ↑ \\
 \midrule
-COLMAP & lego & 10313 & Random Init &  &  & 10.479 & 0.117 & \textbf{0.777} \\
-VGGT & lego & 10313 & Random Init & Use BA &  & \textbf{0.268} & \textbf{0.004} & \underline{0.771} \\
-VGGT & lego & 10313 & Random Init &  &  & \underline{0.297} & \underline{0.005} & 0.675 \\
+COLMAP & lego & Random Init &  & 10.479 & 0.117 & \textbf{0.777} \\
+VGGT & lego & Random Init & Use BA & \textbf{0.268} & \textbf{0.004} & \underline{0.771} \\
+VGGT & lego & Random Init &  & \underline{0.297} & \underline{0.005} & 0.675 \\
 \midrule
-COLMAP & ship & 5146 & Random Init &  &  & \textbf{0.243} & \textbf{0.004} & \textbf{0.645} \\
-VGGT & ship & 5146 & Random Init & Use BA &  & \underline{0.429} & \underline{0.008} & 0.488 \\
-VGGT & ship & 5146 & Random Init &  &  & 0.487 & 0.009 & \underline{0.585} \\
+COLMAP & ship & Random Init &  & \textbf{0.243} & \textbf{0.004} & \textbf{0.645} \\
+VGGT & ship & Random Init & Use BA & \underline{0.429} & \underline{0.008} & 0.488 \\
+VGGT & ship & Random Init &  & 0.487 & 0.009 & \underline{0.585} \\
 \midrule
-VGGT & drums & 3866 & Random Init & Use BA &  & \underline{0.235} & \textbf{0.003} & \underline{0.653} \\
-VGGT & drums & 3866 & Random Init &  &  & \textbf{0.172} & \textbf{0.003} & \textbf{0.683} \\
-VGGT & drums &  &  &  &  &  &  &  \\
+VGGT & drums & Random Init & Use BA & \underline{0.235} & \textbf{0.003} & \underline{0.653} \\
+VGGT & drums & Random Init &  & \textbf{0.172} & \textbf{0.003} & \textbf{0.683} \\
+VGGT & drums &  &  &  &  &  \\
 \bottomrule
 \end{tabular}
 \end{table}

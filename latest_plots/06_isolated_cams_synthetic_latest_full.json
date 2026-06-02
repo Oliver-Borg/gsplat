@@ -46,6 +46,7 @@
         "feature_extractor":"aliked+sp",
         "max_ba_iterations":250,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"synthetic",
         "psnr":18.6093997955,
         "lpips":0.122478947,
@@ -72,8 +73,7 @@
         "input_folder":"drums_1_n87_s42_mpinhole_aliked-sp_c0.0_p3866_random_farthestpose_useba_maxba250_sharedcam",
         "output_folder":"drums_1_n87_s42_mpinhole_aliked-sp_c0.0_p3866_random_farthestpose_useba_maxba250_sharedcam_i87_gteval_randinit3866_steps15000_val_step14999.json",
         "initial_points":3866,
-        "plot_series":"vggt | Random Init | Use BA | ",
-        "real_num_points_jitter":3866.0
+        "plot_series":"vggt | Random Init | Use BA"
     },
     {
         "method":"vggt",
@@ -122,6 +122,7 @@
         "feature_extractor":"aliked+sp",
         "max_ba_iterations":250,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"synthetic",
         "psnr":19.1319618225,
         "lpips":0.2774400115,
@@ -148,8 +149,7 @@
         "input_folder":"ship_1_n87_s42_mpinhole_aliked-sp_c0.0_p5146_random_farthestpose_useba_maxba250_sharedcam",
         "output_folder":"ship_1_n87_s42_mpinhole_aliked-sp_c0.0_p5146_random_farthestpose_useba_maxba250_sharedcam_i87_gteval_randinit5146_steps15000_val_step14999.json",
         "initial_points":5146,
-        "plot_series":"vggt | Random Init | Use BA | ",
-        "real_num_points_jitter":5146.0
+        "plot_series":"vggt | Random Init | Use BA"
     },
     {
         "method":"vggt",
@@ -198,6 +198,7 @@
         "feature_extractor":"aliked+sp",
         "max_ba_iterations":250,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"synthetic",
         "psnr":22.9663238525,
         "lpips":0.0814644918,
@@ -224,8 +225,7 @@
         "input_folder":"lego_1_n87_s42_mpinhole_aliked-sp_c0.0_p10313_random_farthestpose_useba_maxba250_sharedcam",
         "output_folder":"lego_1_n87_s42_mpinhole_aliked-sp_c0.0_p10313_random_farthestpose_useba_maxba250_sharedcam_i87_gteval_randinit10313_steps15000_val_step14999.json",
         "initial_points":10313,
-        "plot_series":"vggt | Random Init | Use BA | ",
-        "real_num_points_jitter":10313.0
+        "plot_series":"vggt | Random Init | Use BA"
     },
     {
         "method":"colmap",
@@ -274,6 +274,7 @@
         "feature_extractor":"",
         "max_ba_iterations":null,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"synthetic",
         "psnr":22.3905410767,
         "lpips":0.1951177865,
@@ -300,8 +301,7 @@
         "input_folder":"ship_1_n87_s42_default_mpinhole_farthestpose_sharedcam",
         "output_folder":"ship_1_n87_s42_default_mpinhole_farthestpose_sharedcam_i87_gteval_randinit5146_steps15000_val_step14999.json",
         "initial_points":5146,
-        "plot_series":"colmap | Random Init |  | ",
-        "real_num_points_jitter":5146.0
+        "plot_series":"colmap | Random Init | "
     },
     {
         "method":"colmap",
@@ -350,6 +350,7 @@
         "feature_extractor":"",
         "max_ba_iterations":null,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"synthetic",
         "psnr":22.51445961,
         "lpips":0.0708413273,
@@ -376,8 +377,7 @@
         "input_folder":"lego_1_n87_s42_default_mpinhole_farthestpose_sharedcam",
         "output_folder":"lego_1_n87_s42_default_mpinhole_farthestpose_sharedcam_i87_gteval_randinit10313_steps15000_val_step14999.json",
         "initial_points":10313,
-        "plot_series":"colmap | Random Init |  | ",
-        "real_num_points_jitter":10313.0
+        "plot_series":"colmap | Random Init | "
     },
     {
         "method":"vggt",
@@ -426,6 +426,7 @@
         "feature_extractor":"",
         "max_ba_iterations":null,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"synthetic",
         "psnr":19.6952705383,
         "lpips":0.1262831539,
@@ -452,8 +453,7 @@
         "input_folder":"drums_1_n87_s42_c0.0_p3866_random_farthestpose",
         "output_folder":"drums_1_n87_s42_c0.0_p3866_random_farthestpose_i87_gteval_randinit3866_steps15000_val_step14999.json",
         "initial_points":3866,
-        "plot_series":"vggt | Random Init |  | ",
-        "real_num_points_jitter":3866.0
+        "plot_series":"vggt | Random Init | "
     },
     {
         "method":"vggt",
@@ -502,6 +502,7 @@
         "feature_extractor":"",
         "max_ba_iterations":null,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"synthetic",
         "psnr":20.8680000305,
         "lpips":0.2035492957,
@@ -528,8 +529,7 @@
         "input_folder":"ship_1_n87_s42_c0.0_p5146_random_farthestpose",
         "output_folder":"ship_1_n87_s42_c0.0_p5146_random_farthestpose_i87_gteval_randinit5146_steps15000_val_step14999.json",
         "initial_points":5146,
-        "plot_series":"vggt | Random Init |  | ",
-        "real_num_points_jitter":5146.0
+        "plot_series":"vggt | Random Init | "
     },
     {
         "method":"vggt",
@@ -578,6 +578,7 @@
         "feature_extractor":"",
         "max_ba_iterations":null,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"synthetic",
         "psnr":20.54804039,
         "lpips":0.1071551591,
@@ -604,8 +605,7 @@
         "input_folder":"lego_1_n87_s42_c0.0_p10313_random_farthestpose",
         "output_folder":"lego_1_n87_s42_c0.0_p10313_random_farthestpose_i87_gteval_randinit10313_steps15000_val_step14999.json",
         "initial_points":10313,
-        "plot_series":"vggt | Random Init |  | ",
-        "real_num_points_jitter":10313.0
+        "plot_series":"vggt | Random Init | "
     },
     {
         "method":"colmap",
@@ -654,6 +654,7 @@
         "feature_extractor":"",
         "max_ba_iterations":null,
         "source":"sfm",
+        "series_label_override":null,
         "dataset_collection":"synthetic",
         "psnr":null,
         "lpips":null,
@@ -680,7 +681,6 @@
         "input_folder":"drums_1_n87_s42_default_mpinhole_farthestpose_sharedcam",
         "output_folder":"",
         "initial_points":null,
-        "plot_series":"colmap |  |  | ",
-        "real_num_points_jitter":null
+        "plot_series":"colmap |  | "
     }
 ]

@@ -46,6 +46,7 @@
         "feature_extractor":"aliked+sp",
         "max_ba_iterations":250,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"synthetic",
         "psnr":18.6093997955,
         "lpips":0.122478947,
@@ -72,8 +73,7 @@
         "input_folder":"drums_1_n87_s42_mpinhole_aliked-sp_c0.0_p3866_random_farthestpose_useba_maxba250_sharedcam",
         "output_folder":"drums_1_n87_s42_mpinhole_aliked-sp_c0.0_p3866_random_farthestpose_useba_maxba250_sharedcam_i87_gteval_randinit3866_steps15000_val_step14999.json",
         "initial_points":3866,
-        "plot_series":"vggt | Random Init | Use BA | ",
-        "real_num_points_jitter":3866.0
+        "plot_series":"vggt | Random Init | Use BA"
     },
     {
         "method":"vggt",
@@ -122,6 +122,7 @@
         "feature_extractor":"aliked+sp",
         "max_ba_iterations":250,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"synthetic",
         "psnr":19.1319618225,
         "lpips":0.2774400115,
@@ -148,8 +149,7 @@
         "input_folder":"ship_1_n87_s42_mpinhole_aliked-sp_c0.0_p5146_random_farthestpose_useba_maxba250_sharedcam",
         "output_folder":"ship_1_n87_s42_mpinhole_aliked-sp_c0.0_p5146_random_farthestpose_useba_maxba250_sharedcam_i87_gteval_randinit5146_steps15000_val_step14999.json",
         "initial_points":5146,
-        "plot_series":"vggt | Random Init | Use BA | ",
-        "real_num_points_jitter":5146.0
+        "plot_series":"vggt | Random Init | Use BA"
     },
     {
         "method":"vggt",
@@ -198,6 +198,7 @@
         "feature_extractor":"aliked+sp",
         "max_ba_iterations":250,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"synthetic",
         "psnr":22.9663238525,
         "lpips":0.0814644918,
@@ -224,8 +225,7 @@
         "input_folder":"lego_1_n87_s42_mpinhole_aliked-sp_c0.0_p10313_random_farthestpose_useba_maxba250_sharedcam",
         "output_folder":"lego_1_n87_s42_mpinhole_aliked-sp_c0.0_p10313_random_farthestpose_useba_maxba250_sharedcam_i87_gteval_randinit10313_steps15000_val_step14999.json",
         "initial_points":10313,
-        "plot_series":"vggt | Random Init | Use BA | ",
-        "real_num_points_jitter":10313.0
+        "plot_series":"vggt | Random Init | Use BA"
     },
     {
         "method":"vggt",
@@ -274,6 +274,7 @@
         "feature_extractor":"aliked+sp",
         "max_ba_iterations":250,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"outdoor",
         "psnr":17.7136211395,
         "lpips":0.5619108677,
@@ -300,8 +301,7 @@
         "input_folder":"bicycle_4_n100_s42_mradial_aliked-sp_c0.0_p17352_random_farthestpose_useba_maxba250_sharedcam",
         "output_folder":"bicycle_4_n100_s42_mradial_aliked-sp_c0.0_p17352_random_farthestpose_useba_maxba250_sharedcam_i100_gteval_randinit17352_steps15000_val_step14999.json",
         "initial_points":17352,
-        "plot_series":"vggt | Random Init | Use BA | ",
-        "real_num_points_jitter":17352.0
+        "plot_series":"vggt | Random Init | Use BA"
     },
     {
         "method":"vggt",
@@ -350,6 +350,7 @@
         "feature_extractor":"aliked+sp",
         "max_ba_iterations":250,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"outdoor",
         "psnr":19.1168746948,
         "lpips":0.5691958666,
@@ -376,8 +377,7 @@
         "input_folder":"stump_2_n100_s42_mradial_aliked-sp_c0.0_p19683_random_farthestpose_useba_maxba250_sharedcam",
         "output_folder":"stump_2_n100_s42_mradial_aliked-sp_c0.0_p19683_random_farthestpose_useba_maxba250_sharedcam_i100_gteval_randinit19683_steps15000_val_step14999.json",
         "initial_points":19683,
-        "plot_series":"vggt | Random Init | Use BA | ",
-        "real_num_points_jitter":19683.0
+        "plot_series":"vggt | Random Init | Use BA"
     },
     {
         "method":"vggt",
@@ -426,6 +426,7 @@
         "feature_extractor":"aliked+sp",
         "max_ba_iterations":250,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"indoor",
         "psnr":18.8056087494,
         "lpips":0.3805466592,
@@ -452,8 +453,7 @@
         "input_folder":"counter_2_n100_s42_mradial_aliked-sp_c0.0_p60980_random_farthestpose_useba_maxba250_sharedcam",
         "output_folder":"counter_2_n100_s42_mradial_aliked-sp_c0.0_p60980_random_farthestpose_useba_maxba250_sharedcam_i100_gteval_randinit60980_steps15000_val_step14999.json",
         "initial_points":60980,
-        "plot_series":"vggt | Random Init | Use BA | ",
-        "real_num_points_jitter":60980.0
+        "plot_series":"vggt | Random Init | Use BA"
     },
     {
         "method":"vggt",
@@ -502,6 +502,7 @@
         "feature_extractor":"aliked+sp",
         "max_ba_iterations":250,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"outdoor",
         "psnr":18.5215892792,
         "lpips":0.4600361288,
@@ -528,8 +529,7 @@
         "input_folder":"garden_2_n100_s42_mradial_aliked-sp_c0.0_p70656_random_farthestpose_useba_maxba250_sharedcam",
         "output_folder":"garden_2_n100_s42_mradial_aliked-sp_c0.0_p70656_random_farthestpose_useba_maxba250_sharedcam_i100_gteval_randinit70656_steps15000_val_step14999.json",
         "initial_points":70656,
-        "plot_series":"vggt | Random Init | Use BA | ",
-        "real_num_points_jitter":70656.0
+        "plot_series":"vggt | Random Init | Use BA"
     },
     {
         "method":"vggt",
@@ -578,6 +578,7 @@
         "feature_extractor":"aliked+sp",
         "max_ba_iterations":250,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"indoor",
         "psnr":18.9493198395,
         "lpips":0.3593359888,
@@ -604,8 +605,7 @@
         "input_folder":"bonsai_2_n100_s42_mradial_aliked-sp_c0.0_p80892_random_farthestpose_useba_maxba250_sharedcam",
         "output_folder":"bonsai_2_n100_s42_mradial_aliked-sp_c0.0_p80892_random_farthestpose_useba_maxba250_sharedcam_i100_gteval_randinit80892_steps15000_val_step14999.json",
         "initial_points":80892,
-        "plot_series":"vggt | Random Init | Use BA | ",
-        "real_num_points_jitter":80892.0
+        "plot_series":"vggt | Random Init | Use BA"
     },
     {
         "method":"vggt",
@@ -654,6 +654,7 @@
         "feature_extractor":"aliked+sp",
         "max_ba_iterations":250,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"indoor",
         "psnr":19.3357067108,
         "lpips":0.2556728423,
@@ -680,8 +681,7 @@
         "input_folder":"kitchen_2_n100_s42_mradial_aliked-sp_c0.0_p92853_random_farthestpose_useba_maxba250_sharedcam",
         "output_folder":"kitchen_2_n100_s42_mradial_aliked-sp_c0.0_p92853_random_farthestpose_useba_maxba250_sharedcam_i100_gteval_randinit92853_steps15000_val_step14999.json",
         "initial_points":92853,
-        "plot_series":"vggt | Random Init | Use BA | ",
-        "real_num_points_jitter":92853.0
+        "plot_series":"vggt | Random Init | Use BA"
     },
     {
         "method":"colmap",
@@ -730,6 +730,7 @@
         "feature_extractor":"",
         "max_ba_iterations":null,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"synthetic",
         "psnr":22.3905410767,
         "lpips":0.1951177865,
@@ -756,8 +757,7 @@
         "input_folder":"ship_1_n87_s42_default_mpinhole_farthestpose_sharedcam",
         "output_folder":"ship_1_n87_s42_default_mpinhole_farthestpose_sharedcam_i87_gteval_randinit5146_steps15000_val_step14999.json",
         "initial_points":5146,
-        "plot_series":"colmap | Random Init |  | ",
-        "real_num_points_jitter":5146.0
+        "plot_series":"colmap | Random Init | "
     },
     {
         "method":"colmap",
@@ -806,6 +806,7 @@
         "feature_extractor":"",
         "max_ba_iterations":null,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"synthetic",
         "psnr":22.51445961,
         "lpips":0.0708413273,
@@ -832,8 +833,7 @@
         "input_folder":"lego_1_n87_s42_default_mpinhole_farthestpose_sharedcam",
         "output_folder":"lego_1_n87_s42_default_mpinhole_farthestpose_sharedcam_i87_gteval_randinit10313_steps15000_val_step14999.json",
         "initial_points":10313,
-        "plot_series":"colmap | Random Init |  | ",
-        "real_num_points_jitter":10313.0
+        "plot_series":"colmap | Random Init | "
     },
     {
         "method":"colmap",
@@ -882,6 +882,7 @@
         "feature_extractor":"",
         "max_ba_iterations":null,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"outdoor",
         "psnr":21.1576976776,
         "lpips":0.5056108236,
@@ -908,8 +909,7 @@
         "input_folder":"bicycle_4_n100_s42_default_farthestpose_sharedcam",
         "output_folder":"bicycle_4_n100_s42_default_farthestpose_sharedcam_i100_gteval_randinit17352_steps15000_val_step14999.json",
         "initial_points":17352,
-        "plot_series":"colmap | Random Init |  | ",
-        "real_num_points_jitter":17352.0
+        "plot_series":"colmap | Random Init | "
     },
     {
         "method":"colmap",
@@ -958,6 +958,7 @@
         "feature_extractor":"",
         "max_ba_iterations":null,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"outdoor",
         "psnr":24.3889694214,
         "lpips":0.4114316106,
@@ -984,8 +985,7 @@
         "input_folder":"stump_2_n100_s42_default_farthestpose_sharedcam",
         "output_folder":"stump_2_n100_s42_default_farthestpose_sharedcam_i100_gteval_randinit19683_steps15000_val_step14999.json",
         "initial_points":19683,
-        "plot_series":"colmap | Random Init |  | ",
-        "real_num_points_jitter":19683.0
+        "plot_series":"colmap | Random Init | "
     },
     {
         "method":"colmap",
@@ -1034,6 +1034,7 @@
         "feature_extractor":"",
         "max_ba_iterations":null,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"indoor",
         "psnr":24.2170505524,
         "lpips":0.2503585815,
@@ -1060,8 +1061,7 @@
         "input_folder":"counter_2_n100_s42_default_farthestpose_sharedcam",
         "output_folder":"counter_2_n100_s42_default_farthestpose_sharedcam_i100_gteval_randinit60980_steps15000_val_step14999.json",
         "initial_points":60980,
-        "plot_series":"colmap | Random Init |  | ",
-        "real_num_points_jitter":60980.0
+        "plot_series":"colmap | Random Init | "
     },
     {
         "method":"colmap",
@@ -1110,6 +1110,7 @@
         "feature_extractor":"",
         "max_ba_iterations":null,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"outdoor",
         "psnr":21.4810295105,
         "lpips":0.3382422924,
@@ -1136,8 +1137,7 @@
         "input_folder":"garden_2_n100_s42_default_farthestpose_sharedcam",
         "output_folder":"garden_2_n100_s42_default_farthestpose_sharedcam_i100_gteval_randinit70656_steps15000_val_step14999.json",
         "initial_points":70656,
-        "plot_series":"colmap | Random Init |  | ",
-        "real_num_points_jitter":70656.0
+        "plot_series":"colmap | Random Init | "
     },
     {
         "method":"colmap",
@@ -1186,6 +1186,7 @@
         "feature_extractor":"",
         "max_ba_iterations":null,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"indoor",
         "psnr":22.0336761475,
         "lpips":0.2348685265,
@@ -1212,8 +1213,7 @@
         "input_folder":"bonsai_2_n100_s42_default_farthestpose_sharedcam",
         "output_folder":"bonsai_2_n100_s42_default_farthestpose_sharedcam_i100_gteval_randinit80892_steps15000_val_step14999.json",
         "initial_points":80892,
-        "plot_series":"colmap | Random Init |  | ",
-        "real_num_points_jitter":80892.0
+        "plot_series":"colmap | Random Init | "
     },
     {
         "method":"colmap",
@@ -1262,6 +1262,7 @@
         "feature_extractor":"",
         "max_ba_iterations":null,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"indoor",
         "psnr":21.1365299225,
         "lpips":0.182017222,
@@ -1288,8 +1289,7 @@
         "input_folder":"kitchen_2_n100_s42_default_farthestpose_sharedcam",
         "output_folder":"kitchen_2_n100_s42_default_farthestpose_sharedcam_i100_gteval_randinit92853_steps15000_val_step14999.json",
         "initial_points":92853,
-        "plot_series":"colmap | Random Init |  | ",
-        "real_num_points_jitter":92853.0
+        "plot_series":"colmap | Random Init | "
     },
     {
         "method":"vggt",
@@ -1338,6 +1338,7 @@
         "feature_extractor":"",
         "max_ba_iterations":null,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"synthetic",
         "psnr":19.6952705383,
         "lpips":0.1262831539,
@@ -1364,8 +1365,7 @@
         "input_folder":"drums_1_n87_s42_c0.0_p3866_random_farthestpose",
         "output_folder":"drums_1_n87_s42_c0.0_p3866_random_farthestpose_i87_gteval_randinit3866_steps15000_val_step14999.json",
         "initial_points":3866,
-        "plot_series":"vggt | Random Init |  | ",
-        "real_num_points_jitter":3866.0
+        "plot_series":"vggt | Random Init | "
     },
     {
         "method":"vggt",
@@ -1414,6 +1414,7 @@
         "feature_extractor":"",
         "max_ba_iterations":null,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"synthetic",
         "psnr":20.8680000305,
         "lpips":0.2035492957,
@@ -1440,8 +1441,7 @@
         "input_folder":"ship_1_n87_s42_c0.0_p5146_random_farthestpose",
         "output_folder":"ship_1_n87_s42_c0.0_p5146_random_farthestpose_i87_gteval_randinit5146_steps15000_val_step14999.json",
         "initial_points":5146,
-        "plot_series":"vggt | Random Init |  | ",
-        "real_num_points_jitter":5146.0
+        "plot_series":"vggt | Random Init | "
     },
     {
         "method":"vggt",
@@ -1490,6 +1490,7 @@
         "feature_extractor":"",
         "max_ba_iterations":null,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"synthetic",
         "psnr":20.54804039,
         "lpips":0.1071551591,
@@ -1516,8 +1517,7 @@
         "input_folder":"lego_1_n87_s42_c0.0_p10313_random_farthestpose",
         "output_folder":"lego_1_n87_s42_c0.0_p10313_random_farthestpose_i87_gteval_randinit10313_steps15000_val_step14999.json",
         "initial_points":10313,
-        "plot_series":"vggt | Random Init |  | ",
-        "real_num_points_jitter":10313.0
+        "plot_series":"vggt | Random Init | "
     },
     {
         "method":"vggt",
@@ -1566,6 +1566,7 @@
         "feature_extractor":"",
         "max_ba_iterations":null,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"outdoor",
         "psnr":17.8556957245,
         "lpips":0.5818175673,
@@ -1592,8 +1593,7 @@
         "input_folder":"bicycle_4_n100_s42_c0.0_p17352_random_farthestpose",
         "output_folder":"bicycle_4_n100_s42_c0.0_p17352_random_farthestpose_i100_gteval_randinit17352_steps15000_val_step14999.json",
         "initial_points":17352,
-        "plot_series":"vggt | Random Init |  | ",
-        "real_num_points_jitter":17352.0
+        "plot_series":"vggt | Random Init | "
     },
     {
         "method":"vggt",
@@ -1642,6 +1642,7 @@
         "feature_extractor":"",
         "max_ba_iterations":null,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"outdoor",
         "psnr":18.9012203217,
         "lpips":0.6045355201,
@@ -1668,8 +1669,7 @@
         "input_folder":"stump_2_n100_s42_c0.0_p19683_random_farthestpose",
         "output_folder":"stump_2_n100_s42_c0.0_p19683_random_farthestpose_i100_gteval_randinit19683_steps15000_val_step14999.json",
         "initial_points":19683,
-        "plot_series":"vggt | Random Init |  | ",
-        "real_num_points_jitter":19683.0
+        "plot_series":"vggt | Random Init | "
     },
     {
         "method":"vggt",
@@ -1718,6 +1718,7 @@
         "feature_extractor":"",
         "max_ba_iterations":null,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"indoor",
         "psnr":20.2936534882,
         "lpips":0.3611009717,
@@ -1744,8 +1745,7 @@
         "input_folder":"counter_2_n100_s42_c0.0_p60980_random_farthestpose",
         "output_folder":"counter_2_n100_s42_c0.0_p60980_random_farthestpose_i100_gteval_randinit60980_steps15000_val_step14999.json",
         "initial_points":60980,
-        "plot_series":"vggt | Random Init |  | ",
-        "real_num_points_jitter":60980.0
+        "plot_series":"vggt | Random Init | "
     },
     {
         "method":"vggt",
@@ -1794,6 +1794,7 @@
         "feature_extractor":"",
         "max_ba_iterations":null,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"outdoor",
         "psnr":18.7526226044,
         "lpips":0.5294361115,
@@ -1820,8 +1821,7 @@
         "input_folder":"garden_2_n100_s42_c0.0_p70656_random_farthestpose",
         "output_folder":"garden_2_n100_s42_c0.0_p70656_random_farthestpose_i100_gteval_randinit70656_steps15000_val_step14999.json",
         "initial_points":70656,
-        "plot_series":"vggt | Random Init |  | ",
-        "real_num_points_jitter":70656.0
+        "plot_series":"vggt | Random Init | "
     },
     {
         "method":"vggt",
@@ -1870,6 +1870,7 @@
         "feature_extractor":"",
         "max_ba_iterations":null,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"indoor",
         "psnr":17.7033462524,
         "lpips":0.4533112049,
@@ -1896,8 +1897,7 @@
         "input_folder":"bonsai_2_n100_s42_c0.0_p80892_random_farthestpose",
         "output_folder":"bonsai_2_n100_s42_c0.0_p80892_random_farthestpose_i100_gteval_randinit80892_steps15000_val_step14999.json",
         "initial_points":80892,
-        "plot_series":"vggt | Random Init |  | ",
-        "real_num_points_jitter":80892.0
+        "plot_series":"vggt | Random Init | "
     },
     {
         "method":"vggt",
@@ -1946,6 +1946,7 @@
         "feature_extractor":"",
         "max_ba_iterations":null,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"indoor",
         "psnr":20.184595108,
         "lpips":0.2845962942,
@@ -1972,8 +1973,7 @@
         "input_folder":"kitchen_2_n100_s42_c0.0_p92853_random_farthestpose",
         "output_folder":"kitchen_2_n100_s42_c0.0_p92853_random_farthestpose_i100_gteval_randinit92853_steps15000_val_step14999.json",
         "initial_points":92853,
-        "plot_series":"vggt | Random Init |  | ",
-        "real_num_points_jitter":92853.0
+        "plot_series":"vggt | Random Init | "
     },
     {
         "method":"colmap",
@@ -2022,6 +2022,7 @@
         "feature_extractor":"",
         "max_ba_iterations":null,
         "source":"sfm",
+        "series_label_override":null,
         "dataset_collection":"synthetic",
         "psnr":null,
         "lpips":null,
@@ -2048,7 +2049,6 @@
         "input_folder":"drums_1_n87_s42_default_mpinhole_farthestpose_sharedcam",
         "output_folder":"",
         "initial_points":null,
-        "plot_series":"colmap |  |  | ",
-        "real_num_points_jitter":null
+        "plot_series":"colmap |  | "
     }
 ]

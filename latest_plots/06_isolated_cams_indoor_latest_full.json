@@ -46,6 +46,7 @@
         "feature_extractor":"aliked+sp",
         "max_ba_iterations":250,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"indoor",
         "psnr":18.8056087494,
         "lpips":0.3805466592,
@@ -72,8 +73,7 @@
         "input_folder":"counter_2_n100_s42_mradial_aliked-sp_c0.0_p60980_random_farthestpose_useba_maxba250_sharedcam",
         "output_folder":"counter_2_n100_s42_mradial_aliked-sp_c0.0_p60980_random_farthestpose_useba_maxba250_sharedcam_i100_gteval_randinit60980_steps15000_val_step14999.json",
         "initial_points":60980,
-        "plot_series":"vggt | Random Init | Use BA | ",
-        "real_num_points_jitter":60980.0
+        "plot_series":"vggt | Random Init | Use BA"
     },
     {
         "method":"vggt",
@@ -122,6 +122,7 @@
         "feature_extractor":"aliked+sp",
         "max_ba_iterations":250,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"indoor",
         "psnr":18.9493198395,
         "lpips":0.3593359888,
@@ -148,8 +149,7 @@
         "input_folder":"bonsai_2_n100_s42_mradial_aliked-sp_c0.0_p80892_random_farthestpose_useba_maxba250_sharedcam",
         "output_folder":"bonsai_2_n100_s42_mradial_aliked-sp_c0.0_p80892_random_farthestpose_useba_maxba250_sharedcam_i100_gteval_randinit80892_steps15000_val_step14999.json",
         "initial_points":80892,
-        "plot_series":"vggt | Random Init | Use BA | ",
-        "real_num_points_jitter":80892.0
+        "plot_series":"vggt | Random Init | Use BA"
     },
     {
         "method":"vggt",
@@ -198,6 +198,7 @@
         "feature_extractor":"aliked+sp",
         "max_ba_iterations":250,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"indoor",
         "psnr":19.3357067108,
         "lpips":0.2556728423,
@@ -224,8 +225,7 @@
         "input_folder":"kitchen_2_n100_s42_mradial_aliked-sp_c0.0_p92853_random_farthestpose_useba_maxba250_sharedcam",
         "output_folder":"kitchen_2_n100_s42_mradial_aliked-sp_c0.0_p92853_random_farthestpose_useba_maxba250_sharedcam_i100_gteval_randinit92853_steps15000_val_step14999.json",
         "initial_points":92853,
-        "plot_series":"vggt | Random Init | Use BA | ",
-        "real_num_points_jitter":92853.0
+        "plot_series":"vggt | Random Init | Use BA"
     },
     {
         "method":"colmap",
@@ -274,6 +274,7 @@
         "feature_extractor":"",
         "max_ba_iterations":null,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"indoor",
         "psnr":24.2170505524,
         "lpips":0.2503585815,
@@ -300,8 +301,7 @@
         "input_folder":"counter_2_n100_s42_default_farthestpose_sharedcam",
         "output_folder":"counter_2_n100_s42_default_farthestpose_sharedcam_i100_gteval_randinit60980_steps15000_val_step14999.json",
         "initial_points":60980,
-        "plot_series":"colmap | Random Init |  | ",
-        "real_num_points_jitter":60980.0
+        "plot_series":"colmap | Random Init | "
     },
     {
         "method":"colmap",
@@ -350,6 +350,7 @@
         "feature_extractor":"",
         "max_ba_iterations":null,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"indoor",
         "psnr":22.0336761475,
         "lpips":0.2348685265,
@@ -376,8 +377,7 @@
         "input_folder":"bonsai_2_n100_s42_default_farthestpose_sharedcam",
         "output_folder":"bonsai_2_n100_s42_default_farthestpose_sharedcam_i100_gteval_randinit80892_steps15000_val_step14999.json",
         "initial_points":80892,
-        "plot_series":"colmap | Random Init |  | ",
-        "real_num_points_jitter":80892.0
+        "plot_series":"colmap | Random Init | "
     },
     {
         "method":"colmap",
@@ -426,6 +426,7 @@
         "feature_extractor":"",
         "max_ba_iterations":null,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"indoor",
         "psnr":21.1365299225,
         "lpips":0.182017222,
@@ -452,8 +453,7 @@
         "input_folder":"kitchen_2_n100_s42_default_farthestpose_sharedcam",
         "output_folder":"kitchen_2_n100_s42_default_farthestpose_sharedcam_i100_gteval_randinit92853_steps15000_val_step14999.json",
         "initial_points":92853,
-        "plot_series":"colmap | Random Init |  | ",
-        "real_num_points_jitter":92853.0
+        "plot_series":"colmap | Random Init | "
     },
     {
         "method":"vggt",
@@ -502,6 +502,7 @@
         "feature_extractor":"",
         "max_ba_iterations":null,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"indoor",
         "psnr":20.2936534882,
         "lpips":0.3611009717,
@@ -528,8 +529,7 @@
         "input_folder":"counter_2_n100_s42_c0.0_p60980_random_farthestpose",
         "output_folder":"counter_2_n100_s42_c0.0_p60980_random_farthestpose_i100_gteval_randinit60980_steps15000_val_step14999.json",
         "initial_points":60980,
-        "plot_series":"vggt | Random Init |  | ",
-        "real_num_points_jitter":60980.0
+        "plot_series":"vggt | Random Init | "
     },
     {
         "method":"vggt",
@@ -578,6 +578,7 @@
         "feature_extractor":"",
         "max_ba_iterations":null,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"indoor",
         "psnr":17.7033462524,
         "lpips":0.4533112049,
@@ -604,8 +605,7 @@
         "input_folder":"bonsai_2_n100_s42_c0.0_p80892_random_farthestpose",
         "output_folder":"bonsai_2_n100_s42_c0.0_p80892_random_farthestpose_i100_gteval_randinit80892_steps15000_val_step14999.json",
         "initial_points":80892,
-        "plot_series":"vggt | Random Init |  | ",
-        "real_num_points_jitter":80892.0
+        "plot_series":"vggt | Random Init | "
     },
     {
         "method":"vggt",
@@ -654,6 +654,7 @@
         "feature_extractor":"",
         "max_ba_iterations":null,
         "source":"gsplat",
+        "series_label_override":null,
         "dataset_collection":"indoor",
         "psnr":20.184595108,
         "lpips":0.2845962942,
@@ -680,7 +681,6 @@
         "input_folder":"kitchen_2_n100_s42_c0.0_p92853_random_farthestpose",
         "output_folder":"kitchen_2_n100_s42_c0.0_p92853_random_farthestpose_i100_gteval_randinit92853_steps15000_val_step14999.json",
         "initial_points":92853,
-        "plot_series":"vggt | Random Init |  | ",
-        "real_num_points_jitter":92853.0
+        "plot_series":"vggt | Random Init | "
     }
 ]
