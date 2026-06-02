@@ -188,7 +188,7 @@ datasets.update(
 @dataclass
 class Config:
     choice: Literal["vggt", "colmap", "gt", "combined"] = "vggt"
-    num_images: int = 30
+    num_images: int = 100
     dataset: Dataset = datasets["lego"]
     seed: int = 42
     conf_thres_value: float = 0.0
@@ -235,6 +235,8 @@ class Config:
 
     raw_metrics: bool = False
     require_depth_metrics: bool = False
+    series_label_override: str | None = None
+
     construction_data: dict = field(default_factory=dict)
 
     @classmethod
@@ -277,8 +279,8 @@ class Config:
         instance.num_steps = data.get("num_steps", cls.num_steps)
         instance.colmap_mode = data.get("colmap_mode", cls.colmap_mode)
         instance.nomcmc = data.get("nomcmc", cls.nomcmc)
-        instance.camera_src = data.get("camera_src", cls.camera_src)
-        instance.pcd_src = data.get("pcd_src", cls.pcd_src)
+        instance.camera_src = data.get("camera_src", instance.choice)
+        instance.pcd_src = data.get("pcd_src", instance.choice)
         instance.align_mode = data.get("align_mode", cls.align_mode)
         instance.align_glue = data.get("align_glue", cls.align_glue)
         instance.keep_backup_cams = data.get("keep_backup_cams", cls.keep_backup_cams)
@@ -288,6 +290,7 @@ class Config:
         instance.feature_extractor = data.get("feature_extractor", cls.feature_extractor)
         instance.loss_multiplier = data.get("loss_multiplier", cls.loss_multiplier)
         instance.pose_loss_multiplier = data.get("pose_loss_multiplier", cls.pose_loss_multiplier)
+        instance.series_label_override = data.get("series_label_override", cls.series_label_override)
 
         # Loop over each key in data and print a warning if it is not a field on the Config dataclass
         for key in data.keys():
@@ -372,6 +375,9 @@ class Config:
 
         if self.use_gt_extrinsics or self.use_gt_intrinsics or self.use_gt_points:
             self.gt_eval = True
+
+        if self.use_gt_extrinsics:
+            self.pose_opt = False
 
         if self.eval_opt and self.gt_eval:  # TODO Figure out a good way to have both enabled
             self.eval_opt = False
@@ -552,7 +558,7 @@ class Config:
             parts.append(f"dl{self.depth_lambda}")
         if self.error_opa:
             parts.append("erroropa")
-        if self.depth_conf_mode and self.choice == "vggt" and self.depth_loss_mode != "disabled":
+        if self.depth_conf_mode and self.choice != "colmap" and self.depth_loss_mode != "disabled":
             parts.append(f"conf{self.depth_conf_mode}")
         if self.nomcmc:
             parts.append("nomcmc")
@@ -711,9 +717,8 @@ class Config:
         # if self.num_images == 20 and self.choice == "colmap":
         #     return True
 
-        if (
-            self.reconstruction_time < datetime.datetime(2026, 5, 18, 19, 45, 0).timestamp()
-            and ("nerf_synthetic" in self.dataset.directory or self.align_glue)
+        if self.reconstruction_time < datetime.datetime(2026, 5, 18, 19, 45, 0).timestamp() and (
+            "nerf_synthetic" in self.dataset.directory or self.align_glue
         ):
             # Technically this should be all runs because the alignment changed, but the ones that
             # change drastically are the synthetic ones so we will just rerun those for now.
@@ -1067,11 +1072,17 @@ class Config:
 
 
 def generate_configs(
-    experiment_config: dict[str, str | float | bool | int | list[str | float | bool | int]],
+    experiment_config: dict[str, str | float | bool | int | list[str | float | bool | int]] | list[dict],
 ) -> list[dict]:
     """
     Recurse through a config and create new configs with the lists unrolled.
     """
+    if isinstance(experiment_config, list):
+        to_return = []
+        for item in experiment_config:
+            to_return.extend(generate_configs(item))
+        return to_return
+
     if not any([isinstance(val, list) for val in experiment_config.values()]):
         return [experiment_config]
     to_return = []
@@ -1111,7 +1122,7 @@ class Experiment:
     name: str
     group: int
     description: str
-    config_dict: dict
+    config_dict: dict | list[dict]
     plot_args: PlotConfig | None = None
     include_gt: bool = False
     val_steps: list[int] = field(default_factory=lambda: [15000])
@@ -1119,17 +1130,30 @@ class Experiment:
     priority: PRIORITY = "low"
 
     @property
-    def render_config_dict(self):
-        render_config_dict = self.config_dict.copy()
-        render_config_dict.update(self.render_filter_override)
-        return render_config_dict
+    def render_config_dicts(self):
+        render_config_dicts = []
+        if isinstance(self.config_dict, list):
+            for config_dict in self.config_dict:
+                render_config_dicts.append(config_dict.copy())
+        else:
+            render_config_dicts.append(self.config_dict.copy())
+        for render_config_dict in render_config_dicts:
+            render_config_dict.update(self.render_filter_override)
+        return render_config_dicts
+
+    def set_dataset(self, dataset_name: str):
+        if isinstance(self.config_dict, list):
+            for config_dict in self.config_dict:
+                config_dict["dataset"] = dataset_name
+        else:
+            self.config_dict["dataset"] = dataset_name
 
     def get_configs(self, dataset_name: str, renders: bool = False, reconstruct_only: bool = False) -> list[Config]:
-        self.config_dict["dataset"] = dataset_name
+        self.set_dataset(dataset_name)
         config_dicts = generate_configs(self.config_dict)
         configs = [Config.from_dict(config_dict) for config_dict in config_dicts]
         if renders:
-            render_config_dicts = generate_configs(self.render_config_dict)
+            render_config_dicts = generate_configs(self.render_config_dicts)
             render_configs = [Config.from_dict(config_dict) for config_dict in render_config_dicts]
             configs = [config for config in configs if config in render_configs]
 
@@ -1150,7 +1174,9 @@ class Experiment:
         unique_configs: list[Config] = []
         for config in configs:
             dupe_key = (
-                config.data_dir if reconstruct_only else (config.result_dir, config.splatting_val_path, config.data_dir)
+                config.data_dir
+                if reconstruct_only
+                else (config.result_dir, config.splatting_val_path, config.data_dir, config.series_label_override)
             )
             if dupe_key not in config_set:
                 unique_configs.append(config)
@@ -1320,6 +1346,7 @@ class Experiment:
                     zip(
                         [path.name for path in self.get_input_paths(dn)],
                         [path.name for path in self.get_output_paths(dn)],
+                        [cfg.series_label_override for cfg in self.get_configs(dn)],
                     )
                 )
             )
@@ -1503,16 +1530,46 @@ experiments = [
         PlotConfig(
             x_axis="num_images",
             split_param="pose_opt",
-            max_render_cols=4,
+            max_render_cols=5,
+            show_gt=False,
+            raw_metrics=False,
+            metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "quality"],
+            horizontal_datasets=False,
+            make_camera_plot=True,
+        ),
+        render_filter_override={
+            "num_images": [20, 30, 40, 70, 100],
+            "seed": [42],
+            "pose_opt": [True],
+        },
+        priority="medium",
+    ),
+    Experiment(
+        "num_images_gt_cams",
+        1,
+        "GT Cams vs VGGT with pose optimization over various number of images.",
+        {
+            "seed": [42],
+            "num_images": [20, 40, 100],
+            "sampling_mode": ["random"],
+            "pose_opt": [True],
+            "gt_eval": [True],
+            "image_mode": ["farthestpose"],
+            "choice": ["vggt"],
+            "use_gt_cams": [False, True],
+            "use_gt_points": [False, True],
+        },
+        PlotConfig(
+            x_axis="num_images",
+            split_param="pose_opt,use_gt_extrinsics,use_gt_points",
+            max_render_cols=3,
             show_gt=False,
             raw_metrics=False,
             metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "quality"],
             horizontal_datasets=False,
         ),
         render_filter_override={
-            "num_images": [20, 30, 40, 100],
             "seed": [42],
-            "pose_opt": [True],
         },
         priority="medium",
     ),
@@ -1542,6 +1599,36 @@ experiments = [
         render_filter_override={
             "num_images": [100],
             "seed": [42],
+        },
+        priority="medium",
+    ),
+    Experiment(
+        "num_images_image_mode",
+        1,
+        "COLMAP versus VGGT over various number of images with different image modes",
+        {
+            "seed": [42],
+            "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+            "sampling_mode": ["random"],
+            "pose_opt": [True],
+            "gt_eval": [True],
+            "image_mode": ["farthestpose", "minfarthestpose"],
+            "choice": ["vggt", "colmap"],
+        },
+        PlotConfig(
+            x_axis="num_images",
+            split_param="image_mode",
+            max_render_cols=5,
+            show_gt=False,
+            raw_metrics=False,
+            metric_keys=["eval_rre", "eval_rte", "num_aligned", "psnr", "lpips", "ssim"],
+            horizontal_datasets=False,
+            make_camera_plot=True,
+        ),
+        render_filter_override={
+            "num_images": [10, 20, 30, 40, 100],
+            "seed": [42],
+            "pose_opt": [True],
         },
         priority="medium",
     ),
@@ -2011,8 +2098,8 @@ experiments = [
             "sampling_mode": ["confidence"],
             "pose_opt": [True],
             "num_points_per_image": [10, 50, 100, 500, 1000, 2500],
-            "choice": ["combined", "vggt", "colmap"],
-            "pcd_src": ["both", "vggt", "colmap"],
+            "choice": ["combined"],
+            "pcd_src": ["both"],
             "camera_src": ["colmap"],
             "num_steps": [15000],
         },
@@ -2030,6 +2117,7 @@ experiments = [
             "choice": ["combined", "colmap"],
             "num_images": [100],
         },
+        priority="high",
     ),
     Experiment(
         "combined_sampling_mode",
@@ -2561,8 +2649,9 @@ experiments = [
         render_filter_override={
             "seed": [42],
             "num_images": [100],
+            "depth_loss_mode": ["full"],
             "depth_lambda": [1.0],
-            "depth_conf_mode": ["standard", "shifted"],
+            "depth_conf_mode": ["disabled", "standard", "shifted"],
         },
         priority="high",
     ),
@@ -2852,8 +2941,8 @@ experiments = [
             "choice": ["colmap", "vggt"],
         },
         PlotConfig(
-            x_axis="real_num_points",
-            split_param="random_init,use_ba,pose_opt",
+            x_axis="",
+            split_param="random_init,use_ba",
             metric_keys=["eval_rre", "eval_rte", "quality"],
             max_render_cols=4,
             horizontal_datasets=False,
@@ -3276,36 +3365,179 @@ experiments = [
         },
     ),
     Experiment(
-        "all_improvements",
+        "all_improvements_stacked",
         99,
-        "Test for optimal configuration of all improvements.",
-        {
-            "seed": [42],
-            "num_images": [100],
-            "sampling_mode": ["random"],
-            "num_points_per_image": [1000],
-            "gt_eval": True,
-            "choice": ["combined", "colmap", "vggt"],
-            "camera_src": ["colmap"],
-            "pcd_src": ["both"],
-            "pose_opt": [True],  # , False
-            "depth_loss_mode": ["full", "closer", "points", "disabled"],
-            "depth_lambda": [0.0, 0.1, 1.0],
-        },
+        "Stacked removal of optimisations.",
+        [
+            {  # All Improvements
+                "sampling_mode": "confidence",
+                "choice": "combined",
+                "camera_src": "colmap",
+                "pcd_src": "both",
+                "pose_opt": True,
+                "depth_loss_mode": "closer",
+                "depth_conf_mode": "shifted",
+                "depth_lambda": 0.1,
+                "series_label_override": "1. All Improvements",
+            },
+            {  # No confidence sampling
+                "sampling_mode": "random",
+                "choice": "combined",
+                "camera_src": "colmap",
+                "pcd_src": "both",
+                "pose_opt": True,
+                "depth_loss_mode": "closer",
+                "depth_conf_mode": "shifted",
+                "depth_lambda": 0.1,
+                "series_label_override": "2. No Confidence Sampling",
+            },
+            {  # No depth conf
+                "choice": "combined",
+                "camera_src": "colmap",
+                "pcd_src": "both",
+                "pose_opt": True,
+                "depth_loss_mode": "closer",
+                "depth_conf_mode": "disabled",
+                "depth_lambda": 0.1,
+                "series_label_override": "3. No Depth Conf",
+            },
+            {  # No depth loss
+                "choice": "combined",
+                "camera_src": "colmap",
+                "pcd_src": "both",
+                "pose_opt": True,
+                "series_label_override": "4. No Depth Loss",
+            },
+            {  # COLMAP points
+                "choice": "colmap",
+                "pose_opt": True,
+                "series_label_override": "5. No Combined Points",
+            },
+            {  # No COLMAP Cameras
+                "choice": "vggt",
+                "pose_opt": True,
+                "series_label_override": "6. No COLMAP Cameras",
+            },
+            {  # No Pose opt
+                "choice": "vggt",
+                "pose_opt": False,
+                "series_label_override": "7. No Pose Opt",
+            },
+        ],
         PlotConfig(
             x_axis="",
-            split_param="depth_loss_mode,depth_lambda,real_num_points",
+            split_param="series_label_override",
             metric_keys=["eval_rre", "eval_rte", "psnr", "ssim", "lpips", "quality"],
             max_render_cols=4,
             horizontal_datasets=False,
-            make_camera_plot=True,
-            make_pcd_plot=True,
+            make_camera_plot=False,
+            make_pcd_plot=False,
             show_depth=True,
         ),
         render_filter_override={
             "seed": [42],
             "num_images": [100],
         },
+        priority="high",
+    ),
+    Experiment(
+        "all_improvements_removals",
+        99,
+        "Individual optimisation removals.",
+        [
+            {  # All Improvements
+                "sampling_mode": "confidence",
+                "choice": "combined",
+                "camera_src": "colmap",
+                "pcd_src": "both",
+                "pose_opt": True,
+                "depth_loss_mode": "closer",
+                "depth_conf_mode": "shifted",
+                "depth_lambda": 0.1,
+                "series_label_override": "1. All Improvements",
+            },
+            {  # No confidence sampling
+                "sampling_mode": "random",
+                "choice": "combined",
+                "camera_src": "colmap",
+                "pcd_src": "both",
+                "pose_opt": True,
+                "depth_loss_mode": "closer",
+                "depth_conf_mode": "shifted",
+                "depth_lambda": 0.1,
+                "series_label_override": "2. No Confidence Sampling",
+            },
+            {  # No depth conf
+                "sampling_mode": "confidence",
+                "choice": "combined",
+                "camera_src": "colmap",
+                "pcd_src": "both",
+                "pose_opt": True,
+                "depth_loss_mode": "closer",
+                "depth_conf_mode": "disabled",
+                "depth_lambda": 0.1,
+                "series_label_override": "3. No Depth Conf",
+            },
+            {  # No depth loss
+                "sampling_mode": "confidence",
+                "choice": "combined",
+                "camera_src": "colmap",
+                "pcd_src": "both",
+                "pose_opt": True,
+                "depth_loss_mode": "closer",
+                "depth_conf_mode": "shifted",
+                "depth_lambda": 0.0,
+                "series_label_override": "4. No Depth Loss",
+            },
+            {  # COLMAP points
+                "sampling_mode": "confidence",
+                "choice": "combined",
+                "camera_src": "colmap",
+                "pcd_src": "vggt",
+                "pose_opt": True,
+                "depth_loss_mode": "closer",
+                "depth_conf_mode": "shifted",
+                "depth_lambda": 0.1,
+                "series_label_override": "5. No Combined Points",
+            },
+            {  # No COLMAP Cameras
+                "sampling_mode": "confidence",
+                "choice": "combined",
+                "camera_src": "vggt",
+                "pcd_src": "both",
+                "pose_opt": True,
+                "depth_loss_mode": "closer",
+                "depth_conf_mode": "shifted",
+                "depth_lambda": 0.1,
+                "series_label_override": "6. No COLMAP Cameras",
+            },
+            {  # No Pose opt
+                "sampling_mode": "confidence",
+                "choice": "combined",
+                "camera_src": "colmap",
+                "pcd_src": "both",
+                "pose_opt": False,
+                "depth_loss_mode": "closer",
+                "depth_conf_mode": "shifted",
+                "depth_lambda": 0.1,
+                "series_label_override": "7. No Pose Opt",
+            },
+        ],
+        PlotConfig(
+            x_axis="",
+            split_param="series_label_override",
+            metric_keys=["eval_rre", "eval_rte", "psnr", "ssim", "lpips", "quality"],
+            max_render_cols=4,
+            horizontal_datasets=False,
+            make_camera_plot=False,
+            make_pcd_plot=False,
+            show_depth=True,
+        ),
+        render_filter_override={
+            "seed": [42],
+            "num_images": [100],
+        },
+        priority="high",
     ),
     Experiment(
         "feature_extractor",
@@ -3360,6 +3592,7 @@ if __name__ == "__main__":
     )
     parser.add_argument("--dataset_name", type=str, required=False, help="Name of the dataset to use", nargs="*")
     parser.add_argument("--skip_splatting", action="store_true", help="Whether to skip splatting")
+    parser.add_argument("--skip_plotting", action="store_true", help="Whether to skip plotting")
     parser.add_argument("--do_reconstruct", action="store_true", help="Whether to run reconstruction")
     parser.add_argument("--plot_only", action="store_true", help="Whether to only plot")
     parser.add_argument("--include_gt", action="store_true", help="Whether to include the ground truth splatted data")
@@ -3450,11 +3683,11 @@ if __name__ == "__main__":
                             force_all=args.force_all,
                             enable_viewer=args.enable_viewer,
                         )
-                    if not args.combined_datasets:
+                    if not args.combined_datasets and not args.skip_plotting:
                         experiment.plot(dataset_name)
                     # except Exception as e:
                     #     print(e)
-                if args.combined_datasets and not args.check_only:
+                if args.combined_datasets and not args.check_only and not args.skip_plotting:
                     if args.dataset_collections:
                         if len(args.dataset_collections) > 1:
                             experiment.plot(
@@ -3468,5 +3701,5 @@ if __name__ == "__main__":
                                 split_dataset="individual",
                                 naming_labels=[collection],
                             )
-                    else:
+                    elif not args.skip_plotting:
                         experiment.plot(dataset_names, split_dataset="individual", naming_labels=dataset_names)
