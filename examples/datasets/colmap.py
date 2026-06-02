@@ -248,6 +248,8 @@ class Parser:
                 image_name = image_id_to_name[image_id]
                 point_idx = manager.point3D_id_to_point3D_idx[point_id]
                 point_indices.setdefault(image_name, []).append(point_idx)
+        for image_name in image_id_to_name.values():
+            point_indices.setdefault(image_name, [])
         point_indices = {k: np.array(v).astype(np.int32) for k, v in point_indices.items()}
 
         # Normalize the world space.
