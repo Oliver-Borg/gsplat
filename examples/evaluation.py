@@ -151,11 +151,19 @@ def calculate_metrics(
     output_path: str | None = None,
 ) -> EvalMetrics:
     common_names = sorted(list(set(pred_poses.keys()) & set(gt_poses.keys())))
+    use_direction_vectors = False
     if len(common_names) < 3:
-        return {"error": f"Only {len(common_names)} images matched. Need >= 3 for Umeyama."}
+        use_direction_vectors = True
 
     p_centers = np.array([pred_poses[n][:3, 3] for n in common_names])
     g_centers = np.array([gt_poses[n][:3, 3] for n in common_names])
+
+    if use_direction_vectors:
+        # Add an extra set of points to p_centers and g_centers by adding the direction vector of each camera
+        p_directions = np.array([pred_poses[n][:3, 2] for n in common_names])
+        g_directions = np.array([gt_poses[n][:3, 2] for n in common_names])
+        p_centers = np.concatenate([p_centers, p_centers + p_directions])
+        g_centers = np.concatenate([g_centers, g_centers + g_directions])
 
     s, R_align, t_align = stochastic_umeyama_alignment(p_centers, g_centers)
 
@@ -243,6 +251,19 @@ def calculate_metrics(
 
 
 def main(pred: str, gt: str, force: bool = False) -> None:
+    failed_eval_json = Path(pred) / "failed_eval.json"
+    try:
+        if os.path.exists(failed_eval_json):
+            os.remove(failed_eval_json)
+        _main(pred, gt, force=force)
+    except Exception as e:
+        error_file = failed_eval_json
+        with open(error_file, "w") as f:
+            json.dump(str(e), f)
+        raise e
+
+
+def _main(pred: str, gt: str, force: bool = False) -> None:
     out_file = os.path.join(pred, "eval_results.json")
     if os.path.exists(out_file) and not force:
         print(f"Evaluation for {pred} already exists at {out_file}. Skipping.")
@@ -260,8 +281,7 @@ def main(pred: str, gt: str, force: bool = False) -> None:
     assert gt_poses is not None and pred_poses is not None
 
     if not gt_poses or not pred_poses:
-        print(f"Error: Missing or empty reconstruction in pred ({len(pred_poses)}) or gt ({len(gt_poses)})")
-        return
+        raise ValueError(f"Error: Missing or empty reconstruction in pred ({len(pred_poses)}) or gt ({len(gt_poses)})")
 
     metrics = calculate_metrics(pred_poses, gt_poses, pred_parser, gt_parser, output_path=pred)
 
