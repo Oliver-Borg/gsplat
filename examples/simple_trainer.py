@@ -931,7 +931,7 @@ class Runner:
                     q1 = len(scaling_factors) // 4
                     q3 = 3 * len(scaling_factors) // 4
                     scaling_factor = scaling_factors[q1: q3 + 1].mean()
-                    if abs(scaling_factor - 1.0) > 0.1:
+                    if abs(scaling_factor - 1.0) > 0.1 and sampled_full_depth_map.numel() > 2000:
                         # Save the images to a debug folder for analysis
                         save_debug_images = False
                         if save_debug_images:
