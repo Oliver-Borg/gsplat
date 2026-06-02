@@ -27,9 +27,11 @@
         true
     ],
     "depth_loss_mode": [
+        "disabled",
         "closer"
     ],
     "depth_conf_mode": [
+        "disabled",
         "shifted"
     ],
     "depth_lambda": [

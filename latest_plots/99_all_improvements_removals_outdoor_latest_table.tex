@@ -1,0 +1,28 @@
+\begin{table}[H]
+\caption{Individual optimisation removals. (Outdoor)}
+\label{tab:99_all_improvements_removals_outdoor}
+\centering
+\scriptsize
+\begin{tabular}{lllrrrrrr}
+\toprule
+Choice & Dataset & Series Label Override & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & SSIM ↑ & LPIPS ↓ & Composite Quality ↑ \\
+\midrule
+COLMAP & bicycle & 1. All Improvements & \underline{0.094} & \textbf{0.002} & 21.676 & 0.523 & 0.263 & 0.451 \\
+COLMAP & bicycle & 2. No Confidence Sampling & \textbf{0.093} & \textbf{0.002} & 21.416 & 0.506 & \textbf{0.243} & 0.449 \\
+COLMAP & bicycle & 3. No Depth Conf & 0.097 & \textbf{0.002} & \underline{22.006} & \underline{0.554} & 0.259 & \underline{0.478} \\
+COLMAP & bicycle & 4. No Depth Loss & 0.102 & \textbf{0.002} & \textbf{22.175} & \textbf{0.564} & \underline{0.257} & \textbf{0.488} \\
+VGGT & bicycle & 5. No Combined Points &  &  &  &  &  &  \\
+VGGT & bicycle & 6. No COLMAP Cameras &  &  &  &  &  &  \\
+\midrule
+COLMAP & garden & 1. All Improvements & \underline{0.038} & \textbf{0.001} & \underline{22.780} & \underline{0.566} & \underline{0.246} & \underline{0.508} \\
+COLMAP & garden & 2. No Confidence Sampling & \textbf{0.037} & \textbf{0.001} & \textbf{23.111} & \textbf{0.597} & \textbf{0.237} & \textbf{0.537} \\
+COLMAP & garden & 4. No Depth Loss & 0.049 & \textbf{0.001} & 22.162 & 0.518 & \underline{0.246} & 0.468 \\
+VGGT & garden & 5. No Combined Points &  &  &  &  &  &  \\
+\midrule
+COLMAP & stump & 1. All Improvements & \textbf{0.025} & \textbf{0.001} & \textbf{26.298} & \textbf{0.761} & \underline{0.266} & \textbf{0.674} \\
+COLMAP & stump & 2. No Confidence Sampling & 0.033 & \textbf{0.001} & 25.954 & \underline{0.747} & \textbf{0.265} & \underline{0.660} \\
+COLMAP & stump & 4. No Depth Loss & \underline{0.027} & \textbf{0.001} & \underline{25.997} & 0.745 & \textbf{0.265} & \underline{0.660} \\
+VGGT & stump & 5. No Combined Points &  &  &  &  &  &  \\
+\bottomrule
+\end{tabular}
+\end{table}

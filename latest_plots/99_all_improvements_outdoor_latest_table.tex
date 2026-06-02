@@ -1,21 +1,17 @@
 \begin{table}[H]
-\caption{Test for optimal configuration of all improvements. (Outdoor)}
+\caption{Optimal configuration for all improvements. (Outdoor)}
 \label{tab:99_all_improvements_outdoor}
 \centering
 \scriptsize
-\begin{tabular}{lllrrrrrrrr}
+\begin{tabular}{lllrr}
 \toprule
-Choice & Dataset & Depth Loss Mode & Depth Lambda & Real Num Points & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & SSIM ↑ & LPIPS ↓ & Composite Quality ↑ \\
+Choice & Dataset & Series Label Override & Val RRE ↓ & Val RTE ↓ \\
 \midrule
-COLMAP & bicycle & points & 0.100 & 17352 & \textbf{0.096} & \textbf{0.002} & \textbf{21.965} & \textbf{0.526} & \textbf{0.373} & \textbf{0.391} \\
-VGGT & bicycle &  & 0.000 &  &  &  &  &  &  &  \\
+VGGT & bicycle & 2. No Confidence Sampling &  &  \\
 \midrule
-COLMAP & garden & closer & 0.100 & 170656 & \textbf{0.037} & \textbf{0.001} & \textbf{22.776} & \textbf{0.566} & \textbf{0.246} & \textbf{0.507} \\
-COLMAP & garden & points & 0.100 & 70656 & \underline{0.051} & \textbf{0.001} & \underline{22.077} & \underline{0.508} & \underline{0.267} & \underline{0.447} \\
-VGGT & garden & closer & 0.100 & 100000 & 0.132 & \underline{0.004} & 19.545 & 0.366 & 0.381 & 0.247 \\
+VGGT & garden & 2. No Confidence Sampling &  &  \\
 \midrule
-COLMAP & stump & points & 0.100 & 19683 & \textbf{0.024} & \textbf{0.001} & \textbf{25.162} & \textbf{0.714} & \textbf{0.347} & \textbf{0.576} \\
-VGGT & stump &  & 0.000 &  &  &  &  &  &  &  \\
+VGGT & stump & 2. No Confidence Sampling &  &  \\
 \bottomrule
 \end{tabular}
 \end{table}

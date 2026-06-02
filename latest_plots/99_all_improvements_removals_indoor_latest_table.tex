@@ -1,0 +1,23 @@
+\begin{table}[H]
+\caption{Individual optimisation removals. (Indoor)}
+\label{tab:99_all_improvements_removals_indoor}
+\centering
+\scriptsize
+\begin{tabular}{lllrrrrrr}
+\toprule
+Choice & Dataset & Series Label Override & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & SSIM ↑ & LPIPS ↓ & Composite Quality ↑ \\
+\midrule
+VGGT & bonsai & 2. No Confidence Sampling &  &  &  &  &  &  \\
+COLMAP & bonsai & 4. No Depth Loss & \textbf{0.096} & \textbf{0.001} & \textbf{25.200} & \textbf{0.797} & \textbf{0.169} & \textbf{0.735} \\
+VGGT & bonsai & 5. No Combined Points &  &  &  &  &  &  \\
+\midrule
+VGGT & kitchen & 2. No Confidence Sampling &  &  &  &  &  &  \\
+COLMAP & kitchen & 4. No Depth Loss & \textbf{0.082} & \textbf{0.001} & \textbf{22.169} & \textbf{0.546} & \textbf{0.136} & \textbf{0.552} \\
+VGGT & kitchen & 5. No Combined Points &  &  &  &  &  &  \\
+\midrule
+VGGT & counter & 2. No Confidence Sampling &  &  &  &  &  &  \\
+COLMAP & counter & 4. No Depth Loss & \textbf{0.028} & \textbf{0.000} & \textbf{24.978} & \textbf{0.844} & \textbf{0.185} & \textbf{0.748} \\
+VGGT & counter & 5. No Combined Points &  &  &  &  &  &  \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,0 +1,10 @@
+choice,dataset,series_label_override,eval_rre,eval_rte,psnr,ssim,lpips,quality
+VGGT,bonsai,2. No Confidence Sampling,,,,,,
+VGGT,kitchen,2. No Confidence Sampling,,,,,,
+VGGT,counter,2. No Confidence Sampling,,,,,,
+COLMAP,bonsai,4. No Depth Loss,0.09638803452253342,0.0011855873744934797,25.20047378540039,0.7971417307853699,0.1691034883260727,0.7348880745165528
+COLMAP,kitchen,4. No Depth Loss,0.08178713172674179,0.0008952112984843552,22.16900062561035,0.5457472801208496,0.1359124332666397,0.5522236896266094
+COLMAP,counter,4. No Depth Loss,0.028481638059020042,0.00028253369964659214,24.978403091430664,0.8438005447387695,0.1846751570701599,0.7484493691708997
+VGGT,bonsai,5. No Combined Points,,,,,,
+VGGT,kitchen,5. No Combined Points,,,,,,
+VGGT,counter,5. No Combined Points,,,,,,

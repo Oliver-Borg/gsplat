@@ -1,0 +1,100 @@
+\begin{table}[H]
+\caption{COLMAP versus VGGT over various number of images with different image modes (Indoor,Outdoor,Synthetic)}
+\label{tab:01_num_images_image_mode_indoor,outdoor,synthetic}
+\centering
+\scriptsize
+\begin{tabular}{llrlrrrrrr}
+\toprule
+Choice & Dataset Collection & Num Images & Image Mode & Val RRE ↓ & Val RTE ↓ & Aligned Cameras ↑ & PSNR ↑ & LPIPS ↓ & SSIM ↑ \\
+\midrule
+COLMAP & indoor & 10 & farthestpose & 4.847 & 0.043 & 4.333 & 10.753 & 0.780 & 0.354 \\
+COLMAP & indoor & 20 & farthestpose & 1.315 & 0.009 & 8.000 & 12.950 & 0.611 & 0.431 \\
+COLMAP & indoor & 30 & farthestpose & 1.297 & 0.061 & 19.333 & 15.876 & 0.478 & 0.460 \\
+COLMAP & indoor & 40 & farthestpose & 0.389 & 0.010 & 31.667 & 17.979 & 0.365 & 0.533 \\
+COLMAP & indoor & 50 & farthestpose & 0.193 & 0.006 & 50.000 & 20.387 & 0.272 & 0.642 \\
+COLMAP & indoor & 60 & farthestpose & 0.118 & \underline{0.002} & 60.000 & 22.683 & 0.222 & 0.740 \\
+COLMAP & indoor & 70 & farthestpose & 0.119 & \underline{0.002} & 70.000 & 22.954 & 0.212 & \underline{0.745} \\
+COLMAP & indoor & 80 & farthestpose & \underline{0.100} & \underline{0.002} & 80.000 & \textbf{24.627} & \underline{0.191} & \textbf{0.796} \\
+COLMAP & indoor & 90 & farthestpose & 0.123 & 0.012 & \underline{90.000} & 23.156 & 0.197 & 0.720 \\
+COLMAP & indoor & 100 & farthestpose & \textbf{0.072} & \textbf{0.001} & \textbf{100.000} & \underline{23.826} & \textbf{0.168} & 0.708 \\
+VGGT & indoor & 10 & farthestpose & 0.853 & 0.014 & 10.000 & 15.317 & 0.482 & 0.414 \\
+VGGT & indoor & 10 & minfarthestpose &  &  & 8.750 &  &  &  \\
+VGGT & indoor & 20 & farthestpose & 0.524 & 0.012 & 20.000 & 16.751 & 0.388 & 0.469 \\
+VGGT & indoor & 20 & minfarthestpose &  &  & 16.167 &  &  &  \\
+VGGT & indoor & 30 & farthestpose & 0.475 & 0.012 & 30.000 & 17.739 & 0.345 & 0.517 \\
+VGGT & indoor & 30 & minfarthestpose &  &  & 29.667 &  &  &  \\
+VGGT & indoor & 40 & farthestpose & 0.425 & 0.012 & 40.000 & 18.153 & 0.321 & 0.521 \\
+VGGT & indoor & 40 & minfarthestpose &  &  & 40.000 &  &  &  \\
+VGGT & indoor & 50 & farthestpose &  &  & 50.000 &  &  &  \\
+VGGT & indoor & 50 & minfarthestpose &  &  & 50.000 &  &  &  \\
+VGGT & indoor & 60 & farthestpose &  &  & 60.000 &  &  &  \\
+VGGT & indoor & 60 & minfarthestpose &  &  & 60.000 &  &  &  \\
+VGGT & indoor & 70 & farthestpose &  &  & 70.000 &  &  &  \\
+VGGT & indoor & 70 & minfarthestpose &  &  & 70.000 &  &  &  \\
+VGGT & indoor & 80 & farthestpose &  &  & 80.000 &  &  &  \\
+VGGT & indoor & 80 & minfarthestpose &  &  & 80.000 &  &  &  \\
+VGGT & indoor & 90 & farthestpose &  &  & \underline{90.000} &  &  &  \\
+VGGT & indoor & 90 & minfarthestpose &  &  & \underline{90.000} &  &  &  \\
+VGGT & indoor & 100 & farthestpose & 0.426 & 0.011 & \textbf{100.000} & 19.416 & 0.271 & 0.538 \\
+VGGT & indoor & 100 & minfarthestpose &  &  & \textbf{100.000} &  &  &  \\
+\midrule
+COLMAP & outdoor & 10 & farthestpose & 1.496 & 0.016 & 3.000 & 12.356 & 0.798 & 0.309 \\
+COLMAP & outdoor & 20 & farthestpose & 1.312 & 0.020 & 9.333 & 13.880 & 0.772 & 0.182 \\
+COLMAP & outdoor & 30 & farthestpose & 0.834 & 0.008 & 19.000 & 15.815 & 0.580 & 0.292 \\
+COLMAP & outdoor & 40 & farthestpose & 0.392 & 0.006 & 23.000 & 16.712 & 0.553 & 0.359 \\
+COLMAP & outdoor & 50 & farthestpose & 0.387 & 0.003 & 29.000 & 15.719 & 0.586 & 0.252 \\
+COLMAP & outdoor & 60 & farthestpose & 0.255 & 0.004 & 35.000 & 15.948 & 0.547 & 0.245 \\
+COLMAP & outdoor & 70 & farthestpose & 0.235 & 0.003 & 40.000 & 16.538 & 0.521 & 0.262 \\
+COLMAP & outdoor & 80 & farthestpose & 0.201 & 0.003 & 48.000 & 17.296 & 0.474 & 0.294 \\
+COLMAP & outdoor & 90 & farthestpose & \underline{0.126} & \underline{0.002} & 90.000 & \underline{21.843} & \underline{0.375} & \underline{0.530} \\
+COLMAP & outdoor & 100 & farthestpose & \textbf{0.064} & \textbf{0.001} & \textbf{100.000} & \textbf{23.042} & \textbf{0.318} & \textbf{0.589} \\
+VGGT & outdoor & 10 & farthestpose & 1.536 & 0.053 & 10.000 & 14.912 & 0.536 & 0.224 \\
+VGGT & outdoor & 10 & minfarthestpose &  &  & 8.000 &  &  &  \\
+VGGT & outdoor & 20 & farthestpose & 1.448 & 0.033 & 20.000 & 16.611 & 0.454 & 0.269 \\
+VGGT & outdoor & 20 & minfarthestpose &  &  & 16.600 &  &  &  \\
+VGGT & outdoor & 30 & farthestpose & 0.730 & 0.019 & 23.000 & 17.547 & 0.418 & 0.309 \\
+VGGT & outdoor & 30 & minfarthestpose &  &  & 21.333 &  &  &  \\
+VGGT & outdoor & 40 & farthestpose & 0.626 & 0.017 & 40.000 & 17.989 & 0.408 & 0.327 \\
+VGGT & outdoor & 40 & minfarthestpose &  &  & 31.667 &  &  &  \\
+VGGT & outdoor & 50 & farthestpose &  &  & 46.200 &  &  &  \\
+VGGT & outdoor & 50 & minfarthestpose &  &  & 46.167 &  &  &  \\
+VGGT & outdoor & 60 & farthestpose &  &  & 60.000 &  &  &  \\
+VGGT & outdoor & 60 & minfarthestpose &  &  & 59.833 &  &  &  \\
+VGGT & outdoor & 70 & farthestpose &  &  & 70.000 &  &  &  \\
+VGGT & outdoor & 70 & minfarthestpose &  &  & 69.833 &  &  &  \\
+VGGT & outdoor & 80 & farthestpose &  &  & 80.000 &  &  &  \\
+VGGT & outdoor & 80 & minfarthestpose &  &  & 79.833 &  &  &  \\
+VGGT & outdoor & 90 & farthestpose &  &  & 90.000 &  &  &  \\
+VGGT & outdoor & 90 & minfarthestpose &  &  & 89.833 &  &  &  \\
+VGGT & outdoor & 100 & farthestpose & 0.467 & 0.018 & \textbf{100.000} & 18.343 & 0.389 & 0.344 \\
+VGGT & outdoor & 100 & minfarthestpose &  &  & \underline{99.833} &  &  &  \\
+\midrule
+COLMAP & synthetic & 20 & farthestpose & 42.236 & 0.161 & 6.000 & 11.271 & 0.584 & 0.454 \\
+COLMAP & synthetic & 30 & farthestpose & 40.739 & 0.293 & 11.000 & 13.131 & 0.459 & 0.558 \\
+COLMAP & synthetic & 40 & farthestpose & 40.406 & 0.380 & 20.333 & 13.772 & 0.418 & 0.580 \\
+COLMAP & synthetic & 50 & farthestpose & 129.968 & 0.952 & 45.000 & 10.967 & 0.517 & 0.642 \\
+COLMAP & synthetic & 60 & farthestpose & 95.025 & 1.005 & 56.000 & 10.878 & 0.521 & 0.664 \\
+COLMAP & synthetic & 70 & farthestpose & \textbf{0.153} & \textbf{0.002} & 70.000 & \underline{22.729} & \textbf{0.058} & \textbf{0.854} \\
+COLMAP & synthetic & 80 & farthestpose & 12.851 & 0.213 & 80.000 & 10.883 & 0.476 & 0.560 \\
+COLMAP & synthetic & 87 & farthestpose & 3.551 & 0.040 & 82.000 & \textbf{22.965} & \underline{0.097} & \underline{0.844} \\
+VGGT & synthetic & 10 & farthestpose & 1.294 & 0.020 & 10.000 & 15.485 & 0.319 & 0.632 \\
+VGGT & synthetic & 10 & minfarthestpose &  &  & 10.000 &  &  &  \\
+VGGT & synthetic & 20 & farthestpose & 1.091 & 0.017 & 20.000 & 16.283 & 0.271 & 0.667 \\
+VGGT & synthetic & 20 & minfarthestpose &  &  & 15.750 &  &  &  \\
+VGGT & synthetic & 30 & farthestpose & 0.993 & 0.015 & 30.000 & 16.548 & 0.245 & 0.680 \\
+VGGT & synthetic & 30 & minfarthestpose &  &  & 22.000 &  &  &  \\
+VGGT & synthetic & 40 & farthestpose & 0.557 & 0.008 & 40.000 & 17.879 & 0.172 & 0.724 \\
+VGGT & synthetic & 40 & minfarthestpose &  &  & 30.000 &  &  &  \\
+VGGT & synthetic & 50 & farthestpose &  &  & 38.000 &  &  &  \\
+VGGT & synthetic & 50 & minfarthestpose &  &  & 49.000 &  &  &  \\
+VGGT & synthetic & 60 & farthestpose &  &  & 50.800 &  &  &  \\
+VGGT & synthetic & 60 & minfarthestpose &  &  & 59.500 &  &  &  \\
+VGGT & synthetic & 70 & farthestpose &  &  & 58.800 &  &  &  \\
+VGGT & synthetic & 70 & minfarthestpose &  &  & 70.000 &  &  &  \\
+VGGT & synthetic & 80 & farthestpose &  &  & 77.000 &  &  &  \\
+VGGT & synthetic & 80 & minfarthestpose &  &  & 80.000 &  &  &  \\
+VGGT & synthetic & 87 & farthestpose & \underline{0.248} & \underline{0.006} & \textbf{87.000} & 21.370 & \underline{0.097} & 0.797 \\
+VGGT & synthetic & 87 & minfarthestpose &  &  & \underline{85.000} &  &  &  \\
+\bottomrule
+\end{tabular}
+\end{table}

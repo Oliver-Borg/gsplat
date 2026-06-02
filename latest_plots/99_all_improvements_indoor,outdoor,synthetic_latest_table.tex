@@ -3,32 +3,30 @@
 \label{tab:99_all_improvements_indoor,outdoor,synthetic}
 \centering
 \scriptsize
-\begin{tabular}{lllrrrrrrrr}
+\begin{tabular}{lllrlrrrrrr}
 \toprule
-Choice & Dataset Collection & Depth Loss Mode & Depth Lambda & Real Num Points & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & SSIM ↑ & LPIPS ↓ & Composite Quality ↑ \\
+Choice & Dataset Collection & Depth Loss Mode & Depth Lambda & Depth Conf Mode & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & SSIM ↑ & LPIPS ↓ & Composite Quality ↑ \\
 \midrule
-COLMAP & indoor & closer & 0.100 & 160980 & \textbf{0.026} & \textbf{0.000} & 24.968 & 0.845 & 0.188 & 0.747 \\
-COLMAP & indoor & closer & 0.100 & 180892 & 0.102 & \underline{0.001} & 24.525 & 0.766 & 0.171 & 0.703 \\
-COLMAP & indoor & closer & 0.100 & 192853 & 0.065 & \underline{0.001} & 23.089 & 0.630 & \textbf{0.132} & 0.621 \\
-COLMAP & indoor & points & 0.100 & 60980 & \underline{0.029} & \textbf{0.000} & \underline{25.118} & \underline{0.847} & 0.188 & \underline{0.751} \\
-COLMAP & indoor & points & 0.100 & 80892 & 0.085 & 0.002 & \textbf{26.852} & \textbf{0.850} & 0.169 & \textbf{0.796} \\
-COLMAP & indoor & points & 0.100 & 92853 & 0.091 & \underline{0.001} & 21.633 & 0.516 & \underline{0.145} & 0.519 \\
-VGGT & indoor & closer & 0.100 & 100000 & 0.422 & 0.011 & 19.262 & 0.536 & 0.286 & 0.400 \\
+COLMAP & indoor &  & 0.000 &  & 0.070 & \textbf{0.001} & 23.971 & 0.718 & \underline{0.166} & 0.668 \\
+COLMAP & indoor & closer & 0.100 &  & \textbf{0.064} & \textbf{0.001} & \underline{24.194} & \textbf{0.747} & \textbf{0.164} & \textbf{0.690} \\
+COLMAP & indoor & points & 0.100 &  & \underline{0.069} & \textbf{0.001} & \textbf{24.534} & \underline{0.737} & 0.167 & \underline{0.689} \\
+VGGT & indoor &  & 0.000 &  & 0.417 & \underline{0.011} & 19.469 & 0.544 & 0.281 & 0.412 \\
+VGGT & indoor & closer & 0.100 &  & 0.419 & \underline{0.011} & 19.513 & 0.545 & 0.278 & 0.415 \\
+VGGT & indoor & closer & 0.100 & Standard Shifted & 0.422 & \underline{0.011} & 19.262 & 0.536 & 0.286 & 0.400 \\
 \midrule
-COLMAP & outdoor & closer & 0.100 & 170656 & \underline{0.037} & \textbf{0.001} & \underline{22.776} & \underline{0.566} & \textbf{0.246} & \underline{0.507} \\
-COLMAP & outdoor & points & 0.100 & 17352 & 0.096 & \underline{0.002} & 21.965 & 0.526 & 0.373 & 0.391 \\
-COLMAP & outdoor & points & 0.100 & 19683 & \textbf{0.024} & \textbf{0.001} & \textbf{25.162} & \textbf{0.714} & 0.347 & \textbf{0.576} \\
-COLMAP & outdoor & points & 0.100 & 70656 & 0.051 & \textbf{0.001} & 22.077 & 0.508 & \underline{0.267} & 0.447 \\
-VGGT & outdoor &  & 0.000 &  &  &  &  &  &  &  \\
-VGGT & outdoor & closer & 0.100 & 100000 & 0.132 & 0.004 & 19.545 & 0.366 & 0.381 & 0.247 \\
+COLMAP & outdoor &  & 0.000 &  & 0.062 & \textbf{0.001} & \underline{23.252} & \underline{0.599} & \underline{0.287} & \underline{0.510} \\
+COLMAP & outdoor & closer & 0.100 &  & \textbf{0.051} & \textbf{0.001} & \textbf{23.755} & \textbf{0.629} & \textbf{0.256} & \textbf{0.556} \\
+COLMAP & outdoor & points & 0.100 &  & \underline{0.057} & \textbf{0.001} & 23.068 & 0.583 & 0.329 & 0.471 \\
+VGGT & outdoor &  & 0.000 &  & 0.524 & \underline{0.018} & 18.432 & 0.349 & 0.426 & 0.189 \\
+VGGT & outdoor & closer & 0.100 &  & 0.492 & \underline{0.018} & 18.510 & 0.350 & 0.426 & 0.191 \\
+VGGT & outdoor & closer & 0.100 & Standard Shifted & 0.525 & \underline{0.018} & 18.472 & 0.348 & 0.424 & 0.191 \\
 \midrule
-COLMAP & synthetic & closer & 0.100 & 85712 & 0.139 & \textbf{0.002} & 21.453 & 0.870 & 0.094 & 0.755 \\
-COLMAP & synthetic & closer & 0.100 & 86262 & 0.174 & \underline{0.003} & 22.441 & 0.733 & 0.155 & 0.655 \\
-COLMAP & synthetic & closer & 0.100 & 97069 & 10.381 & 0.114 & \textbf{25.060} & \underline{0.894} & \underline{0.062} & \textbf{0.855} \\
-COLMAP & synthetic & points & 0.100 & 3866 & \textbf{0.099} & \textbf{0.002} & 22.895 & \textbf{0.906} & 0.090 & 0.805 \\
-COLMAP & synthetic & points & 0.100 & 5146 & \underline{0.129} & \textbf{0.002} & 22.707 & 0.761 & 0.142 & 0.684 \\
-COLMAP & synthetic & points & 0.100 & 10313 & 10.429 & 0.116 & \underline{23.402} & 0.865 & \textbf{0.061} & \underline{0.808} \\
-VGGT & synthetic & closer & 0.100 & 87000 & 0.260 & 0.006 & 20.694 & 0.783 & 0.105 & 0.683 \\
+COLMAP & synthetic &  & 0.000 &  & 3.558 & \underline{0.040} & \textbf{23.115} & \textbf{0.845} & \textbf{0.093} & \textbf{0.771} \\
+COLMAP & synthetic & closer & 0.100 &  & 3.564 & \underline{0.040} & 22.985 & 0.832 & 0.104 & 0.755 \\
+COLMAP & synthetic & points & 0.100 &  & 3.552 & \underline{0.040} & \underline{23.002} & \underline{0.844} & 0.098 & \underline{0.765} \\
+VGGT & synthetic &  & 0.000 &  & \textbf{0.249} & \textbf{0.006} & 21.361 & 0.797 & \underline{0.097} & 0.708 \\
+VGGT & synthetic & closer & 0.100 &  & \textbf{0.249} & \textbf{0.006} & 21.260 & 0.795 & 0.098 & 0.705 \\
+VGGT & synthetic & closer & 0.100 & Standard Shifted & \underline{0.260} & \textbf{0.006} & 20.694 & 0.783 & 0.105 & 0.683 \\
 \bottomrule
 \end{tabular}
 \end{table}

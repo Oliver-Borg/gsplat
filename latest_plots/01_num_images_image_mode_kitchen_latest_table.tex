@@ -1,0 +1,51 @@
+\begin{table}[H]
+\caption{COLMAP versus VGGT over various number of images with different image modes (Kitchen)}
+\label{tab:01_num_images_image_mode_kitchen}
+\centering
+\scriptsize
+\begin{tabular}{lrlrrrrrr}
+\toprule
+Choice & Num Images & Image Mode & Val RRE ↓ & Val RTE ↓ & Aligned Cameras ↑ & PSNR ↑ & LPIPS ↓ & SSIM ↑ \\
+\midrule
+COLMAP & 10 & farthestpose & 2.253 & 0.015 & 5 & 13.384 & 0.725 & 0.377 \\
+COLMAP & 20 & farthestpose & 0.105 & \underline{0.002} & 12 & 17.510 & 0.407 & \textbf{0.559} \\
+COLMAP & 20 & minfarthestpose & 0.207 & 0.003 & 11 & 17.055 & 0.420 & 0.403 \\
+COLMAP & 30 & farthestpose & 0.113 & \textbf{0.001} & 28 & 19.522 & 0.228 & 0.482 \\
+COLMAP & 30 & minfarthestpose & 0.088 & \textbf{0.001} & 29 & 20.694 & 0.210 & 0.523 \\
+COLMAP & 40 & farthestpose & 0.093 & \textbf{0.001} & 40 & 21.045 & 0.183 & 0.539 \\
+COLMAP & 40 & minfarthestpose & \underline{0.087} & \textbf{0.001} & 40 & 21.184 & 0.171 & 0.515 \\
+COLMAP & 50 & farthestpose & 0.090 & \textbf{0.001} & 50 & 21.541 & 0.170 & 0.550 \\
+COLMAP & 50 & minfarthestpose & \textbf{0.086} & \textbf{0.001} & 50 & 21.276 & 0.177 & 0.510 \\
+COLMAP & 60 & farthestpose & 0.098 & \textbf{0.001} & 60 & 21.594 & 0.162 & 0.540 \\
+COLMAP & 60 & minfarthestpose & \textbf{0.086} & \textbf{0.001} & 60 & 21.833 & 0.148 & 0.513 \\
+COLMAP & 70 & farthestpose & 0.096 & \textbf{0.001} & 70 & 21.811 & 0.153 & 0.542 \\
+COLMAP & 70 & minfarthestpose & \textbf{0.086} & \textbf{0.001} & 70 & 21.791 & 0.143 & 0.531 \\
+COLMAP & 80 & farthestpose & 0.094 & \textbf{0.001} & 80 & 21.417 & 0.149 & 0.492 \\
+COLMAP & 80 & minfarthestpose & 0.089 & \textbf{0.001} & 80 & \underline{22.103} & \underline{0.135} & 0.534 \\
+COLMAP & 90 & farthestpose & 0.096 & \textbf{0.001} & \underline{90} & 22.082 & 0.142 & 0.548 \\
+COLMAP & 90 & minfarthestpose & 0.089 & \textbf{0.001} & \underline{90} & 21.827 & 0.136 & 0.518 \\
+COLMAP & 100 & farthestpose & 0.094 & \textbf{0.001} & \textbf{100} & 21.597 & 0.142 & 0.497 \\
+COLMAP & 100 & minfarthestpose & \textbf{0.086} & \textbf{0.001} & \textbf{100} & \textbf{22.443} & \textbf{0.127} & 0.551 \\
+VGGT & 10 & farthestpose & 0.316 & 0.007 & 10 & 16.831 & 0.354 & 0.377 \\
+VGGT & 10 & minfarthestpose & 0.252 & 0.006 & 10 & 16.238 & 0.373 & 0.374 \\
+VGGT & 20 & farthestpose & 0.247 & 0.006 & 20 & 17.509 & 0.290 & 0.411 \\
+VGGT & 20 & minfarthestpose & 0.210 & 0.006 & 20 & 18.296 & 0.252 & 0.435 \\
+VGGT & 30 & farthestpose & 0.163 & 0.005 & 30 & 19.270 & 0.226 & 0.496 \\
+VGGT & 30 & minfarthestpose & 0.126 & 0.005 & 30 & 19.223 & 0.218 & 0.484 \\
+VGGT & 40 & farthestpose & 0.187 & 0.006 & 40 & 18.968 & 0.211 & 0.448 \\
+VGGT & 40 & minfarthestpose & 0.135 & 0.005 & 40 & 19.421 & 0.204 & 0.481 \\
+VGGT & 50 & farthestpose & 0.169 & 0.006 & 50 & 19.993 & 0.191 & 0.489 \\
+VGGT & 50 & minfarthestpose & 0.170 & 0.005 & 50 & 20.239 & 0.178 & 0.517 \\
+VGGT & 60 & farthestpose & 0.216 & 0.006 & 60 & 19.413 & 0.195 & 0.448 \\
+VGGT & 60 & minfarthestpose & 0.185 & 0.005 & 60 & 20.159 & 0.174 & 0.489 \\
+VGGT & 70 & farthestpose & 0.204 & 0.005 & 70 & 19.887 & 0.181 & 0.465 \\
+VGGT & 70 & minfarthestpose & 0.186 & 0.004 & 70 & 20.208 & 0.170 & 0.487 \\
+VGGT & 80 & farthestpose & 0.194 & 0.005 & 80 & 20.428 & 0.178 & 0.490 \\
+VGGT & 80 & minfarthestpose & 0.198 & 0.005 & 80 & 20.380 & 0.170 & 0.506 \\
+VGGT & 90 & farthestpose & 0.215 & 0.005 & \underline{90} & 19.990 & 0.184 & 0.446 \\
+VGGT & 90 & minfarthestpose & 0.175 & 0.004 & \underline{90} & 21.101 & 0.162 & \underline{0.552} \\
+VGGT & 100 & farthestpose & 0.236 & 0.005 & \textbf{100} & 20.018 & 0.176 & 0.414 \\
+VGGT & 100 & minfarthestpose & 0.159 & 0.005 & \textbf{100} & 21.233 & 0.156 & 0.531 \\
+\bottomrule
+\end{tabular}
+\end{table}

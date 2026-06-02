@@ -1,0 +1,86 @@
+[
+    {
+        "sampling_mode": "confidence",
+        "choice": "combined",
+        "camera_src": "colmap",
+        "pcd_src": "both",
+        "pose_opt": true,
+        "depth_loss_mode": "closer",
+        "depth_conf_mode": "shifted",
+        "depth_lambda": 0.1,
+        "series_label_override": "1. All Improvements",
+        "dataset": "bonsai"
+    },
+    {
+        "sampling_mode": "random",
+        "choice": "combined",
+        "camera_src": "colmap",
+        "pcd_src": "both",
+        "pose_opt": true,
+        "depth_loss_mode": "closer",
+        "depth_conf_mode": "shifted",
+        "depth_lambda": 0.1,
+        "series_label_override": "2. No Confidence Sampling",
+        "dataset": "bonsai"
+    },
+    {
+        "sampling_mode": "confidence",
+        "choice": "combined",
+        "camera_src": "colmap",
+        "pcd_src": "both",
+        "pose_opt": true,
+        "depth_loss_mode": "closer",
+        "depth_conf_mode": "disabled",
+        "depth_lambda": 0.1,
+        "series_label_override": "3. No Depth Conf",
+        "dataset": "bonsai"
+    },
+    {
+        "sampling_mode": "confidence",
+        "choice": "combined",
+        "camera_src": "colmap",
+        "pcd_src": "both",
+        "pose_opt": true,
+        "depth_loss_mode": "closer",
+        "depth_conf_mode": "shifted",
+        "depth_lambda": 0.0,
+        "series_label_override": "4. No Depth Loss",
+        "dataset": "bonsai"
+    },
+    {
+        "sampling_mode": "confidence",
+        "choice": "combined",
+        "camera_src": "colmap",
+        "pcd_src": "vggt",
+        "pose_opt": true,
+        "depth_loss_mode": "closer",
+        "depth_conf_mode": "shifted",
+        "depth_lambda": 0.1,
+        "series_label_override": "5. No Combined Points",
+        "dataset": "bonsai"
+    },
+    {
+        "sampling_mode": "confidence",
+        "choice": "combined",
+        "camera_src": "vggt",
+        "pcd_src": "both",
+        "pose_opt": true,
+        "depth_loss_mode": "closer",
+        "depth_conf_mode": "shifted",
+        "depth_lambda": 0.1,
+        "series_label_override": "6. No COLMAP Cameras",
+        "dataset": "bonsai"
+    },
+    {
+        "sampling_mode": "confidence",
+        "choice": "combined",
+        "camera_src": "colmap",
+        "pcd_src": "both",
+        "pose_opt": false,
+        "depth_loss_mode": "closer",
+        "depth_conf_mode": "shifted",
+        "depth_lambda": 0.1,
+        "series_label_override": "7. No Pose Opt",
+        "dataset": "bonsai"
+    }
+]

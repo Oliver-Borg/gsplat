@@ -1,0 +1,29 @@
+{
+    "seed": [
+        42
+    ],
+    "num_images": [
+        10,
+        20,
+        30,
+        40
+    ],
+    "sampling_mode": [
+        "random"
+    ],
+    "pose_opt": [
+        true
+    ],
+    "gt_eval": [
+        true
+    ],
+    "image_mode": [
+        "farthestpose",
+        "minfarthestpose"
+    ],
+    "choice": [
+        "vggt",
+        "colmap"
+    ],
+    "dataset": "bicycle"
+}

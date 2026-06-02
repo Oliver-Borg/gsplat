@@ -1,0 +1,21 @@
+\begin{table}[H]
+\caption{Individual optimisation removals. (Indoor,Outdoor,Synthetic)}
+\label{tab:99_all_improvements_removals_indoor,outdoor,synthetic}
+\centering
+\scriptsize
+\begin{tabular}{lllrrrrrr}
+\toprule
+Choice & Dataset Collection & Series Label Override & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & SSIM ↑ & LPIPS ↓ & Composite Quality ↑ \\
+\midrule
+VGGT & indoor & 2. No Confidence Sampling &  &  &  &  &  &  \\
+COLMAP & indoor & 4. No Depth Loss & \textbf{0.069} & \textbf{0.001} & \textbf{24.116} & \textbf{0.729} & \textbf{0.163} & \textbf{0.679} \\
+VGGT & indoor & 5. No Combined Points &  &  &  &  &  &  \\
+\midrule
+VGGT & outdoor & 2. No Confidence Sampling &  &  &  &  &  &  \\
+COLMAP & outdoor & 4. No Depth Loss & \textbf{0.059} & \textbf{0.001} & \textbf{23.462} & \textbf{0.610} & \textbf{0.256} & \textbf{0.539} \\
+VGGT & outdoor & 5. No Combined Points &  &  &  &  &  &  \\
+\midrule
+VGGT & synthetic & 2. No Confidence Sampling &  &  &  &  &  &  \\
+\bottomrule
+\end{tabular}
+\end{table}

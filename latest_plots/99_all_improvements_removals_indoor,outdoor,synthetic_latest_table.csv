@@ -1,0 +1,8 @@
+choice,dataset_collection,series_label_override,eval_rre,eval_rte,psnr,ssim,lpips,quality
+VGGT,indoor,2. No Confidence Sampling,,,,,,
+VGGT,outdoor,2. No Confidence Sampling,,,,,,
+VGGT,synthetic,2. No Confidence Sampling,,,,,,
+COLMAP,indoor,4. No Depth Loss,0.06888560143609841,0.0007877774575414757,24.11595916748047,0.7288965185483297,0.16323035955429077,0.678520377771354
+COLMAP,outdoor,4. No Depth Loss,0.05924016609787941,0.0012657540307069819,23.46221351623535,0.6098089218139648,0.25614748398462933,0.5394158577387121
+VGGT,indoor,5. No Combined Points,,,,,,
+VGGT,outdoor,5. No Combined Points,,,,,,

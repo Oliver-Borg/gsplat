@@ -1,0 +1,48 @@
+\begin{table}[H]
+\caption{COLMAP versus VGGT over various number of images with different image modes (First)}
+\label{tab:01_num_images_image_mode_first}
+\centering
+\scriptsize
+\begin{tabular}{llrlrrrrrr}
+\toprule
+Choice & Dataset & Num Images & Image Mode & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP & bicycle & 20 & farthestpose &  &  & 9.541 & 0.975 & 0.026 & -0.503 \\
+COLMAP & bicycle & 30 & farthestpose & 1.605 & \underline{0.015} & 10.860 & 0.810 & 0.155 & -0.302 \\
+COLMAP & bicycle & 40 & farthestpose & \textbf{0.503} & \textbf{0.003} & 13.764 & 0.685 & \textbf{0.244} & -0.119 \\
+VGGT & bicycle & 10 & farthestpose & 1.770 & 0.033 & 13.894 & 0.566 & 0.150 & -0.098 \\
+VGGT & bicycle & 10 & minfarthestpose &  &  &  &  &  &  \\
+VGGT & bicycle & 20 & farthestpose & 1.113 & 0.027 & 15.618 & 0.472 & 0.191 & 0.016 \\
+VGGT & bicycle & 20 & minfarthestpose &  &  &  &  &  &  \\
+VGGT & bicycle & 30 & farthestpose & \underline{0.898} & 0.019 & \underline{16.091} & \underline{0.446} & 0.210 & \underline{0.052} \\
+VGGT & bicycle & 30 & minfarthestpose &  &  &  &  &  &  \\
+VGGT & bicycle & 40 & farthestpose & 0.995 & 0.019 & \textbf{16.245} & \textbf{0.434} & \underline{0.218} & \textbf{0.067} \\
+VGGT & bicycle & 40 & minfarthestpose &  &  &  &  &  &  \\
+\midrule
+COLMAP & bonsai & 10 & farthestpose & 9.963 & 0.083 & 10.370 & 0.821 & 0.303 & -0.231 \\
+COLMAP & bonsai & 20 & farthestpose & \textbf{0.671} & \textbf{0.010} & 12.160 & 0.596 & 0.350 & -0.032 \\
+COLMAP & bonsai & 30 & farthestpose & 3.020 & 0.168 & 12.844 & 0.696 & 0.410 & -0.046 \\
+COLMAP & bonsai & 40 & farthestpose & 0.981 & 0.026 & 16.200 & 0.466 & \underline{0.521} & 0.224 \\
+VGGT & bonsai & 10 & farthestpose & 1.210 & 0.024 & 14.488 & 0.561 & 0.437 & 0.084 \\
+VGGT & bonsai & 10 & minfarthestpose &  &  &  &  &  &  \\
+VGGT & bonsai & 20 & farthestpose & 0.904 & 0.024 & 16.241 & 0.465 & 0.501 & 0.214 \\
+VGGT & bonsai & 20 & minfarthestpose &  &  &  &  &  &  \\
+VGGT & bonsai & 30 & farthestpose & 0.921 & 0.024 & \underline{16.325} & \underline{0.450} & 0.513 & \underline{0.231} \\
+VGGT & bonsai & 30 & minfarthestpose &  &  &  &  &  &  \\
+VGGT & bonsai & 40 & farthestpose & \underline{0.788} & \underline{0.022} & \textbf{16.529} & \textbf{0.439} & \textbf{0.524} & \textbf{0.248} \\
+VGGT & bonsai & 40 & minfarthestpose &  &  &  &  &  &  \\
+\midrule
+COLMAP & lego & 20 & farthestpose & 120.361 & 0.425 & 10.804 & 0.512 & \textbf{0.676} & 0.186 \\
+COLMAP & lego & 30 & farthestpose & 119.899 & 0.865 & 10.755 & 0.512 & \underline{0.675} & 0.184 \\
+COLMAP & lego & 40 & farthestpose & 108.589 & 0.926 & 10.944 & 0.520 & 0.645 & 0.165 \\
+VGGT & lego & 10 & farthestpose & 2.499 & 0.035 & 13.161 & 0.365 & 0.598 & 0.275 \\
+VGGT & lego & 10 & minfarthestpose &  &  &  &  &  &  \\
+VGGT & lego & 20 & farthestpose & 2.172 & 0.031 & 13.528 & 0.329 & 0.618 & 0.315 \\
+VGGT & lego & 20 & minfarthestpose &  &  &  &  &  &  \\
+VGGT & lego & 30 & farthestpose & \underline{2.117} & \underline{0.029} & \underline{13.846} & \underline{0.308} & 0.632 & \underline{0.342} \\
+VGGT & lego & 30 & minfarthestpose &  &  &  &  &  &  \\
+VGGT & lego & 40 & farthestpose & \textbf{1.189} & \textbf{0.014} & \textbf{14.321} & \textbf{0.265} & 0.663 & \textbf{0.396} \\
+VGGT & lego & 40 & minfarthestpose &  &  &  &  &  &  \\
+\bottomrule
+\end{tabular}
+\end{table}

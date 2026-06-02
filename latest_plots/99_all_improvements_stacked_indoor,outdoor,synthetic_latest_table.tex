@@ -1,0 +1,28 @@
+\begin{table}[H]
+\caption{Stacked removal of optimisations. (Indoor,Outdoor,Synthetic)}
+\label{tab:99_all_improvements_stacked_indoor,outdoor,synthetic}
+\centering
+\scriptsize
+\begin{tabular}{lllrrrrrr}
+\toprule
+Choice & Dataset Collection & Series Label Override & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & SSIM ↑ & LPIPS ↓ & Composite Quality ↑ \\
+\midrule
+VGGT & indoor & 1. All Improvements &  &  &  &  &  &  \\
+COLMAP & indoor & 4. No Depth Loss & \textbf{0.071} & \textbf{0.001} & \textbf{23.849} & \textbf{0.723} & \textbf{0.164} & \textbf{0.670} \\
+COLMAP & indoor & 5. No Combined Points & \underline{0.072} & \textbf{0.001} & \underline{23.826} & \underline{0.708} & \underline{0.168} & \underline{0.658} \\
+VGGT & indoor & 6. No COLMAP Cameras & 0.426 & \underline{0.011} & 19.416 & 0.538 & 0.271 & 0.413 \\
+VGGT & indoor & 7. No Pose Opt & 0.468 & 0.013 & 19.238 & 0.556 & 0.322 & 0.389 \\
+\midrule
+VGGT & outdoor & 1. All Improvements &  &  &  &  &  &  \\
+COLMAP & outdoor & 4. No Depth Loss & \textbf{0.057} & \textbf{0.001} & \textbf{23.377} & \textbf{0.603} & \textbf{0.248} & \textbf{0.539} \\
+COLMAP & outdoor & 5. No Combined Points & \underline{0.064} & \textbf{0.001} & \underline{23.042} & \underline{0.589} & \underline{0.318} & \underline{0.481} \\
+VGGT & outdoor & 6. No COLMAP Cameras & 0.467 & \underline{0.018} & 18.343 & 0.344 & 0.389 & 0.207 \\
+VGGT & outdoor & 7. No Pose Opt & 0.695 & 0.021 & 18.133 & 0.342 & 0.484 & 0.144 \\
+\midrule
+VGGT & synthetic & 2. No Confidence Sampling &  &  &  &  &  &  \\
+COLMAP & synthetic & 5. No Combined Points & 3.551 & \underline{0.040} & \textbf{22.965} & \textbf{0.844} & \textbf{0.097} & \textbf{0.765} \\
+VGGT & synthetic & 6. No COLMAP Cameras & \textbf{0.248} & \textbf{0.006} & \underline{21.370} & \underline{0.797} & \textbf{0.097} & \underline{0.709} \\
+VGGT & synthetic & 7. No Pose Opt & \underline{0.319} & \textbf{0.006} & 20.370 & 0.770 & \underline{0.126} & 0.656 \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,0 +1,37 @@
+\begin{table}[H]
+\caption{COLMAP versus VGGT over various number of images with different image modes (Garden)}
+\label{tab:01_num_images_image_mode_garden}
+\centering
+\scriptsize
+\begin{tabular}{lrlrrrrrr}
+\toprule
+Choice & Num Images & Image Mode & Val RRE ↓ & Val RTE ↓ & Aligned Cameras ↑ & PSNR ↑ & LPIPS ↓ & SSIM ↑ \\
+\midrule
+COLMAP & 10 & farthestpose & 1.496 & 0.016 & 3 & 12.356 & 0.798 & 0.309 \\
+COLMAP & 20 & farthestpose & 0.091 & \textbf{0.001} & 20 & 19.310 & 0.414 & 0.369 \\
+COLMAP & 30 & farthestpose & 0.064 & \textbf{0.001} & 30 & 20.770 & 0.349 & 0.429 \\
+COLMAP & 40 & farthestpose & \underline{0.052} & \textbf{0.001} & 40 & \underline{21.583} & 0.322 & \underline{0.491} \\
+COLMAP & 100 & farthestpose & \textbf{0.049} & \textbf{0.001} & \textbf{100} & \textbf{22.130} & \textbf{0.264} & \textbf{0.512} \\
+VGGT & 10 & farthestpose & 0.475 & 0.009 & 10 & 15.862 & 0.443 & 0.248 \\
+VGGT & 10 & minfarthestpose &  &  & 6 &  &  &  \\
+VGGT & 20 & farthestpose & 0.146 & \underline{0.003} & 20 & 18.335 & 0.332 & 0.326 \\
+VGGT & 20 & minfarthestpose &  &  & 20 &  &  &  \\
+VGGT & 30 & farthestpose & 0.095 & \underline{0.003} & 30 & 19.416 & 0.292 & 0.385 \\
+VGGT & 30 & minfarthestpose &  &  & 30 &  &  &  \\
+VGGT & 40 & farthestpose & 0.088 & \underline{0.003} & 40 & 19.921 & \underline{0.291} & 0.404 \\
+VGGT & 40 & minfarthestpose &  &  & 40 &  &  &  \\
+VGGT & 50 & farthestpose &  &  & 50 &  &  &  \\
+VGGT & 50 & minfarthestpose &  &  & 50 &  &  &  \\
+VGGT & 60 & farthestpose &  &  & 60 &  &  &  \\
+VGGT & 60 & minfarthestpose &  &  & 60 &  &  &  \\
+VGGT & 70 & farthestpose &  &  & 70 &  &  &  \\
+VGGT & 70 & minfarthestpose &  &  & 70 &  &  &  \\
+VGGT & 80 & farthestpose &  &  & 80 &  &  &  \\
+VGGT & 80 & minfarthestpose &  &  & 80 &  &  &  \\
+VGGT & 90 & farthestpose &  &  & \underline{90} &  &  &  \\
+VGGT & 90 & minfarthestpose &  &  & \underline{90} &  &  &  \\
+VGGT & 100 & farthestpose & 0.135 & 0.004 & \textbf{100} & 19.351 & 0.338 & 0.366 \\
+VGGT & 100 & minfarthestpose &  &  & \textbf{100} &  &  &  \\
+\bottomrule
+\end{tabular}
+\end{table}
