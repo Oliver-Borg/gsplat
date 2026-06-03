@@ -1,18 +1,13 @@
 \begin{table}[H]
-\caption{Small test for functionality (Lego)}
+\caption{\ifdefined\customcaption \customcaption \else Small test for functionality (Lego) \fi}
 \label{tab:99_test_lego}
-\begin{tabular}{lrllrr}
+\centering
+\scriptsize
+\begin{tabular}{lrlrrrrrr}
 \toprule
-Choice & Val Step & Sampling Mode & Pose Opt & Val RRE ↓ & Val RTE ↓ \\
+Choice & Sampling Mode & Pose Opt & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
 \midrule
-VGGT & 1 & random &  & \underline{0.330} & \textbf{0.005} \\
-VGGT & 1 & random & Pose Opt & \underline{0.330} & \textbf{0.005} \\
-VGGT & 7000 & random &  & \underline{0.330} & \textbf{0.005} \\
-VGGT & 7000 & random & Pose Opt & \textbf{0.277} & \underline{0.006} \\
-VGGT &  & ba &  &  &  \\
-VGGT &  & confidence &  &  &  \\
-VGGT &  & voxels &  &  &  \\
-VGGT &  &  &  &  &  \\
+COLMAP &  &  & \textbf{10.479} & \textbf{0.117} & \textbf{22.900} & \textbf{0.088} & \textbf{0.852} & \textbf{0.775} \\
 \bottomrule
 \end{tabular}
 \end{table}

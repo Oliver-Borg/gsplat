@@ -1,0 +1,26 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else COLMAP versus VGGT for $100$ images with different image modes. (Indoor) \fi}
+\label{tab:01_image_mode_dense_indoor}
+\centering
+\scriptsize
+\begin{tabular}{llrlrrrrrr}
+\toprule
+Choice & Dataset & Num Images & Image Mode & Val RRE ↓ & Val RTE ↓ & Aligned Cameras ↑ & PSNR ↑ & LPIPS ↓ & SSIM ↑ \\
+\midrule
+COLMAP & bonsai & 100 & farthestpose & \underline{0.097} & \textbf{0.001} & \textbf{100} & \underline{24.653} & \underline{0.175} & \underline{0.776} \\
+COLMAP & bonsai & 100 & minfarthestpose & \textbf{0.078} & \textbf{0.001} & \textbf{100} & \textbf{25.544} & \textbf{0.144} & \textbf{0.795} \\
+VGGT & bonsai & 100 & farthestpose & 0.789 & 0.022 & \textbf{100} & 17.423 & 0.399 & 0.560 \\
+VGGT & bonsai & 100 & minfarthestpose & 0.693 & \underline{0.019} & \textbf{100} & 18.461 & 0.336 & 0.582 \\
+\midrule
+COLMAP & kitchen & 100 & farthestpose & \underline{0.094} & \textbf{0.001} & \textbf{100} & \underline{21.597} & \underline{0.142} & 0.497 \\
+COLMAP & kitchen & 100 & minfarthestpose & \textbf{0.086} & \textbf{0.001} & \textbf{100} & \textbf{22.443} & \textbf{0.127} & \textbf{0.551} \\
+VGGT & kitchen & 100 & farthestpose & 0.236 & \underline{0.005} & \textbf{100} & 20.018 & 0.176 & 0.414 \\
+VGGT & kitchen & 100 & minfarthestpose & 0.159 & \underline{0.005} & \textbf{100} & 21.233 & 0.156 & \underline{0.531} \\
+\midrule
+COLMAP & counter & 100 & farthestpose & \underline{0.026} & \textbf{0.000} & \textbf{100} & \underline{25.228} & \underline{0.188} & \underline{0.850} \\
+COLMAP & counter & 100 & minfarthestpose & \textbf{0.021} & \textbf{0.000} & \textbf{100} & \textbf{27.591} & \textbf{0.164} & \textbf{0.884} \\
+VGGT & counter & 100 & farthestpose & 0.254 & \underline{0.006} & \textbf{100} & 20.807 & 0.237 & 0.641 \\
+VGGT & counter & 100 & minfarthestpose & 0.278 & \underline{0.006} & \textbf{100} & 20.581 & 0.226 & 0.623 \\
+\bottomrule
+\end{tabular}
+\end{table}

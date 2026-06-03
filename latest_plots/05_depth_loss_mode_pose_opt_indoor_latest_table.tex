@@ -1,0 +1,26 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else COLMAP versus VGGT with depth loss for different depth loss modes. (Indoor) \fi}
+\label{tab:05_depth_loss_mode_pose_opt_indoor}
+\centering
+\scriptsize
+\begin{tabular}{llllrrrrr}
+\toprule
+Choice & Dataset & Depth Loss Mode & Pose Opt & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ \\
+\midrule
+VGGT & bonsai &  &  & \textbf{0.722} & 0.024 & \textbf{17.731} & 0.418 & \textbf{0.575} \\
+VGGT & bonsai &  & Pose Opt & 0.789 & 0.022 & 17.423 & 0.399 & 0.560 \\
+VGGT & bonsai & closer & Pose Opt & \underline{0.746} & \underline{0.021} & \underline{17.637} & \textbf{0.389} & \underline{0.563} \\
+VGGT & bonsai & full & Pose Opt & 0.794 & \textbf{0.017} & 17.473 & \underline{0.392} & 0.557 \\
+\midrule
+VGGT & kitchen &  &  & 0.339 & \underline{0.007} & 19.821 & 0.239 & \textbf{0.463} \\
+VGGT & kitchen &  & Pose Opt & \underline{0.236} & \textbf{0.005} & \underline{20.018} & \underline{0.176} & 0.414 \\
+VGGT & kitchen & closer & Pose Opt & \underline{0.236} & \textbf{0.005} & \textbf{20.186} & \textbf{0.175} & \underline{0.422} \\
+VGGT & kitchen & full & Pose Opt & \textbf{0.222} & \textbf{0.005} & 19.044 & 0.210 & 0.400 \\
+\midrule
+VGGT & counter &  &  & 0.343 & \underline{0.008} & 20.160 & 0.307 & 0.630 \\
+VGGT & counter &  & Pose Opt & 0.254 & \textbf{0.006} & \underline{20.807} & \underline{0.237} & \underline{0.641} \\
+VGGT & counter & closer & Pose Opt & \textbf{0.234} & \textbf{0.006} & \textbf{21.081} & \textbf{0.234} & \textbf{0.655} \\
+VGGT & counter & full & Pose Opt & \underline{0.247} & \textbf{0.006} & 20.773 & 0.246 & \textbf{0.655} \\
+\bottomrule
+\end{tabular}
+\end{table}

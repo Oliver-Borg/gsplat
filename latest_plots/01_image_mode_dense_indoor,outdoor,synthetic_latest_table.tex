@@ -1,0 +1,26 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else COLMAP versus VGGT for $100$ images with different image modes. (Indoor,Outdoor,Synthetic) \fi}
+\label{tab:01_image_mode_dense_indoor,outdoor,synthetic}
+\centering
+\scriptsize
+\begin{tabular}{llrlrrrrrr}
+\toprule
+Choice & Dataset Collection & Num Images & Image Mode & Val RRE ↓ & Val RTE ↓ & Aligned Cameras ↑ & PSNR ↑ & LPIPS ↓ & SSIM ↑ \\
+\midrule
+COLMAP & indoor & 100 & farthestpose & \underline{0.072} & \textbf{0.001} & \textbf{100.000} & \underline{23.826} & \underline{0.168} & \underline{0.708} \\
+COLMAP & indoor & 100 & minfarthestpose & \textbf{0.061} & \textbf{0.001} & \textbf{100.000} & \textbf{25.193} & \textbf{0.145} & \textbf{0.744} \\
+VGGT & indoor & 100 & farthestpose & 0.426 & 0.011 & \textbf{100.000} & 19.416 & 0.271 & 0.538 \\
+VGGT & indoor & 100 & minfarthestpose & 0.377 & \underline{0.010} & \textbf{100.000} & 20.092 & 0.239 & 0.579 \\
+\midrule
+COLMAP & outdoor & 100 & farthestpose & \textbf{0.064} & \textbf{0.001} & \textbf{100.000} & \textbf{23.042} & \underline{0.318} & \textbf{0.589} \\
+COLMAP & outdoor & 100 & minfarthestpose & \underline{0.065} & \textbf{0.001} & \underline{99.667} & \underline{22.734} & \textbf{0.303} & \underline{0.567} \\
+VGGT & outdoor & 100 & farthestpose & 0.467 & \underline{0.018} & \textbf{100.000} & 18.343 & 0.389 & 0.344 \\
+VGGT & outdoor & 100 & minfarthestpose & 0.471 & \underline{0.018} & \textbf{100.000} & 18.298 & 0.383 & 0.344 \\
+\midrule
+COLMAP & synthetic & 87 & farthestpose & 3.551 & 0.040 & 82.000 & \underline{22.965} & \underline{0.097} & \underline{0.844} \\
+COLMAP & synthetic & 87 & minfarthestpose & 3.545 & \underline{0.039} & \underline{83.000} & \textbf{23.293} & \textbf{0.095} & \textbf{0.851} \\
+VGGT & synthetic & 87 & farthestpose & \textbf{0.248} & \textbf{0.006} & \textbf{87.000} & 21.370 & \underline{0.097} & 0.797 \\
+VGGT & synthetic & 87 & minfarthestpose & \underline{0.249} & \textbf{0.006} & \textbf{87.000} & 21.370 & \underline{0.097} & 0.797 \\
+\bottomrule
+\end{tabular}
+\end{table}

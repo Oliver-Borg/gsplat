@@ -1,35 +1,35 @@
 \begin{table}[H]
-\caption{COLMAP versus VGGT with depth loss for different depth loss modes. (Outdoor)}
+\caption{\ifdefined\customcaption \customcaption \else COLMAP versus VGGT with depth loss for different depth loss modes. (Outdoor) \fi}
 \label{tab:05_depth_loss_mode_outdoor}
 \centering
 \scriptsize
-\begin{tabular}{lllrrrrll}
+\begin{tabular}{lllrrrr}
 \toprule
-Choice & Dataset & Depth Loss Mode & RRE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Predicted Depth Abs Rel ↓ & Splatted Depth Abs Rel ↓ \\
+Choice & Dataset & Depth Loss Mode & RRE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ \\
 \midrule
-COLMAP & bicycle &  & \textbf{0.099} & \textbf{22.163} & \textbf{0.349} & \textbf{0.559} &  &  \\
-COLMAP & bicycle & points & \textbf{0.099} & \underline{21.660} & \underline{0.392} & \underline{0.505} &  &  \\
+COLMAP & bicycle &  & \textbf{0.099} & \textbf{22.163} & \textbf{0.349} & \textbf{0.559} \\
+COLMAP & bicycle & points & \textbf{0.099} & \underline{21.660} & \underline{0.392} & \underline{0.505} \\
 \midrule
-VGGT & bicycle &  & \textbf{0.716} & 17.384 & \underline{0.338} & 0.268 &  &  \\
-VGGT & bicycle & closer & \textbf{0.716} & \underline{17.500} & \textbf{0.329} & 0.266 &  &  \\
-VGGT & bicycle & full & \textbf{0.716} & \textbf{18.110} & 0.351 & \textbf{0.293} &  &  \\
-VGGT & bicycle & points & \textbf{0.716} & 17.406 & 0.383 & \underline{0.269} &  &  \\
+VGGT & bicycle &  & \textbf{0.716} & 17.384 & \underline{0.338} & 0.268 \\
+VGGT & bicycle & closer & \textbf{0.716} & \underline{17.500} & \textbf{0.329} & 0.266 \\
+VGGT & bicycle & full & \textbf{0.716} & \textbf{18.110} & 0.351 & \textbf{0.293} \\
+VGGT & bicycle & points & \textbf{0.716} & 17.406 & 0.383 & \underline{0.269} \\
 \midrule
-COLMAP & garden &  & \textbf{0.063} & \textbf{22.130} & \textbf{0.264} & \textbf{0.512} &  &  \\
-COLMAP & garden & points & \textbf{0.063} & \underline{21.959} & \underline{0.272} & \underline{0.499} &  &  \\
+COLMAP & garden &  & \textbf{0.063} & \textbf{22.130} & \textbf{0.264} & \textbf{0.512} \\
+COLMAP & garden & points & \textbf{0.063} & \underline{21.959} & \underline{0.272} & \underline{0.499} \\
 \midrule
-VGGT & garden &  & \textbf{0.373} & 19.351 & \underline{0.338} & 0.366 &  &  \\
-VGGT & garden & closer & \textbf{0.373} & \textbf{19.498} & \textbf{0.332} & 0.360 &  &  \\
-VGGT & garden & full & \textbf{0.373} & \underline{19.402} & 0.346 & \underline{0.371} &  &  \\
-VGGT & garden & points & \textbf{0.373} & 19.362 & 0.361 & \textbf{0.374} &  &  \\
+VGGT & garden &  & \textbf{0.373} & 19.351 & \underline{0.338} & 0.366 \\
+VGGT & garden & closer & \textbf{0.373} & \textbf{19.498} & \textbf{0.332} & 0.360 \\
+VGGT & garden & full & \textbf{0.373} & \underline{19.402} & 0.346 & \underline{0.371} \\
+VGGT & garden & points & \textbf{0.373} & 19.362 & 0.361 & \textbf{0.374} \\
 \midrule
-COLMAP & stump &  & \textbf{0.022} & \underline{24.833} & \textbf{0.340} & \underline{0.696} &  &  \\
-COLMAP & stump & points & \textbf{0.022} & \textbf{24.930} & \underline{0.363} & \textbf{0.709} &  &  \\
+COLMAP & stump &  & \textbf{0.022} & \underline{24.833} & \textbf{0.340} & \underline{0.696} \\
+COLMAP & stump & points & \textbf{0.022} & \textbf{24.930} & \underline{0.363} & \textbf{0.709} \\
 \midrule
-VGGT & stump &  & \textbf{0.856} & 18.294 & \textbf{0.492} & 0.398 &  &  \\
-VGGT & stump & closer & \textbf{0.856} & 18.349 & \underline{0.494} & 0.398 &  &  \\
-VGGT & stump & full & \textbf{0.856} & \textbf{18.406} & 0.515 & \textbf{0.408} &  &  \\
-VGGT & stump & points & \textbf{0.856} & \underline{18.381} & 0.521 & \underline{0.407} &  &  \\
+VGGT & stump &  & \textbf{0.856} & 18.294 & \textbf{0.492} & 0.398 \\
+VGGT & stump & closer & \textbf{0.856} & 18.349 & \underline{0.494} & 0.398 \\
+VGGT & stump & full & \textbf{0.856} & \textbf{18.406} & 0.515 & \textbf{0.408} \\
+VGGT & stump & points & \textbf{0.856} & \underline{18.381} & 0.521 & \underline{0.407} \\
 \bottomrule
 \end{tabular}
 \end{table}

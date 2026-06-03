@@ -1,5 +1,5 @@
 \begin{table}[H]
-\caption{COLMAP versus VGGT over various number of images with different image modes (Outdoor)}
+\caption{\ifdefined\customcaption \customcaption \else COLMAP versus VGGT over various number of images with different image modes (Outdoor) \fi}
 \label{tab:01_num_images_image_mode_outdoor}
 \centering
 \scriptsize
@@ -7,94 +7,120 @@
 \toprule
 Choice & Dataset & Num Images & Image Mode & Val RRE ↓ & Val RTE ↓ & Aligned Cameras ↑ & PSNR ↑ & LPIPS ↓ & SSIM ↑ \\
 \midrule
-COLMAP & bicycle & 20 & farthestpose &  &  & 2.000 & 9.541 & 0.975 & 0.026 \\
-COLMAP & bicycle & 30 & farthestpose & 1.605 & 0.015 & 8.000 & 10.860 & 0.810 & 0.155 \\
-COLMAP & bicycle & 30 & minfarthestpose & 1.543 & 0.010 & 6.000 & 12.715 & 0.843 & 0.246 \\
-COLMAP & bicycle & 40 & farthestpose & 0.503 & \underline{0.003} & 18.000 & 13.764 & 0.685 & 0.244 \\
-COLMAP & bicycle & 40 & minfarthestpose & 0.710 & 0.012 & 9.000 & 15.023 & 0.696 & 0.265 \\
-COLMAP & bicycle & 50 & farthestpose & 0.387 & \underline{0.003} & 29.000 & 15.719 & 0.586 & 0.252 \\
-COLMAP & bicycle & 50 & minfarthestpose & 0.140 & \underline{0.003} & 46.000 & 21.438 & 0.428 & 0.498 \\
-COLMAP & bicycle & 60 & farthestpose & 0.255 & 0.004 & 35.000 & 15.948 & 0.547 & 0.245 \\
-COLMAP & bicycle & 60 & minfarthestpose & 0.147 & \underline{0.003} & 59.000 & 21.727 & 0.393 & 0.507 \\
-COLMAP & bicycle & 70 & farthestpose & 0.235 & \underline{0.003} & 40.000 & 16.538 & 0.521 & 0.262 \\
-COLMAP & bicycle & 70 & minfarthestpose & 0.122 & \underline{0.003} & 69.000 & 21.527 & 0.352 & 0.491 \\
-COLMAP & bicycle & 80 & farthestpose & 0.201 & \underline{0.003} & 48.000 & 17.296 & 0.474 & 0.294 \\
-COLMAP & bicycle & 80 & minfarthestpose & 0.113 & \underline{0.003} & 80.000 & \textbf{22.575} & 0.327 & \textbf{0.568} \\
-COLMAP & bicycle & 90 & farthestpose & 0.126 & \textbf{0.002} & 90.000 & 21.843 & 0.375 & 0.530 \\
-COLMAP & bicycle & 90 & minfarthestpose & \textbf{0.106} & \underline{0.003} & 89.000 & 21.459 & \underline{0.311} & 0.494 \\
-COLMAP & bicycle & 100 & farthestpose & 0.111 & \textbf{0.002} & \textbf{100.000} & \underline{22.163} & 0.349 & \underline{0.559} \\
-COLMAP & bicycle & 100 & minfarthestpose & \underline{0.107} & \textbf{0.002} & \underline{99.000} & 21.968 & \textbf{0.299} & 0.523 \\
-VGGT & bicycle & 10 & farthestpose & 1.770 & 0.033 & 10.000 & 13.894 & 0.566 & 0.150 \\
-VGGT & bicycle & 10 & minfarthestpose & 1.245 & 0.028 & 10.000 & 14.897 & 0.509 & 0.169 \\
-VGGT & bicycle & 20 & farthestpose & 1.113 & 0.027 & 20.000 & 15.618 & 0.472 & 0.191 \\
-VGGT & bicycle & 20 & minfarthestpose & 1.009 & 0.022 & 20.000 & 15.953 & 0.446 & 0.194 \\
-VGGT & bicycle & 30 & farthestpose & 0.898 & 0.019 & 30.000 & 16.091 & 0.446 & 0.210 \\
-VGGT & bicycle & 30 & minfarthestpose & 0.749 & 0.017 & 30.000 & 16.632 & 0.399 & 0.213 \\
-VGGT & bicycle & 40 & farthestpose & 0.995 & 0.019 & 40.000 & 16.245 & 0.434 & 0.218 \\
-VGGT & bicycle & 40 & minfarthestpose & 0.667 & 0.017 & 40.000 & 16.798 & 0.380 & 0.221 \\
-VGGT & bicycle & 50 & farthestpose & 0.791 & 0.019 & 50.000 & 17.069 & 0.393 & 0.239 \\
-VGGT & bicycle & 50 & minfarthestpose & 0.753 & 0.017 & 50.000 & 17.601 & 0.357 & 0.251 \\
-VGGT & bicycle & 60 & farthestpose & 0.581 & 0.015 & 60.000 & 17.526 & 0.364 & 0.258 \\
-VGGT & bicycle & 60 & minfarthestpose & 0.651 & 0.016 & 60.000 & 17.103 & 0.356 & 0.237 \\
-VGGT & bicycle & 70 & farthestpose & 0.533 & 0.016 & 70.000 & 18.604 & 0.344 & 0.309 \\
-VGGT & bicycle & 70 & minfarthestpose & 0.740 & 0.015 & 70.000 & 17.139 & 0.358 & 0.252 \\
-VGGT & bicycle & 80 & farthestpose & 0.506 & 0.015 & 80.000 & 17.488 & 0.343 & 0.267 \\
-VGGT & bicycle & 80 & minfarthestpose & 0.783 & 0.015 & 80.000 & 16.718 & 0.360 & 0.246 \\
-VGGT & bicycle & 90 & farthestpose & 0.550 & 0.015 & 90.000 & 18.419 & 0.329 & 0.297 \\
-VGGT & bicycle & 90 & minfarthestpose & 0.579 & 0.014 & 90.000 & 17.515 & 0.323 & 0.267 \\
-VGGT & bicycle & 100 & farthestpose & 0.489 & 0.014 & \textbf{100.000} & 17.384 & 0.338 & 0.268 \\
-VGGT & bicycle & 100 & minfarthestpose & 0.523 & 0.015 & \textbf{100.000} & 17.328 & 0.333 & 0.272 \\
+COLMAP & bicycle & 20 & farthestpose &  &  & 2 & 9.541 & 0.975 & 0.026 \\
+COLMAP & bicycle & 30 & farthestpose & 1.605 & 0.015 & 8 & 10.860 & 0.810 & 0.155 \\
+COLMAP & bicycle & 30 & minfarthestpose & 1.543 & 0.010 & 6 & 12.715 & 0.843 & 0.246 \\
+COLMAP & bicycle & 40 & farthestpose & 0.503 & \underline{0.003} & 18 & 13.764 & 0.685 & 0.244 \\
+COLMAP & bicycle & 40 & minfarthestpose & 0.710 & 0.012 & 9 & 15.023 & 0.696 & 0.265 \\
+COLMAP & bicycle & 50 & farthestpose & 0.387 & \underline{0.003} & 29 & 15.719 & 0.586 & 0.252 \\
+COLMAP & bicycle & 50 & minfarthestpose & 0.140 & \underline{0.003} & 46 & 21.438 & 0.428 & 0.498 \\
+COLMAP & bicycle & 60 & farthestpose & 0.255 & 0.004 & 35 & 15.948 & 0.547 & 0.245 \\
+COLMAP & bicycle & 60 & minfarthestpose & 0.147 & \underline{0.003} & 59 & 21.727 & 0.393 & 0.507 \\
+COLMAP & bicycle & 70 & farthestpose & 0.235 & \underline{0.003} & 40 & 16.538 & 0.521 & 0.262 \\
+COLMAP & bicycle & 70 & minfarthestpose & 0.122 & \underline{0.003} & 69 & 21.527 & 0.352 & 0.491 \\
+COLMAP & bicycle & 80 & farthestpose & 0.201 & \underline{0.003} & 48 & 17.296 & 0.474 & 0.294 \\
+COLMAP & bicycle & 80 & minfarthestpose & 0.113 & \underline{0.003} & 80 & \textbf{22.575} & 0.327 & \textbf{0.568} \\
+COLMAP & bicycle & 90 & farthestpose & 0.126 & \textbf{0.002} & 90 & 21.843 & 0.375 & 0.530 \\
+COLMAP & bicycle & 90 & minfarthestpose & \textbf{0.106} & \underline{0.003} & 89 & 21.459 & \underline{0.311} & 0.494 \\
+COLMAP & bicycle & 100 & farthestpose & 0.111 & \textbf{0.002} & \textbf{100} & \underline{22.163} & 0.349 & \underline{0.559} \\
+COLMAP & bicycle & 100 & minfarthestpose & \underline{0.107} & \textbf{0.002} & \underline{99} & 21.968 & \textbf{0.299} & 0.523 \\
+VGGT & bicycle & 10 & farthestpose & 1.770 & 0.033 & 10 & 13.894 & 0.566 & 0.150 \\
+VGGT & bicycle & 10 & minfarthestpose & 1.245 & 0.028 & 10 & 14.897 & 0.509 & 0.169 \\
+VGGT & bicycle & 20 & farthestpose & 1.113 & 0.027 & 20 & 15.618 & 0.472 & 0.191 \\
+VGGT & bicycle & 20 & minfarthestpose & 1.009 & 0.022 & 20 & 15.953 & 0.446 & 0.194 \\
+VGGT & bicycle & 30 & farthestpose & 0.898 & 0.019 & 30 & 16.091 & 0.446 & 0.210 \\
+VGGT & bicycle & 30 & minfarthestpose & 0.749 & 0.017 & 30 & 16.632 & 0.399 & 0.213 \\
+VGGT & bicycle & 40 & farthestpose & 0.995 & 0.019 & 40 & 16.245 & 0.434 & 0.218 \\
+VGGT & bicycle & 40 & minfarthestpose & 0.667 & 0.017 & 40 & 16.798 & 0.380 & 0.221 \\
+VGGT & bicycle & 50 & farthestpose & 0.791 & 0.019 & 50 & 17.069 & 0.393 & 0.239 \\
+VGGT & bicycle & 50 & minfarthestpose & 0.753 & 0.017 & 50 & 17.601 & 0.357 & 0.251 \\
+VGGT & bicycle & 60 & farthestpose & 0.581 & 0.015 & 60 & 17.526 & 0.364 & 0.258 \\
+VGGT & bicycle & 60 & minfarthestpose & 0.651 & 0.016 & 60 & 17.103 & 0.356 & 0.237 \\
+VGGT & bicycle & 70 & farthestpose & 0.533 & 0.016 & 70 & 18.604 & 0.344 & 0.309 \\
+VGGT & bicycle & 70 & minfarthestpose & 0.740 & 0.015 & 70 & 17.139 & 0.358 & 0.252 \\
+VGGT & bicycle & 80 & farthestpose & 0.506 & 0.015 & 80 & 17.488 & 0.343 & 0.267 \\
+VGGT & bicycle & 80 & minfarthestpose & 0.783 & 0.015 & 80 & 16.718 & 0.360 & 0.246 \\
+VGGT & bicycle & 90 & farthestpose & 0.550 & 0.015 & 90 & 18.419 & 0.329 & 0.297 \\
+VGGT & bicycle & 90 & minfarthestpose & 0.579 & 0.014 & 90 & 17.515 & 0.323 & 0.267 \\
+VGGT & bicycle & 100 & farthestpose & 0.489 & 0.014 & \textbf{100} & 17.384 & 0.338 & 0.268 \\
+VGGT & bicycle & 100 & minfarthestpose & 0.523 & 0.015 & \textbf{100} & 17.328 & 0.333 & 0.272 \\
 \midrule
-COLMAP & garden & 10 & farthestpose & 1.496 & 0.016 & 3.000 & 12.356 & 0.798 & 0.309 \\
-COLMAP & garden & 20 & farthestpose & 0.091 & \textbf{0.001} & 20.000 & 19.310 & 0.414 & 0.369 \\
-COLMAP & garden & 20 & minfarthestpose & 0.098 & \textbf{0.001} & 20.000 & 19.070 & 0.426 & 0.359 \\
-COLMAP & garden & 30 & farthestpose & 0.064 & \textbf{0.001} & 30.000 & 20.770 & 0.349 & 0.429 \\
-COLMAP & garden & 40 & farthestpose & \underline{0.052} & \textbf{0.001} & 40.000 & \underline{21.583} & 0.322 & \underline{0.491} \\
-COLMAP & garden & 100 & farthestpose & \textbf{0.049} & \textbf{0.001} & \textbf{100.000} & \textbf{22.130} & \textbf{0.264} & \textbf{0.512} \\
-VGGT & garden & 10 & farthestpose & 0.475 & 0.009 & 10.000 & 15.862 & 0.443 & 0.248 \\
-VGGT & garden & 10 & minfarthestpose & 0.233 & 0.007 & 6.000 & 16.477 & 0.416 & 0.256 \\
-VGGT & garden & 20 & farthestpose & 0.146 & \underline{0.003} & 20.000 & 18.335 & 0.332 & 0.326 \\
-VGGT & garden & 20 & minfarthestpose & 0.218 & 0.005 & 20.000 & 18.108 & 0.336 & 0.309 \\
-VGGT & garden & 30 & farthestpose & 0.095 & \underline{0.003} & 30.000 & 19.416 & 0.292 & 0.385 \\
-VGGT & garden & 30 & minfarthestpose &  &  & 30.000 &  &  &  \\
-VGGT & garden & 40 & farthestpose & 0.088 & \underline{0.003} & 40.000 & 19.921 & \underline{0.291} & 0.404 \\
-VGGT & garden & 40 & minfarthestpose &  &  & 40.000 &  &  &  \\
-VGGT & garden & 50 & farthestpose &  &  & 50.000 &  &  &  \\
-VGGT & garden & 50 & minfarthestpose &  &  & 50.000 &  &  &  \\
-VGGT & garden & 60 & farthestpose &  &  & 60.000 &  &  &  \\
-VGGT & garden & 60 & minfarthestpose &  &  & 60.000 &  &  &  \\
-VGGT & garden & 70 & farthestpose &  &  & 70.000 &  &  &  \\
-VGGT & garden & 70 & minfarthestpose &  &  & 70.000 &  &  &  \\
-VGGT & garden & 80 & farthestpose &  &  & 80.000 &  &  &  \\
-VGGT & garden & 80 & minfarthestpose &  &  & 80.000 &  &  &  \\
-VGGT & garden & 90 & farthestpose &  &  & \underline{90.000} &  &  &  \\
-VGGT & garden & 90 & minfarthestpose &  &  & \underline{90.000} &  &  &  \\
-VGGT & garden & 100 & farthestpose & 0.135 & 0.004 & \textbf{100.000} & 19.351 & 0.338 & 0.366 \\
-VGGT & garden & 100 & minfarthestpose &  &  & \textbf{100.000} &  &  &  \\
+COLMAP & garden & 10 & farthestpose & 1.496 & 0.016 & 3 & 12.356 & 0.798 & 0.309 \\
+COLMAP & garden & 20 & farthestpose & 0.091 & \textbf{0.001} & 20 & 19.310 & 0.414 & 0.369 \\
+COLMAP & garden & 20 & minfarthestpose & 0.098 & \textbf{0.001} & 20 & 19.070 & 0.426 & 0.359 \\
+COLMAP & garden & 30 & farthestpose & 0.064 & \textbf{0.001} & 30 & 20.770 & 0.349 & 0.429 \\
+COLMAP & garden & 30 & minfarthestpose & 0.073 & \textbf{0.001} & 30 & 20.508 & 0.353 & 0.416 \\
+COLMAP & garden & 40 & farthestpose & 0.052 & \textbf{0.001} & 40 & 21.583 & 0.322 & 0.491 \\
+COLMAP & garden & 40 & minfarthestpose & 0.075 & \textbf{0.001} & 40 & 20.650 & 0.323 & 0.428 \\
+COLMAP & garden & 50 & farthestpose & 0.052 & \textbf{0.001} & 50 & 21.870 & 0.300 & 0.502 \\
+COLMAP & garden & 50 & minfarthestpose & 0.067 & \textbf{0.001} & 50 & 20.881 & 0.306 & 0.437 \\
+COLMAP & garden & 60 & farthestpose & 0.053 & \textbf{0.001} & 60 & 21.582 & 0.289 & 0.493 \\
+COLMAP & garden & 60 & minfarthestpose & 0.058 & \textbf{0.001} & 60 & 21.555 & 0.292 & 0.479 \\
+COLMAP & garden & 70 & farthestpose & \underline{0.051} & \textbf{0.001} & 70 & 22.023 & 0.283 & \underline{0.508} \\
+COLMAP & garden & 70 & minfarthestpose & 0.061 & \textbf{0.001} & 70 & 21.534 & 0.279 & 0.472 \\
+COLMAP & garden & 80 & farthestpose & 0.052 & \textbf{0.001} & 80 & \underline{22.026} & 0.272 & 0.507 \\
+COLMAP & garden & 80 & minfarthestpose & 0.056 & \textbf{0.001} & 80 & 21.723 & 0.272 & 0.490 \\
+COLMAP & garden & 90 & farthestpose & 0.052 & \textbf{0.001} & \underline{90} & 22.007 & 0.267 & 0.503 \\
+COLMAP & garden & 90 & minfarthestpose & 0.053 & \textbf{0.001} & \underline{90} & 21.915 & 0.267 & 0.502 \\
+COLMAP & garden & 100 & farthestpose & \textbf{0.049} & \textbf{0.001} & \textbf{100} & \textbf{22.130} & \underline{0.264} & \textbf{0.512} \\
+COLMAP & garden & 100 & minfarthestpose & 0.052 & \textbf{0.001} & \textbf{100} & 21.976 & \textbf{0.260} & 0.507 \\
+VGGT & garden & 10 & farthestpose & 0.475 & 0.009 & 10 & 15.862 & 0.443 & 0.248 \\
+VGGT & garden & 10 & minfarthestpose & 0.233 & 0.007 & 6 & 16.477 & 0.416 & 0.256 \\
+VGGT & garden & 20 & farthestpose & 0.146 & \underline{0.003} & 20 & 18.335 & 0.332 & 0.326 \\
+VGGT & garden & 20 & minfarthestpose & 0.218 & 0.005 & 20 & 18.108 & 0.336 & 0.309 \\
+VGGT & garden & 30 & farthestpose & 0.095 & \underline{0.003} & 30 & 19.416 & 0.292 & 0.385 \\
+VGGT & garden & 30 & minfarthestpose & 0.109 & 0.004 & 30 & 19.329 & 0.290 & 0.367 \\
+VGGT & garden & 40 & farthestpose & 0.088 & \underline{0.003} & 40 & 19.921 & 0.291 & 0.404 \\
+VGGT & garden & 40 & minfarthestpose & 0.149 & 0.004 & 40 & 18.992 & 0.312 & 0.359 \\
+VGGT & garden & 50 & farthestpose & 0.114 & 0.004 & 50 & 19.658 & 0.298 & 0.380 \\
+VGGT & garden & 50 & minfarthestpose & 0.184 & 0.005 & 50 & 18.299 & 0.347 & 0.350 \\
+VGGT & garden & 60 & farthestpose & 0.142 & 0.004 & 60 & 19.322 & 0.314 & 0.360 \\
+VGGT & garden & 60 & minfarthestpose & 0.178 & 0.005 & 60 & 18.932 & 0.334 & 0.359 \\
+VGGT & garden & 70 & farthestpose & 0.100 & 0.004 & 70 & 19.705 & 0.314 & 0.380 \\
+VGGT & garden & 70 & minfarthestpose & 0.141 & 0.005 & 70 & 19.456 & 0.322 & 0.371 \\
+VGGT & garden & 80 & farthestpose & 0.146 & 0.004 & 80 & 19.473 & 0.323 & 0.364 \\
+VGGT & garden & 80 & minfarthestpose & 0.164 & 0.004 & 80 & 19.073 & 0.339 & 0.357 \\
+VGGT & garden & 90 & farthestpose & 0.147 & 0.004 & \underline{90} & 19.362 & 0.337 & 0.371 \\
+VGGT & garden & 90 & minfarthestpose & 0.168 & 0.004 & \underline{90} & 19.219 & 0.341 & 0.367 \\
+VGGT & garden & 100 & farthestpose & 0.135 & 0.004 & \textbf{100} & 19.351 & 0.338 & 0.366 \\
+VGGT & garden & 100 & minfarthestpose & 0.176 & 0.004 & \textbf{100} & 18.967 & 0.352 & 0.357 \\
 \midrule
-COLMAP & stump & 20 & farthestpose & 2.533 & 0.038 & 6.000 & 12.789 & 0.926 & 0.149 \\
-COLMAP & stump & 40 & farthestpose & \underline{0.620} & \underline{0.014} & 11.000 & 14.788 & 0.651 & 0.343 \\
-COLMAP & stump & 100 & farthestpose & \textbf{0.034} & \textbf{0.001} & \textbf{100.000} & \textbf{24.833} & \textbf{0.340} & \textbf{0.696} \\
-VGGT & stump & 10 & farthestpose & 2.363 & 0.115 & 10.000 & 14.980 & 0.599 & 0.273 \\
-VGGT & stump & 10 & minfarthestpose &  &  & 10.000 &  &  &  \\
-VGGT & stump & 20 & farthestpose & 3.086 & 0.069 & 20.000 & 15.881 & 0.557 & 0.290 \\
-VGGT & stump & 20 & minfarthestpose &  &  & 11.500 &  &  &  \\
-VGGT & stump & 30 & farthestpose & 1.197 & 0.033 & 16.000 & 17.133 & 0.517 & 0.331 \\
-VGGT & stump & 30 & minfarthestpose &  &  & 16.000 &  &  &  \\
-VGGT & stump & 40 & farthestpose & 0.795 & 0.027 & 40.000 & 17.802 & 0.498 & 0.359 \\
-VGGT & stump & 40 & minfarthestpose &  &  & 30.500 &  &  &  \\
-VGGT & stump & 50 & farthestpose &  &  & 40.500 &  &  &  \\
-VGGT & stump & 50 & minfarthestpose &  &  & 40.500 &  &  &  \\
-VGGT & stump & 60 & farthestpose &  &  & 60.000 &  &  &  \\
-VGGT & stump & 60 & minfarthestpose &  &  & 60.000 &  &  &  \\
-VGGT & stump & 70 & farthestpose &  &  & 70.000 &  &  &  \\
-VGGT & stump & 70 & minfarthestpose &  &  & 70.000 &  &  &  \\
-VGGT & stump & 80 & farthestpose &  &  & 80.000 &  &  &  \\
-VGGT & stump & 80 & minfarthestpose &  &  & 79.500 &  &  &  \\
-VGGT & stump & 90 & farthestpose &  &  & \underline{90.000} &  &  &  \\
-VGGT & stump & 90 & minfarthestpose &  &  & \underline{90.000} &  &  &  \\
-VGGT & stump & 100 & farthestpose & 0.777 & 0.035 & \textbf{100.000} & \underline{18.294} & \underline{0.492} & \underline{0.398} \\
-VGGT & stump & 100 & minfarthestpose &  &  & \textbf{100.000} &  &  &  \\
+COLMAP & stump & 20 & farthestpose & 2.533 & 0.038 & 6 & 12.789 & 0.926 & 0.149 \\
+COLMAP & stump & 20 & minfarthestpose & 2.163 & 0.019 & 3 & 12.640 & 0.800 & 0.333 \\
+COLMAP & stump & 40 & farthestpose & 0.620 & 0.014 & 11 & 14.788 & 0.651 & 0.343 \\
+COLMAP & stump & 40 & minfarthestpose & 0.128 & 0.003 & 21 & 18.982 & 0.503 & 0.478 \\
+COLMAP & stump & 50 & farthestpose & 0.213 & 0.007 & 31 & 18.582 & 0.571 & 0.443 \\
+COLMAP & stump & 50 & minfarthestpose & 0.134 & 0.003 & 31 & 19.863 & 0.491 & 0.506 \\
+COLMAP & stump & 60 & farthestpose & 0.056 & \textbf{0.001} & 60 & 22.454 & 0.441 & 0.591 \\
+COLMAP & stump & 60 & minfarthestpose & 0.088 & \underline{0.002} & 60 & 22.552 & 0.429 & 0.609 \\
+COLMAP & stump & 70 & farthestpose & 0.050 & \textbf{0.001} & 70 & 23.702 & 0.391 & 0.650 \\
+COLMAP & stump & 70 & minfarthestpose & 0.069 & \underline{0.002} & 70 & 22.622 & 0.416 & 0.606 \\
+COLMAP & stump & 80 & farthestpose & \underline{0.033} & \textbf{0.001} & 80 & 24.642 & 0.370 & \underline{0.692} \\
+COLMAP & stump & 80 & minfarthestpose & 0.043 & \underline{0.002} & 79 & 23.250 & 0.396 & 0.633 \\
+COLMAP & stump & 90 & farthestpose & \textbf{0.031} & \textbf{0.001} & \underline{90} & \underline{24.693} & 0.357 & \textbf{0.696} \\
+COLMAP & stump & 90 & minfarthestpose & 0.038 & \underline{0.002} & \underline{90} & 23.828 & 0.366 & 0.651 \\
+COLMAP & stump & 100 & farthestpose & 0.034 & \textbf{0.001} & \textbf{100} & \textbf{24.833} & \textbf{0.340} & \textbf{0.696} \\
+COLMAP & stump & 100 & minfarthestpose & 0.037 & \textbf{0.001} & \textbf{100} & 24.259 & \underline{0.351} & 0.670 \\
+VGGT & stump & 10 & farthestpose & 2.363 & 0.115 & 10 & 14.980 & 0.599 & 0.273 \\
+VGGT & stump & 10 & minfarthestpose & 2.341 & 0.122 & 10 & 15.529 & 0.562 & 0.280 \\
+VGGT & stump & 20 & farthestpose & 3.086 & 0.069 & 20 & 15.881 & 0.557 & 0.290 \\
+VGGT & stump & 20 & minfarthestpose & 1.732 & 0.068 & 20 & 16.899 & 0.509 & 0.318 \\
+VGGT & stump & 30 & farthestpose & 1.197 & 0.033 & 16 & 17.133 & 0.517 & 0.331 \\
+VGGT & stump & 30 & minfarthestpose & 1.076 & 0.036 & 16 & 17.683 & 0.479 & 0.341 \\
+VGGT & stump & 40 & farthestpose & 0.795 & 0.027 & 40 & 17.802 & 0.498 & 0.359 \\
+VGGT & stump & 40 & minfarthestpose & 0.995 & 0.044 & 40 & 17.501 & 0.498 & 0.349 \\
+VGGT & stump & 50 & farthestpose & 0.814 & 0.030 & 50 & 17.765 & 0.496 & 0.367 \\
+VGGT & stump & 50 & minfarthestpose & 1.130 & 0.046 & 50 & 17.594 & 0.503 & 0.359 \\
+VGGT & stump & 60 & farthestpose & 0.865 & 0.032 & 60 & 17.913 & 0.494 & 0.375 \\
+VGGT & stump & 60 & minfarthestpose & 0.970 & 0.042 & 60 & 17.851 & 0.487 & 0.367 \\
+VGGT & stump & 70 & farthestpose & 0.803 & 0.031 & 70 & 18.675 & 0.441 & 0.395 \\
+VGGT & stump & 70 & minfarthestpose & 1.118 & 0.044 & 70 & 17.791 & 0.510 & 0.373 \\
+VGGT & stump & 80 & farthestpose & 0.841 & 0.034 & 80 & 18.658 & 0.453 & 0.400 \\
+VGGT & stump & 80 & minfarthestpose & 0.988 & 0.045 & 80 & 18.039 & 0.493 & 0.382 \\
+VGGT & stump & 90 & farthestpose & 0.799 & 0.036 & \underline{90} & 18.540 & 0.469 & 0.402 \\
+VGGT & stump & 90 & minfarthestpose & 0.725 & 0.041 & \underline{90} & 18.309 & 0.482 & 0.392 \\
+VGGT & stump & 100 & farthestpose & 0.777 & 0.035 & \textbf{100} & 18.294 & 0.492 & 0.398 \\
+VGGT & stump & 100 & minfarthestpose & 0.713 & 0.036 & \textbf{100} & 18.599 & 0.465 & 0.402 \\
 \bottomrule
 \end{tabular}
 \end{table}

@@ -1,0 +1,15 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else COLMAP versus VGGT for $100$ images with different image modes. (Legotest) \fi}
+\label{tab:01_image_mode_dense_legotest}
+\centering
+\scriptsize
+\begin{tabular}{llrlrrrrrr}
+\toprule
+Choice & Dataset & Num Images & Image Mode & Val RRE ↓ & Val RTE ↓ & Aligned Cameras ↑ & PSNR ↑ & LPIPS ↓ & SSIM ↑ \\
+\midrule
+COLMAP & legotest & 100 & farthestpose & \textbf{0.136} & \textbf{0.002} & \underline{98} & \textbf{25.887} & \textbf{0.048} & \textbf{0.906} \\
+VGGT & legotest & 100 & farthestpose &  &  & \textbf{100} &  &  &  \\
+VGGT & legotest & 100 & minfarthestpose &  &  & \textbf{100} &  &  &  \\
+\bottomrule
+\end{tabular}
+\end{table}

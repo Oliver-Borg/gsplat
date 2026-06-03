@@ -5,6 +5,9 @@
     "num_images": [
         100
     ],
+    "image_mode": [
+        "farthestpose"
+    ],
     "sampling_mode": [
         "random",
         "imagefreqnovis",

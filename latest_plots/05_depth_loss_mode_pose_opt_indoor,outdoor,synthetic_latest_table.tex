@@ -1,0 +1,29 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else COLMAP versus VGGT with depth loss for different depth loss modes. (Indoor,Outdoor,Synthetic) \fi}
+\label{tab:05_depth_loss_mode_pose_opt_indoor,outdoor,synthetic}
+\centering
+\scriptsize
+\begin{tabular}{llllrrrrrrr}
+\toprule
+Choice & Dataset Collection & Depth Loss Mode & Pose Opt & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Predicted Depth Abs Rel ↓ & Splatted Depth Abs Rel ↓ \\
+\midrule
+VGGT & indoor &  &  & 0.468 & 0.013 & 19.238 & 0.322 & \textbf{0.556} &  &  \\
+VGGT & indoor &  & Pose Opt & 0.426 & \underline{0.011} & \underline{19.416} & \underline{0.271} & 0.538 &  &  \\
+VGGT & indoor & closer & Pose Opt & \textbf{0.405} & \underline{0.011} & \textbf{19.635} & \textbf{0.266} & \underline{0.547} &  &  \\
+VGGT & indoor & full & Pose Opt & \underline{0.421} & \textbf{0.010} & 19.097 & 0.283 & 0.537 &  &  \\
+\midrule
+VGGT & outdoor &  &  & 0.648 & 0.020 & 18.261 & 0.480 & \underline{0.345} &  &  \\
+VGGT & outdoor &  & Pose Opt & 0.467 & \underline{0.018} & 18.343 & \underline{0.389} & 0.344 &  &  \\
+VGGT & outdoor & closer & Pose Opt & \textbf{0.447} & \underline{0.018} & \underline{18.449} & \textbf{0.385} & 0.342 &  &  \\
+VGGT & outdoor & full &  & 0.716 & \textbf{0.015} & 17.449 & 0.433 & 0.269 &  &  \\
+VGGT & outdoor & full & Pose Opt & \underline{0.465} & 0.019 & \textbf{18.639} & 0.404 & \textbf{0.357} &  &  \\
+\midrule
+VGGT & synthetic &  &  & 0.319 & \underline{0.006} & 20.370 & 0.126 & 0.770 & \textbf{0.020} & 0.023 \\
+VGGT & synthetic &  & Pose Opt & \underline{0.248} & \underline{0.006} & \underline{21.370} & \textbf{0.097} & \underline{0.797} & \textbf{0.020} & \underline{0.022} \\
+VGGT & synthetic & closer &  & 0.319 & \underline{0.006} & 20.374 & 0.135 & 0.770 & \textbf{0.020} & 0.028 \\
+VGGT & synthetic & closer & Pose Opt & 0.254 & \underline{0.006} & 21.006 & \underline{0.103} & 0.790 & \textbf{0.020} & 0.027 \\
+VGGT & synthetic & full &  & 0.319 & \underline{0.006} & 20.374 & 0.131 & 0.772 & \textbf{0.020} & 0.024 \\
+VGGT & synthetic & full & Pose Opt & \textbf{0.233} & \textbf{0.005} & \textbf{22.064} & \textbf{0.097} & \textbf{0.814} & \textbf{0.020} & \textbf{0.021} \\
+\bottomrule
+\end{tabular}
+\end{table}

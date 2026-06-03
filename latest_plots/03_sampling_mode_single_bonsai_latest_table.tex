@@ -1,0 +1,25 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else A comparison of different VGGT point cloud sampling modes for 100000 points (Bonsai) \fi}
+\label{tab:03_sampling_mode_single_bonsai}
+\centering
+\scriptsize
+\begin{tabular}{llrlrr}
+\toprule
+Choice & Dataset & Num Points & Sampling Mode & Near Filtering Strength & Composite Quality ↑ \\
+\midrule
+COLMAP & bonsai & 80892 &  &  & \textbf{0.818} \\
+VGGT & bonsai & 10000 & imagefreqnovis &  & 0.513 \\
+VGGT & bonsai & 10000 & imagefreqvoxels &  & 0.460 \\
+VGGT & bonsai & 10000 & random &  & 0.516 \\
+VGGT & bonsai & 50000 & imagefreqnovis &  & 0.624 \\
+VGGT & bonsai & 50000 & imagefreqvoxels &  & 0.602 \\
+VGGT & bonsai & 50000 & random &  & 0.628 \\
+VGGT & bonsai & 100000 & imagefreqnovis &  & \underline{0.654} \\
+VGGT & bonsai & 100000 & imagefreqvoxels &  & 0.638 \\
+VGGT & bonsai & 100000 & random &  & \underline{0.654} \\
+VGGT & bonsai & 500000 & imagefreqnovis &  & 0.647 \\
+VGGT & bonsai & 500000 & imagefreqvoxels &  & 0.633 \\
+VGGT & bonsai & 500000 & random &  & 0.650 \\
+\bottomrule
+\end{tabular}
+\end{table}

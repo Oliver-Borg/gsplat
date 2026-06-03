@@ -1,0 +1,26 @@
+{
+    "seed": [
+        42
+    ],
+    "num_images": [
+        20
+    ],
+    "sampling_mode": [
+        "random"
+    ],
+    "num_points_per_image": [
+        1000
+    ],
+    "run_mvs": [
+        true,
+        false
+    ],
+    "gt_eval": true,
+    "choice": [
+        "colmap"
+    ],
+    "num_steps": [
+        7000
+    ],
+    "dataset": "garden"
+}

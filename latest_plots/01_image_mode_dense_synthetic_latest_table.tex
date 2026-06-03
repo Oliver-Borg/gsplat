@@ -1,0 +1,26 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else COLMAP versus VGGT for $100$ images with different image modes. (Synthetic) \fi}
+\label{tab:01_image_mode_dense_synthetic}
+\centering
+\scriptsize
+\begin{tabular}{llrlrrrrrr}
+\toprule
+Choice & Dataset & Num Images & Image Mode & Val RRE ↓ & Val RTE ↓ & Aligned Cameras ↑ & PSNR ↑ & LPIPS ↓ & SSIM ↑ \\
+\midrule
+COLMAP & lego & 87 & farthestpose & 10.429 & 0.116 & \textbf{87} & \underline{23.416} & \underline{0.061} & \underline{0.866} \\
+COLMAP & lego & 87 & minfarthestpose & \underline{10.417} & \underline{0.112} & \textbf{87} & \textbf{24.421} & \textbf{0.056} & \textbf{0.887} \\
+VGGT & lego & 87 & farthestpose & \textbf{0.252} & \textbf{0.006} & \textbf{87} & 20.353 & 0.076 & 0.773 \\
+VGGT & lego & 87 & minfarthestpose & \textbf{0.252} & \textbf{0.006} & \textbf{87} & 20.367 & 0.076 & 0.774 \\
+\midrule
+COLMAP & ship & 87 & farthestpose & \underline{0.129} & \textbf{0.002} & 80 & 22.677 & 0.142 & \textbf{0.759} \\
+COLMAP & ship & 87 & minfarthestpose & \textbf{0.095} & \textbf{0.002} & \underline{81} & 22.511 & \underline{0.141} & \underline{0.758} \\
+VGGT & ship & 87 & farthestpose & 0.377 & \underline{0.008} & \textbf{87} & \textbf{22.859} & \textbf{0.130} & 0.748 \\
+VGGT & ship & 87 & minfarthestpose & 0.379 & \underline{0.008} & \textbf{87} & \underline{22.851} & \textbf{0.130} & 0.749 \\
+\midrule
+COLMAP & drums & 87 & farthestpose & \textbf{0.095} & \textbf{0.002} & 79 & \underline{22.801} & 0.089 & \underline{0.906} \\
+COLMAP & drums & 87 & minfarthestpose & 0.122 & \textbf{0.002} & \underline{81} & \textbf{22.948} & \underline{0.088} & \textbf{0.907} \\
+VGGT & drums & 87 & farthestpose & \underline{0.116} & \underline{0.003} & \textbf{87} & 20.899 & \textbf{0.085} & 0.869 \\
+VGGT & drums & 87 & minfarthestpose & \underline{0.116} & \underline{0.003} & \textbf{87} & 20.894 & \textbf{0.085} & 0.869 \\
+\bottomrule
+\end{tabular}
+\end{table}

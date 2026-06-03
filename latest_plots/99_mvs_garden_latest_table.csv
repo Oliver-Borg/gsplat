@@ -1,0 +1,3 @@
+choice,dataset,run_mvs,eval_rre,eval_rte
+VGGT,garden,False,,
+VGGT,garden,True,,

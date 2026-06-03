@@ -1,0 +1,4 @@
+choice,dataset,num_images,image_mode,eval_rre,eval_rte,num_aligned,psnr,lpips,ssim
+COLMAP,legotest,100,farthestpose,0.13622421026229858,0.001989190001040697,98,25.886816024780273,0.048084452748298645,0.9055451154708862
+VGGT,legotest,100,farthestpose,,,100,,,
+VGGT,legotest,100,minfarthestpose,,,100,,,

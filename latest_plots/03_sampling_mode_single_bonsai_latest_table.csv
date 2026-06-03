@@ -1,0 +1,14 @@
+choice,dataset,num_points,sampling_mode,near_filtering_strength,quality
+COLMAP,bonsai,80892,,,0.8176158311267887
+VGGT,bonsai,10000,imagefreqnovis,,0.5129291139848051
+VGGT,bonsai,10000,imagefreqvoxels,,0.4602058665794238
+VGGT,bonsai,10000,random,,0.5157401139973199
+VGGT,bonsai,50000,imagefreqnovis,,0.6240098137139809
+VGGT,bonsai,50000,imagefreqvoxels,,0.6024618773509962
+VGGT,bonsai,50000,random,,0.6275311362596205
+VGGT,bonsai,100000,imagefreqnovis,,0.654278704065096
+VGGT,bonsai,100000,imagefreqvoxels,,0.637716268044621
+VGGT,bonsai,100000,random,,0.6538809603727661
+VGGT,bonsai,500000,imagefreqnovis,,0.6470787428353342
+VGGT,bonsai,500000,imagefreqvoxels,,0.6330668774419516
+VGGT,bonsai,500000,random,,0.6498788553371764

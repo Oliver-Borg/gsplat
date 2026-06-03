@@ -1,0 +1,32 @@
+{
+    "seed": [
+        42
+    ],
+    "num_images": [
+        100
+    ],
+    "image_mode": [
+        "farthestpose"
+    ],
+    "sampling_mode": [
+        "random",
+        "imagefreqnovis",
+        "imagefreqvoxels"
+    ],
+    "num_points_per_image": [
+        100,
+        500,
+        1000,
+        5000
+    ],
+    "choice": [
+        "vggt",
+        "colmap"
+    ],
+    "use_gt_cams": [
+        true
+    ],
+    "gt_eval": true,
+    "num_steps": 7000,
+    "dataset": "bonsai"
+}

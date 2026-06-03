@@ -1,35 +1,35 @@
 \begin{table}[H]
-\caption{COLMAP versus VGGT with depth loss for different depth loss modes. (Indoor)}
+\caption{\ifdefined\customcaption \customcaption \else COLMAP versus VGGT with depth loss for different depth loss modes. (Indoor) \fi}
 \label{tab:05_depth_loss_mode_indoor}
 \centering
 \scriptsize
-\begin{tabular}{lllrrrrll}
+\begin{tabular}{lllrrrr}
 \toprule
-Choice & Dataset & Depth Loss Mode & RRE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Predicted Depth Abs Rel ↓ & Splatted Depth Abs Rel ↓ \\
+Choice & Dataset & Depth Loss Mode & RRE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ \\
 \midrule
-COLMAP & bonsai &  & \textbf{0.158} & \textbf{24.653} & \textbf{0.175} & \textbf{0.776} &  &  \\
-COLMAP & bonsai & points & \textbf{0.158} & \underline{24.098} & \underline{0.185} & \underline{0.768} &  &  \\
+COLMAP & bonsai &  & \textbf{0.158} & \textbf{24.653} & \textbf{0.175} & \textbf{0.776} \\
+COLMAP & bonsai & points & \textbf{0.158} & \underline{24.098} & \underline{0.185} & \underline{0.768} \\
 \midrule
-VGGT & bonsai &  & \textbf{0.722} & 17.423 & 0.399 & \underline{0.560} &  &  \\
-VGGT & bonsai & closer & \textbf{0.722} & \textbf{17.637} & \textbf{0.389} & \textbf{0.563} &  &  \\
-VGGT & bonsai & full & \textbf{0.722} & 17.473 & \underline{0.392} & 0.557 &  &  \\
-VGGT & bonsai & points & \textbf{0.722} & \underline{17.559} & 0.396 & 0.559 &  &  \\
+VGGT & bonsai &  & \textbf{0.722} & 17.423 & 0.399 & \underline{0.560} \\
+VGGT & bonsai & closer & \textbf{0.722} & \textbf{17.637} & \textbf{0.389} & \textbf{0.563} \\
+VGGT & bonsai & full & \textbf{0.722} & 17.473 & \underline{0.392} & 0.557 \\
+VGGT & bonsai & points & \textbf{0.722} & \underline{17.559} & 0.396 & 0.559 \\
 \midrule
-COLMAP & kitchen &  & \textbf{0.107} & \textbf{21.597} & \textbf{0.142} & \underline{0.497} &  &  \\
-COLMAP & kitchen & points & \textbf{0.107} & \underline{21.581} & \underline{0.148} & \textbf{0.512} &  &  \\
+COLMAP & kitchen &  & \textbf{0.107} & \textbf{21.597} & \textbf{0.142} & \underline{0.497} \\
+COLMAP & kitchen & points & \textbf{0.107} & \underline{21.581} & \underline{0.148} & \textbf{0.512} \\
 \midrule
-VGGT & kitchen &  & \textbf{0.339} & \underline{20.018} & \underline{0.176} & \underline{0.414} &  &  \\
-VGGT & kitchen & closer & \textbf{0.339} & \textbf{20.186} & \textbf{0.175} & \textbf{0.422} &  &  \\
-VGGT & kitchen & full & \textbf{0.339} & 19.044 & 0.210 & 0.400 &  &  \\
-VGGT & kitchen & points & \textbf{0.339} & 19.314 & 0.216 & \textbf{0.422} &  &  \\
+VGGT & kitchen &  & \textbf{0.339} & \underline{20.018} & \underline{0.176} & \underline{0.414} \\
+VGGT & kitchen & closer & \textbf{0.339} & \textbf{20.186} & \textbf{0.175} & \textbf{0.422} \\
+VGGT & kitchen & full & \textbf{0.339} & 19.044 & 0.210 & 0.400 \\
+VGGT & kitchen & points & \textbf{0.339} & 19.314 & 0.216 & \textbf{0.422} \\
 \midrule
-COLMAP & counter &  & \textbf{0.029} & \textbf{25.228} & \textbf{0.188} & \textbf{0.850} &  &  \\
-COLMAP & counter & points & \textbf{0.029} & \underline{24.923} & \underline{0.192} & \underline{0.845} &  &  \\
+COLMAP & counter &  & \textbf{0.029} & \textbf{25.228} & \textbf{0.188} & \textbf{0.850} \\
+COLMAP & counter & points & \textbf{0.029} & \underline{24.923} & \underline{0.192} & \underline{0.845} \\
 \midrule
-VGGT & counter &  & \textbf{0.343} & 20.807 & \underline{0.237} & 0.641 &  &  \\
-VGGT & counter & closer & \textbf{0.343} & \textbf{21.081} & \textbf{0.234} & \textbf{0.655} &  &  \\
-VGGT & counter & full & \textbf{0.343} & 20.773 & 0.246 & \textbf{0.655} &  &  \\
-VGGT & counter & points & \textbf{0.343} & \underline{20.874} & 0.247 & \underline{0.652} &  &  \\
+VGGT & counter &  & \textbf{0.343} & 20.807 & \underline{0.237} & 0.641 \\
+VGGT & counter & closer & \textbf{0.343} & \textbf{21.081} & \textbf{0.234} & \textbf{0.655} \\
+VGGT & counter & full & \textbf{0.343} & 20.773 & 0.246 & \textbf{0.655} \\
+VGGT & counter & points & \textbf{0.343} & \underline{20.874} & 0.247 & \underline{0.652} \\
 \bottomrule
 \end{tabular}
 \end{table}

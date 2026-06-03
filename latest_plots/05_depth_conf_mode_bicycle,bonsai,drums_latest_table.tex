@@ -1,5 +1,5 @@
 \begin{table}[H]
-\caption{VGGT with depth loss for different depth confidence modes. (Bicycle,Bonsai,Drums)}
+\caption{\ifdefined\customcaption \customcaption \else VGGT with depth loss for different depth confidence modes. (Bicycle,Bonsai,Drums) \fi}
 \label{tab:05_depth_conf_mode_bicycle,bonsai,drums}
 \centering
 \scriptsize
@@ -25,11 +25,14 @@ VGGT & bonsai & Sigmoid Shifted & full & 0.809 & \underline{0.018} & \underline{
 VGGT & bonsai & Standard & full & 0.803 & \textbf{0.017} & 17.554 & 0.394 & \underline{0.561} & 0.317 \\
 VGGT & bonsai & Standard Shifted & full & 0.820 & \underline{0.018} & \textbf{17.629} & \textbf{0.385} & \textbf{0.563} & \textbf{0.325} \\
 \midrule
-VGGT & drums &  &  & \underline{0.116} & \underline{0.003} & \textbf{20.899} & \textbf{0.085} & \textbf{0.869} & \textbf{0.749} \\
-VGGT & drums &  & full & \textbf{0.112} & \textbf{0.002} & 20.728 & 0.089 & \underline{0.866} & 0.742 \\
-VGGT & drums & Sigmoid & full & 0.118 & \textbf{0.002} & \underline{20.872} & \underline{0.088} & \textbf{0.869} & \underline{0.747} \\
+VGGT & drums &  &  & 0.116 & \underline{0.003} & 20.899 & \textbf{0.085} & 0.869 & 0.749 \\
+VGGT & drums &  & full & 0.112 & \textbf{0.002} & 20.728 & \underline{0.089} & 0.866 & 0.742 \\
+VGGT & drums & Scaled & full & \underline{0.107} & \textbf{0.002} & 20.856 & \textbf{0.085} & 0.869 & 0.748 \\
+VGGT & drums & Scaled Shifted & full & \textbf{0.106} & \textbf{0.002} & 20.855 & \textbf{0.085} & 0.869 & 0.748 \\
+VGGT & drums & Sigmoid & full & 0.118 & \textbf{0.002} & \underline{21.009} & 0.090 & \underline{0.872} & \underline{0.750} \\
+VGGT & drums & Sigmoid Shifted & full & 0.117 & \textbf{0.002} & \textbf{21.047} & 0.090 & \textbf{0.873} & \textbf{0.751} \\
 VGGT & drums & Standard & full & 0.168 & \textbf{0.002} & 20.293 & 0.150 & 0.858 & 0.691 \\
-VGGT & drums & Standard Shifted & full & 0.168 & \textbf{0.002} & 20.267 & 0.151 & 0.858 & 0.690 \\
+VGGT & drums & Standard Shifted & full & 0.169 & \textbf{0.002} & 20.374 & 0.151 & 0.858 & 0.693 \\
 \bottomrule
 \end{tabular}
 \end{table}

@@ -1,6 +1,10 @@
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1.0\linewidth]{Images/04-Results/PointClouds/03_sampling_mode_lego_latest_point_clouds.pdf}
-    \caption{A comparison of different VGGT point cloud sampling modes (Lego).}
+    \ifhighres
+        \includegraphics[width=1.0\linewidth]{Images/04-Results/PointClouds/03_sampling_mode_lego_latest_point_clouds.pdf}
+    \else
+        \includegraphics[width=1.0\linewidth]{Images/04-Results/PointClouds/03_sampling_mode_lego_latest_point_clouds.jpg}
+    \fi
+    \caption{\ifdefined\customcaption \customcaption \else A comparison of different VGGT point cloud sampling modes (Lego). \fi}
     \label{fig:pointclouds_03_sampling_mode_lego}
 \end{figure}

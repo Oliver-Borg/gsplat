@@ -1,0 +1,27 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else COLMAP versus VGGT with depth loss for different depth loss modes. (Outdoor) \fi}
+\label{tab:05_depth_loss_mode_pose_opt_outdoor}
+\centering
+\scriptsize
+\begin{tabular}{llllrrrrr}
+\toprule
+Choice & Dataset & Depth Loss Mode & Pose Opt & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ \\
+\midrule
+VGGT & bicycle &  &  & 0.716 & 0.015 & \underline{17.559} & 0.427 & 0.264 \\
+VGGT & bicycle &  & Pose Opt & \underline{0.489} & \underline{0.014} & 17.384 & \underline{0.338} & 0.268 \\
+VGGT & bicycle & closer & Pose Opt & 0.503 & \textbf{0.013} & 17.500 & \textbf{0.329} & 0.266 \\
+VGGT & bicycle & full &  & 0.716 & 0.015 & 17.449 & 0.433 & \underline{0.269} \\
+VGGT & bicycle & full & Pose Opt & \textbf{0.481} & \textbf{0.013} & \textbf{18.110} & 0.351 & \textbf{0.293} \\
+\midrule
+VGGT & garden &  &  & 0.373 & \underline{0.006} & 18.582 & 0.482 & 0.357 \\
+VGGT & garden &  & Pose Opt & 0.135 & \textbf{0.004} & 19.351 & \underline{0.338} & \underline{0.366} \\
+VGGT & garden & closer & Pose Opt & \underline{0.123} & \textbf{0.004} & \textbf{19.498} & \textbf{0.332} & 0.360 \\
+VGGT & garden & full & Pose Opt & \textbf{0.113} & \textbf{0.004} & \underline{19.402} & 0.346 & \textbf{0.371} \\
+\midrule
+VGGT & stump &  &  & 0.856 & 0.040 & \textbf{18.644} & 0.530 & \textbf{0.412} \\
+VGGT & stump &  & Pose Opt & \underline{0.777} & \textbf{0.035} & 18.294 & \textbf{0.492} & 0.398 \\
+VGGT & stump & closer & Pose Opt & \textbf{0.717} & \underline{0.037} & 18.349 & \underline{0.494} & 0.398 \\
+VGGT & stump & full & Pose Opt & 0.801 & 0.041 & \underline{18.406} & 0.515 & \underline{0.408} \\
+\bottomrule
+\end{tabular}
+\end{table}

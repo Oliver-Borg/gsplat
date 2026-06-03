@@ -1,0 +1,26 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else COLMAP versus VGGT for $100$ images with different image modes. (Outdoor) \fi}
+\label{tab:01_image_mode_dense_outdoor}
+\centering
+\scriptsize
+\begin{tabular}{llrlrrrrrr}
+\toprule
+Choice & Dataset & Num Images & Image Mode & Val RRE ↓ & Val RTE ↓ & Aligned Cameras ↑ & PSNR ↑ & LPIPS ↓ & SSIM ↑ \\
+\midrule
+COLMAP & bicycle & 100 & farthestpose & \underline{0.111} & \textbf{0.002} & \textbf{100} & \textbf{22.163} & 0.349 & \textbf{0.559} \\
+COLMAP & bicycle & 100 & minfarthestpose & \textbf{0.107} & \textbf{0.002} & \underline{99} & \underline{21.968} & \textbf{0.299} & \underline{0.523} \\
+VGGT & bicycle & 100 & farthestpose & 0.489 & \underline{0.014} & \textbf{100} & 17.384 & 0.338 & 0.268 \\
+VGGT & bicycle & 100 & minfarthestpose & 0.523 & 0.015 & \textbf{100} & 17.328 & \underline{0.333} & 0.272 \\
+\midrule
+COLMAP & garden & 100 & farthestpose & \textbf{0.049} & \textbf{0.001} & \textbf{100} & \textbf{22.130} & \underline{0.264} & \textbf{0.512} \\
+COLMAP & garden & 100 & minfarthestpose & \underline{0.052} & \textbf{0.001} & \textbf{100} & \underline{21.976} & \textbf{0.260} & \underline{0.507} \\
+VGGT & garden & 100 & farthestpose & 0.135 & \underline{0.004} & \textbf{100} & 19.351 & 0.338 & 0.366 \\
+VGGT & garden & 100 & minfarthestpose & 0.176 & \underline{0.004} & \textbf{100} & 18.967 & 0.352 & 0.357 \\
+\midrule
+COLMAP & stump & 100 & farthestpose & \textbf{0.034} & \textbf{0.001} & \textbf{100} & \textbf{24.833} & \textbf{0.340} & \textbf{0.696} \\
+COLMAP & stump & 100 & minfarthestpose & \underline{0.037} & \textbf{0.001} & \textbf{100} & \underline{24.259} & \underline{0.351} & \underline{0.670} \\
+VGGT & stump & 100 & farthestpose & 0.777 & \underline{0.035} & \textbf{100} & 18.294 & 0.492 & 0.398 \\
+VGGT & stump & 100 & minfarthestpose & 0.713 & 0.036 & \textbf{100} & 18.599 & 0.465 & 0.402 \\
+\bottomrule
+\end{tabular}
+\end{table}
