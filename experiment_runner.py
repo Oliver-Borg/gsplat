@@ -232,6 +232,7 @@ class Config:
     feature_extractor: FEATURE_EXTRACTOR = "aliked+sp"
     loss_multiplier: float = 1.0
     pose_loss_multiplier: float = 1.0
+    run_train_eval: bool = False
 
     raw_metrics: bool = False
     require_depth_metrics: bool = False
@@ -291,6 +292,7 @@ class Config:
         instance.loss_multiplier = data.get("loss_multiplier", cls.loss_multiplier)
         instance.pose_loss_multiplier = data.get("pose_loss_multiplier", cls.pose_loss_multiplier)
         instance.series_label_override = data.get("series_label_override", cls.series_label_override)
+        instance.run_train_eval = data.get("run_train_eval", cls.run_train_eval)
 
         # Loop over each key in data and print a warning if it is not a field on the Config dataclass
         for key in data.keys():
@@ -588,6 +590,10 @@ class Config:
         return f"{self.result_dir}/stats/val_step{self.num_steps - 1}.json"
 
     @property
+    def splatting_train_path(self):
+        return f"{self.result_dir}/stats/train_step{self.num_steps - 1}.json"
+
+    @property
     def splatting_metrics(self):
         if not os.path.exists(self.splatting_val_path):
             return {}
@@ -597,6 +603,10 @@ class Config:
     def splatting_time(self):
         if not os.path.exists(self.splatting_val_path):
             return 0
+        if self.run_train_eval:
+            if not os.path.exists(self.splatting_train_path):
+                return 0
+            return Path(self.splatting_train_path).stat().st_mtime
         return Path(self.splatting_val_path).stat().st_mtime
 
     @property
@@ -609,6 +619,9 @@ class Config:
     @property
     def force_splat(self):
         if not self.is_splatted:
+            return True
+
+        if self.splatting_time == 0:
             return True
 
         if self.pose_opt_module == "sgld":
@@ -645,12 +658,16 @@ class Config:
             return True
 
         if self.gt_eval and self.is_splatted:
-            if len(list(filter(lambda x: "14999" in x and "depth" not in x, os.listdir(self.renders_folder)))) < len(
-                self.dataset.eval_names
-            ):
+            if len(
+                list(filter(lambda x: x.startswith(f"val_step{self.num_steps - 1}_"), os.listdir(self.renders_folder)))
+            ) < len(self.dataset.eval_names):
                 return True
             if self.require_depth_metrics and len(
-                list(filter(lambda x: "14999" in x and "depth" in x, os.listdir(self.renders_folder)))
+                list(
+                    filter(
+                        lambda x: x.startswith(f"depth_val_step{self.num_steps - 1}_"), os.listdir(self.renders_folder)
+                    )
+                )
             ) < len(self.dataset.eval_names):
                 return True
 
@@ -1056,6 +1073,9 @@ class Config:
             command.append("--pose_loss_multiplier")
             command.append(str(self.pose_loss_multiplier))
 
+        if self.run_train_eval:
+            command.append("--run_train_eval")
+
         env = os.environ.copy()
         if libstdc_path:
             env["LD_PRELOAD"] = libstdc_path
@@ -1106,6 +1126,9 @@ class PlotConfig:
     split_choice: bool = False
     max_render_cols: int = 3
     show_depth: bool = False
+    show_differences: bool = False
+    show_train_renders: bool = False
+    show_zoom: bool = True
     show_gt: bool = True
     apply_jitter: bool = False
     render_nums: list[int] = field(default_factory=lambda: [0])
@@ -1324,6 +1347,7 @@ class Experiment:
         include_title: bool = False,
         split_dataset: Literal["none", "individual", "collection"] = "none",
         naming_labels: list[str] = [],
+        no_heavy_plots: bool = False,
     ):
         if self.plot_args is None:
             return
@@ -1354,7 +1378,7 @@ class Experiment:
         # Collect render and camera folders from first dataset (or all if needed)
         render_folders = None
         camera_folders = None
-        if self.render_filter_override != {}:
+        if self.render_filter_override != {} and not no_heavy_plots:
             render_folders = []
             camera_folders = []
             for dn in dataset_names:
@@ -1374,7 +1398,7 @@ class Experiment:
             folders=all_folders if all_folders else None,
             render_folders=render_folders,
             camera_folders=camera_folders,
-            create_pcp=create_pcp,
+            create_pcp=create_pcp and not no_heavy_plots,
             val_steps=self.val_steps,
             title=self.description,
             metric_keys=self.plot_args.metric_keys,
@@ -1388,13 +1412,16 @@ class Experiment:
             split_dataset=split_dataset,
             max_render_cols=self.plot_args.max_render_cols,
             show_depth=self.plot_args.show_depth,
+            show_differences=self.plot_args.show_differences,
+            show_train_renders=self.plot_args.show_train_renders,
+            show_zoom=self.plot_args.show_zoom,
             show_gt=self.plot_args.show_gt,
             apply_jitter=self.plot_args.apply_jitter,
             render_nums=self.plot_args.render_nums,
             shared_colors=self.plot_args.shared_colors,
             plot_raw=self.plot_args.raw_metrics,
-            make_camera_plot=self.plot_args.make_camera_plot,
-            make_pcd_plot=self.plot_args.make_pcd_plot,
+            make_camera_plot=self.plot_args.make_camera_plot and not no_heavy_plots,
+            make_pcd_plot=self.plot_args.make_pcd_plot and not no_heavy_plots,
             stack_datasets_horizontally=self.plot_args.horizontal_datasets,
             only_best_rows=self.plot_args.only_best_rows,
         )
@@ -1623,10 +1650,70 @@ experiments = [
             raw_metrics=False,
             metric_keys=["eval_rre", "eval_rte", "num_aligned", "psnr", "lpips", "ssim"],
             horizontal_datasets=False,
+            make_camera_plot=False,
+        ),
+        render_filter_override={
+            "num_images": [10, 20, 30, 40, 100],
+            "seed": [42],
+            "pose_opt": [True],
+        },
+        priority="medium",
+    ),
+    Experiment(
+        "num_images_minfarthest",
+        1,
+        "COLMAP versus VGGT over various number of images with minfarthestpose.",
+        {
+            "seed": [42],
+            "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+            "sampling_mode": ["random"],
+            "pose_opt": [True],
+            "gt_eval": [True],
+            "image_mode": ["minfarthestpose"],
+            "choice": ["vggt", "colmap"],
+        },
+        PlotConfig(
+            x_axis="num_images",
+            split_param="image_mode",
+            max_render_cols=5,
+            show_gt=False,
+            raw_metrics=False,
+            metric_keys=["eval_rre", "eval_rte", "num_aligned", "psnr", "lpips", "ssim"],
+            horizontal_datasets=False,
             make_camera_plot=True,
         ),
         render_filter_override={
             "num_images": [10, 20, 30, 40, 100],
+            "seed": [42],
+            "pose_opt": [True],
+        },
+        priority="medium",
+    ),
+    Experiment(
+        "image_mode_dense",
+        1,
+        "COLMAP versus VGGT for $100$ images with different image modes.",
+        {
+            "seed": [42],
+            "num_images": [100],
+            "sampling_mode": ["random"],
+            "pose_opt": [True],
+            "gt_eval": [True],
+            "image_mode": ["farthestpose", "minfarthestpose"],
+            "choice": ["vggt", "colmap"],
+        },
+        PlotConfig(
+            x_axis="num_images",
+            split_param="image_mode",
+            max_render_cols=5,
+            show_gt=False,
+            raw_metrics=False,
+            metric_keys=["eval_rre", "eval_rte", "num_aligned", "psnr", "lpips", "ssim"],
+            horizontal_datasets=False,
+            make_camera_plot=True,
+        ),
+        render_filter_override={
+            "num_images": [100],
             "seed": [42],
             "pose_opt": [True],
         },
@@ -1744,7 +1831,7 @@ experiments = [
         {
             "seed": [42],
             "num_images": [100],
-            "sampling_mode": ["voxels", "random", "confidence", "ba", "imagefps"],
+            "sampling_mode": ["ba", "confidence", "random", "voxels", "imagefps"],
             # "sampling_mode": ["imagefps"],
             # "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 2500, 5000, 10000],
             "num_points_per_image": [10, 50, 100, 500, 1000, 5000, 10000],
@@ -1760,12 +1847,13 @@ experiments = [
             metric_keys=["rre", "rte", "psnr", "lpips", "ssim", "quality"],
             raw_metrics=False,
             make_pcd_plot=True,
-            max_render_cols=4,
+            max_render_cols=3,
             horizontal_datasets=False,
         ),
         render_filter_override={
             "seed": [42],
             "num_points_per_image": [1000],
+            # "sampling_mode": ["random"],
         },
         priority="high",
     ),
@@ -1940,6 +2028,36 @@ experiments = [
         render_filter_override={
             "seed": [42],
             "sampling_mode": ["random"],
+            "num_images": [100],
+        },
+    ),
+    Experiment(
+        "lego_symmetry",
+        99,
+        "Symmetry breaks COLMAP cameras.",
+        {
+            "seed": [42],  #
+            "num_images": [100],
+            "sampling_mode": ["random"],
+            "num_points_per_image": [1000],
+            "run_train_eval": True,
+            "gt_eval": True,
+            "choice": ["colmap"],
+            "num_steps": [7000],
+        },
+        PlotConfig(
+            x_axis="",
+            split_param="run_train_eval",
+            metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "quality"],
+            raw_metrics=True,
+            show_train_renders=True,
+            show_differences=True,
+            show_zoom=False,
+            render_nums=[48],
+        ),
+        val_steps=[7000],
+        render_filter_override={
+            "seed": [42],
             "num_images": [100],
         },
     ),
@@ -3694,6 +3812,7 @@ if __name__ == "__main__":
                                 dataset_names,
                                 split_dataset="collection",
                                 naming_labels=args.dataset_collections,
+                                no_heavy_plots=True,
                             )
                         for collection in args.dataset_collections:
                             experiment.plot(
