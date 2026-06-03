@@ -51,6 +51,8 @@ from concurrent.futures import ThreadPoolExecutor
 class Config:
     # Disable viewer
     disable_viewer: bool = False
+    # Run evaluation on the training set
+    run_train_eval: bool = False
     # Path to the .pt files. If provide, it will skip training and run evaluation only.
     ckpt: Optional[List[str]] = None
     # Name of compression strategy to use
@@ -1240,6 +1242,8 @@ class Runner:
             # eval the full set
             if step in [i - 1 for i in cfg.eval_steps]:
                 self.eval(step)
+                if cfg.run_train_eval:
+                    self.eval(step, stage="train")
                 self.render_traj(step)
 
             # run compression
@@ -1303,16 +1307,28 @@ class Runner:
         world_size = self.world_size
         align_scaling_factor = 1.0
 
-        if len(self.common_names) >= 3 and cfg.gt_train_data_dir is not None and not cfg.eval_opt:
+        if stage == "train":
+            dataset = self.trainset
+            parser = self.train_parser
+        else:
+            dataset = self.valset
+            parser = self.eval_parser
+
+        render_dir = f"{cfg.result_dir}/renders"
+        stats_dir = f"{cfg.result_dir}/stats"
+        os.makedirs(render_dir, exist_ok=True)
+        os.makedirs(stats_dir, exist_ok=True)
+
+        if stage != "train" and len(self.common_names) >= 3 and cfg.gt_train_data_dir is not None and not cfg.eval_opt:
             matrix, align_metrics = self.get_dataset_alignment_matrix(return_metrics=True)
             align_scaling_factor = align_metrics["alignment_scale"]
-            self.valset.transform_matrix = matrix
+            dataset.transform_matrix = matrix
         else:
             matrix, align_metrics = None, {}
-        transform_scaling_factor = float(np.linalg.norm(self.eval_parser.transform[0, :3]))
+        transform_scaling_factor = float(np.linalg.norm(parser.transform[0, :3]))
 
         valloader = torch.utils.data.DataLoader(
-            self.valset, batch_size=1, shuffle=False, num_workers=1
+            dataset, batch_size=1, shuffle=False, num_workers=1
         )
         ellipse_time = 0
         metrics = defaultdict(list)
@@ -1327,8 +1343,13 @@ class Runner:
                 camtoworlds: torch.tensor = data["camtoworld"].to(device)
                 image_ids = data["image_id"].to(device)
 
-                if cfg.eval_pose_opt_steps > 0 and cfg.eval_opt:
-                    camtoworlds = self.eval_pose_adjust(camtoworlds, image_ids)
+                if stage == "train":
+                    if cfg.pose_opt:
+                        camtoworlds = self.pose_adjust(camtoworlds, image_ids)
+                else:
+                    if cfg.eval_pose_opt_steps > 0 and cfg.eval_opt:
+                        camtoworlds = self.eval_pose_adjust(camtoworlds, image_ids)
+
                 Ks = data["K"].to(device)
                 pixels = data["image"].to(device) / 255.0
                 masks = data["mask"].to(device) if "mask" in data else None
@@ -1447,7 +1468,7 @@ class Runner:
                     depth_canvas = torch.cat(depth_canvas_list, dim=2).squeeze(0).cpu().numpy()
                     depth_canvas = (depth_canvas * 255).astype(np.uint8)
                     for prefix, extension in itertools.product(["", "depth_"], ["png", "jpg"]):
-                        for p in Path(self.render_dir).glob(f"{prefix}{stage}_step{step}_{i:04d}*.{extension}"):
+                        for p in Path(render_dir).glob(f"{prefix}{stage}_step{step}_{i:04d}*.{extension}"):
                             if p.is_file():
                                 p.unlink()
                     extension = (
@@ -1455,12 +1476,12 @@ class Runner:
                     )
                     executor.submit(
                         imageio.imwrite,
-                        f"{self.render_dir}/{stage}_step{step}_{i:04d}.{extension}",
+                        f"{render_dir}/{stage}_step{step}_{i:04d}.{extension}",
                         canvas
                     )
                     executor.submit(
                         imageio.imwrite,
-                        f"{self.render_dir}/depth_{stage}_step{step}_{i:04d}.{extension}",
+                        f"{render_dir}/depth_{stage}_step{step}_{i:04d}.{extension}",
                         depth_canvas
                     )
 
@@ -1480,7 +1501,7 @@ class Runner:
             depth_l1_str = f"Depth L1: {stats['depth_l1']:.4f} " if "depth_l1" in stats else ""
             if cfg.use_bilateral_grid:
                 print(
-                    f"PSNR: {stats['psnr']:.3f}, SSIM: {stats['ssim']:.4f}, LPIPS: {stats['lpips']:.3f} "
+                    f"[{stage}] PSNR: {stats['psnr']:.3f}, SSIM: {stats['ssim']:.4f}, LPIPS: {stats['lpips']:.3f} "
                     f"CC_PSNR: {stats['cc_psnr']:.3f}, CC_SSIM: {stats['cc_ssim']:.4f}, CC_LPIPS: {stats['cc_lpips']:.3f} "
                     f"{depth_l1_str}"
                     f"Time: {stats['ellipse_time']:.3f}s/image "
@@ -1488,13 +1509,13 @@ class Runner:
                 )
             else:
                 print(
-                    f"PSNR: {stats['psnr']:.3f}, SSIM: {stats['ssim']:.4f}, LPIPS: {stats['lpips']:.3f} "
+                    f"[{stage}] PSNR: {stats['psnr']:.3f}, SSIM: {stats['ssim']:.4f}, LPIPS: {stats['lpips']:.3f} "
                     f"{depth_l1_str}"
                     f"Time: {stats['ellipse_time']:.3f}s/image "
                     f"Number of GS: {stats['num_GS']}"
                 )
             # save stats as json
-            with open(f"{self.stats_dir}/{stage}_step{step:04d}.json", "w") as f:
+            with open(f"{stats_dir}/{stage}_step{step:04d}.json", "w") as f:
                 json.dump(stats, f)
             # save stats to tensorboard
             for k, v in stats.items():
