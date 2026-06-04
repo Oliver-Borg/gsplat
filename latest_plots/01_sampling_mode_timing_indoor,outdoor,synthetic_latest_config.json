@@ -1,0 +1,31 @@
+{
+    "seed": [
+        42
+    ],
+    "num_images": [
+        100
+    ],
+    "sampling_mode": [
+        "ba",
+        "confidence",
+        "random",
+        "voxels",
+        "imagefps"
+    ],
+    "num_points_per_image": [
+        10,
+        50,
+        100,
+        500,
+        1000
+    ],
+    "choice": [
+        "vggt"
+    ],
+    "use_gt_cams": false,
+    "gt_eval": true,
+    "enable_timing": [
+        true
+    ],
+    "dataset": "bonsai"
+}

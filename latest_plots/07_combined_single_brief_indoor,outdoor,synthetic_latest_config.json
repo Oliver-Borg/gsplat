@@ -1,0 +1,35 @@
+{
+    "seed": [
+        42
+    ],
+    "num_images": [
+        100
+    ],
+    "sampling_mode": [
+        "confidence"
+    ],
+    "num_points_per_image": [
+        1000
+    ],
+    "pose_opt": [
+        true
+    ],
+    "gt_eval": true,
+    "choice": [
+        "colmap",
+        "vggt",
+        "combined"
+    ],
+    "pcd_src": [
+        "colmap",
+        "vggt",
+        "both"
+    ],
+    "camera_src": [
+        "colmap"
+    ],
+    "num_steps": [
+        15000
+    ],
+    "dataset": "bonsai"
+}

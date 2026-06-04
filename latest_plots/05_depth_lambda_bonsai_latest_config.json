@@ -9,15 +9,13 @@
         "random"
     ],
     "depth_loss_mode": [
-        "disabled",
-        "points"
+        "closer"
     ],
     "pose_opt": [
         true
     ],
     "choice": [
-        "vggt",
-        "colmap"
+        "vggt"
     ],
     "depth_lambda": [
         0.0,
@@ -27,9 +25,7 @@
         10
     ],
     "depth_conf_mode": [
-        "disabled",
-        "standard",
-        "sigmoid"
+        "disabled"
     ],
     "dataset": "bonsai"
 }

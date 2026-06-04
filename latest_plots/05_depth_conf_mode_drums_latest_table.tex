@@ -1,0 +1,20 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else VGGT with depth loss for different depth confidence modes. (Drums) \fi}
+\label{tab:05_depth_conf_mode_drums}
+\centering
+\scriptsize
+\begin{tabular}{lllrrrrrr}
+\toprule
+Choice & Depth Conf Mode & Depth Loss Mode & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+VGGT &  &  & 0.116 & \underline{0.003} & 20.899 & \textbf{0.085} & 0.869 & 0.749 \\
+VGGT &  & full & 0.112 & \textbf{0.002} & 20.728 & \underline{0.089} & 0.866 & 0.742 \\
+VGGT & Scaled & full & \underline{0.107} & \textbf{0.002} & 20.856 & \textbf{0.085} & 0.869 & 0.748 \\
+VGGT & Scaled Shifted & full & \textbf{0.106} & \textbf{0.002} & 20.855 & \textbf{0.085} & 0.869 & 0.748 \\
+VGGT & Sigmoid & full & 0.118 & \textbf{0.002} & \underline{21.009} & 0.090 & \underline{0.872} & \underline{0.750} \\
+VGGT & Sigmoid Shifted & full & 0.117 & \textbf{0.002} & \textbf{21.047} & 0.090 & \textbf{0.873} & \textbf{0.751} \\
+VGGT & Standard & full & 0.168 & \textbf{0.002} & 20.293 & 0.150 & 0.858 & 0.691 \\
+VGGT & Standard Shifted & full & 0.169 & \textbf{0.002} & 20.374 & 0.151 & 0.858 & 0.693 \\
+\bottomrule
+\end{tabular}
+\end{table}

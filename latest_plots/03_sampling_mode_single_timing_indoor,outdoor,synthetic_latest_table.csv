@@ -1,0 +1,13 @@
+choice,dataset_collection,num_points,sampling_mode,processing_time
+VGGT,indoor,10000,imagefreqnovis,17.332515239715576
+VGGT,indoor,10000,imagefreqvoxels,32.94863224029541
+VGGT,indoor,10000,random,3.4879848957061768
+VGGT,indoor,50000,imagefreqnovis,13.117534160614014
+VGGT,indoor,50000,imagefreqvoxels,38.55559158325195
+VGGT,indoor,50000,random,4.084478735923767
+VGGT,indoor,100000,imagefreqnovis,13.08041000366211
+VGGT,indoor,100000,imagefreqvoxels,36.87989687919617
+VGGT,indoor,100000,random,4.480559706687927
+VGGT,indoor,500000,imagefreqnovis,18.36259889602661
+VGGT,indoor,500000,imagefreqvoxels,87.76791739463806
+VGGT,indoor,500000,random,9.203691005706787

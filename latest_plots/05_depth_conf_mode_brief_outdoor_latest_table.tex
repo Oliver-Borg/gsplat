@@ -1,0 +1,29 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else VGGT with depth loss for different depth confidence modes. (Outdoor) \fi}
+\label{tab:05_depth_conf_mode_brief_outdoor}
+\centering
+\scriptsize
+\begin{tabular}{llllrrrrrr}
+\toprule
+Choice & Dataset & Depth Conf Mode & Depth Loss Mode & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+VGGT & bicycle &  & full & \textbf{0.481} & \textbf{0.013} & \textbf{18.110} & 0.351 & \textbf{0.293} & \textbf{0.196} \\
+VGGT & bicycle & Scaled Shifted & full & 0.497 & \textbf{0.013} & 17.422 & \textbf{0.345} & 0.269 & 0.173 \\
+VGGT & bicycle & Sigmoid & full & \underline{0.484} & \textbf{0.013} & \underline{18.088} & 0.352 & \underline{0.292} & \underline{0.195} \\
+VGGT & bicycle & Sigmoid Shifted & full & 0.495 & \textbf{0.013} & 17.418 & \underline{0.346} & 0.270 & 0.173 \\
+VGGT & bicycle & Standard Shifted & full & 0.495 & \textbf{0.013} & 17.421 & \underline{0.346} & 0.270 & 0.173 \\
+\midrule
+VGGT & garden &  & full & 0.113 & \textbf{0.004} & 19.402 & 0.346 & 0.371 & 0.269 \\
+VGGT & garden & Scaled Shifted & full & 0.117 & \textbf{0.004} & \underline{19.630} & \textbf{0.333} & 0.371 & \underline{0.282} \\
+VGGT & garden & Sigmoid & full & \textbf{0.109} & \textbf{0.004} & 19.448 & 0.348 & \textbf{0.374} & 0.270 \\
+VGGT & garden & Sigmoid Shifted & full & \underline{0.111} & \textbf{0.004} & \textbf{19.645} & \textbf{0.333} & \underline{0.373} & \textbf{0.283} \\
+VGGT & garden & Standard Shifted & full & \textbf{0.109} & \textbf{0.004} & 19.600 & \underline{0.335} & \textbf{0.374} & 0.281 \\
+\midrule
+VGGT & stump &  & full & 0.801 & \underline{0.041} & \textbf{18.406} & 0.515 & \textbf{0.408} & 0.168 \\
+VGGT & stump & Scaled Shifted & full & 0.774 & \textbf{0.035} & 18.288 & \textbf{0.500} & 0.400 & \textbf{0.171} \\
+VGGT & stump & Sigmoid & full & 0.788 & \underline{0.041} & \underline{18.397} & 0.517 & \textbf{0.408} & 0.167 \\
+VGGT & stump & Sigmoid Shifted & full & \underline{0.771} & \textbf{0.035} & 18.278 & \underline{0.502} & 0.400 & \underline{0.169} \\
+VGGT & stump & Standard Shifted & full & \textbf{0.769} & \textbf{0.035} & 18.303 & 0.504 & \underline{0.401} & \underline{0.169} \\
+\bottomrule
+\end{tabular}
+\end{table}

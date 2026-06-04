@@ -1,5 +1,5 @@
 \begin{table}[H]
-\caption{COLMAP versus VGGT for $20$ images. (Indoor)}
+\caption{\ifdefined\customcaption \customcaption \else COLMAP versus VGGT for $20$ images. (Indoor) \fi}
 \label{tab:01_num_images_sparse_indoor}
 \centering
 \scriptsize
@@ -7,14 +7,14 @@
 \toprule
 Choice & Dataset & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Aligned Cameras ↑ \\
 \midrule
-COLMAP & bonsai & \textbf{0.365} & \textbf{0.010} & \underline{12.658} & \underline{0.572} & \underline{0.365} & \underline{9} \\
-VGGT & bonsai & \underline{0.872} & \underline{0.106} & \textbf{16.017} & \textbf{0.489} & \textbf{0.489} & \textbf{20} \\
+COLMAP & bonsai & \underline{9.121} & \underline{2.011} & \underline{10.349} & \underline{0.799} & \underline{0.302} & \underline{13} \\
+VGGT & bonsai & \textbf{0.984} & \textbf{0.095} & \textbf{16.707} & \textbf{0.437} & \textbf{0.523} & \textbf{20} \\
 \midrule
-COLMAP & kitchen & \textbf{0.239} & \textbf{0.009} & \underline{16.503} & \underline{0.423} & \textbf{0.417} & \underline{12} \\
-VGGT & kitchen & \underline{0.305} & \underline{0.029} & \textbf{17.384} & \textbf{0.343} & \underline{0.396} & \textbf{20} \\
+COLMAP & kitchen & \textbf{0.167} & \textbf{0.008} & \underline{16.582} & \underline{0.418} & \underline{0.379} & \underline{11} \\
+VGGT & kitchen & \underline{0.270} & \underline{0.028} & \textbf{18.177} & \textbf{0.292} & \textbf{0.423} & \textbf{20} \\
 \midrule
-COLMAP & counter & \textbf{0.116} & \textbf{0.001} & \underline{9.049} & \underline{0.806} & \underline{0.385} & \underline{3} \\
-VGGT & counter & \underline{0.487} & \underline{0.036} & \textbf{16.006} & \textbf{0.454} & \textbf{0.467} & \textbf{20} \\
+COLMAP & counter & \textbf{0.121} & \textbf{0.004} & \underline{16.780} & \underline{0.511} & \textbf{0.571} & \underline{13} \\
+VGGT & counter & \underline{0.381} & \underline{0.043} & \textbf{17.897} & \textbf{0.366} & \underline{0.533} & \textbf{20} \\
 \bottomrule
 \end{tabular}
 \end{table}

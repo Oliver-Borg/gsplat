@@ -1,15 +1,20 @@
 \begin{table}[H]
-\caption{COLMAP versus VGGT with depth loss for different depth confidence modes. (Bicycle)}
+\caption{\ifdefined\customcaption \customcaption \else VGGT with depth loss for different depth confidence modes. (Bicycle) \fi}
 \label{tab:05_depth_conf_mode_bicycle}
-\small
-\begin{tabular}{llrrrrll}
+\centering
+\scriptsize
+\begin{tabular}{lllrrrrrr}
 \toprule
-Choice & Depth Conf Mode & RRE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Predicted Depth Abs Rel ↓ & Splatted Depth Abs Rel ↓ \\
+Choice & Depth Conf Mode & Depth Loss Mode & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
 \midrule
-COLMAP &  & \textbf{0.099} & \textbf{21.660} & \underline{0.392} & \textbf{0.505} &  &  \\
-VGGT &  & \underline{0.716} & 17.500 & \textbf{0.329} & 0.266 &  &  \\
-VGGT & sigmoid & \underline{0.716} & 17.498 & \textbf{0.329} & \underline{0.270} &  &  \\
-VGGT & standard & \underline{0.716} & \underline{17.509} & \textbf{0.329} & 0.266 &  &  \\
+VGGT &  &  & 0.489 & 0.014 & 17.384 & \textbf{0.338} & 0.268 & 0.176 \\
+VGGT &  & full & \textbf{0.481} & \underline{0.013} & \textbf{18.110} & 0.351 & \textbf{0.293} & \underline{0.196} \\
+VGGT & Scaled & full & \underline{0.484} & \textbf{0.012} & 18.078 & 0.348 & \underline{0.292} & \textbf{0.197} \\
+VGGT & Scaled Shifted & full & 0.497 & \underline{0.013} & 17.422 & \underline{0.345} & 0.269 & 0.173 \\
+VGGT & Sigmoid & full & \underline{0.484} & \underline{0.013} & \underline{18.088} & 0.352 & \underline{0.292} & 0.195 \\
+VGGT & Sigmoid Shifted & full & 0.495 & \underline{0.013} & 17.418 & 0.346 & 0.270 & 0.173 \\
+VGGT & Standard & full & \textbf{0.481} & \textbf{0.012} & 18.087 & 0.353 & \underline{0.292} & 0.194 \\
+VGGT & Standard Shifted & full & 0.495 & \underline{0.013} & 17.421 & 0.346 & 0.270 & 0.173 \\
 \bottomrule
 \end{tabular}
 \end{table}

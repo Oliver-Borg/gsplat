@@ -1,15 +1,20 @@
 \begin{table}[H]
-\caption{COLMAP versus VGGT with depth loss for different depth confidence modes. (Bonsai)}
+\caption{\ifdefined\customcaption \customcaption \else VGGT with depth loss for different depth confidence modes. (Bonsai) \fi}
 \label{tab:05_depth_conf_mode_bonsai}
-\small
-\begin{tabular}{llrrrrll}
+\centering
+\scriptsize
+\begin{tabular}{lllrrrrrr}
 \toprule
-Choice & Depth Conf Mode & RRE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Predicted Depth Abs Rel ↓ & Splatted Depth Abs Rel ↓ \\
+Choice & Depth Conf Mode & Depth Loss Mode & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
 \midrule
-COLMAP &  & \textbf{0.158} & \textbf{24.098} & \textbf{0.185} & \textbf{0.768} &  &  \\
-VGGT &  & \underline{0.722} & \underline{17.637} & \underline{0.389} & \underline{0.563} &  &  \\
-VGGT & sigmoid & \underline{0.722} & 17.599 & \underline{0.389} & 0.561 &  &  \\
-VGGT & standard & \underline{0.722} & 17.510 & 0.400 & 0.554 &  &  \\
+VGGT &  &  & \textbf{0.789} & 0.022 & 17.423 & 0.399 & 0.560 & 0.310 \\
+VGGT &  & full & \underline{0.794} & \textbf{0.017} & 17.473 & 0.392 & 0.557 & 0.314 \\
+VGGT & Scaled & full & 0.811 & \textbf{0.017} & 17.499 & 0.388 & 0.559 & 0.318 \\
+VGGT & Scaled Shifted & full & 0.801 & 0.019 & 17.525 & 0.389 & \underline{0.561} & 0.319 \\
+VGGT & Sigmoid & full & 0.800 & \textbf{0.017} & 17.494 & 0.392 & 0.559 & 0.315 \\
+VGGT & Sigmoid Shifted & full & 0.809 & \underline{0.018} & \underline{17.571} & \underline{0.387} & \underline{0.561} & \underline{0.321} \\
+VGGT & Standard & full & 0.803 & \textbf{0.017} & 17.554 & 0.394 & \underline{0.561} & 0.317 \\
+VGGT & Standard Shifted & full & 0.820 & \underline{0.018} & \textbf{17.629} & \textbf{0.385} & \textbf{0.563} & \textbf{0.325} \\
 \bottomrule
 \end{tabular}
 \end{table}

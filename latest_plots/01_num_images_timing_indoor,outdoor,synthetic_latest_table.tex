@@ -1,0 +1,72 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else COLMAP versus VGGT over various number of images (Indoor,Outdoor,Synthetic) \fi}
+\label{tab:01_num_images_timing_indoor,outdoor,synthetic}
+\centering
+\scriptsize
+\begin{tabular}{llrrr}
+\toprule
+Choice & Dataset Collection & Num Images & Inference Time ↓ & Peak Memory ↓ \\
+\midrule
+COLMAP & indoor & 10 & 2.018 & \textbf{7172.000} \\
+COLMAP & indoor & 20 & 7.851 & \underline{7589.333} \\
+COLMAP & indoor & 30 & 25.960 & 7653.333 \\
+COLMAP & indoor & 40 & 28.544 & 7713.333 \\
+COLMAP & indoor & 50 & 46.305 & 8089.333 \\
+COLMAP & indoor & 60 & 65.241 & 8153.333 \\
+COLMAP & indoor & 70 & 88.487 & 8343.333 \\
+COLMAP & indoor & 80 & 118.230 & 8403.333 \\
+COLMAP & indoor & 90 & 154.178 & 8467.333 \\
+COLMAP & indoor & 100 & 202.512 & 8527.333 \\
+VGGT & indoor & 10 & \textbf{0.543} & 9829.324 \\
+VGGT & indoor & 20 & \underline{1.343} & 12677.693 \\
+VGGT & indoor & 30 & 2.258 & 15754.249 \\
+VGGT & indoor & 40 & 3.366 & 18836.046 \\
+VGGT & indoor & 50 & 4.599 & 21895.230 \\
+VGGT & indoor & 60 & 6.108 & 24972.382 \\
+VGGT & indoor & 70 & 7.779 & 28060.174 \\
+VGGT & indoor & 80 & 9.591 & 31121.441 \\
+VGGT & indoor & 90 & 11.604 & 34199.013 \\
+VGGT & indoor & 100 & 13.761 & 37285.010 \\
+\midrule
+COLMAP & outdoor & 10 &  &  \\
+COLMAP & outdoor & 20 & 6.037 & 9215.000 \\
+COLMAP & outdoor & 30 & 12.297 & \textbf{5292.000} \\
+COLMAP & outdoor & 40 & 17.709 & \underline{6704.000} \\
+COLMAP & outdoor & 50 & 18.924 & 8888.667 \\
+COLMAP & outdoor & 60 & 27.873 & 8952.667 \\
+COLMAP & outdoor & 70 & 36.548 & 9012.667 \\
+COLMAP & outdoor & 80 & 48.157 & 9080.000 \\
+COLMAP & outdoor & 90 & 57.356 & 9144.000 \\
+COLMAP & outdoor & 100 & 80.445 & 9204.000 \\
+VGGT & outdoor & 10 & \textbf{1.272} & 8341.993 \\
+VGGT & outdoor & 20 & \underline{1.351} & 12677.693 \\
+VGGT & outdoor & 30 & 3.705 & 14167.687 \\
+VGGT & outdoor & 40 & 3.347 & 18836.046 \\
+VGGT & outdoor & 50 & 4.639 & 21895.350 \\
+VGGT & outdoor & 60 & 6.107 & 24973.366 \\
+VGGT & outdoor & 70 & 7.798 & 28060.354 \\
+VGGT & outdoor & 80 & 9.607 & 31121.441 \\
+VGGT & outdoor & 90 & 11.615 & 34199.013 \\
+VGGT & outdoor & 100 & 13.758 & 37285.010 \\
+\midrule
+COLMAP & synthetic & 10 &  &  \\
+COLMAP & synthetic & 20 & 2.050 & 6468.000 \\
+COLMAP & synthetic & 30 & 12.085 & \underline{6271.000} \\
+COLMAP & synthetic & 40 & 17.496 & 6418.000 \\
+COLMAP & synthetic & 50 & 17.994 & 6652.000 \\
+COLMAP & synthetic & 60 & 20.317 & 6716.000 \\
+COLMAP & synthetic & 70 & 31.719 & 6776.000 \\
+COLMAP & synthetic & 80 & 37.851 & 6836.000 \\
+COLMAP & synthetic & 87 & 47.754 & \textbf{4846.333} \\
+VGGT & synthetic & 10 & \textbf{0.544} & 9829.324 \\
+VGGT & synthetic & 20 & \underline{1.345} & 12677.693 \\
+VGGT & synthetic & 30 & 2.255 & 15754.249 \\
+VGGT & synthetic & 40 & 3.353 & 18836.046 \\
+VGGT & synthetic & 50 & 4.624 & 21895.350 \\
+VGGT & synthetic & 60 & 6.098 & 24973.366 \\
+VGGT & synthetic & 70 & 7.776 & 28060.354 \\
+VGGT & synthetic & 80 & 9.584 & 31121.441 \\
+VGGT & synthetic & 87 & 10.994 & 33275.596 \\
+\bottomrule
+\end{tabular}
+\end{table}

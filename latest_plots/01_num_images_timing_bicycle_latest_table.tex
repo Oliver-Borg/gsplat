@@ -1,0 +1,22 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else COLMAP versus VGGT over various number of images (Bicycle) \fi}
+\label{tab:01_num_images_timing_bicycle}
+\centering
+\scriptsize
+\begin{tabular}{lrrr}
+\toprule
+Choice & Num Images & Inference Time ↓ & Peak Memory ↓ \\
+\midrule
+VGGT & 10 & \textbf{0.547} & \underline{9829.324} \\
+VGGT & 20 & \underline{1.363} & 12677.693 \\
+VGGT & 30 & 5.119 & \textbf{8594.125} \\
+VGGT & 40 & 9.081 & 10135.023 \\
+VGGT & 50 & 7.624 & 14620.675 \\
+VGGT & 60 & 10.245 & 16191.683 \\
+VGGT & 70 & 14.349 & 17765.177 \\
+VGGT & 80 & 18.497 & 19336.720 \\
+VGGT & 90 & 22.125 & 20907.507 \\
+VGGT & 100 & 29.893 & 22480.505 \\
+\bottomrule
+\end{tabular}
+\end{table}

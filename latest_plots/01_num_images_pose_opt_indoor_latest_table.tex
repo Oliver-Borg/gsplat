@@ -1,0 +1,134 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else COLMAP versus VGGT over various number of images with pose optimization (Indoor) \fi}
+\label{tab:01_num_images_pose_opt_indoor}
+\centering
+\scriptsize
+\begin{tabular}{llrlrrrrrr}
+\toprule
+Choice & Dataset & Num Images & Pose Opt & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP & bonsai & 10 &  &  &  &  &  &  &  \\
+COLMAP & bonsai & 10 & Pose Opt &  &  &  &  &  &  \\
+COLMAP & bonsai & 20 &  & 28.534 & 0.459 & 10.349 & 0.799 & 0.302 & -0.219 \\
+COLMAP & bonsai & 20 & Pose Opt & 9.324 & 0.439 & 11.028 & 0.785 & 0.348 & -0.170 \\
+COLMAP & bonsai & 30 &  & 0.896 & 0.024 & 17.493 & 0.410 & 0.566 & 0.308 \\
+COLMAP & bonsai & 30 & Pose Opt & 0.492 & 0.013 & 18.592 & 0.339 & 0.597 & 0.391 \\
+COLMAP & bonsai & 40 &  & 0.509 & 0.055 & 20.848 & 0.231 & 0.633 & 0.520 \\
+COLMAP & bonsai & 40 & Pose Opt & 0.353 & 0.053 & 22.964 & 0.186 & 0.727 & 0.642 \\
+COLMAP & bonsai & 50 &  & 0.218 & \underline{0.003} & 21.697 & 0.203 & 0.633 & 0.553 \\
+COLMAP & bonsai & 50 & Pose Opt & 0.085 & \textbf{0.001} & 25.054 & 0.169 & 0.792 & 0.729 \\
+COLMAP & bonsai & 60 &  & 0.219 & 0.004 & 22.169 & 0.190 & 0.665 & 0.589 \\
+COLMAP & bonsai & 60 & Pose Opt & 0.081 & \textbf{0.001} & 25.263 & 0.158 & 0.798 & 0.744 \\
+COLMAP & bonsai & 70 &  & \underline{0.053} & \textbf{0.001} & \textbf{28.404} & 0.148 & \textbf{0.895} & \textbf{0.864} \\
+COLMAP & bonsai & 70 & Pose Opt & 0.088 & \textbf{0.001} & 24.858 & 0.156 & 0.778 & 0.726 \\
+COLMAP & bonsai & 80 &  & \textbf{0.052} & \textbf{0.001} & \underline{28.026} & 0.146 & \underline{0.884} & \underline{0.852} \\
+COLMAP & bonsai & 80 & Pose Opt & 0.086 & \textbf{0.001} & 25.034 & 0.153 & 0.785 & 0.734 \\
+COLMAP & bonsai & 90 &  & 0.069 & \textbf{0.001} & 26.791 & \underline{0.144} & 0.837 & 0.803 \\
+COLMAP & bonsai & 90 & Pose Opt & 0.079 & \textbf{0.001} & 25.546 & 0.146 & 0.799 & 0.756 \\
+COLMAP & bonsai & 100 &  & 0.059 & \textbf{0.001} & 27.826 & \textbf{0.140} & 0.866 & 0.842 \\
+COLMAP & bonsai & 100 & Pose Opt & 0.078 & \textbf{0.001} & 25.544 & \underline{0.144} & 0.795 & 0.756 \\
+VGGT & bonsai & 10 &  & 1.292 & 0.026 & 14.680 & 0.529 & 0.463 & 0.122 \\
+VGGT & bonsai & 10 & Pose Opt & 1.254 & 0.026 & 14.943 & 0.521 & 0.474 & 0.139 \\
+VGGT & bonsai & 20 &  & 0.984 & 0.022 & 16.707 & 0.437 & 0.523 & 0.252 \\
+VGGT & bonsai & 20 & Pose Opt & 0.886 & 0.021 & 16.856 & 0.427 & 0.525 & 0.262 \\
+VGGT & bonsai & 30 &  & 0.888 & 0.020 & 17.341 & 0.414 & 0.541 & 0.288 \\
+VGGT & bonsai & 30 & Pose Opt & 0.711 & 0.019 & 17.659 & 0.392 & 0.550 & 0.313 \\
+VGGT & bonsai & 40 &  & 0.729 & 0.023 & 17.725 & 0.389 & 0.557 & 0.320 \\
+VGGT & bonsai & 40 & Pose Opt & 0.663 & 0.020 & 17.825 & 0.367 & 0.559 & 0.337 \\
+VGGT & bonsai & 50 &  & 0.801 & 0.023 & 17.975 & 0.391 & 0.566 & 0.329 \\
+VGGT & bonsai & 50 & Pose Opt & 0.828 & 0.019 & 17.599 & 0.377 & 0.556 & 0.325 \\
+VGGT & bonsai & 60 &  & 0.888 & 0.024 & 17.901 & 0.391 & 0.568 & 0.329 \\
+VGGT & bonsai & 60 & Pose Opt & 0.776 & 0.020 & 17.887 & 0.355 & 0.567 & 0.350 \\
+VGGT & bonsai & 70 &  & 0.806 & 0.024 & 18.379 & 0.375 & 0.581 & 0.355 \\
+VGGT & bonsai & 70 & Pose Opt & 0.749 & 0.020 & 18.051 & 0.345 & 0.573 & 0.363 \\
+VGGT & bonsai & 80 &  & 0.821 & 0.023 & 18.279 & 0.379 & 0.584 & 0.352 \\
+VGGT & bonsai & 80 & Pose Opt & 0.701 & 0.018 & 18.434 & 0.329 & 0.581 & 0.385 \\
+VGGT & bonsai & 90 &  & 0.734 & 0.023 & 18.626 & 0.372 & 0.592 & 0.368 \\
+VGGT & bonsai & 90 & Pose Opt & 0.726 & 0.018 & 18.539 & 0.329 & 0.585 & 0.388 \\
+VGGT & bonsai & 100 &  & 0.731 & 0.024 & 18.664 & 0.374 & 0.595 & 0.369 \\
+VGGT & bonsai & 100 & Pose Opt & 0.693 & 0.019 & 18.461 & 0.336 & 0.582 & 0.382 \\
+\midrule
+COLMAP & kitchen & 10 &  &  &  &  &  &  &  \\
+COLMAP & kitchen & 10 & Pose Opt &  &  &  &  &  &  \\
+COLMAP & kitchen & 20 &  & 0.167 & \underline{0.002} & 16.582 & 0.418 & 0.379 & 0.177 \\
+COLMAP & kitchen & 20 & Pose Opt & 0.207 & 0.003 & 17.055 & 0.420 & 0.403 & 0.199 \\
+COLMAP & kitchen & 30 &  & 0.130 & \textbf{0.001} & 20.038 & 0.214 & 0.446 & 0.406 \\
+COLMAP & kitchen & 30 & Pose Opt & 0.088 & \textbf{0.001} & 20.694 & 0.210 & 0.523 & 0.466 \\
+COLMAP & kitchen & 40 &  & 0.114 & \textbf{0.001} & 20.505 & 0.184 & 0.461 & 0.442 \\
+COLMAP & kitchen & 40 & Pose Opt & \underline{0.087} & \textbf{0.001} & 21.184 & 0.171 & 0.515 & 0.495 \\
+COLMAP & kitchen & 50 &  & 0.099 & \textbf{0.001} & 20.856 & 0.182 & 0.492 & 0.468 \\
+COLMAP & kitchen & 50 & Pose Opt & \textbf{0.086} & \textbf{0.001} & 21.276 & 0.177 & 0.510 & 0.489 \\
+COLMAP & kitchen & 60 &  & 0.096 & \textbf{0.001} & 21.691 & 0.149 & 0.515 & 0.517 \\
+COLMAP & kitchen & 60 & Pose Opt & \textbf{0.086} & \textbf{0.001} & 21.833 & 0.148 & 0.513 & 0.520 \\
+COLMAP & kitchen & 70 &  & 0.098 & \textbf{0.001} & 21.534 & 0.148 & 0.507 & 0.511 \\
+COLMAP & kitchen & 70 & Pose Opt & \textbf{0.086} & \textbf{0.001} & 21.791 & 0.143 & 0.531 & 0.532 \\
+COLMAP & kitchen & 80 &  & 0.099 & \textbf{0.001} & 21.852 & 0.140 & 0.511 & 0.524 \\
+COLMAP & kitchen & 80 & Pose Opt & 0.089 & \textbf{0.001} & \underline{22.103} & \underline{0.135} & 0.534 & \underline{0.544} \\
+COLMAP & kitchen & 90 &  & 0.101 & \textbf{0.001} & 21.455 & 0.142 & 0.483 & 0.498 \\
+COLMAP & kitchen & 90 & Pose Opt & 0.089 & \textbf{0.001} & 21.827 & 0.136 & 0.518 & 0.530 \\
+COLMAP & kitchen & 100 &  & 0.101 & \textbf{0.001} & 21.721 & 0.137 & 0.498 & 0.515 \\
+COLMAP & kitchen & 100 & Pose Opt & \textbf{0.086} & \textbf{0.001} & \textbf{22.443} & \textbf{0.127} & \underline{0.551} & \textbf{0.566} \\
+VGGT & kitchen & 10 &  & 0.295 & 0.007 & 16.428 & 0.372 & 0.384 & 0.206 \\
+VGGT & kitchen & 10 & Pose Opt & 0.252 & 0.006 & 16.238 & 0.373 & 0.374 & 0.195 \\
+VGGT & kitchen & 20 &  & 0.270 & 0.006 & 18.177 & 0.292 & 0.423 & 0.310 \\
+VGGT & kitchen & 20 & Pose Opt & 0.210 & 0.006 & 18.296 & 0.252 & 0.435 & 0.344 \\
+VGGT & kitchen & 30 &  & 0.278 & 0.006 & 18.528 & 0.271 & 0.443 & 0.341 \\
+VGGT & kitchen & 30 & Pose Opt & 0.126 & 0.005 & 19.223 & 0.218 & 0.484 & 0.410 \\
+VGGT & kitchen & 40 &  & 0.261 & 0.006 & 18.898 & 0.260 & 0.436 & 0.351 \\
+VGGT & kitchen & 40 & Pose Opt & 0.135 & 0.005 & 19.421 & 0.204 & 0.481 & 0.421 \\
+VGGT & kitchen & 50 &  & 0.296 & 0.006 & 19.449 & 0.244 & 0.462 & 0.386 \\
+VGGT & kitchen & 50 & Pose Opt & 0.170 & 0.005 & 20.239 & 0.178 & 0.517 & 0.474 \\
+VGGT & kitchen & 60 &  & 0.324 & 0.006 & 19.611 & 0.239 & 0.455 & 0.388 \\
+VGGT & kitchen & 60 & Pose Opt & 0.185 & 0.005 & 20.159 & 0.174 & 0.489 & 0.458 \\
+VGGT & kitchen & 70 &  & 0.323 & 0.006 & 19.388 & 0.247 & 0.449 & 0.375 \\
+VGGT & kitchen & 70 & Pose Opt & 0.186 & 0.004 & 20.208 & 0.170 & 0.487 & 0.460 \\
+VGGT & kitchen & 80 &  & 0.284 & 0.006 & 20.374 & 0.232 & 0.486 & 0.425 \\
+VGGT & kitchen & 80 & Pose Opt & 0.198 & 0.005 & 20.380 & 0.170 & 0.506 & 0.475 \\
+VGGT & kitchen & 90 &  & 0.321 & 0.006 & 20.005 & 0.238 & 0.470 & 0.405 \\
+VGGT & kitchen & 90 & Pose Opt & 0.175 & 0.004 & 21.101 & 0.162 & \textbf{0.552} & 0.520 \\
+VGGT & kitchen & 100 &  & 0.283 & 0.006 & 20.490 & 0.230 & 0.485 & 0.428 \\
+VGGT & kitchen & 100 & Pose Opt & 0.159 & 0.005 & 21.233 & 0.156 & 0.531 & 0.514 \\
+\midrule
+COLMAP & counter & 10 &  & 0.148 & 0.002 & 12.353 & 0.733 & 0.449 & -0.055 \\
+COLMAP & counter & 10 & Pose Opt & 4.289 & 0.027 & 11.732 & 0.785 & 0.447 & -0.100 \\
+COLMAP & counter & 20 &  & 0.121 & \underline{0.001} & 16.780 & 0.511 & 0.571 & 0.236 \\
+COLMAP & counter & 20 & Pose Opt & 0.422 & 0.006 & 15.710 & 0.547 & 0.525 & 0.167 \\
+COLMAP & counter & 30 &  & 0.028 & \textbf{0.000} & 22.416 & 0.292 & 0.769 & 0.591 \\
+COLMAP & counter & 30 & Pose Opt & 0.066 & \underline{0.001} & 21.888 & 0.298 & 0.733 & 0.556 \\
+COLMAP & counter & 40 &  & 0.023 & \textbf{0.000} & 24.299 & 0.230 & 0.819 & 0.693 \\
+COLMAP & counter & 40 & Pose Opt & 0.028 & \textbf{0.000} & 24.603 & 0.229 & 0.827 & 0.704 \\
+COLMAP & counter & 50 &  & 0.026 & \textbf{0.000} & 25.205 & 0.201 & 0.843 & 0.742 \\
+COLMAP & counter & 50 & Pose Opt & 0.028 & \textbf{0.000} & 24.986 & 0.205 & 0.831 & 0.728 \\
+COLMAP & counter & 60 &  & 0.020 & \textbf{0.000} & 26.158 & 0.189 & 0.866 & 0.781 \\
+COLMAP & counter & 60 & Pose Opt & 0.020 & \textbf{0.000} & 26.182 & 0.188 & 0.863 & 0.780 \\
+COLMAP & counter & 70 &  & \underline{0.019} & \textbf{0.000} & 26.725 & 0.182 & 0.878 & 0.802 \\
+COLMAP & counter & 70 & Pose Opt & 0.023 & \textbf{0.000} & 26.339 & 0.183 & 0.866 & 0.787 \\
+COLMAP & counter & 80 &  & \textbf{0.016} & \textbf{0.000} & 27.376 & 0.169 & 0.888 & 0.828 \\
+COLMAP & counter & 80 & Pose Opt & 0.023 & \textbf{0.000} & 27.184 & 0.171 & 0.879 & 0.818 \\
+COLMAP & counter & 90 &  & \underline{0.019} & \textbf{0.000} & \underline{27.591} & 0.166 & \underline{0.890} & \underline{0.835} \\
+COLMAP & counter & 90 & Pose Opt & 0.023 & \textbf{0.000} & 27.338 & 0.166 & 0.881 & 0.826 \\
+COLMAP & counter & 100 &  & \textbf{0.016} & \textbf{0.000} & \textbf{27.935} & \underline{0.165} & \textbf{0.896} & \textbf{0.846} \\
+COLMAP & counter & 100 & Pose Opt & 0.021 & \textbf{0.000} & \underline{27.591} & \textbf{0.164} & 0.884 & 0.833 \\
+VGGT & counter & 10 &  & 0.675 & 0.008 & 15.224 & 0.470 & 0.459 & 0.167 \\
+VGGT & counter & 10 & Pose Opt & 0.620 & 0.008 & 15.313 & 0.466 & 0.464 & 0.174 \\
+VGGT & counter & 20 &  & 0.381 & 0.010 & 17.897 & 0.366 & 0.533 & 0.324 \\
+VGGT & counter & 20 & Pose Opt & 0.320 & 0.008 & 18.486 & 0.327 & 0.555 & 0.371 \\
+VGGT & counter & 30 &  & 0.348 & 0.009 & 18.839 & 0.314 & 0.561 & 0.389 \\
+VGGT & counter & 30 & Pose Opt & 0.297 & 0.007 & 19.332 & 0.269 & 0.579 & 0.437 \\
+VGGT & counter & 40 &  & 0.380 & 0.008 & 19.154 & 0.294 & 0.574 & 0.415 \\
+VGGT & counter & 40 & Pose Opt & 0.227 & 0.006 & 21.022 & 0.215 & 0.641 & 0.538 \\
+VGGT & counter & 50 &  & 0.393 & 0.008 & 19.037 & 0.302 & 0.578 & 0.411 \\
+VGGT & counter & 50 & Pose Opt & 0.248 & 0.006 & 20.259 & 0.229 & 0.608 & 0.496 \\
+VGGT & counter & 60 &  & 0.379 & 0.007 & 19.745 & 0.285 & 0.598 & 0.446 \\
+VGGT & counter & 60 & Pose Opt & 0.242 & 0.006 & 20.555 & 0.222 & 0.617 & 0.511 \\
+VGGT & counter & 70 &  & 0.356 & 0.008 & 20.209 & 0.279 & 0.616 & 0.469 \\
+VGGT & counter & 70 & Pose Opt & 0.254 & 0.006 & 20.852 & 0.215 & 0.628 & 0.527 \\
+VGGT & counter & 80 &  & 0.359 & 0.007 & 20.539 & 0.275 & 0.628 & 0.484 \\
+VGGT & counter & 80 & Pose Opt & 0.251 & 0.006 & 21.122 & 0.211 & 0.635 & 0.538 \\
+VGGT & counter & 90 &  & 0.396 & 0.007 & 19.928 & 0.294 & 0.614 & 0.453 \\
+VGGT & counter & 90 & Pose Opt & 0.273 & 0.006 & 20.601 & 0.223 & 0.623 & 0.514 \\
+VGGT & counter & 100 &  & 0.387 & 0.008 & 20.050 & 0.291 & 0.618 & 0.459 \\
+VGGT & counter & 100 & Pose Opt & 0.278 & 0.006 & 20.581 & 0.226 & 0.623 & 0.512 \\
+\bottomrule
+\end{tabular}
+\end{table}

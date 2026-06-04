@@ -1,0 +1,26 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else Combining cameras and point clouds from VGGT and COLMAP. (Outdoor) \fi}
+\label{tab:07_combined_single_brief_outdoor}
+\centering
+\scriptsize
+\begin{tabular}{lllllrrrrrr}
+\toprule
+Choice & Dataset & Camera Src & Pcd Src & Sampling Mode & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP & bicycle & COLMAP Cams & Both Pcds & confidence & \textbf{0.102} & \textbf{0.002} & \textbf{22.175} & \textbf{0.257} & \textbf{0.564} & \textbf{0.488} \\
+COLMAP & bicycle & COLMAP Cams & VGGT Pcd & confidence & \underline{0.108} & \underline{0.003} & 21.798 & \underline{0.302} & 0.541 & \underline{0.440} \\
+COLMAP & bicycle &  &  &  & 0.111 & \textbf{0.002} & \underline{22.163} & 0.349 & \underline{0.559} & 0.428 \\
+VGGT & bicycle &  &  & confidence & 0.566 & 0.013 & 17.475 & 0.379 & 0.279 & 0.159 \\
+\midrule
+COLMAP & garden & COLMAP Cams & Both Pcds & confidence & \underline{0.051} & \textbf{0.001} & \textbf{22.130} & \textbf{0.247} & \textbf{0.514} & \textbf{0.465} \\
+COLMAP & garden & COLMAP Cams & VGGT Pcd & confidence & 0.054 & \textbf{0.001} & \underline{21.216} & 0.323 & 0.467 & 0.373 \\
+COLMAP & garden &  &  &  & \textbf{0.049} & \textbf{0.001} & \textbf{22.130} & \underline{0.264} & \underline{0.512} & \underline{0.453} \\
+VGGT & garden &  &  & confidence & 0.138 & \underline{0.004} & 19.474 & 0.383 & 0.367 & 0.245 \\
+\midrule
+COLMAP & stump & COLMAP Cams & Both Pcds & confidence & \textbf{0.027} & \textbf{0.001} & \textbf{26.019} & \textbf{0.265} & \textbf{0.745} & \textbf{0.660} \\
+COLMAP & stump & COLMAP Cams & VGGT Pcd & confidence & 0.203 & \underline{0.004} & \underline{25.103} & \underline{0.307} & \underline{0.713} & \underline{0.599} \\
+COLMAP & stump &  &  &  & \underline{0.034} & \textbf{0.001} & 24.833 & 0.340 & 0.696 & 0.563 \\
+VGGT & stump &  &  & confidence & 0.867 & 0.036 & 18.347 & 0.516 & 0.403 & 0.163 \\
+\bottomrule
+\end{tabular}
+\end{table}

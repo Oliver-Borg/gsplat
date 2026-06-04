@@ -1,0 +1,29 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else VGGT with depth loss for different depth confidence modes. (Indoor) \fi}
+\label{tab:05_depth_conf_mode_brief_indoor}
+\centering
+\scriptsize
+\begin{tabular}{llllrrrrrr}
+\toprule
+Choice & Dataset & Depth Conf Mode & Depth Loss Mode & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+VGGT & bonsai &  & full & \textbf{0.794} & \textbf{0.017} & 17.473 & 0.392 & 0.557 & 0.314 \\
+VGGT & bonsai & Scaled Shifted & full & 0.801 & 0.019 & 17.525 & 0.389 & \underline{0.561} & 0.319 \\
+VGGT & bonsai & Sigmoid & full & \underline{0.800} & \textbf{0.017} & 17.494 & 0.392 & 0.559 & 0.315 \\
+VGGT & bonsai & Sigmoid Shifted & full & 0.809 & \underline{0.018} & \underline{17.571} & \underline{0.387} & \underline{0.561} & \underline{0.321} \\
+VGGT & bonsai & Standard Shifted & full & 0.820 & \underline{0.018} & \textbf{17.629} & \textbf{0.385} & \textbf{0.563} & \textbf{0.325} \\
+\midrule
+VGGT & kitchen &  & full & \underline{0.222} & \textbf{0.005} & 19.044 & 0.210 & 0.400 & 0.363 \\
+VGGT & kitchen & Scaled Shifted & full & \textbf{0.216} & \textbf{0.005} & 19.931 & \textbf{0.177} & 0.411 & 0.407 \\
+VGGT & kitchen & Sigmoid & full & 0.237 & \textbf{0.005} & 19.319 & 0.216 & 0.423 & 0.378 \\
+VGGT & kitchen & Sigmoid Shifted & full & 0.243 & \underline{0.006} & \textbf{20.376} & \underline{0.184} & \textbf{0.458} & \textbf{0.438} \\
+VGGT & kitchen & Standard Shifted & full & 0.242 & \underline{0.006} & \underline{20.012} & 0.196 & \underline{0.453} & \underline{0.421} \\
+\midrule
+VGGT & counter &  & full & \underline{0.247} & \textbf{0.006} & 20.773 & 0.246 & 0.655 & 0.522 \\
+VGGT & counter & Scaled Shifted & full & \textbf{0.246} & \textbf{0.006} & 21.082 & \textbf{0.238} & 0.657 & \textbf{0.534} \\
+VGGT & counter & Sigmoid & full & \underline{0.247} & \textbf{0.006} & 20.796 & 0.249 & 0.655 & 0.521 \\
+VGGT & counter & Sigmoid Shifted & full & 0.248 & \textbf{0.006} & \textbf{21.131} & \underline{0.244} & \underline{0.660} & \underline{0.533} \\
+VGGT & counter & Standard Shifted & full & 0.257 & \textbf{0.006} & \underline{21.096} & 0.258 & \textbf{0.662} & 0.525 \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,0 +1,29 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else VGGT with depth loss for different depth confidence modes. (Indoor,Outdoor,Synthetic) \fi}
+\label{tab:05_depth_conf_mode_brief_indoor,outdoor,synthetic}
+\centering
+\scriptsize
+\begin{tabular}{llllrrrrrr}
+\toprule
+Choice & Dataset Collection & Depth Conf Mode & Depth Loss Mode & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+VGGT & indoor &  & full & \textbf{0.421} & \underline{0.010} & 19.097 & 0.283 & 0.537 & 0.400 \\
+VGGT & indoor & Scaled Shifted & full & \textbf{0.421} & \underline{0.010} & 19.513 & \textbf{0.268} & 0.543 & 0.420 \\
+VGGT & indoor & Sigmoid & full & \underline{0.428} & \textbf{0.009} & 19.203 & 0.286 & 0.546 & 0.405 \\
+VGGT & indoor & Sigmoid Shifted & full & 0.433 & \underline{0.010} & \textbf{19.693} & \underline{0.272} & \textbf{0.560} & \textbf{0.431} \\
+VGGT & indoor & Standard Shifted & full & 0.440 & \underline{0.010} & \underline{19.579} & 0.280 & \underline{0.559} & \underline{0.423} \\
+\midrule
+VGGT & outdoor &  & full & 0.465 & 0.019 & \underline{18.639} & 0.404 & \underline{0.357} & \textbf{0.211} \\
+VGGT & outdoor & Scaled Shifted & full & 0.462 & \underline{0.018} & 18.447 & \textbf{0.392} & 0.347 & \underline{0.209} \\
+VGGT & outdoor & Sigmoid & full & 0.460 & 0.019 & \textbf{18.644} & 0.405 & \textbf{0.358} & \textbf{0.211} \\
+VGGT & outdoor & Sigmoid Shifted & full & \underline{0.459} & \textbf{0.017} & 18.447 & \underline{0.394} & 0.348 & 0.208 \\
+VGGT & outdoor & Standard Shifted & full & \textbf{0.458} & \textbf{0.017} & 18.441 & 0.395 & 0.348 & 0.208 \\
+\midrule
+VGGT & synthetic &  & full & \underline{0.233} & \textbf{0.005} & 22.064 & \underline{0.097} & 0.814 & 0.732 \\
+VGGT & synthetic & Scaled Shifted & full & \textbf{0.232} & \textbf{0.005} & 22.053 & \textbf{0.093} & 0.813 & 0.733 \\
+VGGT & synthetic & Sigmoid & full & 0.235 & \textbf{0.005} & 22.325 & 0.100 & \underline{0.821} & \underline{0.738} \\
+VGGT & synthetic & Sigmoid Shifted & full & 0.235 & \textbf{0.005} & \underline{22.327} & 0.099 & \underline{0.821} & \textbf{0.739} \\
+VGGT & synthetic & Standard Shifted & full & 0.255 & \textbf{0.005} & \textbf{22.552} & 0.139 & \textbf{0.826} & 0.721 \\
+\bottomrule
+\end{tabular}
+\end{table}

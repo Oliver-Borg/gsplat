@@ -1,0 +1,122 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else COLMAP versus VGGT over various number of images with pose optimization (Synthetic) \fi}
+\label{tab:01_num_images_pose_opt_synthetic}
+\centering
+\scriptsize
+\begin{tabular}{llrlrrrrrr}
+\toprule
+Choice & Dataset & Num Images & Pose Opt & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP & lego & 10 &  &  &  &  &  &  &  \\
+COLMAP & lego & 10 & Pose Opt &  &  &  &  &  &  \\
+COLMAP & lego & 20 &  &  &  &  &  &  &  \\
+COLMAP & lego & 20 & Pose Opt &  &  &  &  &  &  \\
+COLMAP & lego & 30 &  & 21.291 & 0.387 & 16.011 & 0.259 & 0.620 & 0.406 \\
+COLMAP & lego & 30 & Pose Opt & 21.109 & 0.379 & 16.640 & 0.240 & 0.669 & 0.458 \\
+COLMAP & lego & 40 &  & 0.532 & 0.008 & 19.836 & 0.099 & 0.781 & 0.669 \\
+COLMAP & lego & 40 & Pose Opt & 0.342 & 0.006 & 20.579 & 0.085 & 0.805 & 0.706 \\
+COLMAP & lego & 50 &  & 37.208 & 0.529 & 9.492 & 0.614 & 0.495 & -0.007 \\
+COLMAP & lego & 50 & Pose Opt & 37.085 & 0.530 & 9.463 & 0.614 & 0.496 & -0.007 \\
+COLMAP & lego & 60 &  & 42.755 & 0.550 & 9.513 & 0.604 & 0.486 & -0.006 \\
+COLMAP & lego & 60 & Pose Opt & 42.823 & 0.553 & 9.542 & 0.605 & 0.487 & -0.006 \\
+COLMAP & lego & 70 &  & 13.015 & 0.138 & 22.653 & 0.069 & 0.852 & 0.782 \\
+COLMAP & lego & 70 & Pose Opt & 12.945 & 0.138 & \underline{23.031} & \underline{0.064} & \underline{0.860} & \underline{0.796} \\
+COLMAP & lego & 80 &  & 12.490 & 0.203 & 11.246 & 0.459 & 0.579 & 0.170 \\
+COLMAP & lego & 80 & Pose Opt & 12.499 & 0.203 & 11.223 & 0.458 & 0.579 & 0.170 \\
+COLMAP & lego & 87 &  & 10.479 & 0.117 & 22.787 & 0.066 & 0.851 & 0.785 \\
+COLMAP & lego & 87 & Pose Opt & 10.429 & 0.116 & \textbf{23.416} & \textbf{0.061} & \textbf{0.866} & \textbf{0.809} \\
+VGGT & lego & 10 &  & 0.822 & 0.010 & 15.198 & 0.235 & 0.686 & 0.444 \\
+VGGT & lego & 10 & Pose Opt & 0.711 & 0.009 & 15.184 & 0.233 & 0.685 & 0.444 \\
+VGGT & lego & 20 &  & 0.501 & \textbf{0.004} & 17.200 & 0.151 & 0.722 & 0.554 \\
+VGGT & lego & 20 & Pose Opt & 0.396 & 0.006 & 17.187 & 0.136 & 0.724 & 0.564 \\
+VGGT & lego & 30 &  & 0.259 & \underline{0.005} & 20.692 & 0.097 & 0.785 & 0.689 \\
+VGGT & lego & 30 & Pose Opt & 0.253 & 0.007 & 19.937 & 0.074 & 0.780 & 0.686 \\
+VGGT & lego & 40 &  & 0.320 & \underline{0.005} & 21.033 & 0.089 & 0.787 & 0.701 \\
+VGGT & lego & 40 & Pose Opt & 0.273 & 0.006 & 20.608 & 0.068 & 0.782 & 0.703 \\
+VGGT & lego & 50 &  & 0.292 & \underline{0.005} & 21.419 & 0.089 & 0.795 & 0.713 \\
+VGGT & lego & 50 & Pose Opt & \textbf{0.185} & 0.006 & 21.456 & \underline{0.064} & 0.803 & 0.734 \\
+VGGT & lego & 60 &  & 0.339 & \underline{0.005} & 21.654 & 0.088 & 0.801 & 0.722 \\
+VGGT & lego & 60 & Pose Opt & \underline{0.249} & 0.006 & 20.830 & 0.069 & 0.785 & 0.708 \\
+VGGT & lego & 70 &  & 0.339 & \underline{0.005} & 19.952 & 0.101 & 0.767 & 0.662 \\
+VGGT & lego & 70 & Pose Opt & 0.291 & 0.006 & 19.618 & 0.084 & 0.763 & 0.664 \\
+VGGT & lego & 80 &  & 0.327 & \underline{0.005} & 20.841 & 0.096 & 0.778 & 0.688 \\
+VGGT & lego & 80 & Pose Opt & 0.282 & 0.006 & 19.877 & 0.080 & 0.760 & 0.670 \\
+VGGT & lego & 87 &  & 0.297 & \underline{0.005} & 20.573 & 0.095 & 0.774 & 0.681 \\
+VGGT & lego & 87 & Pose Opt & 0.252 & 0.006 & 20.353 & 0.076 & 0.773 & 0.689 \\
+\midrule
+COLMAP & ship & 10 &  &  &  &  &  &  &  \\
+COLMAP & ship & 10 & Pose Opt &  &  &  &  &  &  \\
+COLMAP & ship & 20 &  & 0.541 & 0.006 & 14.546 & 0.500 & 0.474 & 0.144 \\
+COLMAP & ship & 20 & Pose Opt & 0.955 & 0.015 & 15.517 & 0.481 & 0.497 & 0.187 \\
+COLMAP & ship & 30 &  & 3.238 & 0.021 & 16.889 & 0.408 & 0.600 & 0.318 \\
+COLMAP & ship & 30 & Pose Opt & 0.763 & 0.012 & 17.583 & 0.362 & 0.605 & 0.363 \\
+COLMAP & ship & 40 &  & 1.015 & 0.021 & 17.970 & 0.330 & 0.627 & 0.402 \\
+COLMAP & ship & 40 & Pose Opt & 0.499 & 0.013 & 19.100 & 0.292 & 0.657 & 0.464 \\
+COLMAP & ship & 50 &  & 0.238 & 0.005 & 21.459 & 0.204 & 0.712 & 0.595 \\
+COLMAP & ship & 50 & Pose Opt & \underline{0.094} & \textbf{0.002} & 22.348 & 0.193 & 0.734 & 0.630 \\
+COLMAP & ship & 60 &  & 0.328 & 0.005 & 22.031 & 0.161 & 0.741 & 0.648 \\
+COLMAP & ship & 60 & Pose Opt & 0.146 & \underline{0.003} & 22.472 & 0.152 & 0.752 & 0.669 \\
+COLMAP & ship & 70 &  & 0.211 & 0.004 & 22.921 & 0.147 & 0.763 & 0.687 \\
+COLMAP & ship & 70 & Pose Opt & 0.123 & \textbf{0.002} & 23.043 & 0.140 & 0.768 & 0.696 \\
+COLMAP & ship & 80 &  & 0.149 & \underline{0.003} & \textbf{23.951} & 0.137 & \underline{0.790} & \underline{0.727} \\
+COLMAP & ship & 80 & Pose Opt & \textbf{0.085} & \textbf{0.002} & \underline{23.869} & 0.133 & \textbf{0.794} & \textbf{0.730} \\
+COLMAP & ship & 87 &  & 0.243 & 0.004 & 22.401 & 0.149 & 0.751 & 0.668 \\
+COLMAP & ship & 87 & Pose Opt & 0.129 & \textbf{0.002} & 22.677 & 0.142 & 0.759 & 0.683 \\
+VGGT & ship & 10 &  & 0.772 & 0.010 & 18.910 & 0.261 & 0.642 & 0.470 \\
+VGGT & ship & 10 & Pose Opt & 0.695 & 0.009 & 19.667 & 0.223 & 0.660 & 0.519 \\
+VGGT & ship & 20 &  & 0.513 & 0.008 & 20.027 & 0.187 & 0.676 & 0.557 \\
+VGGT & ship & 20 & Pose Opt & 0.389 & 0.006 & 20.521 & 0.139 & 0.694 & 0.606 \\
+VGGT & ship & 30 &  & 0.488 & 0.008 & 21.102 & 0.172 & 0.692 & 0.596 \\
+VGGT & ship & 30 & Pose Opt & 0.337 & 0.006 & 21.541 & \textbf{0.126} & 0.716 & 0.646 \\
+VGGT & ship & 40 &  & 0.438 & 0.007 & 21.538 & 0.161 & 0.698 & 0.614 \\
+VGGT & ship & 40 & Pose Opt & 0.349 & 0.006 & 22.013 & \underline{0.128} & 0.718 & 0.655 \\
+VGGT & ship & 50 &  & 0.450 & 0.007 & 21.573 & 0.159 & 0.701 & 0.618 \\
+VGGT & ship & 50 & Pose Opt & 0.367 & 0.006 & 21.421 & 0.134 & 0.706 & 0.633 \\
+VGGT & ship & 60 &  & 0.470 & 0.007 & 21.521 & 0.161 & 0.706 & 0.619 \\
+VGGT & ship & 60 & Pose Opt & 0.383 & 0.006 & 21.388 & 0.138 & 0.713 & 0.634 \\
+VGGT & ship & 70 &  & 0.491 & 0.007 & 22.086 & 0.151 & 0.730 & 0.649 \\
+VGGT & ship & 70 & Pose Opt & 0.402 & 0.007 & 21.930 & 0.131 & 0.731 & 0.659 \\
+VGGT & ship & 80 &  & 0.460 & 0.008 & 21.363 & 0.163 & 0.713 & 0.619 \\
+VGGT & ship & 80 & Pose Opt & 0.374 & 0.008 & 21.678 & 0.136 & 0.724 & 0.648 \\
+VGGT & ship & 87 &  & 0.487 & 0.009 & 20.871 & 0.176 & 0.701 & 0.594 \\
+VGGT & ship & 87 & Pose Opt & 0.377 & 0.008 & 22.859 & 0.130 & 0.748 & 0.687 \\
+\midrule
+COLMAP & drums & 10 &  &  &  &  &  &  &  \\
+COLMAP & drums & 10 & Pose Opt &  &  &  &  &  &  \\
+COLMAP & drums & 20 &  &  &  &  &  &  &  \\
+COLMAP & drums & 20 & Pose Opt &  &  &  &  &  &  \\
+COLMAP & drums & 30 &  &  &  &  &  &  &  \\
+COLMAP & drums & 30 & Pose Opt &  &  &  &  &  &  \\
+COLMAP & drums & 40 &  & 0.970 & 0.023 & 14.847 & 0.297 & 0.682 & 0.397 \\
+COLMAP & drums & 40 & Pose Opt & 0.369 & 0.011 & 15.965 & 0.239 & 0.724 & 0.478 \\
+COLMAP & drums & 50 &  & 0.354 & 0.007 & 19.598 & 0.125 & 0.835 & 0.681 \\
+COLMAP & drums & 50 & Pose Opt & 0.174 & \underline{0.003} & 19.631 & 0.119 & 0.835 & 0.685 \\
+COLMAP & drums & 60 &  & 0.292 & 0.006 & 21.467 & 0.107 & 0.879 & 0.752 \\
+COLMAP & drums & 60 & Pose Opt & 0.147 & \underline{0.003} & 22.692 & 0.097 & 0.904 & 0.796 \\
+COLMAP & drums & 70 &  & 0.229 & 0.005 & 20.643 & 0.108 & 0.860 & 0.725 \\
+COLMAP & drums & 70 & Pose Opt & 0.141 & \underline{0.003} & 21.485 & 0.099 & 0.880 & 0.758 \\
+COLMAP & drums & 80 &  & 0.209 & 0.004 & 22.016 & 0.101 & 0.888 & 0.771 \\
+COLMAP & drums & 80 & Pose Opt & 0.121 & \underline{0.003} & \textbf{23.190} & 0.093 & \textbf{0.912} & \textbf{0.812} \\
+COLMAP & drums & 87 &  & 0.152 & \underline{0.003} & 22.469 & 0.093 & 0.899 & 0.791 \\
+COLMAP & drums & 87 & Pose Opt & \textbf{0.095} & \textbf{0.002} & \underline{22.801} & 0.089 & \underline{0.906} & \underline{0.803} \\
+VGGT & drums & 10 &  & 0.312 & 0.004 & 18.009 & 0.127 & 0.793 & 0.625 \\
+VGGT & drums & 10 & Pose Opt & 0.312 & 0.006 & 17.697 & 0.116 & 0.794 & 0.626 \\
+VGGT & drums & 20 &  & 0.186 & \underline{0.003} & 18.793 & 0.102 & 0.814 & 0.667 \\
+VGGT & drums & 20 & Pose Opt & 0.153 & \underline{0.003} & 18.906 & 0.089 & 0.823 & 0.683 \\
+VGGT & drums & 30 &  & 0.205 & \underline{0.003} & 18.900 & 0.098 & 0.819 & 0.675 \\
+VGGT & drums & 30 & Pose Opt & 0.126 & \underline{0.003} & 19.728 & \textbf{0.080} & 0.843 & 0.716 \\
+VGGT & drums & 40 &  & 0.163 & \underline{0.003} & 19.272 & 0.096 & 0.828 & 0.688 \\
+VGGT & drums & 40 & Pose Opt & 0.108 & \underline{0.003} & 19.894 & \textbf{0.080} & 0.847 & 0.720 \\
+VGGT & drums & 50 &  & 0.171 & \underline{0.003} & 19.336 & 0.097 & 0.831 & 0.691 \\
+VGGT & drums & 50 & Pose Opt & \underline{0.100} & \underline{0.003} & 20.037 & \underline{0.081} & 0.851 & 0.725 \\
+VGGT & drums & 60 &  & 0.181 & \underline{0.003} & 19.433 & 0.100 & 0.831 & 0.691 \\
+VGGT & drums & 60 & Pose Opt & 0.125 & \underline{0.003} & 20.310 & 0.082 & 0.857 & 0.733 \\
+VGGT & drums & 70 &  & 0.186 & \underline{0.003} & 19.563 & 0.101 & 0.834 & 0.694 \\
+VGGT & drums & 70 & Pose Opt & 0.107 & \underline{0.003} & 20.455 & 0.084 & 0.860 & 0.736 \\
+VGGT & drums & 80 &  & 0.190 & \underline{0.003} & 19.509 & 0.105 & 0.833 & 0.690 \\
+VGGT & drums & 80 & Pose Opt & 0.143 & \underline{0.003} & 20.192 & 0.087 & 0.853 & 0.725 \\
+VGGT & drums & 87 &  & 0.172 & \underline{0.003} & 19.668 & 0.106 & 0.836 & 0.694 \\
+VGGT & drums & 87 & Pose Opt & 0.116 & \underline{0.003} & 20.899 & 0.085 & 0.869 & 0.749 \\
+\bottomrule
+\end{tabular}
+\end{table}

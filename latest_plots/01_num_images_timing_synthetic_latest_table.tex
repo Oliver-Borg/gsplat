@@ -1,0 +1,62 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else COLMAP versus VGGT over various number of images (Synthetic) \fi}
+\label{tab:01_num_images_timing_synthetic}
+\centering
+\scriptsize
+\begin{tabular}{llrrr}
+\toprule
+Choice & Dataset & Num Images & Inference Time ↓ & Peak Memory ↓ \\
+\midrule
+COLMAP & lego & 10 &  &  \\
+COLMAP & lego & 20 &  &  \\
+COLMAP & lego & 30 & 21.008 & \textbf{6010.000} \\
+COLMAP & lego & 40 & 31.722 & \underline{6070.000} \\
+COLMAP & lego & 50 & 18.030 & 6652.000 \\
+COLMAP & lego & 60 & 19.289 & 6716.000 \\
+COLMAP & lego & 70 & 33.807 & 6776.000 \\
+COLMAP & lego & 80 & 36.369 & 6836.000 \\
+COLMAP & lego & 87 & 47.262 & 6778.000 \\
+VGGT & lego & 10 & \textbf{0.544} & 9829.324 \\
+VGGT & lego & 20 & \underline{1.346} & 12677.693 \\
+VGGT & lego & 30 & 2.253 & 15754.249 \\
+VGGT & lego & 40 & 3.351 & 18836.046 \\
+VGGT & lego & 50 & 4.628 & 21895.350 \\
+VGGT & lego & 60 & 6.101 & 24973.366 \\
+VGGT & lego & 70 & 7.777 & 28060.354 \\
+VGGT & lego & 80 & 9.583 & 31121.441 \\
+VGGT & lego & 87 & 11.006 & 33275.596 \\
+\midrule
+COLMAP & ship & 10 &  &  \\
+COLMAP & ship & 20 & 2.050 & \underline{6468.000} \\
+COLMAP & ship & 30 & 3.162 & 6532.000 \\
+COLMAP & ship & 40 & 4.938 & 6592.000 \\
+COLMAP & ship & 50 & 9.553 & 6652.000 \\
+COLMAP & ship & 60 & 11.243 & 6716.000 \\
+COLMAP & ship & 70 & 14.960 & 6776.000 \\
+COLMAP & ship & 80 & 19.210 & 6836.000 \\
+COLMAP & ship & 87 & 25.510 & \textbf{983.000} \\
+VGGT & ship & 10 & \textbf{0.544} & 9829.324 \\
+VGGT & ship & 20 & \underline{1.344} & 12677.693 \\
+VGGT & ship & 30 & 2.256 & 15754.249 \\
+VGGT & ship & 40 & 3.354 & 18836.046 \\
+VGGT & ship & 50 & 4.619 & 21895.350 \\
+VGGT & ship & 60 & 6.095 & 24973.366 \\
+VGGT & ship & 70 & 7.774 & 28060.354 \\
+VGGT & ship & 80 & 9.584 & 31121.441 \\
+VGGT & ship & 87 & 10.982 & 33275.596 \\
+\midrule
+COLMAP & drums & 10 &  &  \\
+COLMAP & drums & 20 &  &  \\
+COLMAP & drums & 30 &  &  \\
+COLMAP & drums & 40 & \textbf{15.827} & \textbf{6592.000} \\
+COLMAP & drums & 50 & \underline{26.399} & \underline{6652.000} \\
+COLMAP & drums & 60 & 30.417 & 6716.000 \\
+COLMAP & drums & 70 & 46.391 & 6776.000 \\
+COLMAP & drums & 80 & 57.973 & 6836.000 \\
+COLMAP & drums & 87 & 70.491 & 6778.000 \\
+VGGT & drums & 10 &  &  \\
+VGGT & drums & 20 &  &  \\
+VGGT & drums & 30 &  &  \\
+\bottomrule
+\end{tabular}
+\end{table}

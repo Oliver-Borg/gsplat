@@ -1,0 +1,26 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else Combining cameras and point clouds from VGGT and COLMAP. (Indoor) \fi}
+\label{tab:07_combined_single_brief_indoor}
+\centering
+\scriptsize
+\begin{tabular}{lllllrrrrrr}
+\toprule
+Choice & Dataset & Camera Src & Pcd Src & Sampling Mode & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP & bonsai & COLMAP Cams & Both Pcds & confidence & \textbf{0.096} & \textbf{0.001} & \textbf{25.200} & \textbf{0.169} & \textbf{0.797} & \textbf{0.735} \\
+COLMAP & bonsai & COLMAP Cams & VGGT Pcd & confidence & 0.176 & \underline{0.002} & 22.524 & 0.229 & 0.695 & 0.589 \\
+COLMAP & bonsai &  &  &  & \underline{0.097} & \textbf{0.001} & \underline{24.653} & \underline{0.175} & \underline{0.776} & \underline{0.709} \\
+VGGT & bonsai &  &  & confidence & 0.777 & 0.022 & 17.407 & 0.400 & 0.559 & 0.309 \\
+\midrule
+COLMAP & kitchen & COLMAP Cams & Both Pcds & confidence & \underline{0.082} & \textbf{0.001} & \textbf{22.169} & \textbf{0.136} & \underline{0.546} & \textbf{0.552} \\
+COLMAP & kitchen & COLMAP Cams & VGGT Pcd & confidence & \textbf{0.077} & \textbf{0.001} & \underline{21.751} & 0.168 & \textbf{0.586} & \underline{0.548} \\
+COLMAP & kitchen &  &  &  & 0.094 & \textbf{0.001} & 21.597 & \underline{0.142} & 0.497 & 0.510 \\
+VGGT & kitchen &  &  & confidence & 0.222 & \underline{0.005} & 20.043 & 0.199 & 0.425 & 0.403 \\
+\midrule
+COLMAP & counter & COLMAP Cams & Both Pcds & confidence & \underline{0.028} & \textbf{0.000} & \underline{24.978} & \textbf{0.185} & \underline{0.844} & \underline{0.748} \\
+COLMAP & counter & COLMAP Cams & VGGT Pcd & confidence & 0.038 & \textbf{0.000} & 24.604 & 0.199 & 0.835 & 0.728 \\
+COLMAP & counter &  &  &  & \textbf{0.026} & \textbf{0.000} & \textbf{25.228} & \underline{0.188} & \textbf{0.850} & \textbf{0.754} \\
+VGGT & counter &  &  & confidence & 0.253 & \underline{0.006} & 20.955 & 0.243 & 0.647 & 0.523 \\
+\bottomrule
+\end{tabular}
+\end{table}

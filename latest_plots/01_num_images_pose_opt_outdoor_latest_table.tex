@@ -1,5 +1,5 @@
 \begin{table}[H]
-\caption{COLMAP versus VGGT over various number of images with pose optimization (Outdoor)}
+\caption{\ifdefined\customcaption \customcaption \else COLMAP versus VGGT over various number of images with pose optimization (Outdoor) \fi}
 \label{tab:01_num_images_pose_opt_outdoor}
 \centering
 \scriptsize
@@ -7,97 +7,128 @@
 \toprule
 Choice & Dataset & Num Images & Pose Opt & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
 \midrule
-COLMAP & bicycle & 20 &  &  &  & 9.328 & 0.987 & 0.011 & -0.524 \\
-COLMAP & bicycle & 20 & Pose Opt &  &  & 9.541 & 0.975 & 0.026 & -0.503 \\
-COLMAP & bicycle & 30 &  & 0.653 & 0.006 & 12.060 & 0.775 & 0.181 & -0.243 \\
-COLMAP & bicycle & 30 & Pose Opt & 1.605 & 0.015 & 10.860 & 0.810 & 0.155 & -0.302 \\
-COLMAP & bicycle & 40 &  & 0.322 & 0.005 & 14.498 & 0.694 & 0.265 & -0.098 \\
-COLMAP & bicycle & 40 & Pose Opt & 0.503 & \underline{0.003} & 13.764 & 0.685 & 0.244 & -0.119 \\
-COLMAP & bicycle & 50 &  & 0.201 & \underline{0.003} & 16.599 & 0.583 & 0.293 & 0.025 \\
-COLMAP & bicycle & 50 & Pose Opt & 0.387 & \underline{0.003} & 15.719 & 0.586 & 0.252 & -0.017 \\
-COLMAP & bicycle & 60 &  & 0.130 & \underline{0.003} & 17.236 & 0.545 & 0.331 & 0.082 \\
-COLMAP & bicycle & 60 & Pose Opt & 0.255 & 0.004 & 15.948 & 0.547 & 0.245 & 0.007 \\
-COLMAP & bicycle & 70 &  & 0.135 & \underline{0.003} & 17.676 & 0.523 & 0.344 & 0.112 \\
-COLMAP & bicycle & 70 & Pose Opt & 0.235 & \underline{0.003} & 16.538 & 0.521 & 0.262 & 0.044 \\
-COLMAP & bicycle & 80 &  & 0.149 & \textbf{0.002} & 17.764 & 0.481 & 0.330 & 0.131 \\
-COLMAP & bicycle & 80 & Pose Opt & 0.201 & \underline{0.003} & 17.296 & 0.474 & 0.294 & 0.106 \\
-COLMAP & bicycle & 90 &  & 0.118 & \textbf{0.002} & 20.889 & 0.395 & 0.448 & 0.311 \\
-COLMAP & bicycle & 90 & Pose Opt & 0.126 & \textbf{0.002} & \underline{21.843} & 0.375 & \underline{0.530} & \underline{0.389} \\
-COLMAP & bicycle & 100 &  & \textbf{0.099} & \textbf{0.002} & 21.332 & 0.364 & 0.480 & 0.357 \\
-COLMAP & bicycle & 100 & Pose Opt & \underline{0.111} & \textbf{0.002} & \textbf{22.163} & \underline{0.349} & \textbf{0.559} & \textbf{0.428} \\
-VGGT & bicycle & 10 &  & 1.748 & 0.032 & 13.887 & 0.565 & 0.149 & -0.098 \\
-VGGT & bicycle & 10 & Pose Opt & 1.770 & 0.033 & 13.894 & 0.566 & 0.150 & -0.098 \\
-VGGT & bicycle & 20 &  & 1.149 & 0.027 & 15.574 & 0.478 & 0.191 & 0.012 \\
-VGGT & bicycle & 20 & Pose Opt & 1.113 & 0.027 & 15.618 & 0.472 & 0.191 & 0.016 \\
-VGGT & bicycle & 30 &  & 0.930 & 0.020 & 15.899 & 0.467 & 0.200 & 0.029 \\
-VGGT & bicycle & 30 & Pose Opt & 0.898 & 0.019 & 16.091 & 0.446 & 0.210 & 0.052 \\
-VGGT & bicycle & 40 &  & 0.997 & 0.019 & 15.946 & 0.472 & 0.207 & 0.032 \\
-VGGT & bicycle & 40 & Pose Opt & 0.995 & 0.019 & 16.245 & 0.434 & 0.218 & 0.067 \\
-VGGT & bicycle & 50 &  & 0.872 & 0.020 & 16.468 & 0.444 & 0.218 & 0.065 \\
-VGGT & bicycle & 60 &  & 0.671 & 0.017 & 16.939 & 0.425 & 0.236 & 0.096 \\
-VGGT & bicycle & 70 &  & 0.632 & 0.017 & 17.376 & 0.424 & 0.250 & 0.113 \\
-VGGT & bicycle & 80 &  & 0.660 & 0.016 & 17.035 & 0.433 & 0.248 & 0.100 \\
-VGGT & bicycle & 90 &  & 0.667 & 0.016 & 17.575 & 0.426 & 0.259 & 0.121 \\
-VGGT & bicycle & 100 &  & 0.716 & 0.015 & 17.559 & 0.427 & 0.264 & 0.122 \\
-VGGT & bicycle & 100 & Pose Opt & 0.489 & 0.014 & 17.384 & \textbf{0.338} & 0.268 & 0.176 \\
+COLMAP & bicycle & 10 &  &  &  &  &  &  &  \\
+COLMAP & bicycle & 10 & Pose Opt &  &  &  &  &  &  \\
+COLMAP & bicycle & 20 &  &  &  &  &  &  &  \\
+COLMAP & bicycle & 20 & Pose Opt &  &  &  &  &  &  \\
+COLMAP & bicycle & 30 &  & 0.334 & 0.006 & 14.078 & 0.785 & 0.259 & -0.166 \\
+COLMAP & bicycle & 30 & Pose Opt & 1.543 & 0.010 & 12.715 & 0.843 & 0.246 & -0.234 \\
+COLMAP & bicycle & 40 &  & 0.143 & 0.004 & 15.818 & 0.667 & 0.297 & -0.039 \\
+COLMAP & bicycle & 40 & Pose Opt & 0.710 & 0.012 & 15.023 & 0.696 & 0.265 & -0.090 \\
+COLMAP & bicycle & 50 &  & 0.150 & \underline{0.003} & 19.972 & 0.437 & 0.377 & 0.227 \\
+COLMAP & bicycle & 50 & Pose Opt & 0.140 & \underline{0.003} & 21.438 & 0.428 & 0.498 & 0.330 \\
+COLMAP & bicycle & 60 &  & 0.134 & \underline{0.003} & 19.752 & 0.404 & 0.369 & 0.238 \\
+COLMAP & bicycle & 60 & Pose Opt & 0.147 & \underline{0.003} & 21.727 & 0.393 & 0.507 & 0.363 \\
+COLMAP & bicycle & 70 &  & 0.120 & \underline{0.003} & 19.711 & 0.365 & 0.370 & 0.263 \\
+COLMAP & bicycle & 70 & Pose Opt & 0.122 & \underline{0.003} & 21.527 & 0.352 & 0.491 & 0.375 \\
+COLMAP & bicycle & 80 &  & 0.119 & \textbf{0.002} & 20.295 & 0.341 & 0.403 & 0.307 \\
+COLMAP & bicycle & 80 & Pose Opt & 0.113 & \underline{0.003} & \textbf{22.575} & 0.327 & \textbf{0.568} & \textbf{0.455} \\
+COLMAP & bicycle & 90 &  & 0.113 & \textbf{0.002} & 20.278 & 0.321 & 0.402 & 0.319 \\
+COLMAP & bicycle & 90 & Pose Opt & \textbf{0.106} & \underline{0.003} & 21.459 & 0.311 & 0.494 & 0.401 \\
+COLMAP & bicycle & 100 &  & 0.109 & \textbf{0.002} & 21.351 & \underline{0.307} & 0.482 & 0.394 \\
+COLMAP & bicycle & 100 & Pose Opt & \underline{0.107} & \textbf{0.002} & \underline{21.968} & \textbf{0.299} & \underline{0.523} & \underline{0.435} \\
+VGGT & bicycle & 10 &  & 1.178 & 0.027 & 14.799 & 0.509 & 0.166 & -0.036 \\
+VGGT & bicycle & 10 & Pose Opt & 1.245 & 0.028 & 14.897 & 0.509 & 0.169 & -0.033 \\
+VGGT & bicycle & 20 &  & 1.060 & 0.022 & 16.030 & 0.448 & 0.195 & 0.041 \\
+VGGT & bicycle & 20 & Pose Opt & 1.009 & 0.022 & 15.953 & 0.446 & 0.194 & 0.040 \\
+VGGT & bicycle & 30 &  & 0.751 & 0.017 & 16.637 & 0.417 & 0.212 & 0.081 \\
+VGGT & bicycle & 30 & Pose Opt & 0.749 & 0.017 & 16.632 & 0.399 & 0.213 & 0.093 \\
+VGGT & bicycle & 40 &  & 0.707 & 0.018 & 16.837 & 0.408 & 0.224 & 0.097 \\
+VGGT & bicycle & 40 & Pose Opt & 0.667 & 0.017 & 16.798 & 0.380 & 0.221 & 0.112 \\
+VGGT & bicycle & 50 &  & 0.823 & 0.018 & 17.126 & 0.411 & 0.235 & 0.107 \\
+VGGT & bicycle & 50 & Pose Opt & 0.753 & 0.017 & 17.601 & 0.357 & 0.251 & 0.159 \\
+VGGT & bicycle & 60 &  & 0.734 & 0.016 & 17.197 & 0.408 & 0.243 & 0.115 \\
+VGGT & bicycle & 60 & Pose Opt & 0.651 & 0.016 & 17.103 & 0.356 & 0.237 & 0.142 \\
+VGGT & bicycle & 70 &  & 0.877 & 0.015 & 17.303 & 0.416 & 0.248 & 0.115 \\
+VGGT & bicycle & 70 & Pose Opt & 0.740 & 0.015 & 17.139 & 0.358 & 0.252 & 0.150 \\
+VGGT & bicycle & 80 &  & 0.923 & 0.015 & 16.891 & 0.431 & 0.250 & 0.099 \\
+VGGT & bicycle & 80 & Pose Opt & 0.783 & 0.015 & 16.718 & 0.360 & 0.246 & 0.138 \\
+VGGT & bicycle & 90 &  & 0.737 & 0.015 & 17.289 & 0.421 & 0.260 & 0.119 \\
+VGGT & bicycle & 90 & Pose Opt & 0.579 & 0.014 & 17.515 & 0.323 & 0.267 & 0.188 \\
+VGGT & bicycle & 100 &  & 0.679 & 0.016 & 17.132 & 0.425 & 0.264 & 0.116 \\
+VGGT & bicycle & 100 & Pose Opt & 0.523 & 0.015 & 17.328 & 0.333 & 0.272 & 0.181 \\
 \midrule
-COLMAP & garden & 10 &  & 0.155 & \underline{0.002} & 12.088 & 0.813 & 0.312 & -0.189 \\
-COLMAP & garden & 10 & Pose Opt & 1.496 & 0.016 & 12.356 & 0.798 & 0.309 & -0.176 \\
-COLMAP & garden & 20 &  & 0.071 & \textbf{0.001} & 20.025 & 0.411 & 0.428 & 0.273 \\
-COLMAP & garden & 20 & Pose Opt & 0.091 & \textbf{0.001} & 19.310 & 0.414 & 0.369 & 0.224 \\
-COLMAP & garden & 30 &  & 0.060 & \textbf{0.001} & 21.342 & 0.353 & 0.484 & 0.367 \\
-COLMAP & garden & 30 & Pose Opt & 0.064 & \textbf{0.001} & 20.770 & 0.349 & 0.429 & 0.326 \\
-COLMAP & garden & 40 &  & 0.055 & \textbf{0.001} & 21.741 & 0.325 & \underline{0.506} & 0.404 \\
-COLMAP & garden & 40 & Pose Opt & \underline{0.052} & \textbf{0.001} & 21.583 & 0.322 & 0.491 & 0.394 \\
-COLMAP & garden & 50 &  & 0.059 & \textbf{0.001} & 21.612 & 0.307 & 0.481 & 0.398 \\
-COLMAP & garden & 60 &  & 0.061 & \textbf{0.001} & 21.491 & 0.294 & 0.475 & 0.401 \\
-COLMAP & garden & 70 &  & 0.057 & \textbf{0.001} & 21.829 & 0.289 & 0.491 & 0.419 \\
-COLMAP & garden & 80 &  & 0.060 & \textbf{0.001} & \underline{21.892} & 0.279 & 0.492 & \underline{0.428} \\
-COLMAP & garden & 90 &  & 0.061 & \textbf{0.001} & 21.615 & 0.274 & 0.472 & 0.413 \\
-COLMAP & garden & 100 &  & 0.063 & \textbf{0.001} & 21.593 & \underline{0.271} & 0.467 & 0.412 \\
-COLMAP & garden & 100 & Pose Opt & \textbf{0.049} & \textbf{0.001} & \textbf{22.130} & \textbf{0.264} & \textbf{0.512} & \textbf{0.453} \\
-VGGT & garden & 10 &  & 0.717 & 0.009 & 15.706 & 0.454 & 0.242 & 0.059 \\
-VGGT & garden & 10 & Pose Opt & 0.475 & 0.009 & 15.862 & 0.443 & 0.248 & 0.072 \\
-VGGT & garden & 20 &  & 0.304 & 0.004 & 17.636 & 0.388 & 0.292 & 0.164 \\
-VGGT & garden & 20 & Pose Opt & 0.146 & 0.003 & 18.335 & 0.332 & 0.326 & 0.231 \\
-VGGT & garden & 30 &  & 0.276 & 0.004 & 18.296 & 0.383 & 0.316 & 0.193 \\
-VGGT & garden & 30 & Pose Opt & 0.095 & 0.003 & 19.416 & 0.292 & 0.385 & 0.311 \\
-VGGT & garden & 40 &  & 0.290 & 0.005 & 18.478 & 0.399 & 0.332 & 0.196 \\
-VGGT & garden & 40 & Pose Opt & 0.088 & 0.003 & 19.921 & 0.291 & 0.404 & 0.332 \\
-VGGT & garden & 50 &  & 0.308 & 0.006 & 18.490 & 0.413 & 0.335 & 0.190 \\
-VGGT & garden & 60 &  & 0.345 & 0.005 & 18.577 & 0.428 & 0.343 & 0.187 \\
-VGGT & garden & 70 &  & 0.345 & 0.006 & 18.509 & 0.447 & 0.343 & 0.174 \\
-VGGT & garden & 80 &  & 0.338 & 0.006 & 18.649 & 0.454 & 0.352 & 0.177 \\
-VGGT & garden & 90 &  & 0.379 & 0.006 & 18.366 & 0.473 & 0.351 & 0.160 \\
-VGGT & garden & 100 &  & 0.373 & 0.006 & 18.582 & 0.482 & 0.357 & 0.162 \\
-VGGT & garden & 100 & Pose Opt & 0.135 & 0.004 & 19.351 & 0.338 & 0.366 & 0.270 \\
+COLMAP & garden & 10 &  &  &  &  &  &  &  \\
+COLMAP & garden & 10 & Pose Opt &  &  &  &  &  &  \\
+COLMAP & garden & 20 &  & 0.093 & \textbf{0.001} & 19.224 & 0.432 & 0.371 & 0.213 \\
+COLMAP & garden & 20 & Pose Opt & 0.098 & \textbf{0.001} & 19.070 & 0.426 & 0.359 & 0.206 \\
+COLMAP & garden & 30 &  & 0.082 & \textbf{0.001} & 20.411 & 0.356 & 0.413 & 0.306 \\
+COLMAP & garden & 30 & Pose Opt & 0.073 & \textbf{0.001} & 20.508 & 0.353 & 0.416 & 0.312 \\
+COLMAP & garden & 40 &  & 0.079 & \textbf{0.001} & 20.570 & 0.325 & 0.423 & 0.334 \\
+COLMAP & garden & 40 & Pose Opt & 0.075 & \textbf{0.001} & 20.650 & 0.323 & 0.428 & 0.340 \\
+COLMAP & garden & 50 &  & 0.072 & \textbf{0.001} & 20.969 & 0.306 & 0.441 & 0.364 \\
+COLMAP & garden & 50 & Pose Opt & 0.067 & \textbf{0.001} & 20.881 & 0.306 & 0.437 & 0.359 \\
+COLMAP & garden & 60 &  & 0.060 & \textbf{0.001} & 21.483 & 0.298 & 0.476 & 0.399 \\
+COLMAP & garden & 60 & Pose Opt & 0.058 & \textbf{0.001} & 21.555 & 0.292 & 0.479 & 0.406 \\
+COLMAP & garden & 70 &  & 0.065 & \textbf{0.001} & 21.485 & 0.284 & 0.470 & 0.404 \\
+COLMAP & garden & 70 & Pose Opt & 0.061 & \textbf{0.001} & 21.534 & 0.279 & 0.472 & 0.409 \\
+COLMAP & garden & 80 &  & 0.061 & \textbf{0.001} & 21.558 & 0.275 & 0.475 & 0.414 \\
+COLMAP & garden & 80 & Pose Opt & 0.056 & \textbf{0.001} & 21.723 & 0.272 & 0.490 & 0.427 \\
+COLMAP & garden & 90 &  & 0.057 & \textbf{0.001} & 21.805 & 0.271 & 0.492 & 0.431 \\
+COLMAP & garden & 90 & Pose Opt & \underline{0.053} & \textbf{0.001} & 21.915 & 0.267 & \underline{0.502} & 0.441 \\
+COLMAP & garden & 100 &  & 0.055 & \textbf{0.001} & \underline{21.950} & \underline{0.264} & \underline{0.502} & \underline{0.444} \\
+COLMAP & garden & 100 & Pose Opt & \textbf{0.052} & \textbf{0.001} & \textbf{21.976} & \textbf{0.260} & \textbf{0.507} & \textbf{0.449} \\
+VGGT & garden & 10 &  & 0.210 & 0.007 & 16.451 & 0.421 & 0.255 & 0.101 \\
+VGGT & garden & 10 & Pose Opt & 0.233 & 0.007 & 16.477 & 0.416 & 0.256 & 0.104 \\
+VGGT & garden & 20 &  & 0.362 & 0.006 & 17.361 & 0.401 & 0.280 & 0.145 \\
+VGGT & garden & 20 & Pose Opt & 0.218 & 0.005 & 18.108 & 0.336 & 0.309 & 0.215 \\
+VGGT & garden & 30 &  & 0.326 & 0.006 & 17.984 & 0.391 & 0.305 & 0.176 \\
+VGGT & garden & 30 & Pose Opt & 0.109 & \underline{0.004} & 19.329 & 0.290 & 0.367 & 0.300 \\
+VGGT & garden & 40 &  & 0.359 & 0.006 & 17.990 & 0.413 & 0.317 & 0.170 \\
+VGGT & garden & 40 & Pose Opt & 0.149 & \underline{0.004} & 18.992 & 0.312 & 0.359 & 0.275 \\
+VGGT & garden & 50 &  & 0.373 & 0.006 & 18.076 & 0.433 & 0.328 & 0.166 \\
+VGGT & garden & 50 & Pose Opt & 0.184 & 0.005 & 18.299 & 0.347 & 0.350 & 0.236 \\
+VGGT & garden & 60 &  & 0.388 & 0.007 & 18.203 & 0.449 & 0.338 & 0.164 \\
+VGGT & garden & 60 & Pose Opt & 0.178 & 0.005 & 18.932 & 0.334 & 0.359 & 0.261 \\
+VGGT & garden & 70 &  & 0.386 & 0.007 & 18.565 & 0.441 & 0.346 & 0.180 \\
+VGGT & garden & 70 & Pose Opt & 0.141 & 0.005 & 19.456 & 0.322 & 0.371 & 0.285 \\
+VGGT & garden & 80 &  & 0.385 & 0.006 & 18.588 & 0.453 & 0.350 & 0.176 \\
+VGGT & garden & 80 & Pose Opt & 0.164 & \underline{0.004} & 19.073 & 0.339 & 0.357 & 0.259 \\
+VGGT & garden & 90 &  & 0.364 & 0.006 & 18.709 & 0.460 & 0.355 & 0.176 \\
+VGGT & garden & 90 & Pose Opt & 0.168 & \underline{0.004} & 19.219 & 0.341 & 0.367 & 0.266 \\
+VGGT & garden & 100 &  & 0.380 & 0.006 & 18.596 & 0.479 & 0.355 & 0.163 \\
+VGGT & garden & 100 & Pose Opt & 0.176 & \underline{0.004} & 18.967 & 0.352 & 0.357 & 0.249 \\
 \midrule
-COLMAP & stump & 20 &  & 0.868 & 0.016 & 13.261 & 0.903 & 0.219 & -0.277 \\
-COLMAP & stump & 20 & Pose Opt & 2.533 & 0.038 & 12.789 & 0.926 & 0.149 & -0.341 \\
-COLMAP & stump & 40 &  & 0.170 & \underline{0.002} & 14.148 & 0.660 & 0.318 & -0.053 \\
-COLMAP & stump & 40 & Pose Opt & 0.620 & 0.014 & 14.788 & 0.651 & 0.343 & -0.021 \\
-COLMAP & stump & 50 &  & 0.104 & 0.003 & 18.549 & 0.571 & 0.463 & 0.168 \\
-COLMAP & stump & 60 &  & 0.046 & \underline{0.002} & 22.321 & 0.456 & 0.594 & 0.386 \\
-COLMAP & stump & 70 &  & 0.045 & \textbf{0.001} & 23.636 & 0.402 & 0.654 & 0.479 \\
-COLMAP & stump & 80 &  & 0.028 & \textbf{0.001} & 24.567 & 0.375 & 0.696 & 0.537 \\
-COLMAP & stump & 90 &  & \underline{0.023} & \textbf{0.001} & \underline{24.896} & 0.364 & \underline{0.706} & 0.556 \\
-COLMAP & stump & 100 &  & \textbf{0.022} & \textbf{0.001} & \textbf{25.254} & \underline{0.345} & \textbf{0.721} & \textbf{0.583} \\
-COLMAP & stump & 100 & Pose Opt & 0.034 & \textbf{0.001} & 24.833 & \textbf{0.340} & 0.696 & \underline{0.563} \\
-VGGT & stump & 10 &  & 2.389 & 0.116 & 14.958 & 0.600 & 0.271 & -0.028 \\
-VGGT & stump & 10 & Pose Opt & 2.363 & 0.115 & 14.980 & 0.599 & 0.273 & -0.026 \\
-VGGT & stump & 20 &  & 1.511 & 0.070 & 15.908 & 0.552 & 0.288 & 0.029 \\
-VGGT & stump & 20 & Pose Opt & 3.086 & 0.069 & 15.881 & 0.557 & 0.290 & 0.027 \\
-VGGT & stump & 30 &  & 1.238 & 0.034 & 17.118 & 0.520 & 0.328 & 0.094 \\
-VGGT & stump & 30 & Pose Opt & 1.197 & 0.033 & 17.133 & 0.517 & 0.331 & 0.098 \\
-VGGT & stump & 40 &  & 0.870 & 0.029 & 17.673 & 0.509 & 0.353 & 0.126 \\
-VGGT & stump & 40 & Pose Opt & 0.795 & 0.027 & 17.802 & 0.498 & 0.359 & 0.139 \\
-VGGT & stump & 50 &  & 0.849 & 0.033 & 17.816 & 0.512 & 0.363 & 0.133 \\
-VGGT & stump & 60 &  & 0.979 & 0.036 & 17.935 & 0.517 & 0.372 & 0.137 \\
-VGGT & stump & 70 &  & 0.912 & 0.035 & 18.519 & 0.503 & 0.394 & 0.169 \\
-VGGT & stump & 80 &  & 1.059 & 0.039 & 18.664 & 0.508 & 0.402 & 0.174 \\
-VGGT & stump & 90 &  & 0.892 & 0.041 & 18.607 & 0.523 & 0.407 & 0.166 \\
-VGGT & stump & 100 &  & 0.856 & 0.040 & 18.644 & 0.530 & 0.412 & 0.166 \\
-VGGT & stump & 100 & Pose Opt & 0.777 & 0.035 & 18.294 & 0.492 & 0.398 & 0.174 \\
+COLMAP & stump & 10 &  &  &  &  &  &  &  \\
+COLMAP & stump & 10 & Pose Opt &  &  &  &  &  &  \\
+COLMAP & stump & 20 &  & 0.336 & \underline{0.002} & 11.158 & 0.794 & 0.280 & -0.214 \\
+COLMAP & stump & 20 & Pose Opt & 2.163 & 0.019 & 12.640 & 0.800 & 0.333 & -0.159 \\
+COLMAP & stump & 30 &  &  &  &  &  &  &  \\
+COLMAP & stump & 30 & Pose Opt &  &  &  &  &  &  \\
+COLMAP & stump & 40 &  & 0.068 & \underline{0.002} & 19.450 & 0.506 & 0.502 & 0.248 \\
+COLMAP & stump & 40 & Pose Opt & 0.128 & 0.003 & 18.982 & 0.503 & 0.478 & 0.227 \\
+COLMAP & stump & 50 &  & 0.085 & \underline{0.002} & 19.904 & 0.494 & 0.523 & 0.276 \\
+COLMAP & stump & 50 & Pose Opt & 0.134 & 0.003 & 19.863 & 0.491 & 0.506 & 0.267 \\
+COLMAP & stump & 60 &  & 0.055 & \underline{0.002} & 22.482 & 0.433 & 0.620 & 0.418 \\
+COLMAP & stump & 60 & Pose Opt & 0.088 & \underline{0.002} & 22.552 & 0.429 & 0.609 & 0.416 \\
+COLMAP & stump & 70 &  & 0.043 & \textbf{0.001} & 23.059 & 0.416 & 0.643 & 0.453 \\
+COLMAP & stump & 70 & Pose Opt & 0.069 & \underline{0.002} & 22.622 & 0.416 & 0.606 & 0.423 \\
+COLMAP & stump & 80 &  & 0.029 & \textbf{0.001} & 23.695 & 0.399 & 0.667 & 0.489 \\
+COLMAP & stump & 80 & Pose Opt & 0.043 & \underline{0.002} & 23.250 & 0.396 & 0.633 & 0.463 \\
+COLMAP & stump & 90 &  & \underline{0.024} & \textbf{0.001} & \underline{24.337} & 0.371 & \underline{0.690} & \underline{0.532} \\
+COLMAP & stump & 90 & Pose Opt & 0.038 & \underline{0.002} & 23.828 & 0.366 & 0.651 & 0.502 \\
+COLMAP & stump & 100 &  & \textbf{0.018} & \textbf{0.001} & \textbf{25.194} & \textbf{0.349} & \textbf{0.723} & \textbf{0.580} \\
+COLMAP & stump & 100 & Pose Opt & 0.037 & \textbf{0.001} & 24.259 & \underline{0.351} & 0.670 & 0.531 \\
+VGGT & stump & 10 &  & 2.363 & 0.122 & 15.580 & 0.561 & 0.283 & 0.014 \\
+VGGT & stump & 10 & Pose Opt & 2.341 & 0.122 & 15.529 & 0.562 & 0.280 & 0.011 \\
+VGGT & stump & 20 &  & 1.747 & 0.067 & 16.927 & 0.509 & 0.320 & 0.092 \\
+VGGT & stump & 20 & Pose Opt & 1.732 & 0.068 & 16.899 & 0.509 & 0.318 & 0.091 \\
+VGGT & stump & 30 &  & 1.096 & 0.037 & 17.359 & 0.503 & 0.333 & 0.113 \\
+VGGT & stump & 30 & Pose Opt & 1.076 & 0.036 & 17.683 & 0.479 & 0.341 & 0.138 \\
+VGGT & stump & 40 &  & 0.992 & 0.045 & 17.669 & 0.502 & 0.348 & 0.128 \\
+VGGT & stump & 40 & Pose Opt & 0.995 & 0.044 & 17.501 & 0.498 & 0.349 & 0.127 \\
+VGGT & stump & 50 &  & 1.167 & 0.048 & 17.566 & 0.515 & 0.355 & 0.121 \\
+VGGT & stump & 50 & Pose Opt & 1.130 & 0.046 & 17.594 & 0.503 & 0.359 & 0.132 \\
+VGGT & stump & 60 &  & 1.025 & 0.044 & 17.980 & 0.508 & 0.369 & 0.142 \\
+VGGT & stump & 60 & Pose Opt & 0.970 & 0.042 & 17.851 & 0.487 & 0.367 & 0.151 \\
+VGGT & stump & 70 &  & 1.153 & 0.046 & 17.928 & 0.523 & 0.375 & 0.134 \\
+VGGT & stump & 70 & Pose Opt & 1.118 & 0.044 & 17.791 & 0.510 & 0.373 & 0.139 \\
+VGGT & stump & 80 &  & 1.026 & 0.048 & 18.243 & 0.521 & 0.388 & 0.150 \\
+VGGT & stump & 80 & Pose Opt & 0.988 & 0.045 & 18.039 & 0.493 & 0.382 & 0.159 \\
+VGGT & stump & 90 &  & 0.857 & 0.046 & 18.463 & 0.525 & 0.398 & 0.157 \\
+VGGT & stump & 90 & Pose Opt & 0.725 & 0.041 & 18.309 & 0.482 & 0.392 & 0.177 \\
+VGGT & stump & 100 &  & 0.896 & 0.041 & 18.827 & 0.521 & 0.414 & 0.175 \\
+VGGT & stump & 100 & Pose Opt & 0.713 & 0.036 & 18.599 & 0.465 & 0.402 & 0.199 \\
 \bottomrule
 \end{tabular}
 \end{table}

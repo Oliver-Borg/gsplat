@@ -1,0 +1,4 @@
+choice,dataset,num_points,processing_time
+COLMAP,lego,10313,0
+COLMAP,ship,5146,0
+COLMAP,drums,3866,0

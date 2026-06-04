@@ -1,0 +1,28 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else Image frequency sampling timing. (Indoor) \fi}
+\label{tab:03_sampling_mode_single_timing_indoor}
+\centering
+\scriptsize
+\begin{tabular}{llrlr}
+\toprule
+Choice & Dataset & Num Points & Sampling Mode & Pcd Processing Time ↓ \\
+\midrule
+VGGT & bonsai & 10000 & imagefreqnovis & 17.333 \\
+VGGT & bonsai & 10000 & imagefreqvoxels & 32.949 \\
+VGGT & bonsai & 10000 & random & \textbf{3.371} \\
+VGGT & bonsai & 50000 & imagefreqnovis & 13.118 \\
+VGGT & bonsai & 50000 & imagefreqvoxels & 38.556 \\
+VGGT & bonsai & 50000 & random & \underline{4.084} \\
+VGGT & bonsai & 100000 & imagefreqnovis & 13.080 \\
+VGGT & bonsai & 100000 & imagefreqvoxels & 36.880 \\
+VGGT & bonsai & 100000 & random & 4.478 \\
+VGGT & bonsai & 500000 & imagefreqnovis & 18.363 \\
+VGGT & bonsai & 500000 & imagefreqvoxels & 87.768 \\
+VGGT & bonsai & 500000 & random & 9.204 \\
+\midrule
+VGGT & kitchen & 10000 & random & \textbf{3.605} \\
+VGGT & kitchen & 50000 & random & \underline{4.084} \\
+VGGT & kitchen & 100000 & random & 4.483 \\
+\bottomrule
+\end{tabular}
+\end{table}

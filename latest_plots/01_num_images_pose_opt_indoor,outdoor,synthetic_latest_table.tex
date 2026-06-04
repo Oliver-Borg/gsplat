@@ -1,0 +1,130 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else COLMAP versus VGGT over various number of images with pose optimization (Indoor,Outdoor,Synthetic) \fi}
+\label{tab:01_num_images_pose_opt_indoor,outdoor,synthetic}
+\centering
+\scriptsize
+\begin{tabular}{llrlrrrrrr}
+\toprule
+Choice & Dataset Collection & Num Images & Pose Opt & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP & indoor & 10 &  & 0.148 & \underline{0.002} & 12.353 & 0.733 & 0.449 & -0.055 \\
+COLMAP & indoor & 10 & Pose Opt & 4.289 & 0.027 & 11.732 & 0.785 & 0.447 & -0.100 \\
+COLMAP & indoor & 20 &  & 9.608 & 0.154 & 14.571 & 0.576 & 0.417 & 0.065 \\
+COLMAP & indoor & 20 & Pose Opt & 3.318 & 0.149 & 14.598 & 0.584 & 0.426 & 0.065 \\
+COLMAP & indoor & 30 &  & 0.351 & 0.009 & 19.982 & 0.305 & 0.594 & 0.435 \\
+COLMAP & indoor & 30 & Pose Opt & 0.215 & 0.005 & 20.391 & 0.282 & 0.618 & 0.471 \\
+COLMAP & indoor & 40 &  & 0.215 & 0.019 & 21.884 & 0.215 & 0.638 & 0.552 \\
+COLMAP & indoor & 40 & Pose Opt & 0.156 & 0.018 & 22.917 & 0.195 & 0.690 & 0.614 \\
+COLMAP & indoor & 50 &  & 0.115 & \underline{0.002} & 22.586 & 0.195 & 0.656 & 0.588 \\
+COLMAP & indoor & 50 & Pose Opt & 0.066 & \textbf{0.001} & 23.772 & 0.184 & 0.711 & 0.649 \\
+COLMAP & indoor & 60 &  & 0.112 & \underline{0.002} & 23.339 & 0.176 & 0.682 & 0.629 \\
+COLMAP & indoor & 60 & Pose Opt & 0.062 & \textbf{0.001} & 24.426 & 0.165 & 0.725 & 0.681 \\
+COLMAP & indoor & 70 &  & \underline{0.057} & \textbf{0.001} & 25.555 & 0.159 & \underline{0.760} & 0.726 \\
+COLMAP & indoor & 70 & Pose Opt & 0.066 & \textbf{0.001} & 24.329 & 0.161 & 0.725 & 0.682 \\
+COLMAP & indoor & 80 &  & \textbf{0.056} & \textbf{0.001} & \underline{25.751} & 0.152 & \textbf{0.761} & \textbf{0.735} \\
+COLMAP & indoor & 80 & Pose Opt & 0.066 & \textbf{0.001} & 24.774 & 0.153 & 0.732 & 0.699 \\
+COLMAP & indoor & 90 &  & 0.063 & \textbf{0.001} & 25.279 & 0.151 & 0.736 & 0.712 \\
+COLMAP & indoor & 90 & Pose Opt & 0.064 & \textbf{0.001} & 24.904 & 0.149 & 0.733 & 0.704 \\
+COLMAP & indoor & 100 &  & 0.059 & \textbf{0.001} & \textbf{25.828} & \underline{0.147} & 0.753 & \underline{0.734} \\
+COLMAP & indoor & 100 & Pose Opt & 0.061 & \textbf{0.001} & 25.193 & \textbf{0.145} & 0.744 & 0.718 \\
+VGGT & indoor & 10 &  & 0.754 & 0.014 & 15.444 & 0.457 & 0.435 & 0.165 \\
+VGGT & indoor & 10 & Pose Opt & 0.709 & 0.013 & 15.498 & 0.453 & 0.437 & 0.169 \\
+VGGT & indoor & 20 &  & 0.545 & 0.013 & 17.594 & 0.365 & 0.493 & 0.295 \\
+VGGT & indoor & 20 & Pose Opt & 0.472 & 0.012 & 17.880 & 0.336 & 0.505 & 0.326 \\
+VGGT & indoor & 30 &  & 0.505 & 0.012 & 18.236 & 0.333 & 0.515 & 0.340 \\
+VGGT & indoor & 30 & Pose Opt & 0.378 & 0.010 & 18.738 & 0.293 & 0.538 & 0.387 \\
+VGGT & indoor & 40 &  & 0.457 & 0.012 & 18.592 & 0.314 & 0.522 & 0.362 \\
+VGGT & indoor & 40 & Pose Opt & 0.342 & 0.010 & 19.423 & 0.262 & 0.560 & 0.432 \\
+VGGT & indoor & 50 &  & 0.497 & 0.012 & 18.821 & 0.312 & 0.535 & 0.375 \\
+VGGT & indoor & 50 & Pose Opt & 0.415 & 0.010 & 19.366 & 0.261 & 0.560 & 0.431 \\
+VGGT & indoor & 60 &  & 0.530 & 0.013 & 19.086 & 0.305 & 0.540 & 0.388 \\
+VGGT & indoor & 60 & Pose Opt & 0.401 & 0.010 & 19.534 & 0.250 & 0.558 & 0.440 \\
+VGGT & indoor & 70 &  & 0.495 & 0.013 & 19.325 & 0.300 & 0.549 & 0.400 \\
+VGGT & indoor & 70 & Pose Opt & 0.396 & 0.010 & 19.704 & 0.243 & 0.563 & 0.450 \\
+VGGT & indoor & 80 &  & 0.488 & 0.012 & 19.731 & 0.295 & 0.566 & 0.421 \\
+VGGT & indoor & 80 & Pose Opt & 0.383 & 0.009 & 19.979 & 0.237 & 0.574 & 0.466 \\
+VGGT & indoor & 90 &  & 0.484 & 0.012 & 19.519 & 0.301 & 0.559 & 0.409 \\
+VGGT & indoor & 90 & Pose Opt & 0.391 & 0.010 & 20.081 & 0.238 & 0.586 & 0.474 \\
+VGGT & indoor & 100 &  & 0.467 & 0.012 & 19.735 & 0.298 & 0.566 & 0.419 \\
+VGGT & indoor & 100 & Pose Opt & 0.377 & 0.010 & 20.092 & 0.239 & 0.579 & 0.469 \\
+\midrule
+COLMAP & outdoor & 10 &  &  &  &  &  &  &  \\
+COLMAP & outdoor & 10 & Pose Opt &  &  &  &  &  &  \\
+COLMAP & outdoor & 20 &  & 0.214 & \textbf{0.001} & 15.191 & 0.613 & 0.326 & -0.000 \\
+COLMAP & outdoor & 20 & Pose Opt & 1.131 & 0.010 & 15.855 & 0.613 & 0.346 & 0.024 \\
+COLMAP & outdoor & 30 &  & 0.208 & 0.004 & 17.245 & 0.570 & 0.336 & 0.070 \\
+COLMAP & outdoor & 30 & Pose Opt & 0.808 & 0.005 & 16.611 & 0.598 & 0.331 & 0.039 \\
+COLMAP & outdoor & 40 &  & 0.097 & \underline{0.002} & 18.613 & 0.499 & 0.407 & 0.181 \\
+COLMAP & outdoor & 40 & Pose Opt & 0.304 & 0.005 & 18.218 & 0.507 & 0.390 & 0.159 \\
+COLMAP & outdoor & 50 &  & 0.102 & \underline{0.002} & 20.282 & 0.412 & 0.447 & 0.289 \\
+COLMAP & outdoor & 50 & Pose Opt & 0.114 & \underline{0.002} & 20.727 & 0.409 & 0.480 & 0.319 \\
+COLMAP & outdoor & 60 &  & 0.083 & \underline{0.002} & 21.239 & 0.378 & 0.488 & 0.352 \\
+COLMAP & outdoor & 60 & Pose Opt & 0.098 & \underline{0.002} & 21.945 & 0.371 & 0.532 & 0.395 \\
+COLMAP & outdoor & 70 &  & 0.076 & \underline{0.002} & 21.418 & 0.355 & 0.494 & 0.373 \\
+COLMAP & outdoor & 70 & Pose Opt & 0.084 & \underline{0.002} & 21.894 & 0.349 & 0.523 & 0.402 \\
+COLMAP & outdoor & 80 &  & 0.070 & \textbf{0.001} & 21.850 & 0.338 & 0.515 & 0.403 \\
+COLMAP & outdoor & 80 & Pose Opt & 0.071 & \underline{0.002} & 22.516 & 0.332 & 0.563 & 0.448 \\
+COLMAP & outdoor & 90 &  & \underline{0.064} & \textbf{0.001} & 22.140 & 0.321 & 0.528 & 0.427 \\
+COLMAP & outdoor & 90 & Pose Opt & 0.066 & \underline{0.002} & 22.401 & 0.315 & 0.549 & 0.448 \\
+COLMAP & outdoor & 100 &  & \textbf{0.061} & \textbf{0.001} & \textbf{22.832} & \underline{0.307} & \textbf{0.569} & \textbf{0.473} \\
+COLMAP & outdoor & 100 & Pose Opt & 0.065 & \textbf{0.001} & \underline{22.734} & \textbf{0.303} & \underline{0.567} & \underline{0.472} \\
+VGGT & outdoor & 10 &  & 1.250 & 0.052 & 15.610 & 0.497 & 0.235 & 0.026 \\
+VGGT & outdoor & 10 & Pose Opt & 1.273 & 0.052 & 15.634 & 0.496 & 0.235 & 0.027 \\
+VGGT & outdoor & 20 &  & 1.056 & 0.032 & 16.772 & 0.453 & 0.265 & 0.093 \\
+VGGT & outdoor & 20 & Pose Opt & 0.987 & 0.032 & 16.987 & 0.431 & 0.274 & 0.115 \\
+VGGT & outdoor & 30 &  & 0.724 & 0.020 & 17.327 & 0.437 & 0.283 & 0.123 \\
+VGGT & outdoor & 30 & Pose Opt & 0.645 & 0.019 & 17.881 & 0.389 & 0.307 & 0.177 \\
+VGGT & outdoor & 40 &  & 0.686 & 0.023 & 17.499 & 0.441 & 0.296 & 0.132 \\
+VGGT & outdoor & 40 & Pose Opt & 0.604 & 0.022 & 17.764 & 0.397 & 0.310 & 0.172 \\
+VGGT & outdoor & 50 &  & 0.788 & 0.024 & 17.589 & 0.453 & 0.306 & 0.131 \\
+VGGT & outdoor & 50 & Pose Opt & 0.689 & 0.023 & 17.832 & 0.402 & 0.320 & 0.176 \\
+VGGT & outdoor & 60 &  & 0.716 & 0.022 & 17.793 & 0.455 & 0.317 & 0.140 \\
+VGGT & outdoor & 60 & Pose Opt & 0.600 & 0.021 & 17.962 & 0.392 & 0.321 & 0.185 \\
+VGGT & outdoor & 70 &  & 0.805 & 0.023 & 17.932 & 0.460 & 0.323 & 0.143 \\
+VGGT & outdoor & 70 & Pose Opt & 0.666 & 0.021 & 18.129 & 0.396 & 0.332 & 0.192 \\
+VGGT & outdoor & 80 &  & 0.778 & 0.023 & 17.907 & 0.468 & 0.329 & 0.142 \\
+VGGT & outdoor & 80 & Pose Opt & 0.645 & 0.021 & 17.943 & 0.398 & 0.328 & 0.185 \\
+VGGT & outdoor & 90 &  & 0.653 & 0.022 & 18.154 & 0.469 & 0.338 & 0.151 \\
+VGGT & outdoor & 90 & Pose Opt & 0.491 & 0.020 & 18.348 & 0.382 & 0.342 & 0.210 \\
+VGGT & outdoor & 100 &  & 0.652 & 0.021 & 18.185 & 0.475 & 0.344 & 0.151 \\
+VGGT & outdoor & 100 & Pose Opt & 0.471 & 0.018 & 18.298 & 0.383 & 0.344 & 0.210 \\
+\midrule
+COLMAP & synthetic & 10 &  &  &  &  &  &  &  \\
+COLMAP & synthetic & 10 & Pose Opt &  &  &  &  &  &  \\
+COLMAP & synthetic & 20 &  & 0.541 & \underline{0.006} & 14.546 & 0.500 & 0.474 & 0.144 \\
+COLMAP & synthetic & 20 & Pose Opt & 0.955 & 0.015 & 15.517 & 0.481 & 0.497 & 0.187 \\
+COLMAP & synthetic & 30 &  & 12.265 & 0.204 & 16.450 & 0.333 & 0.610 & 0.362 \\
+COLMAP & synthetic & 30 & Pose Opt & 10.936 & 0.195 & 17.112 & 0.301 & 0.637 & 0.410 \\
+COLMAP & synthetic & 40 &  & 0.839 & 0.017 & 17.551 & 0.242 & 0.697 & 0.490 \\
+COLMAP & synthetic & 40 & Pose Opt & 0.403 & 0.010 & 18.548 & 0.205 & 0.729 & 0.550 \\
+COLMAP & synthetic & 50 &  & 12.600 & 0.180 & 16.849 & 0.314 & 0.681 & 0.423 \\
+COLMAP & synthetic & 50 & Pose Opt & 12.451 & 0.178 & 17.147 & 0.309 & 0.688 & 0.436 \\
+COLMAP & synthetic & 60 &  & 14.458 & 0.187 & 17.670 & 0.291 & 0.702 & 0.465 \\
+COLMAP & synthetic & 60 & Pose Opt & 14.372 & 0.186 & 18.236 & 0.285 & 0.714 & 0.486 \\
+COLMAP & synthetic & 70 &  & 4.485 & 0.049 & 22.072 & 0.108 & 0.825 & 0.731 \\
+COLMAP & synthetic & 70 & Pose Opt & 4.403 & 0.048 & 22.519 & 0.101 & \underline{0.836} & \underline{0.750} \\
+COLMAP & synthetic & 80 &  & 4.283 & 0.070 & 19.071 & 0.232 & 0.752 & 0.556 \\
+COLMAP & synthetic & 80 & Pose Opt & 4.235 & 0.069 & 19.427 & 0.228 & 0.762 & 0.571 \\
+COLMAP & synthetic & 87 &  & 3.625 & 0.041 & \underline{22.552} & 0.103 & 0.833 & 0.748 \\
+COLMAP & synthetic & 87 & Pose Opt & 3.551 & 0.040 & \textbf{22.965} & 0.097 & \textbf{0.844} & \textbf{0.765} \\
+VGGT & synthetic & 10 &  & 0.635 & 0.008 & 17.372 & 0.208 & 0.707 & 0.513 \\
+VGGT & synthetic & 10 & Pose Opt & 0.573 & 0.008 & 17.516 & 0.191 & 0.713 & 0.530 \\
+VGGT & synthetic & 20 &  & 0.400 & \textbf{0.005} & 18.673 & 0.146 & 0.737 & 0.593 \\
+VGGT & synthetic & 20 & Pose Opt & 0.313 & \textbf{0.005} & 18.872 & 0.121 & 0.747 & 0.618 \\
+VGGT & synthetic & 30 &  & 0.317 & \textbf{0.005} & 20.232 & 0.122 & 0.765 & 0.653 \\
+VGGT & synthetic & 30 & Pose Opt & \underline{0.238} & \underline{0.006} & 20.402 & \underline{0.093} & 0.780 & 0.683 \\
+VGGT & synthetic & 40 &  & 0.307 & \textbf{0.005} & 20.614 & 0.115 & 0.771 & 0.668 \\
+VGGT & synthetic & 40 & Pose Opt & 0.243 & \textbf{0.005} & 20.839 & \textbf{0.092} & 0.782 & 0.693 \\
+VGGT & synthetic & 50 &  & 0.304 & \textbf{0.005} & 20.776 & 0.115 & 0.776 & 0.674 \\
+VGGT & synthetic & 50 & Pose Opt & \textbf{0.217} & \textbf{0.005} & 20.971 & \underline{0.093} & 0.787 & 0.697 \\
+VGGT & synthetic & 60 &  & 0.330 & \textbf{0.005} & 20.869 & 0.116 & 0.780 & 0.677 \\
+VGGT & synthetic & 60 & Pose Opt & 0.252 & \textbf{0.005} & 20.843 & 0.097 & 0.785 & 0.692 \\
+VGGT & synthetic & 70 &  & 0.339 & \textbf{0.005} & 20.534 & 0.118 & 0.777 & 0.668 \\
+VGGT & synthetic & 70 & Pose Opt & 0.266 & \textbf{0.005} & 20.668 & 0.100 & 0.784 & 0.686 \\
+VGGT & synthetic & 80 &  & 0.326 & \textbf{0.005} & 20.571 & 0.121 & 0.775 & 0.665 \\
+VGGT & synthetic & 80 & Pose Opt & 0.266 & \textbf{0.005} & 20.582 & 0.101 & 0.779 & 0.681 \\
+VGGT & synthetic & 87 &  & 0.319 & \underline{0.006} & 20.370 & 0.126 & 0.770 & 0.656 \\
+VGGT & synthetic & 87 & Pose Opt & 0.248 & \underline{0.006} & 21.370 & 0.097 & 0.797 & 0.709 \\
+\bottomrule
+\end{tabular}
+\end{table}

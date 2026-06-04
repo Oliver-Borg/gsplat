@@ -1,29 +1,17 @@
 \begin{table}[H]
-\caption{COLMAP versus VGGT with depth loss (Bicycle)}
+\caption{\ifdefined\customcaption \customcaption \else VGGT with \textit{closer} depth loss over different Depth Lambda values. (Bicycle) \fi}
 \label{tab:05_depth_lambda_bicycle}
-\small
-\begin{tabular}{lrllrrrrll}
+\centering
+\scriptsize
+\begin{tabular}{lrrrrrrr}
 \toprule
-Choice & Depth Lambda & Depth Conf Mode & Depth Loss Mode & RRE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Predicted Depth Abs Rel ↓ & Splatted Depth Abs Rel ↓ \\
+Choice & Depth Lambda & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
 \midrule
-COLMAP & 0.000 &  &  & \textbf{0.099} & \underline{22.163} & 0.349 & \textbf{0.559} &  &  \\
-COLMAP & 0.010 &  & points & \textbf{0.099} & \textbf{22.195} & 0.352 & \underline{0.550} &  &  \\
-COLMAP & 0.100 &  & points & \textbf{0.099} & 21.965 & 0.373 & 0.526 &  &  \\
-COLMAP & 1.000 &  & points & \textbf{0.099} & 21.668 & 0.394 & 0.504 &  &  \\
-COLMAP & 10.000 &  & points & \textbf{0.099} & 21.166 & 0.436 & 0.470 &  &  \\
-VGGT & 0.000 &  &  & \underline{0.716} & 17.384 & 0.338 & 0.268 &  &  \\
-VGGT & 0.010 &  & points & \underline{0.716} & 17.411 & \textbf{0.335} & 0.268 &  &  \\
-VGGT & 0.010 & sigmoid & points & \underline{0.716} & 17.384 & 0.338 & 0.267 &  &  \\
-VGGT & 0.010 & standard & points & \underline{0.716} & 17.443 & \underline{0.336} & 0.268 &  &  \\
-VGGT & 0.100 &  & points & \underline{0.716} & 17.350 & 0.342 & 0.265 &  &  \\
-VGGT & 0.100 & sigmoid & points & \underline{0.716} & 17.402 & 0.339 & 0.267 &  &  \\
-VGGT & 0.100 & standard & points & \underline{0.716} & 17.360 & 0.343 & 0.266 &  &  \\
-VGGT & 1.000 &  & points & \underline{0.716} & 17.410 & 0.383 & 0.270 &  &  \\
-VGGT & 1.000 & sigmoid & points & \underline{0.716} & 17.528 & 0.364 & 0.272 &  &  \\
-VGGT & 1.000 & standard & points & \underline{0.716} & 17.381 & 0.391 & 0.268 &  &  \\
-VGGT & 10.000 &  & points & \underline{0.716} & 17.511 & 0.447 & 0.268 &  &  \\
-VGGT & 10.000 & sigmoid & points & \underline{0.716} & 17.588 & 0.428 & 0.270 &  &  \\
-VGGT & 10.000 & standard & points & \underline{0.716} & 17.592 & 0.451 & 0.270 &  &  \\
+VGGT & 0.000 & 0.489 & \underline{0.014} & 17.384 & 0.338 & 0.268 & 0.176 \\
+VGGT & 0.010 & \underline{0.488} & \underline{0.014} & 17.437 & 0.335 & \underline{0.269} & 0.180 \\
+VGGT & 0.100 & \textbf{0.483} & \textbf{0.013} & \underline{17.523} & \underline{0.330} & \textbf{0.270} & \textbf{0.185} \\
+VGGT & 1.000 & 0.501 & \textbf{0.013} & 17.493 & \textbf{0.329} & 0.267 & \underline{0.183} \\
+VGGT & 10.000 & 0.616 & \textbf{0.013} & \textbf{17.860} & 0.346 & \textbf{0.270} & 0.181 \\
 \bottomrule
 \end{tabular}
 \end{table}

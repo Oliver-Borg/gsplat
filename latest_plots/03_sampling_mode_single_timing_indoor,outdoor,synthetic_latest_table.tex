@@ -1,0 +1,24 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else Image frequency sampling timing. (Indoor,Outdoor,Synthetic) \fi}
+\label{tab:03_sampling_mode_single_timing_indoor,outdoor,synthetic}
+\centering
+\scriptsize
+\begin{tabular}{llrlr}
+\toprule
+Choice & Dataset Collection & Num Points & Sampling Mode & Pcd Processing Time ↓ \\
+\midrule
+VGGT & indoor & 10000 & imagefreqnovis & 17.333 \\
+VGGT & indoor & 10000 & imagefreqvoxels & 32.949 \\
+VGGT & indoor & 10000 & random & \textbf{3.488} \\
+VGGT & indoor & 50000 & imagefreqnovis & 13.118 \\
+VGGT & indoor & 50000 & imagefreqvoxels & 38.556 \\
+VGGT & indoor & 50000 & random & \underline{4.084} \\
+VGGT & indoor & 100000 & imagefreqnovis & 13.080 \\
+VGGT & indoor & 100000 & imagefreqvoxels & 36.880 \\
+VGGT & indoor & 100000 & random & 4.481 \\
+VGGT & indoor & 500000 & imagefreqnovis & 18.363 \\
+VGGT & indoor & 500000 & imagefreqvoxels & 87.768 \\
+VGGT & indoor & 500000 & random & 9.204 \\
+\bottomrule
+\end{tabular}
+\end{table}

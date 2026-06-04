@@ -1,0 +1,16 @@
+choice,dataset,num_points,sampling_mode,processing_time
+VGGT,bonsai,10000,imagefreqnovis,17.332515239715576
+VGGT,bonsai,10000,imagefreqvoxels,32.94863224029541
+VGGT,bonsai,10000,random,3.3706467151641846
+VGGT,bonsai,50000,imagefreqnovis,13.117534160614014
+VGGT,bonsai,50000,imagefreqvoxels,38.55559158325195
+VGGT,bonsai,50000,random,4.084459066390991
+VGGT,bonsai,100000,imagefreqnovis,13.08041000366211
+VGGT,bonsai,100000,imagefreqvoxels,36.87989687919617
+VGGT,bonsai,100000,random,4.478395223617554
+VGGT,bonsai,500000,imagefreqnovis,18.36259889602661
+VGGT,bonsai,500000,imagefreqvoxels,87.76791739463806
+VGGT,bonsai,500000,random,9.203691005706787
+VGGT,kitchen,10000,random,3.605323076248169
+VGGT,kitchen,50000,random,4.084498405456543
+VGGT,kitchen,100000,random,4.482724189758301

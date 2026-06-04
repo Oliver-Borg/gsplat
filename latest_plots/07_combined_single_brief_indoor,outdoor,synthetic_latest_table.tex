@@ -1,0 +1,26 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else Combining cameras and point clouds from VGGT and COLMAP. (Indoor,Outdoor,Synthetic) \fi}
+\label{tab:07_combined_single_brief_indoor,outdoor,synthetic}
+\centering
+\scriptsize
+\begin{tabular}{lllllrrrrrr}
+\toprule
+Choice & Dataset Collection & Camera Src & Pcd Src & Sampling Mode & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP & indoor & COLMAP Cams & Both Pcds & confidence & \textbf{0.069} & \textbf{0.001} & \textbf{24.116} & \textbf{0.163} & \textbf{0.729} & \textbf{0.679} \\
+COLMAP & indoor & COLMAP Cams & VGGT Pcd & confidence & 0.097 & \textbf{0.001} & 22.960 & 0.198 & 0.706 & 0.622 \\
+COLMAP & indoor &  &  &  & \underline{0.072} & \textbf{0.001} & \underline{23.826} & \underline{0.168} & \underline{0.708} & \underline{0.658} \\
+VGGT & indoor &  &  & confidence & 0.417 & \underline{0.011} & 19.469 & 0.281 & 0.544 & 0.412 \\
+\midrule
+COLMAP & outdoor & COLMAP Cams & Both Pcds & confidence & \textbf{0.060} & \textbf{0.001} & \textbf{23.442} & \textbf{0.256} & \textbf{0.607} & \textbf{0.538} \\
+COLMAP & outdoor & COLMAP Cams & VGGT Pcd & confidence & 0.122 & \underline{0.002} & 22.705 & \underline{0.311} & 0.574 & 0.470 \\
+COLMAP & outdoor &  &  &  & \underline{0.064} & \textbf{0.001} & \underline{23.042} & 0.318 & \underline{0.589} & \underline{0.481} \\
+VGGT & outdoor &  &  & confidence & 0.524 & 0.018 & 18.432 & 0.426 & 0.349 & 0.189 \\
+\midrule
+COLMAP & synthetic & COLMAP Cams & Both Pcds & confidence & 3.564 & \underline{0.039} & \underline{23.265} & \textbf{0.089} & \underline{0.846} & \underline{0.777} \\
+COLMAP & synthetic & COLMAP Cams & VGGT Pcd & confidence & 3.565 & \underline{0.039} & \textbf{23.331} & \textbf{0.089} & \textbf{0.847} & \textbf{0.779} \\
+COLMAP & synthetic &  &  &  & \underline{3.551} & 0.040 & 22.965 & \underline{0.097} & 0.844 & 0.765 \\
+VGGT & synthetic &  &  & confidence & \textbf{0.249} & \textbf{0.006} & 21.361 & \underline{0.097} & 0.797 & 0.708 \\
+\bottomrule
+\end{tabular}
+\end{table}

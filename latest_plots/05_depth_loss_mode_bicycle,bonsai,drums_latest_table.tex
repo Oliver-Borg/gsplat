@@ -1,0 +1,35 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else COLMAP versus VGGT with depth loss for different depth loss modes. (Bicycle,Bonsai,Drums) \fi}
+\label{tab:05_depth_loss_mode_bicycle,bonsai,drums}
+\centering
+\scriptsize
+\begin{tabular}{lllrrrrrr}
+\toprule
+Choice & Dataset & Depth Loss Mode & RRE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Predicted Depth Abs Rel ↓ & Splatted Depth Abs Rel ↓ \\
+\midrule
+COLMAP & bicycle &  & \textbf{0.099} & \textbf{22.163} & \textbf{0.349} & \textbf{0.559} &  &  \\
+COLMAP & bicycle & points & \textbf{0.099} & \underline{21.660} & \underline{0.392} & \underline{0.505} &  &  \\
+\midrule
+VGGT & bicycle &  & \textbf{0.716} & 17.384 & \underline{0.338} & 0.268 &  &  \\
+VGGT & bicycle & closer & \textbf{0.716} & \underline{17.500} & \textbf{0.329} & 0.266 &  &  \\
+VGGT & bicycle & full & \textbf{0.716} & \textbf{18.110} & 0.351 & \textbf{0.293} &  &  \\
+VGGT & bicycle & points & \textbf{0.716} & 17.406 & 0.383 & \underline{0.269} &  &  \\
+\midrule
+COLMAP & bonsai &  & \textbf{0.158} & \textbf{24.653} & \textbf{0.175} & \textbf{0.776} &  &  \\
+COLMAP & bonsai & points & \textbf{0.158} & \underline{24.098} & \underline{0.185} & \underline{0.768} &  &  \\
+\midrule
+VGGT & bonsai &  & \textbf{0.722} & 17.423 & 0.399 & \underline{0.560} &  &  \\
+VGGT & bonsai & closer & \textbf{0.722} & \textbf{17.637} & \textbf{0.389} & \textbf{0.563} &  &  \\
+VGGT & bonsai & full & \textbf{0.722} & 17.473 & \underline{0.392} & 0.557 &  &  \\
+VGGT & bonsai & points & \textbf{0.722} & \underline{17.559} & 0.396 & 0.559 &  &  \\
+\midrule
+COLMAP & drums &  & \textbf{0.153} & \textbf{22.801} & \textbf{0.089} & \textbf{0.906} &  & \textbf{0.016} \\
+COLMAP & drums & points & \textbf{0.153} & \underline{22.718} & \underline{0.092} & \underline{0.903} &  & \underline{0.017} \\
+\midrule
+VGGT & drums &  & \textbf{0.173} & \underline{20.899} & \underline{0.085} & \textbf{0.869} & \textbf{0.017} & \underline{0.018} \\
+VGGT & drums & closer & \textbf{0.173} & 20.030 & 0.091 & 0.851 & \textbf{0.017} & 0.026 \\
+VGGT & drums & full & \textbf{0.173} & 20.728 & 0.089 & 0.866 & \textbf{0.017} & \underline{0.018} \\
+VGGT & drums & points & \textbf{0.173} & \textbf{20.910} & \textbf{0.082} & \underline{0.868} & \textbf{0.017} & \textbf{0.017} \\
+\bottomrule
+\end{tabular}
+\end{table}

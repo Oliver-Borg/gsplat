@@ -11,9 +11,6 @@
     "gt_eval": [
         true
     ],
-    "image_mode": [
-        "farthestpose"
-    ],
     "choice": [
         "vggt",
         "colmap"

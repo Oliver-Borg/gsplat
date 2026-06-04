@@ -1,17 +1,19 @@
 \begin{table}[H]
-\caption{COLMAP versus VGGT with depth loss for different depth loss modes. (Bonsai)}
+\caption{\ifdefined\customcaption \customcaption \else COLMAP versus VGGT with depth loss for different depth loss modes. (Bonsai) \fi}
 \label{tab:05_depth_loss_mode_bonsai}
-\small
-\begin{tabular}{llrrrrrr}
+\centering
+\scriptsize
+\begin{tabular}{llrrrr}
 \toprule
-Choice & Depth Loss Mode & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+Choice & Depth Loss Mode & RRE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ \\
 \midrule
-COLMAP &  & \textbf{0.158} & \textbf{0.013} & \textbf{24.653} & \textbf{0.175} & \textbf{0.776} & \textbf{0.709} \\
-COLMAP & points & \textbf{0.158} & \textbf{0.013} & \underline{24.098} & \underline{0.185} & \underline{0.768} & \underline{0.687} \\
-VGGT &  & \underline{0.722} & \underline{0.106} & 17.423 & 0.399 & 0.560 & 0.310 \\
-VGGT & closer & \underline{0.722} & \underline{0.106} & 17.637 & 0.389 & 0.563 & 0.322 \\
-VGGT & full & \underline{0.722} & \underline{0.106} & 17.473 & 0.392 & 0.557 & 0.314 \\
-VGGT & points & \underline{0.722} & \underline{0.106} & 17.559 & 0.396 & 0.559 & 0.314 \\
+COLMAP &  & \textbf{0.158} & \textbf{24.653} & \textbf{0.175} & \textbf{0.776} \\
+COLMAP & points & \textbf{0.158} & \underline{24.098} & \underline{0.185} & \underline{0.768} \\
+\midrule
+VGGT &  & \textbf{0.722} & 17.423 & 0.399 & \underline{0.560} \\
+VGGT & closer & \textbf{0.722} & \textbf{17.637} & \textbf{0.389} & \textbf{0.563} \\
+VGGT & full & \textbf{0.722} & 17.473 & \underline{0.392} & 0.557 \\
+VGGT & points & \textbf{0.722} & \underline{17.559} & 0.396 & 0.559 \\
 \bottomrule
 \end{tabular}
 \end{table}

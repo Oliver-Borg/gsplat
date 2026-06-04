@@ -1,0 +1,74 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else COLMAP versus VGGT over various number of images (Outdoor) \fi}
+\label{tab:01_num_images_timing_outdoor}
+\centering
+\scriptsize
+\begin{tabular}{llrrr}
+\toprule
+Choice & Dataset & Num Images & Inference Time ↓ & Peak Memory ↓ \\
+\midrule
+COLMAP & bicycle & 10 &  &  \\
+COLMAP & bicycle & 20 &  &  \\
+COLMAP & bicycle & 30 & 7.974 & \textbf{1434.000} \\
+COLMAP & bicycle & 40 & 14.812 & \textbf{1434.000} \\
+COLMAP & bicycle & 50 & 10.575 & \underline{7346.000} \\
+COLMAP & bicycle & 60 & 14.349 & 7410.000 \\
+COLMAP & bicycle & 70 & 20.832 & 7470.000 \\
+COLMAP & bicycle & 80 & 27.301 & 7552.000 \\
+COLMAP & bicycle & 90 & 32.596 & 7616.000 \\
+COLMAP & bicycle & 100 & 45.990 & 7676.000 \\
+VGGT & bicycle & 10 & \textbf{0.547} & 9829.324 \\
+VGGT & bicycle & 20 & \underline{1.363} & 12677.693 \\
+VGGT & bicycle & 30 & 2.264 & 15754.249 \\
+VGGT & bicycle & 40 & 3.351 & 18836.046 \\
+VGGT & bicycle & 50 & 4.673 & 21895.350 \\
+VGGT & bicycle & 60 & 6.140 & 24973.366 \\
+VGGT & bicycle & 70 & 7.865 & 28060.354 \\
+VGGT & bicycle & 80 & 9.693 & 31121.441 \\
+VGGT & bicycle & 90 & 11.653 & 34199.013 \\
+VGGT & bicycle & 100 & 13.796 & 37285.010 \\
+\midrule
+COLMAP & garden & 10 &  &  \\
+COLMAP & garden & 20 & 8.680 & \underline{9086.000} \\
+COLMAP & garden & 30 & 16.621 & 9150.000 \\
+COLMAP & garden & 40 & 27.414 & 9210.000 \\
+COLMAP & garden & 50 & 31.006 & 9792.000 \\
+COLMAP & garden & 60 & 48.070 & 9856.000 \\
+COLMAP & garden & 70 & 59.865 & 9916.000 \\
+COLMAP & garden & 80 & 81.615 & 9976.000 \\
+COLMAP & garden & 90 & 96.323 & 10040.000 \\
+COLMAP & garden & 100 & 146.449 & 10100.000 \\
+VGGT & garden & 10 & \underline{1.998} & \textbf{6854.662} \\
+VGGT & garden & 20 & \textbf{1.349} & 12677.693 \\
+VGGT & garden & 30 & 2.257 & 15754.249 \\
+VGGT & garden & 40 & 3.343 & 18836.046 \\
+VGGT & garden & 50 & 4.627 & 21895.350 \\
+VGGT & garden & 60 & 6.085 & 24973.366 \\
+VGGT & garden & 70 & 7.757 & 28060.354 \\
+VGGT & garden & 80 & 9.560 & 31121.441 \\
+VGGT & garden & 90 & 11.570 & 34199.013 \\
+VGGT & garden & 100 & 13.706 & 37285.010 \\
+\midrule
+COLMAP & stump & 10 &  &  \\
+COLMAP & stump & 20 & 3.393 & \textbf{9344.000} \\
+COLMAP & stump & 30 &  &  \\
+COLMAP & stump & 40 & 10.902 & \underline{9468.000} \\
+COLMAP & stump & 50 & 15.191 & 9528.000 \\
+COLMAP & stump & 60 & 21.201 & 9592.000 \\
+COLMAP & stump & 70 & 28.947 & 9652.000 \\
+COLMAP & stump & 80 & 35.556 & 9712.000 \\
+COLMAP & stump & 90 & 43.148 & 9776.000 \\
+COLMAP & stump & 100 & 48.896 & 9836.000 \\
+VGGT & stump & 10 & \textbf{0.545} & 9829.324 \\
+VGGT & stump & 20 & \underline{1.340} & 12677.693 \\
+VGGT & stump & 30 & 5.150 & 12581.125 \\
+VGGT & stump & 40 & 3.347 & 18836.046 \\
+VGGT & stump & 50 & 4.616 & 21895.350 \\
+VGGT & stump & 60 & 6.096 & 24973.366 \\
+VGGT & stump & 70 & 7.773 & 28060.354 \\
+VGGT & stump & 80 & 9.570 & 31121.441 \\
+VGGT & stump & 90 & 11.623 & 34199.013 \\
+VGGT & stump & 100 & 13.774 & 37285.010 \\
+\bottomrule
+\end{tabular}
+\end{table}

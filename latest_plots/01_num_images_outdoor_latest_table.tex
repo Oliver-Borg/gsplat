@@ -1,5 +1,5 @@
 \begin{table}[H]
-\caption{COLMAP versus VGGT over various number of images (Outdoor)}
+\caption{\ifdefined\customcaption \customcaption \else COLMAP versus VGGT over various number of images (Outdoor) \fi}
 \label{tab:01_num_images_outdoor}
 \centering
 \scriptsize
@@ -7,65 +7,68 @@
 \toprule
 Choice & Dataset & Num Images & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Aligned Cameras ↑ \\
 \midrule
-COLMAP & bicycle & 20 & 19.486 & 0.240 & 9.328 & 0.987 & 0.011 & 2 \\
-COLMAP & bicycle & 30 & 0.511 & 0.010 & 12.060 & 0.775 & 0.181 & 8 \\
-COLMAP & bicycle & 40 & 0.263 & 0.018 & 14.498 & 0.694 & 0.265 & 18 \\
-COLMAP & bicycle & 50 & 0.233 & 0.009 & 16.599 & 0.583 & 0.293 & 29 \\
-COLMAP & bicycle & 60 & 0.122 & 0.010 & 17.236 & 0.545 & 0.331 & 35 \\
-COLMAP & bicycle & 70 & \underline{0.104} & 0.009 & 17.676 & 0.523 & 0.344 & 40 \\
-COLMAP & bicycle & 80 & 0.160 & \textbf{0.006} & 17.764 & 0.481 & 0.330 & 48 \\
-COLMAP & bicycle & 90 & 0.117 & 0.008 & \underline{20.889} & \underline{0.395} & \underline{0.448} & \underline{90} \\
-COLMAP & bicycle & 100 & \textbf{0.099} & \underline{0.007} & \textbf{21.332} & \textbf{0.364} & \textbf{0.480} & \textbf{100} \\
-VGGT & bicycle & 10 & 1.748 & 0.149 & 13.887 & 0.565 & 0.149 & 10 \\
-VGGT & bicycle & 20 & 1.149 & 0.124 & 15.574 & 0.478 & 0.191 & 20 \\
-VGGT & bicycle & 30 & 0.930 & 0.092 & 15.899 & 0.467 & 0.200 & 30 \\
-VGGT & bicycle & 40 & 0.997 & 0.089 & 15.946 & 0.472 & 0.207 & 40 \\
-VGGT & bicycle & 50 & 0.872 & 0.087 & 16.468 & 0.444 & 0.218 & 50 \\
-VGGT & bicycle & 60 & 0.671 & 0.071 & 16.939 & 0.425 & 0.236 & 60 \\
-VGGT & bicycle & 70 & 0.632 & 0.077 & 17.376 & 0.424 & 0.250 & 70 \\
-VGGT & bicycle & 80 & 0.660 & 0.070 & 17.035 & 0.433 & 0.248 & 80 \\
-VGGT & bicycle & 90 & 0.667 & 0.070 & 17.575 & 0.426 & 0.259 & \underline{90} \\
-VGGT & bicycle & 100 & 0.716 & 0.066 & 17.174 & 0.441 & 0.257 & \textbf{100} \\
+COLMAP & bicycle & 10 &  &  &  &  &  &  \\
+COLMAP & bicycle & 20 &  &  &  &  &  &  \\
+COLMAP & bicycle & 30 & 0.334 & 0.009 & 14.078 & 0.785 & 0.259 & 6 \\
+COLMAP & bicycle & 40 & 0.143 & \textbf{0.007} & 15.818 & 0.667 & 0.297 & 9 \\
+COLMAP & bicycle & 50 & 0.150 & 0.011 & 19.972 & 0.437 & 0.377 & 46 \\
+COLMAP & bicycle & 60 & 0.134 & 0.011 & 19.752 & 0.404 & 0.369 & 59 \\
+COLMAP & bicycle & 70 & 0.120 & 0.010 & 19.711 & 0.365 & 0.370 & 69 \\
+COLMAP & bicycle & 80 & 0.119 & 0.009 & \underline{20.295} & 0.341 & \underline{0.403} & 80 \\
+COLMAP & bicycle & 90 & \underline{0.113} & \underline{0.008} & 20.278 & \underline{0.321} & 0.402 & 89 \\
+COLMAP & bicycle & 100 & \textbf{0.109} & \textbf{0.007} & \textbf{21.351} & \textbf{0.307} & \textbf{0.482} & \underline{99} \\
+VGGT & bicycle & 10 & 1.178 & 0.108 & 14.799 & 0.509 & 0.166 & 10 \\
+VGGT & bicycle & 20 & 1.060 & 0.087 & 16.030 & 0.448 & 0.195 & 20 \\
+VGGT & bicycle & 30 & 0.751 & 0.069 & 16.637 & 0.417 & 0.212 & 30 \\
+VGGT & bicycle & 40 & 0.707 & 0.073 & 16.837 & 0.408 & 0.224 & 40 \\
+VGGT & bicycle & 50 & 0.823 & 0.071 & 17.126 & 0.411 & 0.235 & 50 \\
+VGGT & bicycle & 60 & 0.734 & 0.066 & 17.197 & 0.408 & 0.243 & 60 \\
+VGGT & bicycle & 70 & 0.877 & 0.061 & 17.303 & 0.416 & 0.248 & 70 \\
+VGGT & bicycle & 80 & 0.923 & 0.065 & 16.891 & 0.431 & 0.250 & 80 \\
+VGGT & bicycle & 90 & 0.737 & 0.065 & 17.289 & 0.421 & 0.260 & 90 \\
+VGGT & bicycle & 100 & 0.679 & 0.066 & 17.132 & 0.425 & 0.264 & \textbf{100} \\
 \midrule
-COLMAP & garden & 10 & 0.155 & \textbf{0.002} & 12.088 & 0.813 & 0.312 & 3 \\
-COLMAP & garden & 20 & 0.071 & 0.005 & 20.025 & 0.411 & 0.428 & 20 \\
-COLMAP & garden & 30 & 0.060 & \underline{0.003} & 21.342 & 0.353 & 0.484 & 30 \\
-COLMAP & garden & 40 & \textbf{0.055} & \underline{0.003} & 21.741 & 0.325 & \textbf{0.506} & 40 \\
-COLMAP & garden & 50 & 0.059 & \underline{0.003} & 21.612 & 0.307 & 0.481 & 50 \\
-COLMAP & garden & 60 & 0.061 & \underline{0.003} & 21.491 & 0.294 & 0.475 & 60 \\
-COLMAP & garden & 70 & \underline{0.058} & \underline{0.003} & \underline{21.829} & 0.289 & 0.491 & 70 \\
-COLMAP & garden & 80 & 0.060 & \underline{0.003} & \textbf{21.892} & 0.279 & \underline{0.492} & 80 \\
-COLMAP & garden & 90 & 0.061 & \underline{0.003} & 21.615 & \underline{0.274} & 0.472 & \underline{90} \\
-COLMAP & garden & 100 & 0.063 & \underline{0.003} & 21.593 & \textbf{0.271} & 0.467 & \textbf{100} \\
-VGGT & garden & 10 & 0.716 & 0.041 & 15.706 & 0.454 & 0.242 & 10 \\
-VGGT & garden & 20 & 0.304 & 0.021 & 17.636 & 0.388 & 0.292 & 20 \\
-VGGT & garden & 30 & 0.276 & 0.020 & 18.296 & 0.383 & 0.316 & 30 \\
-VGGT & garden & 40 & 0.289 & 0.025 & 18.478 & 0.399 & 0.332 & 40 \\
-VGGT & garden & 50 & 0.308 & 0.027 & 18.490 & 0.413 & 0.335 & 50 \\
-VGGT & garden & 60 & 0.345 & 0.027 & 18.577 & 0.428 & 0.343 & 60 \\
-VGGT & garden & 70 & 0.345 & 0.027 & 18.509 & 0.447 & 0.343 & 70 \\
-VGGT & garden & 80 & 0.337 & 0.027 & 18.649 & 0.454 & 0.352 & 80 \\
-VGGT & garden & 90 & 0.379 & 0.027 & 18.366 & 0.473 & 0.351 & \underline{90} \\
-VGGT & garden & 100 & 0.373 & 0.027 & 18.582 & 0.482 & 0.357 & \textbf{100} \\
+COLMAP & garden & 10 &  &  &  &  &  &  \\
+COLMAP & garden & 20 & 0.093 & 0.005 & 19.224 & 0.432 & 0.371 & 20 \\
+COLMAP & garden & 30 & 0.082 & \underline{0.004} & 20.411 & 0.356 & 0.413 & 30 \\
+COLMAP & garden & 40 & 0.080 & \textbf{0.003} & 20.570 & 0.325 & 0.423 & 40 \\
+COLMAP & garden & 50 & 0.072 & \textbf{0.003} & 20.969 & 0.306 & 0.441 & 50 \\
+COLMAP & garden & 60 & 0.060 & \textbf{0.003} & 21.483 & 0.298 & 0.476 & 60 \\
+COLMAP & garden & 70 & 0.065 & \textbf{0.003} & 21.485 & 0.284 & 0.470 & 70 \\
+COLMAP & garden & 80 & 0.061 & \textbf{0.003} & 21.558 & 0.275 & 0.475 & 80 \\
+COLMAP & garden & 90 & \underline{0.057} & \textbf{0.003} & \underline{21.805} & \underline{0.271} & \underline{0.492} & \underline{90} \\
+COLMAP & garden & 100 & \textbf{0.055} & \textbf{0.003} & \textbf{21.950} & \textbf{0.264} & \textbf{0.502} & \textbf{100} \\
+VGGT & garden & 10 & 4.334 & 0.117 & 16.451 & 0.421 & 0.255 & 6 \\
+VGGT & garden & 20 & 0.362 & 0.024 & 17.361 & 0.401 & 0.280 & 20 \\
+VGGT & garden & 30 & 0.326 & 0.027 & 17.984 & 0.391 & 0.305 & 30 \\
+VGGT & garden & 40 & 0.359 & 0.028 & 17.990 & 0.413 & 0.317 & 40 \\
+VGGT & garden & 50 & 0.373 & 0.027 & 18.076 & 0.433 & 0.328 & 50 \\
+VGGT & garden & 60 & 0.388 & 0.027 & 18.203 & 0.449 & 0.338 & 60 \\
+VGGT & garden & 70 & 0.387 & 0.028 & 18.565 & 0.441 & 0.346 & 70 \\
+VGGT & garden & 80 & 0.385 & 0.026 & 18.588 & 0.453 & 0.350 & 80 \\
+VGGT & garden & 90 & 0.364 & 0.027 & 18.709 & 0.460 & 0.355 & \underline{90} \\
+VGGT & garden & 100 & 0.380 & 0.027 & 18.596 & 0.479 & 0.355 & \textbf{100} \\
 \midrule
-COLMAP & stump & 20 & 0.868 & 0.031 & 13.261 & 0.903 & 0.219 & 6 \\
-COLMAP & stump & 40 & 0.170 & 0.004 & 14.148 & 0.660 & 0.318 & 11 \\
-COLMAP & stump & 50 & 0.104 & 0.011 & 18.549 & 0.571 & 0.463 & 31 \\
-COLMAP & stump & 60 & 0.046 & 0.006 & 22.321 & 0.456 & 0.594 & 60 \\
-COLMAP & stump & 70 & 0.044 & 0.004 & 23.636 & 0.402 & 0.654 & 70 \\
-COLMAP & stump & 80 & 0.028 & \underline{0.003} & 24.567 & 0.375 & 0.696 & 80 \\
-COLMAP & stump & 90 & \underline{0.023} & \textbf{0.002} & \underline{24.896} & \underline{0.364} & \underline{0.706} & \underline{90} \\
-COLMAP & stump & 100 & \textbf{0.022} & \textbf{0.002} & \textbf{25.254} & \textbf{0.345} & \textbf{0.721} & \textbf{100} \\
-VGGT & stump & 10 & 2.389 & 0.484 & 14.958 & 0.600 & 0.271 & 10 \\
-VGGT & stump & 20 & 1.511 & 0.299 & 15.908 & 0.552 & 0.288 & 20 \\
-VGGT & stump & 30 & 5.382 & 0.176 & 17.118 & 0.520 & 0.328 & 16 \\
-VGGT & stump & 40 & 0.870 & 0.126 & 17.673 & 0.509 & 0.353 & 40 \\
-VGGT & stump & 50 & 0.849 & 0.143 & 17.816 & 0.512 & 0.363 & 50 \\
-VGGT & stump & 60 & 0.979 & 0.149 & 17.935 & 0.517 & 0.372 & 60 \\
-VGGT & stump & 70 & 0.912 & 0.146 & 18.519 & 0.503 & 0.394 & 70 \\
-VGGT & stump & 80 & 1.059 & 0.163 & 18.664 & 0.508 & 0.402 & 80 \\
-VGGT & stump & 90 & 0.892 & 0.169 & 18.607 & 0.523 & 0.407 & \underline{90} \\
-VGGT & stump & 100 & 0.856 & 0.163 & 18.644 & 0.530 & 0.412 & \textbf{100} \\
+COLMAP & stump & 10 &  &  &  &  &  &  \\
+COLMAP & stump & 20 & 0.336 & 0.005 & 11.158 & 0.794 & 0.280 & 3 \\
+COLMAP & stump & 30 &  &  &  &  &  &  \\
+COLMAP & stump & 40 & 0.068 & 0.005 & 19.450 & 0.506 & 0.502 & 21 \\
+COLMAP & stump & 50 & 0.085 & 0.006 & 19.904 & 0.494 & 0.523 & 31 \\
+COLMAP & stump & 60 & 0.055 & 0.006 & 22.482 & 0.433 & 0.620 & 60 \\
+COLMAP & stump & 70 & 0.043 & 0.005 & 23.059 & 0.416 & 0.643 & 70 \\
+COLMAP & stump & 80 & 0.029 & 0.004 & 23.695 & 0.399 & 0.667 & 79 \\
+COLMAP & stump & 90 & \underline{0.024} & \underline{0.003} & \underline{24.337} & \underline{0.371} & \underline{0.690} & \underline{90} \\
+COLMAP & stump & 100 & \textbf{0.018} & \textbf{0.002} & \textbf{25.194} & \textbf{0.349} & \textbf{0.723} & \textbf{100} \\
+VGGT & stump & 10 & 2.363 & 0.517 & 15.580 & 0.561 & 0.283 & 10 \\
+VGGT & stump & 20 & 1.747 & 0.244 & 16.927 & 0.509 & 0.320 & 20 \\
+VGGT & stump & 30 & 8.206 & 0.179 & 17.359 & 0.503 & 0.333 & 16 \\
+VGGT & stump & 40 & 1.076 & 0.171 & 17.669 & 0.502 & 0.348 & 40 \\
+VGGT & stump & 50 & 1.167 & 0.184 & 17.566 & 0.515 & 0.355 & 50 \\
+VGGT & stump & 60 & 1.025 & 0.169 & 17.980 & 0.508 & 0.369 & 60 \\
+VGGT & stump & 70 & 1.153 & 0.177 & 17.928 & 0.523 & 0.375 & 70 \\
+VGGT & stump & 80 & 1.026 & 0.180 & 18.243 & 0.521 & 0.388 & 80 \\
+VGGT & stump & 90 & 0.857 & 0.174 & 18.463 & 0.525 & 0.398 & \underline{90} \\
+VGGT & stump & 100 & 0.896 & 0.157 & 18.827 & 0.521 & 0.414 & \textbf{100} \\
 \bottomrule
 \end{tabular}
 \end{table}

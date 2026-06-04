@@ -1,0 +1,29 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else VGGT with depth loss for different depth confidence modes. (Synthetic) \fi}
+\label{tab:05_depth_conf_mode_brief_synthetic}
+\centering
+\scriptsize
+\begin{tabular}{llllrrrrrr}
+\toprule
+Choice & Dataset & Depth Conf Mode & Depth Loss Mode & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+VGGT & lego &  & full & 0.223 & \underline{0.004} & 21.973 & \underline{0.070} & 0.812 & 0.745 \\
+VGGT & lego & Scaled Shifted & full & \underline{0.222} & \underline{0.004} & 21.886 & \textbf{0.066} & 0.810 & 0.744 \\
+VGGT & lego & Sigmoid & full & 0.223 & \textbf{0.003} & \underline{22.269} & 0.074 & \underline{0.820} & \underline{0.753} \\
+VGGT & lego & Sigmoid Shifted & full & \underline{0.222} & \textbf{0.003} & 22.241 & 0.074 & \underline{0.820} & 0.752 \\
+VGGT & lego & Standard Shifted & full & \textbf{0.203} & \textbf{0.003} & \textbf{23.528} & 0.094 & \textbf{0.846} & \textbf{0.779} \\
+\midrule
+VGGT & ship &  & full & \underline{0.365} & \textbf{0.009} & 23.491 & \underline{0.132} & 0.765 & 0.707 \\
+VGGT & ship & Scaled Shifted & full & 0.369 & \textbf{0.009} & 23.417 & \textbf{0.127} & 0.762 & 0.707 \\
+VGGT & ship & Sigmoid & full & \underline{0.365} & \textbf{0.009} & \underline{23.696} & 0.135 & \underline{0.770} & \underline{0.712} \\
+VGGT & ship & Sigmoid Shifted & full & \textbf{0.364} & \textbf{0.009} & 23.695 & 0.134 & \underline{0.770} & \textbf{0.713} \\
+VGGT & ship & Standard Shifted & full & 0.392 & \underline{0.010} & \textbf{23.755} & 0.173 & \textbf{0.774} & 0.692 \\
+\midrule
+VGGT & drums &  & full & \underline{0.112} & \textbf{0.002} & 20.728 & \underline{0.089} & 0.866 & 0.742 \\
+VGGT & drums & Scaled Shifted & full & \textbf{0.106} & \textbf{0.002} & 20.855 & \textbf{0.085} & 0.869 & 0.748 \\
+VGGT & drums & Sigmoid & full & 0.118 & \textbf{0.002} & \underline{21.009} & 0.090 & \underline{0.872} & \underline{0.750} \\
+VGGT & drums & Sigmoid Shifted & full & 0.117 & \textbf{0.002} & \textbf{21.047} & 0.090 & \textbf{0.873} & \textbf{0.751} \\
+VGGT & drums & Standard Shifted & full & 0.169 & \textbf{0.002} & 20.374 & 0.151 & 0.858 & 0.693 \\
+\bottomrule
+\end{tabular}
+\end{table}
