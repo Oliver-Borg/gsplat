@@ -1,5 +1,5 @@
 \begin{table}[H]
-\caption{A comparison of random sampling of the VGGT point cloud with GT cameras. (Indoor)}
+\caption{\ifdefined\customcaption \customcaption \else A comparison of random sampling of the VGGT point cloud with GT cameras. (Indoor) \fi}
 \label{tab:03_random_gt_cams_indoor}
 \centering
 \scriptsize
@@ -7,32 +7,34 @@
 \toprule
 Choice & Dataset & Num Points & Sampling Mode & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ & Average Error ↓ \\
 \midrule
-COLMAP & bonsai & 80892 &  & \textbf{28.943} & \textbf{0.158} & \textbf{0.908} & \textbf{0.876} & \textbf{0.154} \\
-VGGT & bonsai & 1000 & random & 24.853 & 0.342 & 0.798 & 0.622 & 0.265 \\
-VGGT & bonsai & 5000 & random & 26.103 & 0.253 & 0.839 & 0.724 & 0.219 \\
-VGGT & bonsai & 10000 & random & \underline{26.496} & 0.233 & \underline{0.848} & 0.749 & 0.208 \\
-VGGT & bonsai & 50000 & random & 26.383 & \underline{0.212} & 0.844 & \underline{0.758} & \underline{0.203} \\
-VGGT & bonsai & 100000 & random & 26.099 & \underline{0.212} & 0.838 & 0.749 & 0.206 \\
-VGGT & bonsai & 500000 & random & 25.143 & 0.220 & 0.817 & 0.714 & 0.217 \\
-VGGT & bonsai & 1000000 & random & 24.525 & 0.229 & 0.804 & 0.689 & 0.225 \\
+COLMAP & bonsai & 66763 &  & \textbf{31.412} & \textbf{0.130} & \textbf{0.941} & \textbf{0.959} & \textbf{0.124} \\
+VGGT & bonsai & 1000 & random & 26.152 & 0.322 & 0.821 & 0.672 & 0.249 \\
+VGGT & bonsai & 5000 & random & 28.152 & 0.216 & 0.878 & 0.808 & 0.189 \\
+VGGT & bonsai & 10000 & random & 28.642 & 0.195 & 0.888 & 0.835 & 0.177 \\
+VGGT & bonsai & 50000 & random & \underline{28.905} & 0.169 & \underline{0.889} & \underline{0.857} & \underline{0.168} \\
+VGGT & bonsai & 100000 & random & 28.487 & \underline{0.165} & 0.880 & 0.847 & 0.171 \\
+VGGT & bonsai & 500000 & random & 27.571 & 0.175 & 0.856 & 0.810 & 0.185 \\
+VGGT & bonsai & 1000000 & random & 26.852 & 0.189 & 0.843 & 0.780 & 0.196 \\
 \midrule
-COLMAP & kitchen & 92853 &  & \textbf{27.952} & \textbf{0.122} & \textbf{0.902} & \textbf{0.876} & \textbf{0.145} \\
-VGGT & kitchen & 1000 & random & 24.850 & 0.234 & 0.813 & 0.698 & 0.223 \\
-VGGT & kitchen & 5000 & random & 26.089 & 0.161 & 0.872 & 0.800 & 0.174 \\
-VGGT & kitchen & 10000 & random & \underline{26.189} & 0.144 & 0.884 & 0.820 & 0.162 \\
-VGGT & kitchen & 50000 & random & 25.982 & 0.132 & \underline{0.890} & \underline{0.826} & \underline{0.155} \\
-VGGT & kitchen & 100000 & random & 25.888 & \underline{0.130} & \underline{0.890} & \underline{0.826} & \underline{0.155} \\
-VGGT & kitchen & 500000 & random & 25.448 & 0.133 & 0.882 & 0.811 & 0.160 \\
-VGGT & kitchen & 1000000 & random & 25.199 & 0.136 & 0.879 & 0.803 & 0.162 \\
+COLMAP & kitchen & 70681 &  & \textbf{29.303} & \textbf{0.113} & \textbf{0.915} & \textbf{0.914} & \textbf{0.135} \\
+COLMAP & kitchen &  &  &  &  &  &  &  \\
+VGGT & kitchen & 1000 & random & 25.732 & 0.219 & 0.839 & 0.738 & 0.208 \\
+VGGT & kitchen & 5000 & random & 27.398 & 0.147 & 0.891 & 0.844 & 0.159 \\
+VGGT & kitchen & 10000 & random & \underline{27.446} & 0.135 & 0.901 & 0.858 & 0.150 \\
+VGGT & kitchen & 50000 & random & 27.069 & \underline{0.121} & \underline{0.907} & \underline{0.863} & \underline{0.143} \\
+VGGT & kitchen & 100000 & random & 26.902 & 0.122 & 0.905 & 0.858 & 0.144 \\
+VGGT & kitchen & 500000 & random & 25.972 & 0.127 & 0.893 & 0.831 & 0.152 \\
+VGGT & kitchen & 1000000 & random & 25.704 & 0.130 & 0.892 & 0.824 & 0.154 \\
 \midrule
-COLMAP & counter & 60980 &  & \textbf{25.604} & \textbf{0.186} & \textbf{0.867} & \textbf{0.773} & \textbf{0.184} \\
-VGGT & counter & 1000 & random & 23.651 & 0.345 & 0.790 & 0.593 & 0.269 \\
-VGGT & counter & 5000 & random & 24.837 & 0.237 & 0.840 & 0.711 & 0.213 \\
-VGGT & counter & 10000 & random & \underline{25.135} & 0.212 & 0.853 & 0.740 & 0.200 \\
-VGGT & counter & 50000 & random & \underline{25.135} & 0.190 & \underline{0.859} & \underline{0.757} & \underline{0.190} \\
-VGGT & counter & 100000 & random & 25.016 & \underline{0.187} & 0.856 & 0.755 & \underline{0.190} \\
-VGGT & counter & 500000 & random & 24.606 & \underline{0.187} & 0.846 & 0.742 & 0.194 \\
-VGGT & counter & 1000000 & random & 24.409 & 0.188 & 0.842 & 0.735 & 0.196 \\
+COLMAP & counter & 41914 &  & \textbf{28.309} & 0.162 & \textbf{0.907} & 0.861 & 0.156 \\
+COLMAP & counter &  &  &  &  &  &  &  \\
+VGGT & counter & 1000 & random & 25.362 & 0.312 & 0.824 & 0.665 & 0.245 \\
+VGGT & counter & 5000 & random & 27.336 & 0.204 & 0.882 & 0.803 & 0.183 \\
+VGGT & counter & 10000 & random & 27.769 & 0.179 & 0.896 & 0.834 & 0.168 \\
+VGGT & counter & 50000 & random & \underline{28.097} & 0.154 & \textbf{0.907} & \underline{0.862} & \underline{0.153} \\
+VGGT & counter & 100000 & random & 28.083 & 0.148 & \textbf{0.907} & \textbf{0.865} & \textbf{0.152} \\
+VGGT & counter & 500000 & random & 27.726 & \underline{0.143} & \underline{0.901} & 0.858 & \underline{0.153} \\
+VGGT & counter & 1000000 & random & 27.528 & \textbf{0.142} & 0.898 & 0.854 & 0.154 \\
 \bottomrule
 \end{tabular}
 \end{table}

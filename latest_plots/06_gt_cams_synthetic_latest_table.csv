@@ -1,25 +1,25 @@
-choice,dataset,use_gt_extrinsics,use_gt_intrinsics,use_gt_points,quality
-COLMAP,lego,,,,0.7853716059773675
-COLMAP,lego,,GT Intrinsics,,0.804511408132148
-COLMAP,lego,GT Extrinsics,,,0.8499588578058344
-COLMAP,lego,GT Extrinsics,GT Intrinsics,,1.0715809865643484
-VGGT,lego,,,,0.681244413590493
-VGGT,lego,,GT Intrinsics,,0.69027371461551
-VGGT,lego,GT Extrinsics,,,0.8500471238949765
-VGGT,lego,GT Extrinsics,GT Intrinsics,,1.0766449147391195
-COLMAP,ship,,,,0.6681527490736681
-COLMAP,ship,,GT Intrinsics,,0.7449985900778829
-COLMAP,ship,GT Extrinsics,,,0.685985180272771
-COLMAP,ship,GT Extrinsics,GT Intrinsics,,0.8960803434339879
-VGGT,ship,,,,0.5943074305774795
-VGGT,ship,,GT Intrinsics,,0.6021259593413665
-VGGT,ship,GT Extrinsics,,,0.8092820723677239
-VGGT,ship,GT Extrinsics,GT Intrinsics,,0.9225792733588103
-COLMAP,drums,,,,0.7905281241196481
-COLMAP,drums,,GT Intrinsics,,0.8194237741713712
-COLMAP,drums,GT Extrinsics,,,0.8118215725358389
-COLMAP,drums,GT Extrinsics,GT Intrinsics,,0.8454797243417432
-VGGT,drums,,,,0.6938042229572777
-VGGT,drums,,GT Intrinsics,,0.719163655963635
-VGGT,drums,GT Extrinsics,,,0.7599852246518566
-VGGT,drums,GT Extrinsics,GT Intrinsics,,0.8765481495194964
+choice,dataset,use_gt_extrinsics,use_gt_intrinsics,quality
+COLMAP,lego,,,0.7853716059773675
+COLMAP,lego,,GT Intrinsics,0.804511408132148
+COLMAP,lego,GT Extrinsics,,0.8499588578058344
+COLMAP,lego,GT Extrinsics,GT Intrinsics,1.0715809865643484
+VGGT,lego,,,0.681244413590493
+VGGT,lego,,GT Intrinsics,0.69027371461551
+VGGT,lego,GT Extrinsics,,0.8500471238949765
+VGGT,lego,GT Extrinsics,GT Intrinsics,1.0766449147391195
+COLMAP,ship,,,0.6681527490736681
+COLMAP,ship,,GT Intrinsics,0.7449985900778829
+COLMAP,ship,GT Extrinsics,,0.685985180272771
+COLMAP,ship,GT Extrinsics,GT Intrinsics,0.8960803434339879
+VGGT,ship,,,0.5943074305774795
+VGGT,ship,,GT Intrinsics,0.6021259593413665
+VGGT,ship,GT Extrinsics,,0.8092820723677239
+VGGT,ship,GT Extrinsics,GT Intrinsics,0.9225792733588103
+COLMAP,drums,,,0.7905281241196481
+COLMAP,drums,,GT Intrinsics,0.8194237741713712
+COLMAP,drums,GT Extrinsics,,0.8118215725358389
+COLMAP,drums,GT Extrinsics,GT Intrinsics,0.8454797243417432
+VGGT,drums,,,0.6938042229572777
+VGGT,drums,,GT Intrinsics,0.719163655963635
+VGGT,drums,GT Extrinsics,,0.7599852246518566
+VGGT,drums,GT Extrinsics,GT Intrinsics,0.8765481495194964

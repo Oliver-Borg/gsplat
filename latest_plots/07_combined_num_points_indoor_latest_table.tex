@@ -1,5 +1,5 @@
 \begin{table}[H]
-\caption{Combining cameras and point clouds with different point coints (Indoor)}
+\caption{\ifdefined\customcaption \customcaption \else Combining cameras and point clouds with different point coints (Indoor) \fi}
 \label{tab:07_combined_num_points_indoor}
 \centering
 \scriptsize
@@ -7,26 +7,26 @@
 \toprule
 Choice & Dataset & Num Points & Sampling Mode & Pcd Src & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
 \midrule
-COLMAP & bonsai & 1000 & confidence & Both Pcds & 0.099 & \textbf{0.001} & 24.821 & 0.173 & 0.779 & 0.714 \\
-COLMAP & bonsai & 5000 & confidence & Both Pcds & 0.101 & \textbf{0.001} & 24.536 & 0.174 & 0.768 & 0.703 \\
-COLMAP & bonsai & 10000 & confidence & Both Pcds & 0.101 & \textbf{0.001} & 24.510 & 0.174 & 0.766 & 0.701 \\
-COLMAP & bonsai & 50000 & confidence & Both Pcds & 0.098 & \textbf{0.001} & 24.831 & 0.170 & 0.782 & 0.718 \\
-COLMAP & bonsai & 100000 & confidence & Both Pcds & \underline{0.096} & \textbf{0.001} & \underline{25.200} & \underline{0.169} & \underline{0.797} & \underline{0.735} \\
-COLMAP & bonsai & 250000 & confidence & Both Pcds & \textbf{0.090} & \textbf{0.001} & \textbf{25.684} & \textbf{0.168} & \textbf{0.817} & \textbf{0.756} \\
+COLMAP & bonsai & 1000 & confidence & Both Pcds & \textbf{0.077} & \textbf{0.001} & \textbf{25.591} & 0.143 & \textbf{0.797} & \textbf{0.758} \\
+COLMAP & bonsai & 5000 & confidence & Both Pcds & 0.079 & \textbf{0.001} & 25.433 & 0.142 & 0.791 & 0.752 \\
+COLMAP & bonsai & 10000 & confidence & Both Pcds & \underline{0.078} & \textbf{0.001} & \underline{25.536} & 0.140 & \underline{0.795} & \textbf{0.758} \\
+COLMAP & bonsai & 50000 & confidence & Both Pcds & \underline{0.078} & \textbf{0.001} & 25.481 & 0.136 & 0.792 & \underline{0.757} \\
+COLMAP & bonsai & 100000 & confidence & Both Pcds & 0.080 & \textbf{0.001} & 25.396 & \underline{0.135} & 0.789 & 0.755 \\
+COLMAP & bonsai & 250000 & confidence & Both Pcds & 0.079 & \textbf{0.001} & 25.378 & \textbf{0.134} & 0.789 & 0.755 \\
 \midrule
-COLMAP & kitchen & 1000 & confidence & Both Pcds & 0.090 & \textbf{0.001} & 21.865 & 0.139 & 0.519 & 0.529 \\
-COLMAP & kitchen & 5000 & confidence & Both Pcds & 0.091 & \textbf{0.001} & 21.697 & 0.140 & 0.512 & 0.521 \\
-COLMAP & kitchen & 10000 & confidence & Both Pcds & 0.091 & \textbf{0.001} & 21.741 & 0.140 & 0.513 & 0.522 \\
-COLMAP & kitchen & 50000 & confidence & Both Pcds & 0.084 & \textbf{0.001} & \underline{22.073} & \underline{0.137} & \underline{0.543} & \underline{0.548} \\
-COLMAP & kitchen & 100000 & confidence & Both Pcds & \underline{0.082} & \textbf{0.001} & \textbf{22.169} & \textbf{0.136} & \textbf{0.546} & \textbf{0.552} \\
-COLMAP & kitchen & 250000 & confidence & Both Pcds & \textbf{0.078} & \textbf{0.001} & 22.023 & 0.138 & 0.540 & 0.545 \\
+COLMAP & kitchen & 1000 & confidence & Both Pcds & 0.087 & \textbf{0.001} & 22.102 & 0.130 & 0.526 & 0.544 \\
+COLMAP & kitchen & 5000 & confidence & Both Pcds & 0.092 & \textbf{0.001} & 22.233 & 0.129 & 0.535 & 0.552 \\
+COLMAP & kitchen & 10000 & confidence & Both Pcds & 0.084 & \textbf{0.001} & 22.233 & 0.128 & 0.538 & 0.554 \\
+COLMAP & kitchen & 50000 & confidence & Both Pcds & 0.083 & \textbf{0.001} & 22.536 & \underline{0.126} & 0.557 & 0.571 \\
+COLMAP & kitchen & 100000 & confidence & Both Pcds & \underline{0.074} & \textbf{0.001} & \underline{22.612} & \textbf{0.125} & \underline{0.572} & \underline{0.583} \\
+COLMAP & kitchen & 250000 & confidence & Both Pcds & \textbf{0.066} & \textbf{0.001} & \textbf{22.976} & \textbf{0.125} & \textbf{0.601} & \textbf{0.606} \\
 \midrule
-COLMAP & counter & 1000 & confidence & Both Pcds & \textbf{0.026} & \textbf{0.000} & \textbf{25.349} & 0.187 & \textbf{0.851} & \textbf{0.758} \\
-COLMAP & counter & 5000 & confidence & Both Pcds & \underline{0.028} & \textbf{0.000} & \underline{25.273} & 0.188 & \textbf{0.851} & \underline{0.756} \\
-COLMAP & counter & 10000 & confidence & Both Pcds & \textbf{0.026} & \textbf{0.000} & 25.210 & 0.187 & \underline{0.850} & 0.755 \\
-COLMAP & counter & 50000 & confidence & Both Pcds & 0.029 & \textbf{0.000} & 25.001 & \underline{0.185} & 0.843 & 0.748 \\
-COLMAP & counter & 100000 & confidence & Both Pcds & \underline{0.028} & \textbf{0.000} & 24.978 & \underline{0.185} & 0.844 & 0.748 \\
-COLMAP & counter & 250000 & confidence & Both Pcds & \underline{0.028} & \textbf{0.000} & 24.968 & \textbf{0.183} & 0.839 & 0.746 \\
+COLMAP & counter & 1000 & confidence & Both Pcds & 0.021 & \textbf{0.000} & 27.549 & 0.164 & 0.884 & 0.832 \\
+COLMAP & counter & 5000 & confidence & Both Pcds & 0.021 & \textbf{0.000} & 27.764 & 0.158 & 0.891 & 0.844 \\
+COLMAP & counter & 10000 & confidence & Both Pcds & 0.018 & \textbf{0.000} & \textbf{27.894} & 0.156 & 0.892 & 0.848 \\
+COLMAP & counter & 50000 & confidence & Both Pcds & \underline{0.016} & \textbf{0.000} & \underline{27.875} & 0.152 & \underline{0.893} & \underline{0.851} \\
+COLMAP & counter & 100000 & confidence & Both Pcds & \textbf{0.015} & \textbf{0.000} & 27.870 & \underline{0.149} & \textbf{0.894} & \textbf{0.853} \\
+COLMAP & counter & 250000 & confidence & Both Pcds & 0.019 & \textbf{0.000} & 27.784 & \textbf{0.146} & 0.890 & \underline{0.851} \\
 \bottomrule
 \end{tabular}
 \end{table}

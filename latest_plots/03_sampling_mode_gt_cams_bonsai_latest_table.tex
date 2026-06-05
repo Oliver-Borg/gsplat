@@ -1,57 +1,15 @@
 \begin{table}[H]
-\caption{A comparison of different VGGT point cloud sampling modes with GT cameras (Bonsai)}
+\caption{\ifdefined\customcaption \customcaption \else A comparison of different VGGT point cloud sampling modes with GT cameras (Bonsai) \fi}
 \label{tab:03_sampling_mode_gt_cams_bonsai}
-\small
-\begin{tabular}{lrlrrrr}
+\centering
+\scriptsize
+\begin{tabular}{lrlrrrrr}
 \toprule
-Choice & Num Points & Sampling Mode & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+Choice & Num Points & Sampling Mode & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ & Average Error ↓ \\
 \midrule
-COLMAP & 80892 &  & \textbf{28.943} & \textbf{0.158} & \textbf{0.908} & \textbf{0.876} \\
-VGGT & 1000 & confidence & 24.657 & 0.346 & 0.796 & 0.615 \\
-VGGT & 1000 & imagefps & 24.861 & 0.353 & 0.793 & 0.613 \\
-VGGT & 1000 & random & 24.853 & 0.342 & 0.798 & 0.622 \\
-VGGT & 1000 & voxels & 24.706 & 0.357 & 0.791 & 0.606 \\
-VGGT & 5000 & confidence & 25.924 & 0.256 & 0.838 & 0.718 \\
-VGGT & 5000 & imagefps & 25.907 & 0.264 & 0.832 & 0.710 \\
-VGGT & 5000 & random & 26.103 & 0.253 & 0.839 & 0.724 \\
-VGGT & 5000 & voxels & 26.158 & 0.260 & 0.835 & 0.719 \\
-VGGT & 10000 & confidence & 26.209 & 0.236 & 0.846 & 0.740 \\
-VGGT & 10000 & imagefps & 26.337 & 0.240 & 0.842 & 0.739 \\
-VGGT & 10000 & random & 26.496 & 0.233 & 0.848 & 0.749 \\
-VGGT & 10000 & voxels & 26.406 & 0.238 & 0.842 & 0.741 \\
-VGGT & 20000 & confidence & 26.443 & 0.225 & 0.848 & 0.753 \\
-VGGT & 20000 & imagefps & 26.347 & 0.226 & 0.844 & 0.748 \\
-VGGT & 20000 & random & 26.462 & 0.223 & 0.847 & 0.754 \\
-VGGT & 20000 & voxels & 26.406 & 0.226 & 0.844 & 0.749 \\
-VGGT & 23220 & ba & \underline{26.778} & 0.214 & \underline{0.857} & \underline{0.772} \\
-VGGT & 30000 & confidence & 26.372 & 0.219 & 0.846 & 0.755 \\
-VGGT & 30000 & imagefps & 26.222 & 0.221 & 0.843 & 0.749 \\
-VGGT & 30000 & random & 26.539 & 0.217 & 0.847 & 0.759 \\
-VGGT & 30000 & voxels & 26.273 & 0.221 & 0.841 & 0.749 \\
-VGGT & 50000 & confidence & 26.260 & 0.217 & 0.843 & 0.751 \\
-VGGT & 50000 & imagefps & 26.200 & 0.216 & 0.842 & 0.750 \\
-VGGT & 50000 & random & 26.383 & 0.212 & 0.844 & 0.758 \\
-VGGT & 50000 & voxels & 26.119 & 0.216 & 0.839 & 0.747 \\
-VGGT & 75000 & confidence & 26.046 & 0.217 & 0.839 & 0.746 \\
-VGGT & 75000 & imagefps & 25.965 & 0.213 & 0.838 & 0.746 \\
-VGGT & 75000 & random & 26.184 & \underline{0.211} & 0.841 & 0.753 \\
-VGGT & 75000 & voxels & 26.097 & 0.213 & 0.835 & 0.746 \\
-VGGT & 100000 & confidence & 26.007 & 0.212 & 0.838 & 0.747 \\
-VGGT & 100000 & imagefps & 25.750 & 0.216 & 0.830 & 0.735 \\
-VGGT & 100000 & random & 26.099 & 0.212 & 0.838 & 0.749 \\
-VGGT & 100000 & voxels & 25.986 & \underline{0.211} & 0.833 & 0.745 \\
-VGGT & 250000 & confidence & 25.568 & 0.219 & 0.825 & 0.727 \\
-VGGT & 250000 & imagefps & 24.984 & 0.220 & 0.818 & 0.712 \\
-VGGT & 250000 & random & 25.608 & 0.214 & 0.827 & 0.732 \\
-VGGT & 250000 & voxels & 25.368 & 0.217 & 0.821 & 0.722 \\
-VGGT & 500000 & confidence & 24.966 & 0.230 & 0.814 & 0.702 \\
-VGGT & 500000 & imagefps & 24.479 & 0.230 & 0.805 & 0.689 \\
-VGGT & 500000 & random & 25.143 & 0.220 & 0.817 & 0.714 \\
-VGGT & 500000 & voxels & 24.892 & 0.224 & 0.811 & 0.703 \\
-VGGT & 1000000 & confidence & 24.227 & 0.246 & 0.801 & 0.672 \\
-VGGT & 1000000 & imagefps & 23.922 & 0.239 & 0.793 & 0.666 \\
-VGGT & 1000000 & random & 24.525 & 0.229 & 0.804 & 0.689 \\
-VGGT & 1000000 & voxels & 24.452 & 0.232 & 0.803 & 0.686 \\
+COLMAP & 80892 &  & \textbf{28.943} & \textbf{0.158} & \textbf{0.908} & \textbf{0.876} & \textbf{0.154} \\
+VGGT & 23220 & ba & \underline{26.778} & 0.214 & \underline{0.857} & \underline{0.772} & \underline{0.198} \\
+VGGT & 100000 & voxels & 25.986 & \underline{0.211} & 0.833 & 0.745 & 0.207 \\
 \bottomrule
 \end{tabular}
 \end{table}

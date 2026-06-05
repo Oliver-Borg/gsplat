@@ -1,5 +1,5 @@
 \begin{table}[H]
-\caption{Stacked removal of optimisations. (Indoor)}
+\caption{\ifdefined\customcaption \customcaption \else Stacked removal of optimisations. (Indoor) \fi}
 \label{tab:99_all_improvements_stacked_indoor}
 \centering
 \scriptsize
@@ -7,23 +7,29 @@
 \toprule
 Choice & Dataset & Series Label Override & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & SSIM ↑ & LPIPS ↓ & Composite Quality ↑ \\
 \midrule
-VGGT & bonsai & 1. All Improvements &  &  &  &  &  &  \\
-COLMAP & bonsai & 4. No Depth Loss & \underline{0.099} & \textbf{0.001} & \textbf{24.778} & \textbf{0.778} & \textbf{0.171} & \textbf{0.715} \\
-COLMAP & bonsai & 5. No Combined Points & \textbf{0.097} & \textbf{0.001} & \underline{24.653} & \underline{0.776} & \underline{0.175} & \underline{0.709} \\
-VGGT & bonsai & 6. No COLMAP Cameras & 0.789 & \underline{0.022} & 17.423 & 0.560 & 0.399 & 0.310 \\
-VGGT & bonsai & 7. No Pose Opt & 0.722 & 0.024 & 17.731 & 0.575 & 0.418 & 0.313 \\
+COLMAP & bonsai & 1. All Improvements & 0.084 & \textbf{0.001} & 25.298 & 0.779 & \underline{0.136} & 0.746 \\
+COLMAP & bonsai & 2. No Confidence Sampling & 0.087 & \textbf{0.001} & 25.180 & 0.772 & 0.137 & 0.739 \\
+COLMAP & bonsai & 3. No Depth Conf & \underline{0.081} & \textbf{0.001} & \underline{25.427} & 0.788 & \textbf{0.134} & 0.755 \\
+COLMAP & bonsai & 4. No Depth Loss & \textbf{0.078} & \textbf{0.001} & 25.419 & \underline{0.791} & \textbf{0.134} & \textbf{0.757} \\
+COLMAP & bonsai & 5. No Combined Points & \textbf{0.078} & \textbf{0.001} & \textbf{25.544} & \textbf{0.795} & 0.144 & \underline{0.756} \\
+VGGT & bonsai & 6. No COLMAP Cameras & 0.693 & \underline{0.019} & 18.461 & 0.582 & 0.336 & 0.382 \\
+VGGT & bonsai & 7. No Pose Opt & 0.731 & 0.024 & 18.664 & 0.595 & 0.374 & 0.369 \\
 \midrule
-VGGT & kitchen & 1. All Improvements &  &  &  &  &  &  \\
-COLMAP & kitchen & 4. No Depth Loss & \textbf{0.080} & \textbf{0.001} & \textbf{22.089} & \textbf{0.556} & \textbf{0.135} & \textbf{0.557} \\
-COLMAP & kitchen & 5. No Combined Points & \underline{0.094} & \textbf{0.001} & \underline{21.597} & \underline{0.497} & \underline{0.142} & \underline{0.510} \\
-VGGT & kitchen & 6. No COLMAP Cameras & 0.236 & \underline{0.005} & 20.018 & 0.414 & 0.176 & 0.410 \\
-VGGT & kitchen & 7. No Pose Opt & 0.339 & 0.007 & 19.821 & 0.463 & 0.239 & 0.396 \\
+COLMAP & kitchen & 1. All Improvements & \textbf{0.052} & \textbf{0.001} & \textbf{24.663} & \textbf{0.707} & \textbf{0.119} & \textbf{0.703} \\
+COLMAP & kitchen & 2. No Confidence Sampling & \underline{0.055} & \textbf{0.001} & \underline{24.143} & \underline{0.700} & \textbf{0.119} & \underline{0.690} \\
+COLMAP & kitchen & 3. No Depth Conf & 0.075 & \textbf{0.001} & 22.772 & 0.590 & \underline{0.121} & 0.598 \\
+COLMAP & kitchen & 4. No Depth Loss & 0.075 & \textbf{0.001} & 22.715 & 0.583 & 0.123 & 0.593 \\
+COLMAP & kitchen & 5. No Combined Points & 0.086 & \textbf{0.001} & 22.443 & 0.551 & 0.127 & 0.566 \\
+VGGT & kitchen & 6. No COLMAP Cameras & 0.159 & \underline{0.005} & 21.233 & 0.531 & 0.156 & 0.514 \\
+VGGT & kitchen & 7. No Pose Opt & 0.283 & 0.006 & 20.490 & 0.485 & 0.230 & 0.428 \\
 \midrule
-VGGT & counter & 1. All Improvements &  &  &  &  &  &  \\
-COLMAP & counter & 4. No Depth Loss & \underline{0.033} & \textbf{0.000} & \underline{24.680} & \underline{0.835} & \textbf{0.184} & \underline{0.738} \\
-COLMAP & counter & 5. No Combined Points & \textbf{0.026} & \textbf{0.000} & \textbf{25.228} & \textbf{0.850} & \underline{0.188} & \textbf{0.754} \\
-VGGT & counter & 6. No COLMAP Cameras & 0.254 & \underline{0.006} & 20.807 & 0.641 & 0.237 & 0.520 \\
-VGGT & counter & 7. No Pose Opt & 0.343 & 0.008 & 20.160 & 0.630 & 0.307 & 0.459 \\
+COLMAP & counter & 1. All Improvements & \textbf{0.017} & \textbf{0.000} & \textbf{27.672} & \textbf{0.893} & 0.151 & \textbf{0.848} \\
+COLMAP & counter & 2. No Confidence Sampling & \textbf{0.017} & \textbf{0.000} & 27.421 & \underline{0.887} & \underline{0.147} & 0.842 \\
+COLMAP & counter & 3. No Depth Conf & 0.022 & \textbf{0.000} & 27.542 & 0.884 & \textbf{0.144} & \underline{0.844} \\
+COLMAP & counter & 4. No Depth Loss & \underline{0.021} & \textbf{0.000} & 27.466 & 0.883 & \underline{0.147} & 0.840 \\
+COLMAP & counter & 5. No Combined Points & \underline{0.021} & \textbf{0.000} & \underline{27.591} & 0.884 & 0.164 & 0.833 \\
+VGGT & counter & 6. No COLMAP Cameras & 0.278 & \underline{0.006} & 20.581 & 0.623 & 0.226 & 0.512 \\
+VGGT & counter & 7. No Pose Opt & 0.387 & 0.008 & 20.050 & 0.618 & 0.291 & 0.459 \\
 \bottomrule
 \end{tabular}
 \end{table}

@@ -1,5 +1,5 @@
 \begin{table}[H]
-\caption{A comparison of different VGGT point cloud sampling modes with GT cameras (Indoor)}
+\caption{\ifdefined\customcaption \customcaption \else A comparison of different VGGT point cloud sampling modes with GT cameras (Indoor) \fi}
 \label{tab:03_sampling_mode_gt_cams_indoor}
 \centering
 \scriptsize
@@ -7,20 +7,21 @@
 \toprule
 Choice & Dataset & Num Points & Sampling Mode & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ & Average Error ↓ \\
 \midrule
-COLMAP & bonsai & 80892 &  & \textbf{28.943} & \textbf{0.158} & \textbf{0.908} & \textbf{0.876} & \textbf{0.154} \\
-VGGT & bonsai & 23220 & ba & \underline{26.778} & 0.214 & \underline{0.857} & \underline{0.772} & \underline{0.198} \\
-VGGT & bonsai & 100000 & voxels & 25.986 & \underline{0.211} & 0.833 & 0.745 & 0.207 \\
+COLMAP & bonsai & 66763 &  & \textbf{31.412} & \textbf{0.130} & \textbf{0.941} & \textbf{0.959} & \textbf{0.124} \\
+VGGT & bonsai & 23313 & ba & \underline{29.298} & 0.180 & \underline{0.904} & \underline{0.867} & \underline{0.164} \\
+VGGT & bonsai & 100000 & random & 28.487 & \underline{0.165} & 0.880 & 0.847 & 0.171 \\
 \midrule
-COLMAP & kitchen & 92853 &  & \textbf{27.952} & \textbf{0.122} & \textbf{0.902} & \textbf{0.876} & \textbf{0.145} \\
-VGGT & kitchen & 10000 & random & \underline{26.189} & 0.144 & 0.884 & 0.820 & 0.162 \\
-VGGT & kitchen & 50000 & random & 25.982 & 0.132 & \underline{0.890} & \underline{0.826} & \underline{0.155} \\
-VGGT & kitchen & 100000 & random & 25.888 & \underline{0.130} & \underline{0.890} & \underline{0.826} & \underline{0.155} \\
+COLMAP & kitchen & 70681 &  & \textbf{29.303} & \textbf{0.113} & \textbf{0.915} & \textbf{0.914} & \textbf{0.135} \\
+VGGT & kitchen & 10000 & imagefps & \underline{27.645} & 0.136 & 0.898 & 0.860 & 0.152 \\
+VGGT & kitchen & 50000 & random & 27.069 & \underline{0.121} & \underline{0.907} & \underline{0.863} & \underline{0.143} \\
 \midrule
-COLMAP & counter & 60980 &  & \textbf{25.604} & \textbf{0.186} & \textbf{0.867} & \textbf{0.773} & \textbf{0.184} \\
-VGGT & counter & 10000 & random & \underline{25.135} & 0.212 & 0.853 & 0.740 & 0.200 \\
-VGGT & counter & 50000 & random & \underline{25.135} & 0.190 & \underline{0.859} & \underline{0.757} & \underline{0.190} \\
-VGGT & counter & 100000 & random & 25.016 & \underline{0.187} & 0.856 & 0.755 & \underline{0.190} \\
-VGGT & counter & 500000 & random & 24.606 & \underline{0.187} & 0.846 & 0.742 & 0.194 \\
+COLMAP & counter & 41914 &  & \textbf{28.309} & 0.162 & \textbf{0.907} & 0.861 & 0.156 \\
+VGGT & counter & 50000 & random & \underline{28.097} & 0.154 & \textbf{0.907} & \underline{0.862} & \underline{0.153} \\
+VGGT & counter & 50000 & voxels & 27.830 & 0.161 & \underline{0.903} & 0.851 & 0.158 \\
+VGGT & counter & 100000 & confidence & 27.766 & 0.160 & \underline{0.903} & 0.850 & 0.158 \\
+VGGT & counter & 100000 & random & 28.083 & 0.148 & \textbf{0.907} & \textbf{0.865} & \textbf{0.152} \\
+VGGT & counter & 500000 & random & 27.726 & \underline{0.143} & 0.901 & 0.858 & \underline{0.153} \\
+VGGT & counter & 1000000 & random & 27.528 & \textbf{0.142} & 0.898 & 0.854 & 0.154 \\
 \bottomrule
 \end{tabular}
 \end{table}

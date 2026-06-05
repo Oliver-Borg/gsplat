@@ -7,7 +7,7 @@ COLMAP,bicycle,GT Extrinsics,,,0.382532453986249
 COLMAP,bicycle,GT Extrinsics,,GT Points,0.4405011377449234
 COLMAP,bicycle,GT Extrinsics,GT Intrinsics,,0.4735277968230691
 COLMAP,bicycle,GT Extrinsics,GT Intrinsics,GT Points,0.5706081853391598
-VGGT,bicycle,,,,0.10288788805231015
+VGGT,bicycle,,,,0.12214661237092046
 VGGT,bicycle,,,GT Points,0.12716225759792515
 VGGT,bicycle,,GT Intrinsics,,0.1218986206429589
 VGGT,bicycle,,GT Intrinsics,GT Points,0.12644155262506498

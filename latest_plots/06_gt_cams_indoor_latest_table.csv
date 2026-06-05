@@ -1,49 +1,49 @@
 choice,dataset,use_gt_extrinsics,use_gt_intrinsics,use_gt_points,quality
-COLMAP,bonsai,,,,0.6035285908886177
-COLMAP,bonsai,,,GT Points,0.6160128481439215
-COLMAP,bonsai,,GT Intrinsics,,0.6045298188285753
-COLMAP,bonsai,,GT Intrinsics,GT Points,0.6152609519132783
-COLMAP,bonsai,GT Extrinsics,,,0.8661177225164037
-COLMAP,bonsai,GT Extrinsics,,GT Points,0.8764181146767327
-COLMAP,bonsai,GT Extrinsics,GT Intrinsics,,0.8755625190287151
-COLMAP,bonsai,GT Extrinsics,GT Intrinsics,GT Points,0.8913670293575296
-VGGT,bonsai,,,,0.31275946366624285
-VGGT,bonsai,,,GT Points,0.3157532414962442
-VGGT,bonsai,,GT Intrinsics,,0.3692004225562345
-VGGT,bonsai,,GT Intrinsics,GT Points,0.3819916716948045
-VGGT,bonsai,GT Extrinsics,,,0.3695476130280424
-VGGT,bonsai,GT Extrinsics,,GT Points,0.37786367951932864
-VGGT,bonsai,GT Extrinsics,GT Intrinsics,,0.7491229822916052
-VGGT,bonsai,GT Extrinsics,GT Intrinsics,GT Points,0.8874214896720443
-COLMAP,kitchen,,,,0.4839732631063059
-COLMAP,kitchen,,,GT Points,0.48859500327305483
-COLMAP,kitchen,,GT Intrinsics,,0.49115559627205774
-COLMAP,kitchen,,GT Intrinsics,GT Points,0.4963824135905508
-COLMAP,kitchen,GT Extrinsics,,,0.8317555153888878
-COLMAP,kitchen,GT Extrinsics,,GT Points,0.8363173338714708
-COLMAP,kitchen,GT Extrinsics,GT Intrinsics,,0.8764360954402869
-COLMAP,kitchen,GT Extrinsics,GT Intrinsics,GT Points,0.8856253888678287
-VGGT,kitchen,,,,0.39649354836397005
-VGGT,kitchen,,,GT Points,0.41915373538050116
-VGGT,kitchen,,GT Intrinsics,,0.38907989938976384
-VGGT,kitchen,,GT Intrinsics,GT Points,0.41444478296784315
-VGGT,kitchen,GT Extrinsics,,,0.5961048535087652
-VGGT,kitchen,GT Extrinsics,,GT Points,0.6381740721306914
-VGGT,kitchen,GT Extrinsics,GT Intrinsics,,0.8260839641907525
-VGGT,kitchen,GT Extrinsics,GT Intrinsics,GT Points,0.8853914881387726
-COLMAP,counter,,,,0.7550067725779562
-COLMAP,counter,,,GT Points,0.7639872810722868
-COLMAP,counter,,GT Intrinsics,,0.7609115684086661
-COLMAP,counter,,GT Intrinsics,GT Points,0.7682390596821681
-COLMAP,counter,GT Extrinsics,,,0.767389822773069
-COLMAP,counter,GT Extrinsics,,GT Points,0.7756004325362906
-COLMAP,counter,GT Extrinsics,GT Intrinsics,,0.7731847258803903
-COLMAP,counter,GT Extrinsics,GT Intrinsics,GT Points,0.7808887110545002
-VGGT,counter,,,,0.45863071345446405
-VGGT,counter,,,GT Points,0.4679945042336274
-VGGT,counter,,GT Intrinsics,,0.455418107066548
-VGGT,counter,,GT Intrinsics,GT Points,0.4669304790242761
-VGGT,counter,GT Extrinsics,,,0.600714395462963
-VGGT,counter,GT Extrinsics,,GT Points,0.6193163979355587
-VGGT,counter,GT Extrinsics,GT Intrinsics,,0.755027282055978
-VGGT,counter,GT Extrinsics,GT Intrinsics,GT Points,0.7824117028535069
+COLMAP,bonsai,,,,0.8418353775478633
+COLMAP,bonsai,,,GT Points,0.8559250052754487
+COLMAP,bonsai,,GT Intrinsics,,0.839929920926816
+COLMAP,bonsai,,GT Intrinsics,GT Points,0.8546676747670339
+COLMAP,bonsai,GT Extrinsics,,,0.9560898544340646
+COLMAP,bonsai,GT Extrinsics,,GT Points,0.9711271049702919
+COLMAP,bonsai,GT Extrinsics,GT Intrinsics,,0.9585122633398624
+COLMAP,bonsai,GT Extrinsics,GT Intrinsics,GT Points,0.9741171917177934
+VGGT,bonsai,,,,0.3694203145477662
+VGGT,bonsai,,,GT Points,0.37174779320011053
+VGGT,bonsai,,GT Intrinsics,,0.41439505747342126
+VGGT,bonsai,,GT Intrinsics,GT Points,0.42217732537017394
+VGGT,bonsai,GT Extrinsics,,,0.4391701133162887
+VGGT,bonsai,GT Extrinsics,,GT Points,0.4452856152068492
+VGGT,bonsai,GT Extrinsics,GT Intrinsics,,0.847150288033284
+VGGT,bonsai,GT Extrinsics,GT Intrinsics,GT Points,0.973612853270835
+COLMAP,kitchen,,,,0.5148640553079076
+COLMAP,kitchen,,,GT Points,0.5172533749991846
+COLMAP,kitchen,,GT Intrinsics,,0.5242634692929486
+COLMAP,kitchen,,GT Intrinsics,GT Points,0.5263603136979426
+COLMAP,kitchen,GT Extrinsics,,,0.8186251847599915
+COLMAP,kitchen,GT Extrinsics,,GT Points,0.836973000068491
+COLMAP,kitchen,GT Extrinsics,GT Intrinsics,,0.9141956952057387
+COLMAP,kitchen,GT Extrinsics,GT Intrinsics,GT Points,0.9325048406550913
+VGGT,kitchen,,,,0.42770479682438395
+VGGT,kitchen,,,GT Points,0.4547221941983568
+VGGT,kitchen,,GT Intrinsics,,0.43109706237844403
+VGGT,kitchen,,GT Intrinsics,GT Points,0.45625171076949345
+VGGT,kitchen,GT Extrinsics,,,0.6224335283137823
+VGGT,kitchen,GT Extrinsics,,GT Points,0.6648711313319872
+VGGT,kitchen,GT Extrinsics,GT Intrinsics,,0.8582985006693975
+VGGT,kitchen,GT Extrinsics,GT Intrinsics,GT Points,0.9314162324027166
+COLMAP,counter,,,,0.8462504524546369
+COLMAP,counter,,,GT Points,0.869494066387899
+COLMAP,counter,,GT Intrinsics,,0.8530865078277599
+COLMAP,counter,,GT Intrinsics,GT Points,0.8754836084433697
+COLMAP,counter,GT Extrinsics,,,0.8545925541114621
+COLMAP,counter,GT Extrinsics,,GT Points,0.8757415704327485
+COLMAP,counter,GT Extrinsics,GT Intrinsics,,0.8610481857633806
+COLMAP,counter,GT Extrinsics,GT Intrinsics,GT Points,0.8823797801549438
+VGGT,counter,,,,0.4590878210492224
+VGGT,counter,,,GT Points,0.4612895373867424
+VGGT,counter,,GT Intrinsics,,0.45634018340770727
+VGGT,counter,,GT Intrinsics,GT Points,0.4606513387201048
+VGGT,counter,GT Extrinsics,,,0.6958657102665395
+VGGT,counter,GT Extrinsics,,GT Points,0.7058840359550859
+VGGT,counter,GT Extrinsics,GT Intrinsics,,0.8654372138276822
+VGGT,counter,GT Extrinsics,GT Intrinsics,GT Points,0.8828337088159497

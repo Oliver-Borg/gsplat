@@ -1,5 +1,5 @@
 \begin{table}[H]
-\caption{The effect of using ground truth extrinsics, intrinsics and points on VGGT and COLMAP results (Indoor)}
+\caption{\ifdefined\customcaption \customcaption \else The effect of using ground truth extrinsics, intrinsics and points on VGGT and COLMAP results (Indoor) \fi}
 \label{tab:06_gt_cams_indoor}
 \centering
 \scriptsize
@@ -7,59 +7,59 @@
 \toprule
 Choice & Dataset & Use Gt Extrinsics & Use Gt Intrinsics & Use Gt Points & Composite Quality ↑ \\
 \midrule
-COLMAP & bonsai &  &  &  & 0.604 \\
-COLMAP & bonsai &  &  & GT Points & 0.616 \\
-COLMAP & bonsai &  & GT Intrinsics &  & 0.605 \\
-COLMAP & bonsai &  & GT Intrinsics & GT Points & 0.615 \\
-COLMAP & bonsai & GT Extrinsics &  &  & 0.866 \\
-COLMAP & bonsai & GT Extrinsics &  & GT Points & \underline{0.876} \\
-COLMAP & bonsai & GT Extrinsics & GT Intrinsics &  & \underline{0.876} \\
-COLMAP & bonsai & GT Extrinsics & GT Intrinsics & GT Points & \textbf{0.891} \\
+COLMAP & bonsai &  &  &  & 0.842 \\
+COLMAP & bonsai &  &  & GT Points & 0.856 \\
+COLMAP & bonsai &  & GT Intrinsics &  & 0.840 \\
+COLMAP & bonsai &  & GT Intrinsics & GT Points & 0.855 \\
+COLMAP & bonsai & GT Extrinsics &  &  & 0.956 \\
+COLMAP & bonsai & GT Extrinsics &  & GT Points & \underline{0.971} \\
+COLMAP & bonsai & GT Extrinsics & GT Intrinsics &  & 0.959 \\
+COLMAP & bonsai & GT Extrinsics & GT Intrinsics & GT Points & \textbf{0.974} \\
 \midrule
-VGGT & bonsai &  &  &  & 0.313 \\
-VGGT & bonsai &  &  & GT Points & 0.316 \\
-VGGT & bonsai &  & GT Intrinsics &  & 0.369 \\
-VGGT & bonsai &  & GT Intrinsics & GT Points & 0.382 \\
-VGGT & bonsai & GT Extrinsics &  &  & 0.370 \\
-VGGT & bonsai & GT Extrinsics &  & GT Points & 0.378 \\
-VGGT & bonsai & GT Extrinsics & GT Intrinsics &  & \underline{0.749} \\
-VGGT & bonsai & GT Extrinsics & GT Intrinsics & GT Points & \textbf{0.887} \\
+VGGT & bonsai &  &  &  & 0.369 \\
+VGGT & bonsai &  &  & GT Points & 0.372 \\
+VGGT & bonsai &  & GT Intrinsics &  & 0.414 \\
+VGGT & bonsai &  & GT Intrinsics & GT Points & 0.422 \\
+VGGT & bonsai & GT Extrinsics &  &  & 0.439 \\
+VGGT & bonsai & GT Extrinsics &  & GT Points & 0.445 \\
+VGGT & bonsai & GT Extrinsics & GT Intrinsics &  & \underline{0.847} \\
+VGGT & bonsai & GT Extrinsics & GT Intrinsics & GT Points & \textbf{0.974} \\
 \midrule
-COLMAP & kitchen &  &  &  & 0.484 \\
-COLMAP & kitchen &  &  & GT Points & 0.489 \\
-COLMAP & kitchen &  & GT Intrinsics &  & 0.491 \\
-COLMAP & kitchen &  & GT Intrinsics & GT Points & 0.496 \\
-COLMAP & kitchen & GT Extrinsics &  &  & 0.832 \\
-COLMAP & kitchen & GT Extrinsics &  & GT Points & 0.836 \\
-COLMAP & kitchen & GT Extrinsics & GT Intrinsics &  & \underline{0.876} \\
-COLMAP & kitchen & GT Extrinsics & GT Intrinsics & GT Points & \textbf{0.886} \\
+COLMAP & kitchen &  &  &  & 0.515 \\
+COLMAP & kitchen &  &  & GT Points & 0.517 \\
+COLMAP & kitchen &  & GT Intrinsics &  & 0.524 \\
+COLMAP & kitchen &  & GT Intrinsics & GT Points & 0.526 \\
+COLMAP & kitchen & GT Extrinsics &  &  & 0.819 \\
+COLMAP & kitchen & GT Extrinsics &  & GT Points & 0.837 \\
+COLMAP & kitchen & GT Extrinsics & GT Intrinsics &  & \underline{0.914} \\
+COLMAP & kitchen & GT Extrinsics & GT Intrinsics & GT Points & \textbf{0.933} \\
 \midrule
-VGGT & kitchen &  &  &  & 0.396 \\
-VGGT & kitchen &  &  & GT Points & 0.419 \\
-VGGT & kitchen &  & GT Intrinsics &  & 0.389 \\
-VGGT & kitchen &  & GT Intrinsics & GT Points & 0.414 \\
-VGGT & kitchen & GT Extrinsics &  &  & 0.596 \\
-VGGT & kitchen & GT Extrinsics &  & GT Points & 0.638 \\
-VGGT & kitchen & GT Extrinsics & GT Intrinsics &  & \underline{0.826} \\
-VGGT & kitchen & GT Extrinsics & GT Intrinsics & GT Points & \textbf{0.885} \\
+VGGT & kitchen &  &  &  & 0.428 \\
+VGGT & kitchen &  &  & GT Points & 0.455 \\
+VGGT & kitchen &  & GT Intrinsics &  & 0.431 \\
+VGGT & kitchen &  & GT Intrinsics & GT Points & 0.456 \\
+VGGT & kitchen & GT Extrinsics &  &  & 0.622 \\
+VGGT & kitchen & GT Extrinsics &  & GT Points & 0.665 \\
+VGGT & kitchen & GT Extrinsics & GT Intrinsics &  & \underline{0.858} \\
+VGGT & kitchen & GT Extrinsics & GT Intrinsics & GT Points & \textbf{0.931} \\
 \midrule
-COLMAP & counter &  &  &  & 0.755 \\
-COLMAP & counter &  &  & GT Points & 0.764 \\
-COLMAP & counter &  & GT Intrinsics &  & 0.761 \\
-COLMAP & counter &  & GT Intrinsics & GT Points & 0.768 \\
-COLMAP & counter & GT Extrinsics &  &  & 0.767 \\
-COLMAP & counter & GT Extrinsics &  & GT Points & \underline{0.776} \\
-COLMAP & counter & GT Extrinsics & GT Intrinsics &  & 0.773 \\
-COLMAP & counter & GT Extrinsics & GT Intrinsics & GT Points & \textbf{0.781} \\
+COLMAP & counter &  &  &  & 0.846 \\
+COLMAP & counter &  &  & GT Points & 0.869 \\
+COLMAP & counter &  & GT Intrinsics &  & 0.853 \\
+COLMAP & counter &  & GT Intrinsics & GT Points & 0.875 \\
+COLMAP & counter & GT Extrinsics &  &  & 0.855 \\
+COLMAP & counter & GT Extrinsics &  & GT Points & \underline{0.876} \\
+COLMAP & counter & GT Extrinsics & GT Intrinsics &  & 0.861 \\
+COLMAP & counter & GT Extrinsics & GT Intrinsics & GT Points & \textbf{0.882} \\
 \midrule
 VGGT & counter &  &  &  & 0.459 \\
-VGGT & counter &  &  & GT Points & 0.468 \\
-VGGT & counter &  & GT Intrinsics &  & 0.455 \\
-VGGT & counter &  & GT Intrinsics & GT Points & 0.467 \\
-VGGT & counter & GT Extrinsics &  &  & 0.601 \\
-VGGT & counter & GT Extrinsics &  & GT Points & 0.619 \\
-VGGT & counter & GT Extrinsics & GT Intrinsics &  & \underline{0.755} \\
-VGGT & counter & GT Extrinsics & GT Intrinsics & GT Points & \textbf{0.782} \\
+VGGT & counter &  &  & GT Points & 0.461 \\
+VGGT & counter &  & GT Intrinsics &  & 0.456 \\
+VGGT & counter &  & GT Intrinsics & GT Points & 0.461 \\
+VGGT & counter & GT Extrinsics &  &  & 0.696 \\
+VGGT & counter & GT Extrinsics &  & GT Points & 0.706 \\
+VGGT & counter & GT Extrinsics & GT Intrinsics &  & \underline{0.865} \\
+VGGT & counter & GT Extrinsics & GT Intrinsics & GT Points & \textbf{0.883} \\
 \bottomrule
 \end{tabular}
 \end{table}

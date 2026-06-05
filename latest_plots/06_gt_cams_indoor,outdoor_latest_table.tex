@@ -1,0 +1,47 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else The effect of using ground truth extrinsics, intrinsics and points on VGGT and COLMAP results (Indoor,Outdoor) \fi}
+\label{tab:06_gt_cams_indoor,outdoor}
+\centering
+\scriptsize
+\begin{tabular}{lllllr}
+\toprule
+Choice & Dataset Collection & Use Gt Extrinsics & Use Gt Intrinsics & Use Gt Points & Composite Quality ↑ \\
+\midrule
+COLMAP & indoor &  &  &  & 0.614 \\
+COLMAP & indoor &  &  & GT Points & 0.623 \\
+COLMAP & indoor &  & GT Intrinsics &  & 0.619 \\
+COLMAP & indoor &  & GT Intrinsics & GT Points & 0.627 \\
+COLMAP & indoor & GT Extrinsics &  &  & 0.822 \\
+COLMAP & indoor & GT Extrinsics &  & GT Points & 0.829 \\
+COLMAP & indoor & GT Extrinsics & GT Intrinsics &  & \underline{0.842} \\
+COLMAP & indoor & GT Extrinsics & GT Intrinsics & GT Points & \textbf{0.853} \\
+\midrule
+VGGT & indoor &  &  &  & 0.389 \\
+VGGT & indoor &  &  & GT Points & 0.401 \\
+VGGT & indoor &  & GT Intrinsics &  & 0.405 \\
+VGGT & indoor &  & GT Intrinsics & GT Points & 0.421 \\
+VGGT & indoor & GT Extrinsics &  &  & 0.522 \\
+VGGT & indoor & GT Extrinsics &  & GT Points & 0.545 \\
+VGGT & indoor & GT Extrinsics & GT Intrinsics &  & \underline{0.777} \\
+VGGT & indoor & GT Extrinsics & GT Intrinsics & GT Points & \textbf{0.852} \\
+\midrule
+COLMAP & outdoor &  &  &  & 0.451 \\
+COLMAP & outdoor &  &  & GT Points & 0.487 \\
+COLMAP & outdoor &  & GT Intrinsics &  & 0.438 \\
+COLMAP & outdoor &  & GT Intrinsics & GT Points & 0.470 \\
+COLMAP & outdoor & GT Extrinsics &  &  & 0.524 \\
+COLMAP & outdoor & GT Extrinsics &  & GT Points & 0.564 \\
+COLMAP & outdoor & GT Extrinsics & GT Intrinsics &  & \underline{0.567} \\
+COLMAP & outdoor & GT Extrinsics & GT Intrinsics & GT Points & \textbf{0.622} \\
+\midrule
+VGGT & outdoor &  &  &  & 0.150 \\
+VGGT & outdoor &  &  & GT Points & 0.153 \\
+VGGT & outdoor &  & GT Intrinsics &  & 0.150 \\
+VGGT & outdoor &  & GT Intrinsics & GT Points & 0.152 \\
+VGGT & outdoor & GT Extrinsics &  &  & 0.344 \\
+VGGT & outdoor & GT Extrinsics &  & GT Points & 0.365 \\
+VGGT & outdoor & GT Extrinsics & GT Intrinsics &  & \underline{0.603} \\
+VGGT & outdoor & GT Extrinsics & GT Intrinsics & GT Points & \textbf{0.622} \\
+\bottomrule
+\end{tabular}
+\end{table}

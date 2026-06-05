@@ -23,7 +23,7 @@ COLMAP,outdoor,GT Extrinsics,,,0.5240217514282856
 COLMAP,outdoor,GT Extrinsics,,GT Points,0.564445330682502
 COLMAP,outdoor,GT Extrinsics,GT Intrinsics,,0.567230813561876
 COLMAP,outdoor,GT Extrinsics,GT Intrinsics,GT Points,0.6218374935171421
-VGGT,outdoor,,,,0.14369096964087766
+VGGT,outdoor,,,,0.15011054441374777
 VGGT,outdoor,,,GT Points,0.15315185945891757
 VGGT,outdoor,,GT Intrinsics,,0.14986974550889173
 VGGT,outdoor,,GT Intrinsics,GT Points,0.15242479610215903

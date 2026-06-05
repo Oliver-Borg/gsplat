@@ -1,0 +1,46 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else A comparison of different VGGT point cloud sampling modes with GT cameras (First) \fi}
+\label{tab:03_sampling_mode_gt_cams_first}
+\centering
+\scriptsize
+\begin{tabular}{llrlrrrrr}
+\toprule
+Choice & Dataset & Num Points & Sampling Mode & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ & Average Error ↓ \\
+\midrule
+COLMAP & bicycle & 17352 &  & \textbf{22.997} & 0.349 & 0.610 & 0.474 & 0.326 \\
+VGGT & bicycle & 23814 & ba & \underline{22.958} & 0.369 & 0.600 & 0.455 & 0.335 \\
+VGGT & bicycle & 50000 & random & 22.830 & 0.273 & \textbf{0.634} & \underline{0.532} & 0.294 \\
+VGGT & bicycle & 100000 & imagefps & 22.643 & 0.260 & \underline{0.624} & 0.530 & 0.293 \\
+VGGT & bicycle & 100000 & random & 22.770 & 0.248 & \textbf{0.634} & \textbf{0.546} & \textbf{0.286} \\
+VGGT & bicycle & 500000 & random & 22.331 & \textbf{0.233} & 0.605 & 0.530 & \underline{0.289} \\
+VGGT & bicycle & 1000000 & random & 22.059 & \underline{0.243} & 0.585 & 0.507 & 0.298 \\
+\midrule
+COLMAP & bonsai & 80892 &  & \textbf{28.943} & \textbf{0.158} & \textbf{0.908} & \textbf{0.876} & \textbf{0.154} \\
+VGGT & bonsai & 23220 & ba & \underline{26.778} & 0.214 & \underline{0.857} & \underline{0.772} & \underline{0.198} \\
+VGGT & bonsai & 100000 & voxels & 25.986 & \underline{0.211} & 0.833 & 0.745 & 0.207 \\
+\midrule
+COLMAP & lego & 10313 &  & 33.117 & 0.034 & \underline{0.980} & 1.072 & 0.059 \\
+VGGT & lego & 8700 & confidence & 33.125 & 0.034 & \underline{0.980} & 1.072 & 0.059 \\
+VGGT & lego & 8700 & imagefps & 33.113 & 0.034 & \underline{0.980} & 1.071 & 0.059 \\
+VGGT & lego & 8700 & random & 33.127 & 0.033 & \underline{0.980} & 1.072 & 0.059 \\
+VGGT & lego & 8700 & voxels & 33.175 & 0.033 & \underline{0.980} & 1.073 & \underline{0.058} \\
+VGGT & lego & 27774 & ba & 33.294 & \underline{0.032} & \textbf{0.981} & \textbf{1.077} & \textbf{0.057} \\
+VGGT & lego & 43500 & confidence & 33.267 & \underline{0.032} & \textbf{0.981} & \underline{1.076} & \textbf{0.057} \\
+VGGT & lego & 43500 & imagefps & \textbf{33.309} & \underline{0.032} & \textbf{0.981} & \textbf{1.077} & \textbf{0.057} \\
+VGGT & lego & 43500 & random & 33.273 & \underline{0.032} & \textbf{0.981} & \underline{1.076} & \textbf{0.057} \\
+VGGT & lego & 43500 & voxels & 33.253 & \underline{0.032} & \textbf{0.981} & \underline{1.076} & \textbf{0.057} \\
+VGGT & lego & 87000 & confidence & \underline{33.306} & \underline{0.032} & \textbf{0.981} & \textbf{1.077} & \textbf{0.057} \\
+VGGT & lego & 87000 & imagefps & 33.297 & \underline{0.032} & \underline{0.980} & \textbf{1.077} & \textbf{0.057} \\
+VGGT & lego & 87000 & random & 33.302 & \underline{0.032} & \textbf{0.981} & \textbf{1.077} & \textbf{0.057} \\
+VGGT & lego & 87000 & voxels & 33.301 & \underline{0.032} & \textbf{0.981} & \textbf{1.077} & \textbf{0.057} \\
+VGGT & lego & 435000 & confidence & 33.260 & \textbf{0.031} & \underline{0.980} & \underline{1.076} & \textbf{0.057} \\
+VGGT & lego & 435000 & imagefps & 33.228 & \underline{0.032} & \underline{0.980} & 1.075 & \underline{0.058} \\
+VGGT & lego & 435000 & random & 33.251 & \textbf{0.031} & \underline{0.980} & \underline{1.076} & \underline{0.058} \\
+VGGT & lego & 435000 & voxels & 33.241 & \textbf{0.031} & \underline{0.980} & \underline{1.076} & \underline{0.058} \\
+VGGT & lego & 870000 & confidence & 33.215 & \textbf{0.031} & \underline{0.980} & \underline{1.076} & \underline{0.058} \\
+VGGT & lego & 870000 & imagefps & 33.211 & \textbf{0.031} & 0.979 & 1.075 & \underline{0.058} \\
+VGGT & lego & 870000 & random & 33.193 & \textbf{0.031} & \underline{0.980} & 1.075 & \underline{0.058} \\
+VGGT & lego & 870000 & voxels & 33.288 & \textbf{0.031} & \underline{0.980} & \textbf{1.077} & \textbf{0.057} \\
+\bottomrule
+\end{tabular}
+\end{table}
