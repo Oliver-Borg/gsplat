@@ -1,5 +1,5 @@
 \begin{table}[H]
-\caption{VGGT with depth loss for different depth confidence modes. (Indoor,Outdoor,Synthetic)}
+\caption{\ifdefined\customcaption \customcaption \else VGGT with depth loss for different depth confidence modes. (Indoor,Outdoor,Synthetic) \fi}
 \label{tab:05_depth_conf_mode_indoor,outdoor,synthetic}
 \centering
 \scriptsize
@@ -7,14 +7,14 @@
 \toprule
 Choice & Dataset Collection & Depth Conf Mode & Depth Loss Mode & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
 \midrule
-VGGT & indoor &  &  & \underline{0.426} & 0.011 & 19.416 & \underline{0.271} & 0.538 & 0.413 \\
-VGGT & indoor &  & full & \textbf{0.421} & \underline{0.010} & 19.097 & 0.283 & 0.537 & 0.400 \\
-VGGT & indoor & Scaled & full & \underline{0.426} & \textbf{0.009} & 19.382 & 0.272 & 0.545 & 0.416 \\
-VGGT & indoor & Scaled Shifted & full & \textbf{0.421} & \underline{0.010} & 19.513 & \textbf{0.268} & 0.543 & 0.420 \\
-VGGT & indoor & Sigmoid & full & 0.428 & \textbf{0.009} & 19.203 & 0.286 & 0.546 & 0.405 \\
-VGGT & indoor & Sigmoid Shifted & full & 0.433 & \underline{0.010} & \textbf{19.693} & 0.272 & \underline{0.560} & \textbf{0.431} \\
-VGGT & indoor & Standard & full & 0.435 & \underline{0.010} & 19.331 & 0.294 & \textbf{0.563} & 0.412 \\
-VGGT & indoor & Standard Shifted & full & 0.440 & \underline{0.010} & \underline{19.579} & 0.280 & 0.559 & \underline{0.423} \\
+VGGT & indoor &  &  & \textbf{0.377} & \underline{0.010} & 20.092 & \textbf{0.239} & 0.579 & 0.469 \\
+VGGT & indoor &  & full & 0.396 & \textbf{0.009} & 19.925 & 0.252 & \underline{0.585} & 0.462 \\
+VGGT & indoor & Scaled & full & 0.396 & \textbf{0.009} & 20.102 & \underline{0.242} & 0.580 & 0.468 \\
+VGGT & indoor & Scaled Shifted & full & \underline{0.388} & \textbf{0.009} & \textbf{20.215} & \textbf{0.239} & 0.584 & \textbf{0.475} \\
+VGGT & indoor & Sigmoid & full & 0.398 & \textbf{0.009} & 19.863 & 0.257 & 0.581 & 0.455 \\
+VGGT & indoor & Sigmoid Shifted & full & 0.395 & \textbf{0.009} & \underline{20.188} & 0.243 & \textbf{0.588} & \underline{0.474} \\
+VGGT & indoor & Standard & full & 0.398 & \textbf{0.009} & 19.878 & 0.253 & 0.584 & 0.460 \\
+VGGT & indoor & Standard Shifted & full & 0.405 & \textbf{0.009} & 19.885 & 0.255 & 0.562 & 0.446 \\
 \midrule
 VGGT & outdoor &  &  & 0.467 & \underline{0.018} & 18.343 & \textbf{0.389} & 0.344 & 0.207 \\
 VGGT & outdoor &  & full & 0.465 & 0.019 & 18.639 & 0.404 & 0.357 & \underline{0.211} \\

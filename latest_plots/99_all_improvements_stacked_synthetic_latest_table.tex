@@ -1,5 +1,5 @@
 \begin{table}[H]
-\caption{Stacked removal of optimisations. (Synthetic)}
+\caption{\ifdefined\customcaption \customcaption \else Stacked removal of optimisations. (Synthetic) \fi}
 \label{tab:99_all_improvements_stacked_synthetic}
 \centering
 \scriptsize
@@ -7,15 +7,26 @@
 \toprule
 Choice & Dataset & Series Label Override & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & SSIM ↑ & LPIPS ↓ & Composite Quality ↑ \\
 \midrule
-VGGT & lego & 2. No Confidence Sampling &  &  &  &  &  &  \\
-COLMAP & lego & 5. No Combined Points & 10.429 & 0.116 & \textbf{23.416} & \textbf{0.866} & \textbf{0.061} & \textbf{0.809} \\
-VGGT & lego & 6. No COLMAP Cameras & \textbf{0.252} & \underline{0.006} & 20.353 & 0.773 & \underline{0.076} & \underline{0.689} \\
-VGGT & lego & 7. No Pose Opt & \underline{0.297} & \textbf{0.005} & \underline{20.573} & \underline{0.774} & 0.095 & 0.681 \\
+COLMAP & lego & 1. All Improvements &  &  &  &  &  &  \\
+COLMAP & lego & 2. No Confidence Sampling & 10.386 & 0.114 & \underline{25.157} & 0.896 & 0.062 & 0.858 \\
+COLMAP & lego & 3. No Depth Conf & 10.386 & 0.113 & \textbf{25.269} & \textbf{0.905} & \textbf{0.050} & \textbf{0.872} \\
+COLMAP & lego & 4. No Depth Loss & 10.390 & 0.113 & 25.018 & \underline{0.902} & \underline{0.051} & \underline{0.866} \\
+COLMAP & lego & 5. No Combined Points & 10.429 & 0.116 & 23.416 & 0.866 & 0.061 & 0.809 \\
+VGGT & lego & 6. No COLMAP Cameras & \textbf{0.252} & \underline{0.006} & 20.353 & 0.773 & 0.076 & 0.689 \\
+VGGT & lego & 7. No Pose Opt & \underline{0.297} & \textbf{0.005} & 20.573 & 0.774 & 0.095 & 0.681 \\
 \midrule
+COLMAP & ship & 1. All Improvements &  &  &  &  &  &  \\
+COLMAP & ship & 2. No Confidence Sampling &  &  &  &  &  &  \\
+COLMAP & ship & 3. No Depth Conf &  &  &  &  &  &  \\
+COLMAP & ship & 4. No Depth Loss &  &  &  &  &  &  \\
 COLMAP & ship & 5. No Combined Points & \textbf{0.129} & \textbf{0.002} & \underline{22.677} & \textbf{0.759} & \underline{0.142} & \underline{0.683} \\
 VGGT & ship & 6. No COLMAP Cameras & \underline{0.377} & \underline{0.008} & \textbf{22.859} & \underline{0.748} & \textbf{0.130} & \textbf{0.687} \\
 VGGT & ship & 7. No Pose Opt & 0.487 & 0.009 & 20.871 & 0.701 & 0.176 & 0.594 \\
 \midrule
+COLMAP & drums & 1. All Improvements &  &  &  &  &  &  \\
+COLMAP & drums & 2. No Confidence Sampling &  &  &  &  &  &  \\
+COLMAP & drums & 3. No Depth Conf &  &  &  &  &  &  \\
+COLMAP & drums & 4. No Depth Loss &  &  &  &  &  &  \\
 COLMAP & drums & 5. No Combined Points & \textbf{0.095} & \textbf{0.002} & \textbf{22.801} & \textbf{0.906} & \underline{0.089} & \textbf{0.803} \\
 VGGT & drums & 6. No COLMAP Cameras & \underline{0.116} & \underline{0.003} & \underline{20.899} & \underline{0.869} & \textbf{0.085} & \underline{0.749} \\
 VGGT & drums & 7. No Pose Opt & 0.172 & \underline{0.003} & 19.668 & 0.836 & 0.106 & 0.694 \\

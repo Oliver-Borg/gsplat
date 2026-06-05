@@ -6,7 +6,9 @@
         100
     ],
     "sampling_mode": [
-        "random"
+        "voxels",
+        "random",
+        "confidence"
     ],
     "num_points_per_image": [
         1000
@@ -16,14 +18,14 @@
     ],
     "gt_eval": true,
     "choice": [
-        "combined",
         "colmap",
-        "vggt"
+        "vggt",
+        "combined"
     ],
     "pcd_src": [
-        "both",
+        "colmap",
         "vggt",
-        "colmap"
+        "both"
     ],
     "camera_src": [
         "colmap"

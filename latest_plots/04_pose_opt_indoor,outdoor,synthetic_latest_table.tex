@@ -1,25 +1,26 @@
 \begin{table}[H]
-\caption{COLMAP versus VGGT with pose optimization (Indoor,Outdoor,Synthetic)}
+\caption{\ifdefined\customcaption \customcaption \else COLMAP versus VGGT with pose optimization (Indoor,Outdoor,Synthetic) \fi}
 \label{tab:04_pose_opt_indoor,outdoor,synthetic}
-\footnotesize
+\centering
+\scriptsize
 \begin{tabular}{lllrrrrrr}
 \toprule
 Choice & Dataset Collection & Pose Opt & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
 \midrule
-COLMAP & indoor &  & \underline{0.098} & \underline{0.002} & \underline{22.968} & \underline{0.180} & \underline{0.673} & \underline{0.614} \\
-COLMAP & indoor & Pose Opt & \textbf{0.072} & \textbf{0.001} & \textbf{23.826} & \textbf{0.168} & \textbf{0.708} & \textbf{0.658} \\
+COLMAP & indoor &  & \textbf{0.059} & \textbf{0.001} & \textbf{25.828} & \underline{0.147} & \textbf{0.753} & \textbf{0.734} \\
+COLMAP & indoor & Pose Opt & \underline{0.061} & \textbf{0.001} & \underline{25.193} & \textbf{0.145} & \underline{0.744} & \underline{0.718} \\
 \midrule
-VGGT & indoor &  & \underline{0.468} & \underline{0.013} & \underline{19.238} & \underline{0.322} & \textbf{0.556} & \underline{0.389} \\
-VGGT & indoor & Pose Opt & \textbf{0.426} & \textbf{0.011} & \textbf{19.416} & \textbf{0.271} & \underline{0.538} & \textbf{0.413} \\
+VGGT & indoor &  & \underline{0.467} & \underline{0.012} & \underline{19.735} & \underline{0.298} & \underline{0.566} & \underline{0.419} \\
+VGGT & indoor & Pose Opt & \textbf{0.377} & \textbf{0.010} & \textbf{20.092} & \textbf{0.239} & \textbf{0.579} & \textbf{0.469} \\
 \midrule
 COLMAP & outdoor &  & \textbf{0.061} & \textbf{0.001} & \underline{22.726} & \underline{0.327} & \underline{0.556} & \underline{0.451} \\
 COLMAP & outdoor & Pose Opt & \underline{0.064} & \textbf{0.001} & \textbf{23.042} & \textbf{0.318} & \textbf{0.589} & \textbf{0.481} \\
 \midrule
-VGGT & outdoor &  & \underline{0.695} & \underline{0.021} & \underline{18.133} & \underline{0.484} & \underline{0.342} & \underline{0.144} \\
-VGGT & outdoor & Pose Opt & \textbf{0.467} & \textbf{0.018} & \textbf{18.343} & \textbf{0.389} & \textbf{0.344} & \textbf{0.207} \\
+VGGT & outdoor &  & \underline{0.648} & \underline{0.020} & \underline{18.261} & \underline{0.480} & \textbf{0.345} & \underline{0.150} \\
+VGGT & outdoor & Pose Opt & \textbf{0.467} & \textbf{0.018} & \textbf{18.343} & \textbf{0.389} & \underline{0.344} & \textbf{0.207} \\
 \midrule
-COLMAP & synthetic &  & \underline{3.626} & \underline{0.040} & \underline{23.004} & \underline{0.102} & \underline{0.842} & \underline{0.762} \\
-COLMAP & synthetic & Pose Opt & \textbf{3.556} & \textbf{0.039} & \textbf{23.258} & \textbf{0.097} & \textbf{0.851} & \textbf{0.775} \\
+COLMAP & synthetic &  & \underline{3.625} & \underline{0.041} & \underline{22.552} & \underline{0.103} & \underline{0.833} & \underline{0.748} \\
+COLMAP & synthetic & Pose Opt & \textbf{3.551} & \textbf{0.040} & \textbf{22.965} & \textbf{0.097} & \textbf{0.844} & \textbf{0.765} \\
 \midrule
 VGGT & synthetic &  & \underline{0.319} & \textbf{0.006} & \underline{20.370} & \underline{0.126} & \underline{0.770} & \underline{0.656} \\
 VGGT & synthetic & Pose Opt & \textbf{0.248} & \textbf{0.006} & \textbf{21.370} & \textbf{0.097} & \textbf{0.797} & \textbf{0.709} \\

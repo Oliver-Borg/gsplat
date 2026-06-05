@@ -1,28 +1,29 @@
 \begin{table}[H]
-\caption{COLMAP versus VGGT with pose optimization (Indoor)}
+\caption{\ifdefined\customcaption \customcaption \else COLMAP versus VGGT with pose optimization (Indoor) \fi}
 \label{tab:04_pose_opt_indoor}
-\footnotesize
+\centering
+\scriptsize
 \begin{tabular}{lllrrrrrr}
 \toprule
 Choice & Dataset & Pose Opt & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
 \midrule
-COLMAP & bonsai &  & \underline{0.158} & \underline{0.003} & \underline{22.423} & \underline{0.204} & \underline{0.697} & \underline{0.604} \\
-COLMAP & bonsai & Pose Opt & \textbf{0.097} & \textbf{0.001} & \textbf{24.653} & \textbf{0.175} & \textbf{0.776} & \textbf{0.709} \\
+COLMAP & bonsai &  & \textbf{0.059} & \textbf{0.001} & \textbf{27.826} & \textbf{0.140} & \textbf{0.866} & \textbf{0.842} \\
+COLMAP & bonsai & Pose Opt & \underline{0.078} & \textbf{0.001} & \underline{25.544} & \underline{0.144} & \underline{0.795} & \underline{0.756} \\
 \midrule
-VGGT & bonsai &  & \textbf{0.722} & \underline{0.024} & \textbf{17.731} & \underline{0.418} & \textbf{0.575} & \textbf{0.313} \\
-VGGT & bonsai & Pose Opt & \underline{0.789} & \textbf{0.022} & \underline{17.423} & \textbf{0.399} & \underline{0.560} & \underline{0.310} \\
+VGGT & bonsai &  & \underline{0.731} & \underline{0.024} & \textbf{18.664} & \underline{0.374} & \textbf{0.595} & \underline{0.369} \\
+VGGT & bonsai & Pose Opt & \textbf{0.693} & \textbf{0.019} & \underline{18.461} & \textbf{0.336} & \underline{0.582} & \textbf{0.382} \\
 \midrule
-COLMAP & kitchen &  & \underline{0.107} & \textbf{0.001} & \underline{21.260} & \underline{0.149} & \underline{0.471} & \underline{0.484} \\
-COLMAP & kitchen & Pose Opt & \textbf{0.094} & \textbf{0.001} & \textbf{21.597} & \textbf{0.142} & \textbf{0.497} & \textbf{0.510} \\
+COLMAP & kitchen &  & \underline{0.101} & \textbf{0.001} & \underline{21.721} & \underline{0.137} & \underline{0.498} & \underline{0.515} \\
+COLMAP & kitchen & Pose Opt & \textbf{0.086} & \textbf{0.001} & \textbf{22.443} & \textbf{0.127} & \textbf{0.551} & \textbf{0.566} \\
 \midrule
-VGGT & kitchen &  & \underline{0.339} & \underline{0.007} & \underline{19.821} & \underline{0.239} & \textbf{0.463} & \underline{0.396} \\
-VGGT & kitchen & Pose Opt & \textbf{0.236} & \textbf{0.005} & \textbf{20.018} & \textbf{0.176} & \underline{0.414} & \textbf{0.410} \\
+VGGT & kitchen &  & \underline{0.283} & \underline{0.006} & \underline{20.490} & \underline{0.230} & \underline{0.485} & \underline{0.428} \\
+VGGT & kitchen & Pose Opt & \textbf{0.159} & \textbf{0.005} & \textbf{21.233} & \textbf{0.156} & \textbf{0.531} & \textbf{0.514} \\
 \midrule
-COLMAP & counter &  & \underline{0.029} & \textbf{0.000} & \underline{25.221} & \underline{0.189} & \textbf{0.852} & \textbf{0.755} \\
-COLMAP & counter & Pose Opt & \textbf{0.026} & \textbf{0.000} & \textbf{25.228} & \textbf{0.188} & \underline{0.850} & \underline{0.754} \\
+COLMAP & counter &  & \textbf{0.016} & \textbf{0.000} & \textbf{27.935} & \underline{0.165} & \textbf{0.896} & \textbf{0.846} \\
+COLMAP & counter & Pose Opt & \underline{0.021} & \textbf{0.000} & \underline{27.591} & \textbf{0.164} & \underline{0.884} & \underline{0.833} \\
 \midrule
-VGGT & counter &  & \underline{0.343} & \underline{0.008} & \underline{20.160} & \underline{0.307} & \underline{0.630} & \underline{0.459} \\
-VGGT & counter & Pose Opt & \textbf{0.254} & \textbf{0.006} & \textbf{20.807} & \textbf{0.237} & \textbf{0.641} & \textbf{0.520} \\
+VGGT & counter &  & \underline{0.387} & \underline{0.008} & \underline{20.050} & \underline{0.291} & \underline{0.618} & \underline{0.459} \\
+VGGT & counter & Pose Opt & \textbf{0.278} & \textbf{0.006} & \textbf{20.581} & \textbf{0.226} & \textbf{0.623} & \textbf{0.512} \\
 \bottomrule
 \end{tabular}
 \end{table}

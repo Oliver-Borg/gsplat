@@ -1,5 +1,5 @@
 \begin{table}[H]
-\caption{A comparison of different VGGT point cloud sampling modes with GT cameras (Indoor,Outdoor,Synthetic)}
+\caption{\ifdefined\customcaption \customcaption \else A comparison of different VGGT point cloud sampling modes with GT cameras (Indoor,Outdoor,Synthetic) \fi}
 \label{tab:03_sampling_mode_gt_cams_indoor,outdoor,synthetic}
 \centering
 \scriptsize
@@ -7,9 +7,8 @@
 \toprule
 Choice & Dataset Collection & Num Points & Sampling Mode & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ & Average Error ↓ \\
 \midrule
-COLMAP & indoor & 80892 &  & \textbf{28.943} & \underline{0.158} & \textbf{0.908} & \textbf{0.876} & \underline{0.154} \\
-COLMAP & indoor & 92853 &  & \underline{27.952} & \textbf{0.122} & \underline{0.902} & \textbf{0.876} & \textbf{0.145} \\
-VGGT & indoor & 50000 & random & 25.833 & 0.178 & 0.864 & \underline{0.780} & 0.183 \\
+COLMAP & indoor & 66763 &  & \textbf{31.412} & \underline{0.130} & \textbf{0.941} & \textbf{0.959} & \textbf{0.124} \\
+COLMAP & indoor & 70681 &  & \underline{29.303} & \textbf{0.113} & \underline{0.915} & \underline{0.914} & \underline{0.135} \\
 \midrule
 COLMAP & outdoor & 19683 &  & \underline{25.440} & 0.342 & \underline{0.733} & 0.595 & 0.287 \\
 COLMAP & outdoor & 70656 &  & 24.718 & \textbf{0.249} & 0.722 & \textbf{0.633} & \textbf{0.260} \\

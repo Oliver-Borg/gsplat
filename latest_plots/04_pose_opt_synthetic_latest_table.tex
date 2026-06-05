@@ -1,19 +1,20 @@
 \begin{table}[H]
-\caption{COLMAP versus VGGT with pose optimization (Synthetic)}
+\caption{\ifdefined\customcaption \customcaption \else COLMAP versus VGGT with pose optimization (Synthetic) \fi}
 \label{tab:04_pose_opt_synthetic}
-\footnotesize
+\centering
+\scriptsize
 \begin{tabular}{lllrrrrrr}
 \toprule
 Choice & Dataset & Pose Opt & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
 \midrule
-COLMAP & lego &  & \underline{10.431} & \underline{0.113} & \underline{24.951} & \underline{0.058} & \underline{0.894} & \underline{0.856} \\
-COLMAP & lego & Pose Opt & \textbf{10.381} & \textbf{0.112} & \textbf{25.238} & \textbf{0.053} & \textbf{0.906} & \textbf{0.871} \\
+COLMAP & lego &  & \underline{10.479} & \underline{0.117} & \underline{22.787} & \underline{0.066} & \underline{0.851} & \underline{0.785} \\
+COLMAP & lego & Pose Opt & \textbf{10.429} & \textbf{0.116} & \textbf{23.416} & \textbf{0.061} & \textbf{0.866} & \textbf{0.809} \\
 \midrule
 VGGT & lego &  & \underline{0.297} & \textbf{0.005} & \textbf{20.573} & \underline{0.095} & \textbf{0.774} & \underline{0.681} \\
 VGGT & lego & Pose Opt & \textbf{0.252} & \underline{0.006} & \underline{20.353} & \textbf{0.076} & \underline{0.773} & \textbf{0.689} \\
 \midrule
-COLMAP & ship &  & \underline{0.296} & \underline{0.005} & \underline{21.593} & \underline{0.155} & \underline{0.733} & \underline{0.639} \\
-COLMAP & ship & Pose Opt & \textbf{0.192} & \textbf{0.003} & \textbf{21.735} & \textbf{0.149} & \textbf{0.740} & \textbf{0.650} \\
+COLMAP & ship &  & \underline{0.243} & \underline{0.004} & \underline{22.401} & \underline{0.149} & \underline{0.751} & \underline{0.668} \\
+COLMAP & ship & Pose Opt & \textbf{0.129} & \textbf{0.002} & \textbf{22.677} & \textbf{0.142} & \textbf{0.759} & \textbf{0.683} \\
 \midrule
 VGGT & ship &  & \underline{0.487} & \underline{0.009} & \underline{20.871} & \underline{0.176} & \underline{0.701} & \underline{0.594} \\
 VGGT & ship & Pose Opt & \textbf{0.377} & \textbf{0.008} & \textbf{22.859} & \textbf{0.130} & \textbf{0.748} & \textbf{0.687} \\
