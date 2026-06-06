@@ -3,7 +3,7 @@ import math
 import os
 import time
 from collections import defaultdict
-from dataclasses import dataclass, field
+from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple, Union
 import itertools
@@ -380,6 +380,10 @@ class Runner:
         os.makedirs(self.render_dir, exist_ok=True)
         self.ply_dir = f"{cfg.result_dir}/ply"
         os.makedirs(self.ply_dir, exist_ok=True)
+
+        # Dump config to a file here
+        with open(f"{cfg.result_dir}/stats/config.json", "w") as f:
+            json.dump(asdict(cfg), f, indent=4)
 
         # Tensorboard
         self.writer = SummaryWriter(log_dir=f"{cfg.result_dir}/tb")
