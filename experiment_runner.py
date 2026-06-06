@@ -1,3 +1,4 @@
+from copy import deepcopy
 from dataclasses import dataclass, field, replace
 import datetime
 import json
@@ -233,6 +234,8 @@ class Config:
     loss_multiplier: float = 1.0
     pose_loss_multiplier: float = 1.0
     run_train_eval: bool = False
+    run_mvs: bool = False
+    enable_timing: bool = False
 
     raw_metrics: bool = False
     require_depth_metrics: bool = False
@@ -259,6 +262,10 @@ class Config:
         instance.use_ba = data.get("use_ba", cls.use_ba)
         instance.max_ba_iterations = data.get("max_ba_iterations", cls.max_ba_iterations)
         instance.image_mode = data.get("image_mode", cls.image_mode)
+        instance.image_mode = data.get(
+            "image_mode",
+            "minfarthestpose" if instance.dataset.name in ("bonsai", "counter", "kitchen", "room") else cls.image_mode,
+        )
         instance.copy_mode = data.get("copy_mode", cls.copy_mode)
         instance.shared_camera = data.get("shared_camera", cls.shared_camera)
         instance.gt_eval = data.get("gt_eval", cls.gt_eval)
@@ -293,6 +300,8 @@ class Config:
         instance.pose_loss_multiplier = data.get("pose_loss_multiplier", cls.pose_loss_multiplier)
         instance.series_label_override = data.get("series_label_override", cls.series_label_override)
         instance.run_train_eval = data.get("run_train_eval", cls.run_train_eval)
+        instance.run_mvs = data.get("run_mvs", cls.run_mvs)
+        instance.enable_timing = data.get("enable_timing", cls.enable_timing)
 
         # Loop over each key in data and print a warning if it is not a field on the Config dataclass
         for key in data.keys():
@@ -335,12 +344,15 @@ class Config:
             * 7
             / 8
         )
-        if self.num_images > training_set_max_size:
+        if self.num_images >= training_set_max_size:
             self.num_images = training_set_max_size
+            if self.image_mode == "minfarthestpose":
+                self.image_mode = "farthestpose"
 
         if self.choice == "vggt":
             # VGGT goes OOM after 100 images
             self.num_images = min(100, self.num_images)
+            self.run_mvs = False
 
         self.use_ba = self.sampling_mode == "ba" or self.use_ba or self.choice == "colmap"
 
@@ -428,6 +440,8 @@ class Config:
             parts.append(self.colmap_mode)
             if self.camera_type != "SIMPLE_RADIAL":
                 parts.append(self.camera_type.lower().replace("simple_", "m"))
+            if self.run_mvs:
+                parts.append("mvs")
             parts.append(self.image_mode)
             if self.shared_camera:
                 parts.append("sharedcam")
@@ -459,6 +473,10 @@ class Config:
 
             if self.error_opa:
                 parts.append("errconf")
+
+            if self.enable_timing:
+                parts.append("timing")
+
             parts.append(self.image_mode)
 
             if self.use_ba:
@@ -500,9 +518,14 @@ class Config:
                         self.sampling_mode,
                     ]
                 )
+                if self.run_mvs:
+                    parts.append("mvs")
                 if self.near_filtering_strength > 0.0:
                     parts.append(f"nf{self.near_filtering_strength}")
                     parts.append(f"nq{self.near_filtering_quorum}")
+            elif self.pcd_src == "colmap":
+                if self.run_mvs:
+                    parts.append("mvs")
 
             if self.reconstruct_pose_opt:
                 parts.append("recposeopt")
@@ -717,6 +740,12 @@ class Config:
         if self.reconstruct_pose_opt:
             return True
 
+        if self.run_mvs:
+            return True
+
+        if self.enable_timing and self.sampling_mode == "imagefps":
+            return True
+
         if (
             self.sampling_mode == "vox3"
             or self.sampling_mode == "voxels"
@@ -771,6 +800,13 @@ class Config:
         )
 
     @property
+    def reconstruction_stats(self):
+        if not os.path.exists(self.reconstruction_stat_path):
+            return {}
+        with open(self.reconstruction_stat_path, "r") as f:
+            return json.load(f)
+
+    @property
     def _reconstruct_args(self):
         args = {
             "input": (Path(self.dataset.directory) / Path(self.dataset.data_folder_name)).absolute().as_posix(),
@@ -810,6 +846,12 @@ class Config:
 
         if self.use_ba:
             args["use_ba"] = True
+
+        if self.run_mvs:
+            args["run_mvs"] = True
+
+        if self.enable_timing:
+            args["enable_timing"] = True
 
         return args
 
@@ -897,6 +939,8 @@ class Config:
                     "shared_camera",
                     "use_ba",
                     "reconstruct_pose_opt",
+                    "run_mvs",
+                    "enable_timing",
                 )
                 and value is True
             ):
@@ -954,7 +998,7 @@ class Config:
         if (
             self.require_depth_metrics
             and self.eval_metrics.get("all_depth_absrel") is None
-            and "nerf_synthetic" in self.data_dir
+            and "nerf_synthetic" in self.dataset.directory
         ):
             return True
 
@@ -1171,7 +1215,13 @@ class Experiment:
         else:
             self.config_dict["dataset"] = dataset_name
 
-    def get_configs(self, dataset_name: str, renders: bool = False, reconstruct_only: bool = False) -> list[Config]:
+    def get_configs(
+        self,
+        dataset_name: str,
+        renders: bool = False,
+        reconstruct_only: bool = False,
+        force_timing: bool = False,
+    ) -> list[Config]:
         self.set_dataset(dataset_name)
         config_dicts = generate_configs(self.config_dict)
         configs = [Config.from_dict(config_dict) for config_dict in config_dicts]
@@ -1193,6 +1243,8 @@ class Experiment:
             ]
 
         configs += gt_configs
+        if force_timing:
+            configs = [replace(config, enable_timing=True) for config in configs]
         config_set = set()
         unique_configs: list[Config] = []
         for config in configs:
@@ -1250,6 +1302,7 @@ class Experiment:
         force_none: bool = False,
         cuda_devices: list[str] | None = None,
         enable_viewer: bool = False,
+        force_timing: bool = False,
     ):
         print(self.progress_stats(dataset_name))
         configs = self.get_configs(dataset_name)
@@ -1490,8 +1543,70 @@ experiments = [
             "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
             "sampling_mode": ["random"],
             "gt_eval": [True],
-            "image_mode": ["farthestpose"],
+            "image_mode": ["minfarthestpose"],
             "choice": ["vggt", "colmap"],
+        },
+        PlotConfig(
+            x_axis="num_images",
+            split_param="",
+            single_legend=True,
+            max_render_cols=5,
+            show_gt=False,
+            raw_metrics=True,
+            make_camera_plot=False,
+            metric_keys=["rre", "rte", "psnr", "lpips", "ssim", "num_aligned"],
+            render_nums=[0],
+            horizontal_datasets=False,
+        ),
+        render_filter_override={
+            "num_images": [20, 30, 40, 70, 100],
+            "seed": [42],
+        },
+        priority="high",
+    ),
+    Experiment(
+        "num_images_brief",
+        1,
+        "COLMAP versus VGGT over various number of images",
+        {
+            "seed": [42],
+            "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+            "sampling_mode": ["random"],
+            "gt_eval": [True],
+            "image_mode": ["minfarthestpose"],
+            "choice": ["vggt", "colmap"],
+        },
+        PlotConfig(
+            x_axis="num_images",
+            split_param="",
+            single_legend=True,
+            max_render_cols=5,
+            show_gt=True,
+            raw_metrics=True,
+            make_camera_plot=False,
+            metric_keys=["rre", "rte", "psnr", "lpips", "ssim", "num_aligned"],
+            render_nums=[0],
+            horizontal_datasets=False,
+            show_differences=True,
+        ),
+        render_filter_override={
+            "num_images": [100],
+            "seed": [42],
+        },
+        priority="high",
+    ),
+    Experiment(
+        "num_images_timing",
+        1,
+        "COLMAP versus VGGT over various number of images",
+        {
+            "seed": [42],
+            "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+            "sampling_mode": ["random"],
+            "gt_eval": [True],
+            "image_mode": ["minfarthestpose"],
+            "choice": ["vggt", "colmap"],
+            "enable_timing": [True],
         },
         PlotConfig(
             x_axis="num_images",
@@ -1501,9 +1616,9 @@ experiments = [
             show_gt=False,
             raw_metrics=True,
             make_camera_plot=False,
-            metric_keys=["rre", "rte", "psnr", "lpips", "ssim", "num_aligned"],
+            metric_keys=["inference_time", "peak_memory_mb"],
             render_nums=[0],
-            horizontal_datasets=False,
+            horizontal_datasets=True,
         ),
         render_filter_override={
             "num_images": [20, 40, 100],
@@ -1520,7 +1635,6 @@ experiments = [
             "num_images": [20],
             "sampling_mode": ["random"],
             "gt_eval": [True],
-            "image_mode": ["farthestpose"],
             "choice": ["vggt", "colmap"],
         },
         PlotConfig(
@@ -1551,7 +1665,7 @@ experiments = [
             "sampling_mode": ["random"],
             "pose_opt": [True, False],
             "gt_eval": [True],
-            "image_mode": ["farthestpose"],
+            "image_mode": ["minfarthestpose"],
             "choice": ["vggt", "colmap"],
         },
         PlotConfig(
@@ -1581,7 +1695,6 @@ experiments = [
             "sampling_mode": ["random"],
             "pose_opt": [True],
             "gt_eval": [True],
-            "image_mode": ["farthestpose"],
             "choice": ["vggt"],
             "use_gt_cams": [False, True],
             "use_gt_points": [False, True],
@@ -1610,7 +1723,6 @@ experiments = [
             "sampling_mode": ["random"],
             "use_ba": [True, False],
             "gt_eval": [True],
-            "image_mode": ["farthestpose"],
             "choice": ["vggt", "colmap"],
         },
         PlotConfig(
@@ -1729,7 +1841,6 @@ experiments = [
             "sampling_mode": ["random"],
             "gt_eval": [True],
             # "pose_opt": [True, False],
-            "image_mode": ["farthestpose"],
             "choice": ["vggt"],
             "num_points_value": [None, 100000],
         },
@@ -1745,7 +1856,6 @@ experiments = [
             "num_images": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
             "sampling_mode": ["random"],
             "gt_eval": [True],
-            "image_mode": ["farthestpose"],
             "choice": ["vggt", "colmap"],
             "num_steps": [30000],
         },
@@ -1788,7 +1898,6 @@ experiments = [
             "num_images": [100],
             "sampling_mode": ["random"],
             "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 2500, 5000, 10000],
-            "image_mode": ["farthestpose"],
             "choice": ["vggt", "colmap"],
             "pose_opt": [False],
             "gt_eval": True,
@@ -1808,7 +1917,6 @@ experiments = [
             "num_images": [100],
             "sampling_mode": ["random"],
             "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 2500, 5000, 10000],
-            "image_mode": ["farthestpose"],
             "choice": ["vggt", "colmap"],
             "pose_opt": [True, False],
             "gt_eval": True,
@@ -1858,6 +1966,64 @@ experiments = [
         priority="high",
     ),
     Experiment(
+        "sampling_mode_timing",
+        1,
+        "VGGT timing for different sampling modes.",
+        {
+            "seed": [42],
+            "num_images": [100],
+            "sampling_mode": ["ba", "confidence", "random", "voxels", "imagefps"],
+            "num_points_per_image": [10, 50, 100, 500, 1000],
+            "choice": ["vggt"],
+            "use_gt_cams": False,
+            "gt_eval": True,
+            "enable_timing": [True],
+        },
+        PlotConfig(
+            x_axis="num_points",
+            split_param="sampling_mode",
+            raw_metrics=False,
+            single_legend=True,
+            max_render_cols=3,
+            show_gt=False,
+            metric_keys=["processing_time", "processing_peak_memory_mb"],
+            render_nums=[0],
+            horizontal_datasets=False,
+        ),
+        priority="medium",
+    ),
+    Experiment(
+        "sampling_mode_ba",
+        3,
+        "Bundle Adjustment (BA) versus random sampling. BA improves fine details in the 3D Gaussian Splatting renders due to improved camera accuracy.",
+        {
+            "seed": [42],
+            "num_images": [100],
+            "sampling_mode": ["ba", "confidence", "random", "voxels", "imagefps"],
+            "num_points_per_image": [10, 50, 100, 500, 1000, 5000, 10000],
+            "choice": ["vggt", "colmap"],
+            "use_gt_cams": False,
+            "gt_eval": True,
+        },
+        PlotConfig(
+            x_axis="num_points",
+            split_param="sampling_mode",
+            metric_keys=["rre", "rte", "psnr", "lpips", "ssim", "quality"],
+            raw_metrics=False,
+            show_gt=True,
+            max_render_cols=3,
+            horizontal_datasets=False,
+        ),
+        render_filter_override={
+            "seed": [42],
+            "num_points_per_image": [1000],
+            "sampling_mode": ["ba", "random"],
+            "choice": ["vggt"],
+            # "sampling_mode": ["random"],
+        },
+        priority="high",
+    ),
+    Experiment(
         "sampling_mode_gt_cams",
         3,
         "A comparison of different VGGT point cloud sampling modes with GT cameras",
@@ -1884,11 +2050,11 @@ experiments = [
             horizontal_datasets=False,
             only_best_rows=True,
         ),
-        render_filter_override={
-            "seed": [42],
-            "num_points_per_image": [1000],
-            "sampling_mode": ["voxels", "random", "confidence"],
-        },
+        # render_filter_override={
+        #     "seed": [42],
+        #     "num_points_per_image": [1000],
+        #     "sampling_mode": ["voxels", "random", "confidence"],
+        # },
         priority="high",
     ),
     Experiment(
@@ -1927,6 +2093,7 @@ experiments = [
         {
             "seed": [42],
             "num_images": [100],
+            "image_mode": ["farthestpose"],
             # "sampling_mode": ["voxels", "random", "confidence", "ba", "imagefps", "imagefreq"],
             "sampling_mode": ["random", "imagefreqnovis", "imagefreqvoxels"],  # , "imagefreq"
             "num_points_per_image": [100, 500, 1000, 5000],
@@ -1942,17 +2109,45 @@ experiments = [
         PlotConfig(
             x_axis="num_points",
             split_param="sampling_mode,near_filtering_strength",
-            metric_keys=["psnr", "lpips", "ssim", "quality", "avge"],
+            metric_keys=["quality"],
             raw_metrics=False,
             max_render_cols=4,
             make_pcd_plot=True,
-            horizontal_datasets=False,
+            horizontal_datasets=True,
         ),
         val_steps=[7000],
         render_filter_override={
             "seed": [42],
             "num_points_per_image": [1000],
         },
+        priority="medium",
+    ),
+    Experiment(
+        "sampling_mode_single_timing",
+        3,
+        "Image frequency sampling timing.",
+        {
+            "seed": [42],
+            "num_images": [100],
+            "image_mode": ["farthestpose"],
+            "sampling_mode": ["random", "imagefreqnovis", "imagefreqvoxels"],  # , "imagefreq"
+            "num_points_per_image": [100, 500, 1000, 5000],
+            "choice": ["vggt"],
+            "use_gt_cams": [True],
+            "gt_eval": True,
+            "num_steps": 7000,
+            "enable_timing": [True],
+        },
+        PlotConfig(
+            x_axis="num_points",
+            split_param="sampling_mode,near_filtering_strength",
+            metric_keys=["processing_time"],
+            raw_metrics=True,
+            max_render_cols=4,
+            make_pcd_plot=False,
+            horizontal_datasets=True,
+        ),
+        val_steps=[7000],
         priority="medium",
     ),
     Experiment(
@@ -2081,15 +2276,40 @@ experiments = [
             x_axis="",
             split_param="camera_src,pcd_src,sampling_mode",
             metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "quality"],
-            make_pcd_plot=True,
+            # make_pcd_plot=True,
         ),
         val_steps=[15000],
         render_filter_override={
             "seed": [42],
             "sampling_mode": ["confidence"],
-            "choice": "combined",
+            "choice": ["colmap", "vggt", "combined"],
+            "pcd_src": ["both"],
             "num_images": [100],
         },
+        priority="high",
+    ),
+    Experiment(
+        "combined_single_brief",
+        7,
+        "Combining cameras and point clouds from VGGT and COLMAP.",
+        {
+            "seed": [42],  #
+            "num_images": [100],
+            "sampling_mode": ["confidence"],
+            "num_points_per_image": [1000],
+            "pose_opt": [True],
+            "gt_eval": True,
+            "choice": ["colmap", "vggt", "combined"],
+            "pcd_src": ["colmap", "vggt", "both"],
+            "camera_src": ["colmap"],
+            "num_steps": [15000],
+        },
+        PlotConfig(
+            x_axis="",
+            split_param="camera_src,pcd_src,sampling_mode",
+            metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "quality"],
+        ),
+        val_steps=[15000],
     ),
     Experiment(
         "combined_test",
@@ -2458,7 +2678,6 @@ experiments = [
             "pose_opt": [True, False],
             "gt_eval": [True],
             "colmap_mode": ["default", "relaxed"],
-            "image_mode": ["farthestpose"],
             "choice": ["colmap", "vggt"],
             "num_steps": [15000],
         },
@@ -2521,7 +2740,7 @@ experiments = [
             horizontal_datasets=False,
             show_depth=True,
             show_gt=False,
-            max_render_cols=5,
+            max_render_cols=3,
         ),
         render_filter_override={
             "seed": [42],
@@ -2553,7 +2772,7 @@ experiments = [
             horizontal_datasets=False,
             show_depth=True,
             show_gt=False,
-            max_render_cols=5,
+            max_render_cols=3,
         ),
         render_filter_override={
             "seed": [42],
@@ -2581,8 +2800,8 @@ experiments = [
             # metric_keys=["rre", "rte", "psnr", "lpips", "ssim", "quality"],
             metric_keys=["rre", "psnr", "lpips", "ssim", "pred_depth_absrel", "depth_abs_rel"],
             show_depth=True,
-            show_gt=True,
-            max_render_cols=4,
+            show_gt=False,
+            max_render_cols=3,
             horizontal_datasets=False,
             split_choice=True,
             # render_nums=[0, 2, 3, 4, 5],
@@ -2617,8 +2836,8 @@ experiments = [
             # metric_keys=["rre", "rte", "psnr", "lpips", "ssim", "quality"],
             metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "pred_depth_absrel", "depth_abs_rel"],
             show_depth=True,
-            show_gt=True,
-            max_render_cols=4,
+            show_gt=False,
+            max_render_cols=3,
             horizontal_datasets=False,
             # render_nums=[0, 2, 3, 4, 5],
             # render_nums=[3],
@@ -2653,8 +2872,8 @@ experiments = [
             # metric_keys=["rre", "rte", "psnr", "lpips", "ssim", "quality"],
             metric_keys=["rre", "psnr", "lpips", "ssim", "pred_depth_absrel", "depth_abs_rel"],
             show_depth=True,
-            show_gt=True,
-            max_render_cols=4,
+            show_gt=False,
+            max_render_cols=3,
             horizontal_datasets=False,
             # render_nums=[0, 2, 3, 4, 5],
             render_nums=[3],
@@ -2703,12 +2922,13 @@ experiments = [
     Experiment(
         "depth_loss_sparse",
         5,
-        "VGGT with depth loss for different depth loss modes and $30$ images.",
+        "VGGT with depth loss reduces floating artefacts and improves reconstruction quality in sparse view scenes.",
         {
             "seed": [42],  # , 43, 44
-            "num_images": [30],
+            "num_images": [7],
             "sampling_mode": ["random"],
-            "depth_loss_mode": ["disabled", "full", "points", "closer"],
+            "depth_loss_mode": ["disabled", "full", "closer"],
+            "image_mode": ["minfarthestpose"],
             "pose_opt": [True],
             "choice": ["vggt"],
             "depth_lambda": [1.0],
@@ -2720,7 +2940,7 @@ experiments = [
             metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "pred_depth_absrel", "depth_abs_rel"],
             show_depth=True,
             show_gt=False,
-            max_render_cols=4,
+            max_render_cols=3,
             horizontal_datasets=False,
             # render_nums=[0, 2, 3, 4, 5],
             make_camera_plot=False,
@@ -2730,7 +2950,7 @@ experiments = [
             "seed": [42],
             "depth_lambda": [1.0],
         },
-        priority="medium",
+        priority="high",
     ),
     Experiment(
         "depth_conf_mode",
@@ -2771,6 +2991,33 @@ experiments = [
             "depth_lambda": [1.0],
             "depth_conf_mode": ["disabled", "standard", "shifted"],
         },
+        priority="high",
+    ),
+    Experiment(
+        "depth_conf_mode_brief",
+        5,
+        "VGGT with depth loss for different depth confidence modes.",
+        {
+            "seed": [42],  # , 43, 44
+            "num_images": [100],
+            "sampling_mode": ["random"],
+            "depth_loss_mode": ["full"],
+            "pose_opt": [True],
+            "choice": ["vggt"],
+            "depth_lambda": [1.0],
+            "depth_conf_mode": [
+                "disabled",
+                "sigmoid",
+                "shifted",
+                "scaleshifted",
+                "sigshifted",
+            ],
+        },
+        PlotConfig(
+            x_axis="",
+            split_param="depth_conf_mode,depth_loss_mode",
+            metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "quality"],
+        ),
         priority="high",
     ),
     Experiment(
@@ -3031,7 +3278,7 @@ experiments = [
             split_choice=True,
             shared_colors=True,
             max_render_cols=4,
-            horizontal_datasets=True,
+            horizontal_datasets=False,
             # make_pcd_plot=True,
             make_camera_plot=True,
         ),
@@ -3686,6 +3933,31 @@ experiments = [
             "num_images": [100],
         },
     ),
+    Experiment(
+        "mvs",
+        99,
+        "Small test for mvs functionality",
+        {
+            "seed": [42],  #
+            "num_images": [20],
+            "sampling_mode": ["random"],
+            "num_points_per_image": [1000],
+            "run_mvs": [True, False],
+            "gt_eval": True,
+            "choice": ["colmap"],
+            "num_steps": [7000],
+        },
+        PlotConfig(
+            x_axis="",
+            split_param="run_mvs",
+            metric_keys=["eval_rre", "eval_rte"],
+            raw_metrics=True,
+        ),
+        val_steps=[7000],
+        render_filter_override={
+            "seed": [42],
+        },
+    ),
 ]
 
 experiment_dict = {exp.name: exp for exp in experiments}
@@ -3701,6 +3973,193 @@ for collection in dataset_collections.values():
 dataset_values = list(set(dataset_values))
 
 dataset_collections.update({"all": dataset_values})
+
+
+def update_dict(d: dict, u: dict):
+    d_copy = deepcopy(d)
+    d_copy.update(u)
+    return d_copy
+
+
+def get_dataset_experiments(dataset_collection: str):
+    all_improvements_indoor = {  # All Improvements indoor
+        "sampling_mode": "voxels",
+        "choice": "combined",
+        "camera_src": "colmap",
+        "pcd_src": "both",
+        "pose_opt": True,
+        "depth_loss_mode": "closer",
+        "depth_conf_mode": "scaleshifted",
+        "depth_lambda": 10.0,
+        "series_label_override": "1. All Improvements",
+    }
+    all_improvements_outdoor = {  # All Improvements outdoor
+        "sampling_mode": "confidence",
+        "choice": "combined",
+        "camera_src": "colmap",
+        "pcd_src": "both",
+        "pose_opt": True,
+        "depth_loss_mode": "closer",
+        "depth_conf_mode": "sigmoid",
+        "depth_lambda": 0.1,
+        "series_label_override": "1. All Improvements",
+    }
+    all_improvements_synthetic = {  # All Improvements synthetic
+        "sampling_mode": "voxels",
+        "choice": "combined",
+        "camera_src": "colmap",
+        "pcd_src": "vggt",
+        "pose_opt": True,
+        "depth_loss_mode": "closer",
+        "depth_conf_mode": "sigshifted",
+        "depth_lambda": 0.01,
+        "series_label_override": "1. All Improvements",
+    }
+
+    if dataset_collection == "indoor":
+        default_dict = all_improvements_indoor
+    elif dataset_collection == "outdoor":
+        default_dict = all_improvements_outdoor
+    elif dataset_collection == "synthetic":
+        default_dict = all_improvements_synthetic
+    else:
+        return []
+
+    return [
+        Experiment(
+            "all_improvements_removals",
+            99,
+            "Individual optimisation removals.",
+            [
+                update_dict(
+                    default_dict,
+                    {
+                        "series_label_override": "1. All Improvements",
+                    },
+                ),
+                update_dict(
+                    default_dict,
+                    {
+                        "sampling_mode": "random",
+                        "series_label_override": f"2. No {default_dict['sampling_mode']} Sampling",
+                    },
+                ),
+                update_dict(
+                    default_dict,
+                    {
+                        "depth_conf_mode": "disabled",
+                        "series_label_override": "3. No Depth Conf",
+                    },
+                ),
+                update_dict(
+                    default_dict,
+                    {
+                        "depth_loss_mode": "disabled",
+                        "depth_lambda": 0.0,
+                        "series_label_override": "4. No Depth Loss",
+                    },
+                ),
+                update_dict(
+                    default_dict,
+                    {
+                        "pcd_src": "vggt",
+                        "series_label_override": "5. No Combined Points",
+                    },
+                ),
+                update_dict(
+                    default_dict,
+                    {
+                        "camera_src": "vggt",
+                        "series_label_override": "6. No COLMAP Cameras",
+                    },
+                ),
+                update_dict(
+                    default_dict,
+                    {
+                        "pose_opt": False,
+                        "series_label_override": "7. No Pose Opt",
+                    },
+                ),
+            ],
+            PlotConfig(
+                x_axis="",
+                split_param="series_label_override",
+                metric_keys=["eval_rre", "eval_rte", "psnr", "ssim", "lpips", "quality"],
+                max_render_cols=4,
+                horizontal_datasets=False,
+                make_camera_plot=False,
+                make_pcd_plot=False,
+                show_depth=True,
+            ),
+            render_filter_override={
+                "seed": [42],
+                "num_images": [100],
+            },
+            priority="high",
+        ),
+        Experiment(
+            "all_improvements_removals_vggt",
+            99,
+            "Individual optimisation removals.",
+            [
+                update_dict(
+                    default_dict,
+                    {
+                        "choice": "vggt",
+                        "series_label_override": "1. All Improvements",
+                    },
+                ),
+                update_dict(
+                    default_dict,
+                    {
+                        "choice": "vggt",
+                        "sampling_mode": "random",
+                        "series_label_override": f"2. No {default_dict['sampling_mode']} Sampling",
+                    },
+                ),
+                update_dict(
+                    default_dict,
+                    {
+                        "choice": "vggt",
+                        "depth_conf_mode": "disabled",
+                        "series_label_override": "3. No Depth Conf",
+                    },
+                ),
+                update_dict(
+                    default_dict,
+                    {
+                        "choice": "vggt",
+                        "depth_loss_mode": "disabled",
+                        "depth_lambda": 0.0,
+                        "series_label_override": "4. No Depth Loss",
+                    },
+                ),
+                update_dict(
+                    default_dict,
+                    {
+                        "choice": "vggt",
+                        "pose_opt": False,
+                        "series_label_override": "5. No Pose Opt",
+                    },
+                ),
+            ],
+            PlotConfig(
+                x_axis="",
+                split_param="series_label_override",
+                metric_keys=["eval_rre", "eval_rte", "psnr", "ssim", "lpips", "quality"],
+                max_render_cols=4,
+                horizontal_datasets=False,
+                make_camera_plot=False,
+                make_pcd_plot=False,
+                show_depth=True,
+            ),
+            render_filter_override={
+                "seed": [42],
+                "num_images": [100],
+            },
+            priority="high",
+        ),
+    ]
 
 
 if __name__ == "__main__":
@@ -3757,6 +4216,7 @@ if __name__ == "__main__":
         " Overrides --dataset_name if provided.",
         nargs="*",
     )
+    parser.add_argument("--force_timing", action="store_true", help="Force timing calculation")
 
     args = parser.parse_args()
 
@@ -3775,6 +4235,23 @@ if __name__ == "__main__":
     if args.cuda_visible_devices and args.procs_per_gpu > 1 and cuda_devices is not None:
         cuda_devices = [gpu_id for gpu_id in cuda_devices for _ in range(args.procs_per_gpu)]
 
+    splatted = set()
+    not_splatted = set()
+    reconstructed = set()
+    not_reconstructed = set()
+
+    if len(args.dataset_collections) == 1:
+        dataset_experiments = get_dataset_experiments(args.dataset_collections[0])
+        if dataset_experiments:
+            # Update the corresponding experiment in the full list
+            for dataset_experiment in dataset_experiments:
+                for i, experiment in enumerate(experiments):
+                    if experiment.name == dataset_experiment.name:
+                        experiments[i] = dataset_experiment
+                        break
+                else:
+                    experiments.append(dataset_experiment)
+
     for arg_experiment in args.experiment_names:
         for experiment in experiments:
             if priority_map[experiment.priority] < priority_map[args.min_priority]:
@@ -3787,8 +4264,17 @@ if __name__ == "__main__":
                     experiment = replace(experiment, include_gt=args.include_gt)
 
                     if args.check_only:
-                        print(f"Experiment: {experiment.name}")
+                        print(f"Experiment: {experiment.name} ({dataset_name})")
                         print(experiment.progress_stats(dataset_name, print_progress_bars=True))
+                        for config in experiment.get_configs(dataset_name):
+                            if config.is_splatted:
+                                splatted.add(config.output_name)
+                            else:
+                                not_splatted.add(config.output_name)
+                            if config.is_reconstructed:
+                                reconstructed.add(config.output_name)
+                            else:
+                                not_reconstructed.add(config.output_name)
                         print()
                         continue
 
@@ -3800,6 +4286,7 @@ if __name__ == "__main__":
                             cuda_devices=cuda_devices,
                             force_all=args.force_all,
                             enable_viewer=args.enable_viewer,
+                            force_timing=args.force_timing,
                         )
                     if not args.combined_datasets and not args.skip_plotting:
                         experiment.plot(dataset_name)
@@ -3817,8 +4304,31 @@ if __name__ == "__main__":
                         for collection in args.dataset_collections:
                             experiment.plot(
                                 dataset_collections[collection],
-                                split_dataset="individual",
+                                split_dataset="collection",
                                 naming_labels=[collection],
                             )
                     elif not args.skip_plotting:
                         experiment.plot(dataset_names, split_dataset="individual", naming_labels=dataset_names)
+
+    if args.check_only:
+        print("Splatted count:", len(splatted))
+        print("Not splatted count:", len(not_splatted))
+        print("Total count:", len(splatted) + len(not_splatted))
+        print(
+            "Estimated splatting time:",
+            (9 * len(not_splatted)) // 60,
+            "hours",
+            (9 * len(not_splatted)) % 60,
+            "minutes",
+        )
+
+        print("Reconstructed count:", len(reconstructed))
+        print("Not reconstructed count:", len(not_reconstructed))
+        print("Total count:", len(reconstructed) + len(not_reconstructed))
+        print(
+            "Estimated reconstruction time:",
+            (1 * len(not_reconstructed)) // 60,
+            "hours",
+            (1 * len(not_reconstructed)) % 60,
+            "minutes",
+        )
