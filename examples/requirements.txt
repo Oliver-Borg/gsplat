@@ -25,3 +25,5 @@ splines
 SciencePlots
 pysgmcmc
 open3d
+line_profiler
+seaborn
