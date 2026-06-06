@@ -252,6 +252,7 @@ def calculate_metrics(
 
 def main(pred: str, gt: str, force: bool = False) -> None:
     failed_eval_json = Path(pred) / "failed_eval.json"
+    os.makedirs(Path(pred), exist_ok=True)
     try:
         if os.path.exists(failed_eval_json):
             os.remove(failed_eval_json)
