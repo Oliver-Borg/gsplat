@@ -3,33 +3,12 @@
 \label{tab:99_all_improvements_removals_synthetic}
 \centering
 \scriptsize
-\begin{tabular}{lllrrrrrr}
+\begin{tabular}{lll}
 \toprule
-Choice & Dataset & Series Label Override & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & SSIM ↑ & LPIPS ↓ & Composite Quality ↑ \\
+Choice & Dataset Collection & Series Label Override \\
 \midrule
-COLMAP & lego & 1. All Improvements &  &  &  &  &  &  \\
-COLMAP & lego & 2. No Confidence Sampling & \textbf{10.386} & \textbf{0.114} & \textbf{25.157} & \textbf{0.896} & \textbf{0.062} & \textbf{0.858} \\
-COLMAP & lego & 3. No Depth Conf &  &  &  &  &  &  \\
-COLMAP & lego & 4. No Depth Loss &  &  &  &  &  &  \\
-COLMAP & lego & 5. No Combined Points &  &  &  &  &  &  \\
-VGGT & lego & 6. No COLMAP Cameras &  &  &  &  &  &  \\
-COLMAP & lego & 7. No Pose Opt &  &  &  &  &  &  \\
-\midrule
-COLMAP & ship & 1. All Improvements &  &  &  &  &  &  \\
-COLMAP & ship & 2. No Confidence Sampling &  &  &  &  &  &  \\
-COLMAP & ship & 3. No Depth Conf &  &  &  &  &  &  \\
-COLMAP & ship & 4. No Depth Loss &  &  &  &  &  &  \\
-COLMAP & ship & 5. No Combined Points &  &  &  &  &  &  \\
-VGGT & ship & 6. No COLMAP Cameras &  &  &  &  &  &  \\
-COLMAP & ship & 7. No Pose Opt &  &  &  &  &  &  \\
-\midrule
-COLMAP & drums & 1. All Improvements &  &  &  &  &  &  \\
-COLMAP & drums & 2. No Confidence Sampling &  &  &  &  &  &  \\
-COLMAP & drums & 3. No Depth Conf &  &  &  &  &  &  \\
-COLMAP & drums & 4. No Depth Loss &  &  &  &  &  &  \\
-COLMAP & drums & 5. No Combined Points &  &  &  &  &  &  \\
-VGGT & drums & 6. No COLMAP Cameras &  &  &  &  &  &  \\
-COLMAP & drums & 7. No Pose Opt &  &  &  &  &  &  \\
+VGGT & synthetic & 2. No voxels Sampling \\
+VGGT & synthetic & 6. No COLMAP Cameras \\
 \bottomrule
 \end{tabular}
 \end{table}

@@ -2,7 +2,7 @@
 \caption{\ifdefined\customcaption \customcaption \else Combining cameras and point clouds from VGGT and COLMAP. (Indoor,Outdoor,Synthetic) \fi}
 \label{tab:07_combined_single_indoor,outdoor,synthetic}
 \centering
-\scriptsize
+\tiny
 \begin{tabular}{lllllrrrrrr}
 \toprule
 Choice & Dataset Collection & Camera Src & Pcd Src & Sampling Mode & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
@@ -10,35 +10,35 @@ Choice & Dataset Collection & Camera Src & Pcd Src & Sampling Mode & Val RRE ↓
 COLMAP & indoor & COLMAP Cams & Both Pcds & confidence & \textbf{0.056} & \textbf{0.001} & \underline{25.293} & \underline{0.136} & \underline{0.752} & \underline{0.730} \\
 COLMAP & indoor & COLMAP Cams & Both Pcds & random & \underline{0.058} & \textbf{0.001} & 25.200 & \textbf{0.135} & \underline{0.752} & \underline{0.730} \\
 COLMAP & indoor & COLMAP Cams & Both Pcds & voxels & \textbf{0.056} & \textbf{0.001} & \textbf{25.477} & \textbf{0.135} & \textbf{0.761} & \textbf{0.739} \\
+COLMAP & indoor & COLMAP Cams & COLMAP Pcd & SfM & 0.061 & \textbf{0.001} & 25.193 & 0.145 & 0.744 & 0.718 \\
 COLMAP & indoor & COLMAP Cams & VGGT Pcd & confidence & 0.076 & \textbf{0.001} & 24.290 & 0.172 & 0.735 & 0.680 \\
 COLMAP & indoor & COLMAP Cams & VGGT Pcd & random & 0.069 & \textbf{0.001} & 24.662 & 0.155 & 0.748 & 0.705 \\
 COLMAP & indoor & COLMAP Cams & VGGT Pcd & voxels & 0.102 & \textbf{0.001} & 24.028 & 0.172 & 0.730 & 0.672 \\
-COLMAP & indoor &  &  &  & 0.061 & \textbf{0.001} & 25.193 & 0.145 & 0.744 & 0.718 \\
-VGGT & indoor &  &  & confidence & 0.368 & \underline{0.010} & 20.088 & 0.249 & 0.591 & 0.470 \\
-VGGT & indoor &  &  & random & 0.377 & \underline{0.010} & 20.092 & 0.239 & 0.579 & 0.469 \\
-VGGT & indoor &  &  & voxels & 0.377 & \underline{0.010} & 20.295 & 0.249 & 0.612 & 0.487 \\
+VGGT & indoor & VGGT Cams & VGGT Pcd & confidence & 0.368 & \underline{0.010} & 20.088 & 0.249 & 0.591 & 0.470 \\
+VGGT & indoor & VGGT Cams & VGGT Pcd & random & 0.377 & \underline{0.010} & 20.092 & 0.239 & 0.579 & 0.469 \\
+VGGT & indoor & VGGT Cams & VGGT Pcd & voxels & 0.377 & \underline{0.010} & 20.295 & 0.249 & 0.612 & 0.487 \\
 \midrule
 COLMAP & outdoor & COLMAP Cams & Both Pcds & confidence & \underline{0.060} & \textbf{0.001} & \textbf{23.442} & \underline{0.256} & \textbf{0.607} & \underline{0.538} \\
 COLMAP & outdoor & COLMAP Cams & Both Pcds & random & \textbf{0.057} & \textbf{0.001} & \underline{23.377} & \textbf{0.248} & \underline{0.603} & \textbf{0.539} \\
 COLMAP & outdoor & COLMAP Cams & Both Pcds & voxels & \textbf{0.057} & \textbf{0.001} & 23.317 & 0.268 & 0.598 & 0.522 \\
+COLMAP & outdoor & COLMAP Cams & COLMAP Pcd & SfM & 0.064 & \textbf{0.001} & 23.042 & 0.318 & 0.589 & 0.481 \\
 COLMAP & outdoor & COLMAP Cams & VGGT Pcd & confidence & 0.122 & \underline{0.002} & 22.705 & 0.311 & 0.574 & 0.470 \\
 COLMAP & outdoor & COLMAP Cams & VGGT Pcd & random & 0.070 & \underline{0.002} & 22.710 & 0.268 & 0.570 & 0.495 \\
 COLMAP & outdoor & COLMAP Cams & VGGT Pcd & voxels & 0.075 & \underline{0.002} & 22.439 & 0.307 & 0.562 & 0.461 \\
-COLMAP & outdoor &  &  &  & 0.064 & \textbf{0.001} & 23.042 & 0.318 & 0.589 & 0.481 \\
-VGGT & outdoor &  &  & confidence & 0.524 & 0.018 & 18.432 & 0.426 & 0.349 & 0.189 \\
-VGGT & outdoor &  &  & random & 0.467 & 0.018 & 18.343 & 0.389 & 0.344 & 0.207 \\
-VGGT & outdoor &  &  & voxels & 0.455 & 0.018 & 18.455 & 0.410 & 0.353 & 0.201 \\
+VGGT & outdoor & VGGT Cams & VGGT Pcd & confidence & 0.524 & 0.018 & 18.432 & 0.426 & 0.349 & 0.189 \\
+VGGT & outdoor & VGGT Cams & VGGT Pcd & random & 0.467 & 0.018 & 18.343 & 0.389 & 0.344 & 0.207 \\
+VGGT & outdoor & VGGT Cams & VGGT Pcd & voxels & 0.455 & 0.018 & 18.455 & 0.410 & 0.353 & 0.201 \\
 \midrule
 COLMAP & synthetic & COLMAP Cams & Both Pcds & confidence & 3.564 & \underline{0.039} & 23.265 & \textbf{0.089} & \underline{0.846} & \underline{0.777} \\
 COLMAP & synthetic & COLMAP Cams & Both Pcds & random & 3.567 & \underline{0.039} & 23.276 & \textbf{0.089} & \textbf{0.847} & \underline{0.777} \\
 COLMAP & synthetic & COLMAP Cams & Both Pcds & voxels & 3.564 & \underline{0.039} & 23.271 & \underline{0.090} & \textbf{0.847} & \underline{0.777} \\
+COLMAP & synthetic & COLMAP Cams & COLMAP Pcd & SfM & \underline{3.551} & 0.040 & 22.965 & 0.097 & 0.844 & 0.765 \\
 COLMAP & synthetic & COLMAP Cams & VGGT Pcd & confidence & 3.565 & \underline{0.039} & \underline{23.331} & \textbf{0.089} & \textbf{0.847} & \textbf{0.779} \\
 COLMAP & synthetic & COLMAP Cams & VGGT Pcd & random & 3.566 & \underline{0.039} & 23.241 & \underline{0.090} & \underline{0.846} & 0.776 \\
 COLMAP & synthetic & COLMAP Cams & VGGT Pcd & voxels & 3.564 & \underline{0.039} & \textbf{23.337} & \textbf{0.089} & \textbf{0.847} & \textbf{0.779} \\
-COLMAP & synthetic &  &  &  & \underline{3.551} & 0.040 & 22.965 & 0.097 & 0.844 & 0.765 \\
-VGGT & synthetic &  &  & confidence & \textbf{0.249} & \textbf{0.006} & 21.361 & 0.097 & 0.797 & 0.708 \\
-VGGT & synthetic &  &  & random & \textbf{0.249} & \textbf{0.006} & 21.356 & 0.097 & 0.797 & 0.708 \\
-VGGT & synthetic &  &  & voxels & \textbf{0.249} & \textbf{0.006} & 21.328 & 0.097 & 0.796 & 0.707 \\
+VGGT & synthetic & VGGT Cams & VGGT Pcd & confidence & \textbf{0.249} & \textbf{0.006} & 21.361 & 0.097 & 0.797 & 0.708 \\
+VGGT & synthetic & VGGT Cams & VGGT Pcd & random & \textbf{0.249} & \textbf{0.006} & 21.356 & 0.097 & 0.797 & 0.708 \\
+VGGT & synthetic & VGGT Cams & VGGT Pcd & voxels & \textbf{0.249} & \textbf{0.006} & 21.328 & 0.097 & 0.796 & 0.707 \\
 \bottomrule
 \end{tabular}
 \end{table}

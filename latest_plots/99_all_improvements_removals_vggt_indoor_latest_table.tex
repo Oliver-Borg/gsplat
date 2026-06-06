@@ -1,0 +1,14 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else Individual optimisation removals. (Indoor) \fi}
+\label{tab:99_all_improvements_removals_vggt_indoor}
+\centering
+\scriptsize
+\begin{tabular}{lllrrrrrr}
+\toprule
+Choice & Dataset Collection & Series Label Override & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & SSIM ↑ & LPIPS ↓ & Composite Quality ↑ \\
+\midrule
+VGGT & indoor & 2. No voxels Sampling &  &  &  &  &  &  \\
+VGGT & indoor & 4. No Depth Loss & \textbf{0.377} & \textbf{0.010} & \textbf{20.295} & \textbf{0.612} & \textbf{0.249} & \textbf{0.487} \\
+\bottomrule
+\end{tabular}
+\end{table}

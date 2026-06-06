@@ -1,0 +1,62 @@
+[
+    {
+        "sampling_mode": "voxels",
+        "choice": "vggt",
+        "camera_src": "colmap",
+        "pcd_src": "vggt",
+        "pose_opt": true,
+        "depth_loss_mode": "closer",
+        "depth_conf_mode": "sigshifted",
+        "depth_lambda": 0.01,
+        "series_label_override": "1. All Improvements",
+        "dataset": "lego"
+    },
+    {
+        "sampling_mode": "random",
+        "choice": "vggt",
+        "camera_src": "colmap",
+        "pcd_src": "vggt",
+        "pose_opt": true,
+        "depth_loss_mode": "closer",
+        "depth_conf_mode": "sigshifted",
+        "depth_lambda": 0.01,
+        "series_label_override": "2. No voxels Sampling",
+        "dataset": "lego"
+    },
+    {
+        "sampling_mode": "voxels",
+        "choice": "vggt",
+        "camera_src": "colmap",
+        "pcd_src": "vggt",
+        "pose_opt": true,
+        "depth_loss_mode": "closer",
+        "depth_conf_mode": "disabled",
+        "depth_lambda": 0.01,
+        "series_label_override": "3. No Depth Conf",
+        "dataset": "lego"
+    },
+    {
+        "sampling_mode": "voxels",
+        "choice": "vggt",
+        "camera_src": "colmap",
+        "pcd_src": "vggt",
+        "pose_opt": true,
+        "depth_loss_mode": "disabled",
+        "depth_conf_mode": "sigshifted",
+        "depth_lambda": 0.0,
+        "series_label_override": "4. No Depth Loss",
+        "dataset": "lego"
+    },
+    {
+        "sampling_mode": "voxels",
+        "choice": "vggt",
+        "camera_src": "colmap",
+        "pcd_src": "vggt",
+        "pose_opt": false,
+        "depth_loss_mode": "closer",
+        "depth_conf_mode": "sigshifted",
+        "depth_lambda": 0.01,
+        "series_label_override": "5. No Pose Opt",
+        "dataset": "lego"
+    }
+]

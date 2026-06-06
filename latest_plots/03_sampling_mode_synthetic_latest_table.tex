@@ -2,12 +2,12 @@
 \caption{\ifdefined\customcaption \customcaption \else A comparison of different VGGT point cloud sampling modes (Synthetic) \fi}
 \label{tab:03_sampling_mode_synthetic}
 \centering
-\scriptsize
+\tiny
 \begin{tabular}{llrlrrrrrr}
 \toprule
 Choice & Dataset & Num Points & Sampling Mode & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
 \midrule
-COLMAP & lego & 10313 &  & 10.478 & 0.404 & \underline{22.787} & \textbf{0.066} & \textbf{0.851} & \textbf{0.785} \\
+COLMAP & lego & 10313 & SfM & 10.478 & 0.404 & \underline{22.787} & \textbf{0.066} & \textbf{0.851} & \textbf{0.785} \\
 VGGT & lego & 870 & confidence & \underline{0.298} & \underline{0.019} & 20.773 & 0.128 & 0.785 & 0.671 \\
 VGGT & lego & 870 & imagefps & \underline{0.298} & \underline{0.019} & 20.732 & 0.131 & 0.784 & 0.668 \\
 VGGT & lego & 870 & random & \underline{0.298} & \underline{0.019} & 20.806 & 0.126 & 0.785 & 0.673 \\
@@ -38,7 +38,7 @@ VGGT & lego & 870000 & imagefps & \underline{0.298} & \underline{0.019} & 20.606
 VGGT & lego & 870000 & random & \underline{0.298} & \underline{0.019} & 20.607 & 0.093 & 0.773 & 0.683 \\
 VGGT & lego & 870000 & voxels & \underline{0.298} & \underline{0.019} & 20.553 & 0.092 & 0.773 & 0.682 \\
 \midrule
-COLMAP & ship & 5146 &  & \textbf{0.246} & \textbf{0.011} & \textbf{22.401} & \textbf{0.149} & \textbf{0.751} & \textbf{0.668} \\
+COLMAP & ship & 5146 & SfM & \textbf{0.246} & \textbf{0.011} & \textbf{22.401} & \textbf{0.149} & \textbf{0.751} & \textbf{0.668} \\
 VGGT & ship & 870 & confidence & 0.487 & 0.028 & 20.921 & 0.220 & \underline{0.719} & 0.578 \\
 VGGT & ship & 870 & imagefps & 0.487 & 0.028 & 20.914 & 0.216 & \underline{0.719} & 0.580 \\
 VGGT & ship & 870 & random & 0.487 & 0.028 & \underline{20.925} & 0.218 & 0.718 & 0.580 \\
@@ -69,7 +69,7 @@ VGGT & ship & 870000 & imagefps & 0.487 & 0.028 & 20.918 & 0.171 & 0.697 & 0.596
 VGGT & ship & 870000 & random & 0.487 & 0.028 & 20.834 & \underline{0.167} & 0.698 & \underline{0.597} \\
 VGGT & ship & 870000 & voxels & 0.487 & 0.028 & 20.852 & 0.172 & 0.699 & 0.595 \\
 \midrule
-COLMAP & drums & 3866 &  & \textbf{0.153} & \textbf{0.010} & \textbf{22.469} & \textbf{0.093} & \textbf{0.899} & \textbf{0.791} \\
+COLMAP & drums & 3866 & SfM & \textbf{0.153} & \textbf{0.010} & \textbf{22.469} & \textbf{0.093} & \textbf{0.899} & \textbf{0.791} \\
 VGGT & drums & 870 & confidence & \underline{0.173} & \textbf{0.010} & 19.730 & 0.136 & 0.839 & 0.679 \\
 VGGT & drums & 870 & imagefps & \underline{0.173} & \textbf{0.010} & \underline{19.787} & 0.137 & \underline{0.841} & 0.680 \\
 VGGT & drums & 870 & random & \underline{0.173} & \textbf{0.010} & 19.729 & 0.135 & 0.840 & 0.679 \\

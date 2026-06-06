@@ -3,7 +3,7 @@
         42
     ],
     "num_images": [
-        30
+        7
     ],
     "sampling_mode": [
         "random"
@@ -11,8 +11,10 @@
     "depth_loss_mode": [
         "disabled",
         "full",
-        "points",
         "closer"
+    ],
+    "image_mode": [
+        "minfarthestpose"
     ],
     "pose_opt": [
         true

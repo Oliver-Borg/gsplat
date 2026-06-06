@@ -5,31 +5,13 @@
 \scriptsize
 \begin{tabular}{lllrrrrrr}
 \toprule
-Choice & Dataset & Series Label Override & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & SSIM ↑ & LPIPS ↓ & Composite Quality ↑ \\
+Choice & Dataset Collection & Series Label Override & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & SSIM ↑ & LPIPS ↓ & Composite Quality ↑ \\
 \midrule
-COLMAP & bicycle & 1. All Improvements & \underline{0.094} & \textbf{0.002} & 21.676 & 0.523 & 0.263 & 0.451 \\
-COLMAP & bicycle & 2. No Confidence Sampling & \textbf{0.093} & \textbf{0.002} & 21.416 & 0.506 & \textbf{0.243} & 0.449 \\
-COLMAP & bicycle & 3. No Depth Conf & 0.097 & \textbf{0.002} & \underline{22.006} & \underline{0.554} & 0.259 & \underline{0.478} \\
-COLMAP & bicycle & 4. No Depth Loss & 0.102 & \textbf{0.002} & \textbf{22.175} & \textbf{0.564} & \underline{0.257} & \textbf{0.488} \\
-COLMAP & bicycle & 5. No Combined Points & 0.105 & \textbf{0.002} & 21.489 & 0.501 & 0.311 & 0.406 \\
-VGGT & bicycle & 6. No COLMAP Cameras & 0.522 & \underline{0.011} & 17.286 & 0.270 & 0.377 & 0.152 \\
-COLMAP & bicycle & 7. No Pose Opt & 0.099 & \textbf{0.002} & 21.209 & 0.476 & 0.286 & 0.401 \\
-\midrule
-COLMAP & garden & 1. All Improvements & \underline{0.038} & \textbf{0.001} & \underline{22.780} & \underline{0.566} & \underline{0.246} & \underline{0.508} \\
-COLMAP & garden & 2. No Confidence Sampling & \textbf{0.037} & \textbf{0.001} & \textbf{23.111} & \textbf{0.597} & \textbf{0.237} & \textbf{0.537} \\
-COLMAP & garden & 3. No Depth Conf & 0.047 & \textbf{0.001} & 22.260 & 0.526 & \underline{0.246} & 0.475 \\
-COLMAP & garden & 4. No Depth Loss & 0.051 & \textbf{0.001} & 22.130 & 0.514 & 0.247 & 0.465 \\
-COLMAP & garden & 5. No Combined Points & 0.041 & \textbf{0.001} & 21.841 & 0.519 & 0.326 & 0.413 \\
-VGGT & garden & 6. No COLMAP Cameras &  &  &  &  &  &  \\
-COLMAP & garden & 7. No Pose Opt & 0.063 & \textbf{0.001} & 21.499 & 0.463 & 0.259 & 0.415 \\
-\midrule
-COLMAP & stump & 1. All Improvements & \underline{0.025} & \textbf{0.001} & \underline{26.298} & \underline{0.761} & 0.266 & \underline{0.674} \\
-COLMAP & stump & 2. No Confidence Sampling & 0.033 & \textbf{0.001} & 25.954 & 0.747 & \underline{0.265} & 0.660 \\
-COLMAP & stump & 3. No Depth Conf & \textbf{0.022} & \textbf{0.001} & \textbf{26.409} & \textbf{0.764} & \textbf{0.263} & \textbf{0.680} \\
-COLMAP & stump & 4. No Depth Loss & 0.027 & \textbf{0.001} & 26.019 & 0.745 & \underline{0.265} & 0.660 \\
-COLMAP & stump & 5. No Combined Points & 0.221 & \underline{0.005} & 22.281 & 0.540 & 0.339 & 0.426 \\
-VGGT & stump & 6. No COLMAP Cameras &  &  &  &  &  &  \\
-COLMAP & stump & 7. No Pose Opt & \textbf{0.022} & \textbf{0.001} & 26.055 & 0.748 & 0.275 & 0.657 \\
+VGGT & outdoor & 2. Confidence Sampling &  &  &  &  &  &  \\
+COLMAP & outdoor & 3. No Depth Conf & \textbf{0.055} & \textbf{0.001} & \textbf{23.558} & \textbf{0.615} & \textbf{0.256} & \textbf{0.544} \\
+COLMAP & outdoor & 4. No Depth Loss & \underline{0.060} & \textbf{0.001} & \underline{23.442} & \underline{0.607} & \textbf{0.256} & \underline{0.538} \\
+VGGT & outdoor & 5. No Combined Points &  &  &  &  &  &  \\
+VGGT & outdoor & 6. No COLMAP Cameras &  &  &  &  &  &  \\
 \bottomrule
 \end{tabular}
 \end{table}

@@ -1,0 +1,16 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else Combining cameras and point clouds from VGGT and COLMAP. (Bicycle) \fi}
+\label{tab:07_combined_single_brief_bicycle}
+\centering
+\tiny
+\begin{tabular}{lllllrrrrrr}
+\toprule
+Choice & Dataset & Camera Src & Pcd Src & Sampling Mode & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP & bicycle & COLMAP Cams & Both Pcds & confidence & \textbf{0.102} & \textbf{0.002} & \textbf{22.175} & \textbf{0.257} & \textbf{0.564} & \textbf{0.488} \\
+COLMAP & bicycle & COLMAP Cams & VGGT Pcd & confidence & \underline{0.108} & \underline{0.003} & 21.798 & \underline{0.302} & 0.541 & \underline{0.440} \\
+COLMAP & bicycle &  &  &  & 0.111 & \textbf{0.002} & \underline{22.163} & 0.349 & \underline{0.559} & 0.428 \\
+VGGT & bicycle &  &  & confidence & 0.566 & 0.013 & 17.475 & 0.379 & 0.279 & 0.159 \\
+\bottomrule
+\end{tabular}
+\end{table}

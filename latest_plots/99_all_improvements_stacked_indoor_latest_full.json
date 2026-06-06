@@ -78,7 +78,6 @@
         "input_folder":"bonsai_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_confidence_minfarthestpose_sharedcam",
         "output_folder":"bonsai_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_confidence_minfarthestpose_sharedcam_i100_gteval_poseopt_depthcloser_dl0.1_confshifted_steps15000_val_step14999.json",
         "initial_points":166763,
-        "gsplat_cfg_file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/combined_outputs\/bonsai_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_confidence_minfarthestpose_sharedcam_i100_gteval_poseopt_depthcloser_dl0.1_confshifted_steps15000\/stats\/config.json",
         "plot_series":"1. All Improvements"
     },
     {
@@ -160,7 +159,6 @@
         "input_folder":"bonsai_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam",
         "output_folder":"bonsai_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam_i100_gteval_poseopt_depthcloser_dl0.1_confshifted_steps15000_val_step14999.json",
         "initial_points":166763,
-        "gsplat_cfg_file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/combined_outputs\/bonsai_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam_i100_gteval_poseopt_depthcloser_dl0.1_confshifted_steps15000\/stats\/config.json",
         "plot_series":"2. No Confidence Sampling"
     },
     {
@@ -242,7 +240,6 @@
         "input_folder":"bonsai_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam",
         "output_folder":"bonsai_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam_i100_gteval_poseopt_depthcloser_dl0.1_confdisabled_steps15000_val_step14999.json",
         "initial_points":166763,
-        "gsplat_cfg_file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/combined_outputs\/bonsai_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam_i100_gteval_poseopt_depthcloser_dl0.1_confdisabled_steps15000\/stats\/config.json",
         "plot_series":"3. No Depth Conf"
     },
     {
@@ -324,7 +321,6 @@
         "input_folder":"bonsai_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam",
         "output_folder":"bonsai_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam_i100_gteval_poseopt_steps15000_val_step14999.json",
         "initial_points":166763,
-        "gsplat_cfg_file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/combined_outputs\/bonsai_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam_i100_gteval_poseopt_steps15000\/stats\/config.json",
         "plot_series":"4. No Depth Loss"
     },
     {
@@ -406,7 +402,6 @@
         "input_folder":"bonsai_2_n100_s42_default_minfarthestpose_sharedcam",
         "output_folder":"bonsai_2_n100_s42_default_minfarthestpose_sharedcam_i100_gteval_poseopt_steps15000_val_step14999.json",
         "initial_points":66763,
-        "gsplat_cfg_file_path":null,
         "plot_series":"5. No Combined Points"
     },
     {
@@ -488,7 +483,6 @@
         "input_folder":"bonsai_2_n100_s42_c0.0_p100000_random_minfarthestpose",
         "output_folder":"bonsai_2_n100_s42_c0.0_p100000_random_minfarthestpose_i100_gteval_poseopt_steps15000_val_step14999.json",
         "initial_points":100000,
-        "gsplat_cfg_file_path":null,
         "plot_series":"6. No COLMAP Cameras"
     },
     {
@@ -570,7 +564,6 @@
         "input_folder":"bonsai_2_n100_s42_c0.0_p100000_random_minfarthestpose",
         "output_folder":"bonsai_2_n100_s42_c0.0_p100000_random_minfarthestpose_i100_gteval_steps15000_val_step14999.json",
         "initial_points":100000,
-        "gsplat_cfg_file_path":null,
         "plot_series":"7. No Pose Opt"
     },
     {
@@ -620,7 +613,7 @@
         "use_ba":null,
         "feature_extractor":"",
         "max_ba_iterations":null,
-        "source":"gsplat_cfg",
+        "source":"gsplat",
         "series_label_override":"1. All Improvements",
         "dataset_collection":"indoor",
         "psnr":24.6629447937,
@@ -634,7 +627,7 @@
         "quality":0.7034616513,
         "avge":0.2210701234,
         "real_num_points":170681,
-        "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/combined_outputs\/kitchen_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_confidence_minfarthestpose_sharedcam_i100_gteval_poseopt_depthcloser_dl0.1_confshifted_steps15000\/stats\/config.json",
+        "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/combined_outputs\/kitchen_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_confidence_minfarthestpose_sharedcam_i100_gteval_poseopt_depthcloser_dl0.1_confshifted_steps15000\/stats\/val_step14999.json",
         "gsplat_file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/combined_outputs\/kitchen_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_confidence_minfarthestpose_sharedcam_i100_gteval_poseopt_depthcloser_dl0.1_confshifted_steps15000\/stats\/val_step14999.json",
         "folder":"kitchen_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_confidence_minfarthestpose_sharedcam_i100_gteval_poseopt_depthcloser_dl0.1_confshifted_steps15000",
         "rre":0.1013,
@@ -649,10 +642,9 @@
         "peak_memory_reserved_mb":null,
         "processing_time":null,
         "sfm_file_path":"\/home\/ojab2\/work\/git\/vggt\/combined_outputs\/kitchen_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_confidence_minfarthestpose_sharedcam\/eval_results.json",
-        "input_folder":"kitchen_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_confidence_minfarthestpose_sharedcam_i100_gteval_poseopt_depthcloser_dl0.1_confshifted_steps15000",
-        "output_folder":"",
+        "input_folder":"kitchen_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_confidence_minfarthestpose_sharedcam",
+        "output_folder":"kitchen_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_confidence_minfarthestpose_sharedcam_i100_gteval_poseopt_depthcloser_dl0.1_confshifted_steps15000_val_step14999.json",
         "initial_points":170681,
-        "gsplat_cfg_file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/combined_outputs\/kitchen_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_confidence_minfarthestpose_sharedcam_i100_gteval_poseopt_depthcloser_dl0.1_confshifted_steps15000\/stats\/config.json",
         "plot_series":"1. All Improvements"
     },
     {
@@ -702,7 +694,7 @@
         "use_ba":null,
         "feature_extractor":"",
         "max_ba_iterations":null,
-        "source":"gsplat_cfg",
+        "source":"gsplat",
         "series_label_override":"2. No Confidence Sampling",
         "dataset_collection":"indoor",
         "psnr":24.1427955627,
@@ -716,7 +708,7 @@
         "quality":0.6897004923,
         "avge":0.2233739452,
         "real_num_points":170681,
-        "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/combined_outputs\/kitchen_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam_i100_gteval_poseopt_depthcloser_dl0.1_confshifted_steps15000\/stats\/config.json",
+        "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/combined_outputs\/kitchen_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam_i100_gteval_poseopt_depthcloser_dl0.1_confshifted_steps15000\/stats\/val_step14999.json",
         "gsplat_file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/combined_outputs\/kitchen_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam_i100_gteval_poseopt_depthcloser_dl0.1_confshifted_steps15000\/stats\/val_step14999.json",
         "folder":"kitchen_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam_i100_gteval_poseopt_depthcloser_dl0.1_confshifted_steps15000",
         "rre":0.1013,
@@ -731,10 +723,9 @@
         "peak_memory_reserved_mb":null,
         "processing_time":null,
         "sfm_file_path":"\/home\/ojab2\/work\/git\/vggt\/combined_outputs\/kitchen_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam\/eval_results.json",
-        "input_folder":"kitchen_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam_i100_gteval_poseopt_depthcloser_dl0.1_confshifted_steps15000",
-        "output_folder":"",
+        "input_folder":"kitchen_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam",
+        "output_folder":"kitchen_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam_i100_gteval_poseopt_depthcloser_dl0.1_confshifted_steps15000_val_step14999.json",
         "initial_points":170681,
-        "gsplat_cfg_file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/combined_outputs\/kitchen_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam_i100_gteval_poseopt_depthcloser_dl0.1_confshifted_steps15000\/stats\/config.json",
         "plot_series":"2. No Confidence Sampling"
     },
     {
@@ -784,7 +775,7 @@
         "use_ba":null,
         "feature_extractor":"",
         "max_ba_iterations":null,
-        "source":"gsplat_cfg",
+        "source":"gsplat",
         "series_label_override":"3. No Depth Conf",
         "dataset_collection":"indoor",
         "psnr":22.7724170685,
@@ -798,7 +789,7 @@
         "quality":0.5983843656,
         "avge":0.2555900895,
         "real_num_points":170681,
-        "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/combined_outputs\/kitchen_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam_i100_gteval_poseopt_depthcloser_dl0.1_confdisabled_steps15000\/stats\/config.json",
+        "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/combined_outputs\/kitchen_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam_i100_gteval_poseopt_depthcloser_dl0.1_confdisabled_steps15000\/stats\/val_step14999.json",
         "gsplat_file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/combined_outputs\/kitchen_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam_i100_gteval_poseopt_depthcloser_dl0.1_confdisabled_steps15000\/stats\/val_step14999.json",
         "folder":"kitchen_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam_i100_gteval_poseopt_depthcloser_dl0.1_confdisabled_steps15000",
         "rre":0.1013,
@@ -813,10 +804,9 @@
         "peak_memory_reserved_mb":null,
         "processing_time":null,
         "sfm_file_path":"\/home\/ojab2\/work\/git\/vggt\/combined_outputs\/kitchen_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam\/eval_results.json",
-        "input_folder":"kitchen_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam_i100_gteval_poseopt_depthcloser_dl0.1_confdisabled_steps15000",
-        "output_folder":"",
+        "input_folder":"kitchen_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam",
+        "output_folder":"kitchen_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam_i100_gteval_poseopt_depthcloser_dl0.1_confdisabled_steps15000_val_step14999.json",
         "initial_points":170681,
-        "gsplat_cfg_file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/combined_outputs\/kitchen_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam_i100_gteval_poseopt_depthcloser_dl0.1_confdisabled_steps15000\/stats\/config.json",
         "plot_series":"3. No Depth Conf"
     },
     {
@@ -866,7 +856,7 @@
         "use_ba":null,
         "feature_extractor":"",
         "max_ba_iterations":null,
-        "source":"gsplat_cfg",
+        "source":"gsplat",
         "series_label_override":"4. No Depth Loss",
         "dataset_collection":"indoor",
         "psnr":22.7148952484,
@@ -880,7 +870,7 @@
         "quality":0.5925166988,
         "avge":0.257827216,
         "real_num_points":170681,
-        "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/combined_outputs\/kitchen_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam_i100_gteval_poseopt_steps15000\/stats\/config.json",
+        "file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/combined_outputs\/kitchen_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
         "gsplat_file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/combined_outputs\/kitchen_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam_i100_gteval_poseopt_steps15000\/stats\/val_step14999.json",
         "folder":"kitchen_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam_i100_gteval_poseopt_steps15000",
         "rre":0.1013,
@@ -895,10 +885,9 @@
         "peak_memory_reserved_mb":null,
         "processing_time":null,
         "sfm_file_path":"\/home\/ojab2\/work\/git\/vggt\/combined_outputs\/kitchen_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam\/eval_results.json",
-        "input_folder":"kitchen_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam_i100_gteval_poseopt_steps15000",
-        "output_folder":"",
+        "input_folder":"kitchen_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam",
+        "output_folder":"kitchen_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam_i100_gteval_poseopt_steps15000_val_step14999.json",
         "initial_points":170681,
-        "gsplat_cfg_file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/combined_outputs\/kitchen_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam_i100_gteval_poseopt_steps15000\/stats\/config.json",
         "plot_series":"4. No Depth Loss"
     },
     {
@@ -980,7 +969,6 @@
         "input_folder":"kitchen_2_n100_s42_default_minfarthestpose_sharedcam",
         "output_folder":"kitchen_2_n100_s42_default_minfarthestpose_sharedcam_i100_gteval_poseopt_steps15000_val_step14999.json",
         "initial_points":70681,
-        "gsplat_cfg_file_path":null,
         "plot_series":"5. No Combined Points"
     },
     {
@@ -1062,7 +1050,6 @@
         "input_folder":"kitchen_2_n100_s42_c0.0_p100000_random_minfarthestpose",
         "output_folder":"kitchen_2_n100_s42_c0.0_p100000_random_minfarthestpose_i100_gteval_poseopt_steps15000_val_step14999.json",
         "initial_points":100000,
-        "gsplat_cfg_file_path":null,
         "plot_series":"6. No COLMAP Cameras"
     },
     {
@@ -1144,7 +1131,6 @@
         "input_folder":"kitchen_2_n100_s42_c0.0_p100000_random_minfarthestpose",
         "output_folder":"kitchen_2_n100_s42_c0.0_p100000_random_minfarthestpose_i100_gteval_steps15000_val_step14999.json",
         "initial_points":100000,
-        "gsplat_cfg_file_path":null,
         "plot_series":"7. No Pose Opt"
     },
     {
@@ -1226,7 +1212,6 @@
         "input_folder":"counter_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_confidence_minfarthestpose_sharedcam",
         "output_folder":"counter_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_confidence_minfarthestpose_sharedcam_i100_gteval_poseopt_depthcloser_dl0.1_confshifted_steps15000_val_step14999.json",
         "initial_points":141914,
-        "gsplat_cfg_file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/combined_outputs\/counter_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_confidence_minfarthestpose_sharedcam_i100_gteval_poseopt_depthcloser_dl0.1_confshifted_steps15000\/stats\/config.json",
         "plot_series":"1. All Improvements"
     },
     {
@@ -1308,7 +1293,6 @@
         "input_folder":"counter_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam",
         "output_folder":"counter_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam_i100_gteval_poseopt_depthcloser_dl0.1_confshifted_steps15000_val_step14999.json",
         "initial_points":141914,
-        "gsplat_cfg_file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/combined_outputs\/counter_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam_i100_gteval_poseopt_depthcloser_dl0.1_confshifted_steps15000\/stats\/config.json",
         "plot_series":"2. No Confidence Sampling"
     },
     {
@@ -1390,7 +1374,6 @@
         "input_folder":"counter_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam",
         "output_folder":"counter_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam_i100_gteval_poseopt_depthcloser_dl0.1_confdisabled_steps15000_val_step14999.json",
         "initial_points":141914,
-        "gsplat_cfg_file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/combined_outputs\/counter_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam_i100_gteval_poseopt_depthcloser_dl0.1_confdisabled_steps15000\/stats\/config.json",
         "plot_series":"3. No Depth Conf"
     },
     {
@@ -1472,7 +1455,6 @@
         "input_folder":"counter_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam",
         "output_folder":"counter_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam_i100_gteval_poseopt_steps15000_val_step14999.json",
         "initial_points":141914,
-        "gsplat_cfg_file_path":"\/home\/ojab2\/work\/git\/gsplat\/results\/combined_outputs\/counter_2_n100_s42_combined_colmapcams_bothpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam_i100_gteval_poseopt_steps15000\/stats\/config.json",
         "plot_series":"4. No Depth Loss"
     },
     {
@@ -1554,7 +1536,6 @@
         "input_folder":"counter_2_n100_s42_default_minfarthestpose_sharedcam",
         "output_folder":"counter_2_n100_s42_default_minfarthestpose_sharedcam_i100_gteval_poseopt_steps15000_val_step14999.json",
         "initial_points":41914,
-        "gsplat_cfg_file_path":null,
         "plot_series":"5. No Combined Points"
     },
     {
@@ -1636,7 +1617,6 @@
         "input_folder":"counter_2_n100_s42_c0.0_p100000_random_minfarthestpose",
         "output_folder":"counter_2_n100_s42_c0.0_p100000_random_minfarthestpose_i100_gteval_poseopt_steps15000_val_step14999.json",
         "initial_points":100000,
-        "gsplat_cfg_file_path":null,
         "plot_series":"6. No COLMAP Cameras"
     },
     {
@@ -1718,7 +1698,6 @@
         "input_folder":"counter_2_n100_s42_c0.0_p100000_random_minfarthestpose",
         "output_folder":"counter_2_n100_s42_c0.0_p100000_random_minfarthestpose_i100_gteval_steps15000_val_step14999.json",
         "initial_points":100000,
-        "gsplat_cfg_file_path":null,
         "plot_series":"7. No Pose Opt"
     }
 ]

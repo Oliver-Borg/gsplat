@@ -2,25 +2,25 @@
 \caption{\ifdefined\customcaption \customcaption \else Combining cameras and point clouds from VGGT and COLMAP. (Synthetic) \fi}
 \label{tab:07_combined_single_brief_synthetic}
 \centering
-\scriptsize
+\tiny
 \begin{tabular}{lllllrrrrrr}
 \toprule
 Choice & Dataset & Camera Src & Pcd Src & Sampling Mode & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
 \midrule
 COLMAP & lego & COLMAP Cams & Both Pcds & confidence & \underline{10.389} & 0.113 & \underline{25.149} & \textbf{0.050} & \underline{0.904} & \underline{0.870} \\
+COLMAP & lego & COLMAP Cams & COLMAP Pcd & SfM & 10.429 & 0.116 & 23.416 & \underline{0.061} & 0.866 & 0.809 \\
 COLMAP & lego & COLMAP Cams & VGGT Pcd & confidence & 10.395 & \underline{0.112} & \textbf{25.253} & \textbf{0.050} & \textbf{0.905} & \textbf{0.872} \\
-COLMAP & lego &  &  &  & 10.429 & 0.116 & 23.416 & \underline{0.061} & 0.866 & 0.809 \\
-VGGT & lego &  &  & confidence & \textbf{0.251} & \textbf{0.006} & 20.370 & 0.075 & 0.774 & 0.690 \\
+VGGT & lego & VGGT Cams & VGGT Pcd & confidence & \textbf{0.251} & \textbf{0.006} & 20.370 & 0.075 & 0.774 & 0.690 \\
 \midrule
 COLMAP & ship & COLMAP Cams & Both Pcds & confidence & 0.197 & \underline{0.003} & 21.877 & \underline{0.135} & 0.734 & 0.657 \\
+COLMAP & ship & COLMAP Cams & COLMAP Pcd & SfM & \textbf{0.129} & \textbf{0.002} & \underline{22.677} & 0.142 & \textbf{0.759} & \underline{0.683} \\
 COLMAP & ship & COLMAP Cams & VGGT Pcd & confidence & \underline{0.193} & \underline{0.003} & 21.956 & \underline{0.135} & 0.736 & 0.660 \\
-COLMAP & ship &  &  &  & \textbf{0.129} & \textbf{0.002} & \underline{22.677} & 0.142 & \textbf{0.759} & \underline{0.683} \\
-VGGT & ship &  &  & confidence & 0.379 & 0.008 & \textbf{22.838} & \textbf{0.129} & \underline{0.748} & \textbf{0.687} \\
+VGGT & ship & VGGT Cams & VGGT Pcd & confidence & 0.379 & 0.008 & \textbf{22.838} & \textbf{0.129} & \underline{0.748} & \textbf{0.687} \\
 \midrule
 COLMAP & drums & COLMAP Cams & Both Pcds & confidence & \underline{0.107} & \textbf{0.002} & 22.768 & \textbf{0.082} & \underline{0.902} & \textbf{0.805} \\
+COLMAP & drums & COLMAP Cams & COLMAP Pcd & SfM & \textbf{0.095} & \textbf{0.002} & \textbf{22.801} & 0.089 & \textbf{0.906} & \underline{0.803} \\
 COLMAP & drums & COLMAP Cams & VGGT Pcd & confidence & 0.108 & \textbf{0.002} & \underline{22.785} & \underline{0.083} & 0.901 & \textbf{0.805} \\
-COLMAP & drums &  &  &  & \textbf{0.095} & \textbf{0.002} & \textbf{22.801} & 0.089 & \textbf{0.906} & \underline{0.803} \\
-VGGT & drums &  &  & confidence & 0.116 & \underline{0.003} & 20.874 & 0.085 & 0.868 & 0.748 \\
+VGGT & drums & VGGT Cams & VGGT Pcd & confidence & 0.116 & \underline{0.003} & 20.874 & 0.085 & 0.868 & 0.748 \\
 \bottomrule
 \end{tabular}
 \end{table}

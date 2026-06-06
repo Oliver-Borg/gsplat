@@ -3,31 +3,33 @@
 \label{tab:01_sampling_mode_timing_indoor}
 \centering
 \scriptsize
-\begin{tabular}{llrlr}
+\begin{tabular}{llrlrr}
 \toprule
-Choice & Dataset & Num Points & Sampling Mode & Pcd Processing Time ↓ \\
+Choice & Dataset Collection & Num Points & Sampling Mode & Pcd Processing Time ↓ & Pcd Processing Peak Memory ↓ \\
 \midrule
-VGGT & bonsai & 1000 & confidence & \textbf{3.046} \\
-VGGT & bonsai & 1000 & imagefps & 4.875 \\
-VGGT & bonsai & 1000 & random & 3.348 \\
-VGGT & bonsai & 1000 & voxels & 17.048 \\
-VGGT & bonsai & 5000 & confidence & 3.483 \\
-VGGT & bonsai & 5000 & imagefps & 5.329 \\
-VGGT & bonsai & 5000 & random & 3.653 \\
-VGGT & bonsai & 5000 & voxels & 16.447 \\
-VGGT & bonsai & 10000 & confidence & \underline{3.154} \\
-VGGT & bonsai & 10000 & imagefps & 10.439 \\
-VGGT & bonsai & 10000 & random & 3.371 \\
-VGGT & bonsai & 10000 & voxels & 17.289 \\
-VGGT & bonsai & 50000 & confidence & 4.023 \\
-VGGT & bonsai & 50000 & imagefps & 17.588 \\
-VGGT & bonsai & 50000 & random & 4.084 \\
-VGGT & bonsai & 50000 & voxels & 17.298 \\
-VGGT & bonsai & 100000 & confidence & 4.062 \\
-VGGT & bonsai & 100000 & imagefps & 62.816 \\
-VGGT & bonsai & 100000 & random & 4.478 \\
-VGGT & bonsai & 100000 & voxels & 17.688 \\
-VGGT & bonsai &  & ba &  \\
+VGGT & indoor & 1000 & confidence & 2.728 & \textbf{308.000} \\
+VGGT & indoor & 1000 & imagefps & 2.621 & \textbf{308.000} \\
+VGGT & indoor & 1000 & random & 2.636 & \textbf{308.000} \\
+VGGT & indoor & 1000 & voxels & 12.302 & \textbf{308.000} \\
+VGGT & indoor & 5000 & confidence & \underline{2.594} & \textbf{308.000} \\
+VGGT & indoor & 5000 & imagefps & 3.651 & \textbf{308.000} \\
+VGGT & indoor & 5000 & random & 2.656 & \textbf{308.000} \\
+VGGT & indoor & 5000 & voxels & 12.357 & \textbf{308.000} \\
+VGGT & indoor & 10000 & confidence & \textbf{2.581} & \textbf{308.000} \\
+VGGT & indoor & 10000 & imagefps & 4.699 & \textbf{308.000} \\
+VGGT & indoor & 10000 & random & 2.825 & \textbf{308.000} \\
+VGGT & indoor & 10000 & voxels & 12.576 & \textbf{308.000} \\
+VGGT & indoor & 21304 & ba & 166.250 & \underline{17925.161} \\
+VGGT & indoor & 24311 & ba & 144.797 & 20381.517 \\
+VGGT & indoor & 28194 & ba & 186.890 & 22279.662 \\
+VGGT & indoor & 50000 & confidence & 2.938 & \textbf{308.000} \\
+VGGT & indoor & 50000 & imagefps & 14.159 & \textbf{308.000} \\
+VGGT & indoor & 50000 & random & 3.126 & \textbf{308.000} \\
+VGGT & indoor & 50000 & voxels & 13.255 & \textbf{308.000} \\
+VGGT & indoor & 100000 & confidence & 3.246 & \textbf{308.000} \\
+VGGT & indoor & 100000 & imagefps & 26.121 & \textbf{308.000} \\
+VGGT & indoor & 100000 & random & 3.270 & \textbf{308.000} \\
+VGGT & indoor & 100000 & voxels & 13.876 & \textbf{308.000} \\
 \bottomrule
 \end{tabular}
 \end{table}

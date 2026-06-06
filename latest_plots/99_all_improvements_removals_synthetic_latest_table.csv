@@ -1,22 +1,3 @@
-choice,dataset,series_label_override,eval_rre,eval_rte,psnr,ssim,lpips,quality
-COLMAP,lego,1. All Improvements,,,,,,
-COLMAP,ship,1. All Improvements,,,,,,
-COLMAP,drums,1. All Improvements,,,,,,
-COLMAP,lego,2. No Confidence Sampling,10.38590145111084,0.11436904221773148,25.156843185424805,0.8961736559867859,0.06247736141085625,0.8578121038547113
-COLMAP,ship,2. No Confidence Sampling,,,,,,
-COLMAP,drums,2. No Confidence Sampling,,,,,,
-COLMAP,lego,3. No Depth Conf,,,,,,
-COLMAP,ship,3. No Depth Conf,,,,,,
-COLMAP,drums,3. No Depth Conf,,,,,,
-COLMAP,lego,4. No Depth Loss,,,,,,
-COLMAP,ship,4. No Depth Loss,,,,,,
-COLMAP,drums,4. No Depth Loss,,,,,,
-COLMAP,lego,5. No Combined Points,,,,,,
-COLMAP,ship,5. No Combined Points,,,,,,
-COLMAP,drums,5. No Combined Points,,,,,,
-VGGT,lego,6. No COLMAP Cameras,,,,,,
-VGGT,ship,6. No COLMAP Cameras,,,,,,
-VGGT,drums,6. No COLMAP Cameras,,,,,,
-COLMAP,lego,7. No Pose Opt,,,,,,
-COLMAP,ship,7. No Pose Opt,,,,,,
-COLMAP,drums,7. No Pose Opt,,,,,,
+choice,dataset_collection,series_label_override
+VGGT,synthetic,2. No voxels Sampling
+VGGT,synthetic,6. No COLMAP Cameras

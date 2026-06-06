@@ -1,0 +1,32 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else COLMAP versus VGGT over various number of images (Counter) \fi}
+\label{tab:01_num_images_brief_counter}
+\centering
+\scriptsize
+\begin{tabular}{lrrrrrrr}
+\toprule
+Choice & Num Images & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Aligned Cameras ↑ \\
+\midrule
+COLMAP & 10 & 0.148 & 0.006 & 12.353 & 0.733 & 0.449 & 5 \\
+COLMAP & 20 & 0.121 & 0.004 & 16.780 & 0.511 & 0.571 & 13 \\
+COLMAP & 30 & 0.028 & \underline{0.002} & 22.416 & 0.292 & 0.769 & 30 \\
+COLMAP & 40 & 0.023 & \textbf{0.001} & 24.299 & 0.230 & 0.819 & 40 \\
+COLMAP & 50 & 0.026 & \textbf{0.001} & 25.205 & 0.201 & 0.843 & 50 \\
+COLMAP & 60 & 0.020 & \textbf{0.001} & 26.158 & 0.189 & 0.866 & 60 \\
+COLMAP & 70 & \underline{0.019} & \textbf{0.001} & 26.725 & 0.182 & 0.878 & 70 \\
+COLMAP & 80 & \textbf{0.016} & \textbf{0.001} & 27.376 & 0.169 & 0.888 & 80 \\
+COLMAP & 90 & \underline{0.019} & \textbf{0.001} & \underline{27.591} & \underline{0.166} & \underline{0.890} & \underline{90} \\
+COLMAP & 100 & \textbf{0.016} & \textbf{0.001} & \textbf{27.935} & \textbf{0.165} & \textbf{0.896} & \textbf{100} \\
+VGGT & 10 & 0.675 & 0.046 & 15.224 & 0.470 & 0.459 & 10 \\
+VGGT & 20 & 0.381 & 0.043 & 17.897 & 0.366 & 0.533 & 20 \\
+VGGT & 30 & 0.349 & 0.036 & 18.839 & 0.314 & 0.561 & 30 \\
+VGGT & 40 & 0.380 & 0.032 & 19.154 & 0.294 & 0.574 & 40 \\
+VGGT & 50 & 0.393 & 0.031 & 19.037 & 0.302 & 0.578 & 50 \\
+VGGT & 60 & 0.380 & 0.031 & 19.745 & 0.285 & 0.598 & 60 \\
+VGGT & 70 & 0.356 & 0.031 & 20.209 & 0.279 & 0.616 & 70 \\
+VGGT & 80 & 0.359 & 0.030 & 20.539 & 0.275 & 0.628 & 80 \\
+VGGT & 90 & 0.396 & 0.030 & 19.928 & 0.294 & 0.614 & \underline{90} \\
+VGGT & 100 & 0.387 & 0.030 & 20.050 & 0.291 & 0.618 & \textbf{100} \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,0 +1,30 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else COLMAP versus VGGT over various number of images (Bicycle) \fi}
+\label{tab:01_num_images_brief_bicycle}
+\centering
+\scriptsize
+\begin{tabular}{lrrrrrrr}
+\toprule
+Choice & Num Images & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Aligned Cameras ↑ \\
+\midrule
+COLMAP & 30 & 0.334 & 0.009 & 14.078 & 0.785 & 0.259 & 6 \\
+COLMAP & 40 & 0.143 & \textbf{0.007} & 15.818 & 0.667 & 0.297 & 9 \\
+COLMAP & 50 & 0.150 & 0.011 & 19.972 & 0.437 & 0.377 & 46 \\
+COLMAP & 60 & 0.134 & 0.011 & 19.752 & 0.404 & 0.369 & 59 \\
+COLMAP & 70 & 0.120 & 0.010 & 19.711 & 0.365 & 0.370 & 69 \\
+COLMAP & 80 & 0.119 & 0.009 & \underline{20.295} & 0.341 & \underline{0.403} & 80 \\
+COLMAP & 90 & \underline{0.113} & \underline{0.008} & 20.278 & \underline{0.321} & 0.402 & 89 \\
+COLMAP & 100 & \textbf{0.109} & \textbf{0.007} & \textbf{21.351} & \textbf{0.307} & \textbf{0.482} & \underline{99} \\
+VGGT & 10 & 1.178 & 0.108 & 14.799 & 0.509 & 0.166 & 10 \\
+VGGT & 20 & 1.060 & 0.087 & 16.030 & 0.448 & 0.195 & 20 \\
+VGGT & 30 & 0.751 & 0.069 & 16.637 & 0.417 & 0.212 & 30 \\
+VGGT & 40 & 0.707 & 0.073 & 16.837 & 0.408 & 0.224 & 40 \\
+VGGT & 50 & 0.823 & 0.071 & 17.126 & 0.411 & 0.235 & 50 \\
+VGGT & 60 & 0.734 & 0.066 & 17.197 & 0.408 & 0.243 & 60 \\
+VGGT & 70 & 0.877 & 0.061 & 17.303 & 0.416 & 0.248 & 70 \\
+VGGT & 80 & 0.923 & 0.065 & 16.891 & 0.431 & 0.250 & 80 \\
+VGGT & 90 & 0.737 & 0.065 & 17.289 & 0.421 & 0.260 & 90 \\
+VGGT & 100 & 0.679 & 0.066 & 17.132 & 0.425 & 0.264 & \textbf{100} \\
+\bottomrule
+\end{tabular}
+\end{table}

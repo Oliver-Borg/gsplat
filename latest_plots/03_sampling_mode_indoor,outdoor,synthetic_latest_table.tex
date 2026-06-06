@@ -2,14 +2,14 @@
 \caption{\ifdefined\customcaption \customcaption \else A comparison of different VGGT point cloud sampling modes (Indoor,Outdoor,Synthetic) \fi}
 \label{tab:03_sampling_mode_indoor,outdoor,synthetic}
 \centering
-\scriptsize
+\tiny
 \begin{tabular}{llrlrrrrrr}
 \toprule
 Choice & Dataset Collection & Num Points & Sampling Mode & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
 \midrule
-COLMAP & indoor & 41914 &  & \textbf{0.016} & \textbf{0.001} & \textbf{27.935} & 0.165 & \textbf{0.896} & \textbf{0.846} \\
-COLMAP & indoor & 66763 &  & 0.059 & \underline{0.003} & \underline{27.826} & \underline{0.140} & \underline{0.866} & \underline{0.842} \\
-COLMAP & indoor & 70681 &  & 0.101 & 0.004 & 21.721 & \textbf{0.137} & 0.498 & 0.515 \\
+COLMAP & indoor & 41914 & SfM & \textbf{0.016} & \textbf{0.001} & \textbf{27.935} & 0.165 & \textbf{0.896} & \textbf{0.846} \\
+COLMAP & indoor & 66763 & SfM & 0.059 & \underline{0.003} & \underline{27.826} & \underline{0.140} & \underline{0.866} & \underline{0.842} \\
+COLMAP & indoor & 70681 & SfM & 0.101 & 0.004 & 21.721 & \textbf{0.137} & 0.498 & 0.515 \\
 VGGT & indoor & 1000 & confidence & 0.467 & 0.051 & 20.062 & 0.470 & 0.606 & 0.342 \\
 VGGT & indoor & 1000 & imagefps & 0.467 & 0.051 & 20.152 & 0.471 & 0.607 & 0.344 \\
 VGGT & indoor & 1000 & random & 0.467 & 0.051 & 20.065 & 0.465 & 0.606 & 0.345 \\
@@ -42,9 +42,9 @@ VGGT & indoor & 1000000 & imagefps & 0.467 & 0.051 & 19.454 & 0.320 & 0.551 & 0.
 VGGT & indoor & 1000000 & random & 0.467 & 0.051 & 19.554 & 0.297 & 0.555 & 0.410 \\
 VGGT & indoor & 1000000 & voxels & 0.467 & 0.051 & 19.330 & 0.323 & 0.560 & 0.392 \\
 \midrule
-COLMAP & outdoor & 17352 &  & 0.099 & 0.007 & 21.332 & 0.364 & \underline{0.480} & 0.357 \\
-COLMAP & outdoor & 19683 &  & \textbf{0.022} & \textbf{0.002} & \textbf{25.254} & \underline{0.345} & \textbf{0.721} & \textbf{0.583} \\
-COLMAP & outdoor & 70656 &  & \underline{0.063} & \underline{0.003} & \underline{21.593} & \textbf{0.271} & 0.467 & \underline{0.412} \\
+COLMAP & outdoor & 17352 & SfM & 0.099 & 0.007 & 21.332 & 0.364 & \underline{0.480} & 0.357 \\
+COLMAP & outdoor & 19683 & SfM & \textbf{0.022} & \textbf{0.002} & \textbf{25.254} & \underline{0.345} & \textbf{0.721} & \textbf{0.583} \\
+COLMAP & outdoor & 70656 & SfM & \underline{0.063} & \underline{0.003} & \underline{21.593} & \textbf{0.271} & 0.467 & \underline{0.412} \\
 VGGT & outdoor & 1000 & confidence & 0.695 & 0.086 & 18.892 & 0.710 & 0.404 & 0.054 \\
 VGGT & outdoor & 1000 & imagefps & 0.648 & 0.085 & 18.891 & 0.713 & 0.404 & 0.052 \\
 VGGT & outdoor & 1000 & random & 0.695 & 0.086 & 18.917 & 0.710 & 0.404 & 0.054 \\
@@ -77,9 +77,9 @@ VGGT & outdoor & 1000000 & imagefps & 0.648 & 0.085 & 18.107 & 0.483 & 0.331 & 0
 VGGT & outdoor & 1000000 & random & 0.695 & 0.086 & 18.150 & 0.452 & 0.325 & 0.154 \\
 VGGT & outdoor & 1000000 & voxels & 0.648 & 0.085 & 18.188 & 0.494 & 0.334 & 0.134 \\
 \midrule
-COLMAP & synthetic & 3866 &  & \textbf{0.153} & \textbf{0.010} & 22.469 & 0.093 & \textbf{0.899} & \textbf{0.791} \\
-COLMAP & synthetic & 5146 &  & 0.246 & \underline{0.011} & 22.401 & 0.149 & 0.751 & 0.668 \\
-COLMAP & synthetic & 10313 &  & 10.478 & 0.404 & \underline{22.787} & \textbf{0.066} & \underline{0.851} & \underline{0.785} \\
+COLMAP & synthetic & 3866 & SfM & \textbf{0.153} & \textbf{0.010} & 22.469 & 0.093 & \textbf{0.899} & \textbf{0.791} \\
+COLMAP & synthetic & 5146 & SfM & 0.246 & \underline{0.011} & 22.401 & 0.149 & 0.751 & 0.668 \\
+COLMAP & synthetic & 10313 & SfM & 10.478 & 0.404 & \underline{22.787} & \textbf{0.066} & \underline{0.851} & \underline{0.785} \\
 VGGT & synthetic & 870 & confidence & 0.319 & 0.019 & 20.475 & 0.161 & 0.781 & 0.643 \\
 VGGT & synthetic & 870 & imagefps & 0.319 & 0.019 & 20.477 & 0.162 & 0.781 & 0.643 \\
 VGGT & synthetic & 870 & random & 0.319 & 0.019 & 20.487 & 0.160 & 0.781 & 0.644 \\

@@ -1,0 +1,3 @@
+choice,dataset_collection,series_label_override
+VGGT,synthetic,1. All Improvements
+VGGT,synthetic,2. No voxels Sampling

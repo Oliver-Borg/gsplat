@@ -2,12 +2,12 @@
 \caption{\ifdefined\customcaption \customcaption \else A comparison of different VGGT point cloud sampling modes (Outdoor) \fi}
 \label{tab:03_sampling_mode_outdoor}
 \centering
-\scriptsize
+\tiny
 \begin{tabular}{llrlrrrrrr}
 \toprule
 Choice & Dataset & Num Points & Sampling Mode & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
 \midrule
-COLMAP & bicycle & 17352 &  & \textbf{0.099} & \textbf{0.007} & \textbf{21.332} & \textbf{0.364} & \textbf{0.480} & \textbf{0.357} \\
+COLMAP & bicycle & 17352 & SfM & \textbf{0.099} & \textbf{0.007} & \textbf{21.332} & \textbf{0.364} & \textbf{0.480} & \textbf{0.357} \\
 VGGT & bicycle & 1000 & confidence & 0.857 & 0.067 & 18.249 & 0.680 & 0.330 & 0.018 \\
 VGGT & bicycle & 1000 & imagefps & 0.716 & 0.066 & 18.240 & 0.695 & 0.331 & 0.009 \\
 VGGT & bicycle & 1000 & random & 0.857 & 0.067 & \underline{18.250} & 0.683 & 0.331 & 0.016 \\
@@ -38,7 +38,7 @@ VGGT & bicycle & 1000000 & imagefps & 0.716 & 0.066 & 17.425 & 0.453 & 0.242 & 0
 VGGT & bicycle & 1000000 & random & 0.857 & 0.067 & 17.437 & 0.411 & 0.238 & 0.115 \\
 VGGT & bicycle & 1000000 & voxels & 0.716 & 0.066 & 17.626 & 0.460 & 0.255 & 0.098 \\
 \midrule
-COLMAP & garden & 70656 &  & \textbf{0.063} & \textbf{0.003} & \textbf{21.593} & \textbf{0.271} & \textbf{0.467} & \textbf{0.412} \\
+COLMAP & garden & 70656 & SfM & \textbf{0.063} & \textbf{0.003} & \textbf{21.593} & \textbf{0.271} & \textbf{0.467} & \textbf{0.412} \\
 VGGT & garden & 1000 & confidence & 0.373 & 0.027 & 19.120 & 0.700 & \underline{0.398} & 0.062 \\
 VGGT & garden & 1000 & imagefps & 0.373 & 0.027 & \underline{19.148} & 0.697 & \underline{0.398} & 0.064 \\
 VGGT & garden & 1000 & random & 0.373 & 0.027 & \underline{19.148} & 0.695 & \underline{0.398} & 0.065 \\
@@ -69,7 +69,7 @@ VGGT & garden & 1000000 & imagefps & 0.373 & 0.027 & 18.414 & 0.463 & 0.345 & 0.
 VGGT & garden & 1000000 & random & 0.373 & 0.027 & 18.412 & \underline{0.432} & 0.341 & \underline{0.180} \\
 VGGT & garden & 1000000 & voxels & 0.373 & 0.027 & 18.394 & 0.490 & 0.352 & 0.150 \\
 \midrule
-COLMAP & stump & 19683 &  & \textbf{0.022} & \textbf{0.002} & \textbf{25.254} & \textbf{0.345} & \textbf{0.721} & \textbf{0.583} \\
+COLMAP & stump & 19683 & SfM & \textbf{0.022} & \textbf{0.002} & \textbf{25.254} & \textbf{0.345} & \textbf{0.721} & \textbf{0.583} \\
 VGGT & stump & 1000 & confidence & 0.856 & 0.163 & 19.307 & 0.752 & 0.483 & 0.082 \\
 VGGT & stump & 1000 & imagefps & 0.856 & 0.163 & 19.286 & 0.747 & 0.482 & 0.084 \\
 VGGT & stump & 1000 & random & 0.856 & 0.163 & 19.354 & 0.753 & 0.483 & 0.082 \\
