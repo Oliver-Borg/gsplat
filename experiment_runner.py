@@ -1995,7 +1995,8 @@ experiments = [
     Experiment(
         "sampling_mode_ba",
         3,
-        "Bundle Adjustment (BA) versus random sampling. BA improves fine details in the 3D Gaussian Splatting renders due to improved camera accuracy.",
+        "Bundle Adjustment (BA) versus random sampling. "
+        "BA improves fine details in the 3D Gaussian Splatting renders due to improved camera accuracy.",
         {
             "seed": [42],
             "num_images": [100],
@@ -3743,7 +3744,7 @@ experiments = [
                 "depth_loss_mode": "closer",
                 "depth_conf_mode": "shifted",
                 "depth_lambda": 0.1,
-                "series_label_override": "1. All Improvements",
+                "series_label_override": "1. All Features",
             },
             {  # No confidence sampling
                 "sampling_mode": "random",
@@ -3819,7 +3820,7 @@ experiments = [
                 "depth_loss_mode": "closer",
                 "depth_conf_mode": "shifted",
                 "depth_lambda": 0.1,
-                "series_label_override": "1. All Improvements",
+                "series_label_override": "1. All Features",
             },
             {  # No confidence sampling
                 "sampling_mode": "random",
@@ -3880,6 +3881,68 @@ experiments = [
                 "sampling_mode": "confidence",
                 "choice": "combined",
                 "camera_src": "colmap",
+                "pcd_src": "both",
+                "pose_opt": False,
+                "depth_loss_mode": "closer",
+                "depth_conf_mode": "shifted",
+                "depth_lambda": 0.1,
+                "series_label_override": "7. No Pose Opt",
+            },
+        ],
+        PlotConfig(
+            x_axis="",
+            split_param="series_label_override",
+            metric_keys=["eval_rre", "eval_rte", "psnr", "ssim", "lpips", "quality"],
+            max_render_cols=4,
+            horizontal_datasets=False,
+            make_camera_plot=False,
+            make_pcd_plot=False,
+            show_depth=True,
+        ),
+        render_filter_override={
+            "seed": [42],
+            "num_images": [100],
+        },
+        priority="high",
+    ),
+    Experiment(
+        "all_improvements_removals_vggt",
+        99,
+        "Individual optimisation removals for VGGT.",
+        [
+            {  # All Improvements
+                "sampling_mode": "confidence",
+                "choice": "vggt",
+                "pcd_src": "both",
+                "pose_opt": True,
+                "depth_loss_mode": "closer",
+                "depth_conf_mode": "shifted",
+                "depth_lambda": 0.1,
+                "series_label_override": "1. All Features",
+            },
+            {  # No depth conf
+                "sampling_mode": "confidence",
+                "choice": "vggt",
+                "pcd_src": "both",
+                "pose_opt": True,
+                "depth_loss_mode": "closer",
+                "depth_conf_mode": "disabled",
+                "depth_lambda": 0.1,
+                "series_label_override": "3. No Depth Conf",
+            },
+            {  # No depth loss
+                "sampling_mode": "confidence",
+                "choice": "vggt",
+                "pcd_src": "both",
+                "pose_opt": True,
+                "depth_loss_mode": "closer",
+                "depth_conf_mode": "shifted",
+                "depth_lambda": 0.0,
+                "series_label_override": "4. No Depth Loss",
+            },
+            {  # No Pose opt
+                "sampling_mode": "confidence",
+                "choice": "vggt",
                 "pcd_src": "both",
                 "pose_opt": False,
                 "depth_loss_mode": "closer",
@@ -3981,20 +4044,20 @@ def update_dict(d: dict, u: dict):
     return d_copy
 
 
-def get_dataset_experiments(dataset_collection: str):
+def get_dataset_experiment(dataset_collection: str, experiment_name: str):
     all_improvements_indoor = {  # All Improvements indoor
-        "sampling_mode": "voxels",
+        "sampling_mode": "random",
         "choice": "combined",
         "camera_src": "colmap",
         "pcd_src": "both",
         "pose_opt": True,
         "depth_loss_mode": "closer",
-        "depth_conf_mode": "scaleshifted",
+        "depth_conf_mode": "sigshifted" if "vggt" in experiment_name else "scaleshifted",
         "depth_lambda": 10.0,
-        "series_label_override": "1. All Improvements",
+        "series_label_override": "1. All Features",
     }
     all_improvements_outdoor = {  # All Improvements outdoor
-        "sampling_mode": "confidence",
+        "sampling_mode": "random" if "vggt" in experiment_name else "confidence",
         "choice": "combined",
         "camera_src": "colmap",
         "pcd_src": "both",
@@ -4002,10 +4065,10 @@ def get_dataset_experiments(dataset_collection: str):
         "depth_loss_mode": "closer",
         "depth_conf_mode": "sigmoid",
         "depth_lambda": 0.1,
-        "series_label_override": "1. All Improvements",
+        "series_label_override": "1. All Features",
     }
     all_improvements_synthetic = {  # All Improvements synthetic
-        "sampling_mode": "voxels",
+        "sampling_mode": "random",
         "choice": "combined",
         "camera_src": "colmap",
         "pcd_src": "vggt",
@@ -4013,7 +4076,7 @@ def get_dataset_experiments(dataset_collection: str):
         "depth_loss_mode": "closer",
         "depth_conf_mode": "sigshifted",
         "depth_lambda": 0.01,
-        "series_label_override": "1. All Improvements",
+        "series_label_override": "1. All Features",
     }
 
     if dataset_collection == "indoor":
@@ -4023,9 +4086,9 @@ def get_dataset_experiments(dataset_collection: str):
     elif dataset_collection == "synthetic":
         default_dict = all_improvements_synthetic
     else:
-        return []
+        return None
 
-    return [
+    experiments = [
         Experiment(
             "all_improvements_removals",
             99,
@@ -4034,13 +4097,13 @@ def get_dataset_experiments(dataset_collection: str):
                 update_dict(
                     default_dict,
                     {
-                        "series_label_override": "1. All Improvements",
+                        "series_label_override": "1. All Features",
                     },
                 ),
                 update_dict(
                     default_dict,
                     {
-                        "sampling_mode": "random",
+                        "sampling_mode": "random" if default_dict['sampling_mode'] != "random" else "confidence",
                         "series_label_override": f"2. No {default_dict['sampling_mode']} Sampling",
                     },
                 ),
@@ -4084,7 +4147,7 @@ def get_dataset_experiments(dataset_collection: str):
             PlotConfig(
                 x_axis="",
                 split_param="series_label_override",
-                metric_keys=["eval_rre", "eval_rte", "psnr", "ssim", "lpips", "quality"],
+                metric_keys=["psnr", "lpips", "ssim", "quality"],
                 max_render_cols=4,
                 horizontal_datasets=False,
                 make_camera_plot=False,
@@ -4106,15 +4169,7 @@ def get_dataset_experiments(dataset_collection: str):
                     default_dict,
                     {
                         "choice": "vggt",
-                        "series_label_override": "1. All Improvements",
-                    },
-                ),
-                update_dict(
-                    default_dict,
-                    {
-                        "choice": "vggt",
-                        "sampling_mode": "random",
-                        "series_label_override": f"2. No {default_dict['sampling_mode']} Sampling",
+                        "series_label_override": "1. All Features",
                     },
                 ),
                 update_dict(
@@ -4122,7 +4177,7 @@ def get_dataset_experiments(dataset_collection: str):
                     {
                         "choice": "vggt",
                         "depth_conf_mode": "disabled",
-                        "series_label_override": "3. No Depth Conf",
+                        "series_label_override": "2. No Depth Conf",
                     },
                 ),
                 update_dict(
@@ -4131,7 +4186,7 @@ def get_dataset_experiments(dataset_collection: str):
                         "choice": "vggt",
                         "depth_loss_mode": "disabled",
                         "depth_lambda": 0.0,
-                        "series_label_override": "4. No Depth Loss",
+                        "series_label_override": "3. No Depth Loss",
                     },
                 ),
                 update_dict(
@@ -4139,14 +4194,14 @@ def get_dataset_experiments(dataset_collection: str):
                     {
                         "choice": "vggt",
                         "pose_opt": False,
-                        "series_label_override": "5. No Pose Opt",
+                        "series_label_override": "4. No Pose Opt",
                     },
                 ),
             ],
             PlotConfig(
                 x_axis="",
                 split_param="series_label_override",
-                metric_keys=["eval_rre", "eval_rte", "psnr", "ssim", "lpips", "quality"],
+                metric_keys=["psnr", "lpips", "ssim", "quality"],
                 max_render_cols=4,
                 horizontal_datasets=False,
                 make_camera_plot=False,
@@ -4160,6 +4215,12 @@ def get_dataset_experiments(dataset_collection: str):
             priority="high",
         ),
     ]
+
+    for experiment in experiments:
+        if experiment.name == experiment_name:
+            return experiment
+
+    return None
 
 
 if __name__ == "__main__":
@@ -4241,16 +4302,8 @@ if __name__ == "__main__":
     not_reconstructed = set()
 
     if len(args.dataset_collections) == 1:
-        dataset_experiments = get_dataset_experiments(args.dataset_collections[0])
-        if dataset_experiments:
-            # Update the corresponding experiment in the full list
-            for dataset_experiment in dataset_experiments:
-                for i, experiment in enumerate(experiments):
-                    if experiment.name == dataset_experiment.name:
-                        experiments[i] = dataset_experiment
-                        break
-                else:
-                    experiments.append(dataset_experiment)
+        for i, experiment in enumerate(experiments):
+            experiment = get_dataset_experiment(args.dataset_collections[0], experiment.name) or experiment
 
     for arg_experiment in args.experiment_names:
         for experiment in experiments:

@@ -1,14 +1,16 @@
 \begin{table}[H]
-\caption{\ifdefined\customcaption \customcaption \else Individual optimisation removals. (Synthetic) \fi}
+\caption{\ifdefined\customcaption \customcaption \else Individual optimisation removals for VGGT. (Synthetic) \fi}
 \label{tab:99_all_improvements_removals_vggt_synthetic}
 \centering
 \scriptsize
-\begin{tabular}{lll}
+\begin{tabular}{lllrrrrrr}
 \toprule
-Choice & Dataset Collection & Series Label Override \\
+Choice & Dataset Collection & Series Label Override & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & SSIM ↑ & LPIPS ↓ & Composite Quality ↑ \\
 \midrule
-VGGT & synthetic & 1. All Improvements \\
-VGGT & synthetic & 2. No voxels Sampling \\
+VGGT & synthetic & 1. All Features & 0.262 & \textbf{0.006} & 20.653 & 0.782 & 0.105 & 0.682 \\
+VGGT & synthetic & 3. No Depth Conf & \underline{0.249} & \textbf{0.006} & \underline{21.245} & \underline{0.794} & \underline{0.097} & \underline{0.704} \\
+VGGT & synthetic & 4. No Depth Loss & \textbf{0.248} & \textbf{0.006} & \textbf{21.349} & \textbf{0.796} & \textbf{0.096} & \textbf{0.708} \\
+VGGT & synthetic & 7. No Pose Opt & 0.319 & \textbf{0.006} & 20.367 & 0.769 & 0.139 & 0.648 \\
 \bottomrule
 \end{tabular}
 \end{table}

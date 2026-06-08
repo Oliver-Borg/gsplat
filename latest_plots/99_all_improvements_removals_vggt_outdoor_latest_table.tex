@@ -1,0 +1,16 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else Individual optimisation removals for VGGT. (Outdoor) \fi}
+\label{tab:99_all_improvements_removals_vggt_outdoor}
+\centering
+\scriptsize
+\begin{tabular}{lllrrrrrr}
+\toprule
+Choice & Dataset Collection & Series Label Override & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & SSIM ↑ & LPIPS ↓ & Composite Quality ↑ \\
+\midrule
+VGGT & outdoor & 1. All Features & \underline{0.525} & \textbf{0.018} & \underline{18.472} & 0.348 & \textbf{0.424} & \textbf{0.191} \\
+VGGT & outdoor & 3. No Depth Conf & \textbf{0.492} & \textbf{0.018} & \textbf{18.510} & \textbf{0.350} & \underline{0.426} & \textbf{0.191} \\
+VGGT & outdoor & 4. No Depth Loss & 0.533 & \textbf{0.018} & 18.438 & \underline{0.349} & 0.427 & \underline{0.189} \\
+VGGT & outdoor & 7. No Pose Opt & 0.648 & \underline{0.020} & 18.357 & 0.348 & 0.515 & 0.132 \\
+\bottomrule
+\end{tabular}
+\end{table}

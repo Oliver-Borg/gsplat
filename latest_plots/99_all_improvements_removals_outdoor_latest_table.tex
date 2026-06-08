@@ -3,15 +3,17 @@
 \label{tab:99_all_improvements_removals_outdoor}
 \centering
 \scriptsize
-\begin{tabular}{lllrrrrrr}
+\begin{tabular}{lllrrrr}
 \toprule
-Choice & Dataset Collection & Series Label Override & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & SSIM ↑ & LPIPS ↓ & Composite Quality ↑ \\
+Choice & Dataset Collection & Series Label Override & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
 \midrule
-VGGT & outdoor & 2. Confidence Sampling &  &  &  &  &  &  \\
-COLMAP & outdoor & 3. No Depth Conf & \textbf{0.055} & \textbf{0.001} & \textbf{23.558} & \textbf{0.615} & \textbf{0.256} & \textbf{0.544} \\
-COLMAP & outdoor & 4. No Depth Loss & \underline{0.060} & \textbf{0.001} & \underline{23.442} & \underline{0.607} & \textbf{0.256} & \underline{0.538} \\
-VGGT & outdoor & 5. No Combined Points &  &  &  &  &  &  \\
-VGGT & outdoor & 6. No COLMAP Cameras &  &  &  &  &  &  \\
+COLMAP & outdoor & 1. All Improvements & \underline{23.556} & 0.257 & \underline{0.614} & \underline{0.543} \\
+COLMAP & outdoor & 2. No confidence Sampling & 23.365 & \textbf{0.254} & 0.607 & 0.537 \\
+COLMAP & outdoor & 3. No Depth Conf & \textbf{23.558} & \underline{0.256} & \textbf{0.615} & \textbf{0.544} \\
+COLMAP & outdoor & 4. No Depth Loss & 23.442 & \underline{0.256} & 0.607 & 0.538 \\
+COLMAP & outdoor & 5. No Combined Points & 22.433 & 0.316 & 0.550 & 0.448 \\
+VGGT & outdoor & 6. No COLMAP Cameras & 18.522 & 0.390 & 0.350 & 0.213 \\
+COLMAP & outdoor & 7. No Pose Opt & 22.945 & 0.271 & 0.563 & 0.494 \\
 \bottomrule
 \end{tabular}
 \end{table}

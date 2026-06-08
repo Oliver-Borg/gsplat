@@ -1,6 +1,6 @@
 [
     {
-        "sampling_mode": "voxels",
+        "sampling_mode": "random",
         "choice": "combined",
         "camera_src": "colmap",
         "pcd_src": "vggt",
@@ -12,7 +12,7 @@
         "dataset": "lego"
     },
     {
-        "sampling_mode": "random",
+        "sampling_mode": "confidence",
         "choice": "combined",
         "camera_src": "colmap",
         "pcd_src": "vggt",
@@ -20,11 +20,11 @@
         "depth_loss_mode": "closer",
         "depth_conf_mode": "sigshifted",
         "depth_lambda": 0.01,
-        "series_label_override": "2. No voxels Sampling",
+        "series_label_override": "2. No random Sampling",
         "dataset": "lego"
     },
     {
-        "sampling_mode": "voxels",
+        "sampling_mode": "random",
         "choice": "combined",
         "camera_src": "colmap",
         "pcd_src": "vggt",
@@ -36,7 +36,7 @@
         "dataset": "lego"
     },
     {
-        "sampling_mode": "voxels",
+        "sampling_mode": "random",
         "choice": "combined",
         "camera_src": "colmap",
         "pcd_src": "vggt",
@@ -48,7 +48,7 @@
         "dataset": "lego"
     },
     {
-        "sampling_mode": "voxels",
+        "sampling_mode": "random",
         "choice": "combined",
         "camera_src": "colmap",
         "pcd_src": "vggt",
@@ -60,7 +60,7 @@
         "dataset": "lego"
     },
     {
-        "sampling_mode": "voxels",
+        "sampling_mode": "random",
         "choice": "combined",
         "camera_src": "vggt",
         "pcd_src": "vggt",
@@ -72,7 +72,7 @@
         "dataset": "lego"
     },
     {
-        "sampling_mode": "voxels",
+        "sampling_mode": "random",
         "choice": "combined",
         "camera_src": "colmap",
         "pcd_src": "vggt",

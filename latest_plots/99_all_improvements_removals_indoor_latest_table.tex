@@ -3,13 +3,17 @@
 \label{tab:99_all_improvements_removals_indoor}
 \centering
 \scriptsize
-\begin{tabular}{lllrrrrrr}
+\begin{tabular}{lllrrrr}
 \toprule
-Choice & Dataset Collection & Series Label Override & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & SSIM ↑ & LPIPS ↓ & Composite Quality ↑ \\
+Choice & Dataset Collection & Series Label Override & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
 \midrule
-VGGT & indoor & 2. Confidence Sampling &  &  &  &  &  &  \\
-COLMAP & indoor & 4. No Depth Loss & \textbf{0.056} & \textbf{0.001} & \textbf{25.477} & \textbf{0.761} & \textbf{0.135} & \textbf{0.739} \\
-VGGT & indoor & 5. No Combined Points &  &  &  &  &  &  \\
+COLMAP & indoor & 1. All Improvements & \underline{25.683} & \underline{0.137} & \textbf{0.797} & \textbf{0.764} \\
+COLMAP & indoor & 2. No random Sampling & \textbf{25.740} & 0.139 & 0.789 & \underline{0.759} \\
+COLMAP & indoor & 3. No Depth Conf & 25.410 & 0.141 & \underline{0.791} & 0.753 \\
+COLMAP & indoor & 4. No Depth Loss & 25.200 & \textbf{0.135} & 0.752 & 0.730 \\
+COLMAP & indoor & 5. No Combined Points & 24.028 & 0.169 & 0.755 & 0.689 \\
+VGGT & indoor & 6. No COLMAP Cameras & 20.714 & 0.226 & 0.603 & 0.503 \\
+COLMAP & indoor & 7. No Pose Opt & 25.472 & 0.138 & 0.748 & 0.730 \\
 \bottomrule
 \end{tabular}
 \end{table}

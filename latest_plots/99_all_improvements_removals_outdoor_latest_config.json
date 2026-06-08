@@ -1,5 +1,17 @@
 [
     {
+        "sampling_mode": "confidence",
+        "choice": "combined",
+        "camera_src": "colmap",
+        "pcd_src": "both",
+        "pose_opt": true,
+        "depth_loss_mode": "closer",
+        "depth_conf_mode": "sigmoid",
+        "depth_lambda": 0.1,
+        "series_label_override": "1. All Improvements",
+        "dataset": "bicycle"
+    },
+    {
         "sampling_mode": "random",
         "choice": "combined",
         "camera_src": "colmap",
@@ -8,7 +20,7 @@
         "depth_loss_mode": "closer",
         "depth_conf_mode": "sigmoid",
         "depth_lambda": 0.1,
-        "series_label_override": "2. Confidence Sampling",
+        "series_label_override": "2. No confidence Sampling",
         "dataset": "bicycle"
     },
     {

@@ -3,12 +3,16 @@
 \label{tab:99_all_improvements_removals_synthetic}
 \centering
 \scriptsize
-\begin{tabular}{lll}
+\begin{tabular}{lllrrrr}
 \toprule
-Choice & Dataset Collection & Series Label Override \\
+Choice & Dataset Collection & Series Label Override & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
 \midrule
-VGGT & synthetic & 2. No voxels Sampling \\
-VGGT & synthetic & 6. No COLMAP Cameras \\
+COLMAP & synthetic & 1. All Improvements & 23.492 & \textbf{0.088} & \underline{0.850} & \underline{0.784} \\
+COLMAP & synthetic & 2. No random Sampling & 22.957 & \underline{0.090} & 0.839 & 0.766 \\
+COLMAP & synthetic & 3. No Depth Conf & \textbf{23.517} & \textbf{0.088} & \textbf{0.851} & \textbf{0.785} \\
+COLMAP & synthetic & 4. No Depth Loss & \underline{23.515} & \textbf{0.088} & \underline{0.850} & \textbf{0.785} \\
+VGGT & synthetic & 6. No COLMAP Cameras & 21.324 & 0.097 & 0.796 & 0.707 \\
+COLMAP & synthetic & 7. No Pose Opt & 23.238 & 0.092 & 0.844 & 0.774 \\
 \bottomrule
 \end{tabular}
 \end{table}
