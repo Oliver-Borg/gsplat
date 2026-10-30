@@ -3,6 +3,7 @@ from dataclasses import dataclass, field, replace
 import datetime
 import json
 from pathlib import Path
+import shutil
 from typing import Literal, get_args
 import os
 import subprocess
@@ -1550,7 +1551,7 @@ experiments = [
             x_axis="num_images",
             split_param="",
             single_legend=True,
-            max_render_cols=5,
+            max_render_cols=2,
             show_gt=False,
             raw_metrics=True,
             make_camera_plot=False,
@@ -1559,7 +1560,7 @@ experiments = [
             horizontal_datasets=False,
         ),
         render_filter_override={
-            "num_images": [20, 30, 40, 70, 100],
+            "num_images": [20, 100],
             "seed": [42],
         },
         priority="high",
@@ -1580,14 +1581,14 @@ experiments = [
             x_axis="num_images",
             split_param="",
             single_legend=True,
-            max_render_cols=5,
-            show_gt=True,
+            max_render_cols=2,
+            show_gt=False,
             raw_metrics=True,
-            make_camera_plot=False,
+            make_camera_plot=True,
             metric_keys=["rre", "rte", "psnr", "lpips", "ssim", "num_aligned"],
             render_nums=[0],
             horizontal_datasets=False,
-            show_differences=True,
+            # show_differences=True,
         ),
         render_filter_override={
             "num_images": [100],
@@ -1671,7 +1672,7 @@ experiments = [
         PlotConfig(
             x_axis="num_images",
             split_param="pose_opt",
-            max_render_cols=5,
+            max_render_cols=1,
             show_gt=False,
             raw_metrics=False,
             metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "quality"],
@@ -1679,7 +1680,9 @@ experiments = [
             make_camera_plot=True,
         ),
         render_filter_override={
-            "num_images": [20, 30, 40, 70, 100],
+            # "num_images": [20, 30, 40, 70, 100],
+            "num_images": [20, 100],
+            # "choice": ["colmap"],
             "seed": [42],
             "pose_opt": [True],
         },
@@ -2059,6 +2062,40 @@ experiments = [
         priority="high",
     ),
     Experiment(
+        "sampling_mode_brief",
+        3,
+        "A comparison of different VGGT point cloud sampling modes with GT cameras",
+        {
+            "seed": [42],
+            "num_images": [100],
+            "sampling_mode": ["voxels", "random", "confidence", "ba", "imagefps"],
+            # "sampling_mode": ["imagefps"],
+            # "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 2500, 5000, 10000],
+            "num_points_per_image": [10, 50, 100, 500, 1000, 5000, 10000],
+            # "num_points_per_image": [10, 100, 1000, 10000],
+            # "num_points_per_image": [1000],
+            "choice": ["vggt", "colmap"],
+            # "choice": ["vggt"],
+            "use_gt_cams": [True],
+            "gt_eval": True,
+        },
+        PlotConfig(
+            x_axis="num_points",
+            split_param="sampling_mode",
+            metric_keys=["psnr"],
+            raw_metrics=False,
+            max_render_cols=4,
+            horizontal_datasets=False,
+            only_best_rows=True,
+        ),
+        # render_filter_override={
+        #     "seed": [42],
+        #     "num_points_per_image": [1000],
+        #     "sampling_mode": ["voxels", "random", "confidence"],
+        # },
+        priority="high",
+    ),
+    Experiment(
         "random_gt_cams",
         3,
         "A comparison of random sampling of the VGGT point cloud with GT cameras.",
@@ -2090,36 +2127,34 @@ experiments = [
     Experiment(
         "sampling_mode_single",
         3,
-        "A comparison of different VGGT point cloud sampling modes for 100000 points",
+        "VGGT random sampling with increasing initial point counts. "
+        "Low-point counts yield higher PSNR and SSIM scores because they "
+        "bias towards blurry features when camera alignment is imperfect. "
+        "LPIPS improves because it is biased towards high-frequency details.",
         {
             "seed": [42],
             "num_images": [100],
             "image_mode": ["farthestpose"],
-            # "sampling_mode": ["voxels", "random", "confidence", "ba", "imagefps", "imagefreq"],
-            "sampling_mode": ["random", "imagefreqnovis", "imagefreqvoxels"],  # , "imagefreq"
-            "num_points_per_image": [100, 500, 1000, 5000],
-            # "num_points_per_image": [1000],
-            # "near_filtering_strength": [0.0, 0.9],
-            # "near_filtering_quorum": 10,
-            "choice": ["vggt", "colmap"],
-            # "choice": ["vggt"],
-            "use_gt_cams": [True],
+            "sampling_mode": ["random"],
+            "num_points_per_image": [10, 50, 100, 500, 1000, 5000],
+            "choice": ["vggt"],
+            "use_gt_cams": [False],
             "gt_eval": True,
-            "num_steps": 7000,
+            "num_steps": 15000,
         },
         PlotConfig(
             x_axis="num_points",
-            split_param="sampling_mode,near_filtering_strength",
+            split_param="",
             metric_keys=["quality"],
             raw_metrics=False,
-            max_render_cols=4,
-            make_pcd_plot=True,
-            horizontal_datasets=True,
+            max_render_cols=3,
+            make_pcd_plot=False,
+            horizontal_datasets=False,
+            show_gt=False,
         ),
-        val_steps=[7000],
+        val_steps=[15000],
         render_filter_override={
             "seed": [42],
-            "num_points_per_image": [1000],
         },
         priority="medium",
     ),
@@ -2275,15 +2310,18 @@ experiments = [
         },
         PlotConfig(
             x_axis="",
-            split_param="camera_src,pcd_src,sampling_mode",
+            split_param="camera_src,pcd_src",  # ,sampling_mode
             metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "quality"],
+            show_gt=False,
+            max_render_cols=2,
+            render_nums=[0],
             # make_pcd_plot=True,
         ),
         val_steps=[15000],
         render_filter_override={
             "seed": [42],
-            "sampling_mode": ["confidence"],
-            "choice": ["colmap", "vggt", "combined"],
+            "sampling_mode": ["random"],
+            "choice": ["colmap", "combined"],  # , "vggt"
             "pcd_src": ["both"],
             "num_images": [100],
         },
@@ -2814,6 +2852,44 @@ experiments = [
             "seed": [42],
             "num_images": [100],
             "depth_lambda": [1.0],
+        },
+        priority="high",
+    ),
+    Experiment(
+        "depth_loss_mode_brief",
+        5,
+        "COLMAP versus VGGT with depth loss for different depth loss modes.",
+        {
+            "seed": [42],  # , 43, 44
+            "num_images": [100],
+            "sampling_mode": ["random"],
+            "depth_loss_mode": ["disabled", "points", "full", "closer"],
+            "pose_opt": [True],
+            "choice": ["vggt", "colmap"],
+            "depth_lambda": [1.0],
+            "depth_conf_mode": ["disabled"],
+        },
+        PlotConfig(
+            x_axis="",
+            split_param="depth_loss_mode",
+            # metric_keys=["rre", "rte", "psnr", "lpips", "ssim", "quality"],
+            metric_keys=["rre", "psnr", "lpips", "ssim", "pred_depth_absrel", "depth_abs_rel"],
+            show_depth=True,
+            show_gt=False,
+            max_render_cols=1,
+            horizontal_datasets=False,
+            split_choice=True,
+            # render_nums=[0, 2, 3, 4, 5],
+            # render_nums=[3],
+            render_nums=[0],
+            make_camera_plot=False,
+        ),
+        render_filter_override={
+            "seed": [42],
+            "num_images": [100],
+            "depth_lambda": [1.0],
+            "depth_loss_mode": ["full", "closer"],
+            "choice": ["vggt"],
         },
         priority="high",
     ),
@@ -4103,7 +4179,7 @@ def get_dataset_experiment(dataset_collection: str, experiment_name: str):
                 update_dict(
                     default_dict,
                     {
-                        "sampling_mode": "random" if default_dict['sampling_mode'] != "random" else "confidence",
+                        "sampling_mode": "random" if default_dict["sampling_mode"] != "random" else "confidence",
                         "series_label_override": f"2. No {default_dict['sampling_mode']} Sampling",
                     },
                 ),
@@ -4223,6 +4299,20 @@ def get_dataset_experiment(dataset_collection: str, experiment_name: str):
     return None
 
 
+def cache_checks(checks: dict[str, list[str]] | None) -> dict[str, list[str]]:
+    cache_file = "check_cache.json"
+    if checks is None:
+        if os.path.exists(cache_file):
+            with open(cache_file, "r") as f:
+                return json.load(f)
+        else:
+            return {}
+    else:
+        with open(cache_file, "w") as f:
+            json.dump(checks, f, indent=2)
+    return checks
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run experiments")
     parser.add_argument(
@@ -4278,7 +4368,12 @@ if __name__ == "__main__":
         nargs="*",
     )
     parser.add_argument("--force_timing", action="store_true", help="Force timing calculation")
-
+    parser.add_argument(
+        "--populate_cache", action="store_true", help="Populate the cache with the current status of the experiments"
+    )
+    parser.add_argument(
+        "--delete_unused", action="store_true", help="Delete unused splatted and reconstructed folders"
+    )
     args = parser.parse_args()
 
     dataset_names = []
@@ -4303,9 +4398,13 @@ if __name__ == "__main__":
 
     if len(args.dataset_collections) == 1:
         for i, experiment in enumerate(experiments):
-            experiment = get_dataset_experiment(args.dataset_collections[0], experiment.name) or experiment
+            experiments[i] = get_dataset_experiment(args.dataset_collections[0], experiment.name) or experiment
+
+    checks = cache_checks(None)
 
     for arg_experiment in args.experiment_names:
+        if args.check_only and not args.populate_cache:
+            continue
         for experiment in experiments:
             if priority_map[experiment.priority] < priority_map[args.min_priority]:
                 continue
@@ -4325,9 +4424,9 @@ if __name__ == "__main__":
                             else:
                                 not_splatted.add(config.output_name)
                             if config.is_reconstructed:
-                                reconstructed.add(config.output_name)
+                                reconstructed.add(config.input_name)
                             else:
-                                not_reconstructed.add(config.output_name)
+                                not_reconstructed.add(config.input_name)
                         print()
                         continue
 
@@ -4363,6 +4462,34 @@ if __name__ == "__main__":
                     elif not args.skip_plotting:
                         experiment.plot(dataset_names, split_dataset="individual", naming_labels=dataset_names)
 
+    if args.populate_cache:
+        checks["splatted"] = list(splatted)
+        checks["not_splatted"] = list(not_splatted)
+        checks["reconstructed"] = list(reconstructed)
+        checks["not_reconstructed"] = list(not_reconstructed)
+        checks = cache_checks(checks)
+    elif args.check_only:
+        splatted = set(checks.get("splatted", []))
+        not_splatted = set(checks.get("not_splatted", []))
+        reconstructed = set(checks.get("reconstructed", []))
+        not_reconstructed = set(checks.get("not_reconstructed", []))
+
+    all_splatted_names = []
+    all_reconstructed_names = []
+
+    for method in ("vggt", "colmap", "combined"):
+        all_splatted_names.extend(
+            list(map(lambda x: f"{method}_outputs/{x}", os.listdir(f"../gsplat/results/{method}_outputs")))
+        )
+        all_reconstructed_names.extend(
+            list(
+                filter(
+                    lambda x: "cache" not in x,
+                    map(lambda x: f"{method}_outputs/{x}", os.listdir(f"../vggt/{method}_outputs")),
+                )
+            )
+        )
+
     if args.check_only:
         print("Splatted count:", len(splatted))
         print("Not splatted count:", len(not_splatted))
@@ -4375,6 +4502,9 @@ if __name__ == "__main__":
             "minutes",
         )
 
+        unused_splatted_folders = set(all_splatted_names) - splatted - not_splatted
+        print("Unused splatting folders:", len(unused_splatted_folders))
+
         print("Reconstructed count:", len(reconstructed))
         print("Not reconstructed count:", len(not_reconstructed))
         print("Total count:", len(reconstructed) + len(not_reconstructed))
@@ -4385,3 +4515,68 @@ if __name__ == "__main__":
             (1 * len(not_reconstructed)) % 60,
             "minutes",
         )
+
+        unused_reconstruction_folders = set(all_reconstructed_names) - reconstructed - not_reconstructed
+        print("Unused reconstruction folders:", len(unused_reconstruction_folders))
+
+        dry_run = True
+        total_reclaimed_gb = 0.0
+        total_remaining_gb = 0.0
+        fp_sizes = []
+
+        if args.delete_unused:
+            for folder in tqdm(unused_splatted_folders):
+                # Not deleting any splatting results yet
+                if not dry_run:
+                    if os.path.exists(f"../gsplat/results/{folder}/renders"):
+                        shutil.rmtree(f"../gsplat/results/{folder}/renders")
+                folder_size = 0
+                for dirpath, dirnames, filenames in os.walk(f"../gsplat/results/{folder}/renders"):
+                    for f in filenames:
+                        fp = os.path.join(dirpath, f)
+                        fp_size = os.path.getsize(fp)
+                        folder_size += fp_size
+                        fp_sizes.append((fp, fp_size))
+                total_reclaimed_gb += folder_size / (1024 * 1024 * 1024)
+                pass
+            # for folder in tqdm(set(splatted) | set(not_splatted)):
+            #     folder_size = 0
+            #     for dirpath, dirnames, filenames in os.walk(f"../gsplat/results/{folder}/renders"):
+            #         for f in filenames:
+            #             fp = os.path.join(dirpath, f)
+            #             folder_size += os.path.getsize(fp)
+            #     total_remaining_gb += folder_size / (1024 * 1024 * 1024)
+            for folder in tqdm(unused_reconstruction_folders):
+                # Just delete the images and sparse folders for now
+                # shutil.rmtree(f"../vggt/{folder}")
+                if not dry_run:
+                    if os.path.exists(f"../vggt/{folder}/images"):
+                        shutil.rmtree(f"../vggt/{folder}/images")
+                    if os.path.exists(f"../vggt/{folder}/depths"):
+                        shutil.rmtree(f"../vggt/{folder}/depths")
+                    if os.path.exists(f"../vggt/{folder}/sparse"):
+                        shutil.rmtree(f"../vggt/{folder}/sparse")
+                    if os.path.exists(f"../vggt/{folder}/database.db"):
+                        os.remove(f"../vggt/{folder}/database.db")
+                folder_size = 0
+                for dirpath, dirnames, filenames in os.walk(f"../vggt/{folder}"):
+                    for f in filenames:
+                        fp = os.path.join(dirpath, f)
+                        fp_size = os.path.getsize(fp)
+                        folder_size += fp_size
+                        fp_sizes.append((fp, fp_size))
+                total_reclaimed_gb += folder_size / (1024 * 1024 * 1024)
+            # for folder in tqdm(set(reconstructed) | set(not_reconstructed)):
+            #     folder_size = 0
+            #     for dirpath, dirnames, filenames in os.walk(f"../vggt/{folder}"):
+            #         for f in filenames:
+            #             fp = os.path.join(dirpath, f)
+            #             folder_size += os.path.getsize(fp)
+            #     total_remaining_gb += folder_size / (1024 * 1024 * 1024)
+        print("Total reclaimed space (GB):", total_reclaimed_gb)
+        print("Total remaining space (GB):", total_remaining_gb)
+
+        n = 10
+        print(f"Top {n} largest files:")
+        for fp, fp_size in sorted(fp_sizes, key=lambda x: x[1], reverse=True)[:n]:
+            print(f"  {fp}: {fp_size / (1024 * 1024 * 1024):.2f} GB")
