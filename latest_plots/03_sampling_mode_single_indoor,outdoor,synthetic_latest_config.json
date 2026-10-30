@@ -1,0 +1,31 @@
+{
+    "seed": [
+        42
+    ],
+    "num_images": [
+        100
+    ],
+    "image_mode": [
+        "farthestpose"
+    ],
+    "sampling_mode": [
+        "random"
+    ],
+    "num_points_per_image": [
+        10,
+        50,
+        100,
+        500,
+        1000,
+        5000
+    ],
+    "choice": [
+        "vggt"
+    ],
+    "use_gt_cams": [
+        false
+    ],
+    "gt_eval": true,
+    "num_steps": 15000,
+    "dataset": "bonsai"
+}

@@ -25,7 +25,7 @@
         true
     ],
     "image_mode": [
-        "farthestpose"
+        "minfarthestpose"
     ],
     "choice": [
         "vggt",

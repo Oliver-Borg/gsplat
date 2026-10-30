@@ -1,0 +1,22 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else Combining cameras and point clouds from VGGT and COLMAP. (Garden) \fi}
+\label{tab:07_combined_single_garden}
+\centering
+\tiny
+\begin{tabular}{llllrrrrrr}
+\toprule
+Choice & Camera Src & Pcd Src & Sampling Mode & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP & COLMAP Cams & Both Pcds & confidence & \underline{0.051} & \textbf{0.001} & \textbf{22.130} & 0.247 & \textbf{0.514} & \textbf{0.465} \\
+COLMAP & COLMAP Cams & Both Pcds & random & 0.052 & \textbf{0.001} & 21.962 & \textbf{0.240} & 0.509 & \underline{0.463} \\
+COLMAP & COLMAP Cams & Both Pcds & voxels & 0.052 & \textbf{0.001} & \underline{22.086} & \underline{0.245} & \textbf{0.514} & \textbf{0.465} \\
+COLMAP & COLMAP Cams & COLMAP Pcd & SfM & \textbf{0.049} & \textbf{0.001} & \textbf{22.130} & 0.264 & \underline{0.512} & 0.453 \\
+COLMAP & COLMAP Cams & VGGT Pcd & confidence & 0.054 & \textbf{0.001} & 21.216 & 0.323 & 0.467 & 0.373 \\
+COLMAP & COLMAP Cams & VGGT Pcd & random & 0.054 & \textbf{0.001} & 21.558 & 0.264 & 0.488 & 0.428 \\
+COLMAP & COLMAP Cams & VGGT Pcd & voxels & 0.060 & \textbf{0.001} & 20.725 & 0.301 & 0.457 & 0.372 \\
+VGGT & VGGT Cams & VGGT Pcd & confidence & 0.139 & \underline{0.004} & 19.489 & 0.385 & 0.366 & 0.244 \\
+VGGT & VGGT Cams & VGGT Pcd & random & 0.135 & \underline{0.004} & 19.351 & 0.338 & 0.366 & 0.270 \\
+VGGT & VGGT Cams & VGGT Pcd & voxels & 0.146 & \underline{0.004} & 19.033 & 0.368 & 0.366 & 0.246 \\
+\bottomrule
+\end{tabular}
+\end{table}

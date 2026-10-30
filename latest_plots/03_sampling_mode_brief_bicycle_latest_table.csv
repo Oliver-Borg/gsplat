@@ -1,0 +1,3 @@
+choice,dataset,num_points,sampling_mode,psnr
+COLMAP,bicycle,17352,SfM,22.997255325317383
+VGGT,bicycle,23814,ba,22.958209991455078

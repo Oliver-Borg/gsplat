@@ -1,0 +1,3 @@
+choice,num_points,sampling_mode,psnr
+COLMAP,41914,SfM,28.30894660949707
+VGGT,50000,random,28.09678840637207

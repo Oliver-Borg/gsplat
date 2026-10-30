@@ -2,13 +2,11 @@
 \caption{\ifdefined\customcaption \customcaption \else COLMAP versus VGGT over various number of images with pose optimization (Bonsai) \fi}
 \label{tab:01_num_images_pose_opt_bonsai}
 \centering
-\scriptsize
+\tiny
 \begin{tabular}{llrlrrrrrr}
 \toprule
 Choice & Dataset & Num Images & Pose Opt & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
 \midrule
-COLMAP & bonsai & 10 &  &  &  &  &  &  &  \\
-COLMAP & bonsai & 10 & Pose Opt &  &  &  &  &  &  \\
 COLMAP & bonsai & 20 &  & 28.534 & 0.459 & 10.349 & 0.799 & 0.302 & -0.219 \\
 COLMAP & bonsai & 20 & Pose Opt & 9.324 & 0.439 & 11.028 & 0.785 & 0.348 & -0.170 \\
 COLMAP & bonsai & 30 &  & 0.896 & 0.024 & 17.493 & 0.410 & 0.566 & 0.308 \\

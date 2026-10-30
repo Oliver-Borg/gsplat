@@ -1,0 +1,16 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else Combining cameras and point clouds from VGGT and COLMAP. (Kitchen) \fi}
+\label{tab:07_combined_single_kitchen}
+\centering
+\tiny
+\begin{tabular}{llllrrrrrr}
+\toprule
+Choice & Dataset & Camera Src & Pcd Src & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP & kitchen & COLMAP Cams & Both Pcds & \underline{0.074} & \textbf{0.001} & \textbf{22.822} & \textbf{0.123} & \underline{0.585} & \textbf{0.595} \\
+COLMAP & kitchen & COLMAP Cams & COLMAP Pcd & 0.086 & \textbf{0.001} & \underline{22.443} & \underline{0.127} & 0.551 & 0.566 \\
+COLMAP & kitchen & COLMAP Cams & VGGT Pcd & \textbf{0.067} & \textbf{0.001} & 22.427 & 0.151 & \textbf{0.620} & \underline{0.591} \\
+VGGT & kitchen & VGGT Cams & VGGT Pcd & 0.158 & \underline{0.005} & 21.385 & 0.170 & 0.571 & 0.531 \\
+\bottomrule
+\end{tabular}
+\end{table}

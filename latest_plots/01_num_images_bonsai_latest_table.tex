@@ -1,32 +1,31 @@
 \begin{table}[H]
-\caption{COLMAP versus VGGT over various number of images (Bonsai)}
+\caption{\ifdefined\customcaption \customcaption \else COLMAP versus VGGT over various number of images (Bonsai) \fi}
 \label{tab:01_num_images_bonsai}
 \centering
 \scriptsize
-\begin{tabular}{lrrrrrrr}
+\begin{tabular}{llrrrrrrr}
 \toprule
-Choice & Num Images & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Aligned Cameras ↑ \\
+Choice & Dataset & Num Images & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Aligned Cameras ↑ \\
 \midrule
-COLMAP & 10 & 10.938 & 0.184 & 10.204 & 0.835 & 0.264 & 4 \\
-COLMAP & 20 & 0.365 & \textbf{0.010} & 12.658 & 0.572 & 0.365 & 9 \\
-COLMAP & 30 & 5.080 & 0.504 & 12.956 & 0.694 & 0.400 & 14 \\
-COLMAP & 40 & 1.264 & 0.122 & 16.021 & 0.479 & 0.519 & 34 \\
-COLMAP & 50 & 0.227 & 0.037 & 19.562 & 0.301 & 0.609 & 50 \\
-COLMAP & 60 & 0.213 & \underline{0.012} & 20.667 & 0.253 & 0.639 & 60 \\
-COLMAP & 70 & 0.230 & \underline{0.012} & 20.396 & 0.257 & 0.630 & 70 \\
-COLMAP & 80 & 0.254 & 0.015 & 20.761 & 0.244 & 0.629 & 80 \\
-COLMAP & 90 & \underline{0.187} & 0.060 & \underline{21.677} & \underline{0.221} & \underline{0.670} & \underline{90} \\
-COLMAP & 100 & \textbf{0.158} & 0.013 & \textbf{22.423} & \textbf{0.204} & \textbf{0.697} & \textbf{100} \\
-VGGT & 10 & 1.212 & 0.106 & 14.426 & 0.563 & 0.434 & 10 \\
-VGGT & 20 & 0.872 & 0.106 & 16.017 & 0.489 & 0.489 & 20 \\
-VGGT & 30 & 1.001 & 0.110 & 16.074 & 0.485 & 0.499 & 30 \\
-VGGT & 40 & 0.891 & 0.104 & 16.336 & 0.469 & 0.516 & 40 \\
-VGGT & 50 & 0.864 & 0.100 & 16.562 & 0.459 & 0.528 & 50 \\
-VGGT & 60 & 0.864 & 0.103 & 16.860 & 0.449 & 0.540 & 60 \\
-VGGT & 70 & 0.935 & 0.110 & 16.975 & 0.445 & 0.546 & 70 \\
-VGGT & 80 & 0.902 & 0.112 & 17.384 & 0.431 & 0.561 & 80 \\
-VGGT & 90 & 0.884 & 0.109 & 17.473 & 0.433 & 0.565 & \underline{90} \\
-VGGT & 100 & 0.722 & 0.106 & 17.731 & 0.418 & 0.575 & \textbf{100} \\
+COLMAP & bonsai & 20 & 9.121 & 2.011 & 10.349 & 0.799 & 0.302 & 13 \\
+COLMAP & bonsai & 30 & 0.896 & 0.103 & 17.493 & 0.410 & 0.566 & 29 \\
+COLMAP & bonsai & 40 & 0.509 & 0.231 & 20.848 & 0.231 & 0.633 & 40 \\
+COLMAP & bonsai & 50 & 0.218 & 0.014 & 21.697 & 0.203 & 0.633 & 50 \\
+COLMAP & bonsai & 60 & 0.219 & 0.015 & 22.169 & 0.190 & 0.665 & 60 \\
+COLMAP & bonsai & 70 & \underline{0.053} & 0.005 & \textbf{28.404} & 0.148 & \textbf{0.895} & 70 \\
+COLMAP & bonsai & 80 & \textbf{0.052} & \underline{0.004} & \underline{28.026} & 0.146 & \underline{0.884} & 80 \\
+COLMAP & bonsai & 90 & 0.069 & \underline{0.004} & 26.791 & \underline{0.144} & 0.837 & \underline{90} \\
+COLMAP & bonsai & 100 & 0.059 & \textbf{0.003} & 27.826 & \textbf{0.140} & 0.866 & \textbf{100} \\
+VGGT & bonsai & 10 & 1.292 & 0.112 & 14.680 & 0.529 & 0.463 & 10 \\
+VGGT & bonsai & 20 & 0.984 & 0.095 & 16.707 & 0.437 & 0.523 & 20 \\
+VGGT & bonsai & 30 & 0.888 & 0.090 & 17.341 & 0.414 & 0.541 & 30 \\
+VGGT & bonsai & 40 & 0.729 & 0.097 & 17.725 & 0.389 & 0.557 & 40 \\
+VGGT & bonsai & 50 & 0.801 & 0.095 & 17.975 & 0.391 & 0.566 & 50 \\
+VGGT & bonsai & 60 & 0.888 & 0.102 & 17.901 & 0.391 & 0.568 & 60 \\
+VGGT & bonsai & 70 & 0.806 & 0.101 & 18.379 & 0.375 & 0.581 & 70 \\
+VGGT & bonsai & 80 & 0.821 & 0.096 & 18.279 & 0.379 & 0.584 & 80 \\
+VGGT & bonsai & 90 & 0.734 & 0.096 & 18.626 & 0.372 & 0.592 & \underline{90} \\
+VGGT & bonsai & 100 & 0.731 & 0.098 & 18.664 & 0.374 & 0.595 & \textbf{100} \\
 \bottomrule
 \end{tabular}
 \end{table}

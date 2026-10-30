@@ -1,0 +1,14 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else A comparison of different VGGT point cloud sampling modes with GT cameras (Bicycle) \fi}
+\label{tab:03_sampling_mode_brief_bicycle}
+\centering
+\scriptsize
+\begin{tabular}{llrlr}
+\toprule
+Choice & Dataset & Num Points & Sampling Mode & PSNR ↑ \\
+\midrule
+COLMAP & bicycle & 17352 & SfM & \textbf{22.997} \\
+VGGT & bicycle & 23814 & ba & \underline{22.958} \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,14 +1,22 @@
 \begin{table}[H]
-\caption{Combining cameras and point clouds (Bonsai)}
+\caption{\ifdefined\customcaption \customcaption \else Combining cameras and point clouds from VGGT and COLMAP. (Bonsai) \fi}
 \label{tab:07_combined_single_bonsai}
-\begin{tabular}{lllrrrrr}
+\centering
+\tiny
+\begin{tabular}{llllrrrrrr}
 \toprule
-Choice & Camera Src & Pcd Src & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ \\
+Choice & Camera Src & Pcd Src & Sampling Mode & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
 \midrule
-COLMAP &  &  & \textbf{0.105} & \textbf{0.001} & \textbf{23.780} & \textbf{0.178} & \textbf{0.743} \\
-VGGT & colmapcams & bothpcd &  &  &  &  &  \\
-VGGT & colmapcams & vggtpcd &  &  &  &  &  \\
-VGGT &  &  & \underline{0.811} & \underline{0.022} & \underline{17.406} & \underline{0.397} & \underline{0.560} \\
+COLMAP & COLMAP Cams & Both Pcds & confidence & 0.080 & \textbf{0.001} & 25.396 & \underline{0.135} & 0.789 & 0.755 \\
+COLMAP & COLMAP Cams & Both Pcds & random & \underline{0.078} & \textbf{0.001} & 25.419 & \textbf{0.134} & 0.791 & \underline{0.757} \\
+COLMAP & COLMAP Cams & Both Pcds & voxels & \textbf{0.077} & \textbf{0.001} & \underline{25.499} & 0.137 & \underline{0.793} & \textbf{0.758} \\
+COLMAP & COLMAP Cams & COLMAP Pcd & SfM & \underline{0.078} & \textbf{0.001} & \textbf{25.544} & 0.144 & \textbf{0.795} & 0.756 \\
+COLMAP & COLMAP Cams & VGGT Pcd & confidence & 0.143 & \underline{0.002} & 23.406 & 0.188 & 0.712 & 0.640 \\
+COLMAP & COLMAP Cams & VGGT Pcd & random & 0.119 & \textbf{0.001} & 23.864 & 0.179 & 0.729 & 0.664 \\
+COLMAP & COLMAP Cams & VGGT Pcd & voxels & 0.217 & 0.003 & 22.306 & 0.201 & 0.679 & 0.592 \\
+VGGT & VGGT Cams & VGGT Pcd & confidence & 0.694 & 0.019 & 18.248 & 0.338 & 0.583 & 0.377 \\
+VGGT & VGGT Cams & VGGT Pcd & random & 0.693 & 0.019 & 18.461 & 0.336 & 0.582 & 0.382 \\
+VGGT & VGGT Cams & VGGT Pcd & voxels & 0.726 & 0.019 & 18.198 & 0.348 & 0.583 & 0.370 \\
 \bottomrule
 \end{tabular}
 \end{table}

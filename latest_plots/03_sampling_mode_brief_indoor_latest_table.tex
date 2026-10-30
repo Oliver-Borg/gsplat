@@ -1,0 +1,14 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else A comparison of different VGGT point cloud sampling modes with GT cameras (Indoor) \fi}
+\label{tab:03_sampling_mode_brief_indoor}
+\centering
+\scriptsize
+\begin{tabular}{llrlr}
+\toprule
+Choice & Dataset Collection & Num Points & Sampling Mode & Composite Quality ↑ \\
+\midrule
+COLMAP & indoor & 66763 & SfM & \textbf{0.959} \\
+COLMAP & indoor & 70681 & SfM & \underline{0.914} \\
+\bottomrule
+\end{tabular}
+\end{table}

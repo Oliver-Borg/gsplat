@@ -1,0 +1,14 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else A comparison of different VGGT point cloud sampling modes with GT cameras (Counter) \fi}
+\label{tab:03_sampling_mode_brief_counter}
+\centering
+\scriptsize
+\begin{tabular}{lrlr}
+\toprule
+Choice & Num Points & Sampling Mode & PSNR ↑ \\
+\midrule
+COLMAP & 41914 & SfM & \textbf{28.309} \\
+VGGT & 50000 & random & \underline{28.097} \\
+\bottomrule
+\end{tabular}
+\end{table}

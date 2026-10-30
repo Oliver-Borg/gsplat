@@ -1,0 +1,18 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else VGGT random sampling with increasing initial point counts. Low-point counts yield higher PSNR and SSIM scores because they bias towards blurry features when camera alignment is imperfect. LPIPS improves because it is biased towards high-frequency details. (Indoor) \fi}
+\label{tab:03_sampling_mode_single_indoor}
+\centering
+\scriptsize
+\begin{tabular}{llrr}
+\toprule
+Choice & Dataset Collection & Num Points & Composite Quality ↑ \\
+\midrule
+VGGT & indoor & 1000 & 0.330 \\
+VGGT & indoor & 5000 & 0.372 \\
+VGGT & indoor & 10000 & 0.382 \\
+VGGT & indoor & 50000 & \textbf{0.390} \\
+VGGT & indoor & 100000 & \underline{0.389} \\
+VGGT & indoor & 500000 & 0.379 \\
+\bottomrule
+\end{tabular}
+\end{table}

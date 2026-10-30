@@ -1,0 +1,31 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else COLMAP versus VGGT over various number of images (Bonsai) \fi}
+\label{tab:01_num_images_brief_bonsai}
+\centering
+\scriptsize
+\begin{tabular}{llrrrrrrr}
+\toprule
+Choice & Dataset & Num Images & RRE ↓ & RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Aligned Cameras ↑ \\
+\midrule
+COLMAP & bonsai & 20 & 9.121 & 2.011 & 10.349 & 0.799 & 0.302 & 13 \\
+COLMAP & bonsai & 30 & 0.896 & 0.103 & 17.493 & 0.410 & 0.566 & 29 \\
+COLMAP & bonsai & 40 & 0.509 & 0.231 & 20.848 & 0.231 & 0.633 & 40 \\
+COLMAP & bonsai & 50 & 0.218 & 0.014 & 21.697 & 0.203 & 0.633 & 50 \\
+COLMAP & bonsai & 60 & 0.219 & 0.015 & 22.169 & 0.190 & 0.665 & 60 \\
+COLMAP & bonsai & 70 & \underline{0.053} & 0.005 & \textbf{28.404} & 0.148 & \textbf{0.895} & 70 \\
+COLMAP & bonsai & 80 & \textbf{0.052} & \underline{0.004} & \underline{28.026} & 0.146 & \underline{0.884} & 80 \\
+COLMAP & bonsai & 90 & 0.069 & \underline{0.004} & 26.791 & \underline{0.144} & 0.837 & \underline{90} \\
+COLMAP & bonsai & 100 & 0.059 & \textbf{0.003} & 27.826 & \textbf{0.140} & 0.866 & \textbf{100} \\
+VGGT & bonsai & 10 & 1.292 & 0.112 & 14.680 & 0.529 & 0.463 & 10 \\
+VGGT & bonsai & 20 & 0.984 & 0.095 & 16.707 & 0.437 & 0.523 & 20 \\
+VGGT & bonsai & 30 & 0.888 & 0.090 & 17.341 & 0.414 & 0.541 & 30 \\
+VGGT & bonsai & 40 & 0.729 & 0.097 & 17.725 & 0.389 & 0.557 & 40 \\
+VGGT & bonsai & 50 & 0.801 & 0.095 & 17.975 & 0.391 & 0.566 & 50 \\
+VGGT & bonsai & 60 & 0.888 & 0.102 & 17.901 & 0.391 & 0.568 & 60 \\
+VGGT & bonsai & 70 & 0.806 & 0.101 & 18.379 & 0.375 & 0.581 & 70 \\
+VGGT & bonsai & 80 & 0.821 & 0.096 & 18.279 & 0.379 & 0.584 & 80 \\
+VGGT & bonsai & 90 & 0.734 & 0.096 & 18.626 & 0.372 & 0.592 & \underline{90} \\
+VGGT & bonsai & 100 & 0.731 & 0.098 & 18.664 & 0.374 & 0.595 & \textbf{100} \\
+\bottomrule
+\end{tabular}
+\end{table}

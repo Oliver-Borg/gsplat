@@ -1,0 +1,18 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else VGGT random sampling with increasing point counts.Low point counts have improved PSNR and SSIM scores due to their bias towards blurry features when camera alignment is imperfect. LPIPS improves due to its bias towards high frequency details. (Bicycle) \fi}
+\label{tab:03_sampling_mode_single_bicycle}
+\centering
+\scriptsize
+\begin{tabular}{llrr}
+\toprule
+Choice & Dataset & Num Points & Composite Quality ↑ \\
+\midrule
+VGGT & bicycle & 1000 & 0.016 \\
+VGGT & bicycle & 5000 & 0.071 \\
+VGGT & bicycle & 10000 & 0.090 \\
+VGGT & bicycle & 50000 & \underline{0.116} \\
+VGGT & bicycle & 100000 & \textbf{0.122} \\
+VGGT & bicycle & 500000 & \textbf{0.122} \\
+\bottomrule
+\end{tabular}
+\end{table}

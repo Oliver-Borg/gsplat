@@ -1,0 +1,22 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else Combining cameras and point clouds from VGGT and COLMAP. (Counter) \fi}
+\label{tab:07_combined_single_counter}
+\centering
+\tiny
+\begin{tabular}{llllrrrrrr}
+\toprule
+Choice & Camera Src & Pcd Src & Sampling Mode & Val RRE ↓ & Val RTE ↓ & PSNR ↑ & LPIPS ↓ & SSIM ↑ & Composite Quality ↑ \\
+\midrule
+COLMAP & COLMAP Cams & Both Pcds & confidence & \textbf{0.015} & \textbf{0.000} & \textbf{27.870} & 0.149 & \textbf{0.894} & \textbf{0.853} \\
+COLMAP & COLMAP Cams & Both Pcds & random & 0.021 & \textbf{0.000} & 27.466 & \textbf{0.147} & 0.883 & 0.840 \\
+COLMAP & COLMAP Cams & Both Pcds & voxels & 0.018 & \textbf{0.000} & \underline{27.792} & \underline{0.148} & \underline{0.890} & \underline{0.851} \\
+COLMAP & COLMAP Cams & COLMAP Pcd & SfM & 0.021 & \textbf{0.000} & 27.591 & 0.164 & 0.884 & 0.833 \\
+COLMAP & COLMAP Cams & VGGT Pcd & confidence & \underline{0.017} & \textbf{0.000} & 27.494 & 0.160 & \underline{0.890} & 0.837 \\
+COLMAP & COLMAP Cams & VGGT Pcd & random & 0.022 & \textbf{0.000} & 27.416 & 0.151 & 0.884 & 0.838 \\
+COLMAP & COLMAP Cams & VGGT Pcd & voxels & 0.022 & \textbf{0.000} & 27.176 & 0.163 & 0.882 & 0.825 \\
+VGGT & VGGT Cams & VGGT Pcd & confidence & 0.249 & \underline{0.006} & 20.926 & 0.226 & 0.631 & 0.524 \\
+VGGT & VGGT Cams & VGGT Pcd & random & 0.278 & \underline{0.006} & 20.581 & 0.226 & 0.623 & 0.512 \\
+VGGT & VGGT Cams & VGGT Pcd & voxels & 0.251 & \underline{0.006} & 20.857 & 0.225 & 0.630 & 0.522 \\
+\bottomrule
+\end{tabular}
+\end{table}
