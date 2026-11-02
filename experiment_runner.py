@@ -30,6 +30,16 @@ import examples.evaluation
 GSPLAT_PYTHON = os.path.expanduser("~/.conda/envs/gsplat/bin/python")
 GSPLAT_TORCHRUN = os.path.expanduser("~/.conda/envs/gsplat/bin/torchrun")
 VGGT_PYTHON = os.path.expanduser("~/.conda/envs/vggt/bin/python")
+
+
+def env_for(python: str) -> dict[str, str]:
+    """Environment for running `python` (a conda env interpreter) without leaking the caller's env."""
+    env = os.environ.copy()
+    env.pop("PYTHONPATH", None)
+    env["PATH"] = os.path.dirname(python) + os.pathsep + env.get("PATH", "")
+    return env
+
+
 PRIORITY = Literal["low", "medium", "high"]
 priority_map = {
     "low": 0,
@@ -55,7 +65,9 @@ class Dataset:
     @property
     def eval_names(self):
         data_dir = Path(self.directory) / Path(self.data_folder_name)
-        images = sorted([f for f in os.listdir(data_dir) if "depth" not in f and "normal" not in f])
+        images = sorted(
+            [f for f in os.listdir(data_dir) if "depth" not in f and "normal" not in f]
+        )
         return images[::8]
 
 
@@ -217,7 +229,9 @@ class Config:
     num_cameras: int | None = None
     depth_loss_mode: Literal["disabled", "points", "full", "closer"] = "disabled"
     depth_lambda: float = 0.0
-    depth_conf_mode: Literal["disabled", "standard", "sigmoid", "shifted", "sigshifted"] = "disabled"
+    depth_conf_mode: Literal[
+        "disabled", "standard", "sigmoid", "shifted", "sigshifted"
+    ] = "disabled"
     error_opa: bool = False
     camera_type: CAMERA_TYPE = "SIMPLE_PINHOLE"
     num_steps: Literal[7000, 15000, 30000] = 15000
@@ -237,6 +251,13 @@ class Config:
     run_train_eval: bool = False
     run_mvs: bool = False
     enable_timing: bool = False
+    save_full_pcd: bool = False
+    sampler: bool = False
+    sampler_pool_size: int = 10_000_000
+    sampler_num_gaussians: int = 1_000_000
+    sampler_every: int = 1
+    sampler_lr: float = 1e-3
+    save_ply: bool = False
 
     raw_metrics: bool = False
     require_depth_metrics: bool = False
@@ -252,26 +273,48 @@ class Config:
         instance.dataset = datasets[data.get("dataset", "bicycle")]
         instance.seed = data.get("seed", cls.seed)
         instance.conf_thres_value = data.get("conf_thres_value", cls.conf_thres_value)
-        instance.num_points_per_image = data.get("num_points_per_image", cls.num_points_per_image)
+        instance.num_points_per_image = data.get(
+            "num_points_per_image", cls.num_points_per_image
+        )
         instance.num_points_value = data.get("num_points_value", cls.num_points_value)
         instance.sampling_mode = data.get("sampling_mode", cls.sampling_mode)
-        instance.near_filtering_strength = data.get("near_filtering_strength", cls.near_filtering_strength)
-        instance.near_filtering_quorum = data.get("near_filtering_quorum", cls.near_filtering_quorum)
-        instance.reconstruct_pose_opt = data.get("reconstruct_pose_opt", cls.reconstruct_pose_opt)
-        instance.optimisation_iterations = data.get("optimisation_iterations", cls.optimisation_iterations)
-        instance.optimisation_neighbourhood = data.get("optimisation_neighbourhood", cls.optimisation_neighbourhood)
+        instance.near_filtering_strength = data.get(
+            "near_filtering_strength", cls.near_filtering_strength
+        )
+        instance.near_filtering_quorum = data.get(
+            "near_filtering_quorum", cls.near_filtering_quorum
+        )
+        instance.reconstruct_pose_opt = data.get(
+            "reconstruct_pose_opt", cls.reconstruct_pose_opt
+        )
+        instance.optimisation_iterations = data.get(
+            "optimisation_iterations", cls.optimisation_iterations
+        )
+        instance.optimisation_neighbourhood = data.get(
+            "optimisation_neighbourhood", cls.optimisation_neighbourhood
+        )
         instance.use_ba = data.get("use_ba", cls.use_ba)
-        instance.max_ba_iterations = data.get("max_ba_iterations", cls.max_ba_iterations)
+        instance.max_ba_iterations = data.get(
+            "max_ba_iterations", cls.max_ba_iterations
+        )
         instance.image_mode = data.get("image_mode", cls.image_mode)
         instance.image_mode = data.get(
             "image_mode",
-            "minfarthestpose" if instance.dataset.name in ("bonsai", "counter", "kitchen", "room") else cls.image_mode,
+            (
+                "minfarthestpose"
+                if instance.dataset.name in ("bonsai", "counter", "kitchen", "room")
+                else cls.image_mode
+            ),
         )
         instance.copy_mode = data.get("copy_mode", cls.copy_mode)
         instance.shared_camera = data.get("shared_camera", cls.shared_camera)
         instance.gt_eval = data.get("gt_eval", cls.gt_eval)
-        instance.use_gt_extrinsics = data.get("use_gt_extrinsics", cls.use_gt_extrinsics)
-        instance.use_gt_intrinsics = data.get("use_gt_intrinsics", cls.use_gt_intrinsics)
+        instance.use_gt_extrinsics = data.get(
+            "use_gt_extrinsics", cls.use_gt_extrinsics
+        )
+        instance.use_gt_intrinsics = data.get(
+            "use_gt_intrinsics", cls.use_gt_intrinsics
+        )
         instance.use_gt_extrinsics |= data.get("use_gt_cams", False)
         instance.use_gt_intrinsics |= data.get("use_gt_cams", False)
         instance.use_gt_points = data.get("use_gt_points", cls.use_gt_points)
@@ -294,15 +337,34 @@ class Config:
         instance.align_glue = data.get("align_glue", cls.align_glue)
         instance.keep_backup_cams = data.get("keep_backup_cams", cls.keep_backup_cams)
         instance.random_init = data.get("random_init", cls.random_init)
-        instance.match_colmap_points = data.get("match_colmap_points", cls.match_colmap_points)
+        instance.match_colmap_points = data.get(
+            "match_colmap_points", cls.match_colmap_points
+        )
         instance.pose_opt_module = data.get("pose_opt_module", cls.pose_opt_module)
-        instance.feature_extractor = data.get("feature_extractor", cls.feature_extractor)
+        instance.feature_extractor = data.get(
+            "feature_extractor", cls.feature_extractor
+        )
         instance.loss_multiplier = data.get("loss_multiplier", cls.loss_multiplier)
-        instance.pose_loss_multiplier = data.get("pose_loss_multiplier", cls.pose_loss_multiplier)
-        instance.series_label_override = data.get("series_label_override", cls.series_label_override)
+        instance.pose_loss_multiplier = data.get(
+            "pose_loss_multiplier", cls.pose_loss_multiplier
+        )
+        instance.series_label_override = data.get(
+            "series_label_override", cls.series_label_override
+        )
         instance.run_train_eval = data.get("run_train_eval", cls.run_train_eval)
         instance.run_mvs = data.get("run_mvs", cls.run_mvs)
         instance.enable_timing = data.get("enable_timing", cls.enable_timing)
+        instance.save_full_pcd = data.get("save_full_pcd", cls.save_full_pcd)
+        instance.sampler = data.get("sampler", cls.sampler)
+        instance.sampler_pool_size = data.get(
+            "sampler_pool_size", cls.sampler_pool_size
+        )
+        instance.sampler_num_gaussians = data.get(
+            "sampler_num_gaussians", cls.sampler_num_gaussians
+        )
+        instance.sampler_every = data.get("sampler_every", cls.sampler_every)
+        instance.sampler_lr = data.get("sampler_lr", cls.sampler_lr)
+        instance.save_ply = data.get("save_ply", cls.save_ply)
 
         # Loop over each key in data and print a warning if it is not a field on the Config dataclass
         for key in data.keys():
@@ -318,7 +380,11 @@ class Config:
         if self.choice == "combined" and self.camera_src == self.pcd_src:
             self.choice = self.camera_src
 
-        if self.choice == "combined" and self.camera_src != self.pcd_src and self.random_init:
+        if (
+            self.choice == "combined"
+            and self.camera_src != self.pcd_src
+            and self.random_init
+        ):
             self.choice = self.camera_src
 
         if self.choice == "gt":
@@ -329,7 +395,11 @@ class Config:
             self.use_gt_intrinsics = False
             self.use_gt_points = False
             self.depth_conf_mode = "disabled"
-            self.num_images = len(os.listdir(Path(self.dataset.directory) / Path(self.dataset.data_folder_name)))
+            self.num_images = len(
+                os.listdir(
+                    Path(self.dataset.directory) / Path(self.dataset.data_folder_name)
+                )
+            )
             self.num_cameras = self.num_images
         else:
             assert self.gt_eval
@@ -338,7 +408,10 @@ class Config:
             len(
                 [
                     name
-                    for name in os.listdir(Path(self.dataset.directory) / Path(self.dataset.data_folder_name))
+                    for name in os.listdir(
+                        Path(self.dataset.directory)
+                        / Path(self.dataset.data_folder_name)
+                    )
                     if "depth" not in name and "normal" not in name
                 ]
             )
@@ -355,7 +428,9 @@ class Config:
             self.num_images = min(100, self.num_images)
             self.run_mvs = False
 
-        self.use_ba = self.sampling_mode == "ba" or self.use_ba or self.choice == "colmap"
+        self.use_ba = (
+            self.sampling_mode == "ba" or self.use_ba or self.choice == "colmap"
+        )
 
         if not (self.use_ba and self.choice == "vggt"):
             self.max_ba_iterations = 0
@@ -371,6 +446,14 @@ class Config:
 
         if self.near_filtering_strength == 0.0:
             self.near_filtering_quorum = 1
+
+        if self.sampler:
+            assert (
+                self.choice == "vggt"
+            ), "The learned point sampler needs the full VGGT point cloud"
+            self.save_full_pcd = True
+        if self.choice != "vggt":
+            self.save_full_pcd = False
 
         # TODO Maybe remove
         if self.choice == "vggt" and not self.use_ba:
@@ -394,7 +477,9 @@ class Config:
         if self.use_gt_extrinsics:
             self.pose_opt = False
 
-        if self.eval_opt and self.gt_eval:  # TODO Figure out a good way to have both enabled
+        if (
+            self.eval_opt and self.gt_eval
+        ):  # TODO Figure out a good way to have both enabled
             self.eval_opt = False
 
         if self.match_colmap_points:
@@ -477,6 +562,9 @@ class Config:
 
             if self.enable_timing:
                 parts.append("timing")
+
+            if self.save_full_pcd:
+                parts.append("fullpcd")
 
             parts.append(self.image_mode)
 
@@ -584,12 +672,22 @@ class Config:
             parts.append(f"dl{self.depth_lambda}")
         if self.error_opa:
             parts.append("erroropa")
-        if self.depth_conf_mode and self.choice != "colmap" and self.depth_loss_mode != "disabled":
+        if (
+            self.depth_conf_mode
+            and self.choice != "colmap"
+            and self.depth_loss_mode != "disabled"
+        ):
             parts.append(f"conf{self.depth_conf_mode}")
         if self.nomcmc:
             parts.append("nomcmc")
         if self.random_init:
             parts.append(f"randinit{self.num_points}")
+        if self.sampler:
+            parts.append(
+                f"sampler{self.sampler_num_gaussians}p{self.sampler_pool_size}e{self.sampler_every}"
+            )
+            if self.sampler_lr != Config.sampler_lr:
+                parts.append(f"slr{self.sampler_lr}")
         if self.pose_opt and self.pose_opt_module != "default":
             parts.append(f"pomod{self.pose_opt_module}")
         parts.append(f"steps{self.num_steps}")
@@ -621,7 +719,9 @@ class Config:
     def splatting_metrics(self):
         if not os.path.exists(self.splatting_val_path):
             return {}
-        return _parse_gsplat_json(json.load(open(self.splatting_val_path)), self.splatting_val_path)
+        return _parse_gsplat_json(
+            json.load(open(self.splatting_val_path)), self.splatting_val_path
+        )
 
     @property
     def splatting_time(self):
@@ -641,8 +741,15 @@ class Config:
         return f"../vggt/{self.input_name}"
 
     @property
+    def ply_path(self):
+        return f"{self.result_dir}/ply/point_cloud_{self.num_steps - 1}.ply"
+
+    @property
     def force_splat(self):
         if not self.is_splatted:
+            return True
+
+        if self.save_ply and not os.path.exists(self.ply_path):
             return True
 
         if self.splatting_time == 0:
@@ -659,17 +766,24 @@ class Config:
 
         if (
             "shifted" in self.depth_conf_mode or "sig" in self.depth_conf_mode
-        ) and self.splatting_time < datetime.datetime(2026, 5, 30, 11, 20, 0).timestamp():
+        ) and self.splatting_time < datetime.datetime(
+            2026, 5, 30, 11, 20, 0
+        ).timestamp():
             return True
 
         if (
-            self.choice == "colmap"  # or self.depth_loss_mode == "full" or self.depth_loss_mode == "closer"
+            self.choice
+            == "colmap"  # or self.depth_loss_mode == "full" or self.depth_loss_mode == "closer"
             and self.splatting_time > datetime.datetime(2026, 5, 15, 20, 0).timestamp()
             and self.splatting_time < datetime.datetime(2026, 5, 17, 12, 0).timestamp()
         ):
             return True
 
-        if self.pose_opt and self.gt_eval and self.splatting_time < datetime.datetime(2026, 4, 16, 14, 0).timestamp():
+        if (
+            self.pose_opt
+            and self.gt_eval
+            and self.splatting_time < datetime.datetime(2026, 4, 16, 14, 0).timestamp()
+        ):
             # Runs before this would not align before each evaluation
             return True
 
@@ -683,26 +797,44 @@ class Config:
 
         if self.gt_eval and self.is_splatted:
             if len(
-                list(filter(lambda x: x.startswith(f"val_step{self.num_steps - 1}_"), os.listdir(self.renders_folder)))
+                list(
+                    filter(
+                        lambda x: x.startswith(f"val_step{self.num_steps - 1}_"),
+                        os.listdir(self.renders_folder),
+                    )
+                )
             ) < len(self.dataset.eval_names):
                 return True
             if self.require_depth_metrics and len(
                 list(
                     filter(
-                        lambda x: x.startswith(f"depth_val_step{self.num_steps - 1}_"), os.listdir(self.renders_folder)
+                        lambda x: x.startswith(f"depth_val_step{self.num_steps - 1}_"),
+                        os.listdir(self.renders_folder),
                     )
                 )
             ) < len(self.dataset.eval_names):
                 return True
 
-        if self.require_depth_metrics and self.splatting_time < datetime.datetime(2026, 5, 18, 14, 15, 0).timestamp():
+        if (
+            self.require_depth_metrics
+            and self.splatting_time
+            < datetime.datetime(2026, 5, 18, 14, 15, 0).timestamp()
+        ):
             return True  # 661406185708b56af3bcdcd990e0f6a7b052c22d
 
-        if self.require_depth_metrics and self.splatting_time < datetime.datetime(2026, 5, 18, 17, 30, 0).timestamp():
+        if (
+            self.require_depth_metrics
+            and self.splatting_time
+            < datetime.datetime(2026, 5, 18, 17, 30, 0).timestamp()
+        ):
             return True
 
         return False
-        return self.sampling_mode == "ba" and self.camera_type == "SIMPLE_RADIAL" and self.choice == "vggt"
+        return (
+            self.sampling_mode == "ba"
+            and self.camera_type == "SIMPLE_RADIAL"
+            and self.choice == "vggt"
+        )
 
     @property
     def force_reconstruct(self):
@@ -723,7 +855,8 @@ class Config:
 
         if (
             self.choice == "combined"
-            and self.reconstruction_time < datetime.datetime(2026, 5, 19, 18, 00, 0).timestamp()
+            and self.reconstruction_time
+            < datetime.datetime(2026, 5, 19, 18, 00, 0).timestamp()
         ):
             return True
 
@@ -731,7 +864,8 @@ class Config:
             self.choice == "vggt"
             and not self.use_ba
             and self.shared_camera
-            and self.reconstruction_time < datetime.datetime(2026, 5, 26, 16, 55, 0).timestamp()
+            and self.reconstruction_time
+            < datetime.datetime(2026, 5, 26, 16, 55, 0).timestamp()
         ):
             return True
 
@@ -750,7 +884,8 @@ class Config:
         if (
             self.sampling_mode == "vox3"
             or self.sampling_mode == "voxels"
-            and self.reconstruction_time < datetime.datetime(2026, 5, 17, 16, 30, 0).timestamp()
+            and self.reconstruction_time
+            < datetime.datetime(2026, 5, 17, 16, 30, 0).timestamp()
         ):
             return True
 
@@ -758,13 +893,18 @@ class Config:
             return True
 
         if self.choice == "combined":
-            if self.reconstruction_time < datetime.datetime(2026, 4, 25, 11, 30, 0).timestamp():
+            if (
+                self.reconstruction_time
+                < datetime.datetime(2026, 4, 25, 11, 30, 0).timestamp()
+            ):
                 return True
 
         # if self.num_images == 20 and self.choice == "colmap":
         #     return True
 
-        if self.reconstruction_time < datetime.datetime(2026, 5, 18, 19, 45, 0).timestamp() and (
+        if self.reconstruction_time < datetime.datetime(
+            2026, 5, 18, 19, 45, 0
+        ).timestamp() and (
             "nerf_synthetic" in self.dataset.directory or self.align_glue
         ):
             # Technically this should be all runs because the alignment changed, but the ones that
@@ -797,7 +937,8 @@ class Config:
     @property
     def is_reconstructed(self):
         return self.choice == "gt" or (
-            os.path.exists(self.reconstruction_stat_path) and os.path.exists(self.reconstruction_aligned_cameras_path)
+            os.path.exists(self.reconstruction_stat_path)
+            and os.path.exists(self.reconstruction_aligned_cameras_path)
         )
 
     @property
@@ -810,7 +951,11 @@ class Config:
     @property
     def _reconstruct_args(self):
         args = {
-            "input": (Path(self.dataset.directory) / Path(self.dataset.data_folder_name)).absolute().as_posix(),
+            "input": (
+                Path(self.dataset.directory) / Path(self.dataset.data_folder_name)
+            )
+            .absolute()
+            .as_posix(),
             "name": f"{self.dataset.name}_{self.dataset.factor}",
             "choice": self.choice,
             "num_images": self.num_images,
@@ -830,7 +975,9 @@ class Config:
         }
 
         if (
-            self.depth_conf_mode != "disabled" or self.depth_loss_mode != "disabled" or self.error_opa
+            self.depth_conf_mode != "disabled"
+            or self.depth_loss_mode != "disabled"
+            or self.error_opa
         ) and self.choice == "vggt":
             args["require_depth_conf"] = True
         if self.error_opa:
@@ -854,6 +1001,9 @@ class Config:
         if self.enable_timing:
             args["enable_timing"] = True
 
+        if self.save_full_pcd:
+            args["save_full_pcd"] = True
+
         return args
 
     @property
@@ -872,7 +1022,10 @@ class Config:
         orig_force = force
         force |= self.force_reconstruct
         if self.is_reconstructed and not force:
-            print(Path(self.data_dir), "has already been constructed.\nUse --force to force reconstruction.")
+            print(
+                Path(self.data_dir),
+                "has already been constructed.\nUse --force to force reconstruction.",
+            )
             return 0
 
         if self.choice == "combined":
@@ -883,7 +1036,9 @@ class Config:
             }
 
             configs[self.camera_src].reconstruct(orig_force)
-            pcd_choices = ["vggt", "colmap"] if self.pcd_src == "both" else [self.pcd_src]
+            pcd_choices = (
+                ["vggt", "colmap"] if self.pcd_src == "both" else [self.pcd_src]
+            )
             for pcd_src in pcd_choices:
                 configs[pcd_src].reconstruct(orig_force)
 
@@ -917,7 +1072,9 @@ class Config:
                 command.append("--glue_parts")
 
             try:
-                output = subprocess.run(command, check=True, cwd="../vggt")
+                output = subprocess.run(
+                    command, check=True, cwd="../vggt", env=env_for(VGGT_PYTHON)
+                )
                 print(output)
                 return output.returncode
             except subprocess.CalledProcessError as e:
@@ -942,6 +1099,7 @@ class Config:
                     "reconstruct_pose_opt",
                     "run_mvs",
                     "enable_timing",
+                    "save_full_pcd",
                 )
                 and value is True
             ):
@@ -950,7 +1108,9 @@ class Config:
                 command.extend([f"--{key}", str(value)])
 
         try:
-            output = subprocess.run(command, check=True, cwd="../vggt")
+            output = subprocess.run(
+                command, check=True, cwd="../vggt", env=env_for(VGGT_PYTHON)
+            )
             print(output)
             return output.returncode
         except subprocess.CalledProcessError as e:
@@ -983,14 +1143,20 @@ class Config:
         if not self.is_evaluated:
             return True
 
-        threshold_date = datetime.datetime(2026, 4, 4, 11, 20)  # This is when I fixed the eval script
+        threshold_date = datetime.datetime(
+            2026, 4, 4, 11, 20
+        )  # This is when I fixed the eval script
         threshold_timestamp = threshold_date.timestamp()
         file_timestamp = self.eval_time
 
         if file_timestamp < threshold_timestamp:
             return True
 
-        if self.is_reconstructed and not self.choice == "gt" and file_timestamp < self.reconstruction_time:
+        if (
+            self.is_reconstructed
+            and not self.choice == "gt"
+            and file_timestamp < self.reconstruction_time
+        ):
             return True
 
         if not self.eval_metrics.get("real_num_points", 0):
@@ -1010,7 +1176,9 @@ class Config:
             return 0
         try:
             examples.evaluation.main(
-                self.data_dir, self.dataset.gt_train_data_dir or self.dataset.directory, force=self.force_eval or force
+                self.data_dir,
+                self.dataset.gt_train_data_dir or self.dataset.directory,
+                force=self.force_eval or force,
             )
             return 0
         except Exception as e:
@@ -1022,7 +1190,12 @@ class Config:
         return os.path.exists(self.splatting_val_path)
 
     @profile
-    def run(self, gpu: str | None = None, force_splat: bool = False, enable_viewer: bool = False):
+    def run(
+        self,
+        gpu: str | None = None,
+        force_splat: bool = False,
+        enable_viewer: bool = False,
+    ):
         force_splat = self.force_splat or force_splat
         if self.is_splatted and not force_splat:
             print(f"{self.splatting_val_path} found. Skipping splatting")
@@ -1036,7 +1209,9 @@ class Config:
         print(f"Result dir: {Path(self.result_dir)}")
         # Resolve the libstdc++.so.6 path before building the command
         try:
-            libstdc_path = subprocess.check_output(["gcc", "--print-file-name=libstdc++.so.6"], text=True).strip()
+            libstdc_path = subprocess.check_output(
+                ["gcc", "--print-file-name=libstdc++.so.6"], text=True
+            ).strip()
         except (subprocess.SubprocessError, FileNotFoundError):
             libstdc_path = None
 
@@ -1047,7 +1222,9 @@ class Config:
             "--data_dir",
             self.data_dir,
             "--data_factor",
-            str(self.dataset.factor) if self.choice == "gt" else "1",  # We resize the data when copying in VGGT already
+            (
+                str(self.dataset.factor) if self.choice == "gt" else "1"
+            ),  # We resize the data when copying in VGGT already
             "--eval_data_factor",
             str(self.dataset.factor),
             "--result-dir",
@@ -1110,6 +1287,25 @@ class Config:
             command.append("--init_num_pts")
             command.append(str(self.num_points))
 
+        if self.sampler:
+            command.extend(
+                [
+                    "--init_type",
+                    "vggt_full",
+                    "--sampler_pool_size",
+                    str(self.sampler_pool_size),
+                    "--sampler_num_gaussians",
+                    str(self.sampler_num_gaussians),
+                    "--sampler_every",
+                    str(self.sampler_every),
+                    "--sampler_lr",
+                    str(self.sampler_lr),
+                ]
+            )
+
+        if self.save_ply:
+            command.extend(["--save_ply", "--ply_steps", str(self.num_steps)])
+
         if self.loss_multiplier != 1.0:
             command.append("--loss_multiplier")
             command.append(str(self.loss_multiplier))
@@ -1121,7 +1317,7 @@ class Config:
         if self.run_train_eval:
             command.append("--run_train_eval")
 
-        env = os.environ.copy()
+        env = env_for(GSPLAT_PYTHON)
         if libstdc_path:
             env["LD_PRELOAD"] = libstdc_path
         if gpu is not None:
@@ -1137,7 +1333,10 @@ class Config:
 
 
 def generate_configs(
-    experiment_config: dict[str, str | float | bool | int | list[str | float | bool | int]] | list[dict],
+    experiment_config: (
+        dict[str, str | float | bool | int | list[str | float | bool | int]]
+        | list[dict]
+    ),
 ) -> list[dict]:
     """
     Recurse through a config and create new configs with the lists unrolled.
@@ -1166,7 +1365,9 @@ class PlotConfig:
     x_axis: str
     split_param: str | None = None
     filter: str | None = None
-    metric_keys: list[str] = field(default_factory=lambda: ["rre", "rte", "psnr", "lpips", "ssim", "num_GS"])
+    metric_keys: list[str] = field(
+        default_factory=lambda: ["rre", "rte", "psnr", "lpips", "ssim", "num_GS"]
+    )
     single_legend: bool = True
     split_choice: bool = False
     max_render_cols: int = 3
@@ -1228,7 +1429,9 @@ class Experiment:
         configs = [Config.from_dict(config_dict) for config_dict in config_dicts]
         if renders:
             render_config_dicts = generate_configs(self.render_config_dicts)
-            render_configs = [Config.from_dict(config_dict) for config_dict in render_config_dicts]
+            render_configs = [
+                Config.from_dict(config_dict) for config_dict in render_config_dicts
+            ]
             configs = [config for config in configs if config in render_configs]
 
         gt_configs = []
@@ -1239,7 +1442,11 @@ class Experiment:
 
         if self.plot_args is not None:
             configs = [
-                replace(config, raw_metrics=self.plot_args.raw_metrics, require_depth_metrics=self.plot_args.show_depth)
+                replace(
+                    config,
+                    raw_metrics=self.plot_args.raw_metrics,
+                    require_depth_metrics=self.plot_args.show_depth,
+                )
                 for config in configs
             ]
 
@@ -1252,7 +1459,12 @@ class Experiment:
             dupe_key = (
                 config.data_dir
                 if reconstruct_only
-                else (config.result_dir, config.splatting_val_path, config.data_dir, config.series_label_override)
+                else (
+                    config.result_dir,
+                    config.splatting_val_path,
+                    config.data_dir,
+                    config.series_label_override,
+                )
             )
             if dupe_key not in config_set:
                 unique_configs.append(config)
@@ -1267,7 +1479,9 @@ class Experiment:
         for config in configs:
             if config.choice == "combined":
                 for choice in ("vggt", "colmap"):
-                    reconstruct_args.append(config.replace_choice(choice).reconstruct_args)
+                    reconstruct_args.append(
+                        config.replace_choice(choice).reconstruct_args
+                    )
             else:
                 reconstruct_args.append(config.reconstruct_args)
 
@@ -1287,7 +1501,7 @@ class Experiment:
             config_path.absolute().as_posix(),
         ]
 
-        subprocess.run(command, check=True, cwd="../vggt")
+        subprocess.run(command, check=True, cwd="../vggt", env=env_for(VGGT_PYTHON))
 
         for config in configs:
             if config.choice == "combined":
@@ -1342,9 +1556,15 @@ class Experiment:
                 finally:
                     gpu_queue.put(gpu)
 
-            with concurrent.futures.ThreadPoolExecutor(max_workers=len(cuda_devices)) as executor:
-                futures = [executor.submit(process_config, config) for config in configs]
-                for future in tqdm(concurrent.futures.as_completed(futures), total=len(configs)):
+            with concurrent.futures.ThreadPoolExecutor(
+                max_workers=len(cuda_devices)
+            ) as executor:
+                futures = [
+                    executor.submit(process_config, config) for config in configs
+                ]
+                for future in tqdm(
+                    concurrent.futures.as_completed(futures), total=len(configs)
+                ):
                     config, splat_fail, eval_fail = future.result()
                     if splat_fail:
                         splat_failures.append(config)
@@ -1364,7 +1584,9 @@ class Experiment:
 
             for config in tqdm(configs):
                 if do_splatting:
-                    returncode = config.run(force_splat=force_all, enable_viewer=enable_viewer)
+                    returncode = config.run(
+                        force_splat=force_all, enable_viewer=enable_viewer
+                    )
                     if returncode != 0:
                         splat_failures.append(config)
 
@@ -1407,7 +1629,9 @@ class Experiment:
             return
 
         # Normalize to list
-        dataset_names = dataset_name if isinstance(dataset_name, list) else [dataset_name]
+        dataset_names = (
+            dataset_name if isinstance(dataset_name, list) else [dataset_name]
+        )
 
         # Collect scene names and dataset info
         scene_names = [datasets[dn].scene_name for dn in dataset_names]
@@ -1436,8 +1660,12 @@ class Experiment:
             render_folders = []
             camera_folders = []
             for dn in dataset_names:
-                render_folders.extend([path.name for path in self.get_render_output_paths(dn)])
-                camera_folders.extend([path.name for path in self.get_render_input_paths(dn)])
+                render_folders.extend(
+                    [path.name for path in self.get_render_output_paths(dn)]
+                )
+                camera_folders.extend(
+                    [path.name for path in self.get_render_input_paths(dn)]
+                )
 
         split_param = self.plot_args.split_param
 
@@ -1484,7 +1712,9 @@ class Experiment:
         # for config in self.get_configs(dataset_name):
         #     print(Path(config.eval_path))
 
-    def progress_stats(self, dataset_name: str, print_progress_bars: bool = False) -> str:
+    def progress_stats(
+        self, dataset_name: str, print_progress_bars: bool = False
+    ) -> str:
         configs = self.get_configs(dataset_name)
 
         reconstructed = 0
@@ -1510,7 +1740,9 @@ class Experiment:
                     force_splat += 1
 
         if print_progress_bars:
-            with tqdm(total=len(configs), desc="Reconstructed", unit="config") as pbar_recon:
+            with tqdm(
+                total=len(configs), desc="Reconstructed", unit="config"
+            ) as pbar_recon:
                 for config in configs:
                     if config.is_reconstructed and not config.force_reconstruct:
                         pbar_recon.update(1)
@@ -1763,7 +1995,14 @@ experiments = [
             max_render_cols=5,
             show_gt=False,
             raw_metrics=False,
-            metric_keys=["eval_rre", "eval_rte", "num_aligned", "psnr", "lpips", "ssim"],
+            metric_keys=[
+                "eval_rre",
+                "eval_rte",
+                "num_aligned",
+                "psnr",
+                "lpips",
+                "ssim",
+            ],
             horizontal_datasets=False,
             make_camera_plot=False,
         ),
@@ -1793,7 +2032,14 @@ experiments = [
             max_render_cols=5,
             show_gt=False,
             raw_metrics=False,
-            metric_keys=["eval_rre", "eval_rte", "num_aligned", "psnr", "lpips", "ssim"],
+            metric_keys=[
+                "eval_rre",
+                "eval_rte",
+                "num_aligned",
+                "psnr",
+                "lpips",
+                "ssim",
+            ],
             horizontal_datasets=False,
             make_camera_plot=True,
         ),
@@ -1823,7 +2069,14 @@ experiments = [
             max_render_cols=5,
             show_gt=False,
             raw_metrics=False,
-            metric_keys=["eval_rre", "eval_rte", "num_aligned", "psnr", "lpips", "ssim"],
+            metric_keys=[
+                "eval_rre",
+                "eval_rte",
+                "num_aligned",
+                "psnr",
+                "lpips",
+                "ssim",
+            ],
             horizontal_datasets=False,
             make_camera_plot=True,
         ),
@@ -1862,7 +2115,11 @@ experiments = [
             "choice": ["vggt", "colmap"],
             "num_steps": [30000],
         },
-        PlotConfig(x_axis="num_images", split_param="val_step", metric_keys=["psnr", "lpips", "ssim"]),
+        PlotConfig(
+            x_axis="num_images",
+            split_param="val_step",
+            metric_keys=["psnr", "lpips", "ssim"],
+        ),
         val_steps=[7000, 15000, 30000],
     ),
     Experiment(
@@ -1900,12 +2157,26 @@ experiments = [
             "seed": [42],  #
             "num_images": [100],
             "sampling_mode": ["random"],
-            "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 2500, 5000, 10000],
+            "num_points_per_image": [
+                10,
+                50,
+                100,
+                200,
+                300,
+                500,
+                750,
+                1000,
+                2500,
+                5000,
+                10000,
+            ],
             "choice": ["vggt", "colmap"],
             "pose_opt": [False],
             "gt_eval": True,
         },
-        PlotConfig(x_axis="num_points", split_param="", metric_keys=["psnr", "lpips", "ssim"]),
+        PlotConfig(
+            x_axis="num_points", split_param="", metric_keys=["psnr", "lpips", "ssim"]
+        ),
         render_filter_override={
             "num_points_per_image": [10, 100, 1000, 10000],
         },
@@ -1919,7 +2190,19 @@ experiments = [
             "seed": [42],  #
             "num_images": [100],
             "sampling_mode": ["random"],
-            "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 2500, 5000, 10000],
+            "num_points_per_image": [
+                10,
+                50,
+                100,
+                200,
+                300,
+                500,
+                750,
+                1000,
+                2500,
+                5000,
+                10000,
+            ],
             "choice": ["vggt", "colmap"],
             "pose_opt": [True, False],
             "gt_eval": True,
@@ -2166,7 +2449,11 @@ experiments = [
             "seed": [42],
             "num_images": [100],
             "image_mode": ["farthestpose"],
-            "sampling_mode": ["random", "imagefreqnovis", "imagefreqvoxels"],  # , "imagefreq"
+            "sampling_mode": [
+                "random",
+                "imagefreqnovis",
+                "imagefreqvoxels",
+            ],  # , "imagefreq"
             "num_points_per_image": [100, 500, 1000, 5000],
             "choice": ["vggt"],
             "use_gt_cams": [True],
@@ -2253,7 +2540,14 @@ experiments = [
         PlotConfig(
             x_axis="num_images",
             split_param="camera_src,pcd_src",
-            metric_keys=["eval_rre", "eval_rte", "num_aligned", "psnr", "lpips", "ssim"],
+            metric_keys=[
+                "eval_rre",
+                "eval_rte",
+                "num_aligned",
+                "psnr",
+                "lpips",
+                "ssim",
+            ],
         ),
         val_steps=[15000],
         render_filter_override={
@@ -2624,7 +2918,11 @@ experiments = [
             "choice": ["vggt"],
             "num_steps": [7000, 15000, 30000],
         },
-        PlotConfig(x_axis="val_step", split_param="num_steps", metric_keys=["psnr", "lpips", "ssim"]),
+        PlotConfig(
+            x_axis="val_step",
+            split_param="num_steps",
+            metric_keys=["psnr", "lpips", "ssim"],
+        ),
         val_steps=[1, 3_000, 7_000, 10_000, 15_000, 20_000, 25_000, 30_000],
     ),
     Experiment(
@@ -2661,7 +2959,19 @@ experiments = [
         {
             "seed": [42],  # , 43, 44
             "num_images": [100],
-            "num_points_per_image": [10, 50, 100, 200, 300, 500, 750, 1000, 2500, 5000, 10000],
+            "num_points_per_image": [
+                10,
+                50,
+                100,
+                200,
+                300,
+                500,
+                750,
+                1000,
+                2500,
+                5000,
+                10000,
+            ],
             "sampling_mode": ["random"],
             "choice": ["vggt"],
             "nomcmc": [True, False],
@@ -2683,7 +2993,9 @@ experiments = [
             # "num_steps": [7000],
         },
         PlotConfig(
-            x_axis="val_step", split_param="pose_opt_module,pose_opt", metric_keys=["eval_rre", "eval_rte", "quality"]
+            x_axis="val_step",
+            split_param="pose_opt_module,pose_opt",
+            metric_keys=["eval_rre", "eval_rte", "quality"],
         ),
         val_steps=[1, 3_000, 7_000, 10_000, 15_000, 20_000, 25_000, 30_000],
         render_filter_override={
@@ -2723,7 +3035,14 @@ experiments = [
         PlotConfig(
             x_axis="num_images",
             split_param="colmap_mode,pose_opt",
-            metric_keys=["eval_rre", "eval_rte", "rre", "rte", "num_aligned", "quality"],
+            metric_keys=[
+                "eval_rre",
+                "eval_rte",
+                "rre",
+                "rte",
+                "num_aligned",
+                "quality",
+            ],
         ),
         val_steps=[15000],
     ),
@@ -2837,7 +3156,14 @@ experiments = [
             x_axis="",
             split_param="depth_loss_mode",
             # metric_keys=["rre", "rte", "psnr", "lpips", "ssim", "quality"],
-            metric_keys=["rre", "psnr", "lpips", "ssim", "pred_depth_absrel", "depth_abs_rel"],
+            metric_keys=[
+                "rre",
+                "psnr",
+                "lpips",
+                "ssim",
+                "pred_depth_absrel",
+                "depth_abs_rel",
+            ],
             show_depth=True,
             show_gt=False,
             max_render_cols=3,
@@ -2873,7 +3199,14 @@ experiments = [
             x_axis="",
             split_param="depth_loss_mode",
             # metric_keys=["rre", "rte", "psnr", "lpips", "ssim", "quality"],
-            metric_keys=["rre", "psnr", "lpips", "ssim", "pred_depth_absrel", "depth_abs_rel"],
+            metric_keys=[
+                "rre",
+                "psnr",
+                "lpips",
+                "ssim",
+                "pred_depth_absrel",
+                "depth_abs_rel",
+            ],
             show_depth=True,
             show_gt=False,
             max_render_cols=1,
@@ -2911,7 +3244,15 @@ experiments = [
             x_axis="",
             split_param="depth_loss_mode,pose_opt",
             # metric_keys=["rre", "rte", "psnr", "lpips", "ssim", "quality"],
-            metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "pred_depth_absrel", "depth_abs_rel"],
+            metric_keys=[
+                "eval_rre",
+                "eval_rte",
+                "psnr",
+                "lpips",
+                "ssim",
+                "pred_depth_absrel",
+                "depth_abs_rel",
+            ],
             show_depth=True,
             show_gt=False,
             max_render_cols=3,
@@ -2947,7 +3288,14 @@ experiments = [
             x_axis="",
             split_param="depth_loss_mode",
             # metric_keys=["rre", "rte", "psnr", "lpips", "ssim", "quality"],
-            metric_keys=["rre", "psnr", "lpips", "ssim", "pred_depth_absrel", "depth_abs_rel"],
+            metric_keys=[
+                "rre",
+                "psnr",
+                "lpips",
+                "ssim",
+                "pred_depth_absrel",
+                "depth_abs_rel",
+            ],
             show_depth=True,
             show_gt=False,
             max_render_cols=3,
@@ -2980,7 +3328,14 @@ experiments = [
         PlotConfig(
             x_axis="num_images",
             split_param="depth_loss_mode",
-            metric_keys=["rre", "psnr", "lpips", "ssim", "pred_depth_absrel", "depth_abs_rel"],
+            metric_keys=[
+                "rre",
+                "psnr",
+                "lpips",
+                "ssim",
+                "pred_depth_absrel",
+                "depth_abs_rel",
+            ],
             show_depth=True,
             show_gt=False,
             max_render_cols=5,
@@ -3014,7 +3369,15 @@ experiments = [
         PlotConfig(
             x_axis="num_images",
             split_param="depth_loss_mode",
-            metric_keys=["eval_rre", "eval_rte", "psnr", "lpips", "ssim", "pred_depth_absrel", "depth_abs_rel"],
+            metric_keys=[
+                "eval_rre",
+                "eval_rte",
+                "psnr",
+                "lpips",
+                "ssim",
+                "pred_depth_absrel",
+                "depth_abs_rel",
+            ],
             show_depth=True,
             show_gt=False,
             max_render_cols=3,
@@ -3210,7 +3573,14 @@ experiments = [
         PlotConfig(
             x_axis="num_images",
             split_param="depth_lambda",
-            metric_keys=["rre", "psnr", "lpips", "ssim", "pred_depth_absrel", "depth_abs_rel"],
+            metric_keys=[
+                "rre",
+                "psnr",
+                "lpips",
+                "ssim",
+                "pred_depth_absrel",
+                "depth_abs_rel",
+            ],
             max_render_cols=4,
             horizontal_datasets=False,
             show_depth=True,
@@ -3250,7 +3620,11 @@ experiments = [
             "num_points_per_image": [1100],
             "choice": ["vggt", "colmap"],
         },
-        PlotConfig(x_axis="", split_param="camera_type,pose_opt,sampling_mode", raw_metrics=True),
+        PlotConfig(
+            x_axis="",
+            split_param="camera_type,pose_opt,sampling_mode",
+            raw_metrics=True,
+        ),
     ),
     Experiment(
         "dataset_type",
@@ -3413,7 +3787,14 @@ experiments = [
         PlotConfig(
             x_axis="num_images",
             split_param="random_init,pose_opt,use_ba",
-            metric_keys=["eval_rre", "eval_rte", "real_num_points", "psnr", "ssim", "lpips"],
+            metric_keys=[
+                "eval_rre",
+                "eval_rte",
+                "real_num_points",
+                "psnr",
+                "ssim",
+                "lpips",
+            ],
         ),
         priority="medium",
     ),
@@ -3628,7 +4009,14 @@ experiments = [
         PlotConfig(
             x_axis="num_images",
             split_param="align_glue",
-            metric_keys=["eval_rre", "eval_rte", "num_aligned", "psnr", "ssim", "lpips"],
+            metric_keys=[
+                "eval_rre",
+                "eval_rte",
+                "num_aligned",
+                "psnr",
+                "ssim",
+                "lpips",
+            ],
             max_render_cols=4,
             horizontal_datasets=False,
             render_nums=[0, 2],
@@ -3687,7 +4075,14 @@ experiments = [
         PlotConfig(
             x_axis="",
             split_param="align_glue,colmap_mode",
-            metric_keys=["eval_rre", "eval_rte", "num_aligned", "psnr", "ssim", "lpips"],
+            metric_keys=[
+                "eval_rre",
+                "eval_rte",
+                "num_aligned",
+                "psnr",
+                "ssim",
+                "lpips",
+            ],
             max_render_cols=4,
             horizontal_datasets=False,
             render_nums=[0, 2],
@@ -3768,7 +4163,14 @@ experiments = [
         PlotConfig(
             x_axis="",
             split_param="reconstruct_pose_opt,pose_opt",
-            metric_keys=["rre", "rte", "num_aligned", "eval_rre", "eval_rte", "quality"],
+            metric_keys=[
+                "rre",
+                "rte",
+                "num_aligned",
+                "eval_rre",
+                "eval_rte",
+                "quality",
+            ],
             max_render_cols=4,
             horizontal_datasets=False,
             make_camera_plot=True,
@@ -4097,6 +4499,72 @@ experiments = [
             "seed": [42],
         },
     ),
+    Experiment(
+        "sampler_vs_densification",
+        99,
+        "Learned point sampler (1M of the full VGGT cloud, no densification) versus MCMC densification from 100K random points",
+        [
+            {
+                "seed": [42, 43, 44],
+                "num_steps": [30000],
+                "num_images": [40],
+                "sampling_mode": ["random"],
+                "num_points_value": 100000,
+                "gt_eval": True,
+                "choice": ["vggt"],
+                "save_ply": True,
+                "series_label_override": "1. Densification (100K start, 1M cap)",
+            },
+            {
+                "seed": [42, 43, 44],
+                "num_steps": [30000],
+                "num_images": [40],
+                "sampling_mode": ["random"],
+                "num_points_value": 100000,
+                "gt_eval": True,
+                "choice": ["vggt"],
+                "sampler": True,
+                "sampler_pool_size": 10_000_000,
+                "sampler_num_gaussians": 1_000_000,
+                "sampler_every": 10,
+                "save_ply": True,
+                "series_label_override": "2. Learned sampler (1M of 10M pool)",
+            },
+            {
+                "seed": [42, 43, 44],
+                "num_steps": [30000],
+                "num_images": [40],
+                "sampling_mode": ["random"],
+                "num_points_value": 100000,
+                "gt_eval": True,
+                "choice": ["vggt"],
+                "sampler": True,
+                "sampler_pool_size": 10_000_000,
+                "sampler_num_gaussians": 1_000_000,
+                "sampler_every": 10,
+                "sampler_lr": 0.0,
+                "save_ply": True,
+                "series_label_override": "3. Random sampler ablation (lr=0)",
+            },
+        ],
+        PlotConfig(
+            x_axis="val_step",
+            split_param="series_label_override",
+            metric_keys=["psnr", "ssim", "lpips", "quality", "num_GS"],
+            max_render_cols=3,
+            horizontal_datasets=False,
+            show_gt=True,
+            show_zoom=True,
+            show_differences=True,
+            render_nums=[0, 2, 5],
+        ),
+        val_steps=[1, 3000, 7000, 10000, 15000, 20000, 25000, 30000],
+        render_filter_override={
+            "seed": [42],
+            "num_steps": [30000],
+            "num_images": [40],
+        },
+    ),
 ]
 
 experiment_dict = {exp.name: exp for exp in experiments}
@@ -4128,7 +4596,9 @@ def get_dataset_experiment(dataset_collection: str, experiment_name: str):
         "pcd_src": "both",
         "pose_opt": True,
         "depth_loss_mode": "closer",
-        "depth_conf_mode": "sigshifted" if "vggt" in experiment_name else "scaleshifted",
+        "depth_conf_mode": (
+            "sigshifted" if "vggt" in experiment_name else "scaleshifted"
+        ),
         "depth_lambda": 10.0,
         "series_label_override": "1. All Features",
     }
@@ -4179,7 +4649,11 @@ def get_dataset_experiment(dataset_collection: str, experiment_name: str):
                 update_dict(
                     default_dict,
                     {
-                        "sampling_mode": "random" if default_dict["sampling_mode"] != "random" else "confidence",
+                        "sampling_mode": (
+                            "random"
+                            if default_dict["sampling_mode"] != "random"
+                            else "confidence"
+                        ),
                         "series_label_override": f"2. No {default_dict['sampling_mode']} Sampling",
                     },
                 ),
@@ -4316,18 +4790,42 @@ def cache_checks(checks: dict[str, list[str]] | None) -> dict[str, list[str]]:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run experiments")
     parser.add_argument(
-        "--experiment_names", type=str, default="all", help="Names of the experiments to run", nargs="+"
+        "--experiment_names",
+        type=str,
+        default="all",
+        help="Names of the experiments to run",
+        nargs="+",
     )
-    parser.add_argument("--dataset_name", type=str, required=False, help="Name of the dataset to use", nargs="*")
-    parser.add_argument("--skip_splatting", action="store_true", help="Whether to skip splatting")
-    parser.add_argument("--skip_plotting", action="store_true", help="Whether to skip plotting")
-    parser.add_argument("--do_reconstruct", action="store_true", help="Whether to run reconstruction")
-    parser.add_argument("--plot_only", action="store_true", help="Whether to only plot")
-    parser.add_argument("--include_gt", action="store_true", help="Whether to include the ground truth splatted data")
     parser.add_argument(
-        "--force_all", action="store_true", help="Whether to force all experiments to rerun"
+        "--dataset_name",
+        type=str,
+        required=False,
+        help="Name of the dataset to use",
+        nargs="*",
+    )
+    parser.add_argument(
+        "--skip_splatting", action="store_true", help="Whether to skip splatting"
+    )
+    parser.add_argument(
+        "--skip_plotting", action="store_true", help="Whether to skip plotting"
+    )
+    parser.add_argument(
+        "--do_reconstruct", action="store_true", help="Whether to run reconstruction"
+    )
+    parser.add_argument("--plot_only", action="store_true", help="Whether to only plot")
+    parser.add_argument(
+        "--include_gt",
+        action="store_true",
+        help="Whether to include the ground truth splatted data",
+    )
+    parser.add_argument(
+        "--force_all",
+        action="store_true",
+        help="Whether to force all experiments to rerun",
     )  # TODO add these properly
-    parser.add_argument("--force_none", action="store_true", help="Ignore force calculation")
+    parser.add_argument(
+        "--force_none", action="store_true", help="Ignore force calculation"
+    )
     parser.add_argument(
         "--cuda_visible_devices",
         type=str,
@@ -4341,9 +4839,13 @@ if __name__ == "__main__":
         help="Number of parallel processes to run per GPU when using --cuda_visible_devices",
     )
     parser.add_argument(
-        "--check_only", action="store_true", help="Only check the status of the experiments without running anything"
+        "--check_only",
+        action="store_true",
+        help="Only check the status of the experiments without running anything",
     )
-    parser.add_argument("--enable_viewer", action="store_true", help="Enable the splatting viewer")
+    parser.add_argument(
+        "--enable_viewer", action="store_true", help="Enable the splatting viewer"
+    )
     parser.add_argument(
         "--min_priority",
         type=str,
@@ -4358,7 +4860,11 @@ if __name__ == "__main__":
         help="Groups to run. Can be given instead of experiment names.",
         nargs="*",
     )
-    parser.add_argument("--combined_datasets", action="store_true", help="Combine datasets into a single plot.")
+    parser.add_argument(
+        "--combined_datasets",
+        action="store_true",
+        help="Combine datasets into a single plot.",
+    )
     parser.add_argument(
         "--dataset_collections",
         type=str,
@@ -4367,12 +4873,18 @@ if __name__ == "__main__":
         " Overrides --dataset_name if provided.",
         nargs="*",
     )
-    parser.add_argument("--force_timing", action="store_true", help="Force timing calculation")
     parser.add_argument(
-        "--populate_cache", action="store_true", help="Populate the cache with the current status of the experiments"
+        "--force_timing", action="store_true", help="Force timing calculation"
     )
     parser.add_argument(
-        "--delete_unused", action="store_true", help="Delete unused splatted and reconstructed folders"
+        "--populate_cache",
+        action="store_true",
+        help="Populate the cache with the current status of the experiments",
+    )
+    parser.add_argument(
+        "--delete_unused",
+        action="store_true",
+        help="Delete unused splatted and reconstructed folders",
     )
     args = parser.parse_args()
 
@@ -4386,10 +4898,18 @@ if __name__ == "__main__":
     else:
         dataset_names = args.dataset_name
 
-    cuda_devices = args.cuda_visible_devices.split(",") if args.cuda_visible_devices else None
+    cuda_devices = (
+        args.cuda_visible_devices.split(",") if args.cuda_visible_devices else None
+    )
 
-    if args.cuda_visible_devices and args.procs_per_gpu > 1 and cuda_devices is not None:
-        cuda_devices = [gpu_id for gpu_id in cuda_devices for _ in range(args.procs_per_gpu)]
+    if (
+        args.cuda_visible_devices
+        and args.procs_per_gpu > 1
+        and cuda_devices is not None
+    ):
+        cuda_devices = [
+            gpu_id for gpu_id in cuda_devices for _ in range(args.procs_per_gpu)
+        ]
 
     splatted = set()
     not_splatted = set()
@@ -4398,7 +4918,10 @@ if __name__ == "__main__":
 
     if len(args.dataset_collections) == 1:
         for i, experiment in enumerate(experiments):
-            experiments[i] = get_dataset_experiment(args.dataset_collections[0], experiment.name) or experiment
+            experiments[i] = (
+                get_dataset_experiment(args.dataset_collections[0], experiment.name)
+                or experiment
+            )
 
     checks = cache_checks(None)
 
@@ -4417,7 +4940,11 @@ if __name__ == "__main__":
 
                     if args.check_only:
                         print(f"Experiment: {experiment.name} ({dataset_name})")
-                        print(experiment.progress_stats(dataset_name, print_progress_bars=True))
+                        print(
+                            experiment.progress_stats(
+                                dataset_name, print_progress_bars=True
+                            )
+                        )
                         for config in experiment.get_configs(dataset_name):
                             if config.is_splatted:
                                 splatted.add(config.output_name)
@@ -4444,7 +4971,11 @@ if __name__ == "__main__":
                         experiment.plot(dataset_name)
                     # except Exception as e:
                     #     print(e)
-                if args.combined_datasets and not args.check_only and not args.skip_plotting:
+                if (
+                    args.combined_datasets
+                    and not args.check_only
+                    and not args.skip_plotting
+                ):
                     if args.dataset_collections:
                         if len(args.dataset_collections) > 1:
                             experiment.plot(
@@ -4460,7 +4991,11 @@ if __name__ == "__main__":
                                 naming_labels=[collection],
                             )
                     elif not args.skip_plotting:
-                        experiment.plot(dataset_names, split_dataset="individual", naming_labels=dataset_names)
+                        experiment.plot(
+                            dataset_names,
+                            split_dataset="individual",
+                            naming_labels=dataset_names,
+                        )
 
     if args.populate_cache:
         checks["splatted"] = list(splatted)
@@ -4479,13 +5014,21 @@ if __name__ == "__main__":
 
     for method in ("vggt", "colmap", "combined"):
         all_splatted_names.extend(
-            list(map(lambda x: f"{method}_outputs/{x}", os.listdir(f"../gsplat/results/{method}_outputs")))
+            list(
+                map(
+                    lambda x: f"{method}_outputs/{x}",
+                    os.listdir(f"../gsplat/results/{method}_outputs"),
+                )
+            )
         )
         all_reconstructed_names.extend(
             list(
                 filter(
                     lambda x: "cache" not in x,
-                    map(lambda x: f"{method}_outputs/{x}", os.listdir(f"../vggt/{method}_outputs")),
+                    map(
+                        lambda x: f"{method}_outputs/{x}",
+                        os.listdir(f"../vggt/{method}_outputs"),
+                    ),
                 )
             )
         )
@@ -4516,7 +5059,9 @@ if __name__ == "__main__":
             "minutes",
         )
 
-        unused_reconstruction_folders = set(all_reconstructed_names) - reconstructed - not_reconstructed
+        unused_reconstruction_folders = (
+            set(all_reconstructed_names) - reconstructed - not_reconstructed
+        )
         print("Unused reconstruction folders:", len(unused_reconstruction_folders))
 
         dry_run = True
@@ -4531,7 +5076,9 @@ if __name__ == "__main__":
                     if os.path.exists(f"../gsplat/results/{folder}/renders"):
                         shutil.rmtree(f"../gsplat/results/{folder}/renders")
                 folder_size = 0
-                for dirpath, dirnames, filenames in os.walk(f"../gsplat/results/{folder}/renders"):
+                for dirpath, dirnames, filenames in os.walk(
+                    f"../gsplat/results/{folder}/renders"
+                ):
                     for f in filenames:
                         fp = os.path.join(dirpath, f)
                         fp_size = os.path.getsize(fp)

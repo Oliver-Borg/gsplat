@@ -1,0 +1,83 @@
+[
+    {
+        "seed": [
+            42,
+            43,
+            44
+        ],
+        "num_steps": [
+            30000
+        ],
+        "num_images": [
+            40
+        ],
+        "sampling_mode": [
+            "random"
+        ],
+        "num_points_value": 100000,
+        "gt_eval": true,
+        "choice": [
+            "vggt"
+        ],
+        "save_ply": true,
+        "series_label_override": "1. Densification (100K start, 1M cap)",
+        "dataset": "bonsai"
+    },
+    {
+        "seed": [
+            42,
+            43,
+            44
+        ],
+        "num_steps": [
+            30000
+        ],
+        "num_images": [
+            40
+        ],
+        "sampling_mode": [
+            "random"
+        ],
+        "num_points_value": 100000,
+        "gt_eval": true,
+        "choice": [
+            "vggt"
+        ],
+        "sampler": true,
+        "sampler_pool_size": 10000000,
+        "sampler_num_gaussians": 1000000,
+        "sampler_every": 10,
+        "save_ply": true,
+        "series_label_override": "2. Learned sampler (1M of 10M pool)",
+        "dataset": "bonsai"
+    },
+    {
+        "seed": [
+            42,
+            43,
+            44
+        ],
+        "num_steps": [
+            30000
+        ],
+        "num_images": [
+            40
+        ],
+        "sampling_mode": [
+            "random"
+        ],
+        "num_points_value": 100000,
+        "gt_eval": true,
+        "choice": [
+            "vggt"
+        ],
+        "sampler": true,
+        "sampler_pool_size": 10000000,
+        "sampler_num_gaussians": 1000000,
+        "sampler_every": 10,
+        "sampler_lr": 0.0,
+        "save_ply": true,
+        "series_label_override": "3. Random sampler ablation (lr=0)",
+        "dataset": "bonsai"
+    }
+]

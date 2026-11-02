@@ -434,6 +434,12 @@ class Parser:
                 np.max(self.depths_conf.get(image_name, np.zeros((actual_height, actual_width))))
             )
 
+    def transform_world_points(self, points: np.ndarray) -> np.ndarray:
+        """Map points from the raw COLMAP/VGGT world frame into this parser's (normalised) frame."""
+        points = transform_points(self.transform, points.astype(np.float32))
+        points = (self.R_align @ points.T).T
+        return (points - self.t_align[None, :]).astype(np.float32)
+
     def get_camera_positions(self, names: list[str]):
         indices = [self.image_names.index(name) for name in names]
         return np.array([self.camtoworlds[i] for i in indices])

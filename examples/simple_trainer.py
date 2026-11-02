@@ -33,6 +33,7 @@ from typing_extensions import Literal, assert_never
 from datasets.nerf_synth import SimpleParser
 from copy_cameras import copy_cameras
 from evaluation import EvalMetrics, calculate_metrics, stochastic_umeyama_alignment
+from point_sampler import PointSampler
 from utils import AnnealedSGLD, AppearanceOptModule, knn, rgb_to_sh, set_random_seed
 
 from gsplat import export_splats
@@ -118,6 +119,20 @@ class Config:
     init_type: str = "sfm"
     # Initial number of GSs. Ignored if using sfm
     init_num_pts: int = 100_000
+    # "vggt_full" init: full VGGT point cloud (sparse/points_full.npz) used as the Gaussian pool, a learned
+    # sampler picks `sampler_num_gaussians` of them. Densification is disabled in this mode.
+    # Max points kept from the pool, randomly subsampled (0 = all)
+    sampler_pool_size: int = 300_000
+    # Number of Gaussians the sampler keeps active
+    sampler_num_gaussians: int = 100_000
+    sampler_lr: float = 1e-3
+    # Resample the mask (and step the sampler MLP) every this many rasterizations, reusing it in between
+    sampler_every: int = 1
+    # Temperature of the sigmoid relaxation used for the straight-through gradient
+    sampler_temperature: float = 1.0
+    sampler_num_freqs: int = 10
+    sampler_hidden_dim: int = 512
+    sampler_num_layers: int = 3
     # Initial extent of GSs as a multiple of the camera extent. Ignored if using sfm
     init_extent: float = 3.0
     # Degree of spherical harmonics
@@ -276,15 +291,20 @@ def create_splats_with_optimizers(
     device: str = "cuda",
     world_rank: int = 0,
     world_size: int = 1,
+    pool: Optional[Tuple[np.ndarray, np.ndarray]] = None,
 ) -> Tuple[torch.nn.ParameterDict, Dict[str, torch.optim.Optimizer]]:
-    if init_type == "sfm":
+    if init_type == "vggt_full":
+        assert pool is not None, "init_type=vggt_full needs a point pool"
+        points = torch.from_numpy(pool[0]).float()
+        rgbs = torch.from_numpy(pool[1] / 255.0).float()
+    elif init_type == "sfm":
         points = torch.from_numpy(parser.points).float()
         rgbs = torch.from_numpy(parser.points_rgb / 255.0).float()
     elif init_type == "random":
         points = init_extent * scene_scale * (torch.rand((init_num_pts, 3)) * 2 - 1)
         rgbs = torch.rand((init_num_pts, 3))
     else:
-        raise ValueError("Please specify a correct init_type: sfm or random")
+        raise ValueError("Please specify a correct init_type: sfm, random or vggt_full")
 
     # Initialize the GS size to be the average dist of the 3 nearest neighbors
     dist2_avg = (knn(points, 4)[:, 1:] ** 2).mean(dim=-1)  # [N,]
@@ -448,6 +468,10 @@ class Runner:
 
         # Model
         feature_dim = 32 if cfg.app_opt else None
+        pool = None
+        if cfg.init_type == "vggt_full":
+            assert world_size == 1, "vggt_full init does not support multiple ranks"
+            pool = self.load_point_pool()
         self.splats, self.optimizers = create_splats_with_optimizers(
             self.train_parser,
             init_type=cfg.init_type,
@@ -471,6 +495,7 @@ class Runner:
             device=self.device,
             world_rank=world_rank,
             world_size=world_size,
+            pool=pool,
         )
         print("Model initialized. Number of GS:", len(self.splats["means"]))
         self.num_points = len(self.splats["means"])
@@ -568,6 +593,24 @@ class Runner:
                 self.pose_perturb = DDP(self.pose_perturb)
 
         self.app_optimizers = []
+        self.sampler = None
+        self.sampler_calls = 0
+        self.sampler_mask = None
+        if cfg.init_type == "vggt_full":
+            self.sampler = PointSampler(
+                self.splats["means"].detach(),
+                num_freqs=cfg.sampler_num_freqs,
+                hidden_dim=cfg.sampler_hidden_dim,
+                num_hidden_layers=cfg.sampler_num_layers,
+                temperature=cfg.sampler_temperature,
+            ).to(self.device)
+            # Stepped/zeroed alongside the other auxiliary optimizers
+            self.app_optimizers.append(
+                torch.optim.Adam(self.sampler.parameters(), lr=cfg.sampler_lr)
+            )
+            print(
+                f"Sampler: keeping {cfg.sampler_num_gaussians} of {len(self.sampler.points)} pool Gaussians"
+            )
         if cfg.app_opt:
             assert feature_dim is not None
             self.app_module = AppearanceOptModule(
@@ -576,7 +619,7 @@ class Runner:
             # initialize the last layer to be zero so that the initial output is zero.
             torch.nn.init.zeros_(self.app_module.color_head[-1].weight)
             torch.nn.init.zeros_(self.app_module.color_head[-1].bias)
-            self.app_optimizers = [
+            self.app_optimizers += [
                 torch.optim.Adam(
                     self.app_module.embeds.parameters(),
                     lr=cfg.app_opt_lr * math.sqrt(cfg.batch_size) * 10.0,
@@ -632,6 +675,28 @@ class Runner:
                 mode="training",
             )
 
+    @property
+    def num_active_gs(self) -> int:
+        n = len(self.splats["means"])
+        if self.sampler is not None:
+            return min(n, self.cfg.sampler_num_gaussians)
+        return n
+
+    def load_point_pool(self) -> Tuple[np.ndarray, np.ndarray]:
+        """Load the full VGGT point cloud in the parser's frame, randomly capped to sampler_pool_size."""
+        cfg = self.cfg
+        path = os.path.join(cfg.data_dir, "sparse", "points_full.npz")
+        assert os.path.exists(path), f"{path} missing, run VGGT with --save_full_pcd"
+        data = np.load(path)
+        xyz, rgb = data["xyz"], data["rgb"]
+        if cfg.sampler_pool_size > 0 and len(xyz) > cfg.sampler_pool_size:
+            idx = np.random.default_rng(42).choice(
+                len(xyz), cfg.sampler_pool_size, replace=False
+            )
+            xyz, rgb = xyz[idx], rgb[idx]
+        print(f"Point pool: {len(xyz)} points from {path}")
+        return self.train_parser.transform_world_points(xyz), rgb
+
     def rasterize_splats(
         self,
         camtoworlds: Tensor,
@@ -643,25 +708,58 @@ class Runner:
         camera_model: Optional[Literal["pinhole", "ortho", "fisheye"]] = None,
         **kwargs,
     ) -> Tuple[Tensor, Tensor, Dict]:
-        means = self.splats["means"]  # [N, 3]
+        sel = None
+        mask = None
+        if self.sampler is not None:
+            if torch.is_grad_enabled() and self.cfg.sampler_lr > 0:
+                if self.sampler_calls % self.cfg.sampler_every == 0:
+                    self.sampler_mask, _ = self.sampler(
+                        self.cfg.sampler_num_gaussians, noise=True
+                    )
+                    mask = self.sampler_mask
+                else:
+                    # Reuse the last mask without gradients to the sampler
+                    mask = self.sampler_mask.detach()
+                self.sampler_calls += 1
+            elif torch.is_grad_enabled():
+                # Frozen sampler (lr=0): resample noisy masks without tracking gradients
+                if self.sampler_calls % self.cfg.sampler_every == 0:
+                    with torch.no_grad():
+                        self.sampler_mask, _ = self.sampler(
+                            self.cfg.sampler_num_gaussians, noise=True
+                        )
+                self.sampler_calls += 1
+                mask = self.sampler_mask
+            else:
+                mask, _ = self.sampler(self.cfg.sampler_num_gaussians, noise=False)
+            # Only rasterize the selected Gaussians; the rest would have zero opacity anyway
+            sel = mask.detach().nonzero().squeeze(-1)
+            mask = mask[sel]
+
+        def pick(x: Tensor) -> Tensor:
+            return x if sel is None else x[sel]
+
+        means = pick(self.splats["means"])  # [N, 3]
         # quats = F.normalize(self.splats["quats"], dim=-1)  # [N, 4]
         # rasterization does normalization internally
-        quats = self.splats["quats"]  # [N, 4]
-        scales = torch.exp(self.splats["scales"])  # [N, 3]
-        opacities = torch.sigmoid(self.splats["opacities"])  # [N,]
+        quats = pick(self.splats["quats"])  # [N, 4]
+        scales = torch.exp(pick(self.splats["scales"]))  # [N, 3]
+        opacities = torch.sigmoid(pick(self.splats["opacities"]))  # [N,]
+        if mask is not None:
+            opacities = opacities * mask
 
         image_ids = kwargs.pop("image_ids", None)
         if self.cfg.app_opt:
             colors = self.app_module(
-                features=self.splats["features"],
+                features=pick(self.splats["features"]),
                 embed_ids=image_ids,
                 dirs=means[None, :, :] - camtoworlds[:, None, :3, 3],
                 sh_degree=kwargs.pop("sh_degree", self.cfg.sh_degree),
             )
-            colors = colors + self.splats["colors"]
+            colors = colors + pick(self.splats["colors"])
             colors = torch.sigmoid(colors)
         else:
-            colors = torch.cat([self.splats["sh0"], self.splats["shN"]], 1)  # [N, K, 3]
+            colors = torch.cat([pick(self.splats["sh0"]), pick(self.splats["shN"])], 1)  # [N, K, 3]
 
         if rasterize_mode is None:
             rasterize_mode = "antialiased" if self.cfg.antialiased else "classic"
@@ -1065,7 +1163,7 @@ class Runner:
                 self.writer.add_scalar("train/loss", loss.item(), step)
                 self.writer.add_scalar("train/l1loss", l1loss.item(), step)
                 self.writer.add_scalar("train/ssimloss", ssimloss.item(), step)
-                self.writer.add_scalar("train/num_GS", len(self.splats["means"]), step)
+                self.writer.add_scalar("train/num_GS", self.num_active_gs, step)
                 self.writer.add_scalar("train/mem", mem, step)
                 if cfg.depth_loss_mode != "disabled":
                     self.writer.add_scalar("train/depthloss", depthloss.item(), step)
@@ -1083,7 +1181,7 @@ class Runner:
                 stats = {
                     "mem": mem,
                     "ellipse_time": time.time() - global_tic,
-                    "num_GS": len(self.splats["means"]),
+                    "num_GS": self.num_active_gs,
                 }
                 print("Step: ", step, stats)
                 with open(
@@ -1092,6 +1190,8 @@ class Runner:
                 ) as f:
                     json.dump(stats, f)
                 data = {"step": step, "splats": self.splats.state_dict()}
+                if self.sampler is not None:
+                    data["sampler"] = self.sampler.state_dict()
                 if cfg.pose_opt:
                     if world_size > 1:
                         data["pose_adjust"] = self.pose_adjust.module.state_dict()
@@ -1129,6 +1229,18 @@ class Runner:
                 scales = self.splats["scales"]
                 quats = self.splats["quats"]
                 opacities = self.splats["opacities"]
+                if self.sampler is not None:
+                    # Export only the Gaussians the sampler keeps at evaluation time
+                    with torch.no_grad():
+                        mask, _ = self.sampler(cfg.sampler_num_gaussians, noise=False)
+                    sel = mask.detach().nonzero().squeeze(-1)
+                    means, scales, quats, opacities = (
+                        means[sel],
+                        scales[sel],
+                        quats[sel],
+                        opacities[sel],
+                    )
+                    sh0, shN = sh0[sel], shN[sel]
                 export_splats(
                     means=means,
                     scales=scales,
@@ -1222,7 +1334,9 @@ class Runner:
                     scheduler.step()
 
                 # Run post-backward steps after backward and optimizer
-                if isinstance(self.cfg.strategy, DefaultStrategy):
+                if self.sampler is not None:
+                    pass  # The sampler mask is indexed by pool point, so the Gaussian set must stay fixed
+                elif isinstance(self.cfg.strategy, DefaultStrategy):
                     self.cfg.strategy.step_post_backward(
                         params=self.splats,
                         optimizers=self.optimizers,
@@ -1497,7 +1611,7 @@ class Runner:
             stats.update(
                 {
                     "ellipse_time": ellipse_time,
-                    "num_GS": len(self.splats["means"]),
+                    "num_GS": self.num_active_gs,
                     "num_points": self.num_points,  # This is the initial number of points
                     "num_eval_images": len(valloader),
                 }
