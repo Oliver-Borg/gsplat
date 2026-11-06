@@ -257,6 +257,18 @@ class Config:
     sampler_num_gaussians: int = 1_000_000
     sampler_every: int = 1
     sampler_lr: float = 1e-3
+    vggt_ft: bool = False
+    vggt_heads: str = "camera,depth"
+    vggt_means_source: Literal["depth", "point"] = "depth"
+    vggt_lr: float = 1e-4
+    vggt_lora: bool = False
+    vggt_lora_rank: int = 16
+    vggt_conf_mode: Literal["none", "sampler", "loss", "both"] = "both"
+    vggt_reg_depth: float = 0.0
+    vggt_reg_pose: float = 0.0
+    vggt_head_amp: bool = False
+    vggt_partial_grad: bool = False
+    vggt_refresh_every: int = 0
     save_ply: bool = False
 
     raw_metrics: bool = False
@@ -364,6 +376,21 @@ class Config:
         )
         instance.sampler_every = data.get("sampler_every", cls.sampler_every)
         instance.sampler_lr = data.get("sampler_lr", cls.sampler_lr)
+        for name in (
+            "vggt_ft",
+            "vggt_heads",
+            "vggt_means_source",
+            "vggt_lr",
+            "vggt_lora",
+            "vggt_lora_rank",
+            "vggt_conf_mode",
+            "vggt_reg_depth",
+            "vggt_reg_pose",
+            "vggt_head_amp",
+            "vggt_partial_grad",
+            "vggt_refresh_every",
+        ):
+            setattr(instance, name, data.get(name, getattr(cls, name)))
         instance.save_ply = data.get("save_ply", cls.save_ply)
 
         # Loop over each key in data and print a warning if it is not a field on the Config dataclass
@@ -447,6 +474,10 @@ class Config:
         if self.near_filtering_strength == 0.0:
             self.near_filtering_quorum = 1
 
+        if self.vggt_ft:
+            assert (
+                self.choice == "vggt" and not self.sampler
+            ), "VGGT head fine-tuning needs choice=vggt and replaces the static sampler"
         if self.sampler:
             assert (
                 self.choice == "vggt"
@@ -688,6 +719,28 @@ class Config:
             )
             if self.sampler_lr != Config.sampler_lr:
                 parts.append(f"slr{self.sampler_lr}")
+        if self.vggt_ft:
+            # Hyphen separated so that the plot parser can read it as a single token
+            vft = [
+                f"{self.vggt_lr:g}",
+                f"lora{self.vggt_lora_rank}" if self.vggt_lora else "full",
+                self.vggt_conf_mode,
+                f"k{self.sampler_num_gaussians}",
+                f"e{self.sampler_every}",
+            ]
+            if self.vggt_heads != Config.vggt_heads:
+                vft.append(self.vggt_heads.replace(",", "+"))
+            if self.vggt_means_source != Config.vggt_means_source:
+                vft.append(f"means{self.vggt_means_source}")
+            if self.vggt_reg_depth > 0:
+                vft.append(f"rd{self.vggt_reg_depth:g}")
+            if self.vggt_reg_pose > 0:
+                vft.append(f"rp{self.vggt_reg_pose:g}")
+            if self.vggt_head_amp:
+                vft.append("amp")
+            if self.vggt_partial_grad:
+                vft.append(f"pg{self.vggt_refresh_every}")
+            parts.append("vft-" + "-".join(vft))
         if self.pose_opt and self.pose_opt_module != "default":
             parts.append(f"pomod{self.pose_opt_module}")
         parts.append(f"steps{self.num_steps}")
@@ -1302,6 +1355,44 @@ class Config:
                     str(self.sampler_lr),
                 ]
             )
+
+        if self.vggt_ft:
+            cache_dir = ReconstructArgs(**self._reconstruct_args).cache_dir
+            cache_file = os.path.abspath(
+                os.path.join("../vggt", cache_dir, "raw_preds.pt")
+            )
+            command.extend(
+                [
+                    "--init_type",
+                    "vggt_ft",
+                    "--vggt_cache_file",
+                    cache_file,
+                    "--vggt_heads",
+                    self.vggt_heads,
+                    "--vggt_means_source",
+                    self.vggt_means_source,
+                    "--vggt_lr",
+                    str(self.vggt_lr),
+                    "--vggt_lora_rank",
+                    str(self.vggt_lora_rank),
+                    "--vggt_conf_mode",
+                    self.vggt_conf_mode,
+                    "--vggt_reg_depth",
+                    str(self.vggt_reg_depth),
+                    "--vggt_reg_pose",
+                    str(self.vggt_reg_pose),
+                    "--sampler_num_gaussians",
+                    str(self.sampler_num_gaussians),
+                    "--sampler_every",
+                    str(self.sampler_every),
+                ]
+            )
+            if self.vggt_lora:
+                command.append("--vggt_lora")
+            if self.vggt_head_amp:
+                command.append("--vggt_head_amp")
+            if self.vggt_partial_grad:
+                command.extend(["--vggt_partial_grad", "--vggt_refresh_every", str(self.vggt_refresh_every)])
 
         if self.save_ply:
             command.extend(["--save_ply", "--ply_steps", str(self.num_steps)])
@@ -4566,6 +4657,77 @@ experiments = [
         },
     ),
 ]
+
+experiments.append(
+    Experiment(
+        "vggt_finetune",
+        100,
+        "Fine-tuning the VGGT camera and depth heads during 3DGS training (means from unprojected depth, Gumbel-top-k sampling of 1M pixels) versus the static-cloud sampler and MCMC densification",
+        [
+            {
+                "seed": [42],
+                "num_steps": [30000],
+                "num_images": [40],
+                "sampling_mode": ["random"],
+                "num_points_value": 100000,
+                "gt_eval": True,
+                "choice": ["vggt"],
+                "save_ply": True,
+                "series_label_override": "1. Densification (100K start, 1M cap)",
+            },
+            {
+                "seed": [42],
+                "num_steps": [30000],
+                "num_images": [40],
+                "sampling_mode": ["random"],
+                "num_points_value": 100000,
+                "gt_eval": True,
+                "choice": ["vggt"],
+                "sampler": True,
+                "sampler_pool_size": 10_000_000,
+                "sampler_num_gaussians": 1_000_000,
+                "sampler_every": 10,
+                "save_ply": True,
+                "series_label_override": "2. Static cloud, learned sampler",
+            },
+            {
+                "seed": [42],
+                "num_steps": [30000],
+                "num_images": [40],
+                "sampling_mode": ["random"],
+                "num_points_value": 100000,
+                "gt_eval": True,
+                "choice": ["vggt"],
+                "vggt_ft": True,
+                "vggt_lr": 1e-4,
+                "vggt_lora": True,
+                "vggt_lora_rank": 16,
+                "vggt_conf_mode": "both",
+                "sampler_num_gaussians": 1_000_000,
+                "sampler_every": 1,
+                "save_ply": True,
+                "series_label_override": "3. Fine-tuned VGGT heads (LoRA r16, lr 1e-4)",
+            },
+        ],
+        PlotConfig(
+            x_axis="val_step",
+            split_param="series_label_override",
+            metric_keys=["psnr", "ssim", "lpips", "quality", "num_GS", "eval_rre", "eval_rte"],
+            max_render_cols=3,
+            horizontal_datasets=False,
+            show_gt=True,
+            show_zoom=True,
+            show_differences=True,
+            render_nums=[0, 2, 5],
+        ),
+        val_steps=[1, 3000, 7000, 10000, 15000, 20000, 25000, 30000],
+        render_filter_override={
+            "seed": [42],
+            "num_images": [40],
+            "num_steps": [30000],
+        },
+    )
+)
 
 experiment_dict = {exp.name: exp for exp in experiments}
 

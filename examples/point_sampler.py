@@ -1,7 +1,7 @@
 """Learned sampler that selects a subset of a fixed point pool to be the active Gaussians."""
 
 import math
-from typing import Tuple
+from typing import Optional, Tuple
 
 import torch
 import torch.nn as nn
@@ -14,6 +14,31 @@ def positional_embedding(x: Tensor, num_freqs: int) -> Tensor:
     freqs = (2.0 ** torch.arange(num_freqs, device=x.device, dtype=x.dtype)) * math.pi
     xf = x[..., None, :] * freqs[:, None]  # [N, F, 3]
     return torch.cat([x, torch.sin(xf).flatten(-2), torch.cos(xf).flatten(-2)], dim=-1)
+
+
+def gumbel_topk_mask(
+    scores: Tensor, k: int, temperature: float = 1.0, noise: bool = True, u: Optional[Tensor] = None
+) -> Tensor:
+    """Gumbel-top-k (weighted sampling without replacement) as a straight-through mask [n].
+
+    Forward: exactly k ones (also when scores tie). Backward: gradient of sigmoid((perturbed - kth) / temperature).
+    `u` optionally fixes the uniform noise (e.g. for repeatable evaluation); noise=False takes the plain top-k.
+    """
+    n = scores.shape[0]
+    if k >= n:
+        return torch.ones_like(scores)
+    perturbed = scores
+    if noise:
+        if u is None:
+            u = torch.rand_like(scores)
+        u = u.clamp(1e-10, 1 - 1e-10)
+        perturbed = scores - torch.log(-torch.log(u))
+    top = torch.topk(perturbed.detach(), k)
+    kth = top.values[-1]
+    hard = torch.zeros_like(scores)
+    hard[top.indices] = 1.0  # exactly k, even when scores tie
+    soft = torch.sigmoid((perturbed - kth) / temperature)
+    return hard + soft - soft.detach()
 
 
 class PointSampler(nn.Module):
@@ -68,18 +93,5 @@ class PointSampler(nn.Module):
 
     def forward(self, k: int, noise: bool = True) -> Tuple[Tensor, Tensor]:
         """Returns (mask [n], log_probs [n]). With noise=False the top-k of the scores is taken."""
-        n = self.points.shape[0]
         log_probs = torch.log_softmax(self.logits(), dim=0)
-        if k >= n:
-            return torch.ones_like(log_probs), log_probs
-        perturbed = log_probs
-        if noise:
-            u = torch.rand_like(log_probs).clamp(1e-10, 1 - 1e-10)
-            perturbed = log_probs - torch.log(-torch.log(u))
-        top = torch.topk(perturbed.detach(), k)
-        kth = top.values[-1]
-        hard = torch.zeros_like(log_probs)
-        hard[top.indices] = 1.0  # exactly k, even when scores tie
-        soft = torch.sigmoid((perturbed - kth) / self.temperature)
-        mask = hard + soft - soft.detach()
-        return mask, log_probs
+        return gumbel_topk_mask(log_probs, k, self.temperature, noise), log_probs

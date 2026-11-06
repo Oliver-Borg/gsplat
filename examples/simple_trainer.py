@@ -6,6 +6,7 @@ from collections import defaultdict
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple, Union
+import functools
 import itertools
 
 from line_profiler import profile
@@ -33,7 +34,7 @@ from typing_extensions import Literal, assert_never
 from datasets.nerf_synth import SimpleParser
 from copy_cameras import copy_cameras
 from evaluation import EvalMetrics, calculate_metrics, stochastic_umeyama_alignment
-from point_sampler import PointSampler
+from point_sampler import PointSampler, gumbel_topk_mask
 from utils import AnnealedSGLD, AppearanceOptModule, knn, rgb_to_sh, set_random_seed
 
 from gsplat import export_splats
@@ -133,6 +134,50 @@ class Config:
     sampler_num_freqs: int = 10
     sampler_hidden_dim: int = 512
     sampler_num_layers: int = 3
+
+    # "vggt_ft" init: the VGGT camera/depth heads are fine-tuned during training on cached backbone tokens. The
+    # Gaussian means are the unprojected depth, the cameras come from the camera head, and `sampler_*` (number of
+    # Gaussians, resample cadence, temperature) control the Gumbel-top-k sampling over all valid pixels.
+    # Densification is disabled. Cached backbone outputs written by the VGGT reconstruction (raw_preds.pt)
+    vggt_cache_file: str = ""
+    # Heads that receive gradients (comma separated: camera, depth, point). camera and depth are required.
+    vggt_heads: str = "camera,depth"
+    # Where the Gaussian means come from: unprojected depth (+ predicted cameras) or the point head
+    vggt_means_source: Literal["depth", "point"] = "depth"
+    vggt_lr: float = 1e-4
+    # LoRA instead of full fine-tuning of the heads
+    vggt_lora: bool = False
+    vggt_lora_rank: int = 16
+    vggt_lora_alpha: float = 16.0
+    # How the confidence is used: none (uniform sampling scores), sampler (scores = log conf), loss (VGGT-style
+    # conf-weighted loss against the initial prediction), both
+    vggt_conf_mode: Literal["none", "sampler", "loss", "both"] = "both"
+    vggt_conf_gamma: float = 1.0
+    vggt_conf_alpha: float = 0.2
+    vggt_conf_loss_weight: float = 0.1
+    # Weights of L1 regularisation to the initial prediction (relative depth change, pose encoding). 0 = off
+    vggt_reg_depth: float = 0.0
+    vggt_reg_pose: float = 0.0
+    # Random cap on the candidate pixels (0 = all valid pixels)
+    vggt_pool_size: int = 0
+    # Frames per head chunk and whether chunks are recomputed in backward (memory vs time)
+    vggt_frame_chunk: int = 8
+    vggt_checkpoint: bool = True
+    # bf16 autocast in the DPT heads
+    vggt_head_amp: bool = False
+    # Gradients through the depth head for the rendered frame only (camera head: all frames); the other frames'
+    # means/confidences come from a cache that is re-evaluated without gradients every `vggt_refresh_every`
+    # steps (0: never, the cache keeps the initial prediction and each frame's latest gradient-step output)
+    vggt_partial_grad: bool = False
+    # Keep the camera head fixed (cameras stay the initial prediction); diagnostic
+    vggt_freeze_camera: bool = False
+    # Keep the depth head fixed (the means still depend on the camera head through the unprojection); diagnostic
+    vggt_freeze_depth: bool = False
+    # Append the camera drift relative to the initial prediction to stats/ft_drift.jsonl every N steps (0: off)
+    vggt_drift_every: int = 0
+    vggt_refresh_every: int = 0
+    # Time the sections of each step and write stats/profile_vggt_ft.json
+    vggt_profile: bool = True
     # Initial extent of GSs as a multiple of the camera extent. Ignored if using sfm
     init_extent: float = 3.0
     # Degree of spherical harmonics
@@ -293,8 +338,8 @@ def create_splats_with_optimizers(
     world_size: int = 1,
     pool: Optional[Tuple[np.ndarray, np.ndarray]] = None,
 ) -> Tuple[torch.nn.ParameterDict, Dict[str, torch.optim.Optimizer]]:
-    if init_type == "vggt_full":
-        assert pool is not None, "init_type=vggt_full needs a point pool"
+    if init_type in ("vggt_full", "vggt_ft"):
+        assert pool is not None, f"init_type={init_type} needs a point pool"
         points = torch.from_numpy(pool[0]).float()
         rgbs = torch.from_numpy(pool[1] / 255.0).float()
     elif init_type == "sfm":
@@ -372,6 +417,23 @@ def create_splats_with_optimizers(
         for name, _, lr in params
     }
     return splats, optimizers
+
+
+def ft_cached(fn):
+    """Evaluates the fine-tuned heads once for the whole call (eval, trajectory rendering)."""
+
+    @functools.wraps(fn)
+    def wrapper(self, *args, **kwargs):
+        if self.ft is None:
+            return fn(self, *args, **kwargs)
+        with torch.no_grad():
+            self.ft_out = self.ft()
+        try:
+            return fn(self, *args, **kwargs)
+        finally:
+            self.ft_out = None
+
+    return wrapper
 
 
 class Runner:
@@ -469,9 +531,22 @@ class Runner:
         # Model
         feature_dim = 32 if cfg.app_opt else None
         pool = None
+        self.ft = None
+        self.ft_out = None
+        self.eval_noise = None
+        self.profiler = None
         if cfg.init_type == "vggt_full":
             assert world_size == 1, "vggt_full init does not support multiple ranks"
             pool = self.load_point_pool()
+        elif cfg.init_type == "vggt_ft":
+            assert world_size == 1, "vggt_ft init does not support multiple ranks"
+            assert cfg.data_factor == 1, "vggt_ft assumes the training images are at the VGGT output resolution"
+            from vggt_finetune import StepProfiler, VGGTFinetuner
+
+            used = [self.train_parser.image_names[i] for i in self.trainset.indices]
+            self.ft = VGGTFinetuner(cfg, self.train_parser, used, self.device)
+            self.profiler = StepProfiler(cfg.vggt_profile)
+            pool = (self.ft.initial_points.cpu().numpy(), self.ft.rgb.cpu().numpy())
         self.splats, self.optimizers = create_splats_with_optimizers(
             self.train_parser,
             init_type=cfg.init_type,
@@ -611,6 +686,14 @@ class Runner:
             print(
                 f"Sampler: keeping {cfg.sampler_num_gaussians} of {len(self.sampler.points)} pool Gaussians"
             )
+        if self.ft is not None:
+            # Stepped/zeroed alongside the other auxiliary optimizers
+            self.app_optimizers.append(self.ft.make_optimizer())
+            self.sampler_calls = 0
+            self.sampler_mask = None
+            print(
+                f"VGGT fine-tuning: keeping {cfg.sampler_num_gaussians} of {self.ft.num_candidates} candidate Gaussians"
+            )
         if cfg.app_opt:
             assert feature_dim is not None
             self.app_module = AppearanceOptModule(
@@ -678,7 +761,7 @@ class Runner:
     @property
     def num_active_gs(self) -> int:
         n = len(self.splats["means"])
-        if self.sampler is not None:
+        if self.sampler is not None or self.ft is not None:
             return min(n, self.cfg.sampler_num_gaussians)
         return n
 
@@ -697,6 +780,21 @@ class Runner:
         print(f"Point pool: {len(xyz)} points from {path}")
         return self.train_parser.transform_world_points(xyz), rgb
 
+    def ft_eval_mask(self, scores: Tensor) -> Tensor:
+        """Deterministic selection used for evaluation and export."""
+        cfg = self.cfg
+        if cfg.vggt_conf_mode in ("sampler", "both"):
+            return gumbel_topk_mask(scores, cfg.sampler_num_gaussians, noise=False)
+        # Uniform scores: a fixed noise draw gives a repeatable random subset
+        if self.eval_noise is None:
+            g = torch.Generator(device="cpu").manual_seed(0)
+            self.eval_noise = torch.rand(scores.shape[0], generator=g).to(scores.device)
+        return gumbel_topk_mask(scores, cfg.sampler_num_gaussians, noise=True, u=self.eval_noise)
+
+    def mark(self, name: str):
+        if self.profiler is not None:
+            self.profiler.mark(name)
+
     def rasterize_splats(
         self,
         camtoworlds: Tensor,
@@ -710,7 +808,32 @@ class Runner:
     ) -> Tuple[Tensor, Tensor, Dict]:
         sel = None
         mask = None
-        if self.sampler is not None:
+        ft_means = None
+        if self.ft is not None:
+            training = torch.is_grad_enabled()
+            out = self.ft_out
+            if out is None:
+                with torch.no_grad():
+                    out = self.ft()
+            ft_means = out["means"]
+            scores = self.ft.sampler_scores(out)
+            cfg = self.cfg
+            if training:
+                if self.sampler_calls % cfg.sampler_every == 0:
+                    self.sampler_mask = gumbel_topk_mask(
+                        scores, cfg.sampler_num_gaussians, cfg.sampler_temperature, noise=True
+                    )
+                    mask = self.sampler_mask
+                else:
+                    # Reuse the last selection without gradients to the scores
+                    mask = self.sampler_mask.detach()
+                self.sampler_calls += 1
+            else:
+                mask = self.ft_eval_mask(scores)
+            sel = mask.detach().nonzero().squeeze(-1)
+            mask = mask[sel]
+            self.mark("sampling")
+        elif self.sampler is not None:
             if torch.is_grad_enabled() and self.cfg.sampler_lr > 0:
                 if self.sampler_calls % self.cfg.sampler_every == 0:
                     self.sampler_mask, _ = self.sampler(
@@ -739,7 +862,7 @@ class Runner:
         def pick(x: Tensor) -> Tensor:
             return x if sel is None else x[sel]
 
-        means = pick(self.splats["means"])  # [N, 3]
+        means = pick(self.splats["means"]) if ft_means is None else ft_means[sel]  # [N, 3]
         # quats = F.normalize(self.splats["quats"], dim=-1)  # [N, 4]
         # rasterization does normalization internally
         quats = pick(self.splats["quats"])  # [N, 4]
@@ -899,6 +1022,16 @@ class Runner:
                 pixels.shape[0] * pixels.shape[1] * pixels.shape[2]
             )
             image_ids = data["image_id"].to(device)
+            if self.ft is not None:
+                # Cameras and Gaussian means both come from the heads, so the loss reaches them
+                self.mark("data")
+                frame = self.ft.train_frames_list[int(data["image_id"][0])] if cfg.vggt_partial_grad else None
+                self.ft_out = self.ft(frame)
+                self.ft_out["means"].register_hook(lambda g: (self.mark("rasterize_backward"), g)[1])
+                frames = self.ft.train_frames[image_ids]
+                camtoworlds = self.ft_out["c2w"][frames]
+                Ks = self.ft_out["K"][frames]
+                self.mark("ft_forward")
             masks = data["mask"].to(device) if "mask" in data else None  # [1, H, W]
             depth_conf = None
             full_depth_map = None
@@ -954,6 +1087,7 @@ class Runner:
                 render_mode="RGB+ED" if cfg.depth_loss_mode != "disabled" else "RGB",
                 masks=masks,
             )
+            self.mark("rasterize")
             if renders.shape[-1] == 4:
                 colors, depths = renders[..., 0:3], renders[..., 3:4]
             else:
@@ -1135,10 +1269,19 @@ class Runner:
             if cfg.scale_reg > 0.0:
                 loss += cfg.scale_reg * torch.exp(self.splats["scales"]).mean()
 
+            ft_extra = {}
+            if self.ft is not None:
+                ft_extra = self.ft.extra_losses(self.ft_out)
+                for v in ft_extra.values():
+                    loss = loss + v
+
             if cfg.loss_multiplier != 1.0:
                 loss *= cfg.loss_multiplier
 
+            self.mark("loss")
             loss.backward()
+            self.mark("heads_backward")
+            self.ft_out = None
 
             desc = f"loss={loss.item():.3f}| " f"sh degree={sh_degree_to_use}| "
             if cfg.depth_loss_mode != "disabled":
@@ -1165,6 +1308,11 @@ class Runner:
                 self.writer.add_scalar("train/ssimloss", ssimloss.item(), step)
                 self.writer.add_scalar("train/num_GS", self.num_active_gs, step)
                 self.writer.add_scalar("train/mem", mem, step)
+                for k, v in ft_extra.items():
+                    self.writer.add_scalar(f"train/ft_{k}", v.item(), step)
+                if self.profiler is not None:
+                    for k, v in self.profiler.last.items():
+                        self.writer.add_scalar(f"profile/{k}_ms", v, step)
                 if cfg.depth_loss_mode != "disabled":
                     self.writer.add_scalar("train/depthloss", depthloss.item(), step)
                 if cfg.use_bilateral_grid:
@@ -1192,6 +1340,8 @@ class Runner:
                 data = {"step": step, "splats": self.splats.state_dict()}
                 if self.sampler is not None:
                     data["sampler"] = self.sampler.state_dict()
+                if self.ft is not None:
+                    data["vggt_ft"] = self.ft.trainable_state_dict()
                 if cfg.pose_opt:
                     if world_size > 1:
                         data["pose_adjust"] = self.pose_adjust.module.state_dict()
@@ -1229,7 +1379,16 @@ class Runner:
                 scales = self.splats["scales"]
                 quats = self.splats["quats"]
                 opacities = self.splats["opacities"]
-                if self.sampler is not None:
+                if self.ft is not None:
+                    # Means are the current unprojected depth; export the evaluation-time selection
+                    with torch.no_grad():
+                        out = self.ft()
+                        mask = self.ft_eval_mask(self.ft.sampler_scores(out))
+                    sel = mask.detach().nonzero().squeeze(-1)
+                    means = out["means"][sel]
+                    scales, quats, opacities = scales[sel], quats[sel], opacities[sel]
+                    sh0, shN = sh0[sel], shN[sel]
+                elif self.sampler is not None:
                     # Export only the Gaussians the sampler keeps at evaluation time
                     with torch.no_grad():
                         mask, _ = self.sampler(cfg.sampler_num_gaussians, noise=False)
@@ -1334,7 +1493,7 @@ class Runner:
                     scheduler.step()
 
                 # Run post-backward steps after backward and optimizer
-                if self.sampler is not None:
+                if self.sampler is not None or self.ft is not None:
                     pass  # The sampler mask is indexed by pool point, so the Gaussian set must stay fixed
                 elif isinstance(self.cfg.strategy, DefaultStrategy):
                     self.cfg.strategy.step_post_backward(
@@ -1357,8 +1516,17 @@ class Runner:
                 else:
                     assert_never(self.cfg.strategy)
 
+            self.mark("optimizer")
+            if self.profiler is not None:
+                self.profiler.end_step()
+            if self.ft is not None and cfg.vggt_drift_every > 0 and (step + 1) % cfg.vggt_drift_every == 0:
+                with open(f"{self.stats_dir}/ft_drift.jsonl", "a") as f:
+                    f.write(json.dumps({"step": step + 1, **self.ft.drift()}) + "\n")
+
             # eval the full set
             if step in [i - 1 for i in cfg.eval_steps]:
+                if self.profiler is not None:
+                    self.profiler.dump(f"{self.stats_dir}/profile_vggt_ft.json")
                 self.eval(step)
                 if cfg.run_train_eval:
                     self.eval(step, stage="train")
@@ -1388,7 +1556,12 @@ class Runner:
 
         image_ids = np.array([self.used_training_names.index(name) for name in self.common_names])
 
-        if cfg.pose_opt:
+        if self.ft is not None:
+            # The cameras are predicted by the (fine-tuned) camera head
+            with torch.no_grad():
+                pred_c2w = self.ft.current_cameras()[0].cpu().numpy()
+            train_c2ws = np.array([pred_c2w[self.ft.frame_of[name]] for name in self.common_names])
+        elif cfg.pose_opt:
             with torch.no_grad():
                 train_c2ws = self.pose_adjust(
                     torch.from_numpy(train_c2ws).to(torch.float32).to(self.device),
@@ -1414,6 +1587,7 @@ class Runner:
         else:
             return matrix
 
+    @ft_cached
     @torch.no_grad()
     @profile
     def eval(self, step: int, stage: str = "val"):
@@ -1642,6 +1816,7 @@ class Runner:
                 self.writer.add_scalar(f"{stage}/{k}", v, step)
             self.writer.flush()
 
+    @ft_cached
     @torch.no_grad()
     @profile
     def render_traj(self, step: int):
