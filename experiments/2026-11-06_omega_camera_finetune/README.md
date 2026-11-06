@@ -100,10 +100,14 @@ about 0.012 deg rotation (float32 noise of the angle computation).
 
 ## Failed / missing runs, fixes, confounds
 
-- Arm 6 (full, lr 1e-4, from step 5000) crashed at about step 11935 of 15000 with
-  `torch.AcceleratorError: CUDA error: invalid argument` in `torch.multinomial` inside the MCMC relocation
-  (`gsplat/strategy/ops.py::_multinomial_sample`). It has evals at steps 1, 3000, 7000 and 10000 but not 15000, and no
-  PLY; the cause was not investigated. All other runs completed.
+- Arm 6 (full, lr 1e-4, from step 5000) crashed after step 13200 (the last camera-drift entry; the last progress-bar
+  line seen in the runner log, step ~11935, was buffered output) with `torch.AcceleratorError: CUDA error: invalid
+  argument` in `torch.multinomial` inside the MCMC relocation (`gsplat/strategy/ops.py::relocate`, which samples
+  among the alive Gaussians, weights = their opacities). It has evals at steps 1, 3000, 7000 and 10000 but not 15000,
+  and no PLY or checkpoint. Checked afterwards on GPU 3: `torch.multinomial` on an empty CUDA tensor raises exactly this
+  error, while all-zero or NaN weights raise a device-side assert instead. In this run the focal length change relative
+  to the initial prediction jumps from 0.13 to 95.03 at about step 8300 and stays at 95.03, and the logged drift is
+  identical in the entries at steps 13100, 13150 and 13200. The Gaussian opacities at the crash were not logged.
 - `val_steps` of the experiment definition was first written as [1, 1000, 3000, 5000, 7500, 10000, 12500, 15000], but the
   trainer evaluated at 1, 3000, 7000, 10000, 15000; the definition was changed to those steps after the runs.
 - Single scene, single seed, no determinism check (the earlier VGGT diagnostics showed run-to-run differences for
