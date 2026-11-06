@@ -46,6 +46,14 @@ class LoRALinear(nn.Module):
         self.B = nn.Parameter(torch.zeros(base.out_features, rank, device=w.device, dtype=w.dtype))
         self.scale = alpha / rank
 
+    @property
+    def in_features(self) -> int:  # read by attention modules that reach into their projections
+        return self.base.in_features
+
+    @property
+    def out_features(self) -> int:
+        return self.base.out_features
+
     def forward(self, x: Tensor) -> Tensor:
         return self.base(x) + (x @ self.A.t() @ self.B.t()) * self.scale
 

@@ -178,6 +178,21 @@ class Config:
     vggt_refresh_every: int = 0
     # Time the sections of each step and write stats/profile_vggt_ft.json
     vggt_profile: bool = True
+
+    # Camera-head fine-tuning with a VGGT-Omega camera head (pose optimisation by fine-tuning): the cameras of the
+    # training views come from the fine-tuned head, the Gaussians use normal densification. Needs the raw_preds.pt
+    # written by the Omega reconstruction (cached camera tokens). Replaces pose_opt.
+    camft: bool = False
+    camft_cache_file: str = ""
+    camft_checkpoint: Literal["512", "416"] = "512"
+    camft_lr: float = 1e-4
+    camft_lora: bool = False
+    camft_lora_rank: int = 16
+    camft_lora_alpha: float = 16.0
+    # Steps before the head starts training (the frozen initial cameras are used until then)
+    camft_delay: int = 0
+    # Append the camera drift relative to the initial prediction to stats/ft_drift.jsonl every N steps (0: off)
+    camft_drift_every: int = 0
     # Initial extent of GSs as a multiple of the camera extent. Ignored if using sfm
     init_extent: float = 3.0
     # Degree of spherical harmonics
@@ -547,6 +562,17 @@ class Runner:
             self.ft = VGGTFinetuner(cfg, self.train_parser, used, self.device)
             self.profiler = StepProfiler(cfg.vggt_profile)
             pool = (self.ft.initial_points.cpu().numpy(), self.ft.rgb.cpu().numpy())
+        self.camft = None
+        if cfg.camft:
+            assert world_size == 1, "camft does not support multiple ranks"
+            assert cfg.init_type != "vggt_ft" and not cfg.pose_opt and not cfg.pose_noise and not cfg.eval_opt, (
+                "camft replaces the pose optimiser and vggt_ft"
+            )
+            assert cfg.data_factor == 1, "camft assumes the training images are at the reconstruction image size"
+            from camera_finetune import CameraFinetuner
+
+            used = [self.train_parser.image_names[i] for i in self.trainset.indices]
+            self.camft = CameraFinetuner(cfg, self.train_parser, used, self.device)
         self.splats, self.optimizers = create_splats_with_optimizers(
             self.train_parser,
             init_type=cfg.init_type,
@@ -694,6 +720,10 @@ class Runner:
             print(
                 f"VGGT fine-tuning: keeping {cfg.sampler_num_gaussians} of {self.ft.num_candidates} candidate Gaussians"
             )
+        if self.camft is not None:
+            # Stepped/zeroed alongside the other auxiliary optimizers; Adam only updates parameters that received
+            # gradients, so the head stays at its initial weights (fresh Adam state) until camft_delay
+            self.app_optimizers.append(self.camft.make_optimizer())
         if cfg.app_opt:
             assert feature_dim is not None
             self.app_module = AppearanceOptModule(
@@ -1032,6 +1062,15 @@ class Runner:
                 camtoworlds = self.ft_out["c2w"][frames]
                 Ks = self.ft_out["K"][frames]
                 self.mark("ft_forward")
+            elif self.camft is not None:
+                frame = self.camft.train_frames_list[int(data["image_id"][0])]
+                if step >= cfg.camft_delay:
+                    # All frames through the head with gradient; the rendered view's camera carries the loss
+                    c2w_all, K_all = self.camft()
+                else:
+                    c2w_all, K_all = self.camft.ref_c2w, self.camft.ref_K
+                camtoworlds = c2w_all[frame : frame + 1]
+                Ks = K_all[frame : frame + 1]
             masks = data["mask"].to(device) if "mask" in data else None  # [1, H, W]
             depth_conf = None
             full_depth_map = None
@@ -1342,6 +1381,8 @@ class Runner:
                     data["sampler"] = self.sampler.state_dict()
                 if self.ft is not None:
                     data["vggt_ft"] = self.ft.trainable_state_dict()
+                if self.camft is not None:
+                    data["camft"] = self.camft.trainable_state_dict()
                 if cfg.pose_opt:
                     if world_size > 1:
                         data["pose_adjust"] = self.pose_adjust.module.state_dict()
@@ -1522,6 +1563,9 @@ class Runner:
             if self.ft is not None and cfg.vggt_drift_every > 0 and (step + 1) % cfg.vggt_drift_every == 0:
                 with open(f"{self.stats_dir}/ft_drift.jsonl", "a") as f:
                     f.write(json.dumps({"step": step + 1, **self.ft.drift()}) + "\n")
+            if self.camft is not None and cfg.camft_drift_every > 0 and (step + 1) % cfg.camft_drift_every == 0:
+                with open(f"{self.stats_dir}/ft_drift.jsonl", "a") as f:
+                    f.write(json.dumps({"step": step + 1, **self.camft.drift()}) + "\n")
 
             # eval the full set
             if step in [i - 1 for i in cfg.eval_steps]:
@@ -1556,11 +1600,12 @@ class Runner:
 
         image_ids = np.array([self.used_training_names.index(name) for name in self.common_names])
 
-        if self.ft is not None:
+        cft = self.ft if self.ft is not None else self.camft
+        if cft is not None:
             # The cameras are predicted by the (fine-tuned) camera head
             with torch.no_grad():
-                pred_c2w = self.ft.current_cameras()[0].cpu().numpy()
-            train_c2ws = np.array([pred_c2w[self.ft.frame_of[name]] for name in self.common_names])
+                pred_c2w = cft.current_cameras()[0].cpu().numpy()
+            train_c2ws = np.array([pred_c2w[cft.frame_of[name]] for name in self.common_names])
         elif cfg.pose_opt:
             with torch.no_grad():
                 train_c2ws = self.pose_adjust(

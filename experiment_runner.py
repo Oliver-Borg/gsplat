@@ -269,6 +269,15 @@ class Config:
     vggt_head_amp: bool = False
     vggt_partial_grad: bool = False
     vggt_refresh_every: int = 0
+    # Feed-forward model of choice=vggt ("omega": VGGT-Omega, cameras + depth only) and its checkpoint
+    model: Literal["vggt", "omega"] = "vggt"
+    omega_checkpoint: Literal["512", "416"] = "512"
+    # Camera-head fine-tuning during training with normal densification (replaces pose_opt), Omega only
+    camft: bool = False
+    camft_lr: float = 1e-4
+    camft_lora: bool = False
+    camft_lora_rank: int = 16
+    camft_delay: int = 0
     save_ply: bool = False
 
     raw_metrics: bool = False
@@ -389,6 +398,13 @@ class Config:
             "vggt_head_amp",
             "vggt_partial_grad",
             "vggt_refresh_every",
+            "model",
+            "omega_checkpoint",
+            "camft",
+            "camft_lr",
+            "camft_lora",
+            "camft_lora_rank",
+            "camft_delay",
         ):
             setattr(instance, name, data.get(name, getattr(cls, name)))
         instance.save_ply = data.get("save_ply", cls.save_ply)
@@ -474,6 +490,17 @@ class Config:
         if self.near_filtering_strength == 0.0:
             self.near_filtering_quorum = 1
 
+        if self.choice != "vggt":
+            self.model = "vggt"
+        if self.model == "omega":
+            assert not (
+                self.use_ba or self.sampling_mode == "ba" or self.reconstruct_pose_opt or self.vggt_ft
+            ), "VGGT-Omega has no track/point head: no BA, no reconstruction pose-opt, no vggt_ft"
+        if self.camft:
+            assert (
+                self.choice == "vggt" and self.model == "omega" and not self.sampler and not self.vggt_ft
+            ), "camera-head fine-tuning needs choice=vggt, model=omega"
+            assert not (self.pose_opt or self.eval_opt), "camera-head fine-tuning replaces the pose optimiser"
         if self.vggt_ft:
             assert (
                 self.choice == "vggt" and not self.sampler
@@ -552,6 +579,8 @@ class Config:
             f"n{self.num_images}",
             f"s{self.seed}",
         ]
+        if self.choice == "vggt" and self.model == "omega":
+            parts.append("omega" if self.omega_checkpoint == "512" else f"omega{self.omega_checkpoint}")
 
         if self.choice == "colmap":
             parts.append(self.colmap_mode)
@@ -696,6 +725,12 @@ class Config:
             parts.append("gtpcd")
         if self.pose_opt:
             parts.append("poseopt")
+        if self.camft:
+            # Hyphen separated so that the plot parser can read it as a single token
+            parts.append(
+                f"cft-{self.camft_lr:g}-{'lora' + str(self.camft_lora_rank) if self.camft_lora else 'full'}"
+                f"-d{self.camft_delay}"
+            )
         if self.eval_opt:
             parts.append("evalopt")
         if self.depth_loss_mode != "disabled":
@@ -1057,6 +1092,10 @@ class Config:
         if self.save_full_pcd:
             args["save_full_pcd"] = True
 
+        if self.choice == "vggt" and self.model == "omega":
+            args["model"] = "omega"
+            args["omega_checkpoint"] = self.omega_checkpoint
+
         return args
 
     @property
@@ -1393,6 +1432,31 @@ class Config:
                 command.append("--vggt_head_amp")
             if self.vggt_partial_grad:
                 command.extend(["--vggt_partial_grad", "--vggt_refresh_every", str(self.vggt_refresh_every)])
+
+        if self.camft:
+            cache_dir = ReconstructArgs(**self._reconstruct_args).cache_dir
+            cache_file = os.path.abspath(
+                os.path.join("../vggt", cache_dir, "raw_preds.pt")
+            )
+            command.extend(
+                [
+                    "--camft",
+                    "--camft_cache_file",
+                    cache_file,
+                    "--camft_checkpoint",
+                    self.omega_checkpoint,
+                    "--camft_lr",
+                    str(self.camft_lr),
+                    "--camft_lora_rank",
+                    str(self.camft_lora_rank),
+                    "--camft_delay",
+                    str(self.camft_delay),
+                    "--camft_drift_every",
+                    "50",
+                ]
+            )
+            if self.camft_lora:
+                command.append("--camft_lora")
 
         if self.save_ply:
             command.extend(["--save_ply", "--ply_steps", str(self.num_steps)])
@@ -4725,6 +4789,135 @@ experiments.append(
             "seed": [42],
             "num_images": [40],
             "num_steps": [30000],
+        },
+    )
+)
+
+experiments.append(
+    Experiment(
+        "omega_camera_finetune",
+        101,
+        "Fine-tuning only the VGGT-Omega camera head during 3DGS training with normal MCMC densification (pose optimisation by fine-tuning, delta pose-opt off), versus plain MCMC with the Omega cameras",
+        [
+            {
+                "seed": [42],
+                "num_steps": [15000],
+                "num_images": [40],
+                "sampling_mode": ["random"],
+                "num_points_value": 100000,
+                "gt_eval": True,
+                "choice": ["vggt"],
+                "model": "omega",
+                "save_ply": True,
+                "series_label_override": "1. MCMC baseline (Omega cameras)",
+            },
+            {
+                "seed": [42],
+                "num_steps": [15000],
+                "num_images": [40],
+                "sampling_mode": ["random"],
+                "num_points_value": 100000,
+                "gt_eval": True,
+                "choice": ["vggt"],
+                "model": "omega",
+                "camft": True,
+                "camft_lr": 0.0001,
+                "save_ply": True,
+                "series_label_override": "2. Camera head fine-tuned (full, lr 1e-4)",
+            },
+            {
+                "seed": [42],
+                "num_steps": [15000],
+                "num_images": [40],
+                "sampling_mode": ["random"],
+                "num_points_value": 100000,
+                "gt_eval": True,
+                "choice": ["vggt"],
+                "model": "omega",
+                "camft": True,
+                "camft_lr": 1e-05,
+                "save_ply": True,
+                "series_label_override": "3. Camera head fine-tuned (full, lr 1e-5)",
+            },
+            {
+                "seed": [42],
+                "num_steps": [15000],
+                "num_images": [40],
+                "sampling_mode": ["random"],
+                "num_points_value": 100000,
+                "gt_eval": True,
+                "choice": ["vggt"],
+                "model": "omega",
+                "camft": True,
+                "camft_lr": 1e-06,
+                "save_ply": True,
+                "series_label_override": "4. Camera head fine-tuned (full, lr 1e-6)",
+            },
+            {
+                "seed": [42],
+                "num_steps": [15000],
+                "num_images": [40],
+                "sampling_mode": ["random"],
+                "num_points_value": 100000,
+                "gt_eval": True,
+                "choice": ["vggt"],
+                "model": "omega",
+                "camft": True,
+                "camft_lr": 0.0001,
+                "camft_lora": True,
+                "camft_lora_rank": 16,
+                "save_ply": True,
+                "series_label_override": "5. Camera head fine-tuned (LoRA r16, lr 1e-4)",
+            },
+            {
+                "seed": [42],
+                "num_steps": [15000],
+                "num_images": [40],
+                "sampling_mode": ["random"],
+                "num_points_value": 100000,
+                "gt_eval": True,
+                "choice": ["vggt"],
+                "model": "omega",
+                "camft": True,
+                "camft_lr": 0.0001,
+                "camft_delay": 5000,
+                "save_ply": True,
+                "series_label_override": "6. Camera head fine-tuned (full, lr 1e-4, from step 5000)",
+            },
+            {
+                "seed": [42],
+                "num_steps": [15000],
+                "num_images": [40],
+                "sampling_mode": ["random"],
+                "num_points_value": 100000,
+                "gt_eval": True,
+                "choice": ["vggt"],
+                "model": "omega",
+                "camft": True,
+                "camft_lr": 0.0001,
+                "camft_lora": True,
+                "camft_lora_rank": 16,
+                "camft_delay": 5000,
+                "save_ply": True,
+                "series_label_override": "7. Camera head fine-tuned (LoRA r16, lr 1e-4, from step 5000)",
+            },
+        ],
+        PlotConfig(
+            x_axis="val_step",
+            split_param="series_label_override",
+            metric_keys=["psnr", "ssim", "lpips", "quality", "num_GS", "eval_rre", "eval_rte"],
+            max_render_cols=3,
+            horizontal_datasets=False,
+            show_gt=True,
+            show_zoom=True,
+            show_differences=True,
+            render_nums=[0, 2, 5],
+        ),
+        val_steps=[1, 3000, 7000, 10000, 15000],
+        render_filter_override={
+            "seed": [42],
+            "num_images": [40],
+            "num_steps": [15000],
         },
     )
 )
