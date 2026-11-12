@@ -53,6 +53,10 @@ Per-step loss, rre, rte and training time per step. Dashed/dotted lines: COLMAP 
 
 ![gt smoke](figures/gt_smoke.png)
 
+rre against cumulative training time (forward + backward + optimiser step only; per-step evaluation time excluded):
+
+![rre vs wall time](figures/rre_vs_walltime.png)
+
 Mean over the 40 train frames (loss / rre deg / rte):
 
 | Step | Full head lr 1e-5 | LoRA r16 lr 1e-4 |

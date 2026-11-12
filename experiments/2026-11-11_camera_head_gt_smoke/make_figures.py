@@ -20,3 +20,13 @@ for a, t in zip(ax, ["Huber loss (pose encoding)", "rre (deg, vs GT)", "rte (vs 
     a.set_title(t, fontsize=10); a.set_xlabel("step")
 ax[0].set_yscale("log"); ax[1].set_yscale("log"); ax[2].set_yscale("log")
 ax[1].legend(fontsize=7); plt.tight_layout(); plt.savefig(os.path.join(d, "figures/gt_smoke.png"), dpi=110)
+
+# rre vs cumulative wall time (training steps only; the per-step evaluation time is excluded)
+fig, ax = plt.subplots(1, 1, figsize=(5.5, 3.6))
+for lab, r in rows.items():
+    t = np.cumsum([0.0] + [x["t_train_s"] for x in r[1:]])
+    ax.plot(t, [x["rre"] for x in r], label=lab)
+ax.axhline(COLMAP["rre"], color="k", ls="--", lw=1, label="COLMAP (same 40 images)")
+ax.axhline(INIT["rre"], color="gray", ls=":", lw=1, label="Omega initial")
+ax.set_xlabel("cumulative training time (s, CPU)"); ax.set_ylabel("rre (deg, vs GT)"); ax.set_yscale("log")
+ax.legend(fontsize=7); plt.tight_layout(); plt.savefig(os.path.join(d, "figures/rre_vs_walltime.png"), dpi=110)
