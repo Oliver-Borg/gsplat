@@ -30,6 +30,13 @@ import examples.evaluation
 GSPLAT_PYTHON = os.path.expanduser("~/.conda/envs/gsplat/bin/python")
 GSPLAT_TORCHRUN = os.path.expanduser("~/.conda/envs/gsplat/bin/torchrun")
 VGGT_PYTHON = os.path.expanduser("~/.conda/envs/vggt/bin/python")
+# Cameras of the camera heads fine-tuned against GT (experiments/2026-11-11_camera_head_gt_smoke), see Config.ft_cams
+_FT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "experiments/2026-11-11_camera_head_gt_smoke")
+FT_CAMERA_NPZ = {
+    "full": os.path.join(_FT_DIR, "full_lr1e-5_cameras.npz"),
+    "lora": os.path.join(_FT_DIR, "lora16_lr1e-4_cameras.npz"),
+}
+FT_CAMERA_STEP = 1000
 
 
 def env_for(python: str) -> dict[str, str]:
@@ -278,6 +285,9 @@ class Config:
     camft_lora: bool = False
     camft_lora_rank: int = 16
     camft_delay: int = 0
+    # Train with the cameras of a camera head fine-tuned against GT (`full` / `lora` snapshots, see FT_CAMERA_NPZ) instead
+    # of the Omega cameras; the points stay the Omega point cloud. Omega only, the cameras stay fixed during training.
+    ft_cams: Literal["", "full", "lora"] = ""
     save_ply: bool = False
 
     raw_metrics: bool = False
@@ -405,6 +415,7 @@ class Config:
             "camft_lora",
             "camft_lora_rank",
             "camft_delay",
+            "ft_cams",
         ):
             setattr(instance, name, data.get(name, getattr(cls, name)))
         instance.save_ply = data.get("save_ply", cls.save_ply)
@@ -490,8 +501,12 @@ class Config:
         if self.near_filtering_strength == 0.0:
             self.near_filtering_quorum = 1
 
-        if self.choice != "vggt":
+        if self.choice not in ("vggt", "combined"):
             self.model = "vggt"
+        if self.ft_cams:
+            assert (
+                self.choice == "vggt" and self.model == "omega" and not self.camft
+            ), "ft_cams needs choice=vggt, model=omega and no camera-head training"
         if self.model == "omega":
             assert not (
                 self.use_ba or self.sampling_mode == "ba" or self.reconstruct_pose_opt or self.vggt_ft
@@ -579,7 +594,7 @@ class Config:
             f"n{self.num_images}",
             f"s{self.seed}",
         ]
-        if self.choice == "vggt" and self.model == "omega":
+        if self.choice in ("vggt", "combined") and self.model == "omega":
             parts.append("omega" if self.omega_checkpoint == "512" else f"omega{self.omega_checkpoint}")
 
         if self.choice == "colmap":
@@ -725,6 +740,8 @@ class Config:
             parts.append("gtpcd")
         if self.pose_opt:
             parts.append("poseopt")
+        if self.ft_cams:
+            parts.append(f"ftcams-{self.ft_cams}")
         if self.camft:
             # Hyphen separated so that the plot parser can read it as a single token
             parts.append(
@@ -826,6 +843,8 @@ class Config:
         if self.choice == "gt":
             return self.dataset.directory
 
+        if self.ft_cams:
+            return f"../vggt/{self.input_name}_ftcams-{self.ft_cams}"
         return f"../vggt/{self.input_name}"
 
     @property
@@ -1119,6 +1138,29 @@ class Config:
                 "has already been constructed.\nUse --force to force reconstruction.",
             )
             return 0
+
+        if self.ft_cams:
+            base = Config.from_dict({**self.construction_data, "ft_cams": ""})
+            base.reconstruct(orig_force)
+            command = [
+                VGGT_PYTHON,
+                "make_ft_cameras.py",
+                "--recon_dir",
+                base.data_dir.replace("../vggt/", "", 1),
+                "--npz",
+                FT_CAMERA_NPZ[self.ft_cams],
+                "--step",
+                str(FT_CAMERA_STEP),
+                "--output_dir",
+                self.data_dir.replace("../vggt/", "", 1),
+            ]
+            try:
+                output = subprocess.run(command, check=True, cwd="../vggt", env=env_for(VGGT_PYTHON))
+                print(output)
+                return output.returncode
+            except subprocess.CalledProcessError as e:
+                print(e)
+                return e.returncode
 
         if self.choice == "combined":
             configs = {
@@ -4918,6 +4960,100 @@ experiments.append(
             "seed": [42],
             "num_images": [40],
             "num_steps": [15000],
+        },
+    )
+)
+
+experiments.append(
+    Experiment(
+        "omega_cameras_7k",
+        102,
+        "3DGS (MCMC, frozen cameras, 7000 steps) trained with five sets of cameras and the same VGGT-Omega point cloud: GT, camera head fine-tuned against GT (full / LoRA), Omega, COLMAP",
+        [
+            {
+                "seed": [42],
+                "num_steps": [7000],
+                "num_images": [40],
+                "sampling_mode": ["random"],
+                "num_points_value": 100000,
+                "gt_eval": True,
+                "model": "omega",
+                "save_ply": True,
+                "choice": ["combined"],
+                "camera_src": "gt",
+                "pcd_src": "vggt",
+                "series_label_override": "1. GT cameras",
+            },
+            {
+                "seed": [42],
+                "num_steps": [7000],
+                "num_images": [40],
+                "sampling_mode": ["random"],
+                "num_points_value": 100000,
+                "gt_eval": True,
+                "model": "omega",
+                "save_ply": True,
+                "choice": ["vggt"],
+                "ft_cams": "full",
+                "series_label_override": "2. Camera head fine-tuned against GT (full, lr 1e-5)",
+            },
+            {
+                "seed": [42],
+                "num_steps": [7000],
+                "num_images": [40],
+                "sampling_mode": ["random"],
+                "num_points_value": 100000,
+                "gt_eval": True,
+                "model": "omega",
+                "save_ply": True,
+                "choice": ["vggt"],
+                "ft_cams": "lora",
+                "series_label_override": "3. Camera head fine-tuned against GT (LoRA r16, lr 1e-4)",
+            },
+            {
+                "seed": [42],
+                "num_steps": [7000],
+                "num_images": [40],
+                "sampling_mode": ["random"],
+                "num_points_value": 100000,
+                "gt_eval": True,
+                "model": "omega",
+                "save_ply": True,
+                "choice": ["vggt"],
+                "series_label_override": "4. Omega cameras",
+            },
+            {
+                "seed": [42],
+                "num_steps": [7000],
+                "num_images": [40],
+                "sampling_mode": ["random"],
+                "num_points_value": 100000,
+                "gt_eval": True,
+                "model": "omega",
+                "save_ply": True,
+                "choice": ["combined"],
+                "camera_src": "colmap",
+                "pcd_src": "vggt",
+                "shared_camera": True,
+                "series_label_override": "5. COLMAP cameras",
+            },
+        ],
+        PlotConfig(
+            x_axis="val_step",
+            split_param="series_label_override",
+            metric_keys=["psnr", "ssim", "lpips", "quality", "num_GS", "eval_rre", "eval_rte"],
+            max_render_cols=3,
+            horizontal_datasets=False,
+            show_gt=True,
+            show_zoom=True,
+            show_differences=True,
+            render_nums=[0, 2, 5],
+        ),
+        val_steps=[1, 1000, 3000, 5000, 7000],
+        render_filter_override={
+            "seed": [42],
+            "num_images": [40],
+            "num_steps": [7000],
         },
     )
 )
