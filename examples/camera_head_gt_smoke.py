@@ -10,6 +10,7 @@ import argparse
 import json
 import os
 import sys
+import time
 from types import SimpleNamespace
 
 import numpy as np
@@ -80,6 +81,7 @@ def main():
     ap.add_argument("--out", required=True)
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--device", default="cuda")
+    ap.add_argument("--snapshots", type=int, nargs="*", default=[], help="steps at which the cameras are saved")
     a = ap.parse_args()
     torch.manual_seed(a.seed)
 
@@ -101,18 +103,31 @@ def main():
     opt = ft.make_optimizer()
 
     os.makedirs(os.path.dirname(a.out) or ".", exist_ok=True)
+    sync = torch.cuda.synchronize if a.device.startswith("cuda") else (lambda: None)
+    print(f"device={a.device} torch_threads={torch.get_num_threads()}", flush=True)
+    c0 = ft.current_cameras()
+    initial = (c0[0].cpu().numpy(), c0[1].cpu().numpy())
+    snaps = {}
+    t_start = time.perf_counter()
     with open(a.out, "w") as f:
         for step in range(a.steps + 1):
+            t_train = 0.0
             if step > 0:
+                sync()
+                t0 = time.perf_counter()
                 loss = F.smooth_l1_loss(ft._pose_enc(), target)
                 opt.zero_grad(set_to_none=True)
                 loss.backward()
                 opt.step()
+                sync()
+                t_train = time.perf_counter() - t0
+            t0 = time.perf_counter()
             with torch.no_grad():
                 enc = ft._pose_enc()
                 parts = (enc - target).abs().mean(0)
                 loss_now = F.smooth_l1_loss(enc, target).item()
             rre, rte = metrics(ft, gt_c2w, names)
+            t_eval = time.perf_counter() - t0
             rec = {
                 "step": step,
                 "loss": loss_now,
@@ -121,11 +136,30 @@ def main():
                 "l1_T": parts[:3].mean().item(),
                 "l1_quat": parts[3:7].mean().item(),
                 "l1_fov": parts[7:].mean().item(),
+                "t_train_s": t_train,  # forward + backward + optimiser step
+                "t_eval_s": t_eval,  # re-predict cameras + loss + rre/rte (not part of training)
             }
+            if step in a.snapshots:
+                cs = ft.current_cameras()
+                snaps[f"c2w_step{step}"], snaps[f"K_step{step}"] = cs[0].cpu().numpy(), cs[1].cpu().numpy()
             f.write(json.dumps(rec) + "\n")
-            if step % 20 == 0:
+            f.flush()
+            if step % 50 == 0:
                 print(rec, flush=True)
+    print(f"total wall time {time.perf_counter() - t_start:.1f}s", flush=True)
 
+    c1 = ft.current_cameras()
+    np.savez(
+        os.path.splitext(a.out)[0] + "_cameras.npz",
+        names=np.array(names),
+        frame_idx=np.array([ft.frame_of[n] for n in names]),
+        init_c2w=initial[0],
+        init_K=initial[1],
+        final_c2w=c1[0].cpu().numpy(),
+        final_K=c1[1].cpu().numpy(),
+        gt_c2w=gt_c2w,
+        **snaps,
+    )
 
 if __name__ == "__main__":
     main()
