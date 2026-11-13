@@ -35,7 +35,7 @@ python experiments/2026-11-13_omega_cameras_7k/collect.py && python experiments/
 
 ## Run metadata
 - gsplat commit `0116ceee` (`ft_cams`, `omega_cameras_7k`); the `val_steps` of the experiment definition (listed 1, 1000, 3000, 5000, 7000 at run time,
-  the trainer evaluates at 1, 3000, 7000) was corrected afterwards to `[1, 3000, 7000]` (uncommitted at the time of writing this log).
+  the trainer evaluates at 1, 3000, 7000) was corrected afterwards to `[1, 3000, 7000]` (committed with this log).
   vggt commit `34fc5bc` (contains `make_ft_cameras.py`).
 - Envs: conda `gsplat` (trainer), `vggt` (reconstruction and camera variants), `PYTHONPATH` unset. Hardware: one GPU (index 0), launched 12 Nov 18:54, finished 19:09 (other users' jobs on the other GPUs).
 - Run directories (`results/`, gitignored):
@@ -65,8 +65,7 @@ Gaussian count: 100,000 at step 1, 322,497 at step 3000, 1,000,000 at step 7000 
 - All five runs completed; no failed or missing runs.
 - Single scene, single seed, one run per arm, no determinism check.
 - The camera errors `eval_rre`/`eval_rte` are properties of the fixed cameras (they do not change during training).
-- Camera sets differ in more than pose accuracy: each arm uses its own intrinsics (GT: GT intrinsics, with the radial distortion
-  parameter of the GT camera model not used as in the other arms; heads: fov of the head; COLMAP: shared camera focal; Omega: predicted fov).
+- Camera sets differ in more than pose accuracy: each arm uses its own intrinsics (GT: the GT camera intrinsics as copied by `combine_clouds`; heads: fov of the head; COLMAP: shared camera focal; Omega: predicted fov).
 - The point cloud is the Omega cloud in every arm; in arms 1 and 5 it is aligned to the cameras with a global Umeyama sim(3)
   (`combine_clouds`, mean RRE/RTE between the COLMAP and Omega cameras after alignment 0.72 deg / 0.256), in arms 2 and 3 the
   cameras were mapped into the Omega reconstruction frame with an exact similarity fitted on the initial cameras.
