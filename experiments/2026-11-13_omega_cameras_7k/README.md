@@ -59,16 +59,16 @@ PSNR / SSIM / LPIPS at the evaluation steps, and the camera errors (constant ove
 | 4. Omega initial | 10.95 / 0.246 / 0.789 | 19.90 / 0.631 / 0.370 | 19.76 / 0.617 / 0.307 | 0.4131 | 0.01296 |
 | 5. COLMAP | 10.95 / 0.246 / 0.789 | 20.88 / 0.642 / 0.297 | 20.86 / 0.631 / 0.226 | 0.5092 | 0.05524 |
 
-Renders (runner plot config of `omega_cameras_7k`: `render_nums=[0, 2, 5]`, ground truth, zoom boxes and error maps; produced by
-`--plot_only`, copy of `latest_plots/102_omega_cameras_7k_bonsai_latest_renders.jpg`). The generated figure shows the GT
-row and the error-map rows of arms 1, 5 and 2 only; the other arms are not in the figure:
+Renders (runner plot config of `omega_cameras_7k`: `render_nums=[0, 2, 5]`, `max_render_cols=3`, ground truth row, zoom boxes,
+plain renders at step 7000; produced by `--plot_only`, copy of `latest_plots/102_omega_cameras_7k_bonsai_latest_renders.jpg`).
+Rows: ground truth, then arms 3, 2, 4, 1, 5:
 
 ![renders](figures/renders.jpg)
 
 Cameras of the five sets (`make_camera_plot.py`, `plot_extrinsics` from `vggt/plot_cameras.py`, RTE-coloured; predicted cameras
 from each run's `aligned_cameras.json`, i.e. aligned to the GT world, so the RTE values are in the GT frame and differ from
-`eval_rte`; left to right: GT, full head, LoRA, Omega, COLMAP). Average RTE shown in the plots: GT 0.0000 (292 cameras), full head
-0.0099, LoRA 0.0110, Omega 0.0546, COLMAP 0.2305 (40 cameras each); one COLMAP camera lies far from the others in the plot:
+`eval_rte`; left to right: GT, full head, LoRA, Omega, COLMAP). Average RTE shown in the plots: GT 0.0000, full head
+0.0099, LoRA 0.0110, Omega 0.0546, COLMAP 0.2305 (the same 40 training cameras in every panel); one COLMAP camera lies far from the others in the plot:
 
 ![cameras](figures/cameras.jpg)
 
@@ -84,6 +84,7 @@ Gaussian count: 100,000 at step 1, 322,497 at step 3000, 1,000,000 at step 7000 
   cameras were mapped into the Omega reconstruction frame with an exact similarity fitted on the initial cameras.
 - The arm 2 and 3 cameras were fine-tuned against the same GT cameras used for the evaluation (on the 40 training frames).
 - Variant 2/3 camera check: scoring the written variant against GT gave rre 0.056 / rte 0.002351 (full head), against 0.0574 / 0.002353 in the smoke test.
+- All five arms train on the same 40 images (every data directory's `sparse/` model holds the same 40 images) and are evaluated on the same test images.
 - The three evaluation steps are the trainer's fixed ones (the experiment definition listed 1000 and 5000 too; they were never evaluated).
 
 ## Insights

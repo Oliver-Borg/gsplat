@@ -5046,7 +5046,7 @@ experiments.append(
             horizontal_datasets=False,
             show_gt=True,
             show_zoom=True,
-            show_differences=True,
+            show_differences=False,
             render_nums=[0, 2, 5],
         ),
         val_steps=[1, 3000, 7000],

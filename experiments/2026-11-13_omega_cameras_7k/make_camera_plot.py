@@ -24,13 +24,14 @@ dirs = {
 }
 gt_json = V / "vggt_outputs" / f"{base}_c0.0_p100000_random_minfarthestpose" / "gt_cameras.json"
 gt_poses, gt_K, gt_sz = (f(gt_json) for f in (load_poses_from_json, load_intrinsics_from_json, load_image_sizes_from_json))
+names = sorted(load_poses_from_json(dirs['Omega_'] / 'aligned_cameras.json'))  # the 40 training images
 series = []
 for label, d in dirs.items():
     j = d / "aligned_cameras.json"
     if not j.exists():  # GT arm: the cameras are the GT cameras, which have no aligned_cameras.json
         j = gt_json
     series.append(CameraSeries(label, (1.0, 0.0, 0.0, 0.5), load_poses_from_json(j), load_intrinsics_from_json(j),
-                               load_image_sizes_from_json(j), gt_poses, gt_K, gt_sz, list(gt_poses.keys())))
+                               load_image_sizes_from_json(j), gt_poses, gt_K, gt_sz, names))
 tmp = Path(tempfile.mkdtemp())
 plot_extrinsics([("default", series)], tmp, use_error_colors=True, max_cols=5)
 out = Path(__file__).resolve().parent / "figures" / "cameras.jpg"
