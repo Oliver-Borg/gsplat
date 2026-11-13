@@ -61,7 +61,7 @@ PSNR / SSIM / LPIPS at the evaluation steps, and the camera errors (constant ove
 
 Renders (runner plot config of `omega_cameras_7k`: `render_nums=[0, 2, 5]`, `max_render_cols=3`, ground truth row, zoom boxes,
 plain renders at step 7000; produced by `--plot_only`, copy of `latest_plots/102_omega_cameras_7k_bonsai_latest_renders.jpg`).
-Rows: ground truth, then arms 3, 2, 4, 1, 5:
+Rows: ground truth, then arms 1 to 5 (row order fixed in `vggt/plot_metrics.py`: the categorical order came from `list(set(...))`, now `dict.fromkeys`):
 
 ![renders](figures/renders.jpg)
 
