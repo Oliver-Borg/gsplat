@@ -5049,7 +5049,7 @@ experiments.append(
             show_differences=True,
             render_nums=[0, 2, 5],
         ),
-        val_steps=[1, 1000, 3000, 5000, 7000],
+        val_steps=[1, 3000, 7000],
         render_filter_override={
             "seed": [42],
             "num_images": [40],
