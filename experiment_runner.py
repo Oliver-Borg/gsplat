@@ -36,6 +36,13 @@ FT_CAMERA_NPZ = {
     "full": os.path.join(_FT_DIR, "full_lr1e-5_cameras.npz"),
     "lora": os.path.join(_FT_DIR, "lora16_lr1e-4_cameras.npz"),
 }
+
+
+def ft_camera_npz(kind: str, num_images: int) -> str:
+    """The 40-image snapshots live in the smoke-test folder, other image counts in its `n<N>/` subfolder."""
+    if num_images == 40:
+        return FT_CAMERA_NPZ[kind]
+    return os.path.join(_FT_DIR, f"n{num_images}", os.path.basename(FT_CAMERA_NPZ[kind]))
 FT_CAMERA_STEP = 1000
 
 
@@ -477,8 +484,8 @@ class Config:
             if self.image_mode == "minfarthestpose":
                 self.image_mode = "farthestpose"
 
-        if self.choice == "vggt":
-            # VGGT goes OOM after 100 images
+        if self.choice == "vggt" and self.model != "omega":
+            # VGGT goes OOM after 100 images (VGGT-Omega is not capped)
             self.num_images = min(100, self.num_images)
             self.run_mvs = False
 
@@ -1148,7 +1155,7 @@ class Config:
                 "--recon_dir",
                 base.data_dir.replace("../vggt/", "", 1),
                 "--npz",
-                FT_CAMERA_NPZ[self.ft_cams],
+                ft_camera_npz(self.ft_cams, self.num_images),
                 "--step",
                 str(FT_CAMERA_STEP),
                 "--output_dir",
@@ -5053,6 +5060,100 @@ experiments.append(
         render_filter_override={
             "seed": [42],
             "num_images": [40],
+            "num_steps": [7000],
+        },
+    )
+)
+
+experiments.append(
+    Experiment(
+        "omega_cameras_7k_full",
+        103,
+        "3DGS (MCMC, frozen cameras, 7000 steps, all 255 training images) trained with five sets of cameras and the same VGGT-Omega point cloud: GT, camera head fine-tuned against GT (full / LoRA), Omega, COLMAP",
+        [
+            {
+                "seed": [42],
+                "num_steps": [7000],
+                "num_images": [300],
+                "sampling_mode": ["random"],
+                "num_points_value": 100000,
+                "gt_eval": True,
+                "model": "omega",
+                "save_ply": True,
+                "choice": ["combined"],
+                "camera_src": "gt",
+                "pcd_src": "vggt",
+                "series_label_override": "1. GT cameras [255 images]",
+            },
+            {
+                "seed": [42],
+                "num_steps": [7000],
+                "num_images": [300],
+                "sampling_mode": ["random"],
+                "num_points_value": 100000,
+                "gt_eval": True,
+                "model": "omega",
+                "save_ply": True,
+                "choice": ["vggt"],
+                "ft_cams": "full",
+                "series_label_override": "2. Camera head fine-tuned against GT (full, lr 1e-5) [255 images]",
+            },
+            {
+                "seed": [42],
+                "num_steps": [7000],
+                "num_images": [300],
+                "sampling_mode": ["random"],
+                "num_points_value": 100000,
+                "gt_eval": True,
+                "model": "omega",
+                "save_ply": True,
+                "choice": ["vggt"],
+                "ft_cams": "lora",
+                "series_label_override": "3. Camera head fine-tuned against GT (LoRA r16, lr 1e-4) [255 images]",
+            },
+            {
+                "seed": [42],
+                "num_steps": [7000],
+                "num_images": [300],
+                "sampling_mode": ["random"],
+                "num_points_value": 100000,
+                "gt_eval": True,
+                "model": "omega",
+                "save_ply": True,
+                "choice": ["vggt"],
+                "series_label_override": "4. Omega cameras [255 images]",
+            },
+            {
+                "seed": [42],
+                "num_steps": [7000],
+                "num_images": [300],
+                "sampling_mode": ["random"],
+                "num_points_value": 100000,
+                "gt_eval": True,
+                "model": "omega",
+                "save_ply": True,
+                "choice": ["combined"],
+                "camera_src": "colmap",
+                "pcd_src": "vggt",
+                "shared_camera": True,
+                "series_label_override": "5. COLMAP cameras [255 images]",
+            },
+        ],
+        PlotConfig(
+            x_axis="val_step",
+            split_param="series_label_override",
+            metric_keys=["psnr", "ssim", "lpips", "quality", "num_GS", "eval_rre", "eval_rte"],
+            max_render_cols=3,
+            horizontal_datasets=False,
+            show_gt=True,
+            show_zoom=True,
+            show_differences=False,
+            render_nums=[0, 2, 5],
+        ),
+        val_steps=[1, 3000, 7000],
+        render_filter_override={
+            "seed": [42],
+            "num_images": [300],
             "num_steps": [7000],
         },
     )
