@@ -292,6 +292,10 @@ class Config:
     camft_lora: bool = False
     camft_lora_rank: int = 16
     camft_delay: int = 0
+    # Train the head only with the GT pose-encoding Huber loss (render loss does not reach the head), see simple_trainer camft_gt_loss
+    camft_gt_loss: bool = False
+    # Evaluate on every GT-eval frame that is not a training frame (simple_trainer eval_all_frames)
+    eval_all: bool = False
     # Train with the cameras of a camera head fine-tuned against GT (`full` / `lora` snapshots, see FT_CAMERA_NPZ) instead
     # of the Omega cameras; the points stay the Omega point cloud. Omega only, the cameras stay fixed during training.
     ft_cams: Literal["", "full", "lora"] = ""
@@ -422,6 +426,8 @@ class Config:
             "camft_lora",
             "camft_lora_rank",
             "camft_delay",
+            "camft_gt_loss",
+            "eval_all",
             "ft_cams",
         ):
             setattr(instance, name, data.get(name, getattr(cls, name)))
@@ -523,6 +529,10 @@ class Config:
                 self.choice == "vggt" and self.model == "omega" and not self.sampler and not self.vggt_ft
             ), "camera-head fine-tuning needs choice=vggt, model=omega"
             assert not (self.pose_opt or self.eval_opt), "camera-head fine-tuning replaces the pose optimiser"
+        if self.camft_gt_loss:
+            assert self.camft and self.gt_eval, "camft_gt_loss needs camft and gt_eval (GT cameras)"
+        if self.eval_all:
+            assert self.gt_eval, "eval_all needs gt_eval (the GT eval set)"
         if self.vggt_ft:
             assert (
                 self.choice == "vggt" and not self.sampler
@@ -753,8 +763,10 @@ class Config:
             # Hyphen separated so that the plot parser can read it as a single token
             parts.append(
                 f"cft-{self.camft_lr:g}-{'lora' + str(self.camft_lora_rank) if self.camft_lora else 'full'}"
-                f"-d{self.camft_delay}"
+                f"-d{self.camft_delay}" + ("-gtloss" if self.camft_gt_loss else "")
             )
+        if self.eval_all:
+            parts.append("evalall")
         if self.eval_opt:
             parts.append("evalopt")
         if self.depth_loss_mode != "disabled":
@@ -1506,6 +1518,11 @@ class Config:
             )
             if self.camft_lora:
                 command.append("--camft_lora")
+            if self.camft_gt_loss:
+                command.append("--camft_gt_loss")
+
+        if self.eval_all:
+            command.append("--eval_all_frames")
 
         if self.save_ply:
             command.extend(["--save_ply", "--ply_steps", str(self.num_steps)])
@@ -5155,6 +5172,111 @@ experiments.append(
             "seed": [42],
             "num_images": [300],
             "num_steps": [7000],
+        },
+    )
+)
+
+experiments.append(
+    Experiment(
+        "omega_camft_gt_15k",
+        104,
+        "3DGS (MCMC, 15000 steps, 40 images, Omega point cloud) with the VGGT-Omega camera head (full / LoRA) trained during 3DGS only against GT cameras (pose-encoding Huber loss), vs fixed GT, Omega and COLMAP cameras; evaluated on every GT-eval frame that is not a training frame",
+        [
+            {
+                "seed": [42],
+                "num_steps": [15000],
+                "num_images": [40],
+                "sampling_mode": ["random"],
+                "num_points_value": 100000,
+                "gt_eval": True,
+                "eval_all": True,
+                "model": "omega",
+                "save_ply": True,
+                "choice": ["combined"],
+                "camera_src": "gt",
+                "pcd_src": "vggt",
+                "series_label_override": "1. GT cameras (fixed)",
+            },
+            {
+                "seed": [42],
+                "num_steps": [15000],
+                "num_images": [40],
+                "sampling_mode": ["random"],
+                "num_points_value": 100000,
+                "gt_eval": True,
+                "eval_all": True,
+                "model": "omega",
+                "save_ply": True,
+                "choice": ["vggt"],
+                "camft": True,
+                "camft_gt_loss": True,
+                "camft_lr": 1e-05,
+                "series_label_override": "2. Camera head trained with GT loss during 3DGS (full, lr 1e-5)",
+            },
+            {
+                "seed": [42],
+                "num_steps": [15000],
+                "num_images": [40],
+                "sampling_mode": ["random"],
+                "num_points_value": 100000,
+                "gt_eval": True,
+                "eval_all": True,
+                "model": "omega",
+                "save_ply": True,
+                "choice": ["vggt"],
+                "camft": True,
+                "camft_gt_loss": True,
+                "camft_lora": True,
+                "camft_lora_rank": 16,
+                "camft_lr": 1e-04,
+                "series_label_override": "3. Camera head trained with GT loss during 3DGS (LoRA r16, lr 1e-4)",
+            },
+            {
+                "seed": [42],
+                "num_steps": [15000],
+                "num_images": [40],
+                "sampling_mode": ["random"],
+                "num_points_value": 100000,
+                "gt_eval": True,
+                "eval_all": True,
+                "model": "omega",
+                "save_ply": True,
+                "choice": ["vggt"],
+                "series_label_override": "4. Omega cameras (fixed)",
+            },
+            {
+                "seed": [42],
+                "num_steps": [15000],
+                "num_images": [40],
+                "sampling_mode": ["random"],
+                "num_points_value": 100000,
+                "gt_eval": True,
+                "eval_all": True,
+                "model": "omega",
+                "save_ply": True,
+                "choice": ["combined"],
+                "camera_src": "colmap",
+                "pcd_src": "vggt",
+                "shared_camera": True,
+                "series_label_override": "5. COLMAP cameras (fixed)",
+            },
+        ],
+        PlotConfig(
+            x_axis="val_step",
+            split_param="series_label_override",
+            metric_keys=["psnr", "ssim", "lpips", "quality", "num_GS", "eval_rre", "eval_rte"],
+            max_render_cols=3,
+            horizontal_datasets=False,
+            show_gt=True,
+            show_zoom=True,
+            show_differences=False,
+            render_nums=[0, 2, 5],
+        ),
+        val_steps=[1, 3000, 7000, 10000, 15000],
+        render_filter_override={
+            "seed": [42],
+            "num_images": [40],
+            "num_steps": [15000],
         },
     )
 )

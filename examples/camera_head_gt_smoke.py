@@ -19,45 +19,9 @@ import torch.nn.functional as F
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from camera_finetune import CameraFinetuner  # noqa: E402
+from camera_finetune import CameraFinetuner, gt_pose_targets  # noqa: E402
 from datasets.colmap import Parser  # noqa: E402
-from evaluation import calculate_metrics, stochastic_umeyama_alignment  # noqa: E402
-from vggt_omega.utils.pose_enc import extri_intri_to_pose_encoding  # noqa: E402
-
-
-def gt_targets(ft: CameraFinetuner, gt_parser: Parser, names):
-    """GT cameras aligned to the initial prediction, as pose encodings [S,9] of the Omega world frame."""
-    gt_c2w = gt_parser.get_camera_positions(names)  # [S,4,4], GT parser frame
-    ref = ft.ref_c2w.cpu().numpy()  # initial prediction, trainer frame
-    s, R, t = stochastic_umeyama_alignment(gt_c2w[:, :3, 3], ref[:, :3, 3])
-    al = np.tile(np.eye(4), (len(names), 1, 1))
-    al[:, :3, 3] = s * gt_c2w[:, :3, 3] @ R.T + t
-    al[:, :3, :3] = R @ gt_c2w[:, :3, :3]
-    al = torch.from_numpy(al).float().to(ft.device)
-
-    # trainer frame -> Omega world, w2c (inverse of CameraFinetuner._cameras)
-    Rc = ft.R_M.t() @ al[:, :3, :3]
-    pos = (al[:, :3, 3] - ft.t_M) @ ft.R_M / ft.scale
-    Rw = Rc.transpose(1, 2)
-    Tw = -(Rw @ pos[..., None])[..., 0]
-    extr = torch.cat([Rw, Tw[..., None]], dim=-1)
-
-    # GT focal at the network resolution (per-axis)
-    K = []
-    for n in names:
-        i = gt_parser.image_names.index(n)
-        cid = gt_parser.camera_ids[i]
-        w, h = gt_parser.imsize_dict[cid]
-        k = gt_parser.Ks_dict[cid].copy()
-        k[0] *= ft.W / w
-        k[1] *= ft.H / h
-        K.append(k)
-    K = torch.from_numpy(np.stack(K)).float().to(ft.device)
-
-    enc = extri_intri_to_pose_encoding(extr[None], K[None], (ft.H, ft.W))[0]
-    flip = ((enc[:, 3:7] * ft.ref_pose_enc[:, 3:7]).sum(-1) < 0).float() * -2 + 1  # keep the ref quaternion sign
-    enc[:, 3:7] = enc[:, 3:7] * flip[:, None]
-    return enc, gt_c2w
+from evaluation import calculate_metrics  # noqa: E402
 
 
 @torch.no_grad()
@@ -99,7 +63,7 @@ def main():
         camft_lr=a.lr,
     )
     ft = CameraFinetuner(cfg, train_parser, names, a.device)
-    target, gt_c2w = gt_targets(ft, gt_parser, names)
+    target, gt_c2w = gt_pose_targets(ft, gt_parser, names)
     opt = ft.make_optimizer()
 
     os.makedirs(os.path.dirname(a.out) or ".", exist_ok=True)

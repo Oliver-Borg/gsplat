@@ -106,6 +106,8 @@ class Config:
     # Number of training steps
     max_steps: int = 30_000
     # Steps to evaluate the model
+    # Evaluate on every frame of the GT eval set that is not a training frame (instead of every test_every-th frame)
+    eval_all_frames: bool = False
     eval_steps: List[int] = field(default_factory=lambda: [1, 3_000, 7_000, 10_000, 15_000, 20_000, 25_000, 30_000,])
     # Steps to save the model
     save_steps: List[int] = field(default_factory=lambda: [])
@@ -193,6 +195,9 @@ class Config:
     camft_delay: int = 0
     # Append the camera drift relative to the initial prediction to stats/ft_drift.jsonl every N steps (0: off)
     camft_drift_every: int = 0
+    # Train the head only with the Huber loss on the 9-D pose encoding against the GT cameras (aligned once to the
+    # initial prediction, needs gt_train_data_dir); the render loss sees the head's cameras detached and trains only the Gaussians.
+    camft_gt_loss: bool = False
     # Initial extent of GSs as a multiple of the camera extent. Ignored if using sfm
     init_extent: float = 3.0
     # Degree of spherical harmonics
@@ -573,6 +578,16 @@ class Runner:
 
             used = [self.train_parser.image_names[i] for i in self.trainset.indices]
             self.camft = CameraFinetuner(cfg, self.train_parser, used, self.device)
+            self.camft_target = None
+            if cfg.camft_gt_loss:
+                from camera_finetune import gt_pose_targets
+
+                assert cfg.gt_train_data_dir, "camft_gt_loss needs gt_train_data_dir"
+                gt_names = set(self.align_parser.image_names)
+                missing = [n for n in self.camft.frame_of if n not in gt_names]
+                assert not missing, f"no GT camera for {len(missing)} training frames, e.g. {missing[:3]}"
+                names = sorted(self.camft.frame_of, key=self.camft.frame_of.get)  # frame order of the head
+                self.camft_target = gt_pose_targets(self.camft, self.align_parser, names)[0]
         self.splats, self.optimizers = create_splats_with_optimizers(
             self.train_parser,
             init_type=cfg.init_type,
@@ -660,7 +675,7 @@ class Runner:
         transform_matrix = self.get_dataset_alignment_matrix()
         self.valset = Dataset(
             self.eval_parser,
-            split="val",
+            split="all" if cfg.eval_all_frames else "val",
             exclude_names=self.used_training_names,
             transform_matrix=transform_matrix,
             patch_size=cfg.patch_size,
@@ -1021,8 +1036,11 @@ class Runner:
 
         # Training loop.
         global_tic = time.time()
+        self.train_time = 0.0  # wall time of the training steps only (synchronised, evaluation excluded)
         pbar = tqdm.tqdm(range(init_step, max_steps))
         for step in pbar:
+            torch.cuda.synchronize()
+            step_tic = time.perf_counter()
             if not cfg.disable_viewer:
                 while self.viewer.state == "paused":
                     time.sleep(0.01)
@@ -1067,6 +1085,9 @@ class Runner:
                 if step >= cfg.camft_delay:
                     # All frames through the head with gradient; the rendered view's camera carries the loss
                     c2w_all, K_all = self.camft()
+                    if self.camft_target is not None:
+                        # GT-only head training: the render loss does not reach the head
+                        c2w_all, K_all = c2w_all.detach(), K_all.detach()
                 else:
                     c2w_all, K_all = self.camft.ref_c2w, self.camft.ref_K
                 camtoworlds = c2w_all[frame : frame + 1]
@@ -1317,6 +1338,11 @@ class Runner:
             if cfg.loss_multiplier != 1.0:
                 loss *= cfg.loss_multiplier
 
+            if self.camft is not None and self.camft_target is not None and step >= cfg.camft_delay:
+                # Added after the multiplier: the head's GT loss is independent of the render-loss scale
+                gt_loss = F.smooth_l1_loss(self.camft.last_pose_enc, self.camft_target)
+                loss = loss + gt_loss
+
             self.mark("loss")
             loss.backward()
             self.mark("heads_backward")
@@ -1349,6 +1375,8 @@ class Runner:
                 self.writer.add_scalar("train/mem", mem, step)
                 for k, v in ft_extra.items():
                     self.writer.add_scalar(f"train/ft_{k}", v.item(), step)
+                if self.camft is not None and self.camft_target is not None and step >= cfg.camft_delay:
+                    self.writer.add_scalar("train/camft_gt_loss", gt_loss.item(), step)
                 if self.profiler is not None:
                     for k, v in self.profiler.last.items():
                         self.writer.add_scalar(f"profile/{k}_ms", v, step)
@@ -1566,6 +1594,9 @@ class Runner:
             if self.camft is not None and cfg.camft_drift_every > 0 and (step + 1) % cfg.camft_drift_every == 0:
                 with open(f"{self.stats_dir}/ft_drift.jsonl", "a") as f:
                     f.write(json.dumps({"step": step + 1, **self.camft.drift()}) + "\n")
+
+            torch.cuda.synchronize()
+            self.train_time += time.perf_counter() - step_tic
 
             # eval the full set
             if step in [i - 1 for i in cfg.eval_steps]:
@@ -1830,6 +1861,8 @@ class Runner:
             stats.update(
                 {
                     "ellipse_time": ellipse_time,
+                    "train_time_s": getattr(self, "train_time", 0.0),  # cumulative training-step wall time, evaluation excluded
+                    "train_steps": step + 1,
                     "num_GS": self.num_active_gs,
                     "num_points": self.num_points,  # This is the initial number of points
                     "num_eval_images": len(valloader),

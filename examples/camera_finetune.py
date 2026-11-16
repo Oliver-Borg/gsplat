@@ -20,8 +20,9 @@ if OMEGA_ROOT not in sys.path:
     sys.path.append(OMEGA_ROOT)
 
 from vggt_omega.models.heads import CameraHead  # noqa: E402
-from vggt_omega.utils.pose_enc import encoding_to_camera  # noqa: E402
+from vggt_omega.utils.pose_enc import encoding_to_camera, extri_intri_to_pose_encoding  # noqa: E402
 
+from evaluation import stochastic_umeyama_alignment  # noqa: E402
 from vggt_finetune import apply_lora  # noqa: E402
 
 OMEGA_CHECKPOINTS = {
@@ -135,8 +136,9 @@ class CameraFinetuner(nn.Module):
         return c2w, K
 
     def forward(self) -> Tuple[Tensor, Tensor]:
-        """Cameras of all frames from the (trainable) head."""
-        return self._cameras(self._pose_enc())
+        """Cameras of all frames from the (trainable) head. The pose encoding is kept in `last_pose_enc` (for the GT loss)."""
+        self.last_pose_enc = self._pose_enc()
+        return self._cameras(self.last_pose_enc)
 
     @torch.no_grad()
     def current_cameras(self) -> Tuple[Tensor, Tensor]:
@@ -166,3 +168,39 @@ class CameraFinetuner(nn.Module):
 
     def trainable_state_dict(self) -> Dict[str, Tensor]:
         return self.head.state_dict()
+
+
+def gt_pose_targets(ft: CameraFinetuner, gt_parser, names: List[str]) -> Tuple[Tensor, np.ndarray]:
+    """GT cameras aligned once to the initial prediction (Umeyama sim(3) on the camera centres, GT rotations
+    multiplied by R), as pose encodings [S,9] of the Omega world frame (frames in the order of `names`), and the
+    unaligned GT c2w [S,4,4]. fov comes from the GT intrinsics scaled to the network resolution (per axis)."""
+    gt_c2w = gt_parser.get_camera_positions(names)  # [S,4,4], GT parser frame
+    ref = ft.ref_c2w.cpu().numpy()  # initial prediction, trainer frame
+    s, R, t = stochastic_umeyama_alignment(gt_c2w[:, :3, 3], ref[:, :3, 3])
+    al = np.tile(np.eye(4), (len(names), 1, 1))
+    al[:, :3, 3] = s * gt_c2w[:, :3, 3] @ R.T + t
+    al[:, :3, :3] = R @ gt_c2w[:, :3, :3]
+    al = torch.from_numpy(al).float().to(ft.device)
+
+    # trainer frame -> Omega world, w2c (inverse of CameraFinetuner._cameras)
+    Rc = ft.R_M.t() @ al[:, :3, :3]
+    pos = (al[:, :3, 3] - ft.t_M) @ ft.R_M / ft.scale
+    Rw = Rc.transpose(1, 2)
+    Tw = -(Rw @ pos[..., None])[..., 0]
+    extr = torch.cat([Rw, Tw[..., None]], dim=-1)
+
+    K = []
+    for n in names:
+        i = gt_parser.image_names.index(n)
+        cid = gt_parser.camera_ids[i]
+        w, h = gt_parser.imsize_dict[cid]
+        k = gt_parser.Ks_dict[cid].copy()
+        k[0] *= ft.W / w
+        k[1] *= ft.H / h
+        K.append(k)
+    K = torch.from_numpy(np.stack(K)).float().to(ft.device)
+
+    enc = extri_intri_to_pose_encoding(extr[None], K[None], (ft.H, ft.W))[0]
+    flip = ((enc[:, 3:7] * ft.ref_pose_enc[:, 3:7]).sum(-1) < 0).float() * -2 + 1  # keep the ref quaternion sign
+    enc[:, 3:7] = enc[:, 3:7] * flip[:, None]
+    return enc, gt_c2w
