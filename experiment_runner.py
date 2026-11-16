@@ -456,6 +456,7 @@ class Config:
 
         if self.choice == "gt":
             self.gt_eval = False
+            self.eval_all = False
             self.pose_opt = False
             self.eval_opt = False
             self.use_gt_extrinsics = False
