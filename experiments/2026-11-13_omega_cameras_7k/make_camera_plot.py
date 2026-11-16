@@ -14,15 +14,17 @@ from vggt.cam_utils import load_image_sizes_from_json, load_intrinsics_from_json
 from vggt.plot_cameras import CameraSeries, plot_extrinsics  # noqa: E402
 
 V = Path(os.path.expanduser("~/work/git/vggt"))
-base = "bonsai_2_n40_s42_omega"
+N = sys.argv[1] if len(sys.argv) > 1 else "40"  # training images: 40 or 255
+SEL = "minfarthestpose" if N == "40" else "farthestpose"
+base = f"bonsai_2_n{N}_s42_omega"
 dirs = {
-    "GT_cams_": V / f"combined_outputs/{base}_combined_gtcams_vggtpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam",
-    "Head_full_": V / f"vggt_outputs/{base}_c0.0_p100000_random_minfarthestpose_ftcams-full",
-    "Head_LoRA_": V / f"vggt_outputs/{base}_c0.0_p100000_random_minfarthestpose_ftcams-lora",
-    "Omega_": V / f"vggt_outputs/{base}_c0.0_p100000_random_minfarthestpose",
-    "COLMAP_": V / f"combined_outputs/{base}_combined_colmapcams_vggtpcd_amglobal_default_c0.0_p100000_random_minfarthestpose_sharedcam",
+    "GT_cams_": V / f"combined_outputs/{base}_combined_gtcams_vggtpcd_amglobal_default_c0.0_p100000_random_{SEL}_sharedcam",
+    "Head_full_": V / f"vggt_outputs/{base}_c0.0_p100000_random_{SEL}_ftcams-full",
+    "Head_LoRA_": V / f"vggt_outputs/{base}_c0.0_p100000_random_{SEL}_ftcams-lora",
+    "Omega_": V / f"vggt_outputs/{base}_c0.0_p100000_random_{SEL}",
+    "COLMAP_": V / f"combined_outputs/{base}_combined_colmapcams_vggtpcd_amglobal_default_c0.0_p100000_random_{SEL}_sharedcam",
 }
-gt_json = V / "vggt_outputs" / f"{base}_c0.0_p100000_random_minfarthestpose" / "gt_cameras.json"
+gt_json = V / "vggt_outputs" / f"{base}_c0.0_p100000_random_{SEL}" / "gt_cameras.json"
 gt_poses, gt_K, gt_sz = (f(gt_json) for f in (load_poses_from_json, load_intrinsics_from_json, load_image_sizes_from_json))
 names = sorted(load_poses_from_json(dirs['Omega_'] / 'aligned_cameras.json'))  # the 40 training images
 series = []
@@ -34,6 +36,6 @@ for label, d in dirs.items():
                                load_image_sizes_from_json(j), gt_poses, gt_K, gt_sz, names))
 tmp = Path(tempfile.mkdtemp())
 plot_extrinsics([("default", series)], tmp, use_error_colors=True, max_cols=5)
-out = Path(__file__).resolve().parent / "figures" / "cameras.jpg"
+out = Path(__file__).resolve().parent / "figures" / ("cameras.jpg" if N == "40" else "cameras_n255.jpg")
 shutil.copy(tmp / "camera_alignment.jpg", out)
 print("saved", out)

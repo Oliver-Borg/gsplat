@@ -1,8 +1,9 @@
-import csv, os
+import csv, os, sys
+N = sys.argv[1] if len(sys.argv) > 1 else "40"
 import matplotlib; matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 d = os.path.dirname(os.path.abspath(__file__))
-rows = list(csv.DictReader(open(os.path.join(d, "metrics.csv"))))
+rows = list(csv.DictReader(open(os.path.join(d, "metrics.csv" if N == "40" else "metrics_n255.csv"))))
 arms = list(dict.fromkeys(r["arm"] for r in rows))
 fig, ax = plt.subplots(1, 5, figsize=(17, 3.2))
 for arm in arms:
@@ -12,4 +13,4 @@ for arm in arms:
 for a, t in zip(ax, ["PSNR", "SSIM", "LPIPS", "eval_rre (deg)", "eval_rte"]):
     a.set_title(t, fontsize=10); a.set_xlabel("step")
 ax[3].set_yscale("log"); ax[4].set_yscale("log"); ax[0].legend(fontsize=6)
-plt.tight_layout(); plt.savefig(os.path.join(d, "figures/metrics.png"), dpi=110)
+plt.tight_layout(); plt.savefig(os.path.join(d, "figures/metrics.png" if N == "40" else "figures/metrics_n255.png"), dpi=110)
