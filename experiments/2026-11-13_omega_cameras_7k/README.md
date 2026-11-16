@@ -23,7 +23,7 @@ fine-tuned against GT (full head and LoRA), Omega initial prediction, COLMAP.
 | 5 | COLMAP (same 40 images, shared camera, `default` mode) | `choice=combined`, `camera_src=colmap`, `pcd_src=vggt` |
 
 ## Launch
-Reconstruction (CPU only, cached Omega and COLMAP reconstructions reused), then the trainers through a queue script that
+(`queue_omega7k.sh` in this folder is the idle-GPU queue script that launched the 40-image trainers.) Reconstruction (CPU only, cached Omega and COLMAP reconstructions reused), then the trainers through a queue script that
 waited for an idle GPU:
 ```bash
 cd ~/work/git/gsplat
@@ -101,7 +101,7 @@ Differences from the 40-image setup (facts):
   step-1000 snapshots used for arms 2 and 3. Camera-head results and timings: see the n255 tables in the smoke-test log.
 - Arm 5 uses the existing COLMAP reconstruction of the 255 images (`bonsai_2_n255_s42_default_farthestpose_sharedcam`).
 
-Launch (pipeline script in the session scratchpad, not committed; stages: Omega reconstruction on an idle GPU, the two CPU fine-tunings one after the other,
+Launch (`pipeline_n255.py` in this folder; stages: Omega reconstruction on an idle GPU, the two CPU fine-tunings one after the other,
 `reconstruct()` of arms 1, 2, 3 and 5, then the runner):
 ```bash
 python examples/camera_head_gt_smoke.py --device cpu --cache_file ../vggt/vggt_outputs/bonsai_2_cache_n255_s42_omega_farthestpose/raw_preds.pt \

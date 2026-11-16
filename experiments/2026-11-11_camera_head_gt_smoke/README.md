@@ -92,8 +92,8 @@ left to right: initial prediction, full head, LoRA; GT frustums drawn with the i
 ![cameras step 1000](figures/cameras_step1000.jpg)
 
 ## GPU vs CPU timing (40 images)
-Same fine-tuning (1000 steps, same arguments, seed 42) on one NVIDIA L40S (GPU 0, idle at launch; `--device cuda`, run 14 Nov 14:37 to 14:40 through a
-queue script that waited for an idle GPU) vs the CPU runs above. Output files: `gpu_full.*`, `gpu_lora.*` (jsonl, log, cameras npz) in this folder.
+Same fine-tuning (1000 steps, same arguments, seed 42) on one NVIDIA L40S (GPU 0, idle at launch; `--device cuda`, run 14 Nov 14:37 to 14:40 through
+`queue_gpu_timing.sh`, which waited for an idle GPU) vs the CPU runs above. Output files: `gpu_full.*`, `gpu_lora.*` (jsonl, log, cameras npz) in this folder.
 
 | Arm | Device | train mean / median / min / max (s/step) | eval mean (s) | total wall time | step-1000 rre / rte |
 |---|---|---|---|---|---|

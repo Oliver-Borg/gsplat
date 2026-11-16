@@ -1,0 +1,20 @@
+#!/bin/bash
+# Waits for idle GPUs (no process of anyone on them, <500 MiB used), takes at most 2, then runs the experiment.
+free_gpus() {
+  nvidia-smi --query-gpu=index,uuid,memory.used --format=csv,noheader,nounits | while IFS=', ' read -r idx uuid mem; do
+    n=$(nvidia-smi --query-compute-apps=gpu_uuid --format=csv,noheader | grep -c "$uuid")
+    if [ "$n" -eq 0 ] && [ "$mem" -lt 500 ]; then echo $idx; fi
+  done
+}
+prev=""
+while true; do
+  a=$(free_gpus | head -2 | paste -sd,)
+  if [ -n "$a" ] && [ "$a" = "$prev" ]; then break; fi   # same idle set on two checks in a row
+  prev="$a"; sleep 60
+done
+echo "$(date) launching on GPUs $a"
+cd ~/work/git/gsplat
+env -u PYTHONPATH PATH=$HOME/.conda/envs/gsplat/bin:$PATH python experiment_runner.py \
+  --experiment_names omega_cameras_7k --dataset_name bonsai --dataset_collections \
+  --do_reconstruct --skip_plotting --cuda_visible_devices "$a"
+echo "$(date) runner exit $?"
