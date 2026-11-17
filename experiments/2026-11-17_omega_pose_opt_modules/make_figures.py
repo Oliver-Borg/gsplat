@@ -5,7 +5,7 @@ d = os.path.dirname(os.path.abspath(__file__))
 rows = list(csv.DictReader(open(os.path.join(d, "metrics.csv"))))
 for ex in ("loss", "gtk"):
     R = [r for r in rows if r["experiment"] == ex]
-    fig, ax = plt.subplots(1, 6, figsize=(20, 3.2))
+    fig, ax = plt.subplots(2, 3, figsize=(12, 6.4)); ax = ax.flatten()
     for arm in dict.fromkeys(r["arm"] for r in R):
         r = [x for x in R if x["arm"] == arm]
         for a, k in zip(ax, ["psnr", "ssim", "lpips", "eval_rre", "eval_rte", "train_time_s"]):

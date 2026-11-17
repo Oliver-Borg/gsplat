@@ -8,7 +8,7 @@ arms = {"full head, lr 1e-5": "full_lr1e-5.jsonl", "LoRA r16, lr 1e-4": "lora16_
 COLMAP = {"rre": 0.5092, "rte": 0.05524}
 INIT = {"rre": 0.4134, "rte": 0.01296}  # Omega initial prediction (step 0)
 rows = {lab: [json.loads(l) for l in open(os.path.join(d, f))] for lab, f in arms.items()}
-fig, ax = plt.subplots(1, 4, figsize=(15, 3.2))
+fig, ax = plt.subplots(2, 2, figsize=(9, 6.4)); ax = ax.flatten()
 for lab, r in rows.items():
     for a, k in zip(ax, ["loss", "rre", "rte"]):
         a.plot([x["step"] for x in r], [x[k] for x in r], label=lab)

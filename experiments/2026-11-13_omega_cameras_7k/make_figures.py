@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 d = os.path.dirname(os.path.abspath(__file__))
 rows = list(csv.DictReader(open(os.path.join(d, "metrics.csv" if N == "40" else "metrics_n255.csv"))))
 arms = list(dict.fromkeys(r["arm"] for r in rows))
-fig, ax = plt.subplots(1, 5, figsize=(17, 3.2))
+fig, ax = plt.subplots(2, 3, figsize=(12, 6.4)); ax = ax.flatten(); ax[5].axis("off")
 for arm in arms:
     r = [x for x in rows if x["arm"] == arm]
     for a, k in zip(ax, ["psnr", "ssim", "lpips", "eval_rre", "eval_rte"]):
