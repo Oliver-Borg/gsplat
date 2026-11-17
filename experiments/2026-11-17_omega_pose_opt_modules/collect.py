@@ -8,6 +8,7 @@ runs = [  # (experiment, arm, glob)
     ("loss", "default, L1 c2w", "vggt_outputs/*cft-0.0001-pdef-d0-gtl1c2w" + E_),
     ("loss", "3RGS MLP, Huber enc", "vggt_outputs/*cft-0.0001-mlp-d0-gtloss" + E_),
     ("loss", "3RGS MLP, L1 c2w", "vggt_outputs/*cft-0.0001-mlp-d0-gtl1c2w" + E_),
+    ("loss", "Camera head full lr 1e-5, Huber 9-D enc", "vggt_outputs/*cft-1e-05-full-d0-gtloss" + E_),
     ("gtk", "GT cameras (fixed)", "combined_outputs/*omega_combined_gtcams*evalall_steps15000"),
     ("gtk", "Omega poses (fixed), GT K", "vggt_outputs/*cft-0.0001-fixed-d0-gtk" + E_),
     ("gtk", "default, Huber enc", "vggt_outputs/*cft-0.0001-pdef-d0-gtloss-gtk" + E_),

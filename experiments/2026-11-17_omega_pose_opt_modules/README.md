@@ -19,6 +19,7 @@ Two experiments in `experiment_runner.py`, both starting from the VGGT-Omega cam
   - L1 c2w (`camft_gt_loss_type=l1_c2w`): mean absolute difference of the 3x4 camera-to-world matrices vs the aligned GT c2w, in the trainer's normalised frame.
 - Intrinsics: in `omega_pose_opt_loss` the intrinsics stay at each frame's initial Omega prediction (no module changes them). In `omega_pose_opt_gtk` (`camft_gt_k`) the intrinsics of every
   rendered training view are the GT intrinsics of that frame (GT principal point included) scaled to the training image size, fixed. The maximum absolute difference to the Omega K entries is 32.55 px.
+- The full camera head arm (7, `omega_pose_opt_loss` only) differs from the module arms in more than the module: it runs the head on all frames every step, its lr is 1e-5 (the earlier experiment's value, not 1e-4), its Huber loss is on all 9 pose-encoding dimensions including fov (the module arms use the 7 T + quaternion dimensions), and it was run on GPU 2 on 16 Nov. There is no GT-K variant of it.
 - Reused results (same config as earlier runs, skipped by the runner): GT cameras fixed (also the first arm of `omega_pose_opt_gtk`), Omega cameras fixed, and the 3RGS + Huber arm with Omega K
   (arm 6 of `omega_camft_gt_15k`, run on GPU 0 on 17 Nov 06:43 to 07:00). The GT baseline and Omega baseline were not asked for specifically; I added them to the first experiment (and GT fixed to the second).
 - Extra run options introduced for this experiment: `camft_module` (`default` | `fixed`; `camft_mlp` = 3RGS), `camft_gt_loss_type`, `camft_gt_k`.
@@ -31,6 +32,7 @@ Two experiments in `experiment_runner.py`, both starting from the VGGT-Omega cam
 | 4 | default module, L1 c2w |
 | 5 | 3RGS MLP, Huber on pose encoding (reused) |
 | 6 | 3RGS MLP, L1 c2w |
+| 7 | Camera head (full, lr 1e-5), Huber on the 9-D pose encoding incl. fov (reused; arm 2 of `omega_camft_gt_15k`, added after the first write-up) |
 
 | `omega_pose_opt_gtk` (all with GT K) | Cameras / loss |
 |---|---|
@@ -74,6 +76,7 @@ PSNR / SSIM / LPIPS over the 252 evaluation images.
 | 4. default, L1 c2w | 10.95 / 0.246 / 0.789 | 22.99 / 0.729 / 0.284 | 23.42 / 0.729 / 0.207 | 23.38 / 0.726 / 0.199 | 23.32 / 0.722 / 0.197 |
 | 5. 3RGS MLP, Huber | 10.93 / 0.246 / 0.789 | 23.04 / 0.730 / 0.288 | 23.56 / 0.732 / 0.206 | 23.52 / 0.727 / 0.199 | 23.39 / 0.722 / 0.197 |
 | 6. 3RGS MLP, L1 c2w | 10.93 / 0.246 / 0.789 | 23.04 / 0.730 / 0.288 | 23.59 / 0.733 / 0.205 | 23.59 / 0.729 / 0.198 | 23.48 / 0.725 / 0.195 |
+| 7. Camera head, full lr 1e-5 | 10.93 / 0.245 / 0.789 | 25.24 / 0.831 / 0.257 | 27.15 / 0.886 / 0.161 | 27.65 / 0.896 / 0.149 | 27.88 / 0.900 / 0.144 |
 
 `eval_rre` (deg) / `eval_rte` of the 40 training cameras against GT (rte depends on the world normalisation of each run):
 
@@ -85,9 +88,10 @@ PSNR / SSIM / LPIPS over the 252 evaluation images.
 | 4. default, L1 c2w | 0.4053 / 1.28e-2 | 0.0074 / 2.0e-5 | 0.0077 / 2.1e-5 | 0.0115 / 2.3e-5 | 0.0084 / 2.2e-5 |
 | 5. 3RGS MLP, Huber | 0.3970 / 1.30e-2 | 0.0081 / 3.5e-6 | 0.0110 / 2.3e-7 | 0.0074 / 3.2e-7 | 0.0081 / 3.4e-7 |
 | 6. 3RGS MLP, L1 c2w | 0.3975 / 1.30e-2 | 0.0106 / 2.0e-5 | 0.0103 / 2.2e-5 | 0.0102 / 2.2e-5 | 0.0121 / 1.8e-5 |
+| 7. Camera head, full lr 1e-5 | 0.3365 / 1.02e-2 | 0.0231 / 8.8e-4 | 0.0161 / 2.6e-4 | 0.0104 / 1.1e-4 | 0.0113 / 4.0e-5 |
 
 ![renders](figures/renders_loss.jpg)
-(Renders: `render_nums=[0, 2, 5]`, step 15000, evaluation frames; rows: ground truth, arms 1 to 6.)
+(Renders: `render_nums=[0, 2, 5]`, step 15000, evaluation frames; rows: ground truth, arms 1 to 7.)
 
 ### `omega_pose_opt_gtk` (GT intrinsics)
 ![metrics](figures/metrics_gtk.png)
@@ -118,6 +122,7 @@ loss and the rendered cameras are detached, so the camera trajectory does not de
 | 4. default, L1 c2w | 799 s | 53.3 | 799 s | 53.2 |
 | 5. 3RGS MLP, Huber | 658 s (reused, run 17 Nov 06:43 to 07:00) | 43.9 | 802 s | 53.5 |
 | 6. 3RGS MLP, L1 c2w | 692 s | 46.1 | 804 s | 53.6 |
+| 7. Camera head, full lr 1e-5 | 1046 s (reused, GPU 2, 16 Nov) | 69.7 | not run | |
 
 Arms 1 and 2 of `omega_pose_opt_loss` and the GT arm of `omega_pose_opt_gtk` are reused from the runs on GPU 2 (16 Nov).
 
