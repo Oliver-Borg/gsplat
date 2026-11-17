@@ -15,6 +15,7 @@ runs = [  # (experiment, arm, glob)
     ("gtk", "default, L1 c2w", "vggt_outputs/*cft-0.0001-pdef-d0-gtl1c2w-gtk" + E_),
     ("gtk", "3RGS MLP, Huber enc", "vggt_outputs/*cft-0.0001-mlp-d0-gtloss-gtk" + E_),
     ("gtk", "3RGS MLP, L1 c2w", "vggt_outputs/*cft-0.0001-mlp-d0-gtl1c2w-gtk" + E_),
+    ("gtk", "Camera head full lr 1e-5, Huber T+quat, GT K", "vggt_outputs/*cft-1e-05-full-d0-gtloss-nofov-gtk" + E_),
 ]
 rows = []
 for ex, arm, g in runs:

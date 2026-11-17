@@ -19,7 +19,7 @@ Two experiments in `experiment_runner.py`, both starting from the VGGT-Omega cam
   - L1 c2w (`camft_gt_loss_type=l1_c2w`): mean absolute difference of the 3x4 camera-to-world matrices vs the aligned GT c2w, in the trainer's normalised frame.
 - Intrinsics: in `omega_pose_opt_loss` the intrinsics stay at each frame's initial Omega prediction (no module changes them). In `omega_pose_opt_gtk` (`camft_gt_k`) the intrinsics of every
   rendered training view are the GT intrinsics of that frame (GT principal point included) scaled to the training image size, fixed. The maximum absolute difference to the Omega K entries is 32.55 px.
-- The full camera head arm (7, `omega_pose_opt_loss` only) differs from the module arms in more than the module: it runs the head on all frames every step, its lr is 1e-5 (the earlier experiment's value, not 1e-4), its Huber loss is on all 9 pose-encoding dimensions including fov (the module arms use the 7 T + quaternion dimensions), and it was run on GPU 2 on 16 Nov. There is no GT-K variant of it.
+- The full camera head arm (7, `omega_pose_opt_loss` only) differs from the module arms in more than the module: it runs the head on all frames every step, its lr is 1e-5 (the earlier experiment's value, not 1e-4), its Huber loss is on all 9 pose-encoding dimensions including fov (the module arms use the 7 T + quaternion dimensions), and it was run on GPU 2 on 16 Nov. In `omega_pose_opt_gtk` arm 7 is a new run with GT K and the 7-dimension loss (fov dropped), so the two head arms differ in the loss dimensions as well as in K.
 - Reused results (same config as earlier runs, skipped by the runner): GT cameras fixed (also the first arm of `omega_pose_opt_gtk`), Omega cameras fixed, and the 3RGS + Huber arm with Omega K
   (arm 6 of `omega_camft_gt_15k`, run on GPU 0 on 17 Nov 06:43 to 07:00). The GT baseline and Omega baseline were not asked for specifically; I added them to the first experiment (and GT fixed to the second).
 - Extra run options introduced for this experiment: `camft_module` (`default` | `fixed`; `camft_mlp` = 3RGS), `camft_gt_loss_type`, `camft_gt_k`.
@@ -42,6 +42,8 @@ Two experiments in `experiment_runner.py`, both starting from the VGGT-Omega cam
 | 4 | default module, L1 c2w |
 | 5 | 3RGS MLP, Huber |
 | 6 | 3RGS MLP, L1 c2w |
+| 7 | Camera head (full, lr 1e-5, no LoRA), Huber on T + quaternion (fov dropped), GT K (`camft_gt_no_fov`, `camft_gt_k`); run 17 Nov 18:51 to 19:14 on GPU 0 through the same queue |
+| 7 | Camera head (full, lr 1e-5, no LoRA), Huber on T + quaternion (fov dropped), GT K (`camft_gt_no_fov`, `camft_gt_k`; run 17 Nov 18:51 to 19:14 on GPU 0, same queue) |
 
 ## Launch
 ```bash
@@ -104,12 +106,15 @@ PSNR / SSIM / LPIPS over the 252 evaluation images.
 | 4. default, L1 c2w | 10.95 / 0.246 / 0.789 | 25.56 / 0.849 / 0.242 | 27.73 / 0.902 / 0.153 | 28.01 / 0.905 / 0.143 | 28.09 / 0.905 / 0.140 |
 | 5. 3RGS MLP, Huber | 10.93 / 0.246 / 0.789 | 25.57 / 0.850 / 0.245 | 27.74 / 0.905 / 0.152 | 28.06 / 0.908 / 0.144 | 28.10 / 0.908 / 0.139 |
 | 6. 3RGS MLP, L1 c2w | 10.93 / 0.246 / 0.789 | 25.52 / 0.848 / 0.245 | 27.73 / 0.903 / 0.153 | 28.09 / 0.907 / 0.144 | 28.10 / 0.908 / 0.140 |
+| 7. Camera head, full lr 1e-5, GT K | 10.93 / 0.246 / 0.789 | 25.31 / 0.832 / 0.254 | 27.40 / 0.894 / 0.157 | 27.70 / 0.900 / 0.147 | 27.77 / 0.900 / 0.142 |
 
 The `eval_rre` / `eval_rte` values of arms 3 to 6 equal those of the same module and loss in the table above (rows 3 to 6 there, to the printed precision): in these arms the cameras are trained only by the GT
 loss and the rendered cameras are detached, so the camera trajectory does not depend on the intrinsics. Arm 2: 0.4134 / 1.30e-2 at every step.
 
+`eval_rre` (deg) / `eval_rte` of arm 7 (Camera head, full lr 1e-5, GT K): 0.3232 / 1.0e-2 (step 1), 0.0197 / 7.4e-4 (3000), 0.0144 / 1.8e-4 (7000), 0.0123 / 7.6e-5 (10000), 0.0164 / 8.3e-5 (15000).
+
 ![renders](figures/renders_gtk.jpg)
-(Rows: ground truth, arms 1 to 6.)
+(Rows: ground truth, arms 1 to 7.)
 
 ### Training time
 `train_time_s` at step 15000 and mean per step (cumulative wall time of the training steps; the GPU was shared with other users' jobs, see below):
@@ -122,7 +127,7 @@ loss and the rendered cameras are detached, so the camera trajectory does not de
 | 4. default, L1 c2w | 799 s | 53.3 | 799 s | 53.2 |
 | 5. 3RGS MLP, Huber | 658 s (reused, run 17 Nov 06:43 to 07:00) | 43.9 | 802 s | 53.5 |
 | 6. 3RGS MLP, L1 c2w | 692 s | 46.1 | 804 s | 53.6 |
-| 7. Camera head, full lr 1e-5 | 1046 s (reused, GPU 2, 16 Nov) | 69.7 | not run | |
+| 7. Camera head, full lr 1e-5 | 1046 s (reused, GPU 2, 16 Nov) | 69.7 | 1044 s (GPU 0, 17 Nov 18:51 to 19:14) | 69.6 |
 
 Arms 1 and 2 of `omega_pose_opt_loss` and the GT arm of `omega_pose_opt_gtk` are reused from the runs on GPU 2 (16 Nov).
 
