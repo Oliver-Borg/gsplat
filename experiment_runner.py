@@ -296,6 +296,10 @@ class Config:
     camft_gt_loss: bool = False
     # Pose residual MLP (3RGS) on the initial Omega cameras instead of the head (head frozen, intrinsics fixed)
     camft_mlp: bool = False
+    # Pose module arms (simple_trainer camft_module): "" | "default" | "fixed" (camft_mlp = the 3RGS MLP); GT loss type huber|l1c2w; GT intrinsics
+    camft_module: str = ""
+    camft_gt_loss_type: str = "huber"
+    camft_gt_k: bool = False
     # Evaluate on every GT-eval frame that is not a training frame (simple_trainer eval_all_frames)
     eval_all: bool = False
     # Train with the cameras of a camera head fine-tuned against GT (`full` / `lora` snapshots, see FT_CAMERA_NPZ) instead
@@ -430,6 +434,9 @@ class Config:
             "camft_delay",
             "camft_gt_loss",
             "camft_mlp",
+            "camft_module",
+            "camft_gt_loss_type",
+            "camft_gt_k",
             "eval_all",
             "ft_cams",
         ):
@@ -535,6 +542,14 @@ class Config:
             assert not (self.pose_opt or self.eval_opt), "camera-head fine-tuning replaces the pose optimiser"
         if self.camft_mlp:
             assert self.camft and not self.camft_lora, "camft_mlp needs camft and no LoRA"
+        if self.camft_module:
+            assert self.camft and not self.camft_lora and not self.camft_mlp, "camft_module needs camft, no LoRA, no camft_mlp"
+            assert self.camft_module in ("default", "fixed"), self.camft_module
+        assert self.camft_gt_loss_type in ("huber", "l1c2w"), self.camft_gt_loss_type
+        if self.camft_gt_loss_type != "huber" or self.camft_gt_k:
+            assert self.camft and (self.camft_mlp or self.camft_module), "loss type / GT K are for the pose-module arms"
+        if self.camft_gt_k:
+            assert self.gt_eval, "camft_gt_k needs gt_eval (GT cameras)"
         if self.camft_gt_loss:
             assert self.camft and self.gt_eval, "camft_gt_loss needs camft and gt_eval (GT cameras)"
         if self.eval_all:
@@ -768,8 +783,11 @@ class Config:
         if self.camft:
             # Hyphen separated so that the plot parser can read it as a single token
             parts.append(
-                f"cft-{self.camft_lr:g}-{'mlp' if self.camft_mlp else 'lora' + str(self.camft_lora_rank) if self.camft_lora else 'full'}"
-                f"-d{self.camft_delay}" + ("-gtloss" if self.camft_gt_loss else "")
+                f"cft-{self.camft_lr:g}-"
+                f"{'mlp' if self.camft_mlp else {'default': 'pdef', 'fixed': 'fixed'}[self.camft_module] if self.camft_module else 'lora' + str(self.camft_lora_rank) if self.camft_lora else 'full'}"
+                f"-d{self.camft_delay}"
+                + (("-gtloss" if self.camft_gt_loss_type == "huber" else "-gtl1c2w") if self.camft_gt_loss else "")
+                + ("-gtk" if self.camft_gt_k else "")
             )
         if self.eval_all:
             parts.append("evalall")
@@ -1528,6 +1546,12 @@ class Config:
                 command.append("--camft_gt_loss")
             if self.camft_mlp:
                 command.append("--camft_mlp")
+            if self.camft_module:
+                command.extend(["--camft_module", self.camft_module])
+            if self.camft_gt_loss_type != "huber":
+                command.extend(["--camft_gt_loss_type", "l1_c2w"])
+            if self.camft_gt_k:
+                command.append("--camft_gt_k")
 
         if self.eval_all:
             command.append("--eval_all_frames")
@@ -5284,6 +5308,264 @@ experiments.append(
                 "camft_mlp": True,
                 "camft_lr": 1e-04,
                 "series_label_override": "6. Pose residual MLP (3RGS) with GT loss during 3DGS (lr 1e-4)",
+            },
+        ],
+        PlotConfig(
+            x_axis="val_step",
+            split_param="series_label_override",
+            metric_keys=["psnr", "ssim", "lpips", "quality", "num_GS", "eval_rre", "eval_rte"],
+            max_render_cols=3,
+            horizontal_datasets=False,
+            show_gt=True,
+            show_zoom=True,
+            show_differences=False,
+            render_nums=[0, 2, 5],
+        ),
+        val_steps=[1, 3000, 7000, 10000, 15000],
+        render_filter_override={
+            "seed": [42],
+            "num_images": [40],
+            "num_steps": [15000],
+        },
+    )
+)
+
+experiments.append(
+    Experiment(
+        "omega_pose_opt_loss",
+        105,
+        "3DGS (MCMC, 15000 steps, 40 images, Omega point cloud) with gsplat pose optimisation modules (default 6-D delta, 3RGS MLP) started from the Omega cameras and trained only against GT cameras (pose-encoding Huber vs L1 on c2w); intrinsics from Omega; fixed GT and Omega cameras as baselines",
+        [
+            {
+                "seed": [42],
+                "num_steps": [15000],
+                "num_images": [40],
+                "sampling_mode": ["random"],
+                "num_points_value": 100000,
+                "gt_eval": True,
+                "eval_all": True,
+                "model": "omega",
+                "save_ply": True,
+                "choice": ["combined"],
+                "camera_src": "gt",
+                "pcd_src": "vggt",
+                "series_label_override": "1. GT cameras (fixed)",
+            },
+            {
+                "seed": [42],
+                "num_steps": [15000],
+                "num_images": [40],
+                "sampling_mode": ["random"],
+                "num_points_value": 100000,
+                "gt_eval": True,
+                "eval_all": True,
+                "model": "omega",
+                "save_ply": True,
+                "choice": ["vggt"],
+                "series_label_override": "2. Omega cameras (fixed)",
+            },
+            {
+                "seed": [42],
+                "num_steps": [15000],
+                "num_images": [40],
+                "sampling_mode": ["random"],
+                "num_points_value": 100000,
+                "gt_eval": True,
+                "eval_all": True,
+                "model": "omega",
+                "save_ply": True,
+                "choice": ["vggt"],
+                "camft": True,
+                "camft_module": "default",
+                "camft_gt_loss": True,
+                "camft_lr": 1e-04,
+                "series_label_override": "3. default pose opt, pose-encoding Huber GT loss (lr 1e-4)",
+            },
+            {
+                "seed": [42],
+                "num_steps": [15000],
+                "num_images": [40],
+                "sampling_mode": ["random"],
+                "num_points_value": 100000,
+                "gt_eval": True,
+                "eval_all": True,
+                "model": "omega",
+                "save_ply": True,
+                "choice": ["vggt"],
+                "camft": True,
+                "camft_module": "default",
+                "camft_gt_loss": True,
+                "camft_gt_loss_type": "l1c2w",
+                "camft_lr": 1e-04,
+                "series_label_override": "4. default pose opt, L1 c2w GT loss (lr 1e-4)",
+            },
+            {
+                "seed": [42],
+                "num_steps": [15000],
+                "num_images": [40],
+                "sampling_mode": ["random"],
+                "num_points_value": 100000,
+                "gt_eval": True,
+                "eval_all": True,
+                "model": "omega",
+                "save_ply": True,
+                "choice": ["vggt"],
+                "camft": True,
+                "camft_mlp": True,
+                "camft_gt_loss": True,
+                "camft_lr": 1e-04,
+                "series_label_override": "5. 3RGS MLP pose opt, pose-encoding Huber GT loss (lr 1e-4)",
+            },
+            {
+                "seed": [42],
+                "num_steps": [15000],
+                "num_images": [40],
+                "sampling_mode": ["random"],
+                "num_points_value": 100000,
+                "gt_eval": True,
+                "eval_all": True,
+                "model": "omega",
+                "save_ply": True,
+                "choice": ["vggt"],
+                "camft": True,
+                "camft_mlp": True,
+                "camft_gt_loss": True,
+                "camft_gt_loss_type": "l1c2w",
+                "camft_lr": 1e-04,
+                "series_label_override": "6. 3RGS MLP pose opt, L1 c2w GT loss (lr 1e-4)",
+            },
+        ],
+        PlotConfig(
+            x_axis="val_step",
+            split_param="series_label_override",
+            metric_keys=["psnr", "ssim", "lpips", "quality", "num_GS", "eval_rre", "eval_rte"],
+            max_render_cols=3,
+            horizontal_datasets=False,
+            show_gt=True,
+            show_zoom=True,
+            show_differences=False,
+            render_nums=[0, 2, 5],
+        ),
+        val_steps=[1, 3000, 7000, 10000, 15000],
+        render_filter_override={
+            "seed": [42],
+            "num_images": [40],
+            "num_steps": [15000],
+        },
+    )
+)
+
+experiments.append(
+    Experiment(
+        "omega_pose_opt_gtk",
+        106,
+        "Same as omega_pose_opt_loss with the intrinsics fixed to the GT cameras (also for fixed Omega poses)",
+        [
+            {
+                "seed": [42],
+                "num_steps": [15000],
+                "num_images": [40],
+                "sampling_mode": ["random"],
+                "num_points_value": 100000,
+                "gt_eval": True,
+                "eval_all": True,
+                "model": "omega",
+                "save_ply": True,
+                "choice": ["combined"],
+                "camera_src": "gt",
+                "pcd_src": "vggt",
+                "series_label_override": "1. GT cameras (fixed)",
+            },
+            {
+                "seed": [42],
+                "num_steps": [15000],
+                "num_images": [40],
+                "sampling_mode": ["random"],
+                "num_points_value": 100000,
+                "gt_eval": True,
+                "eval_all": True,
+                "model": "omega",
+                "save_ply": True,
+                "choice": ["vggt"],
+                "camft": True,
+                "camft_module": "fixed",
+                "camft_gt_k": True,
+                "camft_lr": 1e-04,
+                "series_label_override": "2. Omega poses (fixed) with GT K",
+            },
+            {
+                "seed": [42],
+                "num_steps": [15000],
+                "num_images": [40],
+                "sampling_mode": ["random"],
+                "num_points_value": 100000,
+                "gt_eval": True,
+                "eval_all": True,
+                "model": "omega",
+                "save_ply": True,
+                "choice": ["vggt"],
+                "camft": True,
+                "camft_module": "default",
+                "camft_gt_loss": True,
+                "camft_gt_k": True,
+                "camft_lr": 1e-04,
+                "series_label_override": "3. default pose opt, pose-encoding Huber GT loss, GT K (lr 1e-4)",
+            },
+            {
+                "seed": [42],
+                "num_steps": [15000],
+                "num_images": [40],
+                "sampling_mode": ["random"],
+                "num_points_value": 100000,
+                "gt_eval": True,
+                "eval_all": True,
+                "model": "omega",
+                "save_ply": True,
+                "choice": ["vggt"],
+                "camft": True,
+                "camft_module": "default",
+                "camft_gt_loss": True,
+                "camft_gt_loss_type": "l1c2w",
+                "camft_gt_k": True,
+                "camft_lr": 1e-04,
+                "series_label_override": "4. default pose opt, L1 c2w GT loss, GT K (lr 1e-4)",
+            },
+            {
+                "seed": [42],
+                "num_steps": [15000],
+                "num_images": [40],
+                "sampling_mode": ["random"],
+                "num_points_value": 100000,
+                "gt_eval": True,
+                "eval_all": True,
+                "model": "omega",
+                "save_ply": True,
+                "choice": ["vggt"],
+                "camft": True,
+                "camft_mlp": True,
+                "camft_gt_loss": True,
+                "camft_gt_k": True,
+                "camft_lr": 1e-04,
+                "series_label_override": "5. 3RGS MLP pose opt, pose-encoding Huber GT loss, GT K (lr 1e-4)",
+            },
+            {
+                "seed": [42],
+                "num_steps": [15000],
+                "num_images": [40],
+                "sampling_mode": ["random"],
+                "num_points_value": 100000,
+                "gt_eval": True,
+                "eval_all": True,
+                "model": "omega",
+                "save_ply": True,
+                "choice": ["vggt"],
+                "camft": True,
+                "camft_mlp": True,
+                "camft_gt_loss": True,
+                "camft_gt_loss_type": "l1c2w",
+                "camft_gt_k": True,
+                "camft_lr": 1e-04,
+                "series_label_override": "6. 3RGS MLP pose opt, L1 c2w GT loss, GT K (lr 1e-4)",
             },
         ],
         PlotConfig(

@@ -201,6 +201,13 @@ class Config:
     # Replace the head's output by the initial Omega cameras + the 3RGS pose residual MLP (head frozen, intrinsics fixed at the
     # initial prediction); camft_lr is then the MLP lr and the GT loss uses translation and quaternion only.
     camft_mlp: bool = False
+    # Pose module instead of the head: "" = head (or the 3RGS MLP when camft_mlp), "3rgs", "default" (gsplat CameraOptModule),
+    # "fixed" (initial Omega cameras, nothing trained)
+    camft_module: Literal["", "3rgs", "default", "fixed"] = ""
+    # GT loss of the pose-module arms: Huber on the 7-D pose encoding, or L1 on the 3x4 c2w vs the aligned GT c2w
+    camft_gt_loss_type: Literal["huber_enc", "l1_c2w"] = "huber_enc"
+    # Fix the intrinsics to the GT cameras (scaled to the training image size)
+    camft_gt_k: bool = False
     # Initial extent of GSs as a multiple of the camera extent. Ignored if using sfm
     init_extent: float = 3.0
     # Degree of spherical harmonics
@@ -580,7 +587,17 @@ class Runner:
             from camera_finetune import CameraFinetuner, MLPPoseFinetuner
 
             used = [self.train_parser.image_names[i] for i in self.trainset.indices]
-            self.camft = (MLPPoseFinetuner if cfg.camft_mlp else CameraFinetuner)(cfg, self.train_parser, used, self.device)
+            module = cfg.camft_module or ("3rgs" if cfg.camft_mlp else "")
+            if module:
+                self.camft = MLPPoseFinetuner(cfg, self.train_parser, used, self.device, module=module)
+            else:
+                assert cfg.camft_gt_loss_type == "huber_enc" and not cfg.camft_gt_k, "loss type / GT K are for the pose-module arms"
+                self.camft = CameraFinetuner(cfg, self.train_parser, used, self.device)
+            if cfg.camft_gt_k:
+                assert cfg.gt_train_data_dir, "camft_gt_k needs gt_train_data_dir"
+                names = sorted(self.camft.frame_of, key=self.camft.frame_of.get)
+                d = self.camft.set_gt_K(self.align_parser, names)
+                print(f"Camera fine-tuning: intrinsics fixed to GT (max abs diff to the predicted K: {d:.2f})")
             self.camft_target = None
             if cfg.camft_gt_loss:
                 from camera_finetune import gt_pose_targets
@@ -741,7 +758,9 @@ class Runner:
         if self.camft is not None:
             # Stepped/zeroed alongside the other auxiliary optimizers; Adam only updates parameters that received
             # gradients, so the head stays at its initial weights (fresh Adam state) until camft_delay
-            self.app_optimizers.append(self.camft.make_optimizer())
+            _opt = self.camft.make_optimizer()
+            if _opt is not None:
+                self.app_optimizers.append(_opt)
         if cfg.app_opt:
             assert feature_dim is not None
             self.app_module = AppearanceOptModule(
