@@ -9,7 +9,8 @@ free_gpus() {
   done
 }
 prev=""
-while true; do
+[ -n "$GPU" ] && a=$GPU   # GPU=<index> skips the wait (explicitly allowed by the user)
+while [ -z "$GPU" ]; do
   a=$(free_gpus | head -1)
   if [ -n "$a" ] && [ "$a" = "$prev" ]; then break; fi
   prev="$a"; sleep 60

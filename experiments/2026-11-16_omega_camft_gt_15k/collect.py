@@ -6,6 +6,7 @@ runs = {
     "3. Head LoRA r16 lr 1e-4, GT loss": "vggt_outputs/*cft-0.0001-lora16-d0-gtloss_evalall_steps15000",
     "4. Omega cameras (fixed)": "vggt_outputs/*omega*minfarthestpose_i40_gteval_evalall_steps15000",
     "5. COLMAP cameras (fixed)": "combined_outputs/*omega_combined_colmapcams*evalall_steps15000",
+    "6. Pose residual MLP (3RGS) lr 1e-4, GT loss": "vggt_outputs/*cft-0.0001-mlp-d0-gtloss_evalall_steps15000",
 }
 rows = []
 for arm, g in runs.items():

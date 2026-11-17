@@ -93,7 +93,7 @@ left to right: initial prediction, full head, LoRA, pose MLP (arm added later, s
 
 ## GPU vs CPU timing (40 images)
 Same fine-tuning (1000 steps, same arguments, seed 42) on one NVIDIA L40S (GPU 0, idle at launch; `--device cuda`, run 14 Nov 14:37 to 14:40 through
-`queue_gpu_timing.sh`, which waited for an idle GPU) vs the CPU runs above. Output files: `gpu_full.*`, `gpu_lora.*` (jsonl, log, cameras npz) in this folder.
+`queue_gpu_timing.sh`, which waited for an idle GPU) vs the CPU runs above. Output files: `gpu_full.*`, `gpu_lora.*` (jsonl, log, cameras npz) in this folder. The MLP arm was run on GPU 0 on 17 Nov 06:44 (`gpu_mlp.*`, the GPU smoke step of `experiments/2026-11-16_omega_camft_gt_15k/queue_mlp.sh`); GPU 0 held another user's idle model server (0% utilisation, ~30 GB) at that time, so it was not an exclusive GPU.
 
 | Arm | Device | train mean / median / min / max (s/step) | eval mean (s) | total wall time | step-1000 rre / rte |
 |---|---|---|---|---|---|
@@ -101,6 +101,8 @@ Same fine-tuning (1000 steps, same arguments, seed 42) on one NVIDIA L40S (GPU 0
 | Full head lr 1e-5 | GPU | 0.063 / 0.052 / 0.050 / 0.130 | 0.028 | 93.2 s | 0.0568 / 0.00235 |
 | LoRA r16 lr 1e-4 | CPU | 0.770 / 0.709 / 0.489 / 3.440 | 0.398 | 1169.2 s | 0.0780 / 0.00262 |
 | LoRA r16 lr 1e-4 | GPU | 0.025 / 0.025 / 0.022 / 0.110 | 0.026 | 51.0 s | 0.0780 / 0.00265 |
+| Pose residual MLP lr 1e-4 | CPU | 0.0198 / 0.0191 / 0.0142 / 0.0691 | 0.0052 | 25.2 s | 0.0986 / 0.00184 |
+| Pose residual MLP lr 1e-4 | GPU | 0.0067 / 0.0065 / 0.0043 / 0.1801 | 0.0067 | 13.7 s | 0.0993 / 0.001847 |
 
 The GPU trajectories are close to but not identical with the CPU ones (e.g. step 0 loss 1.05e-5 in both; step-1000 values above).
 The GPU timing includes `torch.cuda.synchronize` around the training step; the CPU runs shared a machine with load average ~48.
@@ -156,7 +158,7 @@ Mean over the 40 train frames (loss / rre deg / rte):
 
 CPU timing, 1000 steps (s per step; the MLP step does not run the camera head): train mean / median / min / max 0.0198 / 0.0191 / 0.0142 / 0.0691, eval mean 0.0052, total wall time 25.2 s.
 Files: `mlp_lr1e-4.jsonl`, `.log`, `_cameras.npz`; the figures `gt_smoke.png`, `rre_vs_walltime.png` and the two camera plots above include the third arm.
-GPU timing of this arm: see the GPU timing section (pending: it waits for an idle GPU).
+GPU timing of this arm: see the GPU timing section (`gpu_mlp.*`).
 
 ## Failed / missing runs, confounds
 - No failed runs. The first 200-step run was repeated inside the 1000-step runs (restarted once, a few minutes in, to add
