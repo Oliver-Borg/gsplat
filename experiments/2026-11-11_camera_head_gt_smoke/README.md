@@ -86,7 +86,7 @@ Timing (CPU, 1000 steps; seconds per step):
 | LoRA r16 lr 1e-4 | 0.770 / 0.709 / 0.489 / 3.440 | 0.398 | 1169.2 s |
 
 Camera plots (`plot_extrinsics` from `vggt/plot_cameras.py`, RTE colours; GT aligned to each series' predictions with Umeyama;
-left to right: initial prediction, full head, LoRA; GT frustums drawn with the initial predicted intrinsics, shape only):
+left to right: initial prediction, full head, LoRA, pose MLP (arm added later, see below); GT frustums drawn with the initial predicted intrinsics, shape only):
 
 ![cameras step 200](figures/cameras_step200.jpg)
 ![cameras step 1000](figures/cameras_step1000.jpg)
@@ -128,6 +128,35 @@ Timing (CPU, 1000 steps; seconds per step):
 |---|---|---|---|
 | Full head lr 1e-5 | 10.015 / 9.960 / 8.646 / 12.207 | 2.646 | 12667.1 s |
 | LoRA r16 lr 1e-4 | 9.377 / 9.344 / 8.334 / 11.697 | 3.635 | 13019.8 s |
+
+## Pose residual MLP (3RGS) arm (40 images, CPU)
+Added later as a third configuration with the same targets, loss family, 1000 steps, seed and metrics. Cameras = the initial Omega cameras
+plus the pose residual of the 3RGS module `CameraOptModuleMLP` (`examples/utils.py`: a learned 64-d embedding per frame, 2 hidden layers of
+width 64, outputs 3-D position and 6-D rotation deltas applied to the initial c2w, embeddings and last layer zero-initialised; `cam_scale` 1, trainer frame).
+The camera head is frozen (it only provides the initial cameras) and the intrinsics are fixed at the initial prediction of each frame (see the gaps below).
+Trainable parameters: 0.0115M. Adam, lr 1e-4, constant, no weight decay (decided by the user). Implementation: `MLPPoseFinetuner` in `examples/camera_finetune.py`,
+`--mlp` in `camera_head_gt_smoke.py`.
+- Loss: the same Huber (`smooth_l1`) and the same aligned GT targets, on the T and quaternion part of the 9-D pose encoding of the adjusted c2w (7 values per frame;
+  the fov part is fixed and left out); mean over 40 x 7 values. Filled gap: the loss values are therefore not directly comparable with the 9-value
+  means of the other arms (step 0: 4.33e-6 here, 1.05e-5 there). The logged `l1_fov` is the constant fov difference to GT.
+- Gap filled by me: "fix the initial intrinsics to those of the first camera" was read as the intrinsics of each frame's initial head prediction
+  (not one camera's intrinsics for all frames).
+- Step 0 reproduces the Omega baseline (rre 0.4133, rte 0.01296; init check of the round trip c2w to pose encoding to c2w 1.6e-6 in position).
+
+Mean over the 40 train frames (loss / rre deg / rte):
+
+| Step | Pose MLP lr 1e-4 | (full head lr 1e-5) | (LoRA r16 lr 1e-4) |
+|---|---|---|---|
+| 0 | 4.33e-6 / 0.4133 / 0.01296 | 1.05e-5 / 0.4134 / 0.01296 | 1.05e-5 / 0.4134 / 0.01296 |
+| 50 | 3.52e-6 / 0.3895 / 0.01296 | 1.46e-6 / 0.1482 / 0.00661 | 2.23e-6 / 0.1989 / 0.00775 |
+| 100 | 3.50e-6 / 0.3870 / 0.01294 | 1.21e-6 / 0.1320 / 0.00587 | 1.76e-6 / 0.1596 / 0.00709 |
+| 200 | 2.48e-6 / 0.3579 / 0.01156 | 8.99e-7 / 0.1064 / 0.00486 | 1.37e-6 / 0.1277 / 0.00627 |
+| 500 | 7.90e-7 / 0.2941 / 0.00747 | 4.69e-7 / 0.0765 / 0.00343 | 6.78e-7 / 0.1104 / 0.00371 |
+| 1000 | 6.03e-8 / 0.0986 / 0.00184 | 2.22e-7 / 0.0574 / 0.00235 | 3.22e-7 / 0.0780 / 0.00262 |
+
+CPU timing, 1000 steps (s per step; the MLP step does not run the camera head): train mean / median / min / max 0.0198 / 0.0191 / 0.0142 / 0.0691, eval mean 0.0052, total wall time 25.2 s.
+Files: `mlp_lr1e-4.jsonl`, `.log`, `_cameras.npz`; the figures `gt_smoke.png`, `rre_vs_walltime.png` and the two camera plots above include the third arm.
+GPU timing of this arm: see the GPU timing section (pending: it waits for an idle GPU).
 
 ## Failed / missing runs, confounds
 - No failed runs. The first 200-step run was repeated inside the 1000-step runs (restarted once, a few minutes in, to add

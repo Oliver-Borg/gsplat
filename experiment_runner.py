@@ -294,6 +294,8 @@ class Config:
     camft_delay: int = 0
     # Train the head only with the GT pose-encoding Huber loss (render loss does not reach the head), see simple_trainer camft_gt_loss
     camft_gt_loss: bool = False
+    # Pose residual MLP (3RGS) on the initial Omega cameras instead of the head (head frozen, intrinsics fixed)
+    camft_mlp: bool = False
     # Evaluate on every GT-eval frame that is not a training frame (simple_trainer eval_all_frames)
     eval_all: bool = False
     # Train with the cameras of a camera head fine-tuned against GT (`full` / `lora` snapshots, see FT_CAMERA_NPZ) instead
@@ -427,6 +429,7 @@ class Config:
             "camft_lora_rank",
             "camft_delay",
             "camft_gt_loss",
+            "camft_mlp",
             "eval_all",
             "ft_cams",
         ):
@@ -530,6 +533,8 @@ class Config:
                 self.choice == "vggt" and self.model == "omega" and not self.sampler and not self.vggt_ft
             ), "camera-head fine-tuning needs choice=vggt, model=omega"
             assert not (self.pose_opt or self.eval_opt), "camera-head fine-tuning replaces the pose optimiser"
+        if self.camft_mlp:
+            assert self.camft and not self.camft_lora, "camft_mlp needs camft and no LoRA"
         if self.camft_gt_loss:
             assert self.camft and self.gt_eval, "camft_gt_loss needs camft and gt_eval (GT cameras)"
         if self.eval_all:
@@ -763,7 +768,7 @@ class Config:
         if self.camft:
             # Hyphen separated so that the plot parser can read it as a single token
             parts.append(
-                f"cft-{self.camft_lr:g}-{'lora' + str(self.camft_lora_rank) if self.camft_lora else 'full'}"
+                f"cft-{self.camft_lr:g}-{'mlp' if self.camft_mlp else 'lora' + str(self.camft_lora_rank) if self.camft_lora else 'full'}"
                 f"-d{self.camft_delay}" + ("-gtloss" if self.camft_gt_loss else "")
             )
         if self.eval_all:
@@ -1521,6 +1526,8 @@ class Config:
                 command.append("--camft_lora")
             if self.camft_gt_loss:
                 command.append("--camft_gt_loss")
+            if self.camft_mlp:
+                command.append("--camft_mlp")
 
         if self.eval_all:
             command.append("--eval_all_frames")
@@ -5260,6 +5267,23 @@ experiments.append(
                 "pcd_src": "vggt",
                 "shared_camera": True,
                 "series_label_override": "5. COLMAP cameras (fixed)",
+            },
+            {
+                "seed": [42],
+                "num_steps": [15000],
+                "num_images": [40],
+                "sampling_mode": ["random"],
+                "num_points_value": 100000,
+                "gt_eval": True,
+                "eval_all": True,
+                "model": "omega",
+                "save_ply": True,
+                "choice": ["vggt"],
+                "camft": True,
+                "camft_gt_loss": True,
+                "camft_mlp": True,
+                "camft_lr": 1e-04,
+                "series_label_override": "6. Pose residual MLP (3RGS) with GT loss during 3DGS (lr 1e-4)",
             },
         ],
         PlotConfig(

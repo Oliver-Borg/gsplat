@@ -16,9 +16,9 @@ from vggt.plot_cameras import CameraSeries, plot_extrinsics  # noqa: E402
 
 step = int(sys.argv[1]) if len(sys.argv) > 1 else 1000
 d = Path(__file__).resolve().parent
-arms = {"full head lr 1e-5": "full_lr1e-5_cameras.npz", "LoRA r16 lr 1e-4": "lora16_lr1e-4_cameras.npz"}
+arms = {"full head lr 1e-5": "full_lr1e-5_cameras.npz", "LoRA r16 lr 1e-4": "lora16_lr1e-4_cameras.npz", "pose MLP lr 1e-4": "mlp_lr1e-4_cameras.npz"}
 series = []
-cols = [(1.0, 0.0, 0.0, 0.5)] * 3
+cols = [(1.0, 0.0, 0.0, 0.5)] * 4
 z0 = np.load(d / next(iter(arms.values())), allow_pickle=True)
 names = [str(n) for n in z0["names"]]
 idx = z0["frame_idx"]
@@ -61,7 +61,7 @@ for label, f in arms.items():
     series.append(mk(label.replace(" ", "_") + "_", z[f"c2w_step{step}"], z[f"K_step{step}"], gt, gtK))
 
 tmp = Path(tempfile.mkdtemp())
-plot_extrinsics([("default", series)], tmp, use_error_colors=True, max_cols=3)
+plot_extrinsics([("default", series)], tmp, use_error_colors=True, max_cols=4)
 (d / "figures").mkdir(exist_ok=True)
 shutil.copy(tmp / "camera_alignment.jpg", d / "figures" / f"cameras_step{step}.jpg")
 print("saved", d / "figures" / f"cameras_step{step}.jpg")

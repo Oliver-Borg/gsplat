@@ -198,6 +198,9 @@ class Config:
     # Train the head only with the Huber loss on the 9-D pose encoding against the GT cameras (aligned once to the
     # initial prediction, needs gt_train_data_dir); the render loss sees the head's cameras detached and trains only the Gaussians.
     camft_gt_loss: bool = False
+    # Replace the head's output by the initial Omega cameras + the 3RGS pose residual MLP (head frozen, intrinsics fixed at the
+    # initial prediction); camft_lr is then the MLP lr and the GT loss uses translation and quaternion only.
+    camft_mlp: bool = False
     # Initial extent of GSs as a multiple of the camera extent. Ignored if using sfm
     init_extent: float = 3.0
     # Degree of spherical harmonics
@@ -574,10 +577,10 @@ class Runner:
                 "camft replaces the pose optimiser and vggt_ft"
             )
             assert cfg.data_factor == 1, "camft assumes the training images are at the reconstruction image size"
-            from camera_finetune import CameraFinetuner
+            from camera_finetune import CameraFinetuner, MLPPoseFinetuner
 
             used = [self.train_parser.image_names[i] for i in self.trainset.indices]
-            self.camft = CameraFinetuner(cfg, self.train_parser, used, self.device)
+            self.camft = (MLPPoseFinetuner if cfg.camft_mlp else CameraFinetuner)(cfg, self.train_parser, used, self.device)
             self.camft_target = None
             if cfg.camft_gt_loss:
                 from camera_finetune import gt_pose_targets
@@ -1340,7 +1343,7 @@ class Runner:
 
             if self.camft is not None and self.camft_target is not None and step >= cfg.camft_delay:
                 # Added after the multiplier: the head's GT loss is independent of the render-loss scale
-                gt_loss = F.smooth_l1_loss(self.camft.last_pose_enc, self.camft_target)
+                gt_loss = self.camft.gt_loss(self.camft_target)
                 loss = loss + gt_loss
 
             self.mark("loss")

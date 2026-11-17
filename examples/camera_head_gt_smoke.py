@@ -19,7 +19,7 @@ import torch.nn.functional as F
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from camera_finetune import CameraFinetuner, gt_pose_targets  # noqa: E402
+from camera_finetune import CameraFinetuner, MLPPoseFinetuner, gt_pose_targets  # noqa: E402
 from datasets.colmap import Parser  # noqa: E402
 from evaluation import calculate_metrics  # noqa: E402
 
@@ -39,6 +39,7 @@ def main():
     ap.add_argument("--data_dir", required=True, help="trainer-frame COLMAP dir of the Omega reconstruction")
     ap.add_argument("--gt_dir", required=True)
     ap.add_argument("--lora", action="store_true")
+    ap.add_argument("--mlp", action="store_true", help="3RGS pose residual MLP on the initial cameras (head frozen, fixed intrinsics)")
     ap.add_argument("--lora_rank", type=int, default=16)
     ap.add_argument("--lr", type=float, required=True)
     ap.add_argument("--steps", type=int, default=200)
@@ -62,7 +63,7 @@ def main():
         camft_delay=0,
         camft_lr=a.lr,
     )
-    ft = CameraFinetuner(cfg, train_parser, names, a.device)
+    ft = (MLPPoseFinetuner if a.mlp else CameraFinetuner)(cfg, train_parser, names, a.device)
     target, gt_c2w = gt_pose_targets(ft, gt_parser, names)
     opt = ft.make_optimizer()
 
@@ -79,7 +80,8 @@ def main():
             if step > 0:
                 sync()
                 t0 = time.perf_counter()
-                loss = F.smooth_l1_loss(ft._pose_enc(), target)
+                ft.last_pose_enc = ft._pose_enc()
+                loss = ft.gt_loss(target)
                 opt.zero_grad(set_to_none=True)
                 loss.backward()
                 opt.step()
@@ -89,7 +91,8 @@ def main():
             with torch.no_grad():
                 enc = ft._pose_enc()
                 parts = (enc - target).abs().mean(0)
-                loss_now = F.smooth_l1_loss(enc, target).item()
+                ft.last_pose_enc = enc
+                loss_now = ft.gt_loss(target).item()
             rre, rte = metrics(ft, gt_c2w, names)
             t_eval = time.perf_counter() - t0
             rec = {

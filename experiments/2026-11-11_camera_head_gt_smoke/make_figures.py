@@ -3,7 +3,7 @@ import matplotlib; matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 d = os.path.dirname(os.path.abspath(__file__))
-arms = {"full head, lr 1e-5": "full_lr1e-5.jsonl", "LoRA r16, lr 1e-4": "lora16_lr1e-4.jsonl"}
+arms = {"full head, lr 1e-5": "full_lr1e-5.jsonl", "LoRA r16, lr 1e-4": "lora16_lr1e-4.jsonl", "pose MLP (3RGS), lr 1e-4": "mlp_lr1e-4.jsonl"}
 # reference, same code path (examples/colmap_reference_metrics.py): COLMAP run on the same 40 images
 COLMAP = {"rre": 0.5092, "rte": 0.05524}
 INIT = {"rre": 0.4134, "rte": 0.01296}  # Omega initial prediction (step 0)
