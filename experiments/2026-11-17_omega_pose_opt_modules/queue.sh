@@ -1,10 +1,11 @@
 #!/bin/bash
-# Waits for one idle GPU (no process of anyone on it, <500 MiB used, idle on two consecutive checks), then runs the two experiments
-# omega_pose_opt_loss and omega_pose_opt_gtk one after the other on it. GPU=<index> skips the wait (only when the user allows it).
+# Waits for a GPU at 0% utilisation (on two consecutive checks) with at least MINFREE MiB (default 6000) of free memory; sharing the GPU with
+# other users' idle processes is allowed by the user. Then runs omega_pose_opt_loss and omega_pose_opt_gtk one after the other on it.
+# GPU=<index> skips the wait. Earlier runs peaked at 1.5 to 2.3 GiB (torch max allocated) for the fixed / pose-module arms.
+MINFREE=${MINFREE:-6000}
 free_gpus() {
-  nvidia-smi --query-gpu=index,uuid,memory.used --format=csv,noheader,nounits | while IFS=', ' read -r idx uuid mem; do
-    n=$(nvidia-smi --query-compute-apps=gpu_uuid --format=csv,noheader | grep -c "$uuid")
-    if [ "$n" -eq 0 ] && [ "$mem" -lt 500 ]; then echo $idx; fi
+  nvidia-smi --query-gpu=index,memory.total,memory.used,utilization.gpu --format=csv,noheader,nounits | while IFS=', ' read -r idx tot used util; do
+    if [ "$util" -eq 0 ] && [ $((tot - used)) -ge "$MINFREE" ]; then echo $idx; fi
   done
 }
 prev=""
