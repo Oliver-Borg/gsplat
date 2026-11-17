@@ -208,6 +208,8 @@ class Config:
     camft_gt_loss_type: Literal["huber_enc", "l1_c2w"] = "huber_enc"
     # Fix the intrinsics to the GT cameras (scaled to the training image size)
     camft_gt_k: bool = False
+    # Head arms: leave the fov dimensions out of the Huber GT loss (T and quaternion only, as the pose modules)
+    camft_gt_no_fov: bool = False
     # Initial extent of GSs as a multiple of the camera extent. Ignored if using sfm
     init_extent: float = 3.0
     # Degree of spherical harmonics
@@ -591,9 +593,9 @@ class Runner:
             if module:
                 self.camft = MLPPoseFinetuner(cfg, self.train_parser, used, self.device, module=module)
             else:
-                assert cfg.camft_gt_loss_type == "huber_enc" and not cfg.camft_gt_k, "loss type / GT K are for the pose-module arms"
+                assert cfg.camft_gt_loss_type == "huber_enc", "the L1 c2w loss is for the pose-module arms"
                 self.camft = CameraFinetuner(cfg, self.train_parser, used, self.device)
-            if cfg.camft_gt_k:
+            if cfg.camft_gt_k:  # head arms and module arms
                 assert cfg.gt_train_data_dir, "camft_gt_k needs gt_train_data_dir"
                 names = sorted(self.camft.frame_of, key=self.camft.frame_of.get)
                 d = self.camft.set_gt_K(self.align_parser, names)

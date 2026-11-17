@@ -185,7 +185,10 @@ class CameraFinetuner(nn.Module):
         }
 
     def gt_loss(self, target: Tensor) -> Tensor:
-        """Huber loss of the last forward's pose encoding against the GT pose-encoding targets [S,9]."""
+        """Huber loss of the last forward's pose encoding against the GT pose-encoding targets [S,9]
+        (T and quaternion only with camft_gt_no_fov)."""
+        if getattr(self.cfg, "camft_gt_no_fov", False):
+            return nn.functional.smooth_l1_loss(self.last_pose_enc[:, :7], target[:, :7])
         return nn.functional.smooth_l1_loss(self.last_pose_enc, target)
 
     def make_optimizer(self) -> torch.optim.Optimizer:
