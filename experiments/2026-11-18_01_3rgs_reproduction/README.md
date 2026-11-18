@@ -57,5 +57,8 @@ bonsai is not in the paper's tables.
 - Confounds: MASt3R data from the authors' archive (not regenerated); local images instead of the authors' images; gsplat 1.5.3 in the `gsplat` env, not the commit pinned by the 3rgs repo (`ec3e715`); single seed; shared GPU (times not comparable to an idle GPU); bonsai has no paper reference.
 - The 3DGS baseline on bonsai (PSNR 14.12) and counter (21.87) is below the paper's counter 3DGS number (27.57); not investigated.
 
+## To investigate
+- Discrepancy between the paper's reported 3DGS numbers (counter: PSNR 27.57 / SSIM 0.862 / LPIPS 0.209, ATE 0.011, rot. 0.25) and our 3DGS baseline runs (counter 21.87 / 0.784 / 0.299, ATE 0.0142, rot. 0.265; bonsai 14.12 / 0.520 / 0.616).
+
 ## Insights
 To be filled by the user.

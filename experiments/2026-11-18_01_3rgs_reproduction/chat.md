@@ -5065,3 +5065,18 @@ I haven't written the chat-log rule yet because it needs a few decisions from yo
 ## User (2026-11-18 18:21:13 UTC)
 
 Messages and text replies only, whole session, commit with README. Backfill
+
+## Assistant (2026-11-18 18:21:43 UTC)
+
+The chat logs are in place and committed, and the rule is in `~/.claude/CLAUDE.md`.
+
+- **Converter:** `export_chat.py` in the vggt repo (commit `9732096`). It renders a session transcript as markdown, with your messages and my text replies only, plus timestamps. It leaves out tool calls and outputs, thinking, system reminders and the compaction summaries.
+- **Backfill:** `chat.md` is now in all 10 experiment folders in gsplat (commit `540ff44f`). I skipped `2026-13_tmp`.
+- **Whole session:** all your work since 2026-10-30 is one session, so each file is the same copy. That's 311 KB per folder, about 3 MB in total. It holds 236 of your messages up to now, and later messages aren't included until I regenerate it.
+- **Going forward:** I regenerate `chat.md` whenever I write or update a README, and commit it with the README. The README for `2026-11-18_01_3rgs_reproduction` was committed before this, and its `chat.md` was added now.
+
+Nothing is pushed.
+
+## User (2026-11-18 18:23:19 UTC)
+
+Yes, start the design questions for the head experiment. Also add a note to investigate the discrepency between the reported 3DGS values and ours
