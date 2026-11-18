@@ -39,11 +39,11 @@ detached as in arms 2 and 3. Implementation: `MLPPoseFinetuner` in `examples/cam
 ## Launch
 ```bash
 cd ~/work/git/gsplat
-SKIP_SMOKE=1 experiments/2026-11-16_omega_camft_gt_15k/queue.sh   # waits for one idle GPU, then runs (GPU=<index> pins one):
+SKIP_SMOKE=1 experiments/2026-11-16_00_omega_camft_gt_15k/queue.sh   # waits for one idle GPU, then runs (GPU=<index> pins one):
 #   env -u PYTHONPATH PATH=$HOME/.conda/envs/gsplat/bin:$PATH python experiment_runner.py --experiment_names omega_camft_gt_15k \
 #     --dataset_name bonsai --dataset_collections --do_reconstruct --skip_plotting --cuda_visible_devices <gpu index>
-python experiments/2026-11-16_omega_camft_gt_15k/collect.py && python experiments/2026-11-16_omega_camft_gt_15k/make_figures.py   # gsplat env
-# arm 6 (run afterwards): GPU=<index> experiments/2026-11-16_omega_camft_gt_15k/queue_mlp.sh   # GPU smoke test of the MLP arm, then the runner (arms 1-5 are skipped, results exist)
+python experiments/2026-11-16_00_omega_camft_gt_15k/collect.py && python experiments/2026-11-16_00_omega_camft_gt_15k/make_figures.py   # gsplat env
+# arm 6 (run afterwards): GPU=<index> experiments/2026-11-16_00_omega_camft_gt_15k/queue_mlp.sh   # GPU smoke test of the MLP arm, then the runner (arms 1-5 are skipped, results exist)
 # renders: the runner with --plot_only, copy of latest_plots/104_omega_camft_gt_15k_bonsai_latest_renders.jpg
 ```
 

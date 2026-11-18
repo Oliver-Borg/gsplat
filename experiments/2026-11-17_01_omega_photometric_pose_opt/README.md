@@ -1,7 +1,7 @@
 # Camera optimisation from the photometric loss only (no GT cameras), bonsai, 15000 steps
 
 ## Question
-In the previous experiments the cameras were trained with GT-pose losses (`experiments/2026-11-16_omega_camft_gt_15k`, `experiments/2026-11-17_omega_pose_opt_modules`).
+In the previous experiments the cameras were trained with GT-pose losses (`experiments/2026-11-16_00_omega_camft_gt_15k`, `experiments/2026-11-17_00_omega_pose_opt_modules`).
 Here the only signal reaching the cameras is the photometric (render) loss, as in a setup where the GT cameras are unknown. Same optimisers, started from the Omega cameras:
 default pose module, 3RGS MLP, full camera head, LoRA camera head. Three comparisons, each with its own runner experiment and section below:
 1. `omega_photo_vs_fixed` (group 107): the four photometric arms vs fixed GT, Omega and COLMAP cameras.
@@ -9,7 +9,7 @@ default pose module, 3RGS MLP, full camera head, LoRA camera head. Three compari
 3. `omega_photo_vs_gt_heads` (group 109): the full and LoRA camera head, photometric loss vs the GT-pose loss, with fixed Omega cameras.
 
 ## Setup
-- Scene, trainer and evaluation as in `experiments/2026-11-16_omega_camft_gt_15k` (bonsai, 40 training images `minfarthestpose` seed 42, `simple_trainer.py mcmc`, 15000 steps, MCMC `cap_max=1_000_000`,
+- Scene, trainer and evaluation as in `experiments/2026-11-16_00_omega_camft_gt_15k` (bonsai, 40 training images `minfarthestpose` seed 42, `simple_trainer.py mcmc`, 15000 steps, MCMC `cap_max=1_000_000`,
   100K random Omega points, evaluation on the 252 GT-eval frames that are not training frames, `eval_rre`/`eval_rte` of the 40 training cameras against GT, `train_time_s` = cumulative CUDA-synchronised
   training-step time without evaluation, camera drift log every 50 steps in `stats/ft_drift.jsonl`).
 - Photometric arms (new; no `camft_gt_loss`): the optimiser's cameras are not detached, so the render loss gradient reaches them; there is no GT loss. Camera optimisation starts at step 0 (no delay), from the
@@ -29,11 +29,11 @@ default pose module, 3RGS MLP, full camera head, LoRA camera head. Three compari
 ## Launch
 ```bash
 cd ~/work/git/gsplat
-experiments/2026-11-17_omega_photometric_pose_opt/queue.sh   # polls for a GPU at 0% utilisation with >= 6000 MiB free (GPU=<index> skips the wait), then:
+experiments/2026-11-17_01_omega_photometric_pose_opt/queue.sh   # polls for a GPU at 0% utilisation with >= 6000 MiB free (GPU=<index> skips the wait), then:
 #   env -u PYTHONPATH PATH=$HOME/.conda/envs/gsplat/bin:$PATH python experiment_runner.py \
 #     --experiment_names omega_photo_vs_fixed omega_photo_vs_gt_modules omega_photo_vs_gt_heads --dataset_name bonsai --dataset_collections \
 #     --do_reconstruct --skip_plotting --cuda_visible_devices <gpu index>
-python experiments/2026-11-17_omega_photometric_pose_opt/collect.py && python experiments/2026-11-17_omega_photometric_pose_opt/make_figures.py   # gsplat env
+python experiments/2026-11-17_01_omega_photometric_pose_opt/collect.py && python experiments/2026-11-17_01_omega_photometric_pose_opt/make_figures.py   # gsplat env
 # renders: the runner with --plot_only for the three experiments, copies of latest_plots/107_..., 108_..., 109_..._latest_renders.jpg
 ```
 

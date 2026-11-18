@@ -30,8 +30,8 @@ import examples.evaluation
 GSPLAT_PYTHON = os.path.expanduser("~/.conda/envs/gsplat/bin/python")
 GSPLAT_TORCHRUN = os.path.expanduser("~/.conda/envs/gsplat/bin/torchrun")
 VGGT_PYTHON = os.path.expanduser("~/.conda/envs/vggt/bin/python")
-# Cameras of the camera heads fine-tuned against GT (experiments/2026-11-11_camera_head_gt_smoke), see Config.ft_cams
-_FT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "experiments/2026-11-11_camera_head_gt_smoke")
+# Cameras of the camera heads fine-tuned against GT (experiments/2026-11-11_00_camera_head_gt_smoke), see Config.ft_cams
+_FT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "experiments/2026-11-11_00_camera_head_gt_smoke")
 FT_CAMERA_NPZ = {
     "full": os.path.join(_FT_DIR, "full_lr1e-5_cameras.npz"),
     "lora": os.path.join(_FT_DIR, "lora16_lr1e-4_cameras.npz"),

@@ -17,7 +17,7 @@ fine-tuned against GT (full head and LoRA), Omega initial prediction, COLMAP.
 | Arm | Cameras | How built |
 |---|---|---|
 | 1 | GT | `choice=combined`, `camera_src=gt`, `pcd_src=vggt` (Omega): GT cameras copied into the Omega reconstruction, points aligned to the cameras (global Umeyama) |
-| 2 | Camera head fine-tuned against GT, full head lr 1e-5, step 1000 | `ft_cams=full`: `vggt/make_ft_cameras.py` writes a copy of the Omega reconstruction with the cameras (poses and fov-derived intrinsics) from `../2026-11-11_camera_head_gt_smoke/full_lr1e-5_cameras.npz` |
+| 2 | Camera head fine-tuned against GT, full head lr 1e-5, step 1000 | `ft_cams=full`: `vggt/make_ft_cameras.py` writes a copy of the Omega reconstruction with the cameras (poses and fov-derived intrinsics) from `../2026-11-11_00_camera_head_gt_smoke/full_lr1e-5_cameras.npz` |
 | 3 | Camera head fine-tuned against GT, LoRA r16 lr 1e-4, step 1000 | `ft_cams=lora`, `lora16_lr1e-4_cameras.npz` |
 | 4 | Omega initial prediction | plain Omega reconstruction (`choice=vggt`, `model=omega`) |
 | 5 | COLMAP (same 40 images, shared camera, `default` mode) | `choice=combined`, `camera_src=colmap`, `pcd_src=vggt` |
@@ -30,7 +30,7 @@ cd ~/work/git/gsplat
 env -u PYTHONPATH PATH=$HOME/.conda/envs/gsplat/bin:$PATH python experiment_runner.py \
   --experiment_names omega_cameras_7k --dataset_name bonsai --dataset_collections \
   --do_reconstruct --skip_plotting --cuda_visible_devices 0
-python experiments/2026-11-13_omega_cameras_7k/collect.py && python experiments/2026-11-13_omega_cameras_7k/make_figures.py
+python experiments/2026-11-13_00_omega_cameras_7k/collect.py && python experiments/2026-11-13_00_omega_cameras_7k/make_figures.py
 ```
 
 ## Run metadata
@@ -97,7 +97,7 @@ Differences from the 40-image setup (facts):
 - Image selection mode `farthestpose` (the runner switches from `minfarthestpose` when the training set is the maximum), not `minfarthestpose`.
 - The VGGT 100-image cap of the runner is lifted for `model=omega` (the Omega reconstruction ran on all 255 images in one pass, no out-of-memory).
 - Camera head fine-tuning, per arm 1000 steps, **on CPU** (decided by the user), against the GT cameras aligned once to the initial output
-  (same `camera_head_gt_smoke.py` as the smoke test, outputs in `../2026-11-11_camera_head_gt_smoke/n255/`): full head lr 1e-5, LoRA r16 lr 1e-4,
+  (same `camera_head_gt_smoke.py` as the smoke test, outputs in `../2026-11-11_00_camera_head_gt_smoke/n255/`): full head lr 1e-5, LoRA r16 lr 1e-4,
   step-1000 snapshots used for arms 2 and 3. Camera-head results and timings: see the n255 tables in the smoke-test log.
 - Arm 5 uses the existing COLMAP reconstruction of the 255 images (`bonsai_2_n255_s42_default_farthestpose_sharedcam`).
 
@@ -106,10 +106,10 @@ Launch (`pipeline_n255.py` in this folder; stages: Omega reconstruction on an id
 ```bash
 python examples/camera_head_gt_smoke.py --device cpu --cache_file ../vggt/vggt_outputs/bonsai_2_cache_n255_s42_omega_farthestpose/raw_preds.pt \
   --data_dir ../vggt/vggt_outputs/bonsai_2_n255_s42_omega_c0.0_p100000_random_farthestpose --gt_dir ../vggt/data/360_v2/bonsai \
-  --steps 1000 --snapshots 200 1000 [--lr 1e-5 | --lora --lr 1e-4] --out experiments/2026-11-11_camera_head_gt_smoke/n255/<name>.jsonl
+  --steps 1000 --snapshots 200 1000 [--lr 1e-5 | --lora --lr 1e-4] --out experiments/2026-11-11_00_camera_head_gt_smoke/n255/<name>.jsonl
 env -u PYTHONPATH PATH=$HOME/.conda/envs/gsplat/bin:$PATH python experiment_runner.py --experiment_names omega_cameras_7k_full \
   --dataset_name bonsai --dataset_collections --skip_plotting --cuda_visible_devices 0
-python experiments/2026-11-13_omega_cameras_7k/collect.py 255   # in the gsplat env: make_figures.py 255
+python experiments/2026-11-13_00_omega_cameras_7k/collect.py 255   # in the gsplat env: make_figures.py 255
 env -u PYTHONPATH ~/.conda/envs/vggt/bin/python make_camera_plot.py 255     # renders: runner --plot_only
 ```
 

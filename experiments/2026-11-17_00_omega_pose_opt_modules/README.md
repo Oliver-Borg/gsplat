@@ -7,7 +7,7 @@ Two experiments in `experiment_runner.py`, both starting from the VGGT-Omega cam
 2. `omega_pose_opt_gtk` (group 106, the K ablation): the same arms with the intrinsics fixed to the GT intrinsics, plus the Omega poses with GT intrinsics and no pose optimisation.
 
 ## Setup
-- Scene, trainer, evaluation as in `experiments/2026-11-16_omega_camft_gt_15k` (bonsai, 40 training images `minfarthestpose` seed 42, `simple_trainer.py mcmc`, 15000 steps,
+- Scene, trainer, evaluation as in `experiments/2026-11-16_00_omega_camft_gt_15k` (bonsai, 40 training images `minfarthestpose` seed 42, `simple_trainer.py mcmc`, 15000 steps,
   MCMC `cap_max=1_000_000`, 100K random Omega points, evaluation on the 252 GT-eval frames that are not training frames, `eval_rre`/`eval_rte` on the 40 training cameras,
   `train_time_s` = cumulative CUDA-synchronised training-step time, evaluation excluded).
 - Pose modules (`camft_module`, implemented in `MLPPoseFinetuner` in `examples/camera_finetune.py`): the camera head is frozen and not run; the module's output is applied to the initial Omega
@@ -48,10 +48,10 @@ Two experiments in `experiment_runner.py`, both starting from the VGGT-Omega cam
 ## Launch
 ```bash
 cd ~/work/git/gsplat
-experiments/2026-11-17_omega_pose_opt_modules/queue.sh   # polls for a GPU at 0% utilisation with >= 6000 MiB free (GPU=<index> skips the wait), then:
+experiments/2026-11-17_00_omega_pose_opt_modules/queue.sh   # polls for a GPU at 0% utilisation with >= 6000 MiB free (GPU=<index> skips the wait), then:
 #   env -u PYTHONPATH PATH=$HOME/.conda/envs/gsplat/bin:$PATH python experiment_runner.py --experiment_names omega_pose_opt_loss omega_pose_opt_gtk \
 #     --dataset_name bonsai --dataset_collections --do_reconstruct --skip_plotting --cuda_visible_devices <gpu index>
-python experiments/2026-11-17_omega_pose_opt_modules/collect.py && python experiments/2026-11-17_omega_pose_opt_modules/make_figures.py   # gsplat env
+python experiments/2026-11-17_00_omega_pose_opt_modules/collect.py && python experiments/2026-11-17_00_omega_pose_opt_modules/make_figures.py   # gsplat env
 # renders: the runner with --plot_only for both experiments; copies of latest_plots/105_..._latest_renders.jpg and 106_..._latest_renders.jpg
 ```
 

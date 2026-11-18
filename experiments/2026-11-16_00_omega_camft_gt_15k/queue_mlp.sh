@@ -17,7 +17,7 @@ while [ -z "$GPU" ]; do
 done
 echo "$(date) launching on GPU $a"
 cd ~/work/git/gsplat
-S=experiments/2026-11-11_camera_head_gt_smoke
+S=experiments/2026-11-11_00_camera_head_gt_smoke
 CUDA_VISIBLE_DEVICES=$a env -u PYTHONPATH $HOME/.conda/envs/gsplat/bin/python examples/camera_head_gt_smoke.py --device cuda \
   --cache_file ../vggt/vggt_outputs/bonsai_2_cache_n40_s42_omega_minfarthestpose/raw_preds.pt \
   --data_dir ../vggt/vggt_outputs/bonsai_2_n40_s42_omega_c0.0_p100000_random_minfarthestpose --gt_dir ../vggt/data/360_v2/bonsai \

@@ -38,8 +38,8 @@ CUDA_VISIBLE_DEVICES= env -u PYTHONPATH $HOME/.conda/envs/gsplat/bin/python exam
 CUDA_VISIBLE_DEVICES= env -u PYTHONPATH $HOME/.conda/envs/gsplat/bin/python examples/colmap_reference_metrics.py \
   ../vggt/colmap_outputs/bonsai_2_n40_s42_default_minfarthestpose_sharedcam ../vggt/data/360_v2/bonsai
 # figures (camera plot runs in the vggt env, from ~/work/git)
-python experiments/2026-11-11_camera_head_gt_smoke/make_figures.py
-env -u PYTHONPATH ~/.conda/envs/vggt/bin/python gsplat/experiments/2026-11-11_camera_head_gt_smoke/make_camera_plot.py 200   # and 1000
+python experiments/2026-11-11_00_camera_head_gt_smoke/make_figures.py
+env -u PYTHONPATH ~/.conda/envs/vggt/bin/python gsplat/experiments/2026-11-11_00_camera_head_gt_smoke/make_camera_plot.py 200   # and 1000
 ```
 
 ## Run metadata
@@ -93,7 +93,7 @@ left to right: initial prediction, full head, LoRA, pose MLP (arm added later, s
 
 ## GPU vs CPU timing (40 images)
 Same fine-tuning (1000 steps, same arguments, seed 42) on one NVIDIA L40S (GPU 0, idle at launch; `--device cuda`, run 14 Nov 14:37 to 14:40 through
-`queue_gpu_timing.sh`, which waited for an idle GPU) vs the CPU runs above. Output files: `gpu_full.*`, `gpu_lora.*` (jsonl, log, cameras npz) in this folder. The MLP arm was run on GPU 0 on 17 Nov 06:44 (`gpu_mlp.*`, the GPU smoke step of `experiments/2026-11-16_omega_camft_gt_15k/queue_mlp.sh`); GPU 0 held another user's idle model server (0% utilisation, ~30 GB) at that time, so it was not an exclusive GPU.
+`queue_gpu_timing.sh`, which waited for an idle GPU) vs the CPU runs above. Output files: `gpu_full.*`, `gpu_lora.*` (jsonl, log, cameras npz) in this folder. The MLP arm was run on GPU 0 on 17 Nov 06:44 (`gpu_mlp.*`, the GPU smoke step of `experiments/2026-11-16_00_omega_camft_gt_15k/queue_mlp.sh`); GPU 0 held another user's idle model server (0% utilisation, ~30 GB) at that time, so it was not an exclusive GPU.
 
 | Arm | Device | train mean / median / min / max (s/step) | eval mean (s) | total wall time | step-1000 rre / rte |
 |---|---|---|---|---|---|
@@ -110,7 +110,7 @@ The GPU timing includes `torch.cuda.synchronize` around the training step; the C
 ## 255 training images (CPU)
 Same fine-tuning on the 255-image Omega reconstruction (`bonsai_2_n255_s42_omega_c0.0_p100000_random_farthestpose`, cache
 `bonsai_2_cache_n255_s42_omega_farthestpose/raw_preds.pt`), CPU, 32 threads on a shared machine, 1000 steps, snapshots at 200 and 1000, seed 42, run one arm after the other
-as part of the `omega_cameras_7k_full` pipeline (see `../2026-11-13_omega_cameras_7k/README.md`). Files in `n255/`: `*.jsonl`, `*.log`, `*_cameras.npz`.
+as part of the `omega_cameras_7k_full` pipeline (see `../2026-11-13_00_omega_cameras_7k/README.md`). Files in `n255/`: `*.jsonl`, `*.log`, `*_cameras.npz`.
 Step 0 equals the 255-image Omega baseline (rre 0.3993, rte 0.01156).
 
 Mean over the 255 frames (loss / rre deg / rte):
