@@ -5065,3 +5065,279 @@ I haven't written the chat-log rule yet because it needs a few decisions from yo
 ## User (2026-11-18 18:21:13 UTC)
 
 Messages and text replies only, whole session, commit with README. Backfill
+
+## Assistant (2026-11-18 18:21:43 UTC)
+
+The chat logs are in place and committed, and the rule is in `~/.claude/CLAUDE.md`.
+
+- **Converter:** `export_chat.py` in the vggt repo (commit `9732096`). It renders a session transcript as markdown, with your messages and my text replies only, plus timestamps. It leaves out tool calls and outputs, thinking, system reminders and the compaction summaries.
+- **Backfill:** `chat.md` is now in all 10 experiment folders in gsplat (commit `540ff44f`). I skipped `2026-13_tmp`.
+- **Whole session:** all your work since 2026-10-30 is one session, so each file is the same copy. That's 311 KB per folder, about 3 MB in total. It holds 236 of your messages up to now, and later messages aren't included until I regenerate it.
+- **Going forward:** I regenerate `chat.md` whenever I write or update a README, and commit it with the README. The README for `2026-11-18_01_3rgs_reproduction` was committed before this, and its `chat.md` was added now.
+
+Nothing is pushed.
+
+## User (2026-11-18 18:23:19 UTC)
+
+Yes, start the design questions for the head experiment. Also add a note to investigate the discrepency between the reported 3DGS values and ours
+
+## Assistant (2026-11-18 18:23:31 UTC)
+
+I added the note to the reproduction log under a new "To investigate" section, with the paper and ours 3DGS numbers side by side. It's committed as `53cd3c2e` along with a regenerated `chat.md`, and not pushed.
+
+First round of design questions for the head experiment with the 3R-GS epipolar loss:
+
+1. **Correspondences:** The original VGGT track head needs a query points set per image pair.
+   - What are the query points: a grid per frame, random points, or something else?
+   - How many per frame?
+   - Which pairs: all pairs among the 40 training images, neighbouring frames only, or random pairs? The paper uses `pairs_step=1` and `cores_step=20` subsampling of MASt3R pairs.
+2. **Confidence:** 3R-GS weights each correspondence by MASt3R confidence. The track head gives visibility and confidence per track point. Should the weight be the track confidence, the visibility, or both multiplied, and should there be a threshold below which correspondences are dropped?
+3. **Frozen inputs:** Should the correspondences be computed once and cached, or recomputed from the VGGT track head every step? The track head isn't being trained, so cached is the cheap option.
+4. **Loss formulation:** Does it match the paper exactly?
+   - The loss is the symmetrical epipolar distance from the fundamental matrix built from the current camera-head poses and intrinsics.
+   - The weight is 2.0 and the loss is active only for the first 3000 steps (`0<step<3000`).
+   - Should those be kept, or should the weight and window be arms?
+5. **Photometric loss:** Does the photometric loss also reach the camera head, as in the current experiment, or does only the epipolar loss train it?
+6. **Delay:** Should any arm delay activation? The paper's 0 to 3000 window conflicts with delayed activation at 50% of steps. Which wins for the delayed arm?
+7. **Arms:** Which arms do you want?
+   - Candidates are the full head, LoRA r16 and the 3R-GS MLP module.
+   - The learning rates and the reference arms are open: fixed Omega cameras and the photometric-only arms from the current experiment.
+8. **Head in the loop:** The 3R-GS module acts as a delta on fixed poses, while the camera head predicts poses directly from cached tokens. Should the epipolar loss use the head's output poses and intrinsics (both trainable), or only the poses?
+9. **Setup:** Same as the current experiments (bonsai, 40 images, seed 42, 15000 steps, Omega cameras as init), or the 30k-step 3R-GS schedule?
+10. **Evaluation:** Same eval (`eval_all` 252 frames, GT-aligned rre/rte), or also the 3R-GS test-time pose optimisation of the test views?
+
+## User (2026-11-18 18:24:11 UTC)
+
+Give me these as questions
+
+## Assistant (2026-11-18 19:12:29 UTC)
+
+`rgs3` doesn't sample keypoints itself. It uses the dense MASt3R matches stored in the authors' archive:
+- Each image pair has 8346 stored correspondences, as flattened pixel indices on MASt3R's 512-wide grid. They are not sorted by pixel (bonsai: `corr_i[0]` starts `0, 511, 35643, 37110, …`).
+- `cores_step=20` takes every 20th entry of that stored list (about 417 per pair) and `pairs_step=1` keeps all pairs. The stride is fixed, not random.
+- Bonsai has 4254 pairs for 255 images, not all pairs.
+- The weight is MASt3R's confidence (`corr_weight`, bonsai range 0 to 94.6, mean 5.0). `corr_mask` is True for 66% of the entries.
+- The loss is `Σ(err · weight) / Σ(mask · weight)`: the mask appears only in the denominator, not in the numerator.
+
+For "Delay: do what is done in the paper", I read it as no delayed arms. The paper has no delay, so all arms start at step 0 with the epipolar loss active for steps 0 to 3000 and the photometric loss throughout. Say so if you meant something else.
+
+Recorded so far:
+- **Setup:** 3R-GS schedule, 30k steps with MCMC.
+- **Eval:** the current eval plus the test-time pose optimisation of the test views.
+- **Pairs:** all pairs of the 40 frames.
+- **Caching:** correspondences cached once.
+- **Loss:** as in the paper (weight 2.0, window 0 to 3000, symmetrical epipolar distance).
+- **Photometric loss:** also reaches the head.
+- **Head output:** poses and intrinsics.
+- **Arms:** full head, LoRA r16, 3R-GS MLP module, default module.
+- **References:** fixed Omega cameras, the photometric-only twins, and the MASt3R epipolar loss on the MLP.
+
+Questions still open:
+1. **Query points:** Given how 3R-GS picks its points, how should the track head's query points be chosen? Options are a fixed-stride grid per frame, random with a seed, or something else, and how many per frame?
+2. **Weight:** You answered "Other" for the correspondence weight. What should it be? For example the track head confidence, visibility, or something else, and should there be a mask like `corr_mask`?
+3. **Learning rates:** Which lr for each arm: full head, LoRA, MLP module and default module? Should I reuse the current experiment's values (full head 1e-5, LoRA 1e-4, MLP 1e-4, default 1e-4)? 3R-GS itself uses 1.5e-4 for the MLP and 1e-5 for the default module.
+4. **MASt3R reference arm:** The authors' MASt3R correspondences are for their 255-image bonsai split, not our 40 images. Should that arm use the 40-image subset where it overlaps with their split, our own MASt3R run on the 40 images (needs MASt3R installed), or be dropped?
+5. **MCMC and the ported eval:** The 30k MCMC schedule and the 3R-GS test-time pose optimisation eval would need to go into `simple_trainer.py`, which has no test-time pose optimisation now. Should I port that function (`compute_gradient_loss` plus the 100-iteration loop) into `simple_trainer.py`, or evaluate via `rgs3` code?
+
+## User (2026-11-18 19:12:46 UTC)
+
+Use the same lrs as the current experiment
+
+## Assistant (2026-11-18 19:48:54 UTC)
+
+I'm checking how many of the authors' MASt3R pairs fall inside our 40 bonsai images, so I can tell you whether the MASt3R reference arm is feasible.
+
+## Assistant (2026-11-18 19:49:20 UTC)
+
+The authors' MASt3R pairs are too sparse to serve as the MASt3R reference arm inside our 40-image subset.
+
+- **Split:** The authors' bonsai split matches ours. Their `images_train.txt` and `images_test.txt` are exactly our sorted images with `i % 8 == 0` as test, so every image we use also exists in their archive.
+- **Pairs:** The archive has 4254 pairs for 255 images, and only 70 of them have both images inside a 40-image subset. I measured that on an approximate subset, the 26 registered images in `colmap_outputs/bonsai_2_n40_s42_default_farthestpose/cameras.json`, not on the exact 40 used by the Omega runs. It's still about 70 of 780 possible pairs.
+
+So the "authors' pairs within the 40" option would give a much sparser pair graph than the track-head arms, which use all 780 pairs.
+
+I can't write the code yet because two things are open:
+1. **MASt3R reference arm:** Do you still want it with the authors' 70 pairs as they are, or should I go another way? The alternatives are to run MASt3R ourselves on the 40 images or to drop the arm. Running MASt3R needs it installed and run here, and the sample of ~417 matches per pair would then also be our choice.
+2. **Track-head confidence and mask:** "As in the paper" means weight = confidence and a mask in the denominator only. For the track head I would take confidence from the head's confidence output and the mask as visibility above 0.5 in both frames. The 0.5 threshold is my gap-fill. Is that acceptable, or do you want a different threshold?
+
+## User (2026-11-18 19:52:43 UTC)
+
+Drop the MASt3R arm, 0.5 is fine. Do that after normalisation of the confidence
+
+## Assistant (2026-11-18 19:53:33 UTC)
+
+You picked "Other" for the confidence normalisation but didn't describe it, so I can't implement that part yet. Which normalisation do you mean?
+
+The options I gave were:
+- divide by the per-pair max;
+- min-max per pair;
+- percentile rank per pair.
+
+Anything else works too, for example a global normalisation over all pairs, a sigmoid, or a different statistic. I need the exact formula and whether it is computed per pair, per frame or globally.
+
+Everything else is settled:
+- the mask is normalised confidence > 0.5;
+- the pair confidence is the product of the two frames' confidences;
+- all pairs of the 40 frames, a fixed-stride grid of query points, correspondences cached once;
+- the paper's loss (weight 2.0, steps 0 to 3000, no delay), with the photometric loss also reaching the head;
+- the arms use the current experiment's learning rates, and the MASt3R arm is dropped.
+
+## User (2026-11-18 21:00:44 UTC)
+
+Divide by the max per pair
+
+## Assistant (2026-11-18 21:03:41 UTC)
+
+I'm running the track-head script on the real 40-image Omega cache on GPU 0. It is at 0% utilisation with 15.4 GiB free, and the sharing on it is the same as for the earlier runs.
+
+## Assistant (2026-11-18 21:07:10 UTC)
+
+The track-head step still hits an out-of-memory error at the same 1.28 GiB allocation, so the chunking isn't what causes it. I'm reading that line of the tracker.
+
+## Assistant (2026-11-18 21:08:56 UTC)
+
+I stopped the job, saved the rule that GPUs are never shared, and I'm now polling for a GPU with no other user's process on it before rerunning the track-head script.
+
+## Assistant (2026-11-18 21:09:03 UTC)
+
+No GPU is free of other users' processes right now, so nothing is running. I stopped the track-head job on GPU 0 and saved a rule that I never share a GPU with another user, even when their process is idle.
+
+I started a poller that waits for a GPU with no foreign process and 0% utilisation on two consecutive checks. It runs `track_pairs.py` on the real 40-image Omega cache as soon as one appears. I'll be notified when it finishes.
+
+Code state:
+- `track_pairs.py` is in the vggt repo. It has not run to completion yet: the two attempts on the shared GPU ran out of memory, and I've added a memory fix that hasn't been tested.
+- The epipolar loss and the test-time pose optimisation are added to `examples/simple_trainer.py`, and the runner has the new fields and flags. None of it has been run yet.
+- Still to do: the experiment definition in `experiment_runner.py` with its figures and log, and a short smoke test before the full runs.
+
+Nothing is committed or pushed yet. Everything else you decided stays as agreed, and all the longer runs will also wait for a free GPU.
+
+## User (2026-11-19 08:03:58 UTC)
+
+Progress on the track pairs?
+
+## Assistant (2026-11-19 08:04:06 UTC)
+
+The track pairs haven't been computed yet, and nothing is running on a GPU. The poller is still waiting for a GPU with no other user's process on it, and none qualifies.
+
+| GPU | Util | Free VRAM | Other users' processes |
+|---|---|---|---|
+| 0 | 0% | 15.4 GiB | jsk62 (29.6 GiB) |
+| 1 | 0% | 1.6 GiB | jsk62 (43.4 GiB) |
+| 2 | 87% | 43.5 GiB | ec2013 |
+| 3 | 84% | 42.9 GiB | ec2013, rma55 |
+
+GPUs 2 and 3 have a lot of free VRAM now, but ec2013 and rma55 are running on them. Under your no-sharing rule I'm not using them.
+
+The poller has been waiting since yesterday. The output file `track_pairs.pt` doesn't exist yet. The poller has no timeout, so it will start the job as soon as a GPU is free.
+
+## User (2026-11-19 08:04:27 UTC)
+
+Lets run on 0 since there is a good amount of vram and 0% util
+
+## Assistant (2026-11-19 08:04:45 UTC)
+
+The track-pairs job is now running on GPU 0, as you said. I stopped the poller first. I'll report when it finishes.
+
+## User (2026-11-19 08:13:49 UTC)
+
+Progress on the track pairs?
+
+## Assistant (2026-11-19 08:13:56 UTC)
+
+The track pairs finished at 08:13, in about 8 minutes on GPU 0, with no errors.
+
+- **File:** `vggt_outputs/bonsai_2_cache_n40_s42_omega_minfarthestpose/track_pairs.pt` (12 MB).
+- **Size:** 780 pairs × 425 points per pair (the grid rounds the 417 target to 425).
+- **Mask:** the fraction of points with normalised confidence above 0.5 is 0.103.
+
+Two memory changes were needed: the aggregator runs in bf16, and only the four track-head feature layers are kept. As the OOM message suggested, I also run the track head in query chunks of 50 points. The correspondences are therefore computed under bf16 autocast, like the official demo.
+
+I haven't checked the correspondences against anything yet. Next is a short smoke test of the epipolar loss in the trainer, which will log the initial loss value. I'll also add the experiment definition. Both need a GPU. Which GPU should I use for the smoke test, and may I use GPU 0 again for the later runs?
+
+## User (2026-11-19 08:14:20 UTC)
+
+Use GPU 0 for both
+
+## Assistant (2026-11-19 08:14:52 UTC)
+
+Next I'm running a smoke test of the head arm with the epipolar loss and test-time pose optimisation on GPU 0, as you said, for 60 steps and without `eval_all` so the evaluation stays short.
+
+## Assistant (2026-11-19 08:24:42 UTC)
+
+The experiment is running on GPU 0, and the first run is already in its step-1 evaluation. I committed the code first, with no attribution line and nothing pushed:
+- gsplat `1ccd7aed`: epipolar loss, test-time pose optimisation, and experiments 113 to 115.
+- vggt `09b5c5a`: `track_pairs.py`.
+
+Smoke test results (head arm, 60 steps, GPU 0):
+- **Epipolar loss:** 29.6 at step 5 and 26.1 at step 55.
+- **Head drift:** mean rotation 0.35° at step 10, 0.35° at step 60.
+- **Metrics written:** the `tpo_*` metrics are in the stats file.
+
+Running now (`experiments/2026-11-19_00_omega_epipolar_loss/queue.sh`):
+- 9 distinct runs at 30k steps, one after the other on GPU 0:
+  - four epipolar arms (full head lr 1e-5, LoRA r16 lr 1e-4, 3RGS MLP lr 1e-4, default module lr 1e-4);
+  - their four photometric-only twins;
+  - fixed Omega.
+- All arms use the 3R-GS test-time pose optimisation at the last step.
+- Plots are skipped for now.
+
+The runs at 30k steps can't reuse the earlier 15k runs, so the twins and the fixed reference are new runs.
+
+Gaps I filled that you didn't decide:
+- The grid is 425 points per frame.
+- The 0.5 mask is applied to the product of the two frames' confidences after dividing by the pair maximum, so the mask fraction is 0.103.
+- The paper's loss form is kept: the mask appears only in the denominator.
+- The 3RGS MLP and default module arms keep intrinsics fixed at the initial Omega values (only the poses are trainable), so "poses and intrinsics" applies to the head arms only.
+- The test-time pose optimisation runs only at the final evaluation, on the same eval set as the existing metrics (252 frames).
+- Only GPU 0 is used.
+
+I'll write the log, figures and commit when the runs finish.
+
+## User (2026-11-19 08:34:20 UTC)
+
+Progress on the runs?
+
+## Assistant (2026-11-19 08:34:27 UTC)
+
+The first run, the full camera head with the epipolar loss, is at step 3743 of 30000. It started at 08:23 and is running at about 7.6 it/s, so it should finish in roughly 57 minutes. The other 8 runs haven't started, since the runner goes through them one at a time on GPU 0.
+
+- **Elapsed:** about 11 minutes.
+- **Earlier evaluations:** the step-1 evaluation finished, and the next evaluation is at step 3000. I haven't read their numbers yet.
+- **Failures:** none so far.
+
+GPU 0 is at 100% utilisation and 34.9 GiB used. That is jsk62's idle 29.6 GiB process plus mine at 5.4 GiB.
+
+Nine runs at this rate come to roughly 6 to 8 hours in total, since the LoRA and full-head arms are slower. Nothing else is committed yet beyond the code.
+
+## User (2026-11-19 08:35:20 UTC)
+
+Between each run, check to make sure the utilisation drops to 0% before starting the next one
+
+## Assistant (2026-11-19 08:35:28 UTC)
+
+I'll add the wait to the runner, which means restarting it. The runner process has already loaded its code, so it can't pick up the change mid-run. Restarting loses the 14 minutes of the current run.
+
+## Assistant (2026-11-19 08:36:43 UTC)
+
+Everything is cancelled. No runner, queue or trainer process is running, and I haven't relaunched anything. My last command, which would have restarted the queue, was denied by the permission classifier and did not run.
+
+State to pick up from on the other server, since the filesystem is shared:
+- **Committed:** the epipolar-loss code and experiments 113 to 115 (gsplat `1ccd7aed`), and `track_pairs.py` (vggt `09b5c5a`).
+- **Track pairs:** `vggt_outputs/bonsai_2_cache_n40_s42_omega_minfarthestpose/track_pairs.pt` is already computed, so it needn't be rerun.
+- **Uncommitted:** the new `--wait_gpu_idle` flag in `experiment_runner.py`. It waits for 0% utilisation on the assigned GPU before each run, as you asked, and I haven't tested it. Your own edit to the photometric README is also uncommitted, as before.
+- **`queue.sh`:** it is still the old version without `--wait_gpu_idle`. Add the flag to the `experiment_runner.py` call before launching, and change `--cuda_visible_devices 0` to the GPU you want on the new server.
+- **Stale partial run:** the partial result directory from the cancelled first run, `results/vggt_outputs/…cft-1e-05-full-d0-epi2x3000_tpo_evalall_steps30000`, is still there. The `rm` that would have removed it was denied. Delete it before launching, since it holds only the step-1 evaluation.
+- **GPU rule:** the saved memory says GPUs are never shared with other users. You authorised GPU 0 for these runs on this server, and I haven't recorded that as a permanent exception.
+- **Still to do:** the full runs, then the `README.md`, the figures, and the regenerated `chat.md`.
+
+## User (2026-11-19 08:37:05 UTC)
+
+commit the wait_gpu_idle change
+
+## Assistant (2026-11-19 08:37:10 UTC)
+
+I committed the `--wait_gpu_idle` change to `experiment_runner.py` as gsplat `e4a6262f`. It has no attribution line and is not pushed. The only other uncommitted change is your edit to the photometric README, which I left alone.
+
+## User (2026-11-19 08:37:22 UTC)
+
+Update chat.md files and commit
