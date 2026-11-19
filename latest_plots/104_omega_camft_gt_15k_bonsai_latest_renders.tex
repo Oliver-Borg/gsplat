@@ -1,0 +1,10 @@
+\begin{figure}[H]
+    \centering
+    \ifhighres
+        \includegraphics[width=1.0\linewidth]{Images/04-Results/Renders/104_omega_camft_gt_15k_bonsai_latest_renders.pdf}
+    \else
+        \includegraphics[width=1.0\linewidth]{Images/04-Results/Renders/104_omega_camft_gt_15k_bonsai_latest_renders.jpg}
+    \fi
+    \caption{\ifdefined\customcaption \customcaption \else 3DGS (MCMC, 15000 steps, 40 images, Omega point cloud) with the VGGT-Omega camera head (full / LoRA) trained during 3DGS only against GT cameras (pose-encoding Huber loss), vs fixed GT, Omega and COLMAP cameras; evaluated on every GT-eval frame that is not a training frame (Bonsai). \fi}
+    \label{fig:renders_104_omega_camft_gt_15k_bonsai}
+\end{figure}

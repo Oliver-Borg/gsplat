@@ -1,0 +1,10 @@
+\begin{figure}[H]
+    \centering
+    \ifhighres
+        \includegraphics[width=1.0\linewidth]{Images/04-Results/Renders/102_omega_cameras_7k_bonsai_latest_renders.pdf}
+    \else
+        \includegraphics[width=1.0\linewidth]{Images/04-Results/Renders/102_omega_cameras_7k_bonsai_latest_renders.jpg}
+    \fi
+    \caption{\ifdefined\customcaption \customcaption \else 3DGS (MCMC, frozen cameras, 7000 steps) trained with five sets of cameras and the same VGGT-Omega point cloud: GT, camera head fine-tuned against GT (full / LoRA), Omega, COLMAP (Bonsai). \fi}
+    \label{fig:renders_102_omega_cameras_7k_bonsai}
+\end{figure}

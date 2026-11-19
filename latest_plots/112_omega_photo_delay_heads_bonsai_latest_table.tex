@@ -1,0 +1,37 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else Camera head (full / LoRA), photometric loss: activation at step 0 vs step 7500, with fixed Omega cameras (Bonsai) \fi}
+\label{tab:112_omega_photo_delay_heads_bonsai}
+\centering
+\tiny
+\begin{tabular}{lrlrrrrrrr}
+\toprule
+Choice & Val Step & Series Label Override & PSNR ↑ & SSIM ↑ & LPIPS ↓ & Composite Quality ↑ & Final Gaussian Count & Val RRE ↓ & Val RTE ↓ \\
+\midrule
+VGGT & 1 & Camera head LoRA r16, photometric loss (lr 1e-4) & 10.941 & 0.246 & 0.789 & -0.234 & 100000 & \underline{0.388} & 0.013 \\
+VGGT & 3000 & Camera head LoRA r16, photometric loss (lr 1e-4) & 19.120 & 0.613 & 0.416 & 0.362 & 322497 & 0.546 & \underline{0.012} \\
+VGGT & 7000 & Camera head LoRA r16, photometric loss (lr 1e-4) & 19.165 & 0.599 & 0.330 & 0.408 & 1000000 & 0.513 & \underline{0.012} \\
+VGGT & 10000 & Camera head LoRA r16, photometric loss (lr 1e-4) & 19.118 & 0.593 & 0.317 & 0.412 & 1000000 & 0.514 & \textbf{0.011} \\
+VGGT & 15000 & Camera head LoRA r16, photometric loss (lr 1e-4) & 19.199 & 0.593 & 0.305 & 0.420 & 1000000 & 0.486 & \textbf{0.011} \\
+VGGT & 1 & Camera head LoRA r16, photometric loss (lr 1e-4, delay 7500) & 10.936 & 0.246 & 0.789 & -0.234 & 100000 & 0.413 & 0.013 \\
+VGGT & 3000 & Camera head LoRA r16, photometric loss (lr 1e-4, delay 7500) & \underline{19.868} & 0.632 & 0.373 & 0.414 & 322497 & 0.413 & 0.013 \\
+VGGT & 7000 & Camera head LoRA r16, photometric loss (lr 1e-4, delay 7500) & 19.678 & 0.614 & 0.303 & 0.443 & 1000000 & 0.413 & 0.013 \\
+VGGT & 10000 & Camera head LoRA r16, photometric loss (lr 1e-4, delay 7500) & 19.754 & 0.616 & 0.302 & \textbf{0.446} & 1000000 & 0.419 & 0.013 \\
+VGGT & 15000 & Camera head LoRA r16, photometric loss (lr 1e-4, delay 7500) & 19.515 & 0.603 & \textbf{0.294} & 0.439 & 1000000 & 0.411 & 0.013 \\
+VGGT & 1 & Camera head full, photometric loss (lr 1e-5) & 10.953 & 0.247 & 0.788 & -0.233 & 100000 & \textbf{0.379} & \underline{0.012} \\
+VGGT & 3000 & Camera head full, photometric loss (lr 1e-5) & 16.889 & 0.602 & 0.676 & 0.154 & 322497 & 1.321 & 0.018 \\
+VGGT & 7000 & Camera head full, photometric loss (lr 1e-5) & 15.525 & 0.569 & 0.694 & 0.098 & 1000000 & 2.082 & 0.029 \\
+VGGT & 10000 & Camera head full, photometric loss (lr 1e-5) & 14.935 & 0.547 & 0.703 & 0.069 & 1000000 & 2.663 & 0.036 \\
+VGGT & 15000 & Camera head full, photometric loss (lr 1e-5) & 14.871 & 0.540 & 0.706 & 0.062 & 1000000 & 3.089 & 0.047 \\
+VGGT & 1 & Camera head full, photometric loss (lr 1e-5, delay 7500) & 10.936 & 0.246 & 0.789 & -0.234 & 100000 & 0.413 & 0.013 \\
+VGGT & 3000 & Camera head full, photometric loss (lr 1e-5, delay 7500) & 19.826 & 0.632 & 0.374 & 0.412 & 322497 & 0.413 & 0.013 \\
+VGGT & 7000 & Camera head full, photometric loss (lr 1e-5, delay 7500) & 19.719 & 0.614 & 0.303 & \underline{0.444} & 1000000 & 0.413 & 0.013 \\
+VGGT & 10000 & Camera head full, photometric loss (lr 1e-5, delay 7500) & 19.125 & \textbf{0.637} & 0.546 & 0.297 & 1000000 & 0.749 & 0.014 \\
+VGGT & 15000 & Camera head full, photometric loss (lr 1e-5, delay 7500) & 17.065 & 0.601 & 0.638 & 0.180 & 1000000 & 1.384 & 0.021 \\
+VGGT & 1 & Omega cameras (fixed) & 10.933 & 0.246 & 0.789 & -0.234 & 100000 & 0.413 & 0.013 \\
+VGGT & 3000 & Omega cameras (fixed) & \textbf{19.881} & \underline{0.633} & 0.373 & 0.414 & 322497 & 0.413 & 0.013 \\
+VGGT & 7000 & Omega cameras (fixed) & 19.704 & 0.612 & 0.302 & 0.443 & 1000000 & 0.413 & 0.013 \\
+VGGT & 10000 & Omega cameras (fixed) & 19.611 & 0.606 & \underline{0.296} & 0.441 & 1000000 & 0.413 & 0.013 \\
+VGGT & 15000 & Omega cameras (fixed) & 19.514 & 0.601 & \textbf{0.294} & 0.438 & 1000000 & 0.413 & 0.013 \\
+\bottomrule
+\end{tabular}
+\end{table}

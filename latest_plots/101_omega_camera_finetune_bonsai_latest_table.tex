@@ -1,0 +1,46 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else Fine-tuning only the VGGT-Omega camera head during 3DGS training with normal MCMC densification (pose optimisation by fine-tuning, delta pose-opt off), versus plain MCMC with the Omega cameras (Bonsai) \fi}
+\label{tab:101_omega_camera_finetune_bonsai}
+\centering
+\tiny
+\begin{tabular}{lrlrrrrrrr}
+\toprule
+Choice & Val Step & Series Label Override & PSNR ↑ & SSIM ↑ & LPIPS ↓ & Composite Quality ↑ & Final Gaussian Count & Val RRE ↓ & Val RTE ↓ \\
+\midrule
+VGGT & 1 & 1. MCMC baseline (Omega cameras) & 10.953 & 0.246 & 0.789 & -0.234 & 100000 & 0.413 & 0.013 \\
+VGGT & 3000 & 1. MCMC baseline (Omega cameras) & \textbf{19.931} & \textbf{0.634} & 0.372 & 0.416 & 322497 & 0.413 & 0.013 \\
+VGGT & 7000 & 1. MCMC baseline (Omega cameras) & 19.704 & 0.613 & 0.298 & 0.446 & 1000000 & 0.413 & 0.013 \\
+VGGT & 10000 & 1. MCMC baseline (Omega cameras) & 19.602 & 0.607 & 0.291 & 0.445 & 1000000 & 0.413 & 0.013 \\
+VGGT & 15000 & 1. MCMC baseline (Omega cameras) & 19.507 & 0.602 & \textbf{0.288} & 0.442 & 1000000 & 0.413 & 0.013 \\
+VGGT & 1 & 2. Camera head fine-tuned (full, lr 1e-4) & 10.978 & 0.248 & 0.804 & -0.242 & 100000 & 2.931 & 0.021 \\
+VGGT & 3000 & 2. Camera head fine-tuned (full, lr 1e-4) & 9.629 & 0.080 & 0.890 & -0.418 & 322497 & 116.019 & 2.505 \\
+VGGT & 7000 & 2. Camera head fine-tuned (full, lr 1e-4) & 9.644 & 0.120 & 0.829 & -0.357 & 1000000 & 101.967 & 0.680 \\
+VGGT & 10000 & 2. Camera head fine-tuned (full, lr 1e-4) & 9.832 & 0.159 & 0.802 & -0.313 & 1000000 & 92.273 & 0.882 \\
+VGGT & 15000 & 2. Camera head fine-tuned (full, lr 1e-4) & 9.558 & 0.098 & 0.853 & -0.386 & 1000000 & 154.801 & 2.467 \\
+VGGT & 1 & 3. Camera head fine-tuned (full, lr 1e-5) & 10.966 & 0.247 & 0.788 & -0.233 & 100000 & \textbf{0.379} & 0.012 \\
+VGGT & 3000 & 3. Camera head fine-tuned (full, lr 1e-5) & 16.838 & 0.600 & 0.684 & 0.147 & 322497 & 1.594 & 0.017 \\
+VGGT & 7000 & 3. Camera head fine-tuned (full, lr 1e-5) & 15.210 & 0.558 & 0.702 & 0.081 & 1000000 & 2.475 & 0.032 \\
+VGGT & 10000 & 3. Camera head fine-tuned (full, lr 1e-5) & 14.736 & 0.545 & 0.709 & 0.060 & 1000000 & 3.046 & 0.040 \\
+VGGT & 15000 & 3. Camera head fine-tuned (full, lr 1e-5) & 14.558 & 0.533 & 0.713 & 0.047 & 1000000 & 3.249 & 0.048 \\
+VGGT & 1 & 4. Camera head fine-tuned (full, lr 1e-6) & 10.956 & 0.246 & 0.789 & -0.233 & 100000 & 0.398 & 0.013 \\
+VGGT & 3000 & 4. Camera head fine-tuned (full, lr 1e-6) & 19.472 & 0.624 & 0.408 & 0.380 & 322497 & 0.460 & \underline{0.011} \\
+VGGT & 7000 & 4. Camera head fine-tuned (full, lr 1e-6) & 19.402 & 0.606 & 0.323 & 0.421 & 1000000 & 0.427 & \textbf{0.010} \\
+VGGT & 10000 & 4. Camera head fine-tuned (full, lr 1e-6) & 19.324 & 0.601 & 0.309 & 0.425 & 1000000 & 0.426 & \textbf{0.010} \\
+VGGT & 15000 & 4. Camera head fine-tuned (full, lr 1e-6) & 19.402 & 0.601 & 0.297 & 0.433 & 1000000 & 0.425 & \textbf{0.010} \\
+VGGT & 1 & 5. Camera head fine-tuned (LoRA r16, lr 1e-4) & 10.959 & 0.247 & 0.788 & -0.233 & 100000 & \underline{0.388} & 0.013 \\
+VGGT & 3000 & 5. Camera head fine-tuned (LoRA r16, lr 1e-4) & 19.182 & 0.614 & 0.414 & 0.365 & 322497 & 0.527 & 0.012 \\
+VGGT & 7000 & 5. Camera head fine-tuned (LoRA r16, lr 1e-4) & 19.312 & 0.603 & 0.322 & 0.418 & 1000000 & 0.492 & 0.012 \\
+VGGT & 10000 & 5. Camera head fine-tuned (LoRA r16, lr 1e-4) & 19.389 & 0.601 & 0.301 & 0.431 & 1000000 & 0.458 & \underline{0.011} \\
+VGGT & 15000 & 5. Camera head fine-tuned (LoRA r16, lr 1e-4) & 19.026 & 0.589 & 0.312 & 0.411 & 1000000 & 0.513 & 0.012 \\
+VGGT & 1 & 6. Camera head fine-tuned (full, lr 1e-4, from step 5000) & 10.954 & 0.246 & 0.789 & -0.234 & 100000 & 0.413 & 0.013 \\
+VGGT & 3000 & 6. Camera head fine-tuned (full, lr 1e-4, from step 5000) & 19.904 & \underline{0.633} & 0.374 & 0.415 & 322497 & 0.413 & 0.013 \\
+VGGT & 7000 & 6. Camera head fine-tuned (full, lr 1e-4, from step 5000) & 12.790 & 0.501 & 0.825 & -0.073 & 1000000 & 12.441 & 0.156 \\
+VGGT & 10000 & 6. Camera head fine-tuned (full, lr 1e-4, from step 5000) & 11.654 & 0.400 & 0.881 & -0.188 & 1000000 & 119.505 & 6.937 \\
+VGGT & 1 & 7. Camera head fine-tuned (LoRA r16, lr 1e-4, from step 5000) & 10.954 & 0.246 & 0.789 & -0.234 & 100000 & 0.413 & 0.013 \\
+VGGT & 3000 & 7. Camera head fine-tuned (LoRA r16, lr 1e-4, from step 5000) & 19.878 & \underline{0.633} & 0.374 & 0.413 & 322497 & 0.413 & 0.013 \\
+VGGT & 7000 & 7. Camera head fine-tuned (LoRA r16, lr 1e-4, from step 5000) & \underline{19.914} & 0.622 & 0.296 & \underline{0.456} & 1000000 & 0.398 & 0.013 \\
+VGGT & 10000 & 7. Camera head fine-tuned (LoRA r16, lr 1e-4, from step 5000) & 19.683 & 0.610 & \underline{0.290} & 0.448 & 1000000 & 0.409 & 0.013 \\
+VGGT & 15000 & 7. Camera head fine-tuned (LoRA r16, lr 1e-4, from step 5000) & 19.817 & 0.618 & \textbf{0.288} & \textbf{0.457} & 1000000 & 0.402 & 0.013 \\
+\bottomrule
+\end{tabular}
+\end{table}

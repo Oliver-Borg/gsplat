@@ -1,0 +1,47 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else Same as omega_pose_opt_loss with the intrinsics fixed to the GT cameras (also for fixed Omega poses) (Bonsai) \fi}
+\label{tab:106_omega_pose_opt_gtk_bonsai}
+\centering
+\tiny
+\begin{tabular}{lrlrrrrrrr}
+\toprule
+Choice & Val Step & Series Label Override & PSNR ↑ & SSIM ↑ & LPIPS ↓ & Composite Quality ↑ & Final Gaussian Count & Val RRE ↓ & Val RTE ↓ \\
+\midrule
+VGGT & 1 & 1. GT cameras (fixed) & 10.934 & 0.246 & 0.789 & -0.234 & 100000 & \textbf{0.000} & \textbf{0.000} \\
+VGGT & 3000 & 1. GT cameras (fixed) & 25.563 & 0.849 & 0.242 & 0.727 & 322497 & \textbf{0.000} & \textbf{0.000} \\
+VGGT & 7000 & 1. GT cameras (fixed) & 27.758 & 0.903 & 0.152 & 0.855 & 1000000 & \textbf{0.000} & \textbf{0.000} \\
+VGGT & 10000 & 1. GT cameras (fixed) & 27.968 & 0.905 & 0.143 & 0.865 & 1000000 & \textbf{0.000} & \textbf{0.000} \\
+VGGT & 15000 & 1. GT cameras (fixed) & 28.092 & 0.906 & \textbf{0.139} & 0.870 & 1000000 & \textbf{0.000} & \textbf{0.000} \\
+VGGT & 1 & 2. Omega poses (fixed) with GT K & 10.937 & 0.246 & 0.789 & -0.234 & 100000 & 0.413 & 0.013 \\
+VGGT & 3000 & 2. Omega poses (fixed) with GT K & 20.256 & 0.639 & 0.368 & 0.428 & 322497 & 0.413 & 0.013 \\
+VGGT & 7000 & 2. Omega poses (fixed) with GT K & 20.087 & 0.618 & 0.293 & 0.459 & 1000000 & 0.413 & 0.013 \\
+VGGT & 10000 & 2. Omega poses (fixed) with GT K & 20.004 & 0.612 & 0.286 & 0.458 & 1000000 & 0.413 & 0.013 \\
+VGGT & 15000 & 2. Omega poses (fixed) with GT K & 19.914 & 0.607 & 0.284 & 0.455 & 1000000 & 0.413 & 0.013 \\
+VGGT & 1 & 3. default pose opt, pose-encoding Huber GT loss, GT K (lr 1e-4) & 10.945 & 0.246 & 0.789 & -0.234 & 100000 & 0.405 & 0.013 \\
+VGGT & 3000 & 3. default pose opt, pose-encoding Huber GT loss, GT K (lr 1e-4) & 25.539 & 0.846 & 0.242 & 0.725 & 322497 & 0.011 & \textbf{0.000} \\
+VGGT & 7000 & 3. default pose opt, pose-encoding Huber GT loss, GT K (lr 1e-4) & 27.732 & 0.900 & 0.153 & 0.852 & 1000000 & 0.011 & \textbf{0.000} \\
+VGGT & 10000 & 3. default pose opt, pose-encoding Huber GT loss, GT K (lr 1e-4) & 27.995 & 0.903 & 0.144 & 0.864 & 1000000 & 0.010 & \textbf{0.000} \\
+VGGT & 15000 & 3. default pose opt, pose-encoding Huber GT loss, GT K (lr 1e-4) & 28.090 & 0.904 & \underline{0.140} & 0.869 & 1000000 & 0.010 & \textbf{0.000} \\
+VGGT & 1 & 4. default pose opt, L1 c2w GT loss, GT K (lr 1e-4) & 10.945 & 0.246 & 0.789 & -0.234 & 100000 & 0.405 & 0.013 \\
+VGGT & 3000 & 4. default pose opt, L1 c2w GT loss, GT K (lr 1e-4) & 25.559 & 0.849 & 0.242 & 0.727 & 322497 & \underline{0.007} & \textbf{0.000} \\
+VGGT & 7000 & 4. default pose opt, L1 c2w GT loss, GT K (lr 1e-4) & 27.727 & 0.902 & 0.153 & 0.853 & 1000000 & 0.008 & \textbf{0.000} \\
+VGGT & 10000 & 4. default pose opt, L1 c2w GT loss, GT K (lr 1e-4) & 28.005 & 0.905 & 0.143 & 0.866 & 1000000 & 0.011 & \textbf{0.000} \\
+VGGT & 15000 & 4. default pose opt, L1 c2w GT loss, GT K (lr 1e-4) & 28.091 & 0.905 & \underline{0.140} & 0.870 & 1000000 & 0.008 & \textbf{0.000} \\
+VGGT & 1 & 5. 3RGS MLP pose opt, pose-encoding Huber GT loss, GT K (lr 1e-4) & 10.933 & 0.246 & 0.789 & -0.234 & 100000 & 0.397 & 0.013 \\
+VGGT & 3000 & 5. 3RGS MLP pose opt, pose-encoding Huber GT loss, GT K (lr 1e-4) & 25.573 & 0.850 & 0.245 & 0.726 & 322497 & 0.008 & \textbf{0.000} \\
+VGGT & 7000 & 5. 3RGS MLP pose opt, pose-encoding Huber GT loss, GT K (lr 1e-4) & 27.742 & 0.905 & 0.152 & 0.856 & 1000000 & 0.011 & \textbf{0.000} \\
+VGGT & 10000 & 5. 3RGS MLP pose opt, pose-encoding Huber GT loss, GT K (lr 1e-4) & 28.061 & \textbf{0.908} & 0.144 & 0.868 & 1000000 & \underline{0.007} & \textbf{0.000} \\
+VGGT & 15000 & 5. 3RGS MLP pose opt, pose-encoding Huber GT loss, GT K (lr 1e-4) & \underline{28.097} & \textbf{0.908} & \textbf{0.139} & \textbf{0.872} & 1000000 & 0.008 & \textbf{0.000} \\
+VGGT & 1 & 6. 3RGS MLP pose opt, L1 c2w GT loss, GT K (lr 1e-4) & 10.934 & 0.246 & 0.789 & -0.234 & 100000 & 0.398 & 0.013 \\
+VGGT & 3000 & 6. 3RGS MLP pose opt, L1 c2w GT loss, GT K (lr 1e-4) & 25.522 & 0.848 & 0.245 & 0.724 & 322497 & 0.011 & \textbf{0.000} \\
+VGGT & 7000 & 6. 3RGS MLP pose opt, L1 c2w GT loss, GT K (lr 1e-4) & 27.726 & 0.903 & 0.153 & 0.853 & 1000000 & 0.010 & \textbf{0.000} \\
+VGGT & 10000 & 6. 3RGS MLP pose opt, L1 c2w GT loss, GT K (lr 1e-4) & 28.093 & \underline{0.907} & 0.144 & 0.868 & 1000000 & 0.010 & \textbf{0.000} \\
+VGGT & 15000 & 6. 3RGS MLP pose opt, L1 c2w GT loss, GT K (lr 1e-4) & \textbf{28.099} & \textbf{0.908} & \underline{0.140} & \underline{0.871} & 1000000 & 0.012 & \textbf{0.000} \\
+VGGT & 1 & 7. Camera head (full, lr 1e-5), Huber T + quaternion GT loss, GT K & 10.931 & 0.246 & 0.789 & -0.235 & 100000 & 0.323 & 0.010 \\
+VGGT & 3000 & 7. Camera head (full, lr 1e-5), Huber T + quaternion GT loss, GT K & 25.309 & 0.832 & 0.254 & 0.705 & 322497 & 0.020 & \underline{0.001} \\
+VGGT & 7000 & 7. Camera head (full, lr 1e-5), Huber T + quaternion GT loss, GT K & 27.401 & 0.894 & 0.157 & 0.840 & 1000000 & 0.014 & \textbf{0.000} \\
+VGGT & 10000 & 7. Camera head (full, lr 1e-5), Huber T + quaternion GT loss, GT K & 27.702 & 0.900 & 0.147 & 0.855 & 1000000 & 0.012 & \textbf{0.000} \\
+VGGT & 15000 & 7. Camera head (full, lr 1e-5), Huber T + quaternion GT loss, GT K & 27.771 & 0.900 & 0.142 & 0.860 & 1000000 & 0.016 & \textbf{0.000} \\
+\bottomrule
+\end{tabular}
+\end{table}

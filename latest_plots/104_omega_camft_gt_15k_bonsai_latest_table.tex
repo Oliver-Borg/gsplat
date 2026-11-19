@@ -1,0 +1,42 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else 3DGS (MCMC, 15000 steps, 40 images, Omega point cloud) with the VGGT-Omega camera head (full / LoRA) trained during 3DGS only against GT cameras (pose-encoding Huber loss), vs fixed GT, Omega and COLMAP cameras; evaluated on every GT-eval frame that is not a training frame (Bonsai) \fi}
+\label{tab:104_omega_camft_gt_15k_bonsai}
+\centering
+\tiny
+\begin{tabular}{lrlrrrrrrr}
+\toprule
+Choice & Val Step & Series Label Override & PSNR ↑ & SSIM ↑ & LPIPS ↓ & Composite Quality ↑ & Final Gaussian Count & Val RRE ↓ & Val RTE ↓ \\
+\midrule
+VGGT & 1 & 1. GT cameras (fixed) & 10.934 & 0.246 & 0.789 & -0.234 & 100000 & \textbf{0.000} & \textbf{0.000} \\
+VGGT & 3000 & 1. GT cameras (fixed) & 25.563 & 0.849 & 0.242 & 0.727 & 322497 & \textbf{0.000} & \textbf{0.000} \\
+VGGT & 7000 & 1. GT cameras (fixed) & 27.758 & 0.903 & 0.152 & 0.855 & 1000000 & \textbf{0.000} & \textbf{0.000} \\
+VGGT & 10000 & 1. GT cameras (fixed) & \underline{27.968} & \underline{0.905} & \underline{0.143} & \underline{0.865} & 1000000 & \textbf{0.000} & \textbf{0.000} \\
+VGGT & 15000 & 1. GT cameras (fixed) & \textbf{28.092} & \textbf{0.906} & \textbf{0.139} & \textbf{0.870} & 1000000 & \textbf{0.000} & \textbf{0.000} \\
+VGGT & 1 & 2. Camera head trained with GT loss during 3DGS (full, lr 1e-5) & 10.929 & 0.245 & 0.789 & -0.235 & 100000 & 0.336 & 0.010 \\
+VGGT & 3000 & 2. Camera head trained with GT loss during 3DGS (full, lr 1e-5) & 25.241 & 0.831 & 0.257 & 0.701 & 322497 & 0.023 & \underline{0.001} \\
+VGGT & 7000 & 2. Camera head trained with GT loss during 3DGS (full, lr 1e-5) & 27.146 & 0.886 & 0.161 & 0.828 & 1000000 & 0.016 & \textbf{0.000} \\
+VGGT & 10000 & 2. Camera head trained with GT loss during 3DGS (full, lr 1e-5) & 27.647 & 0.896 & 0.149 & 0.850 & 1000000 & 0.010 & \textbf{0.000} \\
+VGGT & 15000 & 2. Camera head trained with GT loss during 3DGS (full, lr 1e-5) & 27.880 & 0.900 & 0.144 & 0.860 & 1000000 & 0.011 & \textbf{0.000} \\
+VGGT & 1 & 3. Camera head trained with GT loss during 3DGS (LoRA r16, lr 1e-4) & 10.934 & 0.246 & 0.789 & -0.234 & 100000 & 0.391 & 0.012 \\
+VGGT & 3000 & 3. Camera head trained with GT loss during 3DGS (LoRA r16, lr 1e-4) & 24.797 & 0.810 & 0.272 & 0.671 & 322497 & 0.050 & \underline{0.001} \\
+VGGT & 7000 & 3. Camera head trained with GT loss during 3DGS (LoRA r16, lr 1e-4) & 26.645 & 0.867 & 0.173 & 0.800 & 1000000 & 0.027 & \underline{0.001} \\
+VGGT & 10000 & 3. Camera head trained with GT loss during 3DGS (LoRA r16, lr 1e-4) & 27.095 & 0.879 & 0.159 & 0.824 & 1000000 & 0.021 & \underline{0.001} \\
+VGGT & 15000 & 3. Camera head trained with GT loss during 3DGS (LoRA r16, lr 1e-4) & 27.262 & 0.884 & 0.153 & 0.834 & 1000000 & 0.020 & \textbf{0.000} \\
+VGGT & 1 & 4. Omega cameras (fixed) & 10.933 & 0.246 & 0.789 & -0.234 & 100000 & 0.413 & 0.013 \\
+VGGT & 3000 & 4. Omega cameras (fixed) & 19.881 & 0.633 & 0.373 & 0.414 & 322497 & 0.413 & 0.013 \\
+VGGT & 7000 & 4. Omega cameras (fixed) & 19.704 & 0.612 & 0.302 & 0.443 & 1000000 & 0.413 & 0.013 \\
+VGGT & 10000 & 4. Omega cameras (fixed) & 19.611 & 0.606 & 0.296 & 0.441 & 1000000 & 0.413 & 0.013 \\
+VGGT & 15000 & 4. Omega cameras (fixed) & 19.514 & 0.601 & 0.294 & 0.438 & 1000000 & 0.413 & 0.013 \\
+COLMAP & 1 & 5. COLMAP cameras (fixed) & 10.934 & 0.246 & 0.789 & -0.234 & 100000 & 0.509 & 0.055 \\
+COLMAP & 3000 & 5. COLMAP cameras (fixed) & 21.017 & 0.649 & 0.321 & 0.477 & 322497 & 0.509 & 0.055 \\
+COLMAP & 7000 & 5. COLMAP cameras (fixed) & 20.884 & 0.632 & 0.228 & 0.522 & 1000000 & 0.509 & 0.055 \\
+COLMAP & 10000 & 5. COLMAP cameras (fixed) & 20.812 & 0.629 & 0.218 & 0.525 & 1000000 & 0.509 & 0.055 \\
+COLMAP & 15000 & 5. COLMAP cameras (fixed) & 20.746 & 0.625 & 0.215 & 0.524 & 1000000 & 0.509 & 0.055 \\
+VGGT & 1 & 6. Pose residual MLP (3RGS) with GT loss during 3DGS (lr 1e-4) & 10.933 & 0.246 & 0.789 & -0.234 & 100000 & 0.397 & 0.013 \\
+VGGT & 3000 & 6. Pose residual MLP (3RGS) with GT loss during 3DGS (lr 1e-4) & 23.036 & 0.730 & 0.288 & 0.582 & 322497 & 0.008 & \textbf{0.000} \\
+VGGT & 7000 & 6. Pose residual MLP (3RGS) with GT loss during 3DGS (lr 1e-4) & 23.556 & 0.732 & 0.206 & 0.643 & 1000000 & 0.011 & \textbf{0.000} \\
+VGGT & 10000 & 6. Pose residual MLP (3RGS) with GT loss during 3DGS (lr 1e-4) & 23.520 & 0.727 & 0.199 & 0.644 & 1000000 & \underline{0.007} & \textbf{0.000} \\
+VGGT & 15000 & 6. Pose residual MLP (3RGS) with GT loss during 3DGS (lr 1e-4) & 23.391 & 0.722 & 0.197 & 0.640 & 1000000 & 0.008 & \textbf{0.000} \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,0 +1,191 @@
+[
+    {
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            15000
+        ],
+        "num_images": [
+            40
+        ],
+        "sampling_mode": [
+            "random"
+        ],
+        "num_points_value": 100000,
+        "gt_eval": true,
+        "eval_all": true,
+        "model": "omega",
+        "save_ply": true,
+        "choice": [
+            "vggt"
+        ],
+        "camft": true,
+        "camft_module": "default",
+        "camft_lr": 0.0001,
+        "camft_delay": 7500,
+        "series_label_override": "default module, photometric loss (lr 1e-4, delay 7500)",
+        "dataset": "bonsai"
+    },
+    {
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            15000
+        ],
+        "num_images": [
+            40
+        ],
+        "sampling_mode": [
+            "random"
+        ],
+        "num_points_value": 100000,
+        "gt_eval": true,
+        "eval_all": true,
+        "model": "omega",
+        "save_ply": true,
+        "choice": [
+            "vggt"
+        ],
+        "camft": true,
+        "camft_mlp": true,
+        "camft_lr": 0.0001,
+        "camft_delay": 7500,
+        "series_label_override": "3RGS MLP, photometric loss (lr 1e-4, delay 7500)",
+        "dataset": "bonsai"
+    },
+    {
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            15000
+        ],
+        "num_images": [
+            40
+        ],
+        "sampling_mode": [
+            "random"
+        ],
+        "num_points_value": 100000,
+        "gt_eval": true,
+        "eval_all": true,
+        "model": "omega",
+        "save_ply": true,
+        "choice": [
+            "vggt"
+        ],
+        "camft": true,
+        "camft_lr": 1e-05,
+        "camft_delay": 7500,
+        "series_label_override": "Camera head full, photometric loss (lr 1e-5, delay 7500)",
+        "dataset": "bonsai"
+    },
+    {
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            15000
+        ],
+        "num_images": [
+            40
+        ],
+        "sampling_mode": [
+            "random"
+        ],
+        "num_points_value": 100000,
+        "gt_eval": true,
+        "eval_all": true,
+        "model": "omega",
+        "save_ply": true,
+        "choice": [
+            "vggt"
+        ],
+        "camft": true,
+        "camft_lora": true,
+        "camft_lora_rank": 16,
+        "camft_lr": 0.0001,
+        "camft_delay": 7500,
+        "series_label_override": "Camera head LoRA r16, photometric loss (lr 1e-4, delay 7500)",
+        "dataset": "bonsai"
+    },
+    {
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            15000
+        ],
+        "num_images": [
+            40
+        ],
+        "sampling_mode": [
+            "random"
+        ],
+        "num_points_value": 100000,
+        "gt_eval": true,
+        "eval_all": true,
+        "model": "omega",
+        "save_ply": true,
+        "choice": [
+            "combined"
+        ],
+        "camera_src": "gt",
+        "pcd_src": "vggt",
+        "series_label_override": "GT cameras (fixed)",
+        "dataset": "bonsai"
+    },
+    {
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            15000
+        ],
+        "num_images": [
+            40
+        ],
+        "sampling_mode": [
+            "random"
+        ],
+        "num_points_value": 100000,
+        "gt_eval": true,
+        "eval_all": true,
+        "model": "omega",
+        "save_ply": true,
+        "choice": [
+            "vggt"
+        ],
+        "series_label_override": "Omega cameras (fixed)",
+        "dataset": "bonsai"
+    },
+    {
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            15000
+        ],
+        "num_images": [
+            40
+        ],
+        "sampling_mode": [
+            "random"
+        ],
+        "num_points_value": 100000,
+        "gt_eval": true,
+        "eval_all": true,
+        "model": "omega",
+        "save_ply": true,
+        "choice": [
+            "combined"
+        ],
+        "camera_src": "colmap",
+        "pcd_src": "vggt",
+        "shared_camera": true,
+        "series_label_override": "COLMAP cameras (fixed)",
+        "dataset": "bonsai"
+    }
+]

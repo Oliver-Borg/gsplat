@@ -1,0 +1,37 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else Camera head (full / LoRA): photometric + epipolar loss vs photometric loss only, with fixed Omega cameras (Bonsai) \fi}
+\label{tab:115_omega_epi_heads_bonsai}
+\centering
+\tiny
+\begin{tabular}{lrlrrrrrrr}
+\toprule
+Choice & Val Step & Series Label Override & PSNR ↑ & SSIM ↑ & LPIPS ↓ & Composite Quality ↑ & Final Gaussian Count & Val RRE ↓ & Val RTE ↓ \\
+\midrule
+VGGT & 1 & Camera head LoRA r16, photometric + epipolar loss (lr 1e-4) & 10.941 & 0.246 & 0.789 & -0.234 & 100000 & \underline{0.388} & 0.013 \\
+VGGT & 3000 & Camera head LoRA r16, photometric + epipolar loss (lr 1e-4) & 17.809 & 0.580 & 0.478 & 0.280 & 322497 & 0.986 & \underline{0.011} \\
+VGGT & 7000 & Camera head LoRA r16, photometric + epipolar loss (lr 1e-4) & 18.090 & 0.586 & 0.436 & 0.315 & 1000000 & 0.742 & \textbf{0.010} \\
+VGGT & 15000 & Camera head LoRA r16, photometric + epipolar loss (lr 1e-4) & 17.999 & 0.582 & 0.416 & 0.323 & 1000000 & 0.772 & 0.013 \\
+VGGT & 30000 & Camera head LoRA r16, photometric + epipolar loss (lr 1e-4) & 18.095 & 0.591 & 0.441 & 0.314 & 1000000 & 0.777 & 0.013 \\
+VGGT & 1 & Camera head LoRA r16, photometric loss (lr 1e-4) & 10.941 & 0.246 & 0.789 & -0.234 & 100000 & \underline{0.388} & 0.013 \\
+VGGT & 3000 & Camera head LoRA r16, photometric loss (lr 1e-4) & 19.248 & \underline{0.619} & 0.423 & 0.363 & 322497 & 0.496 & 0.012 \\
+VGGT & 7000 & Camera head LoRA r16, photometric loss (lr 1e-4) & 19.692 & 0.616 & 0.322 & 0.433 & 1000000 & 0.448 & \underline{0.011} \\
+VGGT & 15000 & Camera head LoRA r16, photometric loss (lr 1e-4) & 19.585 & 0.604 & \underline{0.290} & \underline{0.443} & 1000000 & 0.435 & \underline{0.011} \\
+VGGT & 30000 & Camera head LoRA r16, photometric loss (lr 1e-4) & 19.475 & 0.597 & \textbf{0.286} & 0.440 & 1000000 & 0.433 & \underline{0.011} \\
+VGGT & 1 & Camera head full, photometric + epipolar loss (lr 1e-5) & 10.953 & 0.247 & 0.788 & -0.233 & 100000 & \textbf{0.379} & 0.012 \\
+VGGT & 3000 & Camera head full, photometric + epipolar loss (lr 1e-5) & 17.632 & 0.575 & 0.485 & 0.270 & 322497 & 1.040 & \underline{0.011} \\
+VGGT & 7000 & Camera head full, photometric + epipolar loss (lr 1e-5) & 17.814 & 0.584 & 0.476 & 0.284 & 1000000 & 0.876 & \textbf{0.010} \\
+VGGT & 15000 & Camera head full, photometric + epipolar loss (lr 1e-5) & 17.952 & 0.608 & 0.578 & 0.238 & 1000000 & 1.040 & 0.012 \\
+VGGT & 30000 & Camera head full, photometric + epipolar loss (lr 1e-5) & 16.319 & 0.577 & 0.689 & 0.121 & 1000000 & 2.112 & 0.042 \\
+VGGT & 1 & Camera head full, photometric loss (lr 1e-5) & 10.953 & 0.247 & 0.788 & -0.233 & 100000 & \textbf{0.379} & 0.012 \\
+VGGT & 3000 & Camera head full, photometric loss (lr 1e-5) & 16.821 & 0.600 & 0.680 & 0.149 & 322497 & 1.455 & 0.017 \\
+VGGT & 7000 & Camera head full, photometric loss (lr 1e-5) & 15.167 & 0.560 & 0.701 & 0.082 & 1000000 & 2.574 & 0.029 \\
+VGGT & 15000 & Camera head full, photometric loss (lr 1e-5) & 14.225 & 0.527 & 0.725 & 0.031 & 1000000 & 3.622 & 0.049 \\
+VGGT & 30000 & Camera head full, photometric loss (lr 1e-5) & 14.100 & 0.516 & 0.723 & 0.023 & 1000000 & 4.241 & 0.059 \\
+VGGT & 1 & Omega cameras (fixed) & 10.933 & 0.246 & 0.789 & -0.234 & 100000 & 0.413 & 0.013 \\
+VGGT & 3000 & Omega cameras (fixed) & \textbf{19.931} & \textbf{0.636} & 0.382 & 0.412 & 322497 & 0.413 & 0.013 \\
+VGGT & 7000 & Omega cameras (fixed) & \underline{19.749} & 0.617 & 0.305 & \textbf{0.445} & 1000000 & 0.413 & 0.013 \\
+VGGT & 15000 & Omega cameras (fixed) & 19.487 & 0.602 & 0.294 & 0.438 & 1000000 & 0.413 & 0.013 \\
+VGGT & 30000 & Omega cameras (fixed) & 19.380 & 0.596 & 0.294 & 0.432 & 1000000 & 0.413 & 0.013 \\
+\bottomrule
+\end{tabular}
+\end{table}

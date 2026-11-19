@@ -1,0 +1,37 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else Pose modules: photometric loss only vs GT-pose Huber loss, with fixed Omega cameras (Bonsai) \fi}
+\label{tab:108_omega_photo_vs_gt_modules_bonsai}
+\centering
+\tiny
+\begin{tabular}{lrlrrrrrrr}
+\toprule
+Choice & Val Step & Series Label Override & PSNR ↑ & SSIM ↑ & LPIPS ↓ & Composite Quality ↑ & Final Gaussian Count & Val RRE ↓ & Val RTE ↓ \\
+\midrule
+VGGT & 1 & 3RGS MLP, GT loss (Huber enc, lr 1e-4) & 10.933 & 0.246 & 0.789 & -0.234 & 100000 & 0.397 & 0.013 \\
+VGGT & 3000 & 3RGS MLP, GT loss (Huber enc, lr 1e-4) & 23.036 & \underline{0.730} & 0.288 & 0.582 & 322497 & \underline{0.008} & \textbf{0.000} \\
+VGGT & 7000 & 3RGS MLP, GT loss (Huber enc, lr 1e-4) & \textbf{23.556} & \textbf{0.732} & 0.206 & \underline{0.643} & 1000000 & 0.011 & \textbf{0.000} \\
+VGGT & 10000 & 3RGS MLP, GT loss (Huber enc, lr 1e-4) & \underline{23.520} & 0.727 & 0.199 & \textbf{0.644} & 1000000 & \textbf{0.007} & \textbf{0.000} \\
+VGGT & 15000 & 3RGS MLP, GT loss (Huber enc, lr 1e-4) & 23.391 & 0.722 & \underline{0.197} & 0.640 & 1000000 & \underline{0.008} & \textbf{0.000} \\
+VGGT & 1 & 3RGS MLP, photometric loss (lr 1e-4) & 10.935 & 0.246 & 0.789 & -0.234 & 100000 & 0.417 & 0.013 \\
+VGGT & 3000 & 3RGS MLP, photometric loss (lr 1e-4) & 19.976 & 0.630 & 0.357 & 0.425 & 322497 & 0.384 & 0.013 \\
+VGGT & 7000 & 3RGS MLP, photometric loss (lr 1e-4) & 19.274 & 0.597 & 0.305 & 0.424 & 1000000 & 0.525 & 0.013 \\
+VGGT & 10000 & 3RGS MLP, photometric loss (lr 1e-4) & 19.234 & 0.592 & 0.297 & 0.426 & 1000000 & 0.521 & 0.013 \\
+VGGT & 15000 & 3RGS MLP, photometric loss (lr 1e-4) & 19.137 & 0.588 & 0.294 & 0.423 & 1000000 & 0.514 & 0.013 \\
+VGGT & 1 & Omega cameras (fixed) & 10.933 & 0.246 & 0.789 & -0.234 & 100000 & 0.413 & 0.013 \\
+VGGT & 3000 & Omega cameras (fixed) & 19.881 & 0.633 & 0.373 & 0.414 & 322497 & 0.413 & 0.013 \\
+VGGT & 7000 & Omega cameras (fixed) & 19.704 & 0.612 & 0.302 & 0.443 & 1000000 & 0.413 & 0.013 \\
+VGGT & 10000 & Omega cameras (fixed) & 19.611 & 0.606 & 0.296 & 0.441 & 1000000 & 0.413 & 0.013 \\
+VGGT & 15000 & Omega cameras (fixed) & 19.514 & 0.601 & 0.294 & 0.438 & 1000000 & 0.413 & 0.013 \\
+VGGT & 1 & default module, GT loss (Huber enc, lr 1e-4) & 10.945 & 0.246 & 0.789 & -0.234 & 100000 & 0.405 & 0.013 \\
+VGGT & 3000 & default module, GT loss (Huber enc, lr 1e-4) & 23.003 & 0.729 & 0.283 & 0.584 & 322497 & 0.011 & \textbf{0.000} \\
+VGGT & 7000 & default module, GT loss (Huber enc, lr 1e-4) & 23.418 & \underline{0.730} & 0.206 & 0.640 & 1000000 & 0.011 & \textbf{0.000} \\
+VGGT & 10000 & default module, GT loss (Huber enc, lr 1e-4) & 23.295 & 0.725 & 0.199 & 0.639 & 1000000 & 0.010 & \textbf{0.000} \\
+VGGT & 15000 & default module, GT loss (Huber enc, lr 1e-4) & 23.289 & 0.721 & \textbf{0.196} & 0.639 & 1000000 & 0.010 & \textbf{0.000} \\
+VGGT & 1 & default module, photometric loss (lr 1e-4) & 10.945 & 0.246 & 0.789 & -0.234 & 100000 & 0.413 & 0.013 \\
+VGGT & 3000 & default module, photometric loss (lr 1e-4) & 19.248 & 0.617 & 0.396 & 0.379 & 322497 & 0.478 & 0.010 \\
+VGGT & 7000 & default module, photometric loss (lr 1e-4) & 19.411 & 0.617 & 0.311 & 0.435 & 1000000 & 0.439 & 0.009 \\
+VGGT & 10000 & default module, photometric loss (lr 1e-4) & 19.420 & 0.615 & 0.295 & 0.444 & 1000000 & 0.425 & 0.009 \\
+VGGT & 15000 & default module, photometric loss (lr 1e-4) & 19.417 & 0.614 & 0.287 & 0.448 & 1000000 & 0.420 & \underline{0.008} \\
+\bottomrule
+\end{tabular}
+\end{table}

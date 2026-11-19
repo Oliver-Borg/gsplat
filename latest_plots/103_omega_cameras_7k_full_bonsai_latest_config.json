@@ -1,0 +1,124 @@
+[
+    {
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            7000
+        ],
+        "num_images": [
+            300
+        ],
+        "sampling_mode": [
+            "random"
+        ],
+        "num_points_value": 100000,
+        "gt_eval": true,
+        "model": "omega",
+        "save_ply": true,
+        "choice": [
+            "combined"
+        ],
+        "camera_src": "gt",
+        "pcd_src": "vggt",
+        "series_label_override": "1. GT cameras [255 images]",
+        "dataset": "bonsai"
+    },
+    {
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            7000
+        ],
+        "num_images": [
+            300
+        ],
+        "sampling_mode": [
+            "random"
+        ],
+        "num_points_value": 100000,
+        "gt_eval": true,
+        "model": "omega",
+        "save_ply": true,
+        "choice": [
+            "vggt"
+        ],
+        "ft_cams": "full",
+        "series_label_override": "2. Camera head fine-tuned against GT (full, lr 1e-5) [255 images]",
+        "dataset": "bonsai"
+    },
+    {
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            7000
+        ],
+        "num_images": [
+            300
+        ],
+        "sampling_mode": [
+            "random"
+        ],
+        "num_points_value": 100000,
+        "gt_eval": true,
+        "model": "omega",
+        "save_ply": true,
+        "choice": [
+            "vggt"
+        ],
+        "ft_cams": "lora",
+        "series_label_override": "3. Camera head fine-tuned against GT (LoRA r16, lr 1e-4) [255 images]",
+        "dataset": "bonsai"
+    },
+    {
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            7000
+        ],
+        "num_images": [
+            300
+        ],
+        "sampling_mode": [
+            "random"
+        ],
+        "num_points_value": 100000,
+        "gt_eval": true,
+        "model": "omega",
+        "save_ply": true,
+        "choice": [
+            "vggt"
+        ],
+        "series_label_override": "4. Omega cameras [255 images]",
+        "dataset": "bonsai"
+    },
+    {
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            7000
+        ],
+        "num_images": [
+            300
+        ],
+        "sampling_mode": [
+            "random"
+        ],
+        "num_points_value": 100000,
+        "gt_eval": true,
+        "model": "omega",
+        "save_ply": true,
+        "choice": [
+            "combined"
+        ],
+        "camera_src": "colmap",
+        "pcd_src": "vggt",
+        "shared_camera": true,
+        "series_label_override": "5. COLMAP cameras [255 images]",
+        "dataset": "bonsai"
+    }
+]

@@ -1,0 +1,181 @@
+[
+    {
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            15000
+        ],
+        "num_images": [
+            40
+        ],
+        "sampling_mode": [
+            "random"
+        ],
+        "num_points_value": 100000,
+        "gt_eval": true,
+        "choice": [
+            "vggt"
+        ],
+        "model": "omega",
+        "save_ply": true,
+        "series_label_override": "1. MCMC baseline (Omega cameras)",
+        "dataset": "bonsai"
+    },
+    {
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            15000
+        ],
+        "num_images": [
+            40
+        ],
+        "sampling_mode": [
+            "random"
+        ],
+        "num_points_value": 100000,
+        "gt_eval": true,
+        "choice": [
+            "vggt"
+        ],
+        "model": "omega",
+        "camft": true,
+        "camft_lr": 0.0001,
+        "save_ply": true,
+        "series_label_override": "2. Camera head fine-tuned (full, lr 1e-4)",
+        "dataset": "bonsai"
+    },
+    {
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            15000
+        ],
+        "num_images": [
+            40
+        ],
+        "sampling_mode": [
+            "random"
+        ],
+        "num_points_value": 100000,
+        "gt_eval": true,
+        "choice": [
+            "vggt"
+        ],
+        "model": "omega",
+        "camft": true,
+        "camft_lr": 1e-05,
+        "save_ply": true,
+        "series_label_override": "3. Camera head fine-tuned (full, lr 1e-5)",
+        "dataset": "bonsai"
+    },
+    {
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            15000
+        ],
+        "num_images": [
+            40
+        ],
+        "sampling_mode": [
+            "random"
+        ],
+        "num_points_value": 100000,
+        "gt_eval": true,
+        "choice": [
+            "vggt"
+        ],
+        "model": "omega",
+        "camft": true,
+        "camft_lr": 1e-06,
+        "save_ply": true,
+        "series_label_override": "4. Camera head fine-tuned (full, lr 1e-6)",
+        "dataset": "bonsai"
+    },
+    {
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            15000
+        ],
+        "num_images": [
+            40
+        ],
+        "sampling_mode": [
+            "random"
+        ],
+        "num_points_value": 100000,
+        "gt_eval": true,
+        "choice": [
+            "vggt"
+        ],
+        "model": "omega",
+        "camft": true,
+        "camft_lr": 0.0001,
+        "camft_lora": true,
+        "camft_lora_rank": 16,
+        "save_ply": true,
+        "series_label_override": "5. Camera head fine-tuned (LoRA r16, lr 1e-4)",
+        "dataset": "bonsai"
+    },
+    {
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            15000
+        ],
+        "num_images": [
+            40
+        ],
+        "sampling_mode": [
+            "random"
+        ],
+        "num_points_value": 100000,
+        "gt_eval": true,
+        "choice": [
+            "vggt"
+        ],
+        "model": "omega",
+        "camft": true,
+        "camft_lr": 0.0001,
+        "camft_delay": 5000,
+        "save_ply": true,
+        "series_label_override": "6. Camera head fine-tuned (full, lr 1e-4, from step 5000)",
+        "dataset": "bonsai"
+    },
+    {
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            15000
+        ],
+        "num_images": [
+            40
+        ],
+        "sampling_mode": [
+            "random"
+        ],
+        "num_points_value": 100000,
+        "gt_eval": true,
+        "choice": [
+            "vggt"
+        ],
+        "model": "omega",
+        "camft": true,
+        "camft_lr": 0.0001,
+        "camft_lora": true,
+        "camft_lora_rank": 16,
+        "camft_delay": 5000,
+        "save_ply": true,
+        "series_label_override": "7. Camera head fine-tuned (LoRA r16, lr 1e-4, from step 5000)",
+        "dataset": "bonsai"
+    }
+]

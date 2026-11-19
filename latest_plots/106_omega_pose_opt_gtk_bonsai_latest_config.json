@@ -1,0 +1,203 @@
+[
+    {
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            15000
+        ],
+        "num_images": [
+            40
+        ],
+        "sampling_mode": [
+            "random"
+        ],
+        "num_points_value": 100000,
+        "gt_eval": true,
+        "eval_all": true,
+        "model": "omega",
+        "save_ply": true,
+        "choice": [
+            "combined"
+        ],
+        "camera_src": "gt",
+        "pcd_src": "vggt",
+        "series_label_override": "1. GT cameras (fixed)",
+        "dataset": "bonsai"
+    },
+    {
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            15000
+        ],
+        "num_images": [
+            40
+        ],
+        "sampling_mode": [
+            "random"
+        ],
+        "num_points_value": 100000,
+        "gt_eval": true,
+        "eval_all": true,
+        "model": "omega",
+        "save_ply": true,
+        "choice": [
+            "vggt"
+        ],
+        "camft": true,
+        "camft_module": "fixed",
+        "camft_gt_k": true,
+        "camft_lr": 0.0001,
+        "series_label_override": "2. Omega poses (fixed) with GT K",
+        "dataset": "bonsai"
+    },
+    {
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            15000
+        ],
+        "num_images": [
+            40
+        ],
+        "sampling_mode": [
+            "random"
+        ],
+        "num_points_value": 100000,
+        "gt_eval": true,
+        "eval_all": true,
+        "model": "omega",
+        "save_ply": true,
+        "choice": [
+            "vggt"
+        ],
+        "camft": true,
+        "camft_module": "default",
+        "camft_gt_loss": true,
+        "camft_gt_k": true,
+        "camft_lr": 0.0001,
+        "series_label_override": "3. default pose opt, pose-encoding Huber GT loss, GT K (lr 1e-4)",
+        "dataset": "bonsai"
+    },
+    {
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            15000
+        ],
+        "num_images": [
+            40
+        ],
+        "sampling_mode": [
+            "random"
+        ],
+        "num_points_value": 100000,
+        "gt_eval": true,
+        "eval_all": true,
+        "model": "omega",
+        "save_ply": true,
+        "choice": [
+            "vggt"
+        ],
+        "camft": true,
+        "camft_module": "default",
+        "camft_gt_loss": true,
+        "camft_gt_loss_type": "l1c2w",
+        "camft_gt_k": true,
+        "camft_lr": 0.0001,
+        "series_label_override": "4. default pose opt, L1 c2w GT loss, GT K (lr 1e-4)",
+        "dataset": "bonsai"
+    },
+    {
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            15000
+        ],
+        "num_images": [
+            40
+        ],
+        "sampling_mode": [
+            "random"
+        ],
+        "num_points_value": 100000,
+        "gt_eval": true,
+        "eval_all": true,
+        "model": "omega",
+        "save_ply": true,
+        "choice": [
+            "vggt"
+        ],
+        "camft": true,
+        "camft_mlp": true,
+        "camft_gt_loss": true,
+        "camft_gt_k": true,
+        "camft_lr": 0.0001,
+        "series_label_override": "5. 3RGS MLP pose opt, pose-encoding Huber GT loss, GT K (lr 1e-4)",
+        "dataset": "bonsai"
+    },
+    {
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            15000
+        ],
+        "num_images": [
+            40
+        ],
+        "sampling_mode": [
+            "random"
+        ],
+        "num_points_value": 100000,
+        "gt_eval": true,
+        "eval_all": true,
+        "model": "omega",
+        "save_ply": true,
+        "choice": [
+            "vggt"
+        ],
+        "camft": true,
+        "camft_mlp": true,
+        "camft_gt_loss": true,
+        "camft_gt_loss_type": "l1c2w",
+        "camft_gt_k": true,
+        "camft_lr": 0.0001,
+        "series_label_override": "6. 3RGS MLP pose opt, L1 c2w GT loss, GT K (lr 1e-4)",
+        "dataset": "bonsai"
+    },
+    {
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            15000
+        ],
+        "num_images": [
+            40
+        ],
+        "sampling_mode": [
+            "random"
+        ],
+        "num_points_value": 100000,
+        "gt_eval": true,
+        "eval_all": true,
+        "model": "omega",
+        "save_ply": true,
+        "choice": [
+            "vggt"
+        ],
+        "camft": true,
+        "camft_gt_loss": true,
+        "camft_gt_no_fov": true,
+        "camft_gt_k": true,
+        "camft_lr": 1e-05,
+        "series_label_override": "7. Camera head (full, lr 1e-5), Huber T + quaternion GT loss, GT K",
+        "dataset": "bonsai"
+    }
+]
