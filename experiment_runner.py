@@ -327,6 +327,8 @@ class Config:
     camft_epi: bool = False
     camft_epi_weight: float = 2.0
     camft_epi_steps: int = 3000
+    # 0 = all frame pairs; k > 0 = sparse graph, every frame paired with its k nearest frames (Omega camera centres)
+    camft_epi_knn: int = 0
     test_pose_opt: bool = False
     # Evaluate on every GT-eval frame that is not a training frame (simple_trainer eval_all_frames)
     eval_all: bool = False
@@ -469,6 +471,7 @@ class Config:
             "camft_epi",
             "camft_epi_weight",
             "camft_epi_steps",
+            "camft_epi_knn",
             "test_pose_opt",
             "eval_all",
             "ft_cams",
@@ -826,7 +829,7 @@ class Config:
                 + (("-gtloss" if self.camft_gt_loss_type == "huber" else "-gtl1c2w") if self.camft_gt_loss else "")
                 + ("-nofov" if self.camft_gt_no_fov else "")
                 + ("-gtk" if self.camft_gt_k else "")
-                + (f"-epi{self.camft_epi_weight:g}x{self.camft_epi_steps}" if self.camft_epi else "")
+                + (f"-epi{self.camft_epi_weight:g}x{self.camft_epi_steps}" + (f"k{self.camft_epi_knn}" if self.camft_epi_knn else "") if self.camft_epi else "")
             )
         if self.test_pose_opt:
             parts.append("tpo")
@@ -1596,7 +1599,10 @@ class Config:
             if self.camft_gt_no_fov:
                 command.append("--camft_gt_no_fov")
             if self.camft_epi:
-                pairs_file = os.path.join(os.path.dirname(cache_file), "track_pairs.pt")
+                pairs_file = os.path.join(
+                    os.path.dirname(cache_file),
+                    f"track_pairs_knn{self.camft_epi_knn}.pt" if self.camft_epi_knn else "track_pairs.pt",
+                )
                 if not os.path.exists(pairs_file):
                     print(f"Writing the VGGT track-head correspondences {pairs_file}")
                     pairs_env = env_for(VGGT_PYTHON)
@@ -1612,6 +1618,7 @@ class Config:
                             os.path.abspath(os.path.join(self.data_dir, "images")),
                             "--out",
                             pairs_file,
+                            *(["--knn", str(self.camft_epi_knn)] if self.camft_epi_knn else []),
                         ],
                         check=True,
                         cwd="../vggt",
@@ -6451,6 +6458,38 @@ for _name, _num, _desc, _arms in (
             ),
             val_steps=[1, 3000, 7000, 15000, 30000],
             render_filter_override={"seed": [42], "num_images": [40], "num_steps": [30000]},
+        )
+    )
+
+# All-frames version (113-115): all 255 non-test frames (every 8th frame is test), sparse pair graph (10 nearest frames
+# by Omega camera centre), evaluation on the 37 test frames, plus the pure COLMAP reference (dataset COLMAP cameras and
+# point cloud, standard split)
+_EPI_ALL_BASE = {**_EPI_BASE, "num_images": [255], "camft_epi_knn": 10}
+_EPI_ALL_ARMS = {**_EPI_ARMS, "colmap": {"choice": ["gt"], "seed": [42], "num_steps": [30000], "test_pose_opt": True, "series_label_override": "COLMAP cameras + point cloud (fixed, all frames)"}}
+for _name, _num, _desc, _arms in (
+    ("omega_epi_all_vs_fixed", 116, "All frames: epipolar loss on camera head / pose modules, with fixed Omega and COLMAP cameras", ["head_epi", "lora_epi", "mlp_epi", "def_epi", "fixed", "colmap"]),
+    ("omega_epi_all_modules", 117, "All frames, pose modules: photometric + epipolar loss vs photometric loss only, with fixed Omega and COLMAP cameras", ["def_epi", "def_photo", "mlp_epi", "mlp_photo", "fixed", "colmap"]),
+    ("omega_epi_all_heads", 118, "All frames, camera head (full / LoRA): photometric + epipolar loss vs photometric loss only, with fixed Omega and COLMAP cameras", ["head_epi", "head_photo", "lora_epi", "lora_photo", "fixed", "colmap"]),
+):
+    experiments.append(
+        Experiment(
+            _name,
+            _num,
+            _desc,
+            [{**(_EPI_ALL_BASE if a != "colmap" else {}), **_EPI_ALL_ARMS[a]} for a in _arms],
+            PlotConfig(
+                x_axis="val_step",
+                split_param="series_label_override",
+                metric_keys=["psnr", "ssim", "lpips", "quality", "num_GS", "eval_rre", "eval_rte"],
+                max_render_cols=3,
+                horizontal_datasets=False,
+                show_gt=True,
+                show_zoom=True,
+                show_differences=False,
+                render_nums=[0, 2, 5],
+            ),
+            val_steps=[1, 3000, 7000, 15000, 30000],
+            render_filter_override={"seed": [42], "num_steps": [30000]},
         )
     )
 
