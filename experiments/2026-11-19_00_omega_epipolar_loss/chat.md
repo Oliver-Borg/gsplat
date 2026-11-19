@@ -5341,3 +5341,88 @@ I committed the `--wait_gpu_idle` change to `experiment_runner.py` as gsplat `e4
 ## User (2026-11-19 08:37:22 UTC)
 
 Update chat.md files and commit
+
+## Assistant (2026-11-19 08:37:29 UTC)
+
+I regenerated `chat.md` in all 11 experiment folders and committed them as gsplat `a81264d6`. The commit includes the new `2026-11-19_00_omega_epipolar_loss` folder, which now has a `chat.md` but no `README.md` yet. Nothing is pushed.
+
+Each file holds the whole session up to this message. Your uncommitted edit to the photometric README was not included in the commit.
+
+## User (2026-11-19 09:29:31 UTC)
+
+Please run the experiments on this server using a maximum of 4 gpus
+
+## Assistant (2026-11-19 09:29:41 UTC)
+
+This server has 8 free L4 GPUs with 22.5 GiB each and no foreign processes, so I'll use GPUs 0 to 3. I'm checking that the environment works here, then launching.
+
+## Assistant (2026-11-19 09:31:28 UTC)
+
+The runs are going on GPUs 0 to 3 of this server, and nothing else is on any GPU. I started the runner at 09:29 with the wait-for-0%-utilisation check before each run.
+
+- **GPU 0:** LoRA r16 with the epipolar loss.
+- **GPU 1:** full camera head with the epipolar loss.
+- **GPUs 2 and 3:** two further runs of the 9. The log lines I filtered only name the first two.
+
+The other five runs start as GPUs free up. The utilisation check waits for 0% on two consecutive checks, 20 seconds apart.
+
+Two things to know:
+- The shell I'm using here sees only one device (`CUDA_VISIBLE_DEVICES=3`). That doesn't affect the runs, since the runner pins its own.
+- This server has 8 L4 GPUs, not L40S, so run times will differ from the earlier experiments. I'll record that in the log.
+
+The partial files left in the full-head result directory from the cancelled run are overwritten by the rerun. I'll report when the runs finish and then write the log.
+
+## User (2026-11-19 12:51:19 UTC)
+
+Progress on the runs?
+
+## Assistant (2026-11-19 12:51:30 UTC)
+
+Of the 9 runs, 7 have finished and 2 are still running. Nothing has failed. The runner has been going since 09:29:54, and it's 12:51 now.
+
+**Finished (30k steps, `val_step29999.json` written):**
+- The 4 epipolar arms: full head, LoRA r16, 3R-GS MLP and default module.
+- The fixed Omega cameras run.
+- The 3R-GS MLP photometric twin.
+- The default module photometric twin.
+
+**Still running, on GPUs 1 and 3:**
+- The LoRA r16 photometric twin has `val_step0000`, `val_step2999` and `val_step6999` written.
+- The full-head photometric twin has `val_step0000` and `val_step2999`.
+- The log shows one of the two at step 4500 of 30000, at about 4.5–4.9 it/s with roughly 1.5 h estimated remaining. I didn't read the other run's step count.
+
+GPUs 0, 2 and 4–7 are idle, and nothing else is on the machine. The runner uses at most GPUs 0–3, and only the two remaining runs are active.
+
+Next I'll wait for the last two runs, then make the plots and write the README and `chat.md`.
+
+## User (2026-11-19 13:54:16 UTC)
+
+Progress now?
+
+## Assistant (2026-11-19 13:54:23 UTC)
+
+Two runs are still going and nothing has failed. As of 13:54, one of them is at step 20116 of 30000, about 4.4 it/s, with roughly 37 minutes left on that estimate.
+
+- **Running:** the LoRA r16 photometric twin and the full-head photometric twin, on GPUs 1 and 3. I only read the step count for one of them from the log. The progress line doesn't say which run it belongs to.
+- **Finished:** the other 7 runs (4 epipolar arms, fixed Omega cameras, and the 3R-GS MLP and default-module photometric twins).
+- **Idle:** GPUs 0, 2 and 4–7. The runner uses GPUs 0–3, and only these two runs are left.
+
+Once both finish I'll make the plots and write the README and `chat.md`.
+
+## User (2026-11-19 18:21:41 UTC)
+
+Progress now?
+
+## Assistant (2026-11-19 18:21:47 UTC)
+
+All 9 runs have finished. The runner exited with code 0 at 14:50:36, and the log has no tracebacks. All 9 result directories have `val_step29999.json`, so every run reached 30000 steps. GPUs 0–3 are idle.
+
+Next I'll collect the metrics, make the plots (max 3 columns), write the README and regenerate `chat.md`. I'll commit them together without attribution lines and won't push.
+
+## User (2026-11-19 18:21:50 UTC)
+
+Write the log and make the plots
+
+## Assistant (2026-11-19 18:23:11 UTC)
+
+Plots are generated. I'm copying the renders into the experiment folder and checking one.
