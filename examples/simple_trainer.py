@@ -210,6 +210,18 @@ class Config:
     camft_gt_k: bool = False
     # Head arms: leave the fov dimensions out of the Huber GT loss (T and quaternion only, as the pose modules)
     camft_gt_no_fov: bool = False
+    # 3R-GS global epipolar loss (https://arxiv.org/abs/2504.04294) on the cameras of the camft head / pose module, from the
+    # correspondences in a track_pairs.pt (written by vggt/track_pairs.py): weight * sum(err * w) / sum(mask * w) with err the
+    # symmetrical epipolar distance of the fundamental matrices built from the current cameras; active for 0 < step < camft_epi_steps.
+    camft_epi_file: str = ""
+    camft_epi_weight: float = 2.0
+    camft_epi_steps: int = 3000
+    # 3R-GS test-time pose optimisation of the evaluation views at the last evaluation (extra tpo_* metrics): per view a
+    # zero-initialised CameraOptModule on the (aligned) camera, Adam with exponential lr decay to 1% over the iterations,
+    # Scharr gradient-masked L1 loss on the rendered image; the Gaussians are fixed.
+    test_pose_opt: bool = False
+    test_pose_opt_iters: int = 100
+    test_pose_opt_lr: float = 8e-4
     # Initial extent of GSs as a multiple of the camera extent. Ignored if using sfm
     init_extent: float = 3.0
     # Degree of spherical harmonics
@@ -610,6 +622,23 @@ class Runner:
                 assert not missing, f"no GT camera for {len(missing)} training frames, e.g. {missing[:3]}"
                 names = sorted(self.camft.frame_of, key=self.camft.frame_of.get)  # frame order of the head
                 self.camft_target = gt_pose_targets(self.camft, self.align_parser, names)[0]
+        self.camft_epi = None
+        if cfg.camft_epi_file:
+            assert self.camft is not None, "camft_epi_file needs camft"
+            assert cfg.camft_delay == 0 and self.camft_target is None, "the epipolar loss runs without delay and GT loss"
+            tp = torch.load(cfg.camft_epi_file, map_location="cpu", weights_only=False)
+            assert tp["names"] == sorted(self.camft.frame_of, key=self.camft.frame_of.get), (
+                "track_pairs.pt frames differ from the camft frames"
+            )
+            self.camft_epi = {
+                k: tp[k].to(self.device)
+                for k in ("ei", "ej", "pts_i", "pts_j", "weight", "mask")
+            }
+            self.camft_epi["mask"] = self.camft_epi["mask"].float()
+            print(
+                f"Epipolar loss: {len(tp['ei'])} pairs x {tp['pts_i'].shape[1]} points, mask fraction "
+                f"{self.camft_epi['mask'].mean().item():.3f}, weight {cfg.camft_epi_weight}, steps 0-{cfg.camft_epi_steps}"
+            )
         self.splats, self.optimizers = create_splats_with_optimizers(
             self.train_parser,
             init_type=cfg.init_type,
@@ -1359,6 +1388,19 @@ class Runner:
                 for v in ft_extra.values():
                     loss = loss + v
 
+            epi_loss = None
+            if self.camft_epi is not None and 0 < step < cfg.camft_epi_steps:
+                import kornia
+
+                e = self.camft_epi
+                P = K_all @ torch.linalg.inv(c2w_all)[:, :3]  # [S,3,4] projection matrices of all frames
+                Fm = kornia.geometry.epipolar.fundamental_from_projections(P[e["ei"]], P[e["ej"]])
+                err = kornia.geometry.epipolar.symmetrical_epipolar_distance(
+                    e["pts_i"], e["pts_j"], Fm, squared=False, eps=1e-8
+                )
+                epi_loss = (err * e["weight"]).sum() / (e["mask"] * e["weight"]).sum()
+                loss = loss + epi_loss * cfg.camft_epi_weight
+
             if cfg.loss_multiplier != 1.0:
                 loss *= cfg.loss_multiplier
 
@@ -1401,6 +1443,8 @@ class Runner:
                     self.writer.add_scalar(f"train/ft_{k}", v.item(), step)
                 if self.camft is not None and self.camft_target is not None and step >= cfg.camft_delay:
                     self.writer.add_scalar("train/camft_gt_loss", gt_loss.item(), step)
+                if epi_loss is not None:
+                    self.writer.add_scalar("train/camft_epi_loss", epi_loss.item(), step)
                 if self.profiler is not None:
                     for k, v in self.profiler.last.items():
                         self.writer.add_scalar(f"profile/{k}_ms", v, step)
@@ -1687,6 +1731,45 @@ class Runner:
         else:
             return matrix
 
+    def test_time_pose_opt(self, camtoworlds, Ks, width, height, masks, pixels):
+        """3R-GS test-time pose optimisation of one evaluation view (ported from rgs3/trainer.py `optim_camtoworlds`):
+        returns the optimised camera-to-world [1,4,4]; the Gaussians are fixed."""
+        from rgs3.trainer import compute_gradient_loss
+        from utils import CameraOptModule
+
+        cfg = self.cfg
+        iters = cfg.test_pose_opt_iters
+        for p in self.splats.values():
+            p.requires_grad_(False)
+        try:
+            with torch.enable_grad():
+                adjust = CameraOptModule(1).to(self.device)
+                adjust.zero_init()
+                opt = torch.optim.Adam(adjust.parameters(), lr=cfg.test_pose_opt_lr)
+                sched = torch.optim.lr_scheduler.ExponentialLR(opt, gamma=0.01 ** (1.0 / iters))
+                ids = torch.tensor([0], device=self.device)
+                for _ in range(iters):
+                    cam = adjust(camtoworlds, ids)
+                    renders, _, _ = self.rasterize_splats(
+                        camtoworlds=cam,
+                        Ks=Ks,
+                        width=width,
+                        height=height,
+                        sh_degree=cfg.sh_degree,
+                        near_plane=cfg.near_plane,
+                        far_plane=cfg.far_plane,
+                        masks=masks,
+                    )
+                    loss = compute_gradient_loss(pixels, renders)
+                    loss.backward()
+                    opt.step()
+                    opt.zero_grad(set_to_none=True)
+                    sched.step()
+                return adjust(camtoworlds, ids).detach()
+        finally:
+            for p in self.splats.values():
+                p.requires_grad_(True)
+
     @ft_cached
     @torch.no_grad()
     @profile
@@ -1844,6 +1927,25 @@ class Runner:
                     metrics["psnr"].append(self.psnr(colors_p, pixels_p))
                     metrics["ssim"].append(self.ssim(colors_p, pixels_p))
                     metrics["lpips"].append(self.lpips(colors_p, pixels_p))
+                    if cfg.test_pose_opt and stage != "train" and step + 1 == cfg.max_steps:
+                        cam_t = self.test_time_pose_opt(camtoworlds, Ks, width, height, masks, pixels)
+                        colors_t = torch.clamp(
+                            self.rasterize_splats(
+                                camtoworlds=cam_t,
+                                Ks=Ks,
+                                width=width,
+                                height=height,
+                                sh_degree=cfg.sh_degree,
+                                near_plane=cfg.near_plane,
+                                far_plane=cfg.far_plane,
+                                masks=masks,
+                            )[0],
+                            0.0,
+                            1.0,
+                        ).permute(0, 3, 1, 2)
+                        metrics["tpo_psnr"].append(self.psnr(colors_t, pixels_p))
+                        metrics["tpo_ssim"].append(self.ssim(colors_t, pixels_p))
+                        metrics["tpo_lpips"].append(self.lpips(colors_t, pixels_p))
                     metrics["depth_factor"].append(depths.max())
                     metrics["gt_depth_factor"].append(gt_depths.max())
                     metrics["image_cols"].append(torch.tensor(5, device=device, dtype=torch.float32))
