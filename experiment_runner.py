@@ -7,6 +7,7 @@ import shutil
 from typing import Literal, get_args
 import os
 import subprocess
+import time
 import argparse
 import concurrent.futures
 from queue import Queue
@@ -28,6 +29,27 @@ from vggt.reconstruct_args import (
 import examples.evaluation
 
 GSPLAT_PYTHON = os.path.expanduser("~/.conda/envs/gsplat/bin/python")
+
+# Set by --wait_gpu_idle: before every splatting run, wait until the assigned GPU shows 0% utilisation on two consecutive checks
+WAIT_GPU_IDLE = False
+
+
+def wait_gpu_idle(gpu: str, interval: int = 20):
+    prev_idle = False
+    while True:
+        out = subprocess.run(
+            ["nvidia-smi", "-i", str(gpu), "--query-gpu=utilization.gpu", "--format=csv,noheader,nounits"],
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        idle = out == "0"
+        if idle and prev_idle:
+            return
+        if not idle:
+            print(f"Waiting for GPU {gpu} utilisation to drop to 0% (now {out}%)", flush=True)
+        prev_idle = idle
+        time.sleep(interval)
+
 GSPLAT_TORCHRUN = os.path.expanduser("~/.conda/envs/gsplat/bin/torchrun")
 VGGT_PYTHON = os.path.expanduser("~/.conda/envs/vggt/bin/python")
 # Cameras of the camera heads fine-tuned against GT (experiments/2026-11-11_00_camera_head_gt_smoke), see Config.ft_cams
@@ -1626,6 +1648,8 @@ class Config:
         if self.run_train_eval:
             command.append("--run_train_eval")
 
+        if WAIT_GPU_IDLE and gpu is not None:
+            wait_gpu_idle(gpu)
         env = env_for(GSPLAT_PYTHON)
         if libstdc_path:
             env["LD_PRELOAD"] = libstdc_path
@@ -6690,6 +6714,11 @@ if __name__ == "__main__":
         "--force_none", action="store_true", help="Ignore force calculation"
     )
     parser.add_argument(
+        "--wait_gpu_idle",
+        action="store_true",
+        help="Before every splatting run wait until the assigned GPU is at 0%% utilisation (two consecutive checks)",
+    )
+    parser.add_argument(
         "--cuda_visible_devices",
         type=str,
         default=None,
@@ -6750,6 +6779,7 @@ if __name__ == "__main__":
         help="Delete unused splatted and reconstructed folders",
     )
     args = parser.parse_args()
+    WAIT_GPU_IDLE = args.wait_gpu_idle
 
     dataset_names = []
     if args.dataset_collections:
