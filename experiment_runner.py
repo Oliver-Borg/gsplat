@@ -6493,6 +6493,36 @@ for _name, _num, _desc, _arms in (
         )
     )
 
+# Diagnostics for the all-frames experiments (119): which part of the gap to the COLMAP reference comes from the cameras and
+# which from the initial point cloud. Not run yet.
+_EPI_DIAG_BASE = {**_EPI_BASE, "num_images": [255], "choice": ["combined"], "eval_all": True}
+experiments.append(
+    Experiment(
+        "omega_epi_all_diagnostics",
+        119,
+        "All frames, fixed cameras: Omega vs GT (dataset COLMAP) cameras, Omega vs COLMAP point cloud",
+        [
+            {**_EPI_DIAG_BASE, "camera_src": "gt", "pcd_src": "vggt", "series_label_override": "GT cameras + Omega point cloud (fixed)"},
+            {**_EPI_DIAG_BASE, "camera_src": "vggt", "pcd_src": "gt", "series_label_override": "Omega cameras + COLMAP point cloud (fixed)"},
+            {**_EPI_ARMS["fixed"], **_EPI_BASE, "num_images": [255], "series_label_override": "Omega cameras + Omega point cloud (fixed)"},
+            {"choice": ["gt"], "seed": [42], "num_steps": [30000], "test_pose_opt": True, "series_label_override": "COLMAP cameras + point cloud (fixed, all frames)"},
+        ],
+        PlotConfig(
+            x_axis="val_step",
+            split_param="series_label_override",
+            metric_keys=["psnr", "ssim", "lpips", "quality", "num_GS", "eval_rre", "eval_rte"],
+            max_render_cols=3,
+            horizontal_datasets=False,
+            show_gt=True,
+            show_zoom=True,
+            show_differences=False,
+            render_nums=[0, 2, 5],
+        ),
+        val_steps=[1, 3000, 7000, 15000, 30000],
+        render_filter_override={"seed": [42], "num_steps": [30000]},
+    )
+)
+
 experiment_dict = {exp.name: exp for exp in experiments}
 
 dataset_values = []
