@@ -329,6 +329,9 @@ class Config:
     camft_epi_steps: int = 3000
     # 0 = all frame pairs; k > 0 = sparse graph, every frame paired with its k nearest frames (Omega camera centres)
     camft_epi_knn: int = 0
+    # Shared training intrinsics (mean K of the training frames); intrinsics_opt: 3R-GS shared-focal optimisation (implies the mean K)
+    train_mean_k: bool = False
+    intrinsics_opt: bool = False
     test_pose_opt: bool = False
     # Evaluate on every GT-eval frame that is not a training frame (simple_trainer eval_all_frames)
     eval_all: bool = False
@@ -472,6 +475,8 @@ class Config:
             "camft_epi_weight",
             "camft_epi_steps",
             "camft_epi_knn",
+            "train_mean_k",
+            "intrinsics_opt",
             "test_pose_opt",
             "eval_all",
             "ft_cams",
@@ -831,6 +836,10 @@ class Config:
                 + ("-gtk" if self.camft_gt_k else "")
                 + (f"-epi{self.camft_epi_weight:g}x{self.camft_epi_steps}" + (f"k{self.camft_epi_knn}" if self.camft_epi_knn else "") if self.camft_epi else "")
             )
+        if self.intrinsics_opt:
+            parts.append("intropt")
+        elif self.train_mean_k:
+            parts.append("meank")
         if self.test_pose_opt:
             parts.append("tpo")
         if self.eval_all:
@@ -1635,6 +1644,10 @@ class Config:
                     ]
                 )
 
+        if self.intrinsics_opt:
+            command.append("--intrinsics_opt")
+        elif self.train_mean_k:
+            command.append("--train_mean_k")
         if self.test_pose_opt:
             command.append("--test_pose_opt")
 
@@ -6522,6 +6535,47 @@ experiments.append(
         render_filter_override={"seed": [42], "num_steps": [30000]},
     )
 )
+
+# Counter scene, 3R-GS-like intrinsics (120, 121). Training uses one shared K for all frames (the mean of the Omega
+# per-frame K) instead of per-frame K; evaluation keeps the eval frames' own GT K. 121 adds the 3R-GS intrinsics
+# optimisation (shared focal, lr 1e-4). Every 8th frame is test, all other frames train; head arms are left out.
+_EPI_CTR_BASE = {**_EPI_BASE, "num_images": [1000], "camft_epi_knn": 10}
+_EPI_CTR_MODULES = ["mlp_epi", "mlp_photo", "def_epi", "def_photo"]
+_EPI_CTR_ARMS = {}
+for _a in _EPI_CTR_MODULES:
+    _EPI_CTR_ARMS[_a + "_meank"] = {**_EPI_ARMS[_a], "train_mean_k": True, "series_label_override": _EPI_ARMS[_a]["series_label_override"] + ", shared mean K"}
+    _EPI_CTR_ARMS[_a + "_intropt"] = {**_EPI_ARMS[_a], "intrinsics_opt": True, "series_label_override": _EPI_ARMS[_a]["series_label_override"] + ", shared K, focal optimised"}
+_EPI_CTR_ARMS["fixed_perframe"] = {"series_label_override": "Omega cameras (fixed), per-frame K"}
+_EPI_CTR_ARMS["fixed_meank"] = {"train_mean_k": True, "series_label_override": "Omega cameras (fixed), shared mean K"}
+_EPI_CTR_ARMS["fixed_intropt"] = {"intrinsics_opt": True, "series_label_override": "Omega cameras (fixed), shared K, focal optimised"}
+_EPI_CTR_ARMS["colmap"] = _EPI_ALL_ARMS["colmap"]
+for _name, _num, _desc, _arms in (
+    ("omega_epi_ctr_meank", 120, "Counter, all frames: Omega camera modules with one shared mean K for training (like 3R-GS), epipolar vs photometric, fixed Omega cameras with per-frame / shared K, COLMAP reference",
+     [a + "_meank" for a in _EPI_CTR_MODULES] + ["fixed_perframe", "fixed_meank", "colmap"]),
+    ("omega_epi_ctr_intropt", 121, "Counter, all frames: 3R-GS shared-focal intrinsics optimisation on the modules and on fixed Omega cameras, with the shared mean K runs as references",
+     [a + "_intropt" for a in _EPI_CTR_MODULES] + [a + "_meank" for a in _EPI_CTR_MODULES] + ["fixed_intropt", "fixed_meank", "fixed_perframe", "colmap"]),
+):
+    experiments.append(
+        Experiment(
+            _name,
+            _num,
+            _desc,
+            [{**(_EPI_CTR_BASE if a != "colmap" else {}), **_EPI_CTR_ARMS[a]} for a in _arms],
+            PlotConfig(
+                x_axis="val_step",
+                split_param="series_label_override",
+                metric_keys=["psnr", "ssim", "lpips", "quality", "num_GS", "eval_rre", "eval_rte"],
+                max_render_cols=3,
+                horizontal_datasets=False,
+                show_gt=True,
+                show_zoom=True,
+                show_differences=False,
+                render_nums=[0, 2, 5],
+            ),
+            val_steps=[1, 3000, 7000, 15000, 30000],
+            render_filter_override={"seed": [42], "num_steps": [30000]},
+        )
+    )
 
 experiment_dict = {exp.name: exp for exp in experiments}
 

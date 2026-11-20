@@ -216,6 +216,13 @@ class Config:
     camft_epi_file: str = ""
     camft_epi_weight: float = 2.0
     camft_epi_steps: int = 3000
+    # Shared training intrinsics: the mean of the training-frame K (every training render and the epipolar loss use it);
+    # evaluation keeps the eval frames' own (GT) K
+    train_mean_k: bool = False
+    # 3R-GS intrinsics optimisation: one shared focal (log-parametrised, initialised from the mean focal of the training K,
+    # Adam lr focal_opt_lr), principal point fixed at the mean; implies train_mean_k
+    intrinsics_opt: bool = False
+    focal_opt_lr: float = 1e-4
     # 3R-GS test-time pose optimisation of the evaluation views at the last evaluation (extra tpo_* metrics): per view a
     # zero-initialised CameraOptModule on the (aligned) camera, Adam with exponential lr decay to 1% over the iterations,
     # Scharr gradient-masked L1 loss on the rendered image; the Gaussians are fixed.
@@ -639,6 +646,15 @@ class Runner:
                 f"Epipolar loss: {len(tp['ei'])} pairs x {tp['pts_i'].shape[1]} points, mask fraction "
                 f"{self.camft_epi['mask'].mean().item():.3f}, weight {cfg.camft_epi_weight}, steps 0-{cfg.camft_epi_steps}"
             )
+        self.mean_K = None
+        self.log_focal = None
+        if cfg.train_mean_k or cfg.intrinsics_opt:
+            Ks_tr = np.stack([self.train_parser.Ks_dict[self.train_parser.camera_ids[i]] for i in self.trainset.indices])
+            self.mean_K = torch.from_numpy(Ks_tr.mean(axis=0)).float().to(self.device)
+            print(
+                f"Shared training K from {len(Ks_tr)} frames: fx {self.mean_K[0, 0]:.2f} (min {Ks_tr[:, 0, 0].min():.2f}, "
+                f"max {Ks_tr[:, 0, 0].max():.2f}), fy {self.mean_K[1, 1]:.2f}, cx {self.mean_K[0, 2]:.2f}, cy {self.mean_K[1, 2]:.2f}"
+            )
         self.splats, self.optimizers = create_splats_with_optimizers(
             self.train_parser,
             init_type=cfg.init_type,
@@ -792,6 +808,10 @@ class Runner:
             _opt = self.camft.make_optimizer()
             if _opt is not None:
                 self.app_optimizers.append(_opt)
+        if cfg.intrinsics_opt:
+            f0 = 0.5 * float(self.mean_K[0, 0] + self.mean_K[1, 1])
+            self.log_focal = torch.nn.Parameter(torch.tensor(math.log(f0), device=self.device))
+            self.app_optimizers.append(torch.optim.Adam([self.log_focal], lr=cfg.focal_opt_lr))
         if cfg.app_opt:
             assert feature_dim is not None
             self.app_module = AppearanceOptModule(
@@ -1118,6 +1138,8 @@ class Runner:
 
             camtoworlds = camtoworlds_gt = data["camtoworld"].to(device)  # [1, 4, 4]
             Ks = data["K"].to(device)  # [1, 3, 3]
+            if self.mean_K is not None:
+                Ks = self.shared_K()[None]
             pixels = data["image"].to(device) / 255.0  # [1, H, W, 3]
             num_train_rays_per_step = (
                 pixels.shape[0] * pixels.shape[1] * pixels.shape[2]
@@ -1143,6 +1165,8 @@ class Runner:
                         c2w_all, K_all = c2w_all.detach(), K_all.detach()
                 else:
                     c2w_all, K_all = self.camft.ref_c2w, self.camft.ref_K
+                if self.mean_K is not None:
+                    K_all = self.shared_K()[None].expand(K_all.shape[0], 3, 3)
                 camtoworlds = c2w_all[frame : frame + 1]
                 Ks = K_all[frame : frame + 1]
             masks = data["mask"].to(device) if "mask" in data else None  # [1, H, W]
@@ -1445,6 +1469,8 @@ class Runner:
                     self.writer.add_scalar("train/camft_gt_loss", gt_loss.item(), step)
                 if epi_loss is not None:
                     self.writer.add_scalar("train/camft_epi_loss", epi_loss.item(), step)
+                if self.log_focal is not None:
+                    self.writer.add_scalar("train/focal", self.log_focal.exp().item(), step)
                 if self.profiler is not None:
                     for k, v in self.profiler.last.items():
                         self.writer.add_scalar(f"profile/{k}_ms", v, step)
@@ -1731,6 +1757,16 @@ class Runner:
         else:
             return matrix
 
+    def shared_K(self) -> Tensor:
+        """Shared training intrinsics [3,3]: the mean K, with the optimised focal when intrinsics_opt."""
+        if self.log_focal is None:
+            return self.mean_K
+        f = self.log_focal.exp()
+        K = self.mean_K.clone()
+        K[0, 0] = f
+        K[1, 1] = f
+        return K
+
     def test_time_pose_opt(self, camtoworlds, Ks, width, height, masks, pixels):
         """3R-GS test-time pose optimisation of one evaluation view (ported from rgs3/trainer.py `optim_camtoworlds`):
         returns the optimised camera-to-world [1,4,4]; the Gaussians are fixed."""
@@ -1994,6 +2030,9 @@ class Runner:
                     "num_eval_images": len(valloader),
                 }
             )
+            if self.mean_K is not None:
+                K_sh = self.shared_K().detach()
+                stats.update({"train_fx": K_sh[0, 0].item(), "train_fy": K_sh[1, 1].item(), "train_cx": K_sh[0, 2].item(), "train_cy": K_sh[1, 2].item()})
             depth_l1_str = f"Depth L1: {stats['depth_l1']:.4f} " if "depth_l1" in stats else ""
             if cfg.use_bilateral_grid:
                 print(
