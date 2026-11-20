@@ -6536,31 +6536,31 @@ experiments.append(
     )
 )
 
-# Counter scene, 3R-GS-like intrinsics (120, 121). Training uses one shared K for all frames (the mean of the Omega
+# 3R-GS-like intrinsics (120, 121; the scene is chosen with --dataset_name). Training uses one shared K for all frames (the mean of the Omega
 # per-frame K) instead of per-frame K; evaluation keeps the eval frames' own GT K. 121 adds the 3R-GS intrinsics
 # optimisation (shared focal, lr 1e-4). Every 8th frame is test, all other frames train; head arms are left out.
-_EPI_CTR_BASE = {**_EPI_BASE, "num_images": [1000], "camft_epi_knn": 10}
-_EPI_CTR_MODULES = ["mlp_epi", "mlp_photo", "def_epi", "def_photo"]
-_EPI_CTR_ARMS = {}
-for _a in _EPI_CTR_MODULES:
-    _EPI_CTR_ARMS[_a + "_meank"] = {**_EPI_ARMS[_a], "train_mean_k": True, "series_label_override": _EPI_ARMS[_a]["series_label_override"] + ", shared mean K"}
-    _EPI_CTR_ARMS[_a + "_intropt"] = {**_EPI_ARMS[_a], "intrinsics_opt": True, "series_label_override": _EPI_ARMS[_a]["series_label_override"] + ", shared K, focal optimised"}
-_EPI_CTR_ARMS["fixed_perframe"] = {"series_label_override": "Omega cameras (fixed), per-frame K"}
-_EPI_CTR_ARMS["fixed_meank"] = {"train_mean_k": True, "series_label_override": "Omega cameras (fixed), shared mean K"}
-_EPI_CTR_ARMS["fixed_intropt"] = {"intrinsics_opt": True, "series_label_override": "Omega cameras (fixed), shared K, focal optimised"}
-_EPI_CTR_ARMS["colmap"] = _EPI_ALL_ARMS["colmap"]
+_EPI_K_BASE = {**_EPI_BASE, "num_images": [1000], "camft_epi_knn": 10}
+_EPI_K_MODULES = ["mlp_epi", "mlp_photo", "def_epi", "def_photo"]
+_EPI_K_ARMS = {}
+for _a in _EPI_K_MODULES:
+    _EPI_K_ARMS[_a + "_meank"] = {**_EPI_ARMS[_a], "train_mean_k": True, "series_label_override": _EPI_ARMS[_a]["series_label_override"] + ", shared mean K"}
+    _EPI_K_ARMS[_a + "_intropt"] = {**_EPI_ARMS[_a], "intrinsics_opt": True, "series_label_override": _EPI_ARMS[_a]["series_label_override"] + ", shared K, focal optimised"}
+_EPI_K_ARMS["fixed_perframe"] = {"series_label_override": "Omega cameras (fixed), per-frame K"}
+_EPI_K_ARMS["fixed_meank"] = {"train_mean_k": True, "series_label_override": "Omega cameras (fixed), shared mean K"}
+_EPI_K_ARMS["fixed_intropt"] = {"intrinsics_opt": True, "series_label_override": "Omega cameras (fixed), shared K, focal optimised"}
+_EPI_K_ARMS["colmap"] = _EPI_ALL_ARMS["colmap"]
 for _name, _num, _desc, _arms in (
-    ("omega_epi_ctr_meank", 120, "Counter, all frames: Omega camera modules with one shared mean K for training (like 3R-GS), epipolar vs photometric, fixed Omega cameras with per-frame / shared K, COLMAP reference",
-     [a + "_meank" for a in _EPI_CTR_MODULES] + ["fixed_perframe", "fixed_meank", "colmap"]),
-    ("omega_epi_ctr_intropt", 121, "Counter, all frames: 3R-GS shared-focal intrinsics optimisation on the modules and on fixed Omega cameras, with the shared mean K runs as references",
-     [a + "_intropt" for a in _EPI_CTR_MODULES] + [a + "_meank" for a in _EPI_CTR_MODULES] + ["fixed_intropt", "fixed_meank", "fixed_perframe", "colmap"]),
+    ("omega_epi_meank", 120, "All frames: Omega camera modules with one shared mean K for training (like 3R-GS), epipolar vs photometric, fixed Omega cameras with per-frame / shared K, COLMAP reference",
+     [a + "_meank" for a in _EPI_K_MODULES] + ["fixed_perframe", "fixed_meank", "colmap"]),
+    ("omega_epi_intropt", 121, "All frames: 3R-GS shared-focal intrinsics optimisation on the modules and on fixed Omega cameras, with the shared mean K runs as references",
+     [a + "_intropt" for a in _EPI_K_MODULES] + [a + "_meank" for a in _EPI_K_MODULES] + ["fixed_intropt", "fixed_meank", "fixed_perframe", "colmap"]),
 ):
     experiments.append(
         Experiment(
             _name,
             _num,
             _desc,
-            [{**(_EPI_CTR_BASE if a != "colmap" else {}), **_EPI_CTR_ARMS[a]} for a in _arms],
+            [{**(_EPI_K_BASE if a != "colmap" else {}), **_EPI_K_ARMS[a]} for a in _arms],
             PlotConfig(
                 x_axis="val_step",
                 split_param="series_label_override",
