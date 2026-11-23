@@ -6853,3 +6853,39 @@ es/metrics_vs_abs_error.png"), dpi=110); plt.close()
 EOF
 cd /home/ojab2/work/git/gsplat; until grep -aq "runner exit" experiments/2026-11-23_00_colmap_focal_error/queue.log; do sleep 20; done; grep -a "runner exit" experiments/2026-11-23_00_colmap_focal_error/queue.log; date" completed (exit code 0)</summary>
 </task-notification>
+
+## Assistant (2026-11-23 10:01:23 UTC)
+
+All 13 runs finished, and the log, plots and `chat.md` are written and committed in gsplat as `b0ba7596`. It also includes `latest_plots/124_*`. Nothing is pushed.
+
+The runner exited 0 at 09:59 GMT with no tracebacks. The log is in `experiments/2026-11-23_00_colmap_focal_error/`. It has the README with an empty Insights section, two figures (3 panels each), the renders, `metrics.csv`, and the collect and plot scripts.
+
+Results at step 7000, on the 37 test frames:
+
+| training focal change | PSNR | SSIM | LPIPS |
+|---|---|---|---|
+| 0% (COLMAP cameras) | 30.24 | 0.937 | 0.136 |
+| fixed −0.1% / +0.1% | 29.94 / 29.79 | 0.930 / 0.929 | 0.138 / 0.138 |
+| fixed −1% / +1% | 23.03 / 22.95 | 0.694 / 0.693 | 0.189 / 0.187 |
+| fixed −5% / +5% | 18.01 / 18.10 | 0.597 / 0.599 | 0.445 / 0.434 |
+| fixed −10% / +10% | 16.20 / 16.33 | 0.570 / 0.574 | 0.591 / 0.578 |
+| random up to ±0.1% (realised mean abs 0.05%) | 30.21 | 0.936 | 0.138 |
+| random up to ±1% (0.51 / 0.49%) | 28.08 | 0.875 | 0.214 |
+| random up to ±5% (2.54 / 2.44%) | 22.76 | 0.709 | 0.439 |
+| random up to ±10% (5.07 / 4.88%) | 20.31 | 0.667 | 0.575 |
+
+The two figures plot the fixed set against signed change, and the fixed and random sets against the mean absolute focal error of the training views.
+
+Facts to know:
+- **Restart for 4 GPUs:** I stopped my runner and its two trainers by PID and relaunched on GPUs 0–3. The baseline and the −1%, −5% and −10% runs were kept from the first launch, and the ±0.1% runs were redone. Both queue logs are named in the README, and `queue_part1.log` is gitignored, so it's not in the commit.
+- **Train times:** they are not comparable, since 2 to 4 runs shared the machine at different times.
+- **Random draws:** the random changes are one seed-42 draw per setting. The draws for the different bounds are the same uniform values scaled by x.
+- **Smoke-test directories:** `results/gt_outputs/*_steps40` are leftovers of my smoke tests and are not part of the results. I tried to delete them with `rm -rf` and the permission check denied it, so I left them in place.
+
+## User (2026-11-23 10:06:22 UTC)
+
+Please add the colmap renders with 0% changes to the render plot
+
+## Assistant (2026-11-23 10:06:47 UTC)
+
+I'm looking at the layout of the per-image render files, so I can build a render figure that includes the 0% baseline.
