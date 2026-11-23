@@ -1,0 +1,42 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else All frames: 3R-GS shared-focal intrinsics optimisation on the modules and on fixed Omega cameras, with the shared mean K runs as references (Bonsai) \fi}
+\label{tab:121_omega_epi_intropt_bonsai}
+\centering
+\tiny
+\begin{tabular}{lrlrrrrrrr}
+\toprule
+Choice & Val Step & Series Label Override & PSNR ↑ & SSIM ↑ & LPIPS ↓ & Composite Quality ↑ & Final Gaussian Count & Val RRE ↓ & Val RTE ↓ \\
+\midrule
+VGGT & 7000 & 3RGS MLP, photometric + epipolar loss (lr 1e-4), shared K, focal optimised & 21.531 & 0.660 & 0.243 & 0.541 & 1000000 & 0.200 & \underline{0.002} \\
+VGGT & 1 & 3RGS MLP, photometric + epipolar loss (lr 1e-4), shared mean K & 11.145 & 0.261 & 0.788 & -0.221 & 100000 & 0.418 & 0.012 \\
+VGGT & 3000 & 3RGS MLP, photometric + epipolar loss (lr 1e-4), shared mean K & 21.917 & 0.678 & 0.347 & 0.495 & 322497 & 0.299 & 0.005 \\
+VGGT & 15000 & 3RGS MLP, photometric + epipolar loss (lr 1e-4), shared mean K & 22.611 & 0.670 & 0.178 & 0.607 & 1000000 & \textbf{0.186} & \textbf{0.001} \\
+VGGT & 30000 & 3RGS MLP, photometric + epipolar loss (lr 1e-4), shared mean K & 22.691 & 0.670 & 0.162 & 0.619 & 1000000 & \underline{0.193} & \textbf{0.001} \\
+VGGT & 7000 & 3RGS MLP, photometric loss (lr 1e-4), shared K, focal optimised & 23.050 & 0.723 & 0.307 & 0.567 & 1000000 & 0.371 & 0.010 \\
+VGGT & 1 & 3RGS MLP, photometric loss (lr 1e-4), shared mean K & 11.145 & 0.261 & 0.788 & -0.221 & 100000 & 0.418 & 0.012 \\
+VGGT & 3000 & 3RGS MLP, photometric loss (lr 1e-4), shared mean K & 22.730 & 0.725 & 0.421 & 0.491 & 322497 & 0.371 & 0.011 \\
+VGGT & 15000 & 3RGS MLP, photometric loss (lr 1e-4), shared mean K & 23.055 & 0.717 & 0.230 & 0.611 & 1000000 & 0.354 & 0.008 \\
+VGGT & 30000 & 3RGS MLP, photometric loss (lr 1e-4), shared mean K & 23.236 & 0.711 & 0.186 & 0.638 & 1000000 & 0.316 & 0.007 \\
+GT & 1 & COLMAP cameras + point cloud (fixed, all frames) & 10.606 & 0.240 & 0.730 & -0.208 & 206613 &  &  \\
+GT & 3000 & COLMAP cameras + point cloud (fixed, all frames) & 26.757 & 0.889 & 0.196 & 0.801 & 666323 &  &  \\
+GT & 7000 & COLMAP cameras + point cloud (fixed, all frames) & 29.659 & 0.931 & 0.139 & 0.914 & 1000000 &  &  \\
+GT & 15000 & COLMAP cameras + point cloud (fixed, all frames) & \underline{31.533} & \underline{0.947} & \underline{0.115} & \underline{0.973} & 1000000 &  &  \\
+GT & 30000 & COLMAP cameras + point cloud (fixed, all frames) & \textbf{32.760} & \textbf{0.954} & \textbf{0.106} & \textbf{1.006} & 1000000 &  &  \\
+VGGT & 1 & Omega cameras (fixed), per-frame K & 11.170 & 0.262 & 0.788 & -0.220 & 100000 & 0.399 & 0.012 \\
+VGGT & 3000 & Omega cameras (fixed), per-frame K & 21.434 & 0.680 & 0.433 & 0.433 & 322497 & 0.399 & 0.012 \\
+VGGT & 15000 & Omega cameras (fixed), per-frame K & 21.529 & 0.669 & 0.304 & 0.509 & 1000000 & 0.399 & 0.012 \\
+VGGT & 30000 & Omega cameras (fixed), per-frame K & 21.441 & 0.663 & 0.273 & 0.523 & 1000000 & 0.399 & 0.012 \\
+VGGT & 7000 & Omega cameras (fixed), shared K, focal optimised & 21.478 & 0.671 & 0.375 & 0.465 & 1000000 & 0.399 & 0.012 \\
+VGGT & 1 & default module, photometric + epipolar loss (lr 1e-4), shared K, focal optimised & 11.167 & 0.262 & 0.788 & -0.220 & 100000 & 0.399 & 0.012 \\
+VGGT & 3000 & default module, photometric + epipolar loss (lr 1e-4), shared K, focal optimised & 21.146 & 0.658 & 0.357 & 0.463 & 322497 & 0.294 & 0.004 \\
+VGGT & 15000 & default module, photometric + epipolar loss (lr 1e-4), shared K, focal optimised & 21.724 & 0.679 & 0.301 & 0.520 & 1000000 & 0.229 & \underline{0.002} \\
+VGGT & 30000 & default module, photometric + epipolar loss (lr 1e-4), shared K, focal optimised & 22.346 & 0.693 & 0.297 & 0.542 & 1000000 & 0.204 & \underline{0.002} \\
+VGGT & 7000 & default module, photometric + epipolar loss (lr 1e-4), shared mean K & 22.099 & 0.686 & 0.365 & 0.491 & 1000000 & 0.261 & 0.003 \\
+VGGT & 7000 & default module, photometric loss (lr 1e-4), shared K, focal optimised & 23.189 & 0.720 & 0.385 & 0.520 & 1000000 & 0.308 & 0.006 \\
+VGGT & 1 & default module, photometric loss (lr 1e-4), shared mean K & 11.167 & 0.262 & 0.788 & -0.220 & 100000 & 0.399 & 0.012 \\
+VGGT & 3000 & default module, photometric loss (lr 1e-4), shared mean K & 22.258 & 0.701 & 0.463 & 0.443 & 322497 & 0.339 & 0.008 \\
+VGGT & 15000 & default module, photometric loss (lr 1e-4), shared mean K & 22.982 & 0.718 & 0.357 & 0.531 & 1000000 & 0.268 & 0.005 \\
+VGGT & 30000 & default module, photometric loss (lr 1e-4), shared mean K & 23.652 & 0.737 & 0.279 & 0.603 & 1000000 & 0.254 & 0.005 \\
+\bottomrule
+\end{tabular}
+\end{table}
