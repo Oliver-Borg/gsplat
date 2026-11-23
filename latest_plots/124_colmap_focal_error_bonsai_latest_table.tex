@@ -1,0 +1,14 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else 3DGS (MCMC) with COLMAP cameras and a wrong training focal: fixed change for every view (-10..+10%) and per-view random change (up to +-10%), 7000 steps (Bonsai) \fi}
+\label{tab:124_colmap_focal_error_bonsai}
+\centering
+\scriptsize
+\begin{tabular}{lrlrrrr}
+\toprule
+Choice & Val Step & Series Label Override & PSNR ↑ & SSIM ↑ & LPIPS ↓ & Final Gaussian Count \\
+\midrule
+GT & 7000 & fixed focal change +5% & \textbf{18.105} & \textbf{0.599} & \textbf{0.434} & 1000000 \\
+GT & 1 & random focal change up to +-5% & \underline{10.606} & \underline{0.239} & \underline{0.731} & 206613 \\
+\bottomrule
+\end{tabular}
+\end{table}

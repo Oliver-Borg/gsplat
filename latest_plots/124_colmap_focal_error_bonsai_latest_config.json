@@ -1,0 +1,183 @@
+[
+    {
+        "choice": [
+            "gt"
+        ],
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            7000
+        ],
+        "series_label_override": "fixed focal change 0% (COLMAP)",
+        "dataset": "bonsai"
+    },
+    {
+        "choice": [
+            "gt"
+        ],
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            7000
+        ],
+        "train_k_scale_pct": -10.0,
+        "series_label_override": "fixed focal change -10%",
+        "dataset": "bonsai"
+    },
+    {
+        "choice": [
+            "gt"
+        ],
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            7000
+        ],
+        "train_k_scale_pct": -5.0,
+        "series_label_override": "fixed focal change -5%",
+        "dataset": "bonsai"
+    },
+    {
+        "choice": [
+            "gt"
+        ],
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            7000
+        ],
+        "train_k_scale_pct": -1.0,
+        "series_label_override": "fixed focal change -1%",
+        "dataset": "bonsai"
+    },
+    {
+        "choice": [
+            "gt"
+        ],
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            7000
+        ],
+        "train_k_scale_pct": -0.1,
+        "series_label_override": "fixed focal change -0.1%",
+        "dataset": "bonsai"
+    },
+    {
+        "choice": [
+            "gt"
+        ],
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            7000
+        ],
+        "train_k_scale_pct": 0.1,
+        "series_label_override": "fixed focal change +0.1%",
+        "dataset": "bonsai"
+    },
+    {
+        "choice": [
+            "gt"
+        ],
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            7000
+        ],
+        "train_k_scale_pct": 1.0,
+        "series_label_override": "fixed focal change +1%",
+        "dataset": "bonsai"
+    },
+    {
+        "choice": [
+            "gt"
+        ],
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            7000
+        ],
+        "train_k_scale_pct": 5.0,
+        "series_label_override": "fixed focal change +5%",
+        "dataset": "bonsai"
+    },
+    {
+        "choice": [
+            "gt"
+        ],
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            7000
+        ],
+        "train_k_scale_pct": 10.0,
+        "series_label_override": "fixed focal change +10%",
+        "dataset": "bonsai"
+    },
+    {
+        "choice": [
+            "gt"
+        ],
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            7000
+        ],
+        "train_k_random_pct": 0.1,
+        "series_label_override": "random focal change up to +-0.1%",
+        "dataset": "bonsai"
+    },
+    {
+        "choice": [
+            "gt"
+        ],
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            7000
+        ],
+        "train_k_random_pct": 1.0,
+        "series_label_override": "random focal change up to +-1%",
+        "dataset": "bonsai"
+    },
+    {
+        "choice": [
+            "gt"
+        ],
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            7000
+        ],
+        "train_k_random_pct": 5.0,
+        "series_label_override": "random focal change up to +-5%",
+        "dataset": "bonsai"
+    },
+    {
+        "choice": [
+            "gt"
+        ],
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            7000
+        ],
+        "train_k_random_pct": 10.0,
+        "series_label_override": "random focal change up to +-10%",
+        "dataset": "bonsai"
+    }
+]
