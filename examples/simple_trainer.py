@@ -225,6 +225,13 @@ class Config:
     train_k_scale_pct: float = 0.0
     train_k_random_pct: float = 0.0
     train_k_seed: int = 42
+    # Wrong-pose test (no optimisation), training views only (evaluation views keep their poses): per view a random rotation
+    # about each camera axis, angle ~ U(-train_rot_random_deg, +train_rot_random_deg) (camera centre unchanged), and/or a random
+    # camera-centre shift with a uniformly random unit direction and a magnitude ~ U(0, train_trans_random_pct) percent of the
+    # scene scale (distance between the two farthest training camera centres). Drawn once with train_pose_seed.
+    train_rot_random_deg: float = 0.0
+    train_trans_random_pct: float = 0.0
+    train_pose_seed: int = 42
     # 3R-GS intrinsics optimisation: one shared focal (log-parametrised, initialised from the mean focal of the training K,
     # Adam lr focal_opt_lr), principal point fixed at the mean; implies train_mean_k
     intrinsics_opt: bool = False
@@ -667,6 +674,33 @@ class Runner:
                 f"Training K focal change: fx {u[:, 0].mean():+.3f}% (|.| mean {np.abs(u[:, 0]).mean():.3f}%, max {np.abs(u[:, 0]).max():.3f}%), "
                 f"fy {u[:, 1].mean():+.3f}% (|.| mean {np.abs(u[:, 1]).mean():.3f}%, max {np.abs(u[:, 1]).max():.3f}%) over {n} views"
             )
+        self.pose_err = None  # (R_pert [N,3,3], t_pert [N,3]) per training view
+        if cfg.train_rot_random_deg or cfg.train_trans_random_pct:
+            assert not (cfg.camft or cfg.pose_opt or cfg.train_mean_k or cfg.intrinsics_opt), "the pose change is for fixed-camera runs"
+            from scipy.spatial.distance import pdist
+            from scipy.spatial.transform import Rotation
+
+            n = len(self.trainset)
+            c2w_tr = np.stack([self.train_parser.camtoworlds[i] for i in self.trainset.indices])
+            centres = c2w_tr[:, :3, 3]
+            scale = float(pdist(centres).max())  # distance between the two farthest training camera centres
+            rng = np.random.default_rng(cfg.train_pose_seed)
+            ang = rng.uniform(-1.0, 1.0, size=(n, 3)) * cfg.train_rot_random_deg
+            direction = rng.normal(size=(n, 3))
+            direction /= np.linalg.norm(direction, axis=1, keepdims=True)
+            mag = rng.uniform(0.0, 1.0, size=n) * cfg.train_trans_random_pct / 100.0 * scale
+            R_pert = Rotation.from_euler("xyz", ang, degrees=True).as_matrix() if cfg.train_rot_random_deg else np.tile(np.eye(3), (n, 1, 1))
+            t_pert = direction * mag[:, None]
+            rot_deg = np.degrees(np.arccos(np.clip((np.trace(R_pert, axis1=1, axis2=2) - 1) / 2, -1, 1)))
+            self.pose_err_stats = {
+                "train_pose_scale": scale,
+                "train_rot_err_mean_deg": float(rot_deg.mean()),
+                "train_rot_err_max_deg": float(rot_deg.max()),
+                "train_trans_err_mean_pct": float((np.linalg.norm(t_pert, axis=1) / scale * 100.0).mean()),
+                "train_trans_err_max_pct": float((np.linalg.norm(t_pert, axis=1) / scale * 100.0).max()),
+            }
+            self.pose_err = (torch.from_numpy(R_pert).float().to(self.device), torch.from_numpy(t_pert).float().to(self.device))
+            print(f"Training pose change over {n} views: scale {scale:.4f}, " + ", ".join(f"{k} {v:.4f}" for k, v in self.pose_err_stats.items()))
         self.mean_K = None
         self.log_focal = None
         if cfg.train_mean_k or cfg.intrinsics_opt:
@@ -1158,6 +1192,11 @@ class Runner:
                     data = next(trainloader_iter)
 
             camtoworlds = camtoworlds_gt = data["camtoworld"].to(device)  # [1, 4, 4]
+            if self.pose_err is not None:
+                ids_p = data["image_id"].to(device)
+                camtoworlds = camtoworlds.clone()
+                camtoworlds[:, :3, :3] = camtoworlds[:, :3, :3] @ self.pose_err[0][ids_p]
+                camtoworlds[:, :3, 3] = camtoworlds[:, :3, 3] + self.pose_err[1][ids_p]
             Ks = data["K"].to(device)  # [1, 3, 3]
             if self.mean_K is not None:
                 Ks = self.shared_K()[None]
@@ -2092,6 +2131,8 @@ class Runner:
                 }
             )
             stats.update(self.k_accuracy())
+            if self.pose_err is not None:
+                stats.update(self.pose_err_stats)
             if self.k_scale is not None:
                 u = self.k_scale_pct
                 stats.update(

@@ -335,6 +335,9 @@ class Config:
     # Wrong-focal test (percent): fixed change of fx and fy for every training view, or per-view uniform random change up to +-x
     train_k_scale_pct: float = 0.0
     train_k_random_pct: float = 0.0
+    # Wrong-pose test: per-view random rotation about every camera axis up to +-x degrees / random camera-centre shift up to x percent of the scene scale
+    train_rot_random_deg: float = 0.0
+    train_trans_random_pct: float = 0.0
     test_pose_opt: bool = False
     # Evaluate on every GT-eval frame that is not a training frame (simple_trainer eval_all_frames)
     eval_all: bool = False
@@ -482,6 +485,8 @@ class Config:
             "intrinsics_opt",
             "train_k_scale_pct",
             "train_k_random_pct",
+            "train_rot_random_deg",
+            "train_trans_random_pct",
             "test_pose_opt",
             "eval_all",
             "ft_cams",
@@ -849,6 +854,10 @@ class Config:
             parts.append(f"kfix{self.train_k_scale_pct:+g}")
         if self.train_k_random_pct:
             parts.append(f"krand{self.train_k_random_pct:g}")
+        if self.train_rot_random_deg:
+            parts.append(f"rrand{self.train_rot_random_deg:g}")
+        if self.train_trans_random_pct:
+            parts.append(f"trand{self.train_trans_random_pct:g}")
         if self.test_pose_opt:
             parts.append("tpo")
         if self.eval_all:
@@ -1657,6 +1666,10 @@ class Config:
             command.extend(["--train_k_scale_pct", str(self.train_k_scale_pct)])
         if self.train_k_random_pct:
             command.extend(["--train_k_random_pct", str(self.train_k_random_pct)])
+        if self.train_rot_random_deg:
+            command.extend(["--train_rot_random_deg", str(self.train_rot_random_deg)])
+        if self.train_trans_random_pct:
+            command.extend(["--train_trans_random_pct", str(self.train_trans_random_pct)])
         if self.intrinsics_opt:
             command.append("--intrinsics_opt")
         elif self.train_mean_k:
@@ -6623,6 +6636,36 @@ experiments.append(
         render_filter_override={"seed": [42], "num_steps": [7000]},
     )
 )
+
+# Wrong-pose tests (125 rotation, 126 translation): like 124 (COLMAP cameras and point cloud, 255 train frames, MCMC, 7000 steps), the
+# training cameras get a per-view random error; evaluation views keep their poses.
+def _pose_experiment(name, number, desc, key, unit, levels):
+    arms = [{**_KERR_BASE, "series_label_override": f"{key} change 0% (COLMAP)"}]
+    for x in levels:
+        arms.append({**_KERR_BASE, ("train_rot_random_deg" if key == "rotation" else "train_trans_random_pct"): x,
+                     "series_label_override": f"random {key} change up to {x:g}{unit}"})
+    experiments.append(
+        Experiment(
+            name, number, desc, arms,
+            PlotConfig(
+                x_axis="val_step",
+                split_param="series_label_override",
+                metric_keys=["psnr", "ssim", "lpips", "num_GS"],
+                max_render_cols=3,
+                horizontal_datasets=False,
+                show_gt=True,
+                show_zoom=True,
+                show_differences=False,
+                render_nums=[0, 2, 5],
+            ),
+            val_steps=[1, 7000],
+            render_filter_override={"seed": [42], "num_steps": [7000]},
+        )
+    )
+
+
+_pose_experiment("colmap_rotation_error", 125, "3DGS (MCMC) with COLMAP cameras and per-view random rotation errors of the training cameras (up to +-x degrees about every axis), 7000 steps", "rotation", " deg", (0.1, 0.5, 1.0, 2.0, 5.0, 10.0))
+_pose_experiment("colmap_translation_error", 126, "3DGS (MCMC) with COLMAP cameras and per-view random camera-centre errors of the training cameras (up to x percent of the distance between the two farthest cameras), 7000 steps", "translation", "% of scene scale", (0.1, 0.5, 1.0, 2.0, 5.0, 10.0))
 
 experiment_dict = {exp.name: exp for exp in experiments}
 
