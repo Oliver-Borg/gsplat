@@ -6709,3 +6709,204 @@ Please split experiment 121 into 3 different groups: 3RGS, default and Omega, wi
 ## Assistant (2026-11-23 08:58:35 UTC)
 
 All the runs for the three groups already exist, so no re-run is needed. I'm regenerating the plots, tables and log for the new grouping now.
+
+## Assistant (2026-11-23 08:59:45 UTC)
+
+Experiment 121 is now three experiments, each with the COLMAP reference, committed locally as `cad9fffa` (not pushed). No re-run was needed, since all the run directories already existed.
+
+| experiment | name | arms |
+|---|---|---|
+| 121 | `omega_epi_intropt_3rgs` | 3R-GS MLP epipolar+photometric and photometric with the focal optimised, the same two with the shared mean K, COLMAP |
+| 122 | `omega_epi_intropt_default` | default module, same four arms, COLMAP |
+| 123 | `omega_epi_intropt_omega` | fixed Omega with the focal optimised, with the shared mean K, with per-frame K, COLMAP |
+
+- **Log:** the README's focal-optimisation section now has one table, metrics plot and renders figure per group, and `metrics.csv` and `chat.md` are regenerated.
+- **Mean-K experiment:** experiment 120 is unchanged.
+- **Launch record:** the log's launch command is the one actually run, with the old single experiment name. The metadata notes that it was later split into 121, 122 and 123 over the same run directories.
+- **Stale files:** I removed the old `latest_plots/121_omega_epi_intropt_*` files and replaced them with `121`, `122` and `123` plots for the new names.
+- **References:** each module group holds only its own family plus the COLMAP reference. I did not add the fixed Omega runs as cross-references there; tell me if you want them added.
+
+## User (2026-11-23 09:03:21 UTC)
+
+Can we log/test K accuracy somehow? Focal length accuracy? Distortion accuracy? I think COLMAP uses the pinhole cameras so just focal length is probably good
+
+## Assistant (2026-11-23 09:06:02 UTC)
+
+The K accuracy is now backfilled from files for the finished runs, and the trainer logging is being tested. I haven't touched the log yet.
+
+**What I added:**
+- **Trainer logging:** `simple_trainer.py` now writes focal accuracy into the stats JSON at every eval. For fx and fy it logs the signed mean, mean absolute and max absolute relative error in % of the K used in training against the GT K at the trainer image size. The used K is the per-frame K, the shared mean K or optimised focal, or the head/module K. This takes effect for new runs only. I'm running a 100-step smoke test of two arms on GPU 1 to confirm it writes the keys.
+- **Backfill script:** `experiments/2026-11-20_00_omega_epipolar_intrinsics/k_accuracy.py` reads the data dirs and the stats JSONs and writes `k_accuracy.csv`. It needs no GPU and no re-run.
+
+**Backfilled numbers** (GT: fx = fy = 1611.351 at 1559×1039; relative error of fx / fy):
+
+| K | fx error | fy error | notes |
+|---|---|---|---|
+| Omega per-frame K, 255 frames | +0.380% mean | +0.469% mean | mean absolute 0.695% / 0.734%, max 2.171% / 2.399% |
+| shared mean K (all `meank` runs) | +0.380% | +0.469% | one value for every frame |
+| epipolar arms with the focal optimised (MLP / default) | +1.085% / +1.051% | same | fx = fy; the focal was 1628.8 / 1628.3 at the end, about 1.07% above GT |
+| photometric arms and fixed Omega with the focal optimised | +0.424% | +0.424% | unchanged from the initial value, fx = fy at the mean of fx and fy |
+| COLMAP reference | 0 | 0 | GT K by construction |
+
+For the epipolar arms the error was +0.424% at step 1 and already +1.085% (MLP) / +1.051% (default) at step 3000, when the epipolar loss stops. It stayed at that value to step 30000.
+
+Distortion isn't compared: the GT camera is PINHOLE, as you thought, and Omega predicts none.
+
+I'll add the smoke test result and the K accuracy table to the log once the trainer test finishes.
+
+## User (2026-11-23 09:09:24 UTC)
+
+Add a new experiment for running 3DGS with varying focal lengths (no optimisation) with COLMAP cameras and plot the metrics against focal innaccuracy. Do one set with a fixed focal length change for every view from -10% to 10% and one with random changes up to -10%/10%. Do 10, 5, 1 and 0.1% in both directions. Just run 7000 steps for each run
+
+## Assistant (2026-11-23 09:20:13 UTC)
+
+The wrong-focal experiment (124, `colmap_focal_error`) is launched and running on `dev-gpu-acs` (`gxp-l4-0`, 8 L4s all idle at launch), on GPUs 0 and 1, with the runner started at 09:18 GMT. Its queue log is in `experiments/2026-11-23_00_colmap_focal_error/queue.log`.
+
+- **Runs, 13 in total:** a 0% baseline, a fixed change for every view of −10, −5, −1, −0.1, +0.1, +1, +5 and +10%, and a per-view random change of up to ±0.1, ±1, ±5 and ±10%.
+- **Common setup:** 3DGS with MCMC, using the dataset's COLMAP cameras and point cloud, all 255 train frames, bonsai, seed 42, 7000 steps. There is no test-time pose optimisation.
+- **What the focal change touches:** fx and fy of the training views only. The principal point and the evaluation views' K are unchanged.
+- **Random set:** fx and fy get independent changes, uniform in ±x% per view. They are drawn once with seed 42, using one draw per view and axis, so they don't vary between steps.
+- **Smoke test:** a 40-step test of the −10% and ±10% random arms on GPU 1 here checked that the stats are written. For the random arm the realised mean absolute change was 5.07% (fx) and 4.88% (fy).
+
+When the runner exits I'll plot and write the log. The plots will be PSNR, SSIM and LPIPS against focal error: one figure of the fixed set against signed change, and one comparing fixed and random against mean absolute focal error. Both are at most 3 columns. Nothing is pushed.
+
+## User (2026-11-23 09:36:13 UTC)
+
+Progress on the runs?
+
+## Assistant (2026-11-23 09:36:27 UTC)
+
+Four of the 13 runs are done: the 0% baseline and the fixed −1, −5 and −10% runs. Two more are training, and the other seven have not started. There are no failures.
+
+- **Done:** baseline, fixed −1%, −5% and −10%, each with its step-6999 stats written.
+- **Running:** fixed +0.1% and −0.1%. The log shows one at step 4437 of 7000 and the other at 3195, at about 20–27 it/s. This is a guess at which of the two progress lines belongs to which run.
+- **Not started:** fixed +1%, +5% and +10%, and the four random runs (±0.1, ±1, ±5, ±10%).
+- **Timing:** the runner started at 09:18 GMT and it's 09:36 now. At about 6 minutes per run with 2 running at a time, I estimate the 7 remaining runs finish around 10:10 GMT.
+- **GPUs:** 0 and 1 are in use by my runs, and 2 to 7 are idle. I'm keeping to 2 GPUs.
+
+I'll plot and write the log when the runner exits.
+
+## User (2026-11-23 09:36:55 UTC)
+
+Lets use 4 gpus
+
+## Assistant (2026-11-23 09:37:08 UTC)
+
+To use 4 GPUs I have to restart the runner, since its GPU list is fixed at launch. I'll stop my own runner and its trainers by PID, then relaunch on GPUs 0–3. The runner skips the 4 finished runs and redoes the 2 partial ones, which have about 3 minutes of progress to lose.
+
+## Assistant (2026-11-23 09:42:07 UTC)
+
+The runs are now on GPUs 0–3 of `dev-gpu-acs`. All four are busy at about 97% utilisation, and GPUs 4–7 are untouched.
+
+I had to restart the runner to change its GPU list. I stopped my own runner and its two running trainers by PID, so about 3 minutes of progress on those two runs was lost. The new runner started at 09:37:25 GMT and reports 4 of 13 runs already splatted, so it skips those and redoes the rest.
+
+- **Finished and kept:** the 0% baseline and the fixed −1, −5 and −10% runs.
+- **Redone:** fixed +0.1% and −0.1%.
+- **Now running or queued:** the fixed +1, +5 and +10% runs and the four random runs. As of 09:38 the result directories exist for +1% and +5%, and the other runs have not started.
+- **Log files:** the first launch's log is kept as `queue_part1.log`, and the new one is `queue.log`, both in the experiment folder.
+
+With 4 GPUs I estimate the remaining runs finish within about 15 minutes. I'll plot and write the log when the runner exits.
+
+## User (2026-11-23 10:00:11 UTC)
+
+<task-notification>
+<task-id>bgy8fn57m</task-id>
+<tool-use-id>toolu_018WkXdqW7rv3uNqCJPEqrDQ</tool-use-id>
+<output-file>/tmp/claude-6786/-home-ojab2-work-git-vggt/7de51f4e-b011-4945-a096-0dd4da5cb0e2/tasks/bgy8fn57m.output</output-file>
+<status>completed</status>
+<summary>Background command "cd /home/ojab2/work/git/gsplat; E=experiments/2026-11-23_00_colmap_focal_error; mv $E/queue.log $E/queue_part1.log; sed -i 's/launching on GPUs 0,1/launching on GPUs 0-3/; s/--cuda_visible_devices 0,1/--cuda_visible_devices 0,1,2,3/' $E/queue.sh; cat $E/queue.sh | sed -n 3,8p; ssh dev-gpu-acs "cd /home/ojab2/work/git/gsplat &amp;&amp; setsid nohup $E/queue.sh &gt; $E/queue.log 2&gt;&amp;1 &lt; /dev/null &amp; sleep 1; echo launched on \$(hostname)"; sleep 60; ssh dev-gpu-acs "nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader | head -5"; grep -a "Splatted:" $E/queue.log | head -1" completed (exit code 0)</summary>
+</task-notification>
+
+## Assistant (2026-11-23 10:00:15 UTC)
+
+The notification only says the earlier relaunch command ended. While the runs finish I'm writing the collect and plot scripts.
+
+## Assistant (2026-11-23 10:00:27 UTC)
+
+The collect and plot scripts for this experiment are written, and I'm waiting for the runner to exit.
+
+The two figures, each 3 panels (PSNR, SSIM, LPIPS):
+- **Fixed set:** the metrics against the signed focal change.
+- **Fixed and random sets:** the metrics against the mean absolute focal error of the training views, on a symlog x-axis so the 0% baseline stays visible. It has a separate line for negative fixed changes, positive fixed changes and the random set.
+
+For the random set the x value is the realised mean absolute error, averaged over fx and fy, not the bound.
+
+## User (2026-11-23 10:00:27 UTC)
+
+<task-notification>
+<task-id>bls8e2rai</task-id>
+<tool-use-id>toolu_0163y3aqPDPpvsm3Pnv6C9Qx</tool-use-id>
+<output-file>/tmp/claude-6786/-home-ojab2-work-git-vggt/7de51f4e-b011-4945-a096-0dd4da5cb0e2/tasks/bls8e2rai.output</output-file>
+<status>completed</status>
+<summary>Background command "cd /home/ojab2/work/git/gsplat/experiments/2026-11-23_00_colmap_focal_error; mkdir -p figures; cat &gt; collect.py &lt;&lt;'EOF'
+import csv, glob, json, os, re
+root = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../..")
+rows = []
+for d in sorted(glob.glob(os.path.join(root, "results/gt_outputs/bonsai_2_n255_s42_i292_*steps7000"))):
+    name = os.path.basename(d)
+    m = re.search(r"kfix([+-][0-9.]+)", name); r = re.search(r"krand([0-9.]+)", name)
+    kind = "fixed" if m e
+
+... [3060 characters truncated] ...
+
+es/metrics_vs_abs_error.png"), dpi=110); plt.close()
+EOF
+cd /home/ojab2/work/git/gsplat; until grep -aq "runner exit" experiments/2026-11-23_00_colmap_focal_error/queue.log; do sleep 20; done; grep -a "runner exit" experiments/2026-11-23_00_colmap_focal_error/queue.log; date" completed (exit code 0)</summary>
+</task-notification>
+
+## Assistant (2026-11-23 10:01:23 UTC)
+
+All 13 runs finished, and the log, plots and `chat.md` are written and committed in gsplat as `b0ba7596`. It also includes `latest_plots/124_*`. Nothing is pushed.
+
+The runner exited 0 at 09:59 GMT with no tracebacks. The log is in `experiments/2026-11-23_00_colmap_focal_error/`. It has the README with an empty Insights section, two figures (3 panels each), the renders, `metrics.csv`, and the collect and plot scripts.
+
+Results at step 7000, on the 37 test frames:
+
+| training focal change | PSNR | SSIM | LPIPS |
+|---|---|---|---|
+| 0% (COLMAP cameras) | 30.24 | 0.937 | 0.136 |
+| fixed −0.1% / +0.1% | 29.94 / 29.79 | 0.930 / 0.929 | 0.138 / 0.138 |
+| fixed −1% / +1% | 23.03 / 22.95 | 0.694 / 0.693 | 0.189 / 0.187 |
+| fixed −5% / +5% | 18.01 / 18.10 | 0.597 / 0.599 | 0.445 / 0.434 |
+| fixed −10% / +10% | 16.20 / 16.33 | 0.570 / 0.574 | 0.591 / 0.578 |
+| random up to ±0.1% (realised mean abs 0.05%) | 30.21 | 0.936 | 0.138 |
+| random up to ±1% (0.51 / 0.49%) | 28.08 | 0.875 | 0.214 |
+| random up to ±5% (2.54 / 2.44%) | 22.76 | 0.709 | 0.439 |
+| random up to ±10% (5.07 / 4.88%) | 20.31 | 0.667 | 0.575 |
+
+The two figures plot the fixed set against signed change, and the fixed and random sets against the mean absolute focal error of the training views.
+
+Facts to know:
+- **Restart for 4 GPUs:** I stopped my runner and its two trainers by PID and relaunched on GPUs 0–3. The baseline and the −1%, −5% and −10% runs were kept from the first launch, and the ±0.1% runs were redone. Both queue logs are named in the README, and `queue_part1.log` is gitignored, so it's not in the commit.
+- **Train times:** they are not comparable, since 2 to 4 runs shared the machine at different times.
+- **Random draws:** the random changes are one seed-42 draw per setting. The draws for the different bounds are the same uniform values scaled by x.
+- **Smoke-test directories:** `results/gt_outputs/*_steps40` are leftovers of my smoke tests and are not part of the results. I tried to delete them with `rm -rf` and the permission check denied it, so I left them in place.
+
+## User (2026-11-23 10:06:22 UTC)
+
+Please add the colmap renders with 0% changes to the render plot
+
+## Assistant (2026-11-23 10:06:47 UTC)
+
+I'm looking at the layout of the per-image render files, so I can build a render figure that includes the 0% baseline.
+
+## Assistant (2026-11-23 10:07:42 UTC)
+
+I added the 0% COLMAP baseline to the render figure and committed it as `4881c6cb`. It isn't pushed.
+
+The runner's own render plot had only a single series (the +5% run). I think it picked one run because the focal-change settings aren't part of how it matches runs, but I didn't debug that. So I built the figure directly from the run directories with a new script, `make_renders.py`, which replaces `figures/renders.jpg`.
+
+- **Rows:** ground truth, the 0% COLMAP baseline, the 8 fixed runs (−10 to +10%) and the 4 random runs (up to ±0.1, ±1, ±5, ±10%).
+- **Columns:** test views 0, 2 and 5, so 3 columns.
+- **Labels:** each row shows its run's 37-frame mean PSNR, LPIPS and SSIM.
+- **README:** it now describes the figure and lists the script in the commands, and `chat.md` is regenerated.
+
+One caveat: the figure has no zoom insets like the runner's plots. I cut the ground-truth and render panels out of each run's saved evaluation images.
+
+## User (2026-11-23 10:08:15 UTC)
+
+Use the existing plotting code with the zoom ins
+
+## Assistant (2026-11-23 10:09:12 UTC)
+
+Now all the series appear in the runner's table. I'm checking the render figure with zoom insets.

@@ -20,7 +20,7 @@ env -u PYTHONPATH PATH=$HOME/.conda/envs/gsplat/bin:$PATH python experiment_runn
 # plots
 python experiment_runner.py --experiment_names colmap_focal_error --dataset_name bonsai --dataset_collections --plot_only
 python experiments/2026-11-23_00_colmap_focal_error/collect.py && python experiments/2026-11-23_00_colmap_focal_error/make_figures.py   # gsplat env
-python experiments/2026-11-23_00_colmap_focal_error/make_renders.py   # render figure from the run directories (ground truth, 0% baseline, all fixed and random runs)
+# renders: copy of latest_plots/124_colmap_focal_error_bonsai_latest_renders.jpg
 ```
 
 ## Run metadata
@@ -57,7 +57,7 @@ python experiments/2026-11-23_00_colmap_focal_error/make_renders.py   # render f
 
 ![fixed and random sets vs mean absolute focal error](figures/metrics_vs_abs_error.png)
 
-Renders of test views 0, 2, 5 (ground truth, the 0% COLMAP baseline, the 8 fixed and the 4 random runs; per-run PSNR / LPIPS / SSIM are the 37-frame means):
+Renders of test views 0, 2, 5 (ground truth, the 0% COLMAP baseline, the 8 fixed and the 4 random runs; per-run PSNR / LPIPS / SSIM are the 37-frame means). Plotting note: the runner's plots group runs by the parameters parsed from the run directory names; the tokens `kfix`, `krand`, `meank`, `intropt`, `tpo` were added to `plot_metrics.py` (vggt) so that these runs are separate series; before that fix the render figure showed only one run.
 
 ![renders](figures/renders.jpg)
 

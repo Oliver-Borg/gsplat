@@ -9,14 +9,24 @@ Choice & Val Step & Series Label Override & PSNR ↑ & SSIM ↑ & LPIPS ↓ & Co
 \midrule
 VGGT & 1 & 3RGS MLP, photometric + epipolar loss (lr 1e-4), shared K, focal optimised & 11.145 & 0.261 & 0.788 & -0.221 & 100000 & 0.418 & 0.012 \\
 VGGT & 3000 & 3RGS MLP, photometric + epipolar loss (lr 1e-4), shared K, focal optimised & 21.499 & 0.667 & 0.353 & 0.477 & 322497 & 0.304 & 0.005 \\
+VGGT & 7000 & 3RGS MLP, photometric + epipolar loss (lr 1e-4), shared K, focal optimised & 21.531 & 0.660 & 0.243 & 0.541 & 1000000 & 0.200 & \underline{0.002} \\
 VGGT & 15000 & 3RGS MLP, photometric + epipolar loss (lr 1e-4), shared K, focal optimised & 21.792 & 0.659 & 0.193 & 0.576 & 1000000 & 0.202 & \textbf{0.001} \\
-VGGT & 30000 & 3RGS MLP, photometric + epipolar loss (lr 1e-4), shared K, focal optimised & 21.745 & 0.656 & 0.180 & 0.581 & 1000000 & \textbf{0.191} & \textbf{0.001} \\
-VGGT & 7000 & 3RGS MLP, photometric + epipolar loss (lr 1e-4), shared mean K & 22.428 & 0.673 & 0.236 & 0.569 & 1000000 & \underline{0.196} & \underline{0.002} \\
+VGGT & 30000 & 3RGS MLP, photometric + epipolar loss (lr 1e-4), shared K, focal optimised & 21.745 & 0.656 & 0.180 & 0.581 & 1000000 & \underline{0.191} & \textbf{0.001} \\
+VGGT & 1 & 3RGS MLP, photometric + epipolar loss (lr 1e-4), shared mean K & 11.145 & 0.261 & 0.788 & -0.221 & 100000 & 0.418 & 0.012 \\
+VGGT & 3000 & 3RGS MLP, photometric + epipolar loss (lr 1e-4), shared mean K & 21.917 & 0.678 & 0.347 & 0.495 & 322497 & 0.299 & 0.005 \\
+VGGT & 7000 & 3RGS MLP, photometric + epipolar loss (lr 1e-4), shared mean K & 22.428 & 0.673 & 0.236 & 0.569 & 1000000 & 0.196 & \underline{0.002} \\
+VGGT & 15000 & 3RGS MLP, photometric + epipolar loss (lr 1e-4), shared mean K & 22.611 & 0.670 & 0.178 & 0.607 & 1000000 & \textbf{0.186} & \textbf{0.001} \\
+VGGT & 30000 & 3RGS MLP, photometric + epipolar loss (lr 1e-4), shared mean K & 22.691 & 0.670 & 0.162 & 0.619 & 1000000 & 0.193 & \textbf{0.001} \\
+VGGT & 1 & 3RGS MLP, photometric loss (lr 1e-4), shared K, focal optimised & 11.145 & 0.261 & 0.788 & -0.221 & 100000 & 0.418 & 0.012 \\
 VGGT & 3000 & 3RGS MLP, photometric loss (lr 1e-4), shared K, focal optimised & 22.680 & 0.723 & 0.422 & 0.489 & 322497 & 0.371 & 0.011 \\
 VGGT & 7000 & 3RGS MLP, photometric loss (lr 1e-4), shared K, focal optimised & 23.050 & 0.723 & 0.307 & 0.567 & 1000000 & 0.371 & 0.010 \\
 VGGT & 15000 & 3RGS MLP, photometric loss (lr 1e-4), shared K, focal optimised & 23.008 & 0.718 & 0.227 & 0.612 & 1000000 & 0.353 & 0.008 \\
 VGGT & 30000 & 3RGS MLP, photometric loss (lr 1e-4), shared K, focal optimised & 23.361 & 0.721 & 0.184 & 0.647 & 1000000 & 0.311 & 0.007 \\
 VGGT & 1 & 3RGS MLP, photometric loss (lr 1e-4), shared mean K & 11.145 & 0.261 & 0.788 & -0.221 & 100000 & 0.418 & 0.012 \\
+VGGT & 3000 & 3RGS MLP, photometric loss (lr 1e-4), shared mean K & 22.730 & 0.725 & 0.421 & 0.491 & 322497 & 0.371 & 0.011 \\
+VGGT & 7000 & 3RGS MLP, photometric loss (lr 1e-4), shared mean K & 23.069 & 0.724 & 0.308 & 0.567 & 1000000 & 0.381 & 0.010 \\
+VGGT & 15000 & 3RGS MLP, photometric loss (lr 1e-4), shared mean K & 23.055 & 0.717 & 0.230 & 0.611 & 1000000 & 0.354 & 0.008 \\
+VGGT & 30000 & 3RGS MLP, photometric loss (lr 1e-4), shared mean K & 23.236 & 0.711 & 0.186 & 0.638 & 1000000 & 0.316 & 0.007 \\
 GT & 1 & COLMAP cameras + point cloud (fixed, all frames) & 10.606 & 0.240 & 0.730 & -0.208 & 206613 &  &  \\
 GT & 3000 & COLMAP cameras + point cloud (fixed, all frames) & 26.757 & 0.889 & 0.196 & 0.801 & 666323 &  &  \\
 GT & 7000 & COLMAP cameras + point cloud (fixed, all frames) & 29.659 & 0.931 & 0.139 & 0.914 & 1000000 &  &  \\

@@ -6889,3 +6889,24 @@ Please add the colmap renders with 0% changes to the render plot
 ## Assistant (2026-11-23 10:06:47 UTC)
 
 I'm looking at the layout of the per-image render files, so I can build a render figure that includes the 0% baseline.
+
+## Assistant (2026-11-23 10:07:42 UTC)
+
+I added the 0% COLMAP baseline to the render figure and committed it as `4881c6cb`. It isn't pushed.
+
+The runner's own render plot had only a single series (the +5% run). I think it picked one run because the focal-change settings aren't part of how it matches runs, but I didn't debug that. So I built the figure directly from the run directories with a new script, `make_renders.py`, which replaces `figures/renders.jpg`.
+
+- **Rows:** ground truth, the 0% COLMAP baseline, the 8 fixed runs (−10 to +10%) and the 4 random runs (up to ±0.1, ±1, ±5, ±10%).
+- **Columns:** test views 0, 2 and 5, so 3 columns.
+- **Labels:** each row shows its run's 37-frame mean PSNR, LPIPS and SSIM.
+- **README:** it now describes the figure and lists the script in the commands, and `chat.md` is regenerated.
+
+One caveat: the figure has no zoom insets like the runner's plots. I cut the ground-truth and render panels out of each run's saved evaluation images.
+
+## User (2026-11-23 10:08:15 UTC)
+
+Use the existing plotting code with the zoom ins
+
+## Assistant (2026-11-23 10:09:12 UTC)
+
+Now all the series appear in the runner's table. I'm checking the render figure with zoom insets.

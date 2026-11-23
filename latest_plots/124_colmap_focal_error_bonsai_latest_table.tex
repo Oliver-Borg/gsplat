@@ -7,8 +7,32 @@
 \toprule
 Choice & Val Step & Series Label Override & PSNR ↑ & SSIM ↑ & LPIPS ↓ & Final Gaussian Count \\
 \midrule
-GT & 7000 & fixed focal change +5% & \textbf{18.105} & \textbf{0.599} & \textbf{0.434} & 1000000 \\
-GT & 1 & random focal change up to +-5% & \underline{10.606} & \underline{0.239} & \underline{0.731} & 206613 \\
+GT & 1 & fixed focal change +0.1% & 10.606 & 0.240 & 0.730 & 206613 \\
+GT & 7000 & fixed focal change +0.1% & 29.794 & 0.929 & \underline{0.138} & 1000000 \\
+GT & 1 & fixed focal change +1% & 10.604 & 0.239 & 0.731 & 206613 \\
+GT & 7000 & fixed focal change +1% & 22.948 & 0.693 & 0.187 & 1000000 \\
+GT & 1 & fixed focal change +10% & 10.602 & 0.238 & 0.730 & 206613 \\
+GT & 7000 & fixed focal change +10% & 16.329 & 0.574 & 0.578 & 1000000 \\
+GT & 1 & fixed focal change +5% & 10.602 & 0.238 & 0.730 & 206613 \\
+GT & 7000 & fixed focal change +5% & 18.105 & 0.599 & 0.434 & 1000000 \\
+GT & 1 & fixed focal change -0.1% & 10.606 & 0.240 & 0.730 & 206613 \\
+GT & 7000 & fixed focal change -0.1% & 29.944 & 0.930 & \underline{0.138} & 1000000 \\
+GT & 1 & fixed focal change -1% & 10.605 & 0.239 & 0.731 & 206613 \\
+GT & 7000 & fixed focal change -1% & 23.026 & 0.694 & 0.189 & 1000000 \\
+GT & 1 & fixed focal change -10% & 10.606 & 0.239 & 0.731 & 206613 \\
+GT & 7000 & fixed focal change -10% & 16.200 & 0.570 & 0.591 & 1000000 \\
+GT & 1 & fixed focal change -5% & 10.606 & 0.239 & 0.731 & 206613 \\
+GT & 7000 & fixed focal change -5% & 18.010 & 0.597 & 0.445 & 1000000 \\
+GT & 1 & fixed focal change 0% (COLMAP) & 10.606 & 0.240 & 0.730 & 206613 \\
+GT & 7000 & fixed focal change 0% (COLMAP) & \textbf{30.239} & \textbf{0.937} & \textbf{0.136} & 1000000 \\
+GT & 1 & random focal change up to +-0.1% & 10.606 & 0.240 & 0.730 & 206613 \\
+GT & 7000 & random focal change up to +-0.1% & \underline{30.206} & \underline{0.936} & \underline{0.138} & 1000000 \\
+GT & 1 & random focal change up to +-1% & 10.605 & 0.239 & 0.731 & 206613 \\
+GT & 7000 & random focal change up to +-1% & 28.077 & 0.875 & 0.214 & 1000000 \\
+GT & 1 & random focal change up to +-10% & 10.605 & 0.239 & 0.730 & 206613 \\
+GT & 7000 & random focal change up to +-10% & 20.309 & 0.667 & 0.575 & 1000000 \\
+GT & 1 & random focal change up to +-5% & 10.606 & 0.239 & 0.731 & 206613 \\
+GT & 7000 & random focal change up to +-5% & 22.756 & 0.709 & 0.439 & 1000000 \\
 \bottomrule
 \end{tabular}
 \end{table}
