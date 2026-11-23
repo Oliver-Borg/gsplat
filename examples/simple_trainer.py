@@ -219,6 +219,12 @@ class Config:
     # Shared training intrinsics: the mean of the training-frame K (every training render and the epipolar loss use it);
     # evaluation keeps the eval frames' own (GT) K
     train_mean_k: bool = False
+    # Wrong-focal test (no optimisation): the training views' fx and fy are scaled by 1 + p/100, p = train_k_scale_pct for every
+    # view (fixed), or, per view and independently for fx and fy, p ~ U(-train_k_random_pct, +train_k_random_pct) drawn once
+    # with train_k_seed. The principal point and the evaluation views' K are unchanged.
+    train_k_scale_pct: float = 0.0
+    train_k_random_pct: float = 0.0
+    train_k_seed: int = 42
     # 3R-GS intrinsics optimisation: one shared focal (log-parametrised, initialised from the mean focal of the training K,
     # Adam lr focal_opt_lr), principal point fixed at the mean; implies train_mean_k
     intrinsics_opt: bool = False
@@ -645,6 +651,21 @@ class Runner:
             print(
                 f"Epipolar loss: {len(tp['ei'])} pairs x {tp['pts_i'].shape[1]} points, mask fraction "
                 f"{self.camft_epi['mask'].mean().item():.3f}, weight {cfg.camft_epi_weight}, steps 0-{cfg.camft_epi_steps}"
+            )
+        self.k_scale = None  # [N,2] per training view factors of fx, fy (train_k_scale_pct / train_k_random_pct)
+        if cfg.train_k_scale_pct or cfg.train_k_random_pct:
+            assert not (cfg.train_k_scale_pct and cfg.train_k_random_pct), "fixed or random focal change, not both"
+            assert not (cfg.camft or cfg.train_mean_k or cfg.intrinsics_opt), "the focal change is for fixed-camera runs"
+            n = len(self.trainset)
+            if cfg.train_k_random_pct:
+                u = np.random.default_rng(cfg.train_k_seed).uniform(-1.0, 1.0, size=(n, 2)) * cfg.train_k_random_pct
+            else:
+                u = np.full((n, 2), cfg.train_k_scale_pct)
+            self.k_scale_pct = u
+            self.k_scale = torch.from_numpy(1.0 + u / 100.0).float().to(self.device)
+            print(
+                f"Training K focal change: fx {u[:, 0].mean():+.3f}% (|.| mean {np.abs(u[:, 0]).mean():.3f}%, max {np.abs(u[:, 0]).max():.3f}%), "
+                f"fy {u[:, 1].mean():+.3f}% (|.| mean {np.abs(u[:, 1]).mean():.3f}%, max {np.abs(u[:, 1]).max():.3f}%) over {n} views"
             )
         self.mean_K = None
         self.log_focal = None
@@ -1140,6 +1161,11 @@ class Runner:
             Ks = data["K"].to(device)  # [1, 3, 3]
             if self.mean_K is not None:
                 Ks = self.shared_K()[None]
+            if self.k_scale is not None:
+                ids = data["image_id"].to(device)
+                Ks = Ks.clone()
+                Ks[:, 0, 0] = Ks[:, 0, 0] * self.k_scale[ids, 0]
+                Ks[:, 1, 1] = Ks[:, 1, 1] * self.k_scale[ids, 1]
             pixels = data["image"].to(device) / 255.0  # [1, H, W, 3]
             num_train_rays_per_step = (
                 pixels.shape[0] * pixels.shape[1] * pixels.shape[2]
@@ -1757,6 +1783,41 @@ class Runner:
         else:
             return matrix
 
+    @torch.no_grad()
+    def k_accuracy(self) -> Dict[str, float]:
+        """Focal accuracy of the K used in training vs the GT K at the trainer image size, over the training frames:
+        relative errors in % ((used - gt) / gt) of fx and fy: signed mean, mean absolute, max absolute. The used K is the
+        shared K (train_mean_k / intrinsics_opt), the camft head/module K, or the per-frame K of the data dir. Needs GT cameras."""
+        cfg = self.cfg
+        if not cfg.gt_train_data_dir:
+            return {}
+        gt, tr = self.align_parser, self.train_parser
+        gt_index = {n: j for j, n in enumerate(gt.image_names)}
+        cam_K = self.camft.current_cameras()[1].cpu().numpy() if self.camft is not None else None
+        sh = self.shared_K().detach().cpu().numpy() if self.mean_K is not None else None
+        used, ref = [], []
+        for i in self.trainset.indices:
+            name = tr.image_names[i]
+            w, h = tr.imsize_dict[tr.camera_ids[i]]
+            cid = gt.camera_ids[gt_index[name]]
+            wg, hg = gt.imsize_dict[cid]
+            ref.append((gt.Ks_dict[cid][0, 0] * w / wg, gt.Ks_dict[cid][1, 1] * h / hg))
+            if sh is not None:
+                K = sh
+            elif cam_K is not None:
+                K = cam_K[self.camft.frame_of[name]]
+            else:
+                K = tr.Ks_dict[tr.camera_ids[i]]
+            used.append((K[0, 0], K[1, 1]))
+        used, ref = np.asarray(used, dtype=np.float64), np.asarray(ref, dtype=np.float64)
+        err = (used - ref) / ref * 100.0
+        out = {"k_gt_fx_mean": float(ref[:, 0].mean()), "k_gt_fy_mean": float(ref[:, 1].mean())}
+        for a, ax in enumerate(("fx", "fy")):
+            out[f"k_{ax}_err_mean_pct"] = float(err[:, a].mean())
+            out[f"k_{ax}_abs_err_mean_pct"] = float(np.abs(err[:, a]).mean())
+            out[f"k_{ax}_abs_err_max_pct"] = float(np.abs(err[:, a]).max())
+        return out
+
     def shared_K(self) -> Tensor:
         """Shared training intrinsics [3,3]: the mean K, with the optimised focal when intrinsics_opt."""
         if self.log_focal is None:
@@ -2030,6 +2091,17 @@ class Runner:
                     "num_eval_images": len(valloader),
                 }
             )
+            stats.update(self.k_accuracy())
+            if self.k_scale is not None:
+                u = self.k_scale_pct
+                stats.update(
+                    {
+                        "train_k_fx_change_mean_pct": float(u[:, 0].mean()),
+                        "train_k_fy_change_mean_pct": float(u[:, 1].mean()),
+                        "train_k_fx_change_abs_mean_pct": float(np.abs(u[:, 0]).mean()),
+                        "train_k_fy_change_abs_mean_pct": float(np.abs(u[:, 1]).mean()),
+                    }
+                )
             if self.mean_K is not None:
                 K_sh = self.shared_K().detach()
                 stats.update({"train_fx": K_sh[0, 0].item(), "train_fy": K_sh[1, 1].item(), "train_cx": K_sh[0, 2].item(), "train_cy": K_sh[1, 2].item()})

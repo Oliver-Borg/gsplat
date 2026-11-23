@@ -332,6 +332,9 @@ class Config:
     # Shared training intrinsics (mean K of the training frames); intrinsics_opt: 3R-GS shared-focal optimisation (implies the mean K)
     train_mean_k: bool = False
     intrinsics_opt: bool = False
+    # Wrong-focal test (percent): fixed change of fx and fy for every training view, or per-view uniform random change up to +-x
+    train_k_scale_pct: float = 0.0
+    train_k_random_pct: float = 0.0
     test_pose_opt: bool = False
     # Evaluate on every GT-eval frame that is not a training frame (simple_trainer eval_all_frames)
     eval_all: bool = False
@@ -477,6 +480,8 @@ class Config:
             "camft_epi_knn",
             "train_mean_k",
             "intrinsics_opt",
+            "train_k_scale_pct",
+            "train_k_random_pct",
             "test_pose_opt",
             "eval_all",
             "ft_cams",
@@ -840,6 +845,10 @@ class Config:
             parts.append("intropt")
         elif self.train_mean_k:
             parts.append("meank")
+        if self.train_k_scale_pct:
+            parts.append(f"kfix{self.train_k_scale_pct:+g}")
+        if self.train_k_random_pct:
+            parts.append(f"krand{self.train_k_random_pct:g}")
         if self.test_pose_opt:
             parts.append("tpo")
         if self.eval_all:
@@ -1644,6 +1653,10 @@ class Config:
                     ]
                 )
 
+        if self.train_k_scale_pct:
+            command.extend(["--train_k_scale_pct", str(self.train_k_scale_pct)])
+        if self.train_k_random_pct:
+            command.extend(["--train_k_random_pct", str(self.train_k_random_pct)])
         if self.intrinsics_opt:
             command.append("--intrinsics_opt")
         elif self.train_mean_k:
@@ -6580,6 +6593,36 @@ for _name, _num, _desc, _arms in (
             render_filter_override={"seed": [42], "num_steps": [30000]},
         )
     )
+
+# Wrong-focal test (124): 3DGS (MCMC) with the dataset's COLMAP cameras and point cloud, all 255 train frames, the training
+# views' focal changed without any optimisation (fixed change for every view, or per-view random), evaluation views keep their K.
+_KERR_BASE = {"choice": ["gt"], "seed": [42], "num_steps": [7000]}
+_KERR_ARMS = [{**_KERR_BASE, "series_label_override": "fixed focal change 0% (COLMAP)"}]
+for _p in (-10.0, -5.0, -1.0, -0.1, 0.1, 1.0, 5.0, 10.0):
+    _KERR_ARMS.append({**_KERR_BASE, "train_k_scale_pct": _p, "series_label_override": f"fixed focal change {_p:+g}%"})
+for _x in (0.1, 1.0, 5.0, 10.0):
+    _KERR_ARMS.append({**_KERR_BASE, "train_k_random_pct": _x, "series_label_override": f"random focal change up to +-{_x:g}%"})
+experiments.append(
+    Experiment(
+        "colmap_focal_error",
+        124,
+        "3DGS (MCMC) with COLMAP cameras and a wrong training focal: fixed change for every view (-10..+10%) and per-view random change (up to +-10%), 7000 steps",
+        _KERR_ARMS,
+        PlotConfig(
+            x_axis="val_step",
+            split_param="series_label_override",
+            metric_keys=["psnr", "ssim", "lpips", "num_GS"],
+            max_render_cols=3,
+            horizontal_datasets=False,
+            show_gt=True,
+            show_zoom=True,
+            show_differences=False,
+            render_nums=[0, 2, 5],
+        ),
+        val_steps=[1, 7000],
+        render_filter_override={"seed": [42], "num_steps": [7000]},
+    )
+)
 
 experiment_dict = {exp.name: exp for exp in experiments}
 

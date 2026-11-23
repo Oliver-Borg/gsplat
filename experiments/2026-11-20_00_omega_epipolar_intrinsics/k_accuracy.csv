@@ -1,0 +1,44 @@
+case,kind,fx_err_mean_pct,fx_abs_err_mean_pct,fx_abs_err_max_pct,fy_err_mean_pct,fy_abs_err_mean_pct,fy_abs_err_max_pct
+Omega per-frame K (fixed Omega cameras),per-frame,0.3798,0.6952,2.1711,0.4689,0.7338,2.3986
+shared mean K (all `meank` runs),shared,0.3798,0.3798,0.3798,0.4689,0.4689,0.4689
+COLMAP reference (GT K),GT,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000
+cft-0.0001-mlp-d0-epi2x3000k10_intropt_tpo_evalall_steps30000 step 1,intropt,0.4243,0.4243,0.4243,0.4243,0.4243,0.4243
+cft-0.0001-mlp-d0-epi2x3000k10_intropt_tpo_evalall_steps30000 step 3000,intropt,1.0847,1.0847,1.0847,1.0847,1.0847,1.0847
+cft-0.0001-mlp-d0-epi2x3000k10_intropt_tpo_evalall_steps30000 step 7000,intropt,1.0847,1.0847,1.0847,1.0847,1.0847,1.0847
+cft-0.0001-mlp-d0-epi2x3000k10_intropt_tpo_evalall_steps30000 step 10000,intropt,1.0847,1.0847,1.0847,1.0847,1.0847,1.0847
+cft-0.0001-mlp-d0-epi2x3000k10_intropt_tpo_evalall_steps30000 step 15000,intropt,1.0847,1.0847,1.0847,1.0847,1.0847,1.0847
+cft-0.0001-mlp-d0-epi2x3000k10_intropt_tpo_evalall_steps30000 step 20000,intropt,1.0847,1.0847,1.0847,1.0847,1.0847,1.0847
+cft-0.0001-mlp-d0-epi2x3000k10_intropt_tpo_evalall_steps30000 step 25000,intropt,1.0847,1.0847,1.0847,1.0847,1.0847,1.0847
+cft-0.0001-mlp-d0-epi2x3000k10_intropt_tpo_evalall_steps30000 step 30000,intropt,1.0847,1.0847,1.0847,1.0847,1.0847,1.0847
+cft-0.0001-mlp-d0_intropt_tpo_evalall_steps30000 step 1,intropt,0.4243,0.4243,0.4243,0.4243,0.4243,0.4243
+cft-0.0001-mlp-d0_intropt_tpo_evalall_steps30000 step 3000,intropt,0.4243,0.4243,0.4243,0.4243,0.4243,0.4243
+cft-0.0001-mlp-d0_intropt_tpo_evalall_steps30000 step 7000,intropt,0.4243,0.4243,0.4243,0.4243,0.4243,0.4243
+cft-0.0001-mlp-d0_intropt_tpo_evalall_steps30000 step 10000,intropt,0.4243,0.4243,0.4243,0.4243,0.4243,0.4243
+cft-0.0001-mlp-d0_intropt_tpo_evalall_steps30000 step 15000,intropt,0.4243,0.4243,0.4243,0.4243,0.4243,0.4243
+cft-0.0001-mlp-d0_intropt_tpo_evalall_steps30000 step 20000,intropt,0.4243,0.4243,0.4243,0.4243,0.4243,0.4243
+cft-0.0001-mlp-d0_intropt_tpo_evalall_steps30000 step 25000,intropt,0.4243,0.4243,0.4243,0.4243,0.4243,0.4243
+cft-0.0001-mlp-d0_intropt_tpo_evalall_steps30000 step 30000,intropt,0.4243,0.4243,0.4243,0.4243,0.4243,0.4243
+cft-0.0001-pdef-d0-epi2x3000k10_intropt_tpo_evalall_steps30000 step 1,intropt,0.4243,0.4243,0.4243,0.4243,0.4243,0.4243
+cft-0.0001-pdef-d0-epi2x3000k10_intropt_tpo_evalall_steps30000 step 3000,intropt,1.0514,1.0514,1.0514,1.0514,1.0514,1.0514
+cft-0.0001-pdef-d0-epi2x3000k10_intropt_tpo_evalall_steps30000 step 7000,intropt,1.0514,1.0514,1.0514,1.0514,1.0514,1.0514
+cft-0.0001-pdef-d0-epi2x3000k10_intropt_tpo_evalall_steps30000 step 10000,intropt,1.0514,1.0514,1.0514,1.0514,1.0514,1.0514
+cft-0.0001-pdef-d0-epi2x3000k10_intropt_tpo_evalall_steps30000 step 15000,intropt,1.0514,1.0514,1.0514,1.0514,1.0514,1.0514
+cft-0.0001-pdef-d0-epi2x3000k10_intropt_tpo_evalall_steps30000 step 20000,intropt,1.0514,1.0514,1.0514,1.0514,1.0514,1.0514
+cft-0.0001-pdef-d0-epi2x3000k10_intropt_tpo_evalall_steps30000 step 25000,intropt,1.0514,1.0514,1.0514,1.0514,1.0514,1.0514
+cft-0.0001-pdef-d0-epi2x3000k10_intropt_tpo_evalall_steps30000 step 30000,intropt,1.0514,1.0514,1.0514,1.0514,1.0514,1.0514
+cft-0.0001-pdef-d0_intropt_tpo_evalall_steps30000 step 1,intropt,0.4243,0.4243,0.4243,0.4243,0.4243,0.4243
+cft-0.0001-pdef-d0_intropt_tpo_evalall_steps30000 step 3000,intropt,0.4243,0.4243,0.4243,0.4243,0.4243,0.4243
+cft-0.0001-pdef-d0_intropt_tpo_evalall_steps30000 step 7000,intropt,0.4243,0.4243,0.4243,0.4243,0.4243,0.4243
+cft-0.0001-pdef-d0_intropt_tpo_evalall_steps30000 step 10000,intropt,0.4243,0.4243,0.4243,0.4243,0.4243,0.4243
+cft-0.0001-pdef-d0_intropt_tpo_evalall_steps30000 step 15000,intropt,0.4243,0.4243,0.4243,0.4243,0.4243,0.4243
+cft-0.0001-pdef-d0_intropt_tpo_evalall_steps30000 step 20000,intropt,0.4243,0.4243,0.4243,0.4243,0.4243,0.4243
+cft-0.0001-pdef-d0_intropt_tpo_evalall_steps30000 step 25000,intropt,0.4243,0.4243,0.4243,0.4243,0.4243,0.4243
+cft-0.0001-pdef-d0_intropt_tpo_evalall_steps30000 step 30000,intropt,0.4243,0.4243,0.4243,0.4243,0.4243,0.4243
+intropt_tpo_evalall_steps30000 step 1,intropt,0.4243,0.4243,0.4243,0.4243,0.4243,0.4243
+intropt_tpo_evalall_steps30000 step 3000,intropt,0.4243,0.4243,0.4243,0.4243,0.4243,0.4243
+intropt_tpo_evalall_steps30000 step 7000,intropt,0.4243,0.4243,0.4243,0.4243,0.4243,0.4243
+intropt_tpo_evalall_steps30000 step 10000,intropt,0.4243,0.4243,0.4243,0.4243,0.4243,0.4243
+intropt_tpo_evalall_steps30000 step 15000,intropt,0.4243,0.4243,0.4243,0.4243,0.4243,0.4243
+intropt_tpo_evalall_steps30000 step 20000,intropt,0.4243,0.4243,0.4243,0.4243,0.4243,0.4243
+intropt_tpo_evalall_steps30000 step 25000,intropt,0.4243,0.4243,0.4243,0.4243,0.4243,0.4243
+intropt_tpo_evalall_steps30000 step 30000,intropt,0.4243,0.4243,0.4243,0.4243,0.4243,0.4243
