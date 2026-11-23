@@ -6665,3 +6665,47 @@ Progress?
 ## Assistant (2026-11-23 08:11:19 UTC)
 
 All 10 runs finished on 2026-11-20 (runner exit 0 at 09:37:51 GMT, no tracebacks), and this session is now on `gxp-l40s-2`. I'm collecting the metrics, making the plots and writing the log now.
+
+## Assistant (2026-11-23 08:13:19 UTC)
+
+All 10 runs finished, and the log, plots and `chat.md` are written and committed in gsplat as `a0fb046d`. The commit is local and not pushed, and it includes `latest_plots/120–121`.
+
+**Run state:** the 4×L4 runs finished on 2026-11-20, with the runner exiting 0 at 09:37 GMT and no tracebacks. The log is in `experiments/2026-11-20_00_omega_epipolar_intrinsics/`: README, figures, `metrics.csv` and `chat.md`. The `chat.md` joins the earlier session and this one. Insights is empty and waiting for you.
+
+Final numbers at step 30000, on the 37 test frames; TPO is the test-time pose optimisation:
+
+| arm | PSNR | TPO PSNR | `eval_rre` (deg) | final focal fx |
+|---|---|---|---|---|
+| MLP, epipolar+photometric, shared mean K | 22.69 | 30.71 | 0.193 | 1617.5 |
+| MLP, photometric, shared mean K | 23.24 | 28.07 | 0.316 | 1617.5 |
+| default, epipolar+photometric, shared mean K | 23.49 | 27.69 | 0.218 | 1617.5 |
+| default, photometric, shared mean K | 23.65 | 28.05 | 0.254 | 1617.5 |
+| MLP, epipolar+photometric, focal optimised | 21.74 | 26.81 | 0.191 | 1628.8 |
+| MLP, photometric, focal optimised | 23.36 | 27.79 | 0.311 | 1618.2 |
+| default, epipolar+photometric, focal optimised | 22.35 | 26.22 | 0.204 | 1628.3 |
+| default, photometric, focal optimised | 23.63 | 27.98 | 0.257 | 1618.2 |
+| Omega fixed, per-frame K (reused) | 21.44 | 25.77 | 0.399 | per-frame |
+| Omega fixed, shared mean K | 21.44 | 26.08 | 0.399 | 1617.5 |
+| Omega fixed, focal optimised | 21.44 | 26.01 | 0.399 | 1618.2 |
+| COLMAP reference (reused) | 32.76 | 32.82 | – | – |
+
+SSIM, LPIPS, `eval_rte` and train times are in the README tables.
+
+**Focal optimisation, measured:** with the focal optimised, the photometric arms and the fixed Omega arm ended at 1618.2, which is the initial value. Only the two epipolar arms moved, to 1628.8 and 1628.3.
+- **Why the focal didn't move:** I tested `gsplat.rasterization` on a small random scene on GPU 1 of this server, which was free. `K.grad` is `None` after `backward()`, while the viewmat gradient is non-zero. So the photometric loss never reaches the focal in these runs, and only the epipolar loss does, for steps 0–3000.
+- **Same limitation in 3R-GS:** I haven't checked 3R-GS's rasterization path. Their trainer has a commented `Ks.detach()` next to the focal optimisation.
+- **For the README:** I recorded this as a fact, with no interpretation.
+
+**Confounds:**
+- **Not verified:** I assumed from the data flow that the eval views use their own GT K, and haven't tested it.
+- **Train times:** they are not comparable across all rows. The two reused runs ran on the L40S server and the rest on L4s with 4 runs at a time.
+
+The counter version could not start, because Omega ran out of memory on an L4. The plan is in `experiments/TODO.md`. This session is on `gxp-l40s-2` now; GPU 1 there is free of other users, so the counter Omega reconstruction could run there if you want it.
+
+## User (2026-11-23 08:58:07 UTC)
+
+Please split experiment 121 into 3 different groups: 3RGS, default and Omega, with COLMAP included in all 3
+
+## Assistant (2026-11-23 08:58:35 UTC)
+
+All the runs for the three groups already exist, so no re-run is needed. I'm regenerating the plots, tables and log for the new grouping now.

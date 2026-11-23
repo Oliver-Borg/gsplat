@@ -6552,8 +6552,12 @@ _EPI_K_ARMS["colmap"] = _EPI_ALL_ARMS["colmap"]
 for _name, _num, _desc, _arms in (
     ("omega_epi_meank", 120, "All frames: Omega camera modules with one shared mean K for training (like 3R-GS), epipolar vs photometric, fixed Omega cameras with per-frame / shared K, COLMAP reference",
      [a + "_meank" for a in _EPI_K_MODULES] + ["fixed_perframe", "fixed_meank", "colmap"]),
-    ("omega_epi_intropt", 121, "All frames: 3R-GS shared-focal intrinsics optimisation on the modules and on fixed Omega cameras, with the shared mean K runs as references",
-     [a + "_intropt" for a in _EPI_K_MODULES] + [a + "_meank" for a in _EPI_K_MODULES] + ["fixed_intropt", "fixed_meank", "fixed_perframe", "colmap"]),
+    ("omega_epi_intropt_3rgs", 121, "All frames: 3R-GS shared-focal intrinsics optimisation on the 3R-GS MLP module (epipolar+photometric, photometric), shared mean K runs and COLMAP reference",
+     ["mlp_epi_intropt", "mlp_photo_intropt", "mlp_epi_meank", "mlp_photo_meank", "colmap"]),
+    ("omega_epi_intropt_default", 122, "All frames: 3R-GS shared-focal intrinsics optimisation on the default pose module (epipolar+photometric, photometric), shared mean K runs and COLMAP reference",
+     ["def_epi_intropt", "def_photo_intropt", "def_epi_meank", "def_photo_meank", "colmap"]),
+    ("omega_epi_intropt_omega", 123, "All frames: 3R-GS shared-focal intrinsics optimisation on fixed Omega cameras, with shared mean K and per-frame K runs and COLMAP reference",
+     ["fixed_intropt", "fixed_meank", "fixed_perframe", "colmap"]),
 ):
     experiments.append(
         Experiment(

@@ -18,7 +18,9 @@ ARMS = {  # key -> (label, glob)
 }
 SECTIONS = {
     "meank": ["mlp_epi_k", "mlp_photo_k", "def_epi_k", "def_photo_k", "fixed_perframe", "fixed_meank", "colmap"],
-    "intropt": ["mlp_epi_i", "mlp_photo_i", "def_epi_i", "def_photo_i", "mlp_epi_k", "mlp_photo_k", "def_epi_k", "def_photo_k", "fixed_intropt", "fixed_meank", "fixed_perframe", "colmap"],
+    "intropt_3rgs": ["mlp_epi_i", "mlp_photo_i", "mlp_epi_k", "mlp_photo_k", "colmap"],
+    "intropt_default": ["def_epi_i", "def_photo_i", "def_epi_k", "def_photo_k", "colmap"],
+    "intropt_omega": ["fixed_intropt", "fixed_meank", "fixed_perframe", "colmap"],
 }
 F = ("psnr", "ssim", "lpips", "num_GS", "eval_rre", "eval_rte", "tpo_psnr", "tpo_ssim", "tpo_lpips", "train_fx", "train_fy")
 rows = []

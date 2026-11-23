@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 d = os.path.dirname(os.path.abspath(__file__))
 root = os.path.join(d, "../..")
 rows = list(csv.DictReader(open(os.path.join(d, "metrics.csv"))))
-for ex in ("meank", "intropt"):
+for ex in ("meank", "intropt_3rgs", "intropt_default", "intropt_omega"):
     R = [r for r in rows if r["section"] == ex]
     fig, ax = plt.subplots(2, 3, figsize=(12, 6.4)); ax = ax.flatten()
     for arm in dict.fromkeys(r["arm"] for r in R):

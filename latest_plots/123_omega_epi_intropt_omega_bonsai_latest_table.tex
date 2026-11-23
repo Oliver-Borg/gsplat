@@ -1,0 +1,22 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else All frames: 3R-GS shared-focal intrinsics optimisation on fixed Omega cameras, with shared mean K and per-frame K runs and COLMAP reference (Bonsai) \fi}
+\label{tab:123_omega_epi_intropt_omega_bonsai}
+\centering
+\tiny
+\begin{tabular}{lrlrrrrrrr}
+\toprule
+Choice & Val Step & Series Label Override & PSNR ↑ & SSIM ↑ & LPIPS ↓ & Composite Quality ↑ & Final Gaussian Count & Val RRE ↓ & Val RTE ↓ \\
+\midrule
+GT & 1 & COLMAP cameras + point cloud (fixed, all frames) & 10.606 & 0.240 & 0.730 & -0.208 & 206613 &  &  \\
+GT & 3000 & COLMAP cameras + point cloud (fixed, all frames) & 26.757 & 0.889 & 0.196 & 0.801 & 666323 &  &  \\
+GT & 7000 & COLMAP cameras + point cloud (fixed, all frames) & 29.659 & 0.931 & 0.139 & 0.914 & 1000000 &  &  \\
+GT & 15000 & COLMAP cameras + point cloud (fixed, all frames) & \underline{31.533} & \underline{0.947} & \underline{0.115} & \underline{0.973} & 1000000 &  &  \\
+GT & 30000 & COLMAP cameras + point cloud (fixed, all frames) & \textbf{32.760} & \textbf{0.954} & \textbf{0.106} & \textbf{1.006} & 1000000 &  &  \\
+VGGT & 1 & Omega cameras (fixed), per-frame K & 11.170 & 0.262 & 0.788 & -0.220 & 100000 & \textbf{0.399} & \textbf{0.012} \\
+VGGT & 3000 & Omega cameras (fixed), shared K, focal optimised & 21.396 & 0.678 & 0.435 & 0.431 & 322497 & \textbf{0.399} & \textbf{0.012} \\
+VGGT & 7000 & Omega cameras (fixed), shared K, focal optimised & 21.478 & 0.671 & 0.375 & 0.465 & 1000000 & \textbf{0.399} & \textbf{0.012} \\
+VGGT & 15000 & Omega cameras (fixed), shared K, focal optimised & 21.483 & 0.668 & 0.305 & 0.506 & 1000000 & \textbf{0.399} & \textbf{0.012} \\
+VGGT & 30000 & Omega cameras (fixed), shared K, focal optimised & 21.443 & 0.663 & 0.273 & 0.523 & 1000000 & \textbf{0.399} & \textbf{0.012} \\
+\bottomrule
+\end{tabular}
+\end{table}

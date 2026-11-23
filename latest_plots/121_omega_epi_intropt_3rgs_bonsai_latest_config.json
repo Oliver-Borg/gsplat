@@ -1,0 +1,138 @@
+[
+    {
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            30000
+        ],
+        "num_images": [
+            1000
+        ],
+        "sampling_mode": [
+            "random"
+        ],
+        "num_points_value": 100000,
+        "gt_eval": true,
+        "eval_all": true,
+        "model": "omega",
+        "save_ply": true,
+        "choice": [
+            "vggt"
+        ],
+        "test_pose_opt": true,
+        "camft_epi_knn": 10,
+        "camft": true,
+        "camft_mlp": true,
+        "camft_lr": 0.0001,
+        "camft_epi": true,
+        "series_label_override": "3RGS MLP, photometric + epipolar loss (lr 1e-4), shared K, focal optimised",
+        "intrinsics_opt": true,
+        "dataset": "bonsai"
+    },
+    {
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            30000
+        ],
+        "num_images": [
+            1000
+        ],
+        "sampling_mode": [
+            "random"
+        ],
+        "num_points_value": 100000,
+        "gt_eval": true,
+        "eval_all": true,
+        "model": "omega",
+        "save_ply": true,
+        "choice": [
+            "vggt"
+        ],
+        "test_pose_opt": true,
+        "camft_epi_knn": 10,
+        "camft": true,
+        "camft_mlp": true,
+        "camft_lr": 0.0001,
+        "series_label_override": "3RGS MLP, photometric loss (lr 1e-4), shared K, focal optimised",
+        "intrinsics_opt": true,
+        "dataset": "bonsai"
+    },
+    {
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            30000
+        ],
+        "num_images": [
+            1000
+        ],
+        "sampling_mode": [
+            "random"
+        ],
+        "num_points_value": 100000,
+        "gt_eval": true,
+        "eval_all": true,
+        "model": "omega",
+        "save_ply": true,
+        "choice": [
+            "vggt"
+        ],
+        "test_pose_opt": true,
+        "camft_epi_knn": 10,
+        "camft": true,
+        "camft_mlp": true,
+        "camft_lr": 0.0001,
+        "camft_epi": true,
+        "series_label_override": "3RGS MLP, photometric + epipolar loss (lr 1e-4), shared mean K",
+        "train_mean_k": true,
+        "dataset": "bonsai"
+    },
+    {
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            30000
+        ],
+        "num_images": [
+            1000
+        ],
+        "sampling_mode": [
+            "random"
+        ],
+        "num_points_value": 100000,
+        "gt_eval": true,
+        "eval_all": true,
+        "model": "omega",
+        "save_ply": true,
+        "choice": [
+            "vggt"
+        ],
+        "test_pose_opt": true,
+        "camft_epi_knn": 10,
+        "camft": true,
+        "camft_mlp": true,
+        "camft_lr": 0.0001,
+        "series_label_override": "3RGS MLP, photometric loss (lr 1e-4), shared mean K",
+        "train_mean_k": true,
+        "dataset": "bonsai"
+    },
+    {
+        "choice": [
+            "gt"
+        ],
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            30000
+        ],
+        "test_pose_opt": true,
+        "series_label_override": "COLMAP cameras + point cloud (fixed, all frames)",
+        "dataset": "bonsai"
+    }
+]

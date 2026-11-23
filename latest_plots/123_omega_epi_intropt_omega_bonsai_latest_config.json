@@ -1,0 +1,96 @@
+[
+    {
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            30000
+        ],
+        "num_images": [
+            1000
+        ],
+        "sampling_mode": [
+            "random"
+        ],
+        "num_points_value": 100000,
+        "gt_eval": true,
+        "eval_all": true,
+        "model": "omega",
+        "save_ply": true,
+        "choice": [
+            "vggt"
+        ],
+        "test_pose_opt": true,
+        "camft_epi_knn": 10,
+        "intrinsics_opt": true,
+        "series_label_override": "Omega cameras (fixed), shared K, focal optimised",
+        "dataset": "bonsai"
+    },
+    {
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            30000
+        ],
+        "num_images": [
+            1000
+        ],
+        "sampling_mode": [
+            "random"
+        ],
+        "num_points_value": 100000,
+        "gt_eval": true,
+        "eval_all": true,
+        "model": "omega",
+        "save_ply": true,
+        "choice": [
+            "vggt"
+        ],
+        "test_pose_opt": true,
+        "camft_epi_knn": 10,
+        "train_mean_k": true,
+        "series_label_override": "Omega cameras (fixed), shared mean K",
+        "dataset": "bonsai"
+    },
+    {
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            30000
+        ],
+        "num_images": [
+            1000
+        ],
+        "sampling_mode": [
+            "random"
+        ],
+        "num_points_value": 100000,
+        "gt_eval": true,
+        "eval_all": true,
+        "model": "omega",
+        "save_ply": true,
+        "choice": [
+            "vggt"
+        ],
+        "test_pose_opt": true,
+        "camft_epi_knn": 10,
+        "series_label_override": "Omega cameras (fixed), per-frame K",
+        "dataset": "bonsai"
+    },
+    {
+        "choice": [
+            "gt"
+        ],
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            30000
+        ],
+        "test_pose_opt": true,
+        "series_label_override": "COLMAP cameras + point cloud (fixed, all frames)",
+        "dataset": "bonsai"
+    }
+]

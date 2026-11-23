@@ -1,0 +1,27 @@
+\begin{table}[H]
+\caption{\ifdefined\customcaption \customcaption \else All frames: 3R-GS shared-focal intrinsics optimisation on the 3R-GS MLP module (epipolar+photometric, photometric), shared mean K runs and COLMAP reference (Bonsai) \fi}
+\label{tab:121_omega_epi_intropt_3rgs_bonsai}
+\centering
+\tiny
+\begin{tabular}{lrlrrrrrrr}
+\toprule
+Choice & Val Step & Series Label Override & PSNR ↑ & SSIM ↑ & LPIPS ↓ & Composite Quality ↑ & Final Gaussian Count & Val RRE ↓ & Val RTE ↓ \\
+\midrule
+VGGT & 1 & 3RGS MLP, photometric + epipolar loss (lr 1e-4), shared K, focal optimised & 11.145 & 0.261 & 0.788 & -0.221 & 100000 & 0.418 & 0.012 \\
+VGGT & 3000 & 3RGS MLP, photometric + epipolar loss (lr 1e-4), shared K, focal optimised & 21.499 & 0.667 & 0.353 & 0.477 & 322497 & 0.304 & 0.005 \\
+VGGT & 15000 & 3RGS MLP, photometric + epipolar loss (lr 1e-4), shared K, focal optimised & 21.792 & 0.659 & 0.193 & 0.576 & 1000000 & 0.202 & \textbf{0.001} \\
+VGGT & 30000 & 3RGS MLP, photometric + epipolar loss (lr 1e-4), shared K, focal optimised & 21.745 & 0.656 & 0.180 & 0.581 & 1000000 & \textbf{0.191} & \textbf{0.001} \\
+VGGT & 7000 & 3RGS MLP, photometric + epipolar loss (lr 1e-4), shared mean K & 22.428 & 0.673 & 0.236 & 0.569 & 1000000 & \underline{0.196} & \underline{0.002} \\
+VGGT & 3000 & 3RGS MLP, photometric loss (lr 1e-4), shared K, focal optimised & 22.680 & 0.723 & 0.422 & 0.489 & 322497 & 0.371 & 0.011 \\
+VGGT & 7000 & 3RGS MLP, photometric loss (lr 1e-4), shared K, focal optimised & 23.050 & 0.723 & 0.307 & 0.567 & 1000000 & 0.371 & 0.010 \\
+VGGT & 15000 & 3RGS MLP, photometric loss (lr 1e-4), shared K, focal optimised & 23.008 & 0.718 & 0.227 & 0.612 & 1000000 & 0.353 & 0.008 \\
+VGGT & 30000 & 3RGS MLP, photometric loss (lr 1e-4), shared K, focal optimised & 23.361 & 0.721 & 0.184 & 0.647 & 1000000 & 0.311 & 0.007 \\
+VGGT & 1 & 3RGS MLP, photometric loss (lr 1e-4), shared mean K & 11.145 & 0.261 & 0.788 & -0.221 & 100000 & 0.418 & 0.012 \\
+GT & 1 & COLMAP cameras + point cloud (fixed, all frames) & 10.606 & 0.240 & 0.730 & -0.208 & 206613 &  &  \\
+GT & 3000 & COLMAP cameras + point cloud (fixed, all frames) & 26.757 & 0.889 & 0.196 & 0.801 & 666323 &  &  \\
+GT & 7000 & COLMAP cameras + point cloud (fixed, all frames) & 29.659 & 0.931 & 0.139 & 0.914 & 1000000 &  &  \\
+GT & 15000 & COLMAP cameras + point cloud (fixed, all frames) & \underline{31.533} & \underline{0.947} & \underline{0.115} & \underline{0.973} & 1000000 &  &  \\
+GT & 30000 & COLMAP cameras + point cloud (fixed, all frames) & \textbf{32.760} & \textbf{0.954} & \textbf{0.106} & \textbf{1.006} & 1000000 &  &  \\
+\bottomrule
+\end{tabular}
+\end{table}
