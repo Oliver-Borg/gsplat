@@ -10,3 +10,17 @@ for a, (k, t) in zip(ax, [("psnr", "PSNR"), ("ssim", "SSIM"), ("lpips", "LPIPS")
     a.set_xscale("symlog", linthresh=0.005); a.set_xticks([0, 0.01, 0.1, 1]); a.set_xticklabels(["0", "0.01", "0.1", "1"]); a.minorticks_off()
     a.set_title(t, fontsize=10); a.set_xlabel("mean rotation error of the training cameras (deg)")
 plt.tight_layout(); plt.savefig(os.path.join(d, "figures/metrics_vs_error.png"), dpi=110); plt.close()
+
+# quality metrics together with the training-camera rotation (RRE) and translation (RTE) error vs the nominal bound
+b = [float(r["bound"]) for r in R]
+fig, ax = plt.subplots(2, 3, figsize=(12, 7))
+for a, (k, t) in zip(ax[0], [("psnr", "PSNR"), ("ssim", "SSIM"), ("lpips", "LPIPS")]):
+    a.plot(b, [float(r[k]) for r in R], marker="o"); a.set_title(t, fontsize=10)
+for a, (k, t) in zip(ax[1], [("rot", "RRE of the training cameras (deg)"), ("trans", "RTE of the training cameras (% of scene scale)")]):
+    kk = "train_rot_err_%s_deg" if k == "rot" else "train_trans_err_%s_pct"
+    a.plot(b, [float(r[kk % "mean"]) for r in R], marker="o", label="mean")
+    a.plot(b, [float(r[kk % "max"]) for r in R], marker="s", label="max"); a.set_title(t, fontsize=10); a.legend(fontsize=8)
+ax[1][2].axis("off")
+for a in ax.flat[:5]:
+    a.set_xscale("symlog", linthresh=0.005); a.set_xticks([0, 0.01, 0.1, 1]); a.set_xticklabels([f"{v:g}" for v in [0, 0.01, 0.1, 1]]); a.minorticks_off(); a.set_xlabel("nominal rotation bound x (deg)")
+plt.tight_layout(); plt.savefig(os.path.join(d, "figures/metrics_with_rre_rte.png"), dpi=110); plt.close()

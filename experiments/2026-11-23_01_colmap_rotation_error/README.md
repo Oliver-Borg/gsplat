@@ -46,6 +46,10 @@ python experiments/2026-11-23_01_colmap_rotation_error/collect.py && python expe
 
 ![metrics vs realised mean rotation error](figures/metrics_vs_error.png)
 
+Quality metrics together with the RRE / RTE of the training cameras (mean and max over the 255 training views, from the injected perturbation; evaluation views use GT poses) against the nominal bound x:
+
+![metrics with RRE and RTE](figures/metrics_with_rre_rte.png)
+
 Renders of test views 0, 2, 5 (ground truth, the 0% baseline and the three levels).
 
 ![renders](figures/renders.jpg)

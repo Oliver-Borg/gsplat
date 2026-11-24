@@ -44,6 +44,10 @@ python experiments/2026-11-23_02_colmap_translation_error/collect.py && python e
 
 ![metrics vs realised mean translation error](figures/metrics_vs_error.png)
 
+Quality metrics together with the RRE / RTE of the training cameras (mean and max over the 255 training views, from the injected perturbation; evaluation views use GT poses) against the nominal bound x:
+
+![metrics with RRE and RTE](figures/metrics_with_rre_rte.png)
+
 Renders of test views 0, 2, 5 (ground truth, the 0% baseline and the levels that finished).
 
 ![renders](figures/renders.jpg)

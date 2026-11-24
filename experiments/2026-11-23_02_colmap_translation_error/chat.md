@@ -7356,3 +7356,36 @@ I've started a watcher that fires when the runner exits. Nothing else to do unti
 ## Assistant (2026-11-24 09:55:06 UTC)
 
 Status: the plots and tables for 125 and 126 are done. I'm now writing the two READMEs, using the 124 log as the template.
+
+## Assistant (2026-11-24 09:55:56 UTC)
+
+Status: the figures look right, so I'm committing the two experiment logs now, without pushing.
+
+## Assistant (2026-11-24 09:56:05 UTC)
+
+Experiments 125 (rotation) and 126 (translation) are written up and committed in gsplat as `cc73bfc9`, without attribution lines and not pushed.
+
+**Rotation (125):** levels 0.01°, 0.1° and 1°, plus the 0% baseline. The 0.01° run finished on acs GPU 0.
+
+| Rotation error up to ±x° per axis | PSNR | SSIM | LPIPS |
+|---|---|---|---|
+| 0 (baseline) | 30.24 | 0.937 | 0.136 |
+| 0.01 | 30.23 | 0.936 | 0.137 |
+| 0.1 | 28.02 | 0.871 | 0.216 |
+| 1 | 19.76 | 0.656 | 0.622 |
+
+**Translation (126):** levels 0.1–5% of scene scale finished, with PSNR falling from 29.59 to 19.18. The 10% run crashed (CUDA OOM) on the L4 in both attempts, so it has no result.
+
+**Logs:**
+- **Included:** the OOM facts, the memory trace, the `isect_tiles` allocation finding, and your insight about `scale_reg` and the metrics.
+- **Translation insights:** still empty.
+- **Rotation 0.5°:** it finished (PSNR 22.32) but is outside the final level set and isn't plotted.
+- **Queue scripts:** `queue.sh` and `queue2.sh` are gitignored by `*.sh`, so they aren't in the commit. The READMEs describe them.
+
+Unpushed: gsplat is several commits ahead of origin and vggt has 6. I haven't pushed anything.
+
+Uncommitted `experiments/2026-11-17_01_omega_photometric_pose_opt/README.md` is your edit and I left it alone. There's also an untracked `chat.md` in the gsplat root that I didn't create in this segment.
+
+## User (2026-11-24 10:21:05 UTC)
+
+Can we plot the eval rre and rte for the two experiments with the quality metrics
