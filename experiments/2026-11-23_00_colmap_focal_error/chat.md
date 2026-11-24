@@ -7430,3 +7430,43 @@ Yes, redo the 124 plots with the runner
 ## Assistant (2026-11-24 12:13:55 UTC)
 
 Status: the 124 render figure now shows the baseline row three times, because copying the baseline into every series also duplicated it in the renders. I'm fixing that in `plot_metrics.py`.
+
+## Assistant (2026-11-24 12:14:29 UTC)
+
+The baseline row now appears once. I'll copy the fixed figure, regenerate the chat log, and commit.
+
+## Assistant (2026-11-24 12:14:38 UTC)
+
+I've redone the 124 plots with the runner's plotting code and removed my standalone ones. It's committed in gsplat (`4d246ef2`, then `c96cd05c`) and vggt (`43dc62e`, then `2b667c1`). Nothing is pushed.
+
+- **Metrics plot:** PSNR, SSIM and LPIPS against the realised mean absolute focal change, with a symlog x-axis. There are three series: fixed negative, fixed positive and random per view. The 0% baseline is the start point of each series, as in my old figure.
+- **Removed:** `make_figures.py` and my two matplotlib PNGs in the 124 folder. `figures/metrics.jpg` and `figures/renders.jpg` are now copies of the runner outputs.
+- **Signed plot dropped:** the old fixed-change-on-a-signed-x-axis figure is gone, since you chose the abs-error layout.
+- **Settings added to the runner and `plot_metrics.py`:**
+  - the `k_abs_err` metric;
+  - a `k_series` column;
+  - `shared_series_value`, which copies the baseline rows into every series;
+  - round x ticks when there are more than 6 distinct values.
+- **Render bug fixed:** the first version of the render figure showed the baseline row three times, because the copied rows also reached the renders. I fixed that and committed the corrected figure.
+- **Baseline stats edited again:** I added `train_k_*_change_*` = 0.0 to the baseline run's stats JSONs, since it predates those stats. This is noted in the 124 README.
+- **Still using standalone plots:** 11 older experiment folders have a `make_figures.py` (the 2026-11-06 to 2026-11-20 ones). I haven't touched them.
+
+## User (2026-11-24 12:36:35 UTC)
+
+Why is the legend just "runs"?
+
+## Assistant (2026-11-24 12:36:39 UTC)
+
+Because of how I implemented `merge_series` in `plot_metrics.py`. It sets the plot series of every run to the literal string `"runs"` so one line goes through all of them. The legend shows that series name.
+
+The runs' own labels, such as "random rotation change up to 0.1 deg", are still used in the render figure captions, but not in the line plot.
+
+I can fix it in one of two ways:
+- Hide the legend when there is only one series.
+- Let `merge_series` take a label string, for example "3DGS (MCMC), COLMAP cameras", and use that as the series name.
+
+The label option would also change the 125, 126 and 124 plots (124 has three series, so it wouldn't be affected by the single-series hiding). Which do you want?
+
+## User (2026-11-24 12:37:32 UTC)
+
+Hide the legend when there's a single series

@@ -69,6 +69,7 @@
         "eval_rte":null,
         "eval_rre":null,
         "train_rre":0,
+        "k_abs_err":null,
         "train_rte":0.0520557671,
         "depth_l1":null,
         "depth_abs_rel":null,
@@ -82,6 +83,7 @@
         "input_folder":"bonsai_2_n255_s42",
         "output_folder":"bonsai_2_n255_s42_i292_trand0.1_steps7000_val_step6999.json",
         "initial_points":206613,
+        "k_series":"no change",
         "plot_series":"runs",
         "trans_random_change_jitter":0.1
     },
@@ -155,6 +157,7 @@
         "eval_rte":null,
         "eval_rre":null,
         "train_rre":0,
+        "k_abs_err":null,
         "train_rte":0.2602788354,
         "depth_l1":null,
         "depth_abs_rel":null,
@@ -168,6 +171,7 @@
         "input_folder":"bonsai_2_n255_s42",
         "output_folder":"bonsai_2_n255_s42_i292_trand0.5_steps7000_val_step6999.json",
         "initial_points":206613,
+        "k_series":"no change",
         "plot_series":"runs",
         "trans_random_change_jitter":0.5
     },
@@ -241,6 +245,7 @@
         "eval_rte":null,
         "eval_rre":null,
         "train_rre":0,
+        "k_abs_err":null,
         "train_rte":0.5205576709,
         "depth_l1":null,
         "depth_abs_rel":null,
@@ -254,6 +259,7 @@
         "input_folder":"bonsai_2_n255_s42",
         "output_folder":"bonsai_2_n255_s42_i292_trand1_steps7000_val_step6999.json",
         "initial_points":206613,
+        "k_series":"no change",
         "plot_series":"runs",
         "trans_random_change_jitter":1.0
     },
@@ -327,6 +333,7 @@
         "eval_rte":null,
         "eval_rre":null,
         "train_rre":0,
+        "k_abs_err":null,
         "train_rte":1.0411153417,
         "depth_l1":null,
         "depth_abs_rel":null,
@@ -340,6 +347,7 @@
         "input_folder":"bonsai_2_n255_s42",
         "output_folder":"bonsai_2_n255_s42_i292_trand2_steps7000_val_step6999.json",
         "initial_points":206613,
+        "k_series":"no change",
         "plot_series":"runs",
         "trans_random_change_jitter":2.0
     },
@@ -413,6 +421,7 @@
         "eval_rte":null,
         "eval_rre":null,
         "train_rre":0,
+        "k_abs_err":null,
         "train_rte":2.6027883543,
         "depth_l1":null,
         "depth_abs_rel":null,
@@ -426,6 +435,7 @@
         "input_folder":"bonsai_2_n255_s42",
         "output_folder":"bonsai_2_n255_s42_i292_trand5_steps7000_val_step6999.json",
         "initial_points":206613,
+        "k_series":"no change",
         "plot_series":"runs",
         "trans_random_change_jitter":5.0
     },
@@ -499,6 +509,7 @@
         "eval_rte":null,
         "eval_rre":null,
         "train_rre":0,
+        "k_abs_err":0,
         "train_rte":0.0,
         "depth_l1":null,
         "depth_abs_rel":null,
@@ -512,6 +523,7 @@
         "input_folder":"bonsai_2_n255_s42",
         "output_folder":"bonsai_2_n255_s42_i292_steps7000_val_step6999.json",
         "initial_points":206613,
+        "k_series":"no change",
         "plot_series":"runs",
         "trans_random_change_jitter":0.0
     }
