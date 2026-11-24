@@ -5898,12 +5898,6 @@ Decisions I made:
 - **"Mean K":** I read your answer as the mean of Omega's per-frame K, not the GT K. If you meant the GT K for training, tell me.
 - **Eval K:** eval keeps the GT K as you said. I haven't verified in the code that eval frames already use the GT K. Please check that before running.
 - **Experiment 119:** it stays on bonsai and is unchanged. Its second arm uses the dataset's sparse COLMAP points.
-
-
----
-
-# Continued in a new session (context restart)
-
 # Chat log: 7de51f4e-b011-4945-a096-0dd4da5cb0e2.jsonl
 
 ## Assistant (2026-11-19 09:31:28 UTC)
@@ -6910,3 +6904,525 @@ Use the existing plotting code with the zoom ins
 ## Assistant (2026-11-23 10:09:12 UTC)
 
 Now all the series appear in the runner's table. I'm checking the render figure with zoom insets.
+
+## Assistant (2026-11-23 10:10:45 UTC)
+
+The wrong-focal log now uses the runner's own render plot with the zoom insets, and the render figure includes the 0% COLMAP baseline. Both fixes are committed locally and nothing is pushed.
+
+**Cause:** the runner's plots group runs by the parameters parsed from the run directory names. `plot_metrics.py` in the vggt repo didn't know the new tokens (`kfix`, `krand`, `meank`, `intropt`, `tpo`), so runs that differ only by those tokens were merged into one series. In experiment 124 only one run was kept, which was the +5% run.
+
+**What I changed:**
+- **Parser:** vggt `plot_metrics.py` now parses those tokens, committed as `efce604`.
+- **Experiment 124:** the render figure now has ground truth plus all 13 runs (0% baseline, 8 fixed, 4 random) with the zoom insets. The tables show all 13 series too.
+- **Replaced script:** I deleted my custom `make_renders.py`, and the log's README now notes the parser fix.
+- **Experiments 120–123:** these had the same problem. For example, the fixed Omega run with the shared mean K was missing from the render figure. I re-ran the plotting with the fix and replaced their render figures. All the series are present (7, 5, 5 and 4 for experiments 120, 121, 122 and 123), and the README of that log notes the correction. Their metric figures and tables come from `collect.py` and were not affected.
+- **Commit:** the gsplat side is `c354e97b`, which also includes the regenerated `latest_plots/120–124`.
+
+Experiments 113–118 use none of the new tokens, but I haven't checked their render figures for missing arms.
+
+## User (2026-11-23 10:12:33 UTC)
+
+Do a similar experiment with rotation error and then translation error. Normalise translation based on the 2 farthest cameras from COLMAP
+
+## Assistant (2026-11-23 10:21:42 UTC)
+
+Both experiments are running on `dev-gpu-acs`, GPUs 0–3, launched at 10:18 GMT. They are committed as gsplat `e70b2566` and vggt `37080ce`, and the first runs are already splatting.
+
+**What each experiment does:**
+- **Rotation (125, `colmap_rotation_error`):** per training view, an independent random rotation about each of the three camera axes, angle uniform in ±x°, with x in 0.1, 0.5, 1, 2, 5, 10. The camera centre stays fixed.
+- **Translation (126, `colmap_translation_error`):** per training view, a random unit direction times a magnitude uniform in 0 to x% of the scene scale, with x in 0.1, 0.5, 1, 2, 5, 10. Orientation stays fixed. The scale is the distance between the two farthest COLMAP training camera centres, which is 2.1611 in the trainer's world frame.
+- **Common setup:** the errors apply to the training views only, and evaluation views keep their GT poses. The setup is the same as the focal experiment: COLMAP cameras and point cloud, 255 train frames, MCMC, 7000 steps, seed 42. The 0% baseline is the existing focal-experiment baseline, reused. The pose changes are drawn once with seed 42.
+- **One set only:** I did not add a "fixed" set as in the focal experiment, since you specified the random version for both.
+
+**Smoke test** (40 steps, GPU 7):
+- At 10% rotation the realised mean error was 9.65° (max 14.9°). That is more than 10/2 = 5° because three axes combine.
+- At 10% translation the realised mean was 5.21% of the scale (max 9.99%).
+
+**Plotting:** I added the `rrand` and `trand` tokens to `plot_metrics.py`, so the runner's plots keep all series separate this time.
+
+I'll plot and write both logs when the runner exits. They go in two folders, `2026-11-23_01_colmap_rotation_error` and `2026-11-23_02_colmap_translation_error`. Nothing is pushed.
+
+## User (2026-11-23 10:37:10 UTC)
+
+Progress on the runs?
+
+## Assistant (2026-11-23 10:37:34 UTC)
+
+Checking the failures and the L40S options now. I'm not changing anything until you decide how to handle the three crashed runs.
+
+Status as of 10:40 GMT (launched 10:18):
+
+- **Finished (3 of 12 new runs):** rotation 0.1, 0.5 and 1°.
+- **Crashed (3 runs):** rotation 2, 5 and 10°. All three failed with `torch.OutOfMemoryError` after step 3000, in `rasterize_splats` → `isect_tiles`. The allocations were 3.49, 1.79 and 5.11 GiB, with the L4 at 19.6–21.2 GiB in use of 22.08 GiB. This happens during training, not at eval.
+- **Running:** translation 0.1, 0.5, 1 and 2%, at about 20 it/s, on GPUs 0–3 of `dev-gpu-acs`.
+- **Queued:** translation 5 and 10%. They may hit the same memory limit.
+
+I haven't changed anything. The setup is the same as the finished runs, and an L4 has less memory than the runs need at large pose errors.
+
+The options for the crashed runs, after the runner finishes:
+1. **Rerun on an L40S (45 GiB)** with the same setup. `dev-gpu-2` GPU 1 is free of other users right now (0 MiB, 0%). GPUs 0, 2 and 3 have `ec2013` processes. This changes nothing about the experiment.
+2. **Change the setup so it fits on an L4**, for example a lower Gaussian cap or packed rasterization. That would make these runs differ from the others.
+
+Which do you want? If you pick option 1, I'll use the free L40S GPU for those runs, and for any translation run that crashes the same way.
+
+## User (2026-11-23 10:38:42 UTC)
+
+Why do they get to that high of a memory use? It should only be a few GB for 1000000 gaussians
+
+## Assistant (2026-11-23 10:40:34 UTC)
+
+It's confirmed that my process is on GPU 1 only (UUID `…c00f91`), at 1.2 GiB. While it trains I'm writing the analysis script.
+
+## Assistant (2026-11-23 10:40:42 UTC)
+
+I'm measuring where the memory goes. The two diagnostic runs (the 0% baseline and the 10% rotation case, same setup) are training on GPU 1 and will take about 6 minutes each. For each I'm recording peak GPU memory over time, then loading the final Gaussians and counting tile intersections per view. I'll report the numbers when both finish.
+
+## User (2026-11-23 10:47:41 UTC)
+
+<task-notification>
+<task-id>bjjc5am3b</task-id>
+<tool-use-id>toolu_01TxnQ6EWrfijVvMSrm85Z3Q</tool-use-id>
+<output-file>/tmp/claude-6786/-home-ojab2-work-git-vggt/7de51f4e-b011-4945-a096-0dd4da5cb0e2/tasks/bjjc5am3b.output</output-file>
+<status>completed</status>
+<summary>Background command "cd /home/ojab2/work/git/gsplat; cat &gt; results/_diag/analyze.py &lt;&lt;'EOF'
+import sys, glob, numpy as np, torch
+sys.path.insert(0, "/home/ojab2/work/git/gsplat/examples")
+from datasets.colmap import Parser
+from gsplat import rasterization
+tags = sys.argv[1:]
+parser = Parser(data_dir="/home/ojab2/work/git/vggt/data/360_v2/bonsai", factor=2, normalize=True, test_every=8)
+idx = [i for i in range(len(parser.image_names)) if i % 8 != 0][::25][:8]  # 8 training views
+dev = "cuda"
+for t
+
+... [1462 characters truncated] ...
+
+], q)), 1) for q in (50, 99, 99.9, 100)])
+EOF
+until [ -f results/_diag/done ]; do sleep 15; done; for t in base rrand10; do echo "== $t"; grep -a "returncode\|Traceback\|OutOfMemory" results/_diag/run_$t.log | cut -c1-160; sort -k2 -n results/_diag/mem_$t.log | tail -1; done" completed (exit code 0)</summary>
+</task-notification>
+
+## Assistant (2026-11-23 10:48:27 UTC)
+
+Memory isn't dominated by the 1M Gaussians in these runs. I ran the 10% rotation case and the 0% baseline with the same setup on the free L40S GPU 1, and here is what I measured.
+
+| | 0% baseline | 10% rotation |
+|---|---|---|
+| Peak GPU memory (`nvidia-smi`) | 2.4 GiB | 42.0 GiB |
+| Median Gaussian max-scale (trainer world units) | 0.0036 | 1.32 |
+| 99th-percentile max-scale | 0.105 | 2.21 |
+| Mean Gaussian opacity | 0.126 | 0.001 |
+| Tile intersections per view (8 train views, final model) | 3.6M mean, 3.8M max | 12.1M mean, 16.0M max |
+| Median projected radius (px) | 3 | 1410 |
+
+- **Your estimate holds for the baseline:** it used about 2.4 GiB.
+- **The rotation run grew in steps:** over the run it went 2.8 → 13.8 → 24.4 → 39.7 → 42.0 GiB.
+- **The crashes:** the L4 crashes happened in `isect_tiles`, the rasterizer step that lists which image tiles each Gaussian covers. The failed allocations were 3.49, 1.79 and 5.11 GiB. The size of those buffers scales with the number of tile intersections, not with the Gaussian count.
+- **Caveat:** `nvidia-smi` memory includes PyTorch's cache, so 42 GiB overstates what the run strictly needs. I only sampled intersections at the final model and at 8 views, and I did not measure the per-step peaks. The failing allocation sizes imply more intersections at the crash than the 16M I measured.
+
+Hypothesis, not tested: with inconsistent training poses, the optimiser ends up with huge, nearly transparent Gaussians. Their median size is about 370× larger than in the baseline and their opacity is near zero. Each one covers a large part of the image, so the intersection buffers grow.
+
+Two practical facts:
+- The 10% rotation run completed on the L40S (return code 0), using up to about 42 of 45 GiB. The L40S has no room for another process alongside it.
+- That diagnostic run is a full 7000-step run of the same setup, apart from saving a checkpoint and writing to `results/_diag/rrand10`. I can use it as the rotation 10% result if you want, instead of re-running.
+
+I also owe you a correction. My first diagnostic launch passed `gpu="0"`, which pointed at GPU 0 where `ec2013` has a process. I killed it within seconds, before it reached the training loop, and relaunched on GPU 1. I confirmed that my process was only on GPU 1.
+
+Which do you want for the 3 crashed runs (rotation 2, 5, 10°): rerun them on the L40S, or use the diagnostic run for 10°?
+
+## User (2026-11-23 10:49:38 UTC)
+
+<task-notification>
+<task-id>bmuetwept</task-id>
+<tool-use-id>toolu_0171YNuQE92ESEmc12oX2Gmt</tool-use-id>
+<output-file>/tmp/claude-6786/-home-ojab2-work-git-vggt/7de51f4e-b011-4945-a096-0dd4da5cb0e2/tasks/bmuetwept.output</output-file>
+<status>completed</status>
+<summary>Background command "cd /home/ojab2/work/git/gsplat; until grep -aq "runner exit" experiments/2026-11-23_01_colmap_rotation_error/queue.log; do sleep 20; done; grep -a "launching\|runner exit" experiments/2026-11-23_01_colmap_rotation_error/queue.log; grep -ac Traceback experiments/2026-11-23_01_colmap_rotation_error/queue.log" completed (exit code 0)</summary>
+</task-notification>
+
+## Assistant (2026-11-23 10:49:48 UTC)
+
+The runner exited with code 0 at 10:49:35 GMT, 31.5 minutes after launch. Eight of the 12 new runs finished and 4 crashed. All four crashed with `torch.OutOfMemoryError` on an L4.
+
+| | finished | crashed (CUDA out of memory) |
+|---|---|---|
+| Rotation | 0.1, 0.5, 1° | 2, 5, 10° |
+| Translation | 0.1, 0.5, 1, 2, 5% of scene scale | 10% |
+
+The allocations that failed were 1.79, 2.29, 3.49 and 5.11 GiB.
+
+I have not plotted or written either log yet, because the sets would be incomplete. The 10° rotation case also exists as a full run from my diagnostic, in `results/_diag/rrand10` (L40S, same setup, checkpoint saved).
+
+How do you want to handle the 4 crashed runs?
+1. **Rerun them on the L40S with the same setup.** The 10° rotation case showed up to about 42 of 45 GiB. The other three have not been tested, and the L40S GPU would need to be free of other users. GPU 1 of `dev-gpu-2` is free now.
+2. **Use the diagnostic run for the 10° rotation case, and rerun the other three on the L40S.**
+3. **Log the four as failed on the L4 and plot what finished.** Rotation would then only reach 1°, translation 5%.
+4. **Change the setup to fit on an L4.** For example a lower Gaussian cap or packed rasterization, which would make those runs differ from the others.
+
+## User (2026-11-23 10:50:21 UTC)
+
+<task-notification>
+<task-id>bdcnnwpbh</task-id>
+<tool-use-id>toolu_01WRHkXRAQeAG8zemtuU2pwy</tool-use-id>
+<output-file>/tmp/claude-6786/-home-ojab2-work-git-vggt/7de51f4e-b011-4945-a096-0dd4da5cb0e2/tasks/bdcnnwpbh.output</output-file>
+<status>completed</status>
+<summary>Background command "cd /home/ojab2/work/git/gsplat; R=experiments/2026-11-23_01_colmap_rotation_error; T=experiments/2026-11-23_02_colmap_translation_error; mkdir -p $R $T; cat &gt; $R/queue.sh &lt;&lt;'EOF'
+#!/bin/bash
+cd /home/ojab2/work/git/gsplat
+echo "$(date) launching on GPUs 0-3 ($(hostname))"
+env -u PYTHONPATH PATH=$HOME/.conda/envs/gsplat/bin:$PATH python experiment_runner.py \
+  --experiment_names colmap_rotation_error colmap_translation_error \
+  --dataset_name bonsai --dataset_collections --d
+
+... [207 characters truncated] ...
+
+ue.sh &gt; $R/queue.log 2&gt;&amp;1 &lt; /dev/null &amp; sleep 1; echo launched on \$(hostname)"; sleep 45; head -c 100 $R/queue.log; echo; grep -a "Splatted:" $R/queue.log | head -1; ssh dev-gpu-acs "nvidia-smi --query-gpu=index,utilization.gpu --format=csv,noheader | head -4 | tr '\n' ' '"" completed (exit code 0)</summary>
+</task-notification>
+
+## Assistant (2026-11-23 10:50:24 UTC)
+
+That notification is only the earlier launch command's wrapper finishing, so nothing has changed since my last message.
+
+The 4 crashed runs are still waiting on your choice: rotation 2, 5 and 10°, and translation 10%. I haven't plotted or written either log.
+
+The options are:
+1. Rerun all four on the L40S with the same setup.
+2. Use the diagnostic L40S run for the 10° rotation case and rerun the other three.
+3. Log the four as failed on the L4 and plot what finished.
+4. Change the setup so it fits on an L4, which would make those runs differ from the others.
+
+Which do you want?
+
+## User (2026-11-23 12:04:10 UTC)
+
+This must be a bug... there's no way the rendering would jump to that much memory. The GPUs on this server are in use so try it again on the acs server
+
+## Assistant (2026-11-23 12:06:30 UTC)
+
+The four crashed runs (rotation 2°, 5°, 10° and translation 10%) are running again on dev-gpu-acs (gxp-l4-0), GPUs 0–3. That's the same setup as before, with one run per GPU.
+
+I checked both servers first. On dev-gpu-2 (the L40S server) every GPU has another user's processes on it, so I didn't use it. All 8 L4s on acs were empty.
+
+At about 53 s in, the runs are at roughly 20% (step ~1400–1570 of 7000). Memory on the first three GPUs is 1.1–2.0 GiB, with GPU 3 still at 0. The earlier OOMs came later in training, as the Gaussians grew, so I'm watching to see whether they recur. Progress goes to `queue_rerun.log` in the rotation-error experiment folder.
+
+I haven't plotted or written either log yet. When the runs finish I'll collect results, plot, write the two READMEs and commit without pushing. If any run crashes again, I'll record it as failed.
+
+## User (2026-11-23 12:22:19 UTC)
+
+<task-notification>
+<task-id>brce229o5</task-id>
+<tool-use-id>toolu_01CUyJk6QUV6jNpFSogbseug</tool-use-id>
+<output-file>/tmp/claude-6786/-home-ojab2-work-git-vggt/7de51f4e-b011-4945-a096-0dd4da5cb0e2/tasks/brce229o5.output</output-file>
+<status>completed</status>
+<summary>Background command "Relaunch the queue on the acs server" completed (exit code 0)</summary>
+</task-notification>
+
+## Assistant (2026-11-23 12:22:23 UTC)
+
+That notification is just the launch command's wrapper finishing. The training runs on dev-gpu-acs are still going.
+
+I'll check progress and memory on the four GPUs.
+
+## Assistant (2026-11-23 12:22:39 UTC)
+
+The rerun on dev-gpu-acs failed the same way. All four runs hit CUDA out-of-memory on the 22 GiB L4s again. The runner exited at 12:20:48 GMT with exit code 0, the same as the first attempt.
+
+| Run | Failed allocation | Process memory when it failed |
+|---|---|---|
+| Rotation 2°, 5°, 10° and translation 10% (4 runs) | 1.78, 3.33, 4.17 and 4.24 GiB | 18.0–21.4 GiB |
+
+The log doesn't map each size to a run. The first attempt failed at 1.79, 2.29, 3.49 and 5.11 GiB, so the allocation sizes differ between attempts.
+
+The other 8 runs completed. The rotation 10° and translation 10% results still don't exist.
+
+You think this is a bug. Here is what I measured last time on the L40S with the rotation 10° diagnostic run:
+
+| | Baseline (0%) | Rotation 10° |
+|---|---|---|
+| Peak GPU memory | 2.4 GiB | 42 GiB |
+| Median Gaussian max-scale | 0.0036 | 1.32 |
+| Mean opacity | 0.126 | 0.001 |
+| Mean tile intersections per view | 3.6M | 12.1M |
+
+I haven't found a code defect. I only added the perturbation to the camera poses in the training loop.
+
+Next I can trace which step the memory jumps at, and whether the Gaussian scales blow up before or after the jump. That would test your bug hypothesis directly.
+
+Otherwise I can rerun the four on the L40S once a GPU there is free of other users, or log them as failed and plot the 8 that finished. Which do you want?
+
+## User (2026-11-23 13:13:23 UTC)
+
+Trace which step the memory jumps at
+
+## Assistant (2026-11-23 13:13:53 UTC)
+
+I've added an env-guarded per-step memory trace to the trainer and a trace launcher. Next I'm finding the config index for rotation 10°.
+
+## Assistant (2026-11-23 13:15:51 UTC)
+
+My GPU 0 job is gone, leaving only ws423's process there. Relaunching the 10° trace on GPU 2, which is empty and has no other users' processes.
+
+## Assistant (2026-11-23 13:17:54 UTC)
+
+The 10° rotation trace is running on dev-gpu-acs GPU 2, and the baseline trace is running on GPU 1. Both log memory, Gaussian count, scale, opacity and image ID at every step. I'll analyse the memory jump once the 10° run finishes or hits OOM.
+
+I made two mistakes along the way:
+- **Shared GPU:** my first launch put the 10° trace on acs GPU 0, which already had ws423's process on it (about 230 MiB). I missed it in my pre-launch check. I killed that job by PID within a couple of minutes and moved it to GPU 2, which has no other users' processes. ws423's process was never touched.
+- **Trainer edit:** I added an env-guarded trace block to `examples/simple_trainer.py`. It is uncommitted and only runs when `MEM_TRACE` is set.
+
+## User (2026-11-23 13:20:36 UTC)
+
+<task-notification>
+<task-id>bbvt9jne1</task-id>
+<tool-use-id>toolu_01TLTRkK2MLiBosKUMdawpZ2</tool-use-id>
+<output-file>/tmp/claude-6786/-home-ojab2-work-git-vggt/7de51f4e-b011-4945-a096-0dd4da5cb0e2/tasks/bbvt9jne1.output</output-file>
+<status>completed</status>
+<summary>Background command "Wait until the 10 degree trace ends or OOMs" completed (exit code 0)</summary>
+</task-notification>
+
+## Assistant (2026-11-23 13:20:57 UTC)
+
+The memory growth isn't a single jump. Peak memory grows steadily from about step 1200, and it spikes in the steps right after each MCMC refine step, which runs every 100 steps. Both traces ran on dev-gpu-acs (L4): rotation 10° on GPU 2 and the 0% baseline on GPU 1. The 10° run hit OOM at step 4201.
+
+**Baseline (0%)** ran all 7000 steps:
+- Peak was 1.26 GiB from step 4000 on, with 1,000,000 Gaussians.
+- Median Gaussian max-scale was 0.0037 and mean opacity 0.12.
+- The largest peak was 1.39 GiB, at step 3801.
+
+**Rotation 10°:** step peak is the maximum memory allocated during that step.
+
+| Steps | Max step peak (GiB) | Steps over 2 GiB (of 200) | Median max-scale at end of window |
+|---|---|---|---|
+| 0–1000 | 0.44–0.58 | 0 | 0.0003–0.001 |
+| 1200–1400 | 0.77–1.20 | 0 | 0.011–0.041 |
+| 1600–1800 | 1.65–1.90 | 0 | 0.05 |
+| 2000 | 2.52 | 4 | 0.068 |
+| 2200 | 3.83 | 8 | 0.10 |
+| 2400–2800 | 5.5–7.6 | 10–12 | 0.14–0.27 |
+| 3000–3200 | 8.7–9.3 | 12–13 | 0.35–0.43 |
+| 3400 | 15.3 | 18 | 0.47 |
+| 3800 | 17.4 | 23 | 0.55 |
+| 4201 (OOM) | 17.55 | — | 1.05 |
+
+- **Memory outside the spikes:** allocated memory stays small (0.59 GiB at step 2000 and 1.09 GiB at step 4000, with 1,000,000 Gaussians from step 4000). The large numbers are per-step peaks, not retained memory.
+- **Spike timing:** the steps over 2 GiB sit right after each refine step (every 100 steps), as steps ending in 01, 02, 03 and so on. First is step 2201: peak 3.08 GiB, with the Gaussian count jumping from 450,997 to 473,546 and the median max-scale from 0.067 to 0.26. Peak was 0.82 GiB the step before. The peak decays over the next steps (3.42, 2.70, 2.17 GiB).
+- **Spike size over time:** the 2201 spike was 3.1 GiB, the 3402 spike 15.3 GiB, and the failing step 4201 reached 17.55 GiB with 9.18 GiB allocated.
+- **Opacity:** mean opacity is 0.0010 at step 3000 against 0.152 for the baseline.
+- **Loss:** about 0.23–0.27 throughout, against 0.03–0.04 for the baseline at the end.
+
+I haven't looked at which tensor makes the spikes (the earlier crashes were in `isect_tiles`). I also haven't separated the effect of the perturbation from the MCMC strategy's relocation of low-opacity Gaussians. I can test either next.
+
+The traces are in `results/_diag/trace_base.log` and `trace_rrand10.log`. The trace block in `examples/simple_trainer.py` is still uncommitted.
+
+## User (2026-11-23 13:22:14 UTC)
+
+<task-notification>
+<task-id>b9cosnxzo</task-id>
+<tool-use-id>toolu_01SCEWBk79iEudbNA6U2e1Dw</tool-use-id>
+<output-file>/tmp/claude-6786/-home-ojab2-work-git-vggt/7de51f4e-b011-4945-a096-0dd4da5cb0e2/tasks/b9cosnxzo.output</output-file>
+<status>completed</status>
+<summary>Background command "Relaunch 10 degree trace on empty GPU 2" completed (exit code 0)</summary>
+</task-notification>
+
+## Assistant (2026-11-23 13:22:18 UTC)
+
+That notification is only the wrapper of the relaunch command finishing. The 10° trace it started has already ended with the OOM at step 4201 that I reported.
+
+Nothing is running from me on dev-gpu-acs apart from the baseline trace on GPU 1, which finished all 7000 steps. The trace block in `examples/simple_trainer.py` is still uncommitted.
+
+The four crashed runs (rotation 2°, 5°, 10° and translation 10%) are still unresolved. I'm waiting for you on three things:
+- **Which tensor:** whether to find out which tensor causes the spikes.
+- **MCMC vs perturbation:** whether to separate the effect of the perturbation from the MCMC relocation.
+- **The four runs:** whether to rerun them on an L40S, log them as failed, or change the setup.
+
+## User (2026-11-23 15:35:01 UTC)
+
+Find which tensor causes the spikes
+
+## Assistant (2026-11-23 15:35:12 UTC)
+
+GPU 0 on acs is in use by another user, and GPU 1 is empty, so I'm launching the snapshot run on GPU 1.
+
+## Assistant (2026-11-23 15:35:37 UTC)
+
+The snapshot run is going on acs GPU 1. It records every allocation with its stack and dumps a snapshot at the first step whose peak exceeds 3 GiB, which should be around step 2201. I'll analyse the largest allocations once the file appears.
+
+## User (2026-11-23 15:37:29 UTC)
+
+<task-notification>
+<task-id>bak68fmrt</task-id>
+<tool-use-id>toolu_01BKx5ndTWzYf2RYW5UvWrkk</tool-use-id>
+<output-file>/tmp/claude-6786/-home-ojab2-work-git-vggt/7de51f4e-b011-4945-a096-0dd4da5cb0e2/tasks/bak68fmrt.output</output-file>
+<status>completed</status>
+<summary>Background command "Launch snapshot run on acs GPU 1" completed (exit code 0)</summary>
+</task-notification>
+
+## Assistant (2026-11-23 15:37:31 UTC)
+
+That notification is only the launch wrapper finishing. The snapshot run is still going, and I'm waiting for the watcher that reports when the snapshot file is written.
+
+## User (2026-11-23 15:37:31 UTC)
+
+<task-notification>
+<task-id>bnj7cmh74</task-id>
+<tool-use-id>toolu_016BFJr8jq2fDXsGfzM5Zp6B</tool-use-id>
+<output-file>/tmp/claude-6786/-home-ojab2-work-git-vggt/7de51f4e-b011-4945-a096-0dd4da5cb0e2/tasks/bnj7cmh74.output</output-file>
+<status>completed</status>
+<summary>Background command "Wait for snapshot file" completed (exit code 0)</summary>
+</task-notification>
+
+## Assistant (2026-11-23 15:37:54 UTC)
+
+The memory spikes come from `isect_tiles`, the tile-intersection step inside gsplat's `rasterization`. It accounts for 3.07 GiB of the 3.64 GiB live at the peak of the first spike step.
+
+I ran the 10° rotation setup again on acs GPU 1 with PyTorch's allocation history recording. It dumped a snapshot at step 2101, the first step whose peak exceeded 3 GiB.
+
+- **Largest allocations:** every one of the biggest allocations in that step comes from `isect_tiles` (`gsplat/cuda/_wrapper.py:504`, called from `rendering.py:634`, `rasterization`).
+- **Sizes:** two 0.96 GiB buffers, two 0.48 GiB buffers, then a run of 0.11 GiB buffers.
+- **Live set at the peak:** 3.07 GiB is `isect_tiles`. The Adam optimizer-state update in `ops.py` holds 0.20 GiB and the parameter update 0.19 GiB. The `rasterize_splats` output in `simple_trainer.py:1058` is 0.08 GiB.
+
+The tile-intersection buffers scale with the number of (Gaussian, tile) pairs. I didn't read the pair count from the code. If the 0.96 GiB buffers are 8 bytes per entry, that is about 129 million entries in one render (my assumption).
+
+The snapshot step differs from the earlier traced run, so the first spike here is step 2101 rather than 2201. The two runs are both the 10° setup but not identical, since their step-2000 peaks differ.
+
+The snapshot run's script (`run_trace.py`) and snapshot (`results/_diag/snap_2101.pickle`) are in the gitignored results folder. The snapshot trace code in `examples/simple_trainer.py` is still uncommitted.
+
+I can next log the intersection count per render and the projected radius of the Gaussians behind it, to see which Gaussians produce the pairs.
+
+## User (2026-11-24 09:43:50 UTC)
+
+Is there a parameter for maximum scale or minimum opacity?
+
+## Assistant (2026-11-24 09:44:04 UTC)
+
+**Minimum opacity:** yes. The MCMC strategy has `min_opacity`, which defaults to 0.005 (`gsplat/strategy/mcmc.py:54`) and is passed on the command line as `--strategy.min-opacity`.
+- In `mcmc.py:155`, Gaussians with opacity at or below it are marked dead. Their parameters are then copied from sampled live Gaussians, and the Gaussian count stays the same.
+- In the 10° rotation trace the mean opacity was 0.001–0.003 from step 2000 on, which is below this threshold.
+- I haven't checked what fraction of Gaussians were below 0.005 at each refine step.
+
+**Maximum scale:** no. I found no cap on Gaussian size in the trainer, the MCMC strategy, or the `rasterization` arguments. What exists is:
+- **`scale_reg`** (`simple_trainer.py:297`, default 0.0): adds `scale_reg × mean(exp(scales))` to the loss. It is a soft penalty on the average scale, not a hard cap. The command-line preset at line 2423 uses 0.01.
+- **`opacity_reg`** (`simple_trainer.py:295`, default 0.0): adds a penalty on mean opacity. It pushes opacities down rather than up.
+- **`radius_clip`** (`rendering.py:120`, default 0.0): skips Gaussians whose projected 2D radius is smaller than the value. It has no upper limit, so it doesn't bound large Gaussians.
+- **`cap_max`** (default 1,000,000): caps the Gaussian count, not their size.
+
+The baseline runs used the defaults, so none of these were active in the runs we have.
+
+## User (2026-11-24 09:47:06 UTC)
+
+Lets just change the rotation settings to 0.01, 0.1 and 1 degree. I want to do scale reg but that would influence the metrics. (Insight)
+
+## Assistant (2026-11-24 09:48:13 UTC)
+
+I've changed the rotation experiment to 0.01°, 0.1° and 1°, and I'm running the missing 0.01° level on dev-gpu-acs GPU 0.
+
+- **GPU check:** GPU 0 had nothing on it. The two other processes on acs are on GPUs 3 and 4, which I'm not using.
+- **0.1° and 1°:** these already finished, so the runner only needs to train 0.01°.
+- **Other rotation runs:** the 0.5° run finished and the 2°, 5° and 10° runs crashed. They stay in the results folder but are no longer part of the experiment. `collect.py` now keeps only the 0.01°, 0.1° and 1° runs plus the 0% baseline, and the plot's x-axis ticks are 0, 0.01, 0.1, 1.
+- **Translation:** I haven't changed it. The 10% run still crashed on the L4. Tell me if you want its levels changed too.
+- **Trainer:** I reverted the uncommitted trace code in `examples/simple_trainer.py`, so the run uses the committed trainer (e70b2566).
+- **Insight:** I'll put your note under Insights in the rotation log, in your words: "I want to do scale reg but that would influence the metrics."
+
+When the 0.01° run finishes, I'll collect the results, plot, write the logs, regenerate `chat.md` and commit without pushing.
+
+## User (2026-11-24 09:53:55 UTC)
+
+<task-notification>
+<task-id>b4xfx20k2</task-id>
+<tool-use-id>toolu_01RKUnkCUbDXP4kfXoaAvaUm</tool-use-id>
+<output-file>/tmp/claude-6786/-home-ojab2-work-git-vggt/7de51f4e-b011-4945-a096-0dd4da5cb0e2/tasks/b4xfx20k2.output</output-file>
+<status>completed</status>
+<summary>Background command "Filter collect to new levels; launch rotation 0.01 on acs GPU 0" completed (exit code 0)</summary>
+</task-notification>
+
+## Assistant (2026-11-24 09:53:57 UTC)
+
+That notification is only the launch wrapper finishing. The rotation 0.01° run is still training on acs GPU 0, and I'll carry on once it finishes.
+
+## Assistant (2026-11-24 09:53:59 UTC)
+
+I've started a watcher that fires when the runner exits. Nothing else to do until the 0.01° run finishes.
+
+## User (2026-11-24 09:53:59 UTC)
+
+<task-notification>
+<task-id>bmd2dki3a</task-id>
+<tool-use-id>toolu_01DN7JYsHt9CnRmZZnhHxcW7</tool-use-id>
+<output-file>/tmp/claude-6786/-home-ojab2-work-git-vggt/7de51f4e-b011-4945-a096-0dd4da5cb0e2/tasks/bmd2dki3a.output</output-file>
+<status>completed</status>
+<summary>Background command "Wait for rotation 0.01 run to finish" completed (exit code 0)</summary>
+</task-notification>
+
+## Assistant (2026-11-24 09:55:06 UTC)
+
+Status: the plots and tables for 125 and 126 are done. I'm now writing the two READMEs, using the 124 log as the template.
+
+## Assistant (2026-11-24 09:55:56 UTC)
+
+Status: the figures look right, so I'm committing the two experiment logs now, without pushing.
+
+## Assistant (2026-11-24 09:56:05 UTC)
+
+Experiments 125 (rotation) and 126 (translation) are written up and committed in gsplat as `cc73bfc9`, without attribution lines and not pushed.
+
+**Rotation (125):** levels 0.01°, 0.1° and 1°, plus the 0% baseline. The 0.01° run finished on acs GPU 0.
+
+| Rotation error up to ±x° per axis | PSNR | SSIM | LPIPS |
+|---|---|---|---|
+| 0 (baseline) | 30.24 | 0.937 | 0.136 |
+| 0.01 | 30.23 | 0.936 | 0.137 |
+| 0.1 | 28.02 | 0.871 | 0.216 |
+| 1 | 19.76 | 0.656 | 0.622 |
+
+**Translation (126):** levels 0.1–5% of scene scale finished, with PSNR falling from 29.59 to 19.18. The 10% run crashed (CUDA OOM) on the L4 in both attempts, so it has no result.
+
+**Logs:**
+- **Included:** the OOM facts, the memory trace, the `isect_tiles` allocation finding, and your insight about `scale_reg` and the metrics.
+- **Translation insights:** still empty.
+- **Rotation 0.5°:** it finished (PSNR 22.32) but is outside the final level set and isn't plotted.
+- **Queue scripts:** `queue.sh` and `queue2.sh` are gitignored by `*.sh`, so they aren't in the commit. The READMEs describe them.
+
+Unpushed: gsplat is several commits ahead of origin and vggt has 6. I haven't pushed anything.
+
+Uncommitted `experiments/2026-11-17_01_omega_photometric_pose_opt/README.md` is your edit and I left it alone. There's also an untracked `chat.md` in the gsplat root that I didn't create in this segment.
+
+## User (2026-11-24 10:21:05 UTC)
+
+Can we plot the eval rre and rte for the two experiments with the quality metrics
+
+## Assistant (2026-11-24 10:22:17 UTC)
+
+I've plotted the RRE and RTE of the training cameras together with PSNR, SSIM and LPIPS for both experiments. This is the injected error, because the 125/126 runs store no eval RRE/RTE. It is committed as `fb6f268a` and not pushed.
+
+- **Layout:** PSNR, SSIM and LPIPS are in the top row of each figure. The bottom row has RRE (deg) and RTE (% of scene scale) as mean and max over the 255 training views. Everything is plotted against the nominal bound x, on a symlog x-axis.
+- **Files:** `figures/metrics_with_rre_rte.png` in both experiment folders, linked in both READMEs. I regenerated `chat.md` for both.
+- **Axes:** RRE is 0 in the translation experiment, and RTE is 0 in the rotation experiment. Those panels are flat lines.
+- **Rotation realised error:** mean RRE is 0.0097°, 0.0966° and 0.9658° for x = 0.01°, 0.1° and 1°, and the max is 1.5188° at x = 1°.
+
+If you want the eval-pose RRE/RTE after test-time pose optimisation instead, that needs new runs.
+
+## User (2026-11-24 12:03:19 UTC)
+
+Please make sure to always only use my plotting code and never create plots from scratch. If settings don't exist in experiment runner or the plotting code, add them
+
+## Assistant (2026-11-24 12:06:08 UTC)
+
+Status: the runner's own plot now gives the connected lines with RRE and RTE. I'm updating the READMEs to point at the runner figures and committing the gsplat and vggt changes.
+
+## Assistant (2026-11-24 12:06:24 UTC)
+
+I've replotted experiments 125 and 126 with your plotting code and removed my standalone plots for them. It's committed in gsplat as `1ae1da3c` and in vggt as `4bb0fd9`, both without attribution lines and not pushed.
+
+- **Runner plot:** PSNR, SSIM and LPIPS are in the top row and training-camera RRE and RTE (injected, mean) in the bottom row, against the nominal bound x. The runner's own render figures are unchanged.
+- **Settings I added:**
+  - `train_rre` and `train_rte` metrics in `plot_metrics.py`.
+  - `merge_series` (one line through all runs) and `x_symlog` (symlog x-axis), as `plot_graph` arguments and `PlotConfig` fields.
+  - The 125/126 plot config now uses them, with x-axes `rot_random_change` and `trans_random_change`.
+- **Removed:** `make_figures.py` and my matplotlib PNGs in both experiment folders. `figures/metrics.jpg` and `figures/renders.jpg` are copies of the runner outputs, and the READMEs say so. `collect.py` stays, because it only writes `metrics.csv`.
+- **Baseline stats edited:** the baseline run (`bonsai_2_n255_s42_i292_steps7000`) predates the pose-error stats, so I added the four `train_*` error keys as 0.0 to its stats JSONs so the 0 point shows. This is noted in both READMEs.
+- **Other `make_figures.py` files:** 12 experiment folders still contain one, including 124 (focal error). I haven't touched them. Do you want the 124 plots redone through the runner too?
+- **Memory:** I saved your plotting rule as a feedback memory.
+
+## User (2026-11-24 12:10:44 UTC)
+
+Yes, redo the 124 plots with the runner

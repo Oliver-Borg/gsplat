@@ -1765,6 +1765,7 @@ class PlotConfig:
     only_best_rows: bool = False
     merge_series: bool = False  # one line series through all runs (labels still used for renders)
     x_symlog: float | None = None  # symlog x-axis with this linthresh, ticks at the x values
+    shared_series_value: str | None = None  # split value whose rows (e.g. the baseline) are copied into every other series
 
 
 @dataclass
@@ -2089,6 +2090,7 @@ class Experiment:
             only_best_rows=self.plot_args.only_best_rows,
             merge_series=self.plot_args.merge_series,
             x_symlog=self.plot_args.x_symlog,
+            shared_series_value=self.plot_args.shared_series_value,
         )
 
         # print("Plotted metrics from these files")
@@ -6626,9 +6628,11 @@ experiments.append(
         "3DGS (MCMC) with COLMAP cameras and a wrong training focal: fixed change for every view (-10..+10%) and per-view random change (up to +-10%), 7000 steps",
         _KERR_ARMS,
         PlotConfig(
-            x_axis="val_step",
-            split_param="series_label_override",
-            metric_keys=["psnr", "ssim", "lpips", "num_GS"],
+            x_axis="k_abs_err",
+            split_param="k_series",
+            x_symlog=0.05,
+            shared_series_value="no change",
+            metric_keys=["psnr", "ssim", "lpips"],
             max_render_cols=3,
             horizontal_datasets=False,
             show_gt=True,
@@ -6636,7 +6640,7 @@ experiments.append(
             show_differences=False,
             render_nums=[0, 2, 5],
         ),
-        val_steps=[1, 7000],
+        val_steps=[7000],
         render_filter_override={"seed": [42], "num_steps": [7000]},
     )
 )
