@@ -7426,3 +7426,7 @@ I've replotted experiments 125 and 126 with your plotting code and removed my st
 ## User (2026-11-24 12:10:44 UTC)
 
 Yes, redo the 124 plots with the runner
+
+## Assistant (2026-11-24 12:13:55 UTC)
+
+Status: the 124 render figure now shows the baseline row three times, because copying the baseline into every series also duplicated it in the renders. I'm fixing that in `plot_metrics.py`.
