@@ -1763,6 +1763,8 @@ class PlotConfig:
     make_pcd_plot: bool = False
     horizontal_datasets: bool = True
     only_best_rows: bool = False
+    merge_series: bool = False  # one line series through all runs (labels still used for renders)
+    x_symlog: float | None = None  # symlog x-axis with this linthresh, ticks at the x values
 
 
 @dataclass
@@ -2085,6 +2087,8 @@ class Experiment:
             make_pcd_plot=self.plot_args.make_pcd_plot and not no_heavy_plots,
             stack_datasets_horizontally=self.plot_args.horizontal_datasets,
             only_best_rows=self.plot_args.only_best_rows,
+            merge_series=self.plot_args.merge_series,
+            x_symlog=self.plot_args.x_symlog,
         )
 
         # print("Plotted metrics from these files")
@@ -6648,9 +6652,11 @@ def _pose_experiment(name, number, desc, key, unit, levels):
         Experiment(
             name, number, desc, arms,
             PlotConfig(
-                x_axis="val_step",
-                split_param="series_label_override",
-                metric_keys=["psnr", "ssim", "lpips", "num_GS"],
+                x_axis="rot_random_change" if key == "rotation" else "trans_random_change",
+                split_param="",
+                merge_series=True,
+                x_symlog=0.005 if key == "rotation" else 0.05,
+                metric_keys=["psnr", "ssim", "lpips", "train_rre", "train_rte"],
                 max_render_cols=3,
                 horizontal_datasets=False,
                 show_gt=True,
@@ -6658,7 +6664,7 @@ def _pose_experiment(name, number, desc, key, unit, levels):
                 show_differences=False,
                 render_nums=[0, 2, 5],
             ),
-            val_steps=[1, 7000],
+            val_steps=[7000],
             render_filter_override={"seed": [42], "num_steps": [7000]},
         )
     )

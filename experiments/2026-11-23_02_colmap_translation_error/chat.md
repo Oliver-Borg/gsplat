@@ -7389,3 +7389,18 @@ Uncommitted `experiments/2026-11-17_01_omega_photometric_pose_opt/README.md` is 
 ## User (2026-11-24 10:21:05 UTC)
 
 Can we plot the eval rre and rte for the two experiments with the quality metrics
+
+## Assistant (2026-11-24 10:22:17 UTC)
+
+I've plotted the RRE and RTE of the training cameras together with PSNR, SSIM and LPIPS for both experiments. This is the injected error, because the 125/126 runs store no eval RRE/RTE. It is committed as `fb6f268a` and not pushed.
+
+- **Layout:** PSNR, SSIM and LPIPS are in the top row of each figure. The bottom row has RRE (deg) and RTE (% of scene scale) as mean and max over the 255 training views. Everything is plotted against the nominal bound x, on a symlog x-axis.
+- **Files:** `figures/metrics_with_rre_rte.png` in both experiment folders, linked in both READMEs. I regenerated `chat.md` for both.
+- **Axes:** RRE is 0 in the translation experiment, and RTE is 0 in the rotation experiment. Those panels are flat lines.
+- **Rotation realised error:** mean RRE is 0.0097°, 0.0966° and 0.9658° for x = 0.01°, 0.1° and 1°, and the max is 1.5188° at x = 1°.
+
+If you want the eval-pose RRE/RTE after test-time pose optimisation instead, that needs new runs.
+
+## User (2026-11-24 12:03:19 UTC)
+
+Please make sure to always only use my plotting code and never create plots from scratch. If settings don't exist in experiment runner or the plotting code, add them

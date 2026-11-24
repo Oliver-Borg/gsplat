@@ -3,18 +3,14 @@
 \label{tab:125_colmap_rotation_error_bonsai}
 \centering
 \scriptsize
-\begin{tabular}{lrlrrrr}
+\begin{tabular}{lrlrrrrr}
 \toprule
-Choice & Val Step & Series Label Override & PSNR ↑ & SSIM ↑ & LPIPS ↓ & Final Gaussian Count \\
+Choice & Rot Random Change & Series Label & PSNR ↑ & SSIM ↑ & LPIPS ↓ & Training-camera RRE (injected) ↓ & Training-camera RTE (injected) ↓ \\
 \midrule
-GT & 1 & random rotation change up to 0.01 deg & 10.606 & 0.240 & 0.730 & 206613 \\
-GT & 7000 & random rotation change up to 0.01 deg & \underline{30.232} & \underline{0.936} & \underline{0.137} & 1000000 \\
-GT & 1 & random rotation change up to 0.1 deg & 10.605 & 0.238 & 0.730 & 206613 \\
-GT & 7000 & random rotation change up to 0.1 deg & 28.021 & 0.871 & 0.216 & 1000000 \\
-GT & 1 & random rotation change up to 1 deg & 10.604 & 0.239 & 0.731 & 206613 \\
-GT & 7000 & random rotation change up to 1 deg & 19.764 & 0.656 & 0.622 & 1000000 \\
-GT & 1 & rotation change 0% (COLMAP) & 10.606 & 0.240 & 0.730 & 206613 \\
-GT & 7000 & rotation change 0% (COLMAP) & \textbf{30.239} & \textbf{0.937} & \textbf{0.136} & 1000000 \\
+GT & 0.010 & random rotation change up to 0.01 deg & \underline{30.232} & \underline{0.936} & \underline{0.137} & \underline{0.010} & \textbf{0} \\
+GT & 0.100 & random rotation change up to 0.1 deg & 28.021 & 0.871 & 0.216 & 0.097 & \textbf{0} \\
+GT & 1.000 & random rotation change up to 1 deg & 19.764 & 0.656 & 0.622 & 0.966 & \textbf{0} \\
+GT & 0.000 & rotation change 0% (COLMAP) & \textbf{30.239} & \textbf{0.937} & \textbf{0.136} & \textbf{0.000} & \textbf{0} \\
 \bottomrule
 \end{tabular}
 \end{table}

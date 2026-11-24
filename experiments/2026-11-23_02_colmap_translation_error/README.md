@@ -16,8 +16,8 @@ env -u PYTHONPATH PATH=$HOME/.conda/envs/gsplat/bin:$PATH python experiment_runn
   --cuda_visible_devices 0,1,2,3 --wait_gpu_idle
 # plots
 python experiment_runner.py --experiment_names colmap_rotation_error colmap_translation_error --dataset_name bonsai --dataset_collections --plot_only
-python experiments/2026-11-23_02_colmap_translation_error/collect.py && python experiments/2026-11-23_02_colmap_translation_error/make_figures.py   # gsplat env
-# renders: copy of latest_plots/126_colmap_translation_error_bonsai_latest_renders.jpg
+python experiments/2026-11-23_02_colmap_translation_error/collect.py   # gsplat env, writes metrics.csv
+# figures/metrics.jpg and figures/renders.jpg: copies of the runner outputs in latest_plots/126_colmap_translation_error_bonsai_latest_renders.jpg
 ```
 
 ## Run metadata
@@ -29,6 +29,7 @@ python experiments/2026-11-23_02_colmap_translation_error/collect.py && python e
 ## Failed / missing runs, changes between runs, confounds
 - `trand10` ended with `torch.OutOfMemoryError` (CUDA) on the L4 (22 GiB) in launch 1 and again in the rerun; no result for 10%.
 - The memory trace of the rotation experiment (see its log) was not repeated for translation.
+- The baseline run's stats JSONs (`bonsai_2_n255_s42_i292_steps7000`, made before the pose-error stats existed) were edited to add `train_rot_err_*` / `train_trans_err_*` = 0.0 so that the runner plots show the 0 point.
 - Single seed; train times differ because 1-4 runs shared the machine at different times.
 
 ## Results (step 7000, 37 test frames)
@@ -42,11 +43,9 @@ python experiments/2026-11-23_02_colmap_translation_error/collect.py && python e
 | 5 | 2.603 / 4.994 | 19.18 | 0.650 | 0.654 | 1000000 | 456 |
 | 10 | failed (OOM) | | | | | |
 
-![metrics vs realised mean translation error](figures/metrics_vs_error.png)
+Quality metrics (PSNR, SSIM, LPIPS) with the RRE / RTE of the training cameras (injected perturbation, mean over the 255 training views, `train_rre` / `train_rte`) against the nominal bound x; drawn by the runner / `plot_metrics.py` (copy of `latest_plots/126_colmap_translation_error_bonsai_latest_full.jpg`; settings `merge_series`, `x_symlog` and the metrics `train_rre` / `train_rte` were added to the runner and `plot_metrics.py` for this):
 
-Quality metrics together with the RRE / RTE of the training cameras (mean and max over the 255 training views, from the injected perturbation; evaluation views use GT poses) against the nominal bound x:
-
-![metrics with RRE and RTE](figures/metrics_with_rre_rte.png)
+![metrics](figures/metrics.jpg)
 
 Renders of test views 0, 2, 5 (ground truth, the 0% baseline and the levels that finished).
 

@@ -3,23 +3,16 @@
 \label{tab:126_colmap_translation_error_bonsai}
 \centering
 \scriptsize
-\begin{tabular}{lrlrrrr}
+\begin{tabular}{lrlrrrrr}
 \toprule
-Choice & Val Step & Series Label Override & PSNR ↑ & SSIM ↑ & LPIPS ↓ & Final Gaussian Count \\
+Choice & Trans Random Change & Series Label & PSNR ↑ & SSIM ↑ & LPIPS ↓ & Training-camera RRE (injected) ↓ & Training-camera RTE (injected) ↓ \\
 \midrule
-GT & 1 & random translation change up to 0.1% of scene scale & 10.606 & 0.240 & 0.730 & 206613 \\
-GT & 7000 & random translation change up to 0.1% of scene scale & \underline{29.594} & \underline{0.919} & \underline{0.161} & 1000000 \\
-GT & 1 & random translation change up to 0.5% of scene scale & 10.605 & 0.239 & 0.730 & 206613 \\
-GT & 7000 & random translation change up to 0.5% of scene scale & 26.421 & 0.829 & 0.252 & 1000000 \\
-GT & 1 & random translation change up to 1% of scene scale & 10.604 & 0.238 & 0.730 & 206613 \\
-GT & 7000 & random translation change up to 1% of scene scale & 24.519 & 0.773 & 0.345 & 1000000 \\
-GT & 1 & random translation change up to 10% of scene scale & 10.603 & 0.238 & 0.731 & 206613 \\
-GT & 1 & random translation change up to 2% of scene scale & 10.603 & 0.238 & 0.731 & 206613 \\
-GT & 7000 & random translation change up to 2% of scene scale & 22.552 & 0.716 & 0.460 & 1000000 \\
-GT & 1 & random translation change up to 5% of scene scale & 10.604 & 0.238 & 0.731 & 206613 \\
-GT & 7000 & random translation change up to 5% of scene scale & 19.178 & 0.650 & 0.654 & 1000000 \\
-GT & 1 & translation change 0% (COLMAP) & 10.606 & 0.240 & 0.730 & 206613 \\
-GT & 7000 & translation change 0% (COLMAP) & \textbf{30.239} & \textbf{0.937} & \textbf{0.136} & 1000000 \\
+GT & 0.100 & random translation change up to 0.1% of scene scale & \underline{29.594} & \underline{0.919} & \underline{0.161} & \textbf{0} & \underline{0.052} \\
+GT & 0.500 & random translation change up to 0.5% of scene scale & 26.421 & 0.829 & 0.252 & \textbf{0} & 0.260 \\
+GT & 1.000 & random translation change up to 1% of scene scale & 24.519 & 0.773 & 0.345 & \textbf{0} & 0.521 \\
+GT & 2.000 & random translation change up to 2% of scene scale & 22.552 & 0.716 & 0.460 & \textbf{0} & 1.041 \\
+GT & 5.000 & random translation change up to 5% of scene scale & 19.178 & 0.650 & 0.654 & \textbf{0} & 2.603 \\
+GT & 0.000 & translation change 0% (COLMAP) & \textbf{30.239} & \textbf{0.937} & \textbf{0.136} & \textbf{0} & \textbf{0.000} \\
 \bottomrule
 \end{tabular}
 \end{table}
