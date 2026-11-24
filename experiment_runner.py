@@ -6664,7 +6664,7 @@ def _pose_experiment(name, number, desc, key, unit, levels):
     )
 
 
-_pose_experiment("colmap_rotation_error", 125, "3DGS (MCMC) with COLMAP cameras and per-view random rotation errors of the training cameras (up to +-x degrees about every axis), 7000 steps", "rotation", " deg", (0.1, 0.5, 1.0, 2.0, 5.0, 10.0))
+_pose_experiment("colmap_rotation_error", 125, "3DGS (MCMC) with COLMAP cameras and per-view random rotation errors of the training cameras (up to +-x degrees about every axis), 7000 steps", "rotation", " deg", (0.01, 0.1, 1.0))
 _pose_experiment("colmap_translation_error", 126, "3DGS (MCMC) with COLMAP cameras and per-view random camera-centre errors of the training cameras (up to x percent of the distance between the two farthest cameras), 7000 steps", "translation", "% of scene scale", (0.1, 0.5, 1.0, 2.0, 5.0, 10.0))
 
 experiment_dict = {exp.name: exp for exp in experiments}

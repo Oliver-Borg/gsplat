@@ -1,0 +1,57 @@
+[
+    {
+        "choice": [
+            "gt"
+        ],
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            7000
+        ],
+        "series_label_override": "rotation change 0% (COLMAP)",
+        "dataset": "bonsai"
+    },
+    {
+        "choice": [
+            "gt"
+        ],
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            7000
+        ],
+        "train_rot_random_deg": 0.01,
+        "series_label_override": "random rotation change up to 0.01 deg",
+        "dataset": "bonsai"
+    },
+    {
+        "choice": [
+            "gt"
+        ],
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            7000
+        ],
+        "train_rot_random_deg": 0.1,
+        "series_label_override": "random rotation change up to 0.1 deg",
+        "dataset": "bonsai"
+    },
+    {
+        "choice": [
+            "gt"
+        ],
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            7000
+        ],
+        "train_rot_random_deg": 1.0,
+        "series_label_override": "random rotation change up to 1 deg",
+        "dataset": "bonsai"
+    }
+]

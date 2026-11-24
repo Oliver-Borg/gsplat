@@ -1,0 +1,99 @@
+[
+    {
+        "choice": [
+            "gt"
+        ],
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            7000
+        ],
+        "series_label_override": "translation change 0% (COLMAP)",
+        "dataset": "bonsai"
+    },
+    {
+        "choice": [
+            "gt"
+        ],
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            7000
+        ],
+        "train_trans_random_pct": 0.1,
+        "series_label_override": "random translation change up to 0.1% of scene scale",
+        "dataset": "bonsai"
+    },
+    {
+        "choice": [
+            "gt"
+        ],
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            7000
+        ],
+        "train_trans_random_pct": 0.5,
+        "series_label_override": "random translation change up to 0.5% of scene scale",
+        "dataset": "bonsai"
+    },
+    {
+        "choice": [
+            "gt"
+        ],
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            7000
+        ],
+        "train_trans_random_pct": 1.0,
+        "series_label_override": "random translation change up to 1% of scene scale",
+        "dataset": "bonsai"
+    },
+    {
+        "choice": [
+            "gt"
+        ],
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            7000
+        ],
+        "train_trans_random_pct": 2.0,
+        "series_label_override": "random translation change up to 2% of scene scale",
+        "dataset": "bonsai"
+    },
+    {
+        "choice": [
+            "gt"
+        ],
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            7000
+        ],
+        "train_trans_random_pct": 5.0,
+        "series_label_override": "random translation change up to 5% of scene scale",
+        "dataset": "bonsai"
+    },
+    {
+        "choice": [
+            "gt"
+        ],
+        "seed": [
+            42
+        ],
+        "num_steps": [
+            7000
+        ],
+        "train_trans_random_pct": 10.0,
+        "series_label_override": "random translation change up to 10% of scene scale",
+        "dataset": "bonsai"
+    }
+]
